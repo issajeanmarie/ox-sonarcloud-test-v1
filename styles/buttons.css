@@ -1,0 +1,68 @@
+/**
+ * Buttons
+ */
+.ox_btn {
+  display: flex !important;
+  align-items: center !important;
+}
+.btn_full {
+  width: 100%;
+}
+.btn_medium {
+  width: 100px;
+}
+.btn_light_yellow {
+  background-color: #e3b221 !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  height: 42px !important;
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 0px 48px !important;
+}
+.btn_dark_yellow {
+  background-color: #e7b522 !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  height: 42px !important;
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 0px 2rem !important;
+}
+.btn_sm_black {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  height: 42px !important;
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 0px 32px !important;
+}
+.btn_outlined_yellow {
+  background-color: #fff !important;
+  color: #000 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  height: 42px !important;
+  border-radius: 4px !important;
+  border: 1px solid #e3b221 !important;
+  padding: 0px 1rem !important;
+}
+.btn_outline_gray {
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  text-transform: capitalize;
+  border: 1.5px solid #a9a791 !important;
+}
+.btn_outline_gray:hover,
+.btn_outline_gray:active {
+  color: #e3b221 !important;
+}
+.borderless_btn {
+  border-left: none !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
