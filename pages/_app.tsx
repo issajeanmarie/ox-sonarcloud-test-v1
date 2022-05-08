@@ -3,11 +3,11 @@ import "../styles/nprogress.css";
 import "antd/dist/antd.css";
 import { useEffect, FC } from "react";
 import dynamic from "next/dynamic";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import type { AppProps } from "next/app";
 import NProgress from "nprogress";
 import { AppLoadingLoader } from "../components/Loaders";
+import { SEO } from "../components/Shared";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const router = useRouter();
@@ -33,11 +33,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <>
-      <Head>
-        <title>OX Dashboard</title>
-        <link rel="icon" href="/logo.png" />
-      </Head>
-
+      <SEO title="OX Dashboard" linkRel="icon" linkHref="/logo.png" />
       <Component {...pageProps} />
     </>
   );
@@ -45,5 +41,5 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
 
 export default dynamic(() => Promise.resolve(App), {
   ssr: false,
-  loading: () => <AppLoadingLoader />,
+  loading: () => <AppLoadingLoader />
 });

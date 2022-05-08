@@ -2,9 +2,10 @@ import { BsHeadset } from "react-icons/bs";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { RiLuggageDepositLine } from "react-icons/ri";
 import { MdKeyboardArrowDown, MdNotificationsNone } from "react-icons/md";
+import { color, text } from "../../themes/constants";
 
 export const HeadsetIcon = (
-  <BsHeadset style={{ color: "#CDDF00", fontSize: "0.8rem" }} />
+  <BsHeadset style={{ color: color.yellow_faded_text, fontSize: "0.8rem" }} />
 );
 
 export const ArrowNarrowRightIcon = (
@@ -12,11 +13,23 @@ export const ArrowNarrowRightIcon = (
 );
 
 export const DepositLineIcon = (
-  <RiLuggageDepositLine style={{ color: "#E3B221", fontSize: "0.8rem" }} />
+  <RiLuggageDepositLine
+    style={{
+      color: color.yellow_faded_text,
+      fontSize: text.sub_heading,
+      marginTop: "6px"
+    }}
+  />
 );
 
 export const YellowArrowDownIcon = (
-  <MdKeyboardArrowDown style={{ color: "#E3B221", fontSize: "0.8rem" }} />
+  <MdKeyboardArrowDown
+    style={{
+      color: color.yellow_faded_text,
+      fontSize: "1.25rem",
+      marginTop: "6px"
+    }}
+  />
 );
 
 export const NotificationsIcon = (

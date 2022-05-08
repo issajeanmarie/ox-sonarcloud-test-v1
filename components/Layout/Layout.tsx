@@ -1,22 +1,20 @@
 import React from "react";
 import { Layout } from "antd";
 import { ChildrenType } from "../../lib/types/components/ChildrenType";
-import AppSider from "../Shared/AppSider";
+import AppSider from "./AppSider";
 import AppHeader from "../Shared/AppHeader";
-
-const { Content } = Layout;
+import { DashboardLayout, DashboardContents } from "./styles";
 
 const AppLayout = ({ children }: ChildrenType) => {
   return (
-    <Layout className="height100vh">
+    <DashboardLayout>
       <AppSider />
+
       <Layout>
         <AppHeader />
-        <Content className="light_gray_background overflowY">
-          {children}
-        </Content>
+        <DashboardContents>{children}</DashboardContents>
       </Layout>
-    </Layout>
+    </DashboardLayout>
   );
 };
 
