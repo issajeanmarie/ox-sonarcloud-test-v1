@@ -5,7 +5,6 @@
 .ox_input {
   height: 42px !important;
   border-radius: 3px !important;
-  font-size: 14px !important;
 }
 
 .borderless_input {
@@ -25,7 +24,6 @@
 .ox_select {
   height: 42px !important;
   border-radius: 3px !important;
-  font-size: 12px !important;
   width: 100% !important;
   color: #666666 !important;
   background-color: #eaeff2 !important;
@@ -79,25 +77,17 @@
 }
 
 .ant-input-affix-wrapper {
-  color: #666666 !important;
-  font-size: 12px !important;
+  color: #000000 !important;
   background-color: #eaeff2 !important;
   border: none !important;
 }
 .ant-input {
-  color: #666666 !important;
-  font-size: 12px !important;
   background-color: #eaeff2 !important;
   border: none !important;
 }
 .ant-input::placeholder {
   color: #9a9ea8 !important;
-  font-size: 12px;
   font-weight: 300;
-}
-
-.ant-input {
-  padding: 4px 16px !important;
 }
 
 /**
@@ -109,11 +99,72 @@
 }
 
 .ant-form-item-label > label {
-  font-size: 12px !important;
   font-weight: 900 !important;
   color: #313622 !important;
 }
 
 .ant-form-item-label {
   padding-bottom: 2px !important;
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background: #eaeff2 !important;
+  height: 3.2rem !important;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 0 1rem;
+  border-radius: 0;
+  display: flex;
+}
+
+.ant-select.except {
+  background: red !important;
+  width: 50%;
+  height: 2rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.ant-select.except .ant-select-selector {
+  background-color: #ffffff !important;
+  height: inherit !important;
+}
+
+.ant-select-selection-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  background: #eaeff2 !important;
+  outline: none;
+  border: 1px solid none;
+  box-shadow: none;
+}
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector:focus,
+.ant-select:not(.ant-select-customize-input) .ant-select-selector:hover {
+  background: #eaeff2;
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.ant-select-single.ant-select-show-arrow .ant-select-selection-item,
+.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+  display: flex;
+  align-items: center;
+}
+
+.ant-select-show-search.ant-select:not(.ant-select-customize-input)
+  .ant-select-selector
+  input {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
