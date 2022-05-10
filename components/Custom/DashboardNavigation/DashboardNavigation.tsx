@@ -55,8 +55,9 @@ const NavLink = styled(StyledLink)`
   padding: 2rem 1rem;
   border-bottom: ${(props: styledComponentsTypes) =>
     props.active === "true" ? `4px solid ${color.yellow}` : "none"};
-  font-weight: ${(props) => (props.active === "true" ? "700" : "300")};
-  color: ${(props) =>
+  font-weight: ${(props: styledComponentsTypes) =>
+    props.active === "true" ? "700" : "300"};
+  color: ${(props: styledComponentsTypes) =>
     props.active === "true" ? "var(--yellow)" : "var(--black)"};
 
   &:hover {
