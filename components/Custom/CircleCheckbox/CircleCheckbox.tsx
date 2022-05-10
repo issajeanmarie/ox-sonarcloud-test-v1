@@ -2,12 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { color } from "../../../themes/constants";
+import { styledComponentsTypes } from "../../../lib/types/styledComponentsTypes";
+import { CircleCheckBoxTypes } from "../../../lib/types/globalTypes";
 
 const Switch = styled.label`
   position: relative;
   display: inline-block;
-  width: ${(props) => props.width || "39px"};
-  height: ${(props) => props.height || "21px"};
+  width: ${(props: styledComponentsTypes) => props.width || "39px"};
+  height: ${(props: styledComponentsTypes) => props.height || "21px"};
 `;
 
 const Input = styled.input`
@@ -20,9 +22,15 @@ const Input = styled.input`
   }
 
   &:checked + *::before {
-    -webkit-transform: translateX(${(props) => props.translateX || "18px"});
-    -ms-transform: translateX(${(props) => props.translateX || "18px"});
-    transform: translateX(${(props) => props.translateX || "18px"});
+    -webkit-transform: translateX(
+      ${(props: styledComponentsTypes) => props.translateX || "18px"}
+    );
+    -ms-transform: translateX(
+      ${(props: styledComponentsTypes) => props.translateX || "18px"}
+    );
+    transform: translateX(
+      ${(props: styledComponentsTypes) => props.translateX || "18px"}
+    );
   }
 
   &:focus + * {
@@ -45,8 +53,8 @@ const Slider = styled.span`
   &::before {
     position: absolute;
     content: "";
-    width: ${(props) => props.width || "13px"};
-    height: ${(props) => props.height || "13px"};
+    width: ${(props: styledComponentsTypes) => props.width || "13px"};
+    height: ${(props: styledComponentsTypes) => props.height || "13px"};
     left: 4px;
     bottom: 4px;
     background-color: ${color.toggle_grey};
@@ -56,7 +64,12 @@ const Slider = styled.span`
   }
 `;
 
-const CircleCheckbox = ({ defaultValue, checked, state, setState }) => (
+const CircleCheckbox = ({
+  defaultValue,
+  checked,
+  state,
+  setState
+}: CircleCheckBoxTypes) => (
   <Switch>
     <Input
       type="checkbox"
