@@ -2,7 +2,7 @@ import { routes } from "../config/route-config";
 
 const user = {};
 
-export const analyticsMenu = (active = "", depotID = "", depotName = "") => {
+export const analyticsMenu = (active = "", depotName = "") => {
   const menus = [
     {
       name: "TRUCKS",
