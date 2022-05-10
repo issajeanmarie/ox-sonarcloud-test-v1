@@ -24,7 +24,7 @@ export type CircleCheckBoxTypes = {
   defaultValue: boolean;
   checked: boolean;
   state: boolean;
-  setState: `Function`;
+  setState: function;
 };
 
 export type DropIconTypes = {
