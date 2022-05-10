@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import {
   emailValidation,
-  passwordValidation,
+  passwordValidation
 } from "../../../lib/validation/InputValidations";
 import { routes } from "../../../config/route-config";
 import { LoginTypes } from "../../../lib/types/LoginTypes";
@@ -35,7 +35,7 @@ const Login = () => {
               position: "absolute",
               top: "0",
               right: "0",
-              zIndex: "10",
+              zIndex: "10"
             }}
           >
             <span className="text12 fowe400 text-decoration-underline">

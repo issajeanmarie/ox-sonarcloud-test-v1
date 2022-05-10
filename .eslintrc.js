@@ -12,7 +12,7 @@ module.exports = {
       env: {
         browser: true,
         node: true,
-        es6: true,
+        es6: true
       },
       extends: [
         "eslint:recommended",
@@ -21,13 +21,13 @@ module.exports = {
         "plugin:react-hooks/recommended", // React hooks rules
         "plugin:jsx-a11y/recommended", // Accessibility rules
         "plugin:prettier/recommended",
-        "prettier",
+        "prettier"
       ],
       rules: {
         "prettier/prettier": [
           "error",
           { endOfLine: "auto" },
-          { usePrettierrc: true },
+          { usePrettierrc: true }
         ], // Includes .prettierrc.js rules
         // We will use TypeScript's types for component props instead
         "react/prop-types": "off",
@@ -45,7 +45,7 @@ module.exports = {
         "react/jsx-no-comment-textnodes": "off",
 
         // Why would you want unused vars?
-        "@typescript-eslint/no-unused-vars": ["error"],
+        "@typescript-eslint/no-unused-vars": ["error"]
 
         // I suggest this setting for requiring return types on functions only where useful
         // "@typescript-eslint/explicit-function-return-type": [
@@ -55,7 +55,7 @@ module.exports = {
         //     allowConciseArrowFunctionExpressionsStartingWithVoid: true,
         //   },
         // ],
-      },
-    },
-  ],
+      }
+    }
+  ]
 };
