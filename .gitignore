@@ -43,3 +43,5 @@ yarn-error.log*
 # eslint
 .eslintcache
 .env
+
+docker-compose.yml

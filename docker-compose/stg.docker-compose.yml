@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  harambee-admin-stg:
+    image: registry.gitlab.com/harambee1/admin-dashboard/staging:latest
+    container_name: harambee-admin-stg
+    volumes:
+        - '.:/app'
+        - '/app/node_modules'
+    ports:
+      - 8016:3000
+    restart: always
