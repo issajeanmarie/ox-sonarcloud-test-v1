@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -6,7 +7,7 @@ import CloseOutlined from "@ant-design/icons/CloseOutlined";
 import { device } from "../../../themes/device";
 import { color } from "../../../themes/constants";
 import { Flex, StyledLink } from "../../../themes/globalStyles";
-import { styledComponentsTypes } from "../../../lib/types/styledComponentsTypes";
+import { StyledComponentsTypes } from "../../../lib/types/StyledComponentsTypes";
 import { MenuTypes } from "../../../lib/types/globalTypes";
 
 /**
@@ -14,12 +15,11 @@ import { MenuTypes } from "../../../lib/types/globalTypes";
  * @since Feb 2022
  */
 
-const Navigation = styled(Flex)`
+const Navigation = styled(Flex)<StyledComponentsTypes>`
   line-height: 0;
   z-index: 1;
   @media ${device.laptopM} {
-    display: ${(props: styledComponentsTypes) =>
-      props.isVisible ? "block" : "none"};
+    display: ${(props) => (props.isVisible ? "block" : "none")};
     position: absolute;
     top: 100%;
     left: 0;
@@ -53,11 +53,10 @@ const NavLink = styled(StyledLink)`
   font-size: var(--text_sm);
   transition: 0.3s ease-in-out;
   padding: 2rem 1rem;
-  border-bottom: ${(props: styledComponentsTypes) =>
+  border-bottom: ${(props) =>
     props.active === "true" ? `4px solid ${color.yellow}` : "none"};
-  font-weight: ${(props: styledComponentsTypes) =>
-    props.active === "true" ? "700" : "300"};
-  color: ${(props: styledComponentsTypes) =>
+  font-weight: ${(props) => (props.active === "true" ? "700" : "300")};
+  color: ${(props) =>
     props.active === "true" ? "var(--yellow)" : "var(--black)"};
 
   &:hover {
@@ -81,7 +80,7 @@ const DashboardNavigation = ({ menus }: MenuTypes) => {
       </NavigationIconContainer>
 
       <Navigation gap="1rem" align="center" isVisible={isMenuVisible}>
-        {menus?.map((menu: MenuTypes) => (
+        {menus?.map((menu: any) => (
           <NavLink
             key={menu.name}
             active={menu.active ? "true" : "false"}

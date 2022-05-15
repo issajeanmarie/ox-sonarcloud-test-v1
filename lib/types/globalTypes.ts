@@ -21,10 +21,10 @@ export type DropIconTypes = {
 };
 
 export type CircleCheckBoxTypes = {
-  defaultValue: boolean;
+  defaultValue: any;
   checked: boolean;
   state: boolean;
-  setState: function;
+  setState: any;
 };
 
 export type DropIconTypes = {

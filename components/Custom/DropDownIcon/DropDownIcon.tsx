@@ -3,12 +3,11 @@ import PropTypes from "prop-types";
 import Image from "antd/lib/image";
 import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import { styledComponentsTypes } from "../../../lib/types/styledComponentsTypes";
 import { DropIconTypes } from "../../../lib/types/globalTypes";
 
 const Icon = styled(Image)`
   padding: 4px;
-  width: ${(props: styledComponentsTypes) => props.width || "1.2rem"};
+  width: ${(props) => props.width || "1.2rem"};
 `;
 
 const DropIcon = ({ focused, loading, showSearch, width }: DropIconTypes) => {
