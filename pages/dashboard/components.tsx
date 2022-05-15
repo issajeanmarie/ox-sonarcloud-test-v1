@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -38,7 +39,7 @@ import {
 const { Option } = Select;
 const { Column } = Table;
 
-const menus = analyticsMenu("MAP");
+const menus: any = analyticsMenu("MAP");
 
 const tableData = [
   {
@@ -89,7 +90,12 @@ const Components = () => {
     <Layout>
       {/* DASHBOARD HEADER MENU */}
       <DashboardHeader>
-        <DashboardNavigation menus={menus} />
+        <DashboardNavigation
+          menus={menus}
+          name={undefined}
+          active={undefined}
+          url={undefined}
+        />
       </DashboardHeader>
 
       {/* INPUTS, BUTTONS, TYPOGRAPHY AND OTHERS */}
@@ -149,7 +155,14 @@ const Components = () => {
                         .indexOf(input.toLowerCase()) >= 0
                     }
                     getPopupContainer={(trigger) => trigger.parentNode}
-                    suffixIcon={<DropDownIcon />}
+                    suffixIcon={
+                      <DropDownIcon
+                        focused={false}
+                        loading={false}
+                        showSearch={false}
+                        width={""}
+                      />
+                    }
                   >
                     <Option value="yves">Yves Bisemage</Option>
                     <Option value="lionel">Lionel Mpfizi</Option>
@@ -190,7 +203,12 @@ const Components = () => {
                       </Select>
                     </Col>
 
-                    <DropDownIcon />
+                    <DropDownIcon
+                      focused={false}
+                      loading={false}
+                      showSearch={false}
+                      width={""}
+                    />
                   </StyledWhiteSelectContainer>
                 </StyledFormItem>
               </Col>
@@ -331,7 +349,7 @@ const Components = () => {
               </Col>
             </Row>
 
-            <Row gutter="24" align="bottom">
+            <Row gutter={24} align="bottom">
               <Col>
                 <StyledButton margin="0 0 1rem 0" padding="1rem 10rem">
                   BUTTON
@@ -663,7 +681,12 @@ const Components = () => {
                     </Select>
                   </Col>
 
-                  <DropDownIcon />
+                  <DropDownIcon
+                    focused={false}
+                    loading={false}
+                    showSearch={false}
+                    width={""}
+                  />
                 </StyledWhiteSelectContainer>
               </StyledFormItem>
             </Col>

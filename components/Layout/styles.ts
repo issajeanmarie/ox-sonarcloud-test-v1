@@ -3,12 +3,12 @@ import { Layout, Row } from "antd";
 import { color } from "../../themes/constants";
 import { device } from "../../themes/device";
 import { Flex } from "../../themes/globalStyles";
-import { styledComponentsTypes } from "../../lib/types/styledComponentsTypes";
+import { StyledComponentsTypes } from "../../lib/types/StyledComponentsTypes";
 
 const { Sider } = Layout;
 
-export const DashboardLayout = styled(Layout)`
-  height: ${(props: styledComponentsTypes) => props.height || ""};
+export const DashboardLayout = styled(Layout)<StyledComponentsTypes>`
+  height: ${(props) => props.height || ""};
 `;
 
 export const DashboardSider = styled(Sider)`
@@ -22,10 +22,10 @@ export const TopSider = styled(Row)`
   border-bottom: ${`0.95px solid ${color.black}`};
 `;
 
-export const DashboardContents = styled.section`
+export const DashboardContents = styled.section<StyledComponentsTypes>`
   overflow-y: auto;
   height: calc(100vh - 4.8rem);
-  padding: ${(props: styledComponentsTypes) => props.padding || "0"};
+  padding: ${(props) => props.padding || "0"};
   animation: animateDashboard 1s ease-in-out;
   background: ${color.white};
 

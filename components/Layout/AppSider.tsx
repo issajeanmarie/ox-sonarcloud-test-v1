@@ -6,15 +6,15 @@ import { DepositLineIcon, YellowArrowDownIcon } from "../Icons/Icons";
 import { changeRoute } from "../../helpers/routesHandler";
 import { RouteMenus } from "../Menus/Menus";
 import { DashboardSider, TopSider, StyledHelpDesk } from "./styles";
-import { StyledRow, Text, StyledSpan } from "../../themes/globalStyles";
+import { Text, StyledSpan } from "../../themes/globalStyles";
 
 const AppSider = () => {
   return (
     <DashboardSider>
       <TopSider>
         <Dropdown overlay={DepotMenus} trigger={["click"]}>
-          <StyledRow
-            width="100%"
+          <Row
+            style={{ width: "100%" }}
             gutter={12}
             align="middle"
             className="pointer"
@@ -30,7 +30,7 @@ const AppSider = () => {
             <Col span={2} flex="none">
               {YellowArrowDownIcon}
             </Col>
-          </StyledRow>
+          </Row>
         </Dropdown>
       </TopSider>
 
@@ -49,9 +49,7 @@ const AppSider = () => {
             </Col>
 
             <Col>
-              <StyledSpan weight="300" margin="6px 0">
-                OX Help Desk
-              </StyledSpan>
+              <StyledSpan>OX Help Desk</StyledSpan>
             </Col>
           </Row>
         </Col>

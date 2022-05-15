@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { routes } from "../config/route-config";
 
-const user = {};
+const user: any = {};
 
 export const analyticsMenu = (active = "", depotName = "") => {
-  const menus = [
+  const menus: any = [
     {
       name: "TRUCKS",
       url: `${routes.Analytics.url}?depotId=${"depotID" || ""}&depotName=${
