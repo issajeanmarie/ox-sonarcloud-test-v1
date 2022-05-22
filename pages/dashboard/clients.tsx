@@ -1,13 +1,8 @@
 import React from "react";
-import ComingSoon from "../../components/ComingSoon";
 import Layout from "../../components/Layout";
 
 const Clients = () => {
-  return (
-    <Layout>
-      <ComingSoon />
-    </Layout>
-  );
+  return <Layout />;
 };
 
 export default Clients;

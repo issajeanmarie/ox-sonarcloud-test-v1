@@ -28,14 +28,14 @@ export const analyticsMenu = (active = "", depotName = "") => {
     }
   ];
 
-  const filteredMenu = menus.filter((menu) => {
+  const filteredMenu = menus.filter((menu: any) => {
     if (user.isDispatcher) {
       return menu.name !== "MAP" && menu.name !== "REVENUES";
     }
     return menu;
   });
 
-  const activatedMenu = filteredMenu.map((menu) => {
+  const activatedMenu = filteredMenu.map((menu: any) => {
     if (menu.name === active) {
       return { ...menu, active: true };
     }
