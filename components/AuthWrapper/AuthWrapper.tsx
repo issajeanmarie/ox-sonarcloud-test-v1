@@ -9,6 +9,7 @@ const AuthWrapper = ({ children, title }: AuthWrapperTypes) => {
       <Col className="auth_right" xs={24} sm={24} md={8} lg={8} xl={8}>
         <div className="form_container radius4">
           <p className="text24 uppercase_text">{title}</p>
+
           {children}
         </div>
       </Col>

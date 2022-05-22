@@ -1,5 +1,6 @@
-export type styledComponentsTypes = {
-  isVisible: string;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type StyledComponentsTypes = {
+  isVisible: boolean;
   active: string;
   width: string;
   height: string;
@@ -32,4 +33,5 @@ export type styledComponentsTypes = {
   primary: string;
   fontSize: string;
   mb: string;
+  to: string;
 };

@@ -1,15 +1,15 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { color } from "../../../themes/constants";
-import { styledComponentsTypes } from "../../../lib/types/styledComponentsTypes";
+// import styled from "styled-components";
+import Input from "antd/lib/input";
+// import { color } from "../../../themes/constants";
 import { CircleCheckBoxTypes } from "../../../lib/types/globalTypes";
 
-const Switch = styled.label`
+/* const Switch = styled.label`
   position: relative;
   display: inline-block;
-  width: ${(props: styledComponentsTypes) => props.width || "39px"};
-  height: ${(props: styledComponentsTypes) => props.height || "21px"};
+  width: 39px;
+  height: 21px;
 `;
 
 const Input = styled.input`
@@ -22,15 +22,9 @@ const Input = styled.input`
   }
 
   &:checked + *::before {
-    -webkit-transform: translateX(
-      ${(props: styledComponentsTypes) => props.translateX || "18px"}
-    );
-    -ms-transform: translateX(
-      ${(props: styledComponentsTypes) => props.translateX || "18px"}
-    );
-    transform: translateX(
-      ${(props: styledComponentsTypes) => props.translateX || "18px"}
-    );
+    -webkit-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    transform: translateX(18px);
   }
 
   &:focus + * {
@@ -53,8 +47,8 @@ const Slider = styled.span`
   &::before {
     position: absolute;
     content: "";
-    width: ${(props: styledComponentsTypes) => props.width || "13px"};
-    height: ${(props: styledComponentsTypes) => props.height || "13px"};
+    width: 13px;
+    height: 13px;
     left: 4px;
     bottom: 4px;
     background-color: ${color.toggle_grey};
@@ -62,7 +56,7 @@ const Slider = styled.span`
     transition: 0.4s;
     border-radius: 50%;
   }
-`;
+`; */
 
 const CircleCheckbox = ({
   defaultValue,
@@ -70,22 +64,16 @@ const CircleCheckbox = ({
   state,
   setState
 }: CircleCheckBoxTypes) => (
-  <Switch>
+  <label>
     <Input
+      defaultChecked={true}
       type="checkbox"
       defaultValue={defaultValue}
       checked={checked}
       onChange={() => setState(!state)}
     />
-    <Slider />
-  </Switch>
+    <span />
+  </label>
 );
-
-CircleCheckbox.propTypes = {
-  defaultValue: PropTypes.string,
-  checked: PropTypes.bool,
-  state: PropTypes.bool,
-  setState: PropTypes.func
-};
 
 export default CircleCheckbox;
