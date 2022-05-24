@@ -3,6 +3,10 @@ export const routes = {
     name: "Login",
     url: "/"
   },
+  ForgetPassword: {
+    name: "Forgot password",
+    url: "/forgot-password"
+  },
   Orders: {
     name: "Orders",
     url: "/dashboard"

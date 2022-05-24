@@ -1,13 +1,20 @@
 import React from "react";
-import { Form, Row, Col, Input, Button } from "antd";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Form from "antd/lib/form";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
+import Input from "antd/lib/input";
+import Button from "antd/lib/button";
+import Typography from "antd/lib/typography";
 import {
   emailValidation,
   passwordValidation
 } from "../../../lib/validation/InputValidations";
 import { routes } from "../../../config/route-config";
 import { LoginTypes } from "../../../lib/types/LoginTypes";
+
+const { Title } = Typography;
 
 const Login = () => {
   const router = useRouter();
@@ -18,53 +25,34 @@ const Login = () => {
 
   return (
     <Form name="Login" onFinish={onFinish} layout="vertical" title="Login">
-      <Row>
-        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <Form.Item label="Email" name="username" rules={emailValidation}>
-            <Input className="ox_input" placeholder="example@gmail.com" />
-          </Form.Item>
+      <Title className="text16 black fowe700">Email</Title>
+      <Form.Item name="username" rules={emailValidation}>
+        <Input className="my_input" placeholder="example@gmail.com" />
+      </Form.Item>
+
+      <Row align="top" justify="space-between">
+        <Col>
+          <Title className="text16 black fowe700">Password</Title>
+        </Col>
+
+        <Col>
+          <Link href={routes.ForgetPassword.url}>
+            <a className="black text16 underline">Forgot password?</a>
+          </Link>
         </Col>
       </Row>
-      <Row>
-        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              margin: "0",
-              position: "absolute",
-              top: "0",
-              right: "0",
-              zIndex: "10"
-            }}
-          >
-            <span className="text12 fowe400 text-decoration-underline">
-              <Link href="/forgot-password">Forgot password?</Link>
-            </span>
-          </div>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={passwordValidation}
-          >
-            <Input.Password
-              className="ox_input"
-              placeholder="* * * * * * * *"
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="btn_dark_yellow btn_full"
-          >
-            LOGIN
-          </Button>
-        </Col>
-      </Row>
+
+      <Form.Item name="password" rules={passwordValidation} className="mb42">
+        <Input.Password
+          className="my_input"
+          placeholder="* * * * * * * *"
+          name="password"
+        />
+      </Form.Item>
+
+      <Button className="my_button bg_yellow" htmlType="submit">
+        LOGIN
+      </Button>
     </Form>
   );
 };
