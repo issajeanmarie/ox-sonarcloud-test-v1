@@ -15,6 +15,7 @@ import DatePicker from "antd/lib/date-picker";
 import { getMenuFold, setMenuFold } from "../../helpers/handleLocalStorage";
 import AppSider from "./AppSider";
 import AppHeader from "./AppHeader";
+import CustomPhoneInput from "../Custom/CustomPhoneInput";
 import CircleCheckbox from "../Custom/CircleCheckbox";
 import DriversTable from "../DriversTable";
 import OrdersTable from "../OrdersTable";
@@ -26,6 +27,8 @@ const { Option } = Select;
 const AppLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [checkbox, setCheckbox] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [validatePhone] = useState(false);
 
   useEffect(() => {
     const menuRes = getMenuFold();
@@ -75,7 +78,6 @@ const AppLayout = () => {
             </Col>
 
             {/* LEFT SIDE */}
-            <Col>Left side</Col>
           </Row>
 
           {/*
@@ -84,12 +86,17 @@ const AppLayout = () => {
            **
            */}
 
-          <Row className="pad24" gutter={100}>
+          <Row className="pad24" gutter={160}>
             {/* FORMS */}
-            <Col span={10}>
+            <Col
+              sm={{ span: 20 }}
+              xl={{ span: 12 }}
+              xxl={{ span: 12 }}
+              className="mb32"
+            >
               {/* NORMAL INPUT */}
               <Row gutter={24} align="bottom">
-                <Col span={16}>
+                <Col sm={{ span: 24 }} xl={{ span: 16 }}>
                   <Form.Item className="mb12" name="name">
                     <Title className="text16 black fowe700">Label</Title>
 
@@ -100,8 +107,8 @@ const AppLayout = () => {
                   </Form.Item>
                 </Col>
 
-                <Col span={8}>
-                  <Form.Item name="name">
+                <Col sm={{ span: 24 }} xl={{ span: 8 }}>
+                  <Form.Item name="name" className="mb12">
                     <Input
                       style={{ height: "2.8rem" }}
                       className="my_input"
@@ -188,7 +195,7 @@ const AppLayout = () => {
 
               {/* TEXT AREA */}
               <Row gutter={24} align="bottom">
-                <Col span={16}>
+                <Col sm={{ span: 24 }} xl={{ span: 16 }}>
                   <Form.Item name="name">
                     <Title className="text16 black fowe700">Label</Title>
 
@@ -203,7 +210,7 @@ const AppLayout = () => {
 
               {/* DATEPICKER */}
               <Row gutter={24} align="bottom">
-                <Col span={16}>
+                <Col sm={{ span: 24 }} xl={{ span: 16 }}>
                   <Form.Item className="mb12" name="date">
                     <Title className="text16 black fowe700">Date picker</Title>
 
@@ -223,8 +230,8 @@ const AppLayout = () => {
                   </Form.Item>
                 </Col>
 
-                <Col span={8}>
-                  <Form.Item name="name">
+                <Col sm={{ span: 24 }} xl={{ span: 8 }}>
+                  <Form.Item name="name" className="mb12">
                     <DatePicker
                       className="my_datepicker"
                       allowClear={false}
@@ -247,24 +254,18 @@ const AppLayout = () => {
               <Title className="text16 black fowe700">Phone number</Title>
               <Row gutter={24} align="top">
                 <Col span={16}>
-                  <Form.Item className="mb12" name="date">
-                    <DatePicker
-                      className="my_datepicker"
-                      allowClear={false}
-                      name="date"
-                      suffixIcon={
-                        <Image
-                          preview={false}
-                          src="/icons/ic-actions-calendar.svg"
-                          alt=""
-                          width={22}
-                        />
-                      }
+                  <Form.Item className="mb12" name="verifyAccountPhone">
+                    <CustomPhoneInput
+                      width=""
+                      name="verifyAccountPhone"
+                      validatePhone={validatePhone}
+                      phoneNumber={phoneNumber}
+                      setPhoneNumber={setPhoneNumber}
                     />
                   </Form.Item>
                 </Col>
 
-                <Col span={8}>
+                <Col xl={{ span: 24 }} xxl={{ span: 8 }}>
                   <Row gutter={32} align="top">
                     <Col>
                       <Space className="pad12 radius5 bg_white_yellow">
@@ -307,26 +308,26 @@ const AppLayout = () => {
             </Col>
 
             {/* OTHER SIDE OF COMPONENTS */}
-            <Col flex="auto">
+            <Col flex="auto" className="mb32">
               {/* BUTTONS  */}
               <Row align="bottom" gutter={24} className="mb24">
-                <Col span={12}>
+                <Col sm={{ span: 16 }} xl={{ span: 16 }} xxl={{ span: 12 }}>
                   <Button className="my_button bg_yellow">BUTTON</Button>
                 </Col>
 
-                <Col span={6}>
+                <Col sm={{ span: 8 }} xl={{ span: 8 }} xxl={{ span: 6 }}>
                   <Button className="my_button sm bg_yellow">BUTTON</Button>
                 </Col>
               </Row>
 
               <Row align="bottom" gutter={24} className="mb24">
-                <Col span={12}>
+                <Col sm={{ span: 16 }} xl={{ span: 16 }} xxl={{ span: 12 }}>
                   <Button className="my_button bg_white_yellow yellow">
                     BUTTON
                   </Button>
                 </Col>
 
-                <Col span={6}>
+                <Col sm={{ span: 8 }} xl={{ span: 8 }} xxl={{ span: 6 }}>
                   <Button className="my_button sm bg_white_yellow yellow">
                     BUTTON
                   </Button>
@@ -377,7 +378,7 @@ const AppLayout = () => {
             className="dashboard_header shadow mb32"
             align="middle"
             justify="space-between"
-            style={{ padding: "12px 24px", marginTop: "120px" }}
+            style={{ padding: "12px 24px" }}
           >
             {/* RIGHT SIDE  */}
             <Col>
