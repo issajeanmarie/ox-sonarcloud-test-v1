@@ -2618,6 +2618,11 @@ country-flag-icons@^1.5.4:
   resolved "https://registry.yarnpkg.com/country-flag-icons/-/country-flag-icons-1.5.5.tgz#04a41c83e2ea38ea28054d4e3eff9d1ce16aec1c"
   integrity sha512-k4WXZ/WvWOSiYXRG1n8EYHNr1m/IX0GffKqAidaet5DrJsDOmJ8Q/8JvvONhZNnKYg24s4lvsm+9og1HcuIU/g==
 
+country-flag-icons@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/country-flag-icons/-/country-flag-icons-1.5.4.tgz#f249442c2d5a1fdc14e52584a69d674c4653c821"
+  integrity sha512-/PnU4OZimNfuwQWH4hBBoGVmIbMoDoGF8AH6+TxSJzYOPgWxO7vEPu8Cuyzwy6R/voEiw3wjJESDXvQqmS1mng==
+
 cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
   resolved "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz"
