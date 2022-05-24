@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
 import styled from "styled-components";
-import { color } from "../../../themes/constants";
-import { CircleCheckBoxTypes } from "../../../lib/types/globalTypes";
+import { color } from "../../themes/constants";
+import { CircleCheckBoxTypes } from "../../lib/types/globalTypes";
 
 const Switch = styled.label`
   position: relative;

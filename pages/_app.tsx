@@ -1,5 +1,4 @@
 import "../styles/globals.css";
-import "../styles/nprogress.css";
 import "antd/dist/antd.css";
 import { useEffect, FC } from "react";
 import dynamic from "next/dynamic";
