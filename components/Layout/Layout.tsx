@@ -16,6 +16,8 @@ import { getMenuFold, setMenuFold } from "../../helpers/handleLocalStorage";
 import AppSider from "./AppSider";
 import AppHeader from "./AppHeader";
 import CircleCheckbox from "../Custom/CircleCheckbox";
+import DriversTable from "../DriversTable";
+import OrdersTable from "../OrdersTable";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -372,7 +374,7 @@ const AppLayout = () => {
 
           {/* BREADCUMB */}
           <Row
-            className="dashboard_header shadow"
+            className="dashboard_header shadow mb32"
             align="middle"
             justify="space-between"
             style={{ padding: "12px 24px", marginTop: "120px" }}
@@ -418,7 +420,10 @@ const AppLayout = () => {
             </Col>
           </Row>
 
-          <div style={{ width: "12%", margin: "64px auto" }}>
+          {/* DRIVERS TABLE */}
+          <DriversTable />
+
+          <div style={{ width: "12%", margin: "32px auto" }}>
             <Button className="my_button sm bg_white_yellow yellow">
               Load more
             </Button>
@@ -432,7 +437,7 @@ const AppLayout = () => {
 
           {/* FILTERS */}
           <Row
-            className="dashboard_header shadow mg_auto"
+            className="dashboard_header shadow mg_auto mb24 mt64"
             align="middle"
             justify="space-between"
             style={{ padding: "12px 24px", width: "97%" }}
@@ -562,13 +567,16 @@ const AppLayout = () => {
             </Col>
           </Row>
 
+          {/* DRIVERS TABLE */}
+          <OrdersTable />
+
           {/*
            ***
            THIRD SECTION
            **
            */}
 
-          <Row className="pad24" align="top" gutter={64}>
+          <Row className="pad24 mt32" align="top" gutter={64}>
             <Col>
               <Card
                 className="radius4"
@@ -651,30 +659,17 @@ const AppLayout = () => {
 
             {/* UPLOAD CARD */}
             <Col>
-              <Card
-                className="radius4"
-                headStyle={{ border: "none", marginBottom: "0" }}
-                bodyStyle={{ padding: "0 24px 24px 24px" }}
-                style={{ width: 300 }}
-                title={
-                  <Title className="text16 black fowe400 mt0">
-                    Normal text
-                  </Title>
-                }
-                extra={
-                  <Image
-                    width={18}
-                    src="/icons/more_vert_FILL0_wght400_GRAD0_opsz48.svg"
-                    preview={false}
-                    alt=""
-                  />
-                }
-              >
-                <Title className="text24 yellow">5,000,000 Rwf</Title>
-                <Title className="text14 black fowe400 opacity_56 italic">
-                  Caption text
-                </Title>
-              </Card>
+              <Space className="upload_card flex align_center justify_center flex_column radius5 pointe4">
+                <Input className="upload_input" type="file" />
+                <Image
+                  width={32}
+                  src="/icons/add_photo_alternate_FILL0_wght400_GRAD0_opsz48.svg"
+                  preview={false}
+                  alt=""
+                />
+
+                <Title className="text14 black fowe400">Add image</Title>
+              </Space>
             </Col>
           </Row>
         </Content>
