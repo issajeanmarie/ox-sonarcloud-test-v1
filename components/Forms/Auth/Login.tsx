@@ -18,6 +18,8 @@ import { setCredentials } from "../../../lib/redux/slices/authSlice";
 import { LoginResponse } from "../../../lib/types/auth";
 import { BackendErrorTypes } from "../../../lib/types/shared";
 
+const { Title } = Typography;
+
 const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -74,6 +76,18 @@ const Login = () => {
           </Button>
         </Col>
       </Row>
+
+      <Form.Item name="password" rules={passwordValidation} className="mb42">
+        <Input.Password
+          className="my_input"
+          placeholder="* * * * * * * *"
+          name="password"
+        />
+      </Form.Item>
+
+      <Button className="my_button bg_yellow" htmlType="submit">
+        LOGIN
+      </Button>
     </Form>
   );
 };
