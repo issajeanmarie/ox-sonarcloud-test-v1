@@ -33,7 +33,13 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <>
-      <SEO title="OX Dashboard" linkRel="icon" linkHref="/logo.png" />
+      <SEO
+        title="OX Dashboard"
+        linkRel="icon"
+        linkHref="/logo.png"
+        desc="OX Platform Dashboard"
+      />
+
       <Component {...pageProps} />
     </>
   );

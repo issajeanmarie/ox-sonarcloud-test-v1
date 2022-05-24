@@ -19,7 +19,7 @@ export const AppLoadingLoader = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        flexDirection: "column",
+        flexDirection: "column"
       }}
     >
       <Image
@@ -44,7 +44,7 @@ export const ComponentLoadingLoader = () => {
         height: "50vh",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "center"
       }}
     >
       <Spin indicator={loadingIcon} />

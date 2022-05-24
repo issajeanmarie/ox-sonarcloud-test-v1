@@ -9,7 +9,7 @@ const ComingSoon = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        flexDirection: "column",
+        flexDirection: "column"
       }}
     >
       <span className="primary_color fowe900 text16">Coming soon!</span>

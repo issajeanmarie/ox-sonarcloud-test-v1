@@ -7,8 +7,8 @@ module.exports = (phase, { defaultConfig }) => {
     return {
       ...defaultConfig,
       webpack: {
-        plugins: [new AntdDayjsWebpackPlugin()],
-      },
+        plugins: [new AntdDayjsWebpackPlugin()]
+      }
     };
   }
 

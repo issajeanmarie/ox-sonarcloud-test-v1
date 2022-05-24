@@ -1,6 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type MenuTypes = {
-  menus: array;
-  name: string;
-  active: boolean;
-  url: string;
+  menus: any;
+  name: any;
+  active: any;
+  url: any;
+};
+
+export type CircleCheckBoxTypes = {
+  defaultValue: any;
+  checked: boolean;
+  state: boolean;
+  setState: any;
+};
+
+export type DropIconTypes = {
+  focused: boolean;
+  loading: boolean;
+  showSearch: boolean;
+  width: string;
 };
