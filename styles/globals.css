@@ -63,7 +63,8 @@
 
   /* OTHERS */
   --opacity_1: 1;
-  --shadow: 0px -6px 24px #0000001a;
+  --shadow: -2px 3px 12px -5px #e4dfdf;
+  --row_shadow: -3px 3px 13px 1px rgba(228, 223, 223, 0.41);
   --opacity_56: 0.56;
   --opacity_43: 0.43;
   --opacity_16: 0.16;
@@ -780,6 +781,10 @@ body {
   text-decoration: underline;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .lineh_normal {
   line-height: normal !important;
 }
@@ -802,7 +807,12 @@ body {
 
 .shadow {
   box-shadow: var(--shadow) !important;
-  background: #ffffff 0% 0% no-repeat padding-box !important;
+  background: var(--white) 0% 0% no-repeat padding-box !important;
+}
+
+.row_shadow {
+  box-shadow: var(--row_shadow) !important;
+  background-color: var(--white) !important;
 }
 
 .input_white {
@@ -837,16 +847,20 @@ body {
   color: var(--color_yellow_faded);
 }
 
+.red {
+  color: var(--color_red) !important;
+}
+
 .yellow_faded_text {
-  color: var(--color_yellow_faded_text);
+  color: var(--color_yellow_faded_text) !important;
 }
 
 .orage {
-  color: var(--color_orage);
+  color: var(--color_orage) !important;
 }
 
 .red {
-  color: var(--color_red);
+  color: var(--color_red) !important;
 }
 
 .opacity_1 {
@@ -890,6 +904,18 @@ body {
 
 .bg_white_input {
   background-color: var(--color_input_white);
+}
+
+.bg_white_edit_btn {
+  background-color: rgba(42, 53, 72, 0.05) !important;
+}
+
+.bg_white_red {
+  background-color: rgba(189, 6, 45, 0.05) !important;
+}
+
+.bg_yellow_view_btn {
+  background-color: rgba(227, 178, 33, 0.05) !important;
 }
 
 .ant-layout-header.shadow {
@@ -1090,7 +1116,27 @@ body {
 }
 
 .mg_auto {
-  margin: auto !important;
+  margin: auto;
+}
+
+.block {
+  display: block !important;
+}
+
+.flex {
+  display: flex;
+}
+
+.align_center {
+  align-items: center;
+}
+
+.justify_center {
+  justify-content: center;
+}
+
+.flex_column {
+  flex-direction: column;
 }
 
 .pad12 {
@@ -1369,4 +1415,117 @@ body {
   right: 20px;
   top: 0;
   transform: translateY(65%);
+}
+
+.ant-table-tbody > tr > td,
+.ant-table-thead > tr > th {
+  border: none !important;
+}
+
+.ant-table-thead > tr > th {
+  color: #2a3548 !important;
+  opacity: 0.56;
+  font-size: 14px;
+}
+
+.ant-table-tbody > tr.shadow {
+  box-shadow: var(--row_shadow) !important;
+  background-color: var(--white) !important;
+  border-radius: 4px;
+  margin: 120px !important;
+}
+
+.ant-table-thead
+  > tr
+  > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+  display: none;
+}
+
+.ant-table-thead > tr > .ant-table-cell {
+  font-weight: 700;
+}
+
+@media screen and (max-width: 992px) {
+  .data_table .ant-table-thead {
+    display: none;
+  }
+
+  .data_table table,
+  .data_table table .ant-table-tbody,
+  .data_table table tr,
+  .data_table table td {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .data_table table .ant-table-tbody tr:not(:nth-child(1)) {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--grey);
+  }
+
+  .data_table table .ant-table-tbody td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .data_table table .ant-table-tbody td:nth-child(2) {
+    margin-top: 1rem;
+  }
+
+  .data_table table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 1rem;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .data_table table .no_text {
+    background: var(--black);
+    color: var(--yellow);
+    margin-bottom: 100px;
+    display: flex;
+    font-weight: 700;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .data_table table,
+  .data_table table .ant-table-tbody,
+  .data_table table tr,
+  .data_table table td {
+    width: 100%;
+  }
+}
+
+.upload_card {
+  border: 1px dashed var(--color_toggle_grey);
+  row-gap: 16px !important;
+  width: 147px;
+  height: 147px;
+  position: relative;
+}
+
+.ant-input.upload_input {
+  opacity: 0;
+  width: 147px;
+  height: 147px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  z-index: 1;
 }

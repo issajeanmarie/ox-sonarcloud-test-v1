@@ -1,11 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
-// import styled from "styled-components";
-import Input from "antd/lib/input";
-// import { color } from "../../../themes/constants";
+import styled from "styled-components";
+import { color } from "../../../themes/constants";
 import { CircleCheckBoxTypes } from "../../../lib/types/globalTypes";
 
-/* const Switch = styled.label`
+const Switch = styled.label`
   position: relative;
   display: inline-block;
   width: 39px;
@@ -56,7 +55,7 @@ const Slider = styled.span`
     transition: 0.4s;
     border-radius: 50%;
   }
-`; */
+`;
 
 const CircleCheckbox = ({
   defaultValue,
@@ -64,7 +63,7 @@ const CircleCheckbox = ({
   state,
   setState
 }: CircleCheckBoxTypes) => (
-  <label>
+  <Switch>
     <Input
       defaultChecked={true}
       type="checkbox"
@@ -72,8 +71,8 @@ const CircleCheckbox = ({
       checked={checked}
       onChange={() => setState(!state)}
     />
-    <span />
-  </label>
+    <Slider />
+  </Switch>
 );
 
 export default CircleCheckbox;
