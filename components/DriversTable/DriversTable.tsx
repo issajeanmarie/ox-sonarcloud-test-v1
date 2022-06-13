@@ -51,9 +51,7 @@ const DriversTable = () => (
         title="#"
         render={(text: Types, record: Types) => {
           const child = (
-            <Title className="text14 fowe400 dark opacity_56">
-              {record.key}
-            </Title>
+            <Text className="normalText opacity_56">{record.key}</Text>
           );
           return { children: child, props: { "data-label": "#" } };
         }}

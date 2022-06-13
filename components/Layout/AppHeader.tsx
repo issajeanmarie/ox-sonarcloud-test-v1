@@ -16,7 +16,7 @@ const { Title, Text } = Typography;
 
 const AppHeader = ({ collapsed, toggle }: any) => {
   return (
-    <div className="h-[11vh] w-full flex items-center px-5 bg-white">
+    <div className="w-full flex items-center p-4 bg-white">
       <div className="flex-1 flex items-center justify-between ">
         <div className="flex items-center gap-4">
           {React.createElement(
