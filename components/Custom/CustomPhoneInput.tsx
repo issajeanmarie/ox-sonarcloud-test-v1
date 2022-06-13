@@ -23,7 +23,7 @@ const CustomPhoneInput = ({
     <PhoneInput
       className="my_input"
       width={width}
-      placeholder="--- --- ---"
+      placeholder="Choose country"
       value={phoneNumber}
       onChange={setPhoneNumber}
       name={name}

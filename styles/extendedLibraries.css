@@ -141,6 +141,11 @@
   font-size: 12px !important;
 }
 
+.ant-select-selection-placeholder {
+  font-size: 14px !important;
+  font-weight: normal !important;
+}
+
 .ant-select-show-search.ant-select:not(.ant-select-customize-input)
   .ant-select-selector
   input {
