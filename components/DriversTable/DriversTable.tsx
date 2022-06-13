@@ -4,9 +4,10 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
+import CustomButton from "../Shared/Button/button";
 
 const { Column } = Table;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const tableData = [
   {
@@ -34,10 +35,7 @@ type Types = {
 };
 
 const DriversTable = () => (
-  <Space
-    className="mg_auto"
-    style={{ padding: "12px 24px", width: "97%", display: "block" }}
-  >
+  <div className="mx-4">
     <Table
       className="data_table"
       rowClassName="shadow"
@@ -66,7 +64,9 @@ const DriversTable = () => (
         key="name"
         title="Name"
         render={(text: Types, record: Types) => {
-          const child = <Title className="text14 fowe700">{record.name}</Title>;
+          const child = (
+            <Text className="normalText fowe700">{record.name}</Text>
+          );
           return { children: child, props: { "data-label": "Name" } };
         }}
       />
@@ -77,9 +77,7 @@ const DriversTable = () => (
         title="Phone number"
         render={(text: Types, record: Types) => {
           const child = (
-            <Title className="text14 fowe400 dark opacity_56">
-              {record.phone}
-            </Title>
+            <Text className="normalText opacity_56">{record.phone}</Text>
           );
           return { children: child, props: { "data-label": "Phone number" } };
         }}
@@ -91,9 +89,7 @@ const DriversTable = () => (
         title="Email"
         render={(text: Types, record: Types) => {
           const child = (
-            <Title className="text14 fowe400 dark opacity_56">
-              {record.email}
-            </Title>
+            <Text className="normalText opacity_56">{record.email}</Text>
           );
           return { children: child, props: { "data-label": "Email" } };
         }}
@@ -105,9 +101,7 @@ const DriversTable = () => (
         title="Status"
         render={(text: Types, record: Types) => {
           const child = (
-            <Title className="text14 fowe700 uppercase red">
-              {record.status}
-            </Title>
+            <Text className="heading2 uppercase red">{record.status}</Text>
           );
           return { children: child, props: { "data-label": "Status" } };
         }}
@@ -121,42 +115,40 @@ const DriversTable = () => (
           const child = (
             <Row align="middle" gutter={16} wrap={false}>
               <Col>
-                <Space
-                  className="flex align_center justify_center radius5 bg_white_edit_btn pointer"
-                  style={{ width: "36px", height: "36px" }}
-                >
-                  <Image
-                    src="/icons/ic-contact-edit.svg"
-                    alt=""
-                    width={16}
-                    preview={false}
-                  />
-                </Space>
+                <CustomButton
+                  type="secondary"
+                  size="icon"
+                  icon={
+                    <Image
+                      src="/icons/ic-contact-edit.svg"
+                      alt=""
+                      width={12}
+                      preview={false}
+                    />
+                  }
+                />
               </Col>
 
               <Col>
-                <Space
-                  className="flex align_center justify_center radius5 bg_white_red pointer"
-                  style={{ width: "36px", height: "36px" }}
-                >
-                  <Image
-                    src="/icons/ic-actions-remove.svg"
-                    alt=""
-                    width={16}
-                    preview={false}
-                  />
-                </Space>
+                <CustomButton
+                  type="danger"
+                  size="icon"
+                  className="bg_danger"
+                  icon={
+                    <Image
+                      src="/icons/ic-actions-remove.svg"
+                      alt=""
+                      width={12}
+                      preview={false}
+                    />
+                  }
+                />
               </Col>
 
               <Col>
-                <Space
-                  className="flex align_center justify_center radius5 bg_yellow_view_btn pointer"
-                  style={{ padding: "0px 32px", height: "36px" }}
-                >
-                  <Title className="yellow_faded_text text14 fowe700 mb0">
-                    View
-                  </Title>
-                </Space>
+                <CustomButton type="secondary" size="small">
+                  View
+                </CustomButton>
               </Col>
             </Row>
           );
@@ -164,7 +156,7 @@ const DriversTable = () => (
         }}
       />
     </Table>
-  </Space>
+  </div>
 );
 
 export default DriversTable;

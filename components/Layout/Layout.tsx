@@ -19,9 +19,14 @@ import CustomPhoneInput from "../Custom/CustomPhoneInput";
 import CircleCheckbox from "../Custom/CircleCheckbox";
 import DriversTable from "../DriversTable";
 import OrdersTable from "../OrdersTable";
+import TopNavigator from "../Shared/TopNavigator";
+import { Header_Links } from "../../lib/types/links";
+import CustomInput from "../Shared/Input";
+import { PlusOutlined } from "@ant-design/icons";
+import CustomButton from "../Shared/Button/button";
 
 const { Content } = Layout;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Option } = Select;
 
 const AppLayout = () => {
@@ -29,6 +34,21 @@ const AppLayout = () => {
   const [checkbox, setCheckbox] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [validatePhone] = useState(false);
+
+  const Links: Header_Links[] = [
+    {
+      label: "TRUCKS",
+      id: "trucks"
+    },
+    {
+      label: "REVENUES",
+      id: "revenues"
+    },
+    {
+      label: "MAP",
+      id: "map"
+    }
+  ];
 
   useEffect(() => {
     const menuRes = getMenuFold();
@@ -44,42 +64,12 @@ const AppLayout = () => {
     <Layout>
       <AppSider collapsed={collapsed} />
 
-      <Layout className="site-layout">
+      <Layout>
         <AppHeader collapsed={collapsed} toggle={toggle} />
 
-        <Content className="bg_white black contents_container">
+        <Content className="bg-ox-white text-black contents_container">
           {/* PAGES NAVIGATION */}
-          <Row
-            className="dashboard_header shadow"
-            align="middle"
-            justify="space-between"
-          >
-            {/* RIGHT SIDE  */}
-            <Col>
-              <Row align="middle" gutter={32}>
-                <Col>
-                  <Title className="black text14 fowe300 pointer lineh_normal mb0 dashboard_menu dashboard_menu_active">
-                    TRUCKS
-                  </Title>
-                </Col>
-
-                <Col>
-                  <Title className="black text14 fowe300 pointer lineh0 mb0 dashboard_menu">
-                    REVENUES
-                  </Title>
-                </Col>
-
-                <Col>
-                  <Title className="black text14 fowe300 pointer lineh0 mb0 dashboard_menu">
-                    MAP
-                  </Title>
-                </Col>
-              </Row>
-            </Col>
-
-            {/* LEFT SIDE */}
-          </Row>
-
+          <TopNavigator headerLinks={Links} />
           {/*
            ***
            FIRST SECTION
@@ -97,45 +87,59 @@ const AppLayout = () => {
               {/* NORMAL INPUT */}
               <Row gutter={24} align="bottom">
                 <Col sm={{ span: 24 }} xl={{ span: 16 }}>
-                  <Form.Item className="mb12" name="name">
-                    <Title className="text16 black fowe700">Label</Title>
-
-                    <Input.Password
-                      className="my_input"
-                      placeholder="*** *** ***"
-                    />
-                  </Form.Item>
+                  <CustomInput type="text" name="Name" label="Label" />
                 </Col>
 
                 <Col sm={{ span: 24 }} xl={{ span: 8 }}>
-                  <Form.Item name="name" className="mb12">
-                    <Input
-                      style={{ height: "2.8rem" }}
-                      className="my_input"
-                      placeholder="Placeholder"
-                      suffix={
-                        <Image
-                          width={14}
-                          src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
-                          preview={false}
-                          alt=""
-                        />
-                      }
-                    />
-                  </Form.Item>
+                  <CustomInput
+                    type="text"
+                    placeholder="Placeholder"
+                    name="search"
+                    size="small"
+                    suffixIcon={
+                      <Image
+                        width={10}
+                        src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
+                        preview={false}
+                        alt=""
+                      />
+                    }
+                  />
                 </Col>
               </Row>
 
               {/* SELECT AND OPTIONS */}
               <Row gutter={24} align="bottom">
                 <Col span={16}>
-                  <Form.Item name="name">
-                    <Title className="text16 black fowe700">Label</Title>
+                  <CustomInput
+                    type="select"
+                    label="Label"
+                    placeholder="Choose user"
+                    options={[
+                      { label: "Lionel Mpfizi", value: "lm" },
+                      { label: "KBM", value: "kbm" },
+                      { label: "Issa J Marie", value: "Ijm" }
+                    ]}
+                    name="users"
+                    suffixIcon={
+                      <Image
+                        preview={false}
+                        src="/icons/expand_more_black_24dp.svg"
+                        alt=""
+                        width={10}
+                      />
+                    }
+                  />
+                </Col>
 
+                {/* <Col style={{ width: "200px" }}>
+                  <Form.Item name="name">
                     <Select
+                      className="my_input sm"
                       showSearch
-                      placeholder="Select someone"
+                      placeholder="Select"
                       size="large"
+                      prefixCls="hello"
                       suffixIcon={
                         <Image
                           preview={false}
@@ -144,109 +148,50 @@ const AppLayout = () => {
                           width={10}
                         />
                       }
-                    >
-                      <Option value="yves">Yves Bisemage</Option>
-                      <Option value="lionel">Lionel Mpfizi</Option>
-                      <Option value="issa">Issa Jean Marie</Option>
-                    </Select>
+                    />
                   </Form.Item>
-                </Col>
-
-                <Col style={{ width: "200px" }}>
-                  <Form.Item name="name">
-                    <Row
-                      wrap={false}
-                      className="radius5"
-                      align="middle"
-                      style={{
-                        border: "1px solid #dbdbdb",
-                        padding: "4px 0 4px 12px",
-                        height: "2.8rem"
-                      }}
-                    >
-                      <Col span={6}>
-                        <span className="fowe700 text14">Metric:</span>
-                      </Col>
-
-                      <Col span={18}>
-                        <Select
-                          className="except"
-                          showSearch
-                          placeholder="Select"
-                          size="large"
-                          suffixIcon={
-                            <Image
-                              preview={false}
-                              src="/icons/expand_more_black_24dp.svg"
-                              alt=""
-                              width={10}
-                            />
-                          }
-                        >
-                          <Option value="yves">Option</Option>
-                          <Option value="lionel">Option</Option>
-                          <Option value="issa">Option</Option>
-                        </Select>
-                      </Col>
-                    </Row>
-                  </Form.Item>
-                </Col>
+                </Col> */}
               </Row>
 
               {/* TEXT AREA */}
               <Row gutter={24} align="bottom">
                 <Col sm={{ span: 24 }} xl={{ span: 16 }}>
-                  <Form.Item name="name">
-                    <Title className="text16 black fowe700">Label</Title>
-
-                    <Input.TextArea
-                      className="my_input"
-                      placeholder="Text area"
-                      style={{ minHeight: "124px", padding: "12px" }}
-                    />
-                  </Form.Item>
+                  <CustomInput type="text_area" label="Label" name="message" />
                 </Col>
               </Row>
 
               {/* DATEPICKER */}
               <Row gutter={24} align="bottom">
                 <Col sm={{ span: 24 }} xl={{ span: 16 }}>
-                  <Form.Item className="mb12" name="date">
-                    <Title className="text16 black fowe700">Date picker</Title>
-
-                    <DatePicker
-                      className="my_datepicker"
-                      allowClear={false}
-                      name="date"
-                      suffixIcon={
-                        <Image
-                          preview={false}
-                          src="/icons/ic-actions-calendar.svg"
-                          alt=""
-                          width={22}
-                        />
-                      }
-                    />
-                  </Form.Item>
+                  <CustomInput
+                    type="date"
+                    label="Date picker"
+                    suffixIcon={
+                      <Image
+                        preview={false}
+                        src="/icons/ic-actions-calendar.svg"
+                        alt=""
+                        width={18}
+                      />
+                    }
+                    name="date"
+                  />
                 </Col>
 
-                <Col sm={{ span: 24 }} xl={{ span: 8 }}>
-                  <Form.Item name="name" className="mb12">
-                    <DatePicker
-                      className="my_datepicker"
-                      allowClear={false}
-                      name="date"
-                      style={{ height: "2.8rem" }}
-                      suffixIcon={
-                        <Image
-                          preview={false}
-                          src="/icons/ic-actions-calendar.svg"
-                          alt=""
-                          width={18}
-                        />
-                      }
-                    />
-                  </Form.Item>
+                <Col sm={{ span: 25 }} xl={{ span: 8 }}>
+                  <CustomInput
+                    type="date"
+                    name="date"
+                    size="small"
+                    suffixIcon={
+                      <Image
+                        preview={false}
+                        src="/icons/ic-actions-calendar.svg"
+                        alt=""
+                        width={18}
+                      />
+                    }
+                  />
                 </Col>
               </Row>
 
@@ -268,15 +213,12 @@ const AppLayout = () => {
                 <Col xl={{ span: 24 }} xxl={{ span: 8 }}>
                   <Row gutter={32} align="top">
                     <Col>
-                      <Space className="pad12 radius5 bg_white_yellow">
-                        <Image
-                          width={18}
-                          height={18}
-                          src="/icons/ic-actions-add-simple.svg"
-                          preview={false}
-                          alt=""
-                        />
-                      </Space>
+                      <CustomButton
+                        type="secondary"
+                        size="icon"
+                        loading={false}
+                        icon={<PlusOutlined />}
+                      />
                     </Col>
 
                     {/* BUTTON WITH CANCEL */}
@@ -312,53 +254,51 @@ const AppLayout = () => {
               {/* BUTTONS  */}
               <Row align="bottom" gutter={24} className="mb24">
                 <Col sm={{ span: 16 }} xl={{ span: 16 }} xxl={{ span: 12 }}>
-                  <Button className="my_button bg_yellow">BUTTON</Button>
+                  <CustomButton type="primary">BUTTON</CustomButton>
                 </Col>
 
                 <Col sm={{ span: 8 }} xl={{ span: 8 }} xxl={{ span: 6 }}>
-                  <Button className="my_button sm bg_yellow">BUTTON</Button>
+                  <CustomButton type="primary" size="small">
+                    BUTTON
+                  </CustomButton>
                 </Col>
               </Row>
 
               <Row align="bottom" gutter={24} className="mb24">
                 <Col sm={{ span: 16 }} xl={{ span: 16 }} xxl={{ span: 12 }}>
-                  <Button className="my_button bg_white_yellow yellow">
-                    BUTTON
-                  </Button>
+                  <CustomButton type="secondary">BUTTON</CustomButton>
                 </Col>
 
                 <Col sm={{ span: 8 }} xl={{ span: 8 }} xxl={{ span: 6 }}>
-                  <Button className="my_button sm bg_white_yellow yellow">
+                  <CustomButton type="secondary" size="small">
                     BUTTON
-                  </Button>
+                  </CustomButton>
                 </Col>
               </Row>
 
               <Link href="#">
-                <a className="black text16 underline ">Forgot password?</a>
+                <a className="link animate">Forgot password?</a>
               </Link>
 
               {/* TEXTURE  */}
-              <Row align="bottom" gutter={32}>
-                <Col>
-                  <Title className="text24 black mt64">HEADING 1</Title>
-                  <Title className="text18 black fowe300">Heading 2</Title>
-                  <Title className="text16 black fowe400">Normal text</Title>
-                  <Title className="text14 black fowe400 opacity_56 italic">
-                    Caption text
-                  </Title>
-                  <Title className="text16 black fowe400">Normal text</Title>
-                </Col>
+              <div className="mt-10">
+                <div className="flex flex-col gap-2">
+                  <Text className="heading1">HEADING 1</Text>
+                  <Text className="heading2">Heading 2</Text>
+                  <Text className="normalText">Normal text</Text>
+                  <Text className="captionText block">caption text</Text>
+                  <Text className="normalText">Normal text</Text>
+                </div>
 
-                <Col>
+                <div className="mt-3">
                   <CircleCheckbox
                     defaultValue={true}
                     checked={checkbox}
                     setState={setCheckbox}
                     state={checkbox}
                   />
-                </Col>
-              </Row>
+                </div>
+              </div>
 
               {/* DAYS */}
               <Row gutter={24} align="middle" className="mt64">
@@ -382,42 +322,30 @@ const AppLayout = () => {
           >
             {/* RIGHT SIDE  */}
             <Col>
-              <Row gutter={20} align="middle">
-                <Col>
-                  <Image
-                    className="pointer"
-                    src="/icons/keyboard_backspace_black_24dp.svg"
-                    alt="OX Delivery Logo"
-                    width={24}
-                    preview={false}
-                  />
-                </Col>
+              <div className="flex items-center gap-4">
+                <Image
+                  className="pointer"
+                  src="/icons/keyboard_backspace_black_24dp.svg"
+                  alt="OX Delivery Logo"
+                  width={20}
+                  preview={false}
+                />
 
-                <Col>
-                  <Title className="black text16 mb0">Level 1</Title>
-                </Col>
+                <Text className="heading2">Level 1</Text>
 
-                <Col>
-                  <Title className="black text16 mb0">/</Title>
-                </Col>
+                <Text className="heading2">/</Text>
 
-                <Col>
-                  <Title className="black text16 mb0">Level 2</Title>
-                </Col>
+                <Text className="heading2">Level 2</Text>
 
-                <Col>
-                  <Title className="black text16 mb0">/</Title>
-                </Col>
+                <Text className="heading2">/</Text>
 
-                <Col>
-                  <Title className="opacity_56 black text16 mb0">Current</Title>
-                </Col>
-              </Row>
+                <Text className="opacity_56 normalText">Current</Text>
+              </div>
             </Col>
 
             {/* LEFT SIDE */}
             <Col span={3}>
-              <Button className="my_button sm bg_yellow">ACTION</Button>
+              <CustomButton type="primary">ACTION</CustomButton>
             </Col>
           </Row>
 
@@ -425,9 +353,7 @@ const AppLayout = () => {
           <DriversTable />
 
           <div style={{ width: "12%", margin: "32px auto" }}>
-            <Button className="my_button sm bg_white_yellow yellow">
-              Load more
-            </Button>
+            <CustomButton type="secondary">Load more</CustomButton>
           </div>
 
           {/*
@@ -437,136 +363,65 @@ const AppLayout = () => {
            */}
 
           {/* FILTERS */}
-          <Row
-            className="dashboard_header shadow mg_auto mb24 mt64"
-            align="middle"
-            justify="space-between"
-            style={{ padding: "12px 24px", width: "97%" }}
-          >
-            {/* RIGHT SIDE  */}
-            <Col>
-              <Row align="middle" gutter={24}>
-                <Col>
-                  <Title className="text16 fowe700 black mb0">
-                    2,645 Orders
-                  </Title>
-                </Col>
+          <div className="flex items-center justify-between dashboard_header shadow p-4">
+            {/* LEFT SIDE  */}
+            <div className="flex items-center gap-4">
+              <Text className="heading2 ">2,645 Orders</Text>
+              <CustomInput
+                type="date"
+                name="date"
+                size="small"
+                suffixIcon={
+                  <Image
+                    preview={false}
+                    src="/icons/ic-actions-calendar.svg"
+                    alt=""
+                    width={18}
+                  />
+                }
+              />
 
-                <Col style={{ width: "200px" }}>
-                  <Form.Item name="name" className="mb0">
-                    <Row
-                      wrap={false}
-                      className="radius5"
-                      align="middle"
-                      style={{
-                        border: "1px solid #dbdbdb",
-                        padding: "4px 0 4px 12px",
-                        height: "2.8rem"
-                      }}
-                    >
-                      <Col span={6}>
-                        <span className="fowe700 text14">Filter:</span>
-                      </Col>
+              <CustomInput
+                type="date"
+                name="date"
+                size="small"
+                suffixIcon={
+                  <Image
+                    preview={false}
+                    src="/icons/ic-actions-calendar.svg"
+                    alt=""
+                    width={18}
+                  />
+                }
+              />
+            </div>
 
-                      <Col span={18}>
-                        <Select
-                          className="except"
-                          showSearch
-                          placeholder="Select"
-                          size="large"
-                          suffixIcon={
-                            <Image
-                              preview={false}
-                              src="/icons/expand_more_black_24dp.svg"
-                              alt=""
-                              width={10}
-                            />
-                          }
-                        >
-                          <Option value="yves">Option</Option>
-                          <Option value="lionel">Option</Option>
-                          <Option value="issa">Option</Option>
-                        </Select>
-                      </Col>
-                    </Row>
-                  </Form.Item>
-                </Col>
+            {/* RIGHT SIDE */}
+            <div className="flex items-center gap-4">
+              <CustomInput
+                type="text"
+                name="search"
+                size="small"
+                placeholder="Placeholder"
+                suffixIcon={
+                  <Image
+                    width={14}
+                    src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
+                    preview={false}
+                    alt=""
+                  />
+                }
+              />
 
-                <Col>
-                  <Form.Item name="name" className="mb0">
-                    <DatePicker
-                      className="my_datepicker"
-                      allowClear={false}
-                      placeholder="Start"
-                      name="date"
-                      style={{ height: "2.8rem" }}
-                      suffixIcon={
-                        <Image
-                          preview={false}
-                          src="/icons/ic-actions-calendar.svg"
-                          alt=""
-                          width={18}
-                        />
-                      }
-                    />
-                  </Form.Item>
-                </Col>
+              <CustomButton type="secondary" size="small">
+                DOWNLOAD REPORT
+              </CustomButton>
 
-                <Col>
-                  <Form.Item name="name" className="mb0">
-                    <DatePicker
-                      className="my_datepicker"
-                      allowClear={false}
-                      placeholder="End"
-                      name="date"
-                      style={{ height: "2.8rem" }}
-                      suffixIcon={
-                        <Image
-                          preview={false}
-                          src="/icons/ic-actions-calendar.svg"
-                          alt=""
-                          width={18}
-                        />
-                      }
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Col>
-
-            {/* LEFT SIDE */}
-            <Col span={10}>
-              <Row gutter={24} align="middle" justify="end">
-                <Col span={6}>
-                  <Form.Item name="name" className="mb0">
-                    <Input
-                      style={{ height: "2.8rem", margin: "0" }}
-                      className="my_input"
-                      placeholder="Placeholder"
-                      suffix={
-                        <Image
-                          width={14}
-                          src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
-                          preview={false}
-                          alt=""
-                        />
-                      }
-                    />
-                  </Form.Item>
-                </Col>
-
-                <Col span={9}>
-                  <Button className="my_button sm bg_white_yellow yellow">
-                    DOWNLOAD REPORT
-                  </Button>
-                </Col>
-
-                <Col span={9}>
-                  <Button className="my_button sm bg_yellow">NEW ORDER</Button>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
+              <CustomButton type="primary" size="small">
+                NEW ORDER
+              </CustomButton>
+            </div>
+          </div>
 
           {/* DRIVERS TABLE */}
           <OrdersTable />
