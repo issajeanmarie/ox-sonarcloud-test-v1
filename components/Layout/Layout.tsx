@@ -76,7 +76,7 @@ const AppLayout = () => {
            **
            */}
 
-          <Row className="pad24" gutter={160}>
+          <Row className="p-5" gutter={160}>
             {/* FORMS */}
             <Col
               sm={{ span: 20 }}
@@ -85,7 +85,7 @@ const AppLayout = () => {
               className="mb32"
             >
               {/* NORMAL INPUT */}
-              <Row gutter={24} align="bottom">
+              <Row gutter={24} align="bottom" className="mb-5">
                 <Col sm={{ span: 24 }} xl={{ span: 16 }}>
                   <CustomInput type="text" name="Name" label="Label" />
                 </Col>
@@ -109,7 +109,7 @@ const AppLayout = () => {
               </Row>
 
               {/* SELECT AND OPTIONS */}
-              <Row gutter={24} align="bottom">
+              <Row gutter={24} align="bottom" className="mb-5">
                 <Col span={16}>
                   <CustomInput
                     type="select"
@@ -154,7 +154,7 @@ const AppLayout = () => {
               </Row>
 
               {/* TEXT AREA */}
-              <Row gutter={24} align="bottom">
+              <Row gutter={24} align="bottom" className="mb-4">
                 <Col sm={{ span: 24 }} xl={{ span: 16 }}>
                   <CustomInput type="text_area" label="Label" name="message" />
                 </Col>
@@ -196,63 +196,43 @@ const AppLayout = () => {
               </Row>
 
               {/* PHONE NUMBER */}
-              <Title className="text16 black fowe700">Phone number</Title>
-              <Row gutter={24} align="top">
-                <Col span={16}>
-                  <Form.Item className="mb12" name="verifyAccountPhone">
-                    <CustomPhoneInput
-                      width=""
-                      name="verifyAccountPhone"
-                      validatePhone={validatePhone}
-                      phoneNumber={phoneNumber}
-                      setPhoneNumber={setPhoneNumber}
-                    />
-                  </Form.Item>
-                </Col>
+              <Text className="heading2 my-3">Phone number</Text>
+              <div className="flex items-center gap-3 w-full">
+                <Form.Item name="verifyAccountPhone">
+                  <CustomPhoneInput
+                    width=""
+                    name="verifyAccountPhone"
+                    validatePhone={validatePhone}
+                    phoneNumber={phoneNumber}
+                    setPhoneNumber={setPhoneNumber}
+                  />
+                </Form.Item>
 
-                <Col xl={{ span: 24 }} xxl={{ span: 8 }}>
-                  <Row gutter={32} align="top">
-                    <Col>
-                      <CustomButton
-                        type="secondary"
-                        size="icon"
-                        loading={false}
-                        icon={<PlusOutlined />}
-                      />
-                    </Col>
+                <CustomButton
+                  type="secondary"
+                  size="icon"
+                  loading={false}
+                  icon={<PlusOutlined />}
+                />
 
-                    {/* BUTTON WITH CANCEL */}
-                    <Col>
-                      <Space>
-                        <Row
-                          className="bg_white_input radius5"
-                          style={{ padding: "8px 0" }}
-                          align="middle"
-                          justify="space-between"
-                          gutter={32}
-                        >
-                          <Col className="uppercase fowe700 text12">Button</Col>
-                          <Col>
-                            <Image
-                              className="pointer"
-                              width={12}
-                              src="/icons/ic-actions-close-simple.svg"
-                              preview={false}
-                              alt=""
-                            />
-                          </Col>
-                        </Row>
-                      </Space>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
+                {/* BUTTON WITH CANCEL */}
+                <div className="flex items-center bg_white_input radius5 py-[8px] gap-3 px-3 rounded cursor-pointer">
+                  <Text className="heading2">Button</Text>
+                  <Image
+                    className="pointer"
+                    width={12}
+                    src="/icons/ic-actions-close-simple.svg"
+                    preview={false}
+                    alt=""
+                  />
+                </div>
+              </div>
             </Col>
 
             {/* OTHER SIDE OF COMPONENTS */}
-            <Col flex="auto" className="mb32">
+            <Col>
               {/* BUTTONS  */}
-              <Row align="bottom" gutter={24} className="mb24">
+              <Row align="bottom" gutter={24} className="my-5">
                 <Col sm={{ span: 16 }} xl={{ span: 16 }} xxl={{ span: 12 }}>
                   <CustomButton type="primary">BUTTON</CustomButton>
                 </Col>
@@ -264,7 +244,7 @@ const AppLayout = () => {
                 </Col>
               </Row>
 
-              <Row align="bottom" gutter={24} className="mb24">
+              <Row align="bottom" gutter={24} className="my-5">
                 <Col sm={{ span: 16 }} xl={{ span: 16 }} xxl={{ span: 12 }}>
                   <CustomButton type="secondary">BUTTON</CustomButton>
                 </Col>
@@ -301,12 +281,12 @@ const AppLayout = () => {
               </div>
 
               {/* DAYS */}
-              <Row gutter={24} align="middle" className="mt64">
+              <Row gutter={24} align="middle" className="mt-10">
                 {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
                   <Col key={`${index * 2}-${day}`}>
-                    <Title className="fowe400 pointer text14 radius50 bg_white_input pad12 day_circle">
+                    <Text className="rounded-full bg_white_input day_circle cursor-pointer">
                       {day}
-                    </Title>
+                    </Text>
                   </Col>
                 ))}
               </Row>
@@ -432,18 +412,14 @@ const AppLayout = () => {
            **
            */}
 
-          <Row className="pad24 mt32" align="top" gutter={64}>
+          <Row className="p-5 mt-5" gutter={64}>
             <Col>
               <Card
                 className="radius4"
                 headStyle={{ border: "none", marginBottom: "0" }}
                 bodyStyle={{ padding: "0 24px 24px 24px" }}
                 style={{ width: 300 }}
-                title={
-                  <Title className="text16 black fowe400 mt0">
-                    Normal text
-                  </Title>
-                }
+                title={<Text className="normalText">Normal text</Text>}
                 extra={
                   <Image
                     width={18}
@@ -453,10 +429,10 @@ const AppLayout = () => {
                   />
                 }
               >
-                <Title className="text24 yellow">5,000,000 Rwf</Title>
-                <Title className="text14 black fowe400 opacity_56 italic">
-                  Caption text
-                </Title>
+                <Text className="text-2xl font-semibold block yellow mb-3">
+                  5,000,000 Rwf
+                </Text>
+                <Text className="captionText">Caption text</Text>
               </Card>
             </Col>
 
@@ -479,9 +455,7 @@ const AppLayout = () => {
                       </Col>
 
                       <Col>
-                        <Title className="text16 black fowe400 mb0">
-                          Yellow card
-                        </Title>
+                        <Text className="normalText">Yellow card</Text>
                       </Col>
                     </Row>
                   </Col>
@@ -515,7 +489,7 @@ const AppLayout = () => {
 
             {/* UPLOAD CARD */}
             <Col>
-              <Space className="upload_card flex align_center justify_center flex_column radius5 pointe4">
+              <div className="upload_card flex items-center justify-center flex-col">
                 <Input className="upload_input" type="file" />
                 <Image
                   width={32}
@@ -524,8 +498,8 @@ const AppLayout = () => {
                   alt=""
                 />
 
-                <Title className="text14 black fowe400">Add image</Title>
-              </Space>
+                <Text className="normalText block">Add image</Text>
+              </div>
             </Col>
           </Row>
         </Content>

@@ -47,17 +47,11 @@ const orderData = [
 ];
 
 const OrdersTable = () => (
-  <Space className="mg_auto shadow" style={{ width: "97%", display: "block" }}>
+  <div className="shadow w-[99%] m-auto my-5">
     {/* TOP ROW */}
-    <Row
-      justify="space-between"
-      className="pad24"
-      style={{
-        borderBottom: "1px solid #eaeff2"
-      }}
-    >
+    <div className="p-5 border-b flex items-center justify-between">
       {/* TOP ROW RIGHT SIDE */}
-      <Col span={12}>
+      <div>
         <Row align="middle" gutter={32}>
           <Col>
             <Image
@@ -76,11 +70,11 @@ const OrdersTable = () => (
             <Text className="normalText opacity_56">0788734295</Text>
           </Col>
         </Row>
-      </Col>
+      </div>
 
       {/* TOP ROW RIGHT SIDE */}
-      <Col span={12}>
-        <Row align="middle" justify="end" gutter={64}>
+      <div>
+        <div className="flex items-center gap-4">
           <Col>
             <Text className="heading2 orange">70, 000 Rwf</Text>
           </Col>
@@ -89,9 +83,9 @@ const OrdersTable = () => (
             <Text className="captionText">Order status:</Text>
             <Text className="normalText fowe700">PENDING</Text>
           </div>
-        </Row>
-      </Col>
-    </Row>
+        </div>
+      </div>
+    </div>
 
     {/* MIDDLE ROW */}
     <Table
@@ -148,7 +142,7 @@ const OrdersTable = () => (
         render={(text: Types, record: Types) => {
           const child = (
             <div className="flex items-center gap-2">
-              <Title className="fowe700 text16 mb0">From</Title>
+              <Text className="heading2">From</Text>
               <Text className="normalText">{record.from}</Text>
             </div>
           );
@@ -162,7 +156,7 @@ const OrdersTable = () => (
         render={(text: Types, record: Types) => {
           const child = (
             <div className="flex items-center gap-2">
-              <Title className="fowe700 text16 mb0">To</Title>
+              <Text className="heading2">To</Text>
               <Text className="normalText">{record.to}</Text>
             </div>
           );
@@ -175,9 +169,9 @@ const OrdersTable = () => (
         title="Supporting"
         render={(text: Types, record: Types) => {
           const child = (
-            <Title className="text14 black fowe400 opacity_56 italic nowrap mb0">
+            <Text className="captionText opacity_56 italic nowrap mb0">
               {record.supporting}
-            </Title>
+            </Text>
           );
           return { children: child, props: { "data-label": "Status" } };
         }}
@@ -239,26 +233,26 @@ const OrdersTable = () => (
       <Col>
         <Row gutter={12} align="middle">
           <Col>
-            <Title className="text14 black fowe400 opacity_56 nowrap mb0">
+            <Text className="normalText opacity_56 nowrap">
               Created: 11th May 2022 -
-            </Title>
+            </Text>
           </Col>
 
           <Col>
-            <Title className="text14 black fowe700 opacity_56 italic nowrap mb0">
+            <Text className="normalText opacity_56 italic nowrap ">
               Edited by Yves Honore
-            </Title>
+            </Text>
           </Col>
         </Row>
       </Col>
 
       <Col>
-        <Title className="text14 black fowe400 opacity_56 italic nowrap mb0">
+        <Text className="normalText opacity_56 italic nowrap mb0">
           NYAMASHEKE Depot
-        </Title>
+        </Text>
       </Col>
     </Row>
-  </Space>
+  </div>
 );
 
 export default OrdersTable;
