@@ -1,5 +1,4 @@
 import Table from "antd/lib/table";
-import Space from "antd/lib/space";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
@@ -7,7 +6,7 @@ import Typography from "antd/lib/typography";
 import CustomButton from "../Shared/Button";
 
 const { Column } = Table;
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 type Types = {
   key: number;
@@ -96,7 +95,7 @@ const OrdersTable = () => (
       showHeader={false}
       bordered={false}
       scroll={{ x: "100%" }}
-      // tableLayout="fixed"
+      tableLayout="auto"
     >
       <Column
         key="key"
@@ -182,7 +181,7 @@ const OrdersTable = () => (
         title="Action"
         render={() => {
           const child = (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 justify-end">
               <Text className="heading2 red nowrap mb0">70, 000 Rwf</Text>
 
               <CustomButton

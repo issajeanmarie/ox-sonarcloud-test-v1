@@ -4,11 +4,9 @@ import Space from "antd/lib/space";
 import Image from "antd/lib/image";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import Layout from "antd/lib/layout";
 import Typography from "antd/lib/typography";
 
-const { Header } = Layout;
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface ProfileBoxProps {
   user: {
@@ -20,10 +18,10 @@ interface ProfileBoxProps {
 const ProfileBox: FC<ProfileBoxProps> = ({ user }) => {
   const userProfile = (
     <Space className="bg-white radius5 ">
-      <Row gutter={24} align="middle" className="pad24">
+      <Row gutter={24} align="middle" className="pad24 mb-3">
         <Col>
           <Image
-            className="radius8 img_fit"
+            className="rounded img_fit"
             width={64}
             height={64}
             src="/icons/Social media icon.jpg"
@@ -38,7 +36,7 @@ const ProfileBox: FC<ProfileBoxProps> = ({ user }) => {
         </Col>
       </Row>
 
-      <Row gutter={16} className="px-7 pb-2">
+      <Row gutter={16} className="px-5 pb-2">
         <Col>
           <Image
             width={14}
@@ -52,7 +50,7 @@ const ProfileBox: FC<ProfileBoxProps> = ({ user }) => {
         </Col>
       </Row>
 
-      <Row gutter={16} className="px-7">
+      <Row gutter={16} className="px-5">
         <Col>
           <Image
             width={14}

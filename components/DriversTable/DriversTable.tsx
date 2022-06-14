@@ -1,5 +1,4 @@
 import Table from "antd/lib/table";
-import Space from "antd/lib/space";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
@@ -7,7 +6,7 @@ import Typography from "antd/lib/typography";
 import CustomButton from "../Shared/Button/button";
 
 const { Column } = Table;
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const tableData = [
   {

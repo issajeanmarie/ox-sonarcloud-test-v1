@@ -17,14 +17,14 @@ const TopNavigator: FC<TopNavigatorProps> = ({ headerLinks }) => {
 
   useEffect(() => {
     headerLinks && setActive(headerLinks[0].id);
-  }, []);
+  }, [headerLinks]);
 
   return (
     <div className="w-full shadow px-5 bg-ox-white">
       <div className="flex items-center gap-10">
         {headerLinks.map((link, index) => {
           return (
-            <div
+            <button
               key={index}
               className={`py-4 cursor-pointer ${
                 active === link.id && "border-b-4 border-ox-yellow"
@@ -38,7 +38,7 @@ const TopNavigator: FC<TopNavigatorProps> = ({ headerLinks }) => {
               >
                 {link.label}
               </Text>
-            </div>
+            </button>
           );
         })}
       </div>

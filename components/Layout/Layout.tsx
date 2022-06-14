@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Layout from "antd/lib/layout";
-import Space from "antd/lib/space";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import Button from "antd/lib/button";
 import Card from "antd/lib/card";
 import Form from "antd/lib/form";
 import Input from "antd/lib/input";
-import Select from "antd/lib/select";
-import DatePicker from "antd/lib/date-picker";
 import { getMenuFold, setMenuFold } from "../../helpers/handleLocalStorage";
 import AppSider from "./AppSider";
 import AppHeader from "./AppHeader";
@@ -26,8 +22,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import CustomButton from "../Shared/Button/button";
 
 const { Content } = Layout;
-const { Title, Text } = Typography;
-const { Option } = Select;
+const { Text } = Typography;
 
 const AppLayout = () => {
   const [collapsed, setCollapsed] = useState(false);

@@ -10,7 +10,7 @@ import Typography from "antd/lib/typography";
 import { manageSidebarMenus, moreSidebarMenus } from "../../helpers/menus";
 
 const { Sider } = Layout;
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const AppSider = ({ collapsed }: any) => {
   const menus = manageSidebarMenus();

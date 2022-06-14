@@ -7,6 +7,7 @@ interface ButtonProps {
   size?: "icon" | "small";
   icon?: React.ReactElement;
   className?: string;
+  htmlType?: "button" | "submit" | "reset";
 }
 
 const CustomButton: FC<ButtonProps> = ({
@@ -15,6 +16,7 @@ const CustomButton: FC<ButtonProps> = ({
   loading,
   size,
   className,
+  htmlType,
   children
 }) => {
   switch (type) {
@@ -26,6 +28,7 @@ const CustomButton: FC<ButtonProps> = ({
           } bg_yellow ${className}`}
           loading={loading}
           icon={icon}
+          htmlType={htmlType}
         >
           {children}
         </Button>
@@ -38,6 +41,7 @@ const CustomButton: FC<ButtonProps> = ({
           }  bg_white_yellow yellow ${className}`}
           loading={loading}
           icon={icon}
+          htmlType={htmlType}
         >
           {children}
         </Button>
@@ -50,6 +54,7 @@ const CustomButton: FC<ButtonProps> = ({
           }  bg_danger yellow ${className}`}
           loading={loading}
           icon={icon}
+          htmlType={htmlType}
         >
           {children}
         </Button>

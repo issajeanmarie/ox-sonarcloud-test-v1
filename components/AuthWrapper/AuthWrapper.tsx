@@ -1,10 +1,7 @@
 import React from "react";
 import { Col, Row } from "antd";
 import Image from "antd/lib/image";
-import Typography from "antd/lib/typography";
 import { AuthWrapperTypes } from "../../lib/types/components/AuthWrapperTypes";
-
-const { Title } = Typography;
 
 const AuthWrapper = ({ children, title }: AuthWrapperTypes) => {
   return (
@@ -23,8 +20,7 @@ const AuthWrapper = ({ children, title }: AuthWrapperTypes) => {
             </Col>
           </Row>
 
-          <Title className="black text24 uppercase fowe700 mb64">{title}</Title>
-
+          <div className="heading1 uppercase my-10 text-2xl">{title}</div>
           {children}
         </div>
       </Col>
