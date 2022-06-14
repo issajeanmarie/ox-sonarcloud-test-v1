@@ -83,9 +83,22 @@ const Login = () => {
           placeholder="* * * * * * * *"
           name="password"
         />
-      </Form.Item>
-
-      <Button className="my_button bg_yellow" htmlType="submit">
+        <div className="flex items-center justify-between">
+          <div className="heading2">Password</div>
+          <div>
+            <Link href={routes.ForgetPassword.url}>
+              <a className="link animate">Forgot password?</a>
+            </Link>
+          </div>
+        </div>
+        <Input
+          name="password"
+          placeholder="***********"
+          type="password"
+          rules={passwordValidation}
+        />
+      </div>
+      <Button type="primary" className="mt-5" htmlType="submit">
         LOGIN
       </Button>
     </Form>
