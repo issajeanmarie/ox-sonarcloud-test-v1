@@ -1,12 +1,12 @@
 import Table from "antd/lib/table";
-import Space from "antd/lib/space";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
+import CustomButton from "../Shared/Button";
 
 const { Column } = Table;
-const { Title } = Typography;
+const { Text } = Typography;
 
 type Types = {
   key: number;
@@ -46,17 +46,11 @@ const orderData = [
 ];
 
 const OrdersTable = () => (
-  <Space className="mg_auto shadow" style={{ width: "97%", display: "block" }}>
+  <div className="shadow w-[99%] m-auto my-5">
     {/* TOP ROW */}
-    <Row
-      justify="space-between"
-      className="pad24"
-      style={{
-        borderBottom: "1px solid #eaeff2"
-      }}
-    >
+    <div className="p-5 border-b flex items-center justify-between">
       {/* TOP ROW RIGHT SIDE */}
-      <Col span={12}>
+      <div>
         <Row align="middle" gutter={32}>
           <Col>
             <Image
@@ -68,85 +62,59 @@ const OrdersTable = () => (
           </Col>
 
           <Col>
-            <Title className="fowe700 text18 mb0">Turatsinze Theoneste</Title>
+            <Text className="heading2">Turatsinze Theoneste</Text>
           </Col>
 
           <Col>
-            <Title className="fowe400 text16 mb0 opacity_56 mb0">
-              0788734295
-            </Title>
+            <Text className="normalText opacity_56">0788734295</Text>
           </Col>
         </Row>
-      </Col>
+      </div>
 
       {/* TOP ROW RIGHT SIDE */}
-      <Col span={12}>
-        <Row align="middle" justify="end" gutter={64}>
+      <div>
+        <div className="flex items-center gap-4">
           <Col>
-            <Title className="fowe700 text18 mb0" style={{ color: "#ED7818" }}>
-              70, 000 Rwf
-            </Title>
+            <Text className="heading2 orange">70, 000 Rwf</Text>
           </Col>
 
-          <Col span={9}>
-            <Row align="middle" gutter={12} justify="end" wrap={false}>
-              <Col>
-                <Title className="text14 black fowe400 opacity_56 italic nowrap mb0">
-                  Order status:
-                </Title>
-              </Col>
-
-              <Col>
-                <Title className="fowe700 text14 dark mb0">PENDING</Title>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Col>
-    </Row>
+          <div className="flex items-center gap-4">
+            <Text className="captionText">Order status:</Text>
+            <Text className="normalText fowe700">PENDING</Text>
+          </div>
+        </div>
+      </div>
+    </div>
 
     {/* MIDDLE ROW */}
     <Table
-      style={{ padding: "10px" }}
       className="data_table"
       dataSource={orderData}
       rowKey={(record) => record.key}
       pagination={false}
       showHeader={false}
       bordered={false}
-      scroll={{ x: 0 }}
+      scroll={{ x: "100%" }}
+      tableLayout="auto"
     >
       <Column
         key="key"
         title="Name"
         render={(text: Types, record: Types) => {
           const child = (
-            <Row align="middle" gutter={24} wrap={false}>
-              <Col>
-                <Image
-                  width={22}
-                  src="/icons/ic-ecommerce-delivery-yellow.svg"
-                  preview={false}
-                  alt=""
-                />
-              </Col>
+            <div className="flex items-center gap-3">
+              <Image
+                width={22}
+                src="/icons/ic-ecommerce-delivery-yellow.svg"
+                preview={false}
+                alt=""
+              />
 
-              <Col>
-                <Row align="middle" gutter={24}>
-                  <Col>
-                    <Title className="fowe700 text16 nowrap mb0">
-                      {record.plate}
-                    </Title>
-                  </Col>
-
-                  <Col>
-                    <Title className="fowe400 text14 opacity_56 dark nowrap mb0">
-                      {record.driver}
-                    </Title>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
+              <div className="flex items-center gap-3">
+                <Text className="heading2 nowrap">{record.plate}</Text>
+                <Text className="normalText nowrap">{record.driver}</Text>
+              </div>
+            </div>
           );
           return { children: child, props: { "data-label": "Name" } };
         }}
@@ -157,19 +125,11 @@ const OrdersTable = () => (
         title="Weight"
         render={(text: Types, record: Types) => {
           const child = (
-            <Row align="middle" gutter={16}>
-              <Col>
-                <Title className="fowe700 text16 nowrap mb0">
-                  {record.weight}
-                </Title>
-              </Col>
+            <div className="flex items-center gap-3">
+              <Text className="heading2 nowrap">{record.weight}</Text>
 
-              <Col>
-                <Title className="text16 black fowe400 nowrap opacity_56 italic mb0">
-                  {record.unitPrice}
-                </Title>
-              </Col>
-            </Row>
+              <Text className="captionText nowrap">{record.unitPrice}</Text>
+            </div>
           );
           return { children: child, props: { "data-label": "Name" } };
         }}
@@ -180,17 +140,10 @@ const OrdersTable = () => (
         title="From"
         render={(text: Types, record: Types) => {
           const child = (
-            <Row align="middle" gutter={16}>
-              <Col>
-                <Title className="fowe700 text16 mb0">From</Title>
-              </Col>
-
-              <Col>
-                <Title className="fowe400 text16 opacity_56 dark mb0">
-                  {record.from}
-                </Title>
-              </Col>
-            </Row>
+            <div className="flex items-center gap-2">
+              <Text className="heading2">From</Text>
+              <Text className="normalText">{record.from}</Text>
+            </div>
           );
           return { children: child, props: { "data-label": "Phone number" } };
         }}
@@ -201,17 +154,10 @@ const OrdersTable = () => (
         title="To"
         render={(text: Types, record: Types) => {
           const child = (
-            <Row align="middle" gutter={16}>
-              <Col>
-                <Title className="fowe700 text16 mb0">To</Title>
-              </Col>
-
-              <Col>
-                <Title className="fowe400 text16 opacity_56 dark mb0">
-                  {record.to}
-                </Title>
-              </Col>
-            </Row>
+            <div className="flex items-center gap-2">
+              <Text className="heading2">To</Text>
+              <Text className="normalText">{record.to}</Text>
+            </div>
           );
           return { children: child, props: { "data-label": "Email" } };
         }}
@@ -222,69 +168,52 @@ const OrdersTable = () => (
         title="Supporting"
         render={(text: Types, record: Types) => {
           const child = (
-            <Title className="text14 black fowe400 opacity_56 italic nowrap mb0">
+            <Text className="captionText opacity_56 italic nowrap mb0">
               {record.supporting}
-            </Title>
+            </Text>
           );
           return { children: child, props: { "data-label": "Status" } };
         }}
       />
 
       <Column
-        width="20%"
         key="key"
         title="Action"
         render={() => {
           const child = (
-            <Row align="middle" gutter={16} wrap={false}>
-              <Col>
-                <Title
-                  className="fowe700 text16 red nowrap mb0"
-                  style={{ margin: "0 5.6rem 0 0" }}
-                >
-                  70, 000 Rwf
-                </Title>
-              </Col>
+            <div className="flex items-center gap-3 justify-end">
+              <Text className="heading2 red nowrap mb0">70, 000 Rwf</Text>
 
-              <Col>
-                <Space
-                  className="flex align_center justify_center radius5 bg_white_edit_btn pointer"
-                  style={{ width: "36px", height: "36px" }}
-                >
+              <CustomButton
+                type="secondary"
+                size="icon"
+                icon={
                   <Image
                     src="/icons/ic-ecommerce-invoice.svg"
                     alt="OX Delivery Logo"
-                    width={18}
+                    width={12}
                     preview={false}
                   />
-                </Space>
-              </Col>
+                }
+              />
 
-              <Col>
-                <Space
-                  className="flex align_center justify_center radius5 bg_white_red pointer"
-                  style={{ width: "36px", height: "36px" }}
-                >
+              <CustomButton
+                type="danger"
+                size="icon"
+                icon={
                   <Image
                     src="/icons/ic-actions-remove.svg"
                     alt="OX Delivery Logo"
-                    width={16}
+                    width={12}
                     preview={false}
                   />
-                </Space>
-              </Col>
+                }
+              />
 
-              <Col>
-                <Space
-                  className="flex align_center justify_center radius5 bg_yellow_view_btn pointer"
-                  style={{ padding: "0px 32px", height: "36px" }}
-                >
-                  <Title className="yellow_faded_text text14 fowe700 mb0">
-                    View
-                  </Title>
-                </Space>
-              </Col>
-            </Row>
+              <CustomButton type="secondary" size="small">
+                View
+              </CustomButton>
+            </div>
           );
           return { children: child, props: { "data-label": "Status" } };
         }}
@@ -303,26 +232,26 @@ const OrdersTable = () => (
       <Col>
         <Row gutter={12} align="middle">
           <Col>
-            <Title className="text14 black fowe400 opacity_56 nowrap mb0">
+            <Text className="normalText opacity_56 nowrap">
               Created: 11th May 2022 -
-            </Title>
+            </Text>
           </Col>
 
           <Col>
-            <Title className="text14 black fowe700 opacity_56 italic nowrap mb0">
+            <Text className="normalText opacity_56 italic nowrap ">
               Edited by Yves Honore
-            </Title>
+            </Text>
           </Col>
         </Row>
       </Col>
 
       <Col>
-        <Title className="text14 black fowe400 opacity_56 italic nowrap mb0">
+        <Text className="normalText opacity_56 italic nowrap mb0">
           NYAMASHEKE Depot
-        </Title>
+        </Text>
       </Col>
     </Row>
-  </Space>
+  </div>
 );
 
 export default OrdersTable;

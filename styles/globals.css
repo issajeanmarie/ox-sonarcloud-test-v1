@@ -1,4 +1,7 @@
 @import url("./extendedLibraries.css");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   /* COLORS */
@@ -74,22 +77,6 @@ body {
   background: var(--color_border_grey);
 }
 
-.text24 {
-  font-size: var(--text24) !important;
-}
-
-.text18 {
-  font-size: var(--text18) !important;
-}
-
-.text16 {
-  font-size: var(--text16) !important;
-}
-
-.text14 {
-  font-size: var(--text14) !important;
-}
-
 .fowe300 {
   font-weight: 300 !important;
 }
@@ -152,6 +139,10 @@ body {
 
 .bg_yellow {
   background-color: var(--color_yellow) !important;
+}
+
+.bg_danger {
+  @apply bg-ox-danger !important;
 }
 
 .shadow {
@@ -271,256 +262,50 @@ body {
   font-style: italic;
 }
 
-/* MARGIN TOP */
-.mt0 {
-  margin-top: 0px !important;
+.app-btn {
+  @apply text-white;
+  @apply rounded-full;
+  @apply py-1;
+  @apply px-4;
+  @apply shadow;
 }
 
-.mt2 {
-  margin-top: 2px;
+.heading1 {
+  @apply text-2xl;
+  @apply font-semibold;
+  @apply text-ox-dark !important;
 }
 
-.mt4 {
-  margin-top: 4px;
+.heading2 {
+  @apply font-semibold;
+  @apply text-base;
+  @apply block;
+  @apply text-ox-dark !important;
 }
 
-.mt6 {
-  margin-top: 6px;
+.normalText {
+  @apply font-normal;
+  @apply text-sm;
+  @apply block;
 }
 
-.mt8 {
-  margin-top: 8px;
+.captionText {
+  @apply font-light;
+  @apply text-sm;
+  @apply italic;
+  @apply text-gray-400 !important;
 }
 
-.mt12 {
-  margin-top: 12px !important;
+.link {
+  @apply underline;
+  @apply text-ox-dark !important;
+  @apply hover:text-ox-yellow !important;
+  @apply cursor-pointer;
 }
 
-.mt14 {
-  margin-top: 14px;
-}
-
-.mt16 {
-  margin-top: 16px;
-}
-
-.mt18 {
-  margin-top: 18px;
-}
-
-.mt22 {
-  margin-top: 22px !important;
-}
-
-.mt24 {
-  margin-top: 24px !important;
-}
-
-.mt32 {
-  margin-top: 32px !important;
-}
-
-.mt64 {
-  margin-top: 64px !important;
-}
-
-/* MARGIN RIGHT */
-.mr2 {
-  margin-right: 2px;
-}
-
-.mr4 {
-  margin-right: 4px;
-}
-
-.mr6 {
-  margin-right: 6px;
-}
-
-.mr8 {
-  margin-right: 8px;
-}
-
-.mr12 {
-  margin-right: 12px;
-}
-
-.mr14 {
-  margin-right: 14px;
-}
-
-.mr16 {
-  margin-right: 16px;
-}
-
-.mr18 {
-  margin-right: 18px;
-}
-
-.mr22 {
-  margin-right: 22px;
-}
-
-.mr24 {
-  margin-right: 24px;
-}
-
-/* MARGIN BOTTOM */
-.mb0 {
-  margin-bottom: 0px !important;
-}
-
-.mb2 {
-  margin-bottom: 2px !important;
-}
-
-.mb4 {
-  margin-bottom: 4px !important;
-}
-
-.mb6 {
-  margin-bottom: 6px !important;
-}
-
-.mb8 {
-  margin-bottom: 8px !important;
-}
-
-.mb12 {
-  margin-bottom: 12px !important;
-}
-
-.mb14 {
-  margin-bottom: 14px !important;
-}
-
-.mb16 {
-  margin-bottom: 16px !important;
-}
-
-.mb18 {
-  margin-bottom: 18px !important;
-}
-
-.mb22 {
-  margin-bottom: 22px !important;
-}
-
-.mb24 {
-  margin-bottom: 24px !important;
-}
-
-.mb32 {
-  margin-bottom: 32px !important;
-}
-
-.mb42 {
-  margin-bottom: 42px !important;
-}
-
-.mb64 {
-  margin-bottom: 64px !important;
-}
-
-/* MARGIN LEFT */
-.ml2 {
-  margin-left: 2px !important;
-}
-
-.ml4 {
-  margin-left: 4px !important;
-}
-
-.ml6 {
-  margin-left: 6px !important;
-}
-
-.ml8 {
-  margin-left: 8px !important;
-}
-
-.ml12 {
-  margin-left: 12px !important;
-}
-
-.ml14 {
-  margin-left: 14px !important;
-}
-
-.ml16 {
-  margin-left: 16px !important;
-}
-
-.ml18 {
-  margin-left: 18px !important;
-}
-
-.ml22 {
-  margin-left: 22px !important;
-}
-
-.ml24 {
-  margin-left: 24px !important;
-}
-
-.mg_auto {
-  margin: auto;
-}
-
-.block {
-  display: block !important;
-}
-
-.flex {
-  display: flex;
-}
-
-.align_center {
-  align-items: center;
-}
-
-.justify_center {
-  justify-content: center;
-}
-
-.flex_column {
-  flex-direction: column;
-}
-
-.pad12 {
-  padding: 12px !important;
-}
-
-.pad16 {
-  padding: 16px !important;
-}
-
-.pad22 {
-  padding: 22px !important;
-}
-
-.pad24 {
-  padding: 24px !important;
-}
-
-.pad32 {
-  padding: 32px !important;
-}
-
-.pad64 {
-  padding: 64px !important;
-}
-
-.radius5 {
-  border-radius: 5px !important;
-}
-
-.radius8 {
-  border-radius: 8px !important;
-}
-
-.radius50 {
-  border-radius: 50% !important;
+.animate {
+  @apply transition-all;
+  @apply duration-200;
 }
 
 .help_desk {
@@ -538,11 +323,6 @@ body {
 
 .img_fit {
   object-fit: cover;
-}
-
-.dashboard_header {
-  width: 100%;
-  padding: 0 2rem;
 }
 
 .dashboard_menu {
@@ -574,24 +354,29 @@ body {
 }
 
 .my_input {
-  background: var(--color_input_white) !important;
-  height: 3.2rem;
-  width: 100% !important;
-  border: none !important;
-  outline: none !important;
-  padding: 0 1rem;
-  border-radius: 4px;
-  border: none;
+  @apply text-ox-input-white !important;
+  @apply h-[42px];
+  @apply w-full;
+  @apply border-none !important;
+  @apply outline-none !important;
+  @apply rounded-sm !important;
+}
+
+.my_input.sm {
+  @apply h-[35px];
 }
 
 .my_datepicker {
   width: 100%;
-  min-width: 7rem;
   flex-grow: 1;
-  height: 3.2rem;
-  padding: 0 1rem;
+  height: 42px;
+  padding: 0 4px;
   background: var(--color_input_white) !important;
   border: none !important;
+}
+
+.my_datepicker.sm {
+  @apply h-[35px];
 }
 
 .my_datepicker:active,
@@ -600,26 +385,33 @@ body {
 }
 
 .my_button {
-  width: 100%;
-  color: var(--color_white) !important;
-  height: 3.2rem !important;
-  font-weight: 700 !important;
-  font-size: 16px !important;
-  border: none !important;
-  outline: none !important;
+  @apply min-w-fit;
+  @apply w-full;
+  @apply h-[42px] !important;
+  @apply text-white !important;
+  @apply font-bold !important;
+  @apply text-[14px] !important;
+  @apply border-none !important;
+  @apply outline-none !important;
 }
 
 .my_button.sm {
-  height: 2.8rem !important;
-  font-size: 14px !important;
+  @apply w-fit !important;
+  @apply text-xs !important;
+  @apply h-[35px] !important;
+}
+
+.my_button.icon {
+  @apply h-[35px] !important;
+  @apply w-[35px] !important;
 }
 
 .my_button.black {
-  color: var(--color_black) !important;
+  @apply text-black !important;
 }
 
 .my_button.yellow {
-  color: var(--color_yellow_faded_text) !important;
+  @apply text-ox-yellow-faded-text !important;
 }
 
 .day_circle {

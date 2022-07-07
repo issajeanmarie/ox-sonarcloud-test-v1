@@ -10,7 +10,7 @@ import Typography from "antd/lib/typography";
 import { manageSidebarMenus, moreSidebarMenus } from "../../helpers/menus";
 
 const { Sider } = Layout;
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const AppSider = ({ collapsed }: any) => {
   const menus = manageSidebarMenus();
@@ -29,7 +29,7 @@ const AppSider = ({ collapsed }: any) => {
       style={{ width: "90%", marginLeft: "12px" }}
     >
       {fakeDepots.map((depot) => (
-        <Row gutter={12} align="middle" key={depot} className="pad12 ">
+        <Row gutter={12} align="middle" key={depot} className="p-2">
           <Col>
             <Image
               width={16}
@@ -62,43 +62,34 @@ const AppSider = ({ collapsed }: any) => {
           className="pad24 mb12"
           style={{ borderBottom: ".8px solid black" }}
         >
-          <Col>
-            <Row gutter={16} align="middle">
-              <Col>
-                <Image
-                  width={22}
-                  src={`/icons/headphonesalt.svg`}
-                  preview={false}
-                  alt=""
-                />
-              </Col>
+          <div className="flex items-center p-5 gap-3 w-full">
+            <Image
+              width={22}
+              src={`/icons/headphonesalt.svg`}
+              preview={false}
+              alt=""
+            />
 
+            {!collapsed && (
+              <div className="normalText text-white">Tyazo depot</div>
+            )}
+            <div className="flex flex-1 justify-end">
               {!collapsed && (
                 <Col>
-                  <Text className="white text14 fowe700">Tyazo depot</Text>
+                  <Image
+                    width={12}
+                    src={`/icons/expand_more_black_24dp_yellow.svg`}
+                    preview={false}
+                    alt=""
+                  />
                 </Col>
               )}
-            </Row>
-          </Col>
-
-          {!collapsed && (
-            <Col>
-              <Image
-                width={12}
-                src={`/icons/expand_more_black_24dp_yellow.svg`}
-                preview={false}
-                alt=""
-              />
-            </Col>
-          )}
+            </div>
+          </div>
         </Row>
       </Dropdown>
 
-      {!collapsed && (
-        <Title className="white fowe400 pad24 italic opacity_38 text14 mb0">
-          Manage
-        </Title>
-      )}
+      {!collapsed && <div className="text-gray-500 italic m-6">Manage</div>}
 
       <Menu
         theme="dark"
@@ -108,9 +99,7 @@ const AppSider = ({ collapsed }: any) => {
       >
         {menus.map((menu) => (
           <Menu.Item
-            className={`white fowe300 text14 my_menu_bg ${
-              !collapsed && "not_collapsed"
-            }`}
+            className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
             key={menu.name}
             icon={
               <Image
@@ -121,21 +110,14 @@ const AppSider = ({ collapsed }: any) => {
               />
             }
           >
-            <Title
-              className="white fowe300 text14"
-              style={{ margin: "1px 0 0 12px" }}
-            >
+            <text className="text-white normalText pl-3">
               {!collapsed && menu.name}
-            </Title>
+            </text>
           </Menu.Item>
         ))}
       </Menu>
 
-      {!collapsed && (
-        <Title className="white fowe400 pad24 italic opacity_38 text14 mb0">
-          More
-        </Title>
-      )}
+      {!collapsed && <div className="text-gray-500 italic m-6">More</div>}
 
       <Menu
         theme="dark"
@@ -147,9 +129,7 @@ const AppSider = ({ collapsed }: any) => {
           if (moreMenu.name === "Settings") {
             return (
               <Menu.Item
-                className={`white fowe300 text14 my_menu_bg ${
-                  !collapsed && "not_collapsed"
-                }`}
+                className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
                 key={moreMenu.name}
                 icon={
                   <Image
@@ -160,12 +140,9 @@ const AppSider = ({ collapsed }: any) => {
                   />
                 }
               >
-                <Title
-                  className="white fowe300 text14"
-                  style={{ margin: "1px 0 0 12px" }}
-                >
+                <text className="text-white normalText pl-3">
                   {!collapsed && moreMenu.name}
-                </Title>
+                </text>
 
                 {/* NOTIFICATION LETTER */}
                 <Space
@@ -194,12 +171,9 @@ const AppSider = ({ collapsed }: any) => {
                 />
               }
             >
-              <Title
-                className="white fowe300 text14"
-                style={{ margin: "1px 0 0 12px" }}
-              >
+              <text className="text-white normalText pl-3">
                 {!collapsed && moreMenu.name}
-              </Title>
+              </text>
             </Menu.Item>
           );
         })}
@@ -210,36 +184,30 @@ const AppSider = ({ collapsed }: any) => {
         align="middle"
         justify="space-between"
       >
-        <Col>
-          <Row gutter={24} align="middle">
+        <div className="flex items-center p-3 gap-3 w-full">
+          <Image
+            width={22}
+            src={`/icons/headphonesalt.svg`}
+            preview={false}
+            alt=""
+          />
+
+          {!collapsed && (
             <Col>
+              <text className="normalText text-white">Help Desk</text>
+            </Col>
+          )}
+          <div className="flex-1 flex justify-end">
+            {!collapsed && (
               <Image
                 width={22}
-                src={`/icons/headphonesalt.svg`}
+                src={`/icons/keyboard_forwad_black_24dp.svg`}
                 preview={false}
                 alt=""
               />
-            </Col>
-
-            {!collapsed && (
-              <Col>
-                <Text className="fowe300 white text14">Help Desk</Text>
-              </Col>
             )}
-          </Row>
-        </Col>
-
-        {!collapsed && (
-          <Col>
-            <Image
-              className="opacity_43"
-              width={22}
-              src={`/icons/keyboard_forwad_black_24dp.svg`}
-              preview={false}
-              alt=""
-            />
-          </Col>
-        )}
+          </div>
+        </div>
       </Row>
     </Sider>
   );
