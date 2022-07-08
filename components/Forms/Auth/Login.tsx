@@ -20,32 +20,36 @@ const Login = () => {
 
   return (
     <Form name="Login" onFinish={onFinish} layout="vertical" title="Login">
-      <div className="flex flex-col gap-4">
-        <Input
-          name="username"
-          type="text"
-          label="Email"
-          placeholder="example@gmail.com"
-          rules={emailValidation}
-        />
-        <div className="flex items-center justify-between">
-          <div className="heading2">Password</div>
-          <div>
-            <Link href={routes.ForgetPassword.url}>
-              <a className="link animate">Forgot password?</a>
-            </Link>
-          </div>
+      <div className="flex flex-col gap-5">
+        <div>
+          <Input
+            name="username"
+            type="text"
+            label="Email"
+            placeholder="example@gmail.com"
+            rules={emailValidation}
+          />
         </div>
-        <Input
-          name="password"
-          placeholder="***********"
-          type="password"
-          rules={passwordValidation}
-        />
+        <div>
+          <div className="flex items-center justify-between">
+            <div className="heading2">Password</div>
+            <div>
+              <Link href={routes.ForgetPassword.url}>
+                <a className="link animate">Forgot password?</a>
+              </Link>
+            </div>
+          </div>
+          <Input
+            name="password"
+            placeholder="***********"
+            type="password"
+            rules={passwordValidation}
+          />
+        </div>
+        <Button type="primary" className="mt-5" htmlType="submit">
+          LOGIN
+        </Button>
       </div>
-      <Button type="primary" className="mt-5" htmlType="submit">
-        LOGIN
-      </Button>
     </Form>
   );
 };

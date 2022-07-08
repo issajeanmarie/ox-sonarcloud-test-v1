@@ -313,7 +313,7 @@ body {
   bottom: 16px;
   right: 50%;
   transform: translateX(50%);
-  width: 90%;
+  width: 80%;
 }
 
 .depot_dropdown {
@@ -359,7 +359,7 @@ body {
   @apply w-full;
   @apply border-none !important;
   @apply outline-none !important;
-  @apply rounded-sm !important;
+  @apply rounded-[4px] !important;
 }
 
 .my_input.sm {
@@ -373,6 +373,7 @@ body {
   padding: 0 4px;
   background: var(--color_input_white) !important;
   border: none !important;
+  border-radius: 4px !important;
 }
 
 .my_datepicker.sm {
@@ -393,6 +394,7 @@ body {
   @apply text-[14px] !important;
   @apply border-none !important;
   @apply outline-none !important;
+  @apply rounded-[4px] !important;
 }
 
 .my_button.sm {

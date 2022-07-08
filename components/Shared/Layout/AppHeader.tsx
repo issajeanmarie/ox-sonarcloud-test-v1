@@ -3,7 +3,7 @@ import React from "react";
 import Image from "antd/lib/image";
 import MenuUnfoldOutlined from "@ant-design/icons/MenuUnfoldOutlined";
 import MenuFoldOutlined from "@ant-design/icons/MenuFoldOutlined";
-import ProfileBox from "../Shared/ProfileBox";
+import ProfileBox from "../ProfileBox";
 
 const AppHeader = ({ collapsed, toggle }: any) => {
   return (

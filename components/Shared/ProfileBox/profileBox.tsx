@@ -6,6 +6,11 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
 
+/**
+ * @author Kundwa Bruno M <kundwabruno@gmail.com>
+ * @since July 2022
+ */
+
 const { Text } = Typography;
 
 interface ProfileBoxProps {
