@@ -5,10 +5,10 @@ export type RefreshResponse = {
   };
 };
 
-export type LoginPayLoad = {};
+export type LoginPayLoad = { value: any };
 
-export type RegisterPayload = {};
+export type RegisterPayload = { value: any };
 
-export type LoginResponse = {};
+export type LoginResponse = { value: any };
 
-export type RegisterResponse = {};
+export type RegisterResponse = { value: any };

@@ -19,7 +19,6 @@ import { Header_Links } from "../../../lib/types/links";
 import CustomInput from "../Input";
 import { PlusOutlined } from "@ant-design/icons";
 import CustomButton from "../Button/button";
-import type { UploadFile } from "antd/es/upload/interface";
 
 const { Content } = Layout;
 const { Text } = Typography;
