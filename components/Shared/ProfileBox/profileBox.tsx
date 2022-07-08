@@ -22,6 +22,11 @@ import { baseAPI } from "../../../lib/api/api";
  * @since July 2022
  */
 
+/**
+ * @author Kundwa Bruno M <kundwabruno@gmail.com>
+ * @since July 2022
+ */
+
 const { Text } = Typography;
 
 interface ProfileBoxProps {
