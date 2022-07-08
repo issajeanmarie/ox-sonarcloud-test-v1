@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Row } from "antd";
 import Image from "antd/lib/image";
-import { AuthWrapperTypes } from "../../lib/types/components/AuthWrapperTypes";
+import { AuthWrapperTypes } from "../../../lib/types/components/AuthWrapperTypes";
 
 const AuthWrapper = ({ children, title }: AuthWrapperTypes) => {
   return (

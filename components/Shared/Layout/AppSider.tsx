@@ -7,7 +7,7 @@ import Menu from "antd/lib/menu";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
-import { manageSidebarMenus, moreSidebarMenus } from "../../helpers/menus";
+import { manageSidebarMenus, moreSidebarMenus } from "../../../helpers/menus";
 
 const { Sider } = Layout;
 const { Text } = Typography;
@@ -62,7 +62,7 @@ const AppSider = ({ collapsed }: any) => {
           className="pad24 mb12"
           style={{ borderBottom: ".8px solid black" }}
         >
-          <div className="flex items-center p-5 gap-3 w-full">
+          <div className="flex justify-center items-center p-5 gap-3 w-full">
             <Image
               width={22}
               src={`/icons/headphonesalt.svg`}
@@ -73,8 +73,9 @@ const AppSider = ({ collapsed }: any) => {
             {!collapsed && (
               <div className="normalText text-white">Tyazo depot</div>
             )}
-            <div className="flex flex-1 justify-end">
-              {!collapsed && (
+
+            {!collapsed && (
+              <div className="flex flex-1 justify-end">
                 <Col>
                   <Image
                     width={12}
@@ -83,8 +84,8 @@ const AppSider = ({ collapsed }: any) => {
                     alt=""
                   />
                 </Col>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </Row>
       </Dropdown>
@@ -146,7 +147,7 @@ const AppSider = ({ collapsed }: any) => {
 
                 {/* NOTIFICATION LETTER */}
                 <Space
-                  className={`radius50 fowe400 bg_yellow white notification_letter ${
+                  className={`radius50 fowe400 bg_yellow rounded-full white notification_letter ${
                     collapsed ? "collapsed_on" : "collapsed_off"
                   }`}
                 >
@@ -179,12 +180,8 @@ const AppSider = ({ collapsed }: any) => {
         })}
       </Menu>
 
-      <Row
-        className="help_desk bg_black pad24 radius5 pointer"
-        align="middle"
-        justify="space-between"
-      >
-        <div className="flex items-center p-3 gap-3 w-full">
+      <Row className="help_desk bg-black rounded-md pointer">
+        <div className="flex items-center justify-center p-3 gap-3 w-full">
           <Image
             width={22}
             src={`/icons/headphonesalt.svg`}
@@ -197,16 +194,16 @@ const AppSider = ({ collapsed }: any) => {
               <text className="normalText text-white">Help Desk</text>
             </Col>
           )}
-          <div className="flex-1 flex justify-end">
-            {!collapsed && (
+          {!collapsed && (
+            <div className="flex-1 flex justify-end">
               <Image
                 width={22}
                 src={`/icons/keyboard_forwad_black_24dp.svg`}
                 preview={false}
                 alt=""
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </Row>
     </Sider>

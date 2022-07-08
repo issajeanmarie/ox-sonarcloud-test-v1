@@ -1,19 +1,23 @@
-import { FC, Fragment } from "react";
+import React, { FC, Fragment } from "react";
 import Form from "antd/lib/form";
 import Select from "antd/lib/select";
 import Typography from "antd/lib/typography";
 import Input from "antd/lib/input";
 import DatePicker from "antd/lib/date-picker";
+import ImageUploader from "./imageUploader";
 
 const { Option } = Select;
 const { Text } = Typography;
 
 interface EntryProps {
-  type: "select" | "text" | "password" | "text_area" | "date";
+  type: "select" | "text" | "password" | "text_area" | "date" | "image";
   name: string;
+  imageCount?: number;
   options?: { label: string; value: string | number }[];
   suffixIcon?: React.ReactElement;
-  size?: "small" | string;
+  images?: any;
+  setImages?: React.SetStateAction<React.Dispatch<any>>;
+  size?: "small" | "large";
   label?: string;
   placeholder?: string;
   className?: string;
@@ -25,6 +29,9 @@ const Entry: FC<EntryProps> = ({
   name,
   options,
   suffixIcon,
+  imageCount,
+  images,
+  setImages,
   label,
   rules,
   size,
@@ -53,11 +60,11 @@ const Entry: FC<EntryProps> = ({
               showSearch
               placeholder={placeholder}
               size="large"
-              className={`my_input ${size === "small" && "sm"}`}
+              className={`my_input ${size === "small" && "sm"} `}
               suffixIcon={suffixIcon}
               filterOption={(input, option) =>
-                option?.key.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||
-                option?.title.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option?.key?.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||
+                option?.title?.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >
               {options?.map((opt, index) => {
@@ -108,6 +115,16 @@ const Entry: FC<EntryProps> = ({
               suffixIcon={suffixIcon}
             />
           </Form.Item>
+        </Fragment>
+      );
+    case "image":
+      return (
+        <Fragment>
+          <ImageUploader
+            imageCount={imageCount || 1}
+            images={images}
+            setImages={setImages}
+          />
         </Fragment>
       );
     default:

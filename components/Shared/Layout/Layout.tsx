@@ -7,19 +7,18 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Card from "antd/lib/card";
 import Form from "antd/lib/form";
-import Input from "antd/lib/input";
-import { getMenuFold, setMenuFold } from "../../helpers/handleLocalStorage";
+import { getMenuFold, setMenuFold } from "../../../helpers/handleLocalStorage";
 import AppSider from "./AppSider";
 import AppHeader from "./AppHeader";
 import CustomPhoneInput from "../Custom/CustomPhoneInput";
 import CircleCheckbox from "../Custom/CircleCheckbox";
-import DriversTable from "../DriversTable";
-import OrdersTable from "../OrdersTable";
-import TopNavigator from "../Shared/TopNavigator";
-import { Header_Links } from "../../lib/types/links";
-import CustomInput from "../Shared/Input";
+import DriversTable from "../../DriversTable";
+import OrdersTable from "../../OrdersTable";
+import TopNavigator from "../TopNavigator";
+import { Header_Links } from "../../../lib/types/links";
+import CustomInput from "../Input";
 import { PlusOutlined } from "@ant-design/icons";
-import CustomButton from "../Shared/Button/button";
+import CustomButton from "../Button/button";
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -29,6 +28,7 @@ const AppLayout = () => {
   const [checkbox, setCheckbox] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [validatePhone] = useState(false);
+  const [images, setImages] = useState<any[]>([]);
 
   const Links: Header_Links[] = [
     {
@@ -82,7 +82,12 @@ const AppLayout = () => {
               {/* NORMAL INPUT */}
               <Row gutter={24} align="bottom" className="mb-5">
                 <Col sm={{ span: 24 }} xl={{ span: 16 }}>
-                  <CustomInput type="text" name="Name" label="Label" />
+                  <CustomInput
+                    type="password"
+                    name="Name"
+                    label="Label"
+                    placeholder="*********"
+                  />
                 </Col>
 
                 <Col sm={{ span: 24 }} xl={{ span: 8 }}>
@@ -484,17 +489,14 @@ const AppLayout = () => {
 
             {/* UPLOAD CARD */}
             <Col>
-              <div className="upload_card flex items-center justify-center flex-col">
-                <Input className="upload_input" type="file" />
-                <Image
-                  width={32}
-                  src="/icons/add_photo_alternate_FILL0_wght400_GRAD0_opsz48.svg"
-                  preview={false}
-                  alt=""
-                />
-
-                <Text className="normalText block">Add image</Text>
-              </div>
+              <CustomInput
+                name="image"
+                size="large"
+                imageCount={2}
+                images={images}
+                setImages={setImages}
+                type="image"
+              />
             </Col>
           </Row>
         </Content>

@@ -90,7 +90,7 @@
   border: none !important;
   outline: none !important;
   padding: 0 1rem;
-  border-radius: 0;
+  border-radius: 4px !important;
   display: flex;
 }
 
@@ -270,4 +270,10 @@
 
 .ant-form-item {
   margin-bottom: 0px !important;
+}
+
+.ant-form-item-explain-error {
+  font-size: 13px !important;
+  color: #dc0000 !important;
+  margin-top: 1px;
 }

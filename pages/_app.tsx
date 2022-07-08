@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import type { AppProps } from "next/app";
 import NProgress from "nprogress";
-import { AppLoadingLoader } from "../components/Loaders";
+import { AppLoadingLoader } from "../components/Shared/Loaders";
 import { SEO } from "../components/Shared";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
