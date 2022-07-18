@@ -23,7 +23,8 @@ import { baseAPI } from "../../../lib/api/api";
  */
 
 /**
- * @author Kundwa Bruno M <kundwabruno@gmail.com>
+ * @author Kundwa Bruno M <kundwabruno@gmail.com> and
+ * @authorTwo Patrick Tunezerwane <tunezepatrick@awesomity.rw>
  * @since July 2022
  */
 

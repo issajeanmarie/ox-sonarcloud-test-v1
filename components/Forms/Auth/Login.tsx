@@ -106,11 +106,18 @@ const Login = () => {
             type="password"
             rules={passwordValidation}
           />
-        </div>
-        <Button type="primary" className="mt-5" htmlType="submit">
-          LOGIN
-        </Button>
-      </div>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24} className="mt-6">
+          <Button
+            loading={isLoading}
+            type="primary"
+            className="mt-5"
+            htmlType="submit"
+          >
+            LOGIN
+          </Button>
+        </Col>
+      </Row>
     </Form>
   );
 };

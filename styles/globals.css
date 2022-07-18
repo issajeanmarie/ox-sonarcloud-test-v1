@@ -1151,7 +1151,7 @@ body {
 .auth_right .form_container {
   background: var(--color_white);
   padding: 56px 42px;
-  width: 494px;
+  width: 440px;
   border-radius: 8px;
   position: absolute !important;
   left: 0% !important;
