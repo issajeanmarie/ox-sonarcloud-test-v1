@@ -96,3 +96,13 @@ export type BackendErrorTypes = {
   };
   status: number;
 };
+
+export type GenericResponse = ApiResponseMetadata<void>;
+
+export type BackendErrorTypes = {
+  data: {
+    message: string;
+    payload: any;
+  };
+  status: number;
+};
