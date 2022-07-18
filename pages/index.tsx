@@ -1,6 +1,7 @@
 import React from "react";
 import LoginForm from "../components/Forms/Auth/Login";
 import AuthWrapper from "../components/Shared/AuthWrapper";
+import WithPublicRoute from "../components/Shared/Routes/WithPublicRoute";
 
 const Login = () => {
   return (
@@ -10,4 +11,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default WithPublicRoute(Login);

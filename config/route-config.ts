@@ -7,6 +7,10 @@ export const routes = {
     name: "Forgot password",
     url: "/forgot-password"
   },
+  ResetPasswordSent: {
+    name: "ResetPasswordSent",
+    url: "/reset-password-sent"
+  },
   Orders: {
     name: "Orders",
     url: "/dashboard"

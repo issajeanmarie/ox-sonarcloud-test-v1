@@ -4,8 +4,11 @@ import Image from "antd/lib/image";
 import MenuUnfoldOutlined from "@ant-design/icons/MenuUnfoldOutlined";
 import MenuFoldOutlined from "@ant-design/icons/MenuFoldOutlined";
 import ProfileBox from "../ProfileBox";
+import { getLoggedInUser } from "../../../helpers/getLoggedInUser";
 
 const AppHeader = ({ collapsed, toggle }: any) => {
+  const { loggedInUser } = getLoggedInUser();
+
   return (
     <div className="w-full flex items-center p-4 bg-white">
       <div className="flex-1 flex items-center justify-between ">
@@ -32,8 +35,8 @@ const AppHeader = ({ collapsed, toggle }: any) => {
 
           <ProfileBox
             user={{
-              username: "Yves Honore",
-              email: "yveshonore14@gmail.com"
+              names: loggedInUser?.names,
+              sub: loggedInUser?.sub
             }}
           />
         </div>
