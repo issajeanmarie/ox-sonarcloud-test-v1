@@ -1,7 +1,14 @@
 import React from "react";
+import ForgetPasswordForm from "../components/Forms/Auth/ForgetPassword";
+import AuthWrapper from "../components/Shared/AuthWrapper";
+import WithPublicRoute from "../components/Shared/Routes/WithPublicRoute";
 
 const ForgotPassword = () => {
-  return <div>forgot-password</div>;
+  return (
+    <AuthWrapper title="Forgot password">
+      <ForgetPasswordForm />
+    </AuthWrapper>
+  );
 };
 
-export default ForgotPassword;
+export default WithPublicRoute(ForgotPassword);

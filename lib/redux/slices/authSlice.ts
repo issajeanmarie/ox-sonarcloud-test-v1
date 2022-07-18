@@ -1,34 +1,41 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-/**
- * @author Kundwa Bruno M <kundwabruno@gmail.com>
- * @since July 2022
- */
-
 type AuthState = {
-  token: string | undefined;
+  message: string;
+  payload: string;
 };
 
 const slice = createSlice({
   name: "auth",
   initialState: {
-    token: undefined
+    payload: ""
   } as AuthState,
   reducers: {
     setCredentials: (
       state,
-      { payload: { refreshToken } }: PayloadAction<{ refreshToken: string }>
+      {
+        payload: { payload }
+      }: PayloadAction<{
+        payload: string;
+      }>
     ) => {
-      state.token = refreshToken;
-      localStorage.setItem("gizToken", refreshToken);
+      state.payload = payload;
+      localStorage.setItem("_ox_tkn_", payload);
+    },
+
+    setResetPasswordToken: (
+      state,
+      { payload: { payload } }: PayloadAction<{ payload: string }>
+    ) => {
+      state.payload = payload;
     },
     removeCredentials: (state) => {
-      state.token = undefined;
-      localStorage.removeItem("gizToken");
+      state.payload = "";
+      localStorage.removeItem("_ox_tkn_");
     }
   }
 });
 
-export const { setCredentials, removeCredentials } = slice.actions;
-
+export const { setCredentials, removeCredentials, setResetPasswordToken } =
+  slice.actions;
 export default slice.reducer;

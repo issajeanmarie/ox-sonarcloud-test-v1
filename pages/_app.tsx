@@ -2,11 +2,13 @@ import "../styles/globals.css";
 import "antd/dist/antd.css";
 import { useEffect, FC } from "react";
 import dynamic from "next/dynamic";
+import { Provider } from "react-redux";
 import { useRouter } from "next/router";
 import type { AppProps } from "next/app";
 import NProgress from "nprogress";
 import { AppLoadingLoader } from "../components/Shared/Loaders";
 import { SEO } from "../components/Shared";
+import { store } from "../lib/redux/store";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const router = useRouter();
@@ -38,8 +40,9 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
         linkHref="/logo.png"
         desc="OX Platform Dashboard"
       />
-
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
     </>
   );
 };

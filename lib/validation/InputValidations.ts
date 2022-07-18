@@ -1,7 +1,10 @@
+/* eslint-disable no-useless-escape */
 export const emailValidation = [
   {
     required: true,
-    message: "Enter email"
+    message: "Enter valid email",
+    pattern:
+      /^\s*(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))\s*$/
   }
 ];
 
