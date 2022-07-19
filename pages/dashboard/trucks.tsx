@@ -77,7 +77,6 @@ const Trucks = () => {
       <div style={{ width: "12%", margin: "32px auto" }}>
         <CustomButton type="secondary">Load more</CustomButton>
       </div>
-      <p>Trucks page</p>
     </Layout>
   );
 };
