@@ -52,6 +52,12 @@ You will also see any lint errors in the console.
 - Redux toolkit
 - RTK Query
 
+## Projects screenshots
+
+![image info](./public/screenshots/Screenshot%20from%202022-07-19%2011-14-56.png)
+![image info](./public/screenshots/Screenshot%20from%202022-07-19%2011-15-24.png)
+![image info](./public/screenshots/Screenshot%20from%202022-07-19%2011-15-44.png)
+
 ## Contributors
 
 - Issa
