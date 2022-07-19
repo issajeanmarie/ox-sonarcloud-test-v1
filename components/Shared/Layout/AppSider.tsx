@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useRouter } from "next/router";
 import Space from "antd/lib/space";
 import Dropdown from "antd/lib/dropdown";
 import Image from "antd/lib/image";
@@ -15,6 +16,8 @@ const { Text } = Typography;
 const AppSider = ({ collapsed }: any) => {
   const menus = manageSidebarMenus();
   const moreMenus = moreSidebarMenus();
+
+  const router = useRouter();
 
   const fakeDepots = [
     "Tyazo Depot",
@@ -99,22 +102,25 @@ const AppSider = ({ collapsed }: any) => {
         defaultSelectedKeys={["1"]}
       >
         {menus.map((menu) => (
-          <Menu.Item
-            className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
-            key={menu.name}
-            icon={
-              <Image
-                width={18}
-                src={`/icons/${menu.icon}`}
-                preview={false}
-                alt=""
-              />
-            }
-          >
-            <text className="text-white normalText pl-3">
-              {!collapsed && menu.name}
-            </text>
-          </Menu.Item>
+          <>
+            <Menu.Item
+              onClick={() => router.push(menu.url)}
+              className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
+              key={menu.name}
+              icon={
+                <Image
+                  width={18}
+                  src={`/icons/${menu.icon}`}
+                  preview={false}
+                  alt=""
+                />
+              }
+            >
+              <text className="text-white normalText pl-3">
+                {!collapsed && menu.name}
+              </text>
+            </Menu.Item>
+          </>
         ))}
       </Menu>
 
@@ -130,6 +136,7 @@ const AppSider = ({ collapsed }: any) => {
           if (moreMenu.name === "Settings") {
             return (
               <Menu.Item
+                onClick={() => router.push(moreMenu.url)}
                 className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
                 key={moreMenu.name}
                 icon={
