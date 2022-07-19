@@ -50,7 +50,7 @@ const Login = () => {
           />
         </Col>
         <Col flex="auto" className="mt-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-[8px]">
             <div className="heading2">Password</div>
             <div>
               <Link href={routes.ForgetPassword.url}>
