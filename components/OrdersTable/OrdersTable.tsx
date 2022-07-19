@@ -185,7 +185,7 @@ const OrdersTable = () => (
               <Text className="heading2 red nowrap mb0">70, 000 Rwf</Text>
 
               <CustomButton
-                type="secondary"
+                type="normal"
                 size="icon"
                 icon={
                   <Image
@@ -210,7 +210,7 @@ const OrdersTable = () => (
                 }
               />
 
-              <CustomButton type="secondary" size="small">
+              <CustomButton type="view" size="small">
                 View
               </CustomButton>
             </div>
