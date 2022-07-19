@@ -58,17 +58,18 @@
 
 .ant-input-affix-wrapper {
   color: #000000 !important;
-  background-color: #eaeff2 !important;
+  background: var(--color_input_white) !important;
   border: none !important;
 }
 .ant-input {
-  background-color: #eaeff2 !important;
+  background: var(--color_input_white) !important;
   border: none !important;
   outline: none !important;
 }
 .ant-input::placeholder {
   color: #9a9ea8 !important;
   font-weight: 300;
+  font-size: 12px;
 }
 
 .ant-form-item-label

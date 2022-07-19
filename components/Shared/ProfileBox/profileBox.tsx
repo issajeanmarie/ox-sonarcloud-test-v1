@@ -114,7 +114,7 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
   );
 
   return (
-    <Dropdown overlay={userProfile} className="pointer">
+    <Dropdown overlay={userProfile} className="pointer" trigger={["click"]}>
       <div className="flex items-center gap-2">
         {loggedInUser?.profilePic ? (
           <Image

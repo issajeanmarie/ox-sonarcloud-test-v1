@@ -8,7 +8,7 @@
   --color_white: #fcfcfc;
   --color_bg_white: #ffffff;
   --color_shadow_dark: #0000001a;
-  --color_input_white: #eaeff2;
+  --color_input_white: rgb(243,246,248);
   --color_dark: #2a3548;
   --color_black: #000000;
   --color_border_grey: #2a3548;
@@ -36,6 +36,7 @@
   --opcaity_23: 0.23;
 
   --PhoneInputCountryFlag-height: 100px;
+  --inputHight: 46px;
 }
 
 html,
@@ -278,7 +279,7 @@ body {
 
 .heading2 {
   @apply font-semibold;
-  @apply text-base;
+  @apply text-sm;
   @apply block;
   @apply text-ox-dark !important;
 }

@@ -41,7 +41,7 @@ const Entry: FC<EntryProps> = ({
     case "text":
       return (
         <Fragment>
-          {label && <Text className="heading2">{label}</Text>}
+          {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <Input
               className={`my_input ${size === "small" && "sm"}`}
@@ -54,7 +54,7 @@ const Entry: FC<EntryProps> = ({
     case "select":
       return (
         <Fragment>
-          {label && <Text className="heading2">{label}</Text>}
+          {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <Select
               showSearch
@@ -81,7 +81,7 @@ const Entry: FC<EntryProps> = ({
     case "text_area":
       return (
         <Fragment>
-          {label && <Text className="heading2">{label}</Text>}
+          {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <Input.TextArea
               className="my_input p-[12px]"
@@ -94,7 +94,7 @@ const Entry: FC<EntryProps> = ({
     case "password":
       return (
         <Fragment>
-          {label && <Text className="heading2">{label}</Text>}
+          {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <Input.Password
               className="my_input p-[12px]"
@@ -106,7 +106,7 @@ const Entry: FC<EntryProps> = ({
     case "date":
       return (
         <Fragment>
-          {label && <Text className="heading2">{label}</Text>}
+          {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <DatePicker
               className={`my_datepicker ${size === "small" && "sm"}`}
