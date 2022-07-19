@@ -2,7 +2,7 @@ import { FC } from "react";
 import Button from "antd/lib/button";
 
 interface ButtonProps {
-  type: "primary" | "secondary" | "danger";
+  type: "primary" | "secondary" | "danger" | "normal" | "view";
   loading?: boolean;
   size?: "icon" | "small";
   icon?: React.ReactElement;
@@ -33,6 +33,7 @@ const CustomButton: FC<ButtonProps> = ({
           {children}
         </Button>
       );
+
     case "secondary":
       return (
         <Button
@@ -46,12 +47,41 @@ const CustomButton: FC<ButtonProps> = ({
           {children}
         </Button>
       );
+
+    case "view":
+      return (
+        <Button
+          className={`my_button ${size === "icon" && "icon"} ${
+            size === "small" && "sm"
+          }  bg_yellow_view_btn yellow ${className}`}
+          loading={loading}
+          icon={icon}
+          htmlType={htmlType}
+        >
+          {children}
+        </Button>
+      );
+
     case "danger":
       return (
         <Button
           className={`my_button ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           }  bg_danger yellow ${className}`}
+          loading={loading}
+          icon={icon}
+          htmlType={htmlType}
+        >
+          {children}
+        </Button>
+      );
+
+    case "normal":
+      return (
+        <Button
+          className={`my_button ${size === "icon" && "icon"} ${
+            size === "small" && "sm"
+          }  bg_white_edit_btn black ${className}`}
           loading={loading}
           icon={icon}
           htmlType={htmlType}

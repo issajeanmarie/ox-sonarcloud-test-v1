@@ -113,7 +113,7 @@ const DriversTable = () => (
             <Row align="middle" gutter={16} wrap={false}>
               <Col>
                 <CustomButton
-                  type="secondary"
+                  type="normal"
                   size="icon"
                   icon={
                     <Image
@@ -143,7 +143,7 @@ const DriversTable = () => (
               </Col>
 
               <Col>
-                <CustomButton type="secondary" size="small">
+                <CustomButton type="view" size="small">
                   View
                 </CustomButton>
               </Col>
