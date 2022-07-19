@@ -3,7 +3,11 @@ import Layout from "../../components/Shared/Layout";
 import WithPrivateRoute from "../../components/Shared/Routes/WithPrivateRoute";
 
 const Trucks = () => {
-  return <Layout />;
+  return (
+    <Layout>
+      <p>Trucks page</p>
+    </Layout>
+  );
 };
 
 export default WithPrivateRoute(Trucks);
