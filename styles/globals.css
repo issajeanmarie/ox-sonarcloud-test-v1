@@ -1142,9 +1142,9 @@ body {
 }
 
 .auth_right {
-  background: rgba(31, 31, 53, 0.3) url("/oxbglines.png");
+  background: linear-gradient(rgba(42, 53, 72, 0.9), rgba(42, 53, 72, 0.9)),
+    url("/oxbglines.png");
   background-size: cover;
-  background-blend-mode: overlay;
   position: relative;
 }
 
