@@ -1,13 +1,14 @@
 import React from "react";
+import Orders from "../../components/Orders";
 import Layout from "../../components/Shared/Layout";
 import WithPrivateRoute from "../../components/Shared/Routes/WithPrivateRoute";
 
-const Orders = () => {
+const OrdersPage = () => {
   return (
     <Layout>
-      <h1>Orders page</h1>
+      <Orders />
     </Layout>
   );
 };
 
-export default WithPrivateRoute(Orders);
+export default WithPrivateRoute(OrdersPage);
