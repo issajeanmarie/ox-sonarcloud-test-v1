@@ -150,7 +150,7 @@
   border: none !important;
 }
 
-.ant-table-tbody > tr > td,
+.noborder .ant-table-tbody > tr > td,
 .ant-table-thead > tr > th {
   border: none !important;
 }
@@ -159,6 +159,7 @@
   color: #2a3548 !important;
   opacity: 0.56;
   font-size: 14px;
+  background-color: #ffffff !important;
 }
 
 .ant-table-tbody > tr.shadow {
