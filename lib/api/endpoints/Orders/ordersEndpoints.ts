@@ -1,4 +1,4 @@
-import { Order, OrdersResponse } from "../../../types/orders";
+import { Order } from "../../../types/orders";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
 
