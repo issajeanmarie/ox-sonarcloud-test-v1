@@ -3,10 +3,18 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
-import CustomButton from "../Shared/Button";
+import CustomButton from "../../Shared/Button";
+import { Order, Order as OrderType, Stop } from "../../../lib/types/orders";
+import { FC } from "react";
+import { dateFormatterNth } from "../../../utils/dateFormatter";
+import { localeString } from "../../../utils/numberFormatter";
 
 const { Column } = Table;
 const { Text } = Typography;
+
+interface OrderProps {
+  order: OrderType;
+}
 
 type Types = {
   key: number;
@@ -20,37 +28,12 @@ type Types = {
   supporting: string;
 };
 
-const orderData = [
-  {
-    key: 1,
-    plate: "RAF 003 A",
-    driver: "Yves Lionel",
-    weight: "1000 KG",
-    unitPrice: "20 Rwf / Kg",
-    from: "Musanze",
-    to: "Nyamasheke",
-    price: "60, 000 Rwf",
-    supporting: ""
-  },
-  {
-    key: 2,
-    plate: "RAF 003 A",
-    driver: "Yves Lionel",
-    weight: "1000 KG",
-    unitPrice: "20 Rwf / Kg",
-    from: "Musanze",
-    to: "Nyamasheke",
-    price: "60, 000 Rwf",
-    supporting: "Supporting order"
-  }
-];
-
-const OrdersTable = () => (
-  <div className="shadow w-[99%] m-auto my-5">
+const Order: FC<OrderProps> = ({ order }) => (
+  <div className="shadow w-full my-5">
     {/* TOP ROW */}
-    <div className="p-5 border-b flex items-center justify-between">
+    <div className="p-5 border-b flex items-center justify-between bg-white">
       {/* TOP ROW RIGHT SIDE */}
-      <div>
+      <div className="w-[67%] 2xl:w-[72.8%]">
         <Row align="middle" gutter={32}>
           <Col>
             <Image
@@ -62,26 +45,25 @@ const OrdersTable = () => (
           </Col>
 
           <Col>
-            <Text className="heading2">Turatsinze Theoneste</Text>
+            <Text className="heading2">{order.office.client.names}</Text>
           </Col>
-
           <Col>
-            <Text className="normalText opacity_56">0788734295</Text>
+            <Text className="normalText opacity_56">{order.clientPhone}</Text>
           </Col>
         </Row>
       </div>
 
       {/* TOP ROW RIGHT SIDE */}
-      <div>
-        <div className="flex items-center gap-4">
-          <Col>
-            <Text className="heading2 orange">70, 000 Rwf</Text>
-          </Col>
+      <div className="flex-1 flex">
+        <div className="">
+          <Text className="heading2 orange">
+            {localeString(order.totalAmount)} Rwf
+          </Text>
+        </div>
 
-          <div className="flex items-center gap-4">
-            <Text className="captionText">Order status:</Text>
-            <Text className="normalText fowe700">PENDING</Text>
-          </div>
+        <div className="flex justify-end flex-1 items-center gap-4">
+          <Text className="captionText">Order status:</Text>
+          <Text className="normalText fowe700">{order.status}</Text>
         </div>
       </div>
     </div>
@@ -89,8 +71,8 @@ const OrdersTable = () => (
     {/* MIDDLE ROW */}
     <Table
       className="data_table"
-      dataSource={orderData}
-      rowKey={(record) => record.key}
+      dataSource={order.stops}
+      rowKey={(record) => record.id}
       pagination={false}
       showHeader={false}
       bordered={false}
@@ -100,7 +82,7 @@ const OrdersTable = () => (
       <Column
         key="key"
         title="Name"
-        render={(text: Types, record: Types) => {
+        render={(text, record: Stop) => {
           const child = (
             <div className="flex items-center gap-3">
               <Image
@@ -111,8 +93,12 @@ const OrdersTable = () => (
               />
 
               <div className="flex items-center gap-3">
-                <Text className="heading2 nowrap">{record.plate}</Text>
-                <Text className="normalText nowrap">{record.driver}</Text>
+                <Text className="heading2 nowrap">
+                  {record.truck.plateNumber}
+                </Text>
+                <span className="nowrap opacity_56 text-xs">
+                  {record.driver.names}
+                </span>
               </div>
             </div>
           );
@@ -123,12 +109,12 @@ const OrdersTable = () => (
       <Column
         key="name"
         title="Weight"
-        render={(text: Types, record: Types) => {
+        render={(text: Types, record: Stop) => {
           const child = (
             <div className="flex items-center gap-3">
-              <Text className="heading2 nowrap">{record.weight}</Text>
+              <Text className="heading2 nowrap">{record.weight} KG</Text>
 
-              <Text className="captionText nowrap">{record.unitPrice}</Text>
+              <span className="text-xs opacity_56 nowrap">20 Rwf / Kg</span>
             </div>
           );
           return { children: child, props: { "data-label": "Name" } };
@@ -138,11 +124,13 @@ const OrdersTable = () => (
       <Column
         key="from"
         title="From"
-        render={(text: Types, record: Types) => {
+        render={(text, record: Stop) => {
           const child = (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <Text className="heading2">From</Text>
-              <Text className="normalText">{record.from}</Text>
+              <Text className="font-extralight text-xs">
+                {record.name?.split(" ")[0]}
+              </Text>
             </div>
           );
           return { children: child, props: { "data-label": "Phone number" } };
@@ -152,11 +140,14 @@ const OrdersTable = () => (
       <Column
         key="key"
         title="To"
-        render={(text: Types, record: Types) => {
+        render={() => {
           const child = (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <Text className="heading2">To</Text>
-              <Text className="normalText">{record.to}</Text>
+              <Text className="font-extralight text-xs">
+                {order.stops[order?.stops?.length - 1]?.name?.split(" ")[0] ||
+                  "---"}
+              </Text>
             </div>
           );
           return { children: child, props: { "data-label": "Email" } };
@@ -175,6 +166,14 @@ const OrdersTable = () => (
           return { children: child, props: { "data-label": "Status" } };
         }}
       />
+      <Column
+        width={160}
+        render={() => (
+          <Text className="heading2  nowrap ">
+            {localeString(order.totalAmount)} Rwf
+          </Text>
+        )}
+      />
 
       <Column
         key="key"
@@ -182,8 +181,6 @@ const OrdersTable = () => (
         render={() => {
           const child = (
             <div className="flex items-center gap-3 justify-end">
-              <Text className="heading2 red nowrap mb0">70, 000 Rwf</Text>
-
               <CustomButton
                 type="normal"
                 size="icon"
@@ -227,31 +224,34 @@ const OrdersTable = () => (
         borderTop: "1px solid #eaeff2",
         padding: "16px 24px"
       }}
+      className="bg-white"
     >
       {/* TOP ROW RIGHT SIDE */}
       <Col>
         <Row gutter={12} align="middle">
           <Col>
-            <Text className="normalText opacity_56 nowrap">
-              Created: 11th May 2022 -
+            <Text className="text-xs opacity_56 nowrap">
+              Created: {dateFormatterNth(order.startDateTime)}
             </Text>
           </Col>
 
           <Col>
-            <Text className="normalText opacity_56 italic nowrap ">
-              Edited by Yves Honore
-            </Text>
+            {order.lastEditedBy && (
+              <Text className="normalText opacity_56 italic nowrap ">
+                - Edited by {order.lastEditedBy}
+              </Text>
+            )}
           </Col>
         </Row>
       </Col>
 
       <Col>
-        <Text className="normalText opacity_56 italic nowrap mb0">
-          NYAMASHEKE Depot
+        <Text className="text-xs opacity_56 italic nowrap mb0">
+          {order.depot.name}
         </Text>
       </Col>
     </Row>
   </div>
 );
 
-export default OrdersTable;
+export default Order;

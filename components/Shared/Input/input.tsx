@@ -69,7 +69,7 @@ const Entry: FC<EntryProps> = ({
             >
               {options?.map((opt, index) => {
                 return (
-                  <Option key={index} value={opt.value}>
+                  <Option key={index} value={opt.value} title={opt.value}>
                     {opt.label}
                   </Option>
                 );
