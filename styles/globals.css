@@ -963,6 +963,12 @@ body {
   @apply text-gray-400 !important;
 }
 
+.mediumText {
+  @apply font-light;
+  @apply text-sm;
+  @apply text-gray-600 !important;
+}
+
 .link {
   @apply underline;
   @apply text-ox-dark !important;
@@ -970,6 +976,17 @@ body {
   @apply cursor-pointer;
 }
 
+/* Text */
+.txt-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  line-height: 1px;
+}
+.txt-small {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1px;
+}
 .animate {
   @apply transition-all;
   @apply duration-200;
