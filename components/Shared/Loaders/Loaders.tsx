@@ -1,16 +1,7 @@
 import React from "react";
-import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
-import Image from "antd/lib/image";
-
-const loadingIcon = (
-  <LoadingOutlined style={{ fontSize: 24, color: "#E3B221" }} spin />
-);
+import Image from "next/image";
 
 export const AppLoadingLoader = () => {
-  const spinIcon = (
-    <LoadingOutlined style={{ fontSize: 48, color: "#E3B221" }} spin />
-  );
   return (
     <div
       style={{
@@ -23,16 +14,12 @@ export const AppLoadingLoader = () => {
       }}
     >
       <Image
-        src="/logo.png"
+        src="/oxloader.png"
         alt=""
-        className="mabo16"
-        preview={false}
-        height={96}
+        width="80px"
+        height="80px"
+        className="animate-spin duration-1000"
       />
-      <br />
-      <div style={{ marginTop: "2em" }}>
-        <Spin indicator={spinIcon} />
-      </div>
     </div>
   );
 };
@@ -47,7 +34,13 @@ export const ComponentLoadingLoader = () => {
         alignItems: "center"
       }}
     >
-      <Spin indicator={loadingIcon} />
+      <Image
+        src="/oxloader.png"
+        alt=""
+        width="80px"
+        height="80px"
+        className="animate-spin duration-1000"
+      />
     </div>
   );
 };

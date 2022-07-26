@@ -13,7 +13,7 @@ const Orders: FC = () => {
       .unwrap()
       .then()
       .catch((e) => {
-        message.error(e.data.message);
+        message.error(e.data.message || "Something went wrong");
       });
   }, [getOrders]);
 

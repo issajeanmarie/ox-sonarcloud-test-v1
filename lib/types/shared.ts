@@ -14,6 +14,12 @@ export type BackendErrorTypes = {
   status: number;
 };
 
+export type PaymentStatus =
+  | "FULL_PAID"
+  | "HALF_PAID"
+  | "PENDING"
+  | "WRITTEN _OFF";
+
 export type Pagination = {
   pageable: {
     sort: {
