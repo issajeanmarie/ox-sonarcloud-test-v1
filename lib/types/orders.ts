@@ -5,6 +5,8 @@
  * @since Jul 19 2022
  */
 
+import { PaymentStatus } from "./shared";
+
 export type OrdersResponse = {
   content: Order[];
   pageable: {
@@ -49,7 +51,7 @@ export type Order = {
     id: number;
   };
   startDateTime: string;
-  paymentStatus: string;
+  paymentStatus: PaymentStatus;
   deliveryCode: string;
   transactions: any[];
   endDateTime: string;
@@ -69,7 +71,7 @@ export type Order = {
   stops: Stop[];
   id: number;
   lastEditedBy?: string;
-  supportOrders: [];
+  supportOrders: Order[];
 };
 
 export type Office = {

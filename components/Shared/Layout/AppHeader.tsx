@@ -11,7 +11,7 @@ const AppHeader = ({ collapsed, toggle }: any) => {
 
   return (
     <div className="w-full flex items-center p-4 bg-white">
-      <div className="flex-1 flex items-center justify-between ">
+      <div className="flex-1 flex items-center justify-between">
         <div className="flex items-center gap-4">
           {React.createElement(
             collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,

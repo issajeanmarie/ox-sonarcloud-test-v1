@@ -27,7 +27,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data }) => {
   };
 
   return (
-    <div className="bg-white flex items-center justify-between rounded shadow-sm py-2 px-4 sticky top-0 z-10">
+    <div className="bg-white flex items-center justify-between rounded shadow-sm py-3 px-4 sticky top-0 z-10">
       <Modal
         title={false}
         width={600}
@@ -38,7 +38,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data }) => {
       >
         <FilterOrdersForm />
       </Modal>
-      <div className="heading2">
+      <div className="text-[17px] font-bold">
         {localeString(data?.payload?.totalElements)} Orders
       </div>
       <div className="flex items-center gap-4">
@@ -46,14 +46,10 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data }) => {
           <FilterOutlined onClick={showModal} className="text-2xl" />
         </div>
         <div>
-          <Button type="secondary" size="small">
-            DOWNLOAD REPORT
-          </Button>
+          <Button type="secondary">DOWNLOAD REPORT</Button>
         </div>
         <div>
-          <Button type="primary" size="small">
-            NEW ORDER
-          </Button>
+          <Button type="primary">NEW ORDER</Button>
         </div>
       </div>
     </div>
