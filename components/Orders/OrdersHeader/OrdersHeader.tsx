@@ -1,14 +1,14 @@
 import { FC, useState } from "react";
 import Button from "../../Shared/Button";
 import { FilterOutlined } from "@ant-design/icons";
-import { Order } from "../../../lib/types/orders";
+import { OrdersResponse } from "../../../lib/types/orders";
 import { localeString } from "../../../utils/numberFormatter";
 import { ApiResponseMetadata } from "../../../lib/types/shared";
 import FilterOrdersForm from "../../Forms/Orders/Filter/filter";
 import { Modal } from "antd";
 
 interface OrdersHeaderProps {
-  data?: ApiResponseMetadata<Order[]>;
+  data?: ApiResponseMetadata<OrdersResponse>;
 }
 
 const OrdersHeader: FC<OrdersHeaderProps> = ({ data }) => {
@@ -39,7 +39,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data }) => {
         <FilterOrdersForm />
       </Modal>
       <div className="heading2">
-        {localeString(data?.payload?.length)} Orders
+        {localeString(data?.payload?.totalElements)} Orders
       </div>
       <div className="flex items-center gap-4">
         <div>

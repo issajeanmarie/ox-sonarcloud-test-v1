@@ -1,4 +1,4 @@
-import { Order } from "../../../types/orders";
+import { OrdersResponse } from "../../../types/orders";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
 
@@ -11,7 +11,7 @@ import { baseAPI } from "../../api";
 
 const ordersApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
-    orders: builder.query<ApiResponseMetadata<Order[]>, void>({
+    orders: builder.query<ApiResponseMetadata<OrdersResponse>, void>({
       query: () => ({
         url: "/orders",
         method: "GET"
