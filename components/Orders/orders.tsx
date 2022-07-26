@@ -15,7 +15,7 @@ const Orders: FC = () => {
       .catch((e) => {
         message.error(e.data.message);
       });
-  }, []);
+  }, [getOrders]);
 
   return (
     <div className="m-4 overflow-auto relative">
@@ -25,7 +25,7 @@ const Orders: FC = () => {
         <Fragment>
           <OrdersHeader data={data} />
           {data &&
-            data?.payload?.map((order, index) => (
+            data?.payload?.content?.map((order, index) => (
               <OneOrder key={index} order={order} />
             ))}
         </Fragment>
