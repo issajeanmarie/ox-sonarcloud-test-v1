@@ -1,16 +1,16 @@
 import { Card, Image, Typography } from "antd";
 import React, { FC } from "react";
-import { MediumCardTypes } from "../../../lib/types/pageTypes/Analytics/MediumCardTypes";
+import { AnalyticsCardTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticsCardTypes";
 
 const { Text } = Typography;
 
-const MediumCard: FC<MediumCardTypes> = ({ title, subTitle, count }) => {
+const MediumCard: FC<AnalyticsCardTypes> = ({ title, subTitle, count }) => {
   return (
     <Card
       className="radius4"
       headStyle={{ border: "none", marginBottom: "0" }}
       bodyStyle={{ padding: "0 24px 24px 24px" }}
-      style={{ width: 300 }}
+      style={{ width: "auto" }}
       title={<Text className="normalText">{title}</Text>}
       extra={
         <Image

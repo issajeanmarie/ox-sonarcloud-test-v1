@@ -1,4 +1,4 @@
-export type MediumCardTypes = {
+export type AnalyticsCardTypes = {
   title: string;
   subTitle: string;
   count: string;
