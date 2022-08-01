@@ -1,32 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../components/Shared/Layout";
 import WithPrivateRoute from "../../components/Shared/Routes/WithPrivateRoute";
 import TopNavigator from "../../components/Shared/TopNavigator";
-import { Header_Links } from "../../lib/types/links";
+import { AnalyticLinks } from "../../components/Analytics/AnalyticLinks";
+import AnalyticTrucks from "../../components/Analytics/Trucks/AnalyticTrucks";
+import AnalyticRevenues from "../../components/Analytics/Revenues/AnalyticRevenues";
+import AnalyticMap from "../../components/Analytics/Map/AnalyticMap";
+import AnalyticKPIs from "../../components/Analytics/KPIs/AnalyticKPIs";
 
 const Analytics = () => {
-  const Links: Header_Links[] = [
-    {
-      label: "TRUCKS",
-      id: "trucks"
-    },
-    {
-      label: "REVENUES",
-      id: "revenues"
-    },
-    {
-      label: "MAP",
-      id: "map"
-    },
-    {
-      label: "KPIs",
-      id: "KPIs"
-    }
-  ];
+  const [active, setActive] = useState<string>("trucks");
+
+  const toggleActiveHandler = (id: string) => {
+    setActive(id);
+  };
 
   return (
     <Layout>
-      <TopNavigator headerLinks={Links} />
+      <TopNavigator
+        headerLinks={AnalyticLinks}
+        setActive={setActive}
+        active={active}
+        toggleActiveHandler={toggleActiveHandler}
+      />
+      <div className="px-5">
+        {active === "trucks" && <AnalyticTrucks />}
+        {active === "revenues" && <AnalyticRevenues />}
+        {active === "map" && <AnalyticMap />}
+        {active === "KPIs" && <AnalyticKPIs />}
+      </div>
     </Layout>
   );
 };

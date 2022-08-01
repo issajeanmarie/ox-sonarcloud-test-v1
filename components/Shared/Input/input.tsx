@@ -113,6 +113,7 @@ const Entry: FC<EntryProps> = ({
               allowClear={false}
               name={name}
               suffixIcon={suffixIcon}
+              placeholder={placeholder}
             />
           </Form.Item>
         </Fragment>
