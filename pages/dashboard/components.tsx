@@ -10,7 +10,6 @@ import { PlusOutlined } from "@ant-design/icons";
 import CustomPhoneInput from "../../components/Shared/Custom/CustomPhoneInput";
 import CircleCheckbox from "../../components/Shared/Custom/CircleCheckbox";
 import DriversTable from "../../components/DriversTable";
-import OrdersTable from "../../components/OrdersTable";
 import TopNavigator from "../../components/Shared/TopNavigator";
 import { Header_Links } from "../../lib/types/links";
 import CustomInput from "../../components/Shared/Input";
@@ -383,7 +382,7 @@ const Comopnents = () => {
       </div>
 
       {/* DRIVERS TABLE */}
-      <OrdersTable />
+      {/* <OrdersTable /> */}
 
       {/*
            ***
