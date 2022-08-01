@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../components/Shared/Layout";
 import WithPrivateRoute from "../../components/Shared/Routes/WithPrivateRoute";
 import TopNavigator from "../../components/Shared/TopNavigator";
@@ -19,10 +19,21 @@ const Settings = () => {
       id: "oxapp"
     }
   ];
+  const [active, setActive] = useState<string>("trucks");
+
+  const toggleActiveHandler = (id: string) => {
+    setActive(id);
+  };
+
   return (
     <Layout>
       {/* PAGES NAVIGATION */}
-      <TopNavigator headerLinks={Links} />
+      <TopNavigator
+        headerLinks={Links}
+        setActive={setActive}
+        active={active}
+        toggleActiveHandler={toggleActiveHandler}
+      />
 
       <div className=" w-[100%] my-5">
         {/* TOP ROW */}
