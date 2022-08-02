@@ -8,6 +8,7 @@ interface ButtonProps {
   icon?: React.ReactElement;
   className?: string;
   htmlType?: "button" | "submit" | "reset";
+  onClick?: () => void;
 }
 
 const CustomButton: FC<ButtonProps> = ({
@@ -17,7 +18,8 @@ const CustomButton: FC<ButtonProps> = ({
   size,
   className,
   htmlType,
-  children
+  children,
+  onClick
 }) => {
   switch (type) {
     case "primary":
@@ -28,6 +30,7 @@ const CustomButton: FC<ButtonProps> = ({
           } bg_yellow ${className}`}
           loading={loading}
           icon={icon}
+          onClick={onClick}
           htmlType={htmlType}
         >
           {children}
@@ -42,6 +45,7 @@ const CustomButton: FC<ButtonProps> = ({
           }  bg_white_yellow yellow ${className}`}
           loading={loading}
           icon={icon}
+          onClick={onClick}
           htmlType={htmlType}
         >
           {children}
@@ -57,6 +61,7 @@ const CustomButton: FC<ButtonProps> = ({
           loading={loading}
           icon={icon}
           htmlType={htmlType}
+          onClick={onClick}
         >
           {children}
         </Button>
@@ -71,6 +76,7 @@ const CustomButton: FC<ButtonProps> = ({
           loading={loading}
           icon={icon}
           htmlType={htmlType}
+          onClick={onClick}
         >
           {children}
         </Button>
@@ -85,6 +91,7 @@ const CustomButton: FC<ButtonProps> = ({
           loading={loading}
           icon={icon}
           htmlType={htmlType}
+          onClick={onClick}
         >
           {children}
         </Button>

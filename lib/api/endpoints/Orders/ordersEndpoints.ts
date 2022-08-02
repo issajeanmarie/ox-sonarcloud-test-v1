@@ -16,6 +16,12 @@ const ordersApi = baseAPI.injectEndpoints({
         url: "/orders?page=0&size=40&depot=3",
         method: "GET"
       })
+    }),
+    order: builder.query<ApiResponseMetadata<OrdersResponse>, void>({
+      query: () => ({
+        url: "/orders?page=0&size=40&depot=3",
+        method: "GET"
+      })
     })
   })
 });

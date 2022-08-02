@@ -53,7 +53,7 @@ const AppSider = ({ collapsed }: any) => {
     <Sider
       style={{ height: "100vh" }}
       className="bg_dark"
-      width={280}
+      width={250}
       trigger={null}
       collapsible
       collapsed={collapsed}

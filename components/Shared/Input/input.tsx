@@ -84,7 +84,7 @@ const Entry: FC<EntryProps> = ({
           {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <Input.TextArea
-              className="my_input p-[12px]"
+              className="my_input"
               rows={6}
               placeholder={placeholder}
             />

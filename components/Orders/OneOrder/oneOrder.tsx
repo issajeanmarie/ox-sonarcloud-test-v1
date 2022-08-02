@@ -10,6 +10,8 @@ import { Order, Order as OrderType } from "../../../lib/types/orders";
 import { dateFormatterNth } from "../../../utils/dateFormatter";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
+import Link from "next/link";
+import { routes } from "../../../config/route-config";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -32,7 +34,7 @@ type Types = {
 
 const Order: FC<OrderProps> = ({ order }) => {
   return (
-    <div className="shadow w-full my-5">
+    <div className="shadow-[0px_0px_19px_#00000008] w-full my-5">
       {/* TOP ROW */}
       <div className="p-5 border-b flex items-center justify-between bg-white">
         {/* TOP ROW RIGHT SIDE */}
@@ -194,7 +196,7 @@ const Order: FC<OrderProps> = ({ order }) => {
         <Column
           key="key"
           title="Action"
-          render={() => {
+          render={(text, record: Order) => {
             const child = (
               <div className="flex items-center gap-3 justify-end">
                 <CustomButton
@@ -222,10 +224,11 @@ const Order: FC<OrderProps> = ({ order }) => {
                     />
                   }
                 />
-
-                <CustomButton type="view" size="small">
-                  View
-                </CustomButton>
+                <Link href={routes.viewOrder.url + record.id}>
+                  <CustomButton type="view" size="small">
+                    View
+                  </CustomButton>
+                </Link>
               </div>
             );
             return { children: child, props: { "data-label": "Status" } };
@@ -253,7 +256,7 @@ const Order: FC<OrderProps> = ({ order }) => {
 
             <Col>
               {order.lastEditedBy && (
-                <Text className="normalText opacity_56 italic nowrap ">
+                <Text className="opacity_56 italic nowrap text-xsD">
                   - Edited by {order.lastEditedBy}
                 </Text>
               )}

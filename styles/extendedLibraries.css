@@ -280,3 +280,19 @@
   color: #dc0000 !important;
   margin-top: 1px;
 }
+
+.ant-steps-item-finish .ant-steps-item-icon {
+  background-color: #e3b221 !important;
+  border-color: #e3b221 !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: white !important;
+}
+
+.ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background-color: #e3b221 !important;
+  border-style: dashed !important;
+}
