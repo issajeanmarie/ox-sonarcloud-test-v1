@@ -20,6 +20,8 @@ export type PaymentStatus =
   | "PENDING"
   | "WRITTEN _OFF";
 
+export type Query = string | string[] | undefined;
+
 export type Pagination = {
   pageable: {
     sort: {

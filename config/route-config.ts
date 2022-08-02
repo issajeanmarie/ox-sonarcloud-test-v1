@@ -15,6 +15,14 @@ export const routes = {
     name: "Orders",
     url: "/dashboard"
   },
+  newOrder: {
+    name: "New order",
+    url: "/dashboard/orders/new"
+  },
+  viewOrder: {
+    name: "View order",
+    url: "/dashboard/orders/"
+  },
   Clients: {
     name: "Clients",
     url: "/dashboard/clients"
