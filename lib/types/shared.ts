@@ -129,6 +129,8 @@ export type Office = {
   };
 };
 
+export type Query = string | string[] | undefined;
+
 export type Pagination = {
   pageable: {
     sort: {
