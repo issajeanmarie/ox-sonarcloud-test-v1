@@ -23,7 +23,7 @@ const Analytics = () => {
         active={active}
         toggleActiveHandler={toggleActiveHandler}
       />
-      <div className="px-5">
+      <div className={`${active !== "map" ? "px-5" : "px-0"} `}>
         {active === "trucks" && <AnalyticTrucks />}
         {active === "revenues" && <AnalyticRevenues />}
         {active === "map" && <AnalyticMap />}
