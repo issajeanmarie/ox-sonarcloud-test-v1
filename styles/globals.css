@@ -804,6 +804,10 @@ body {
   color: var(--color_bg_white) !important;
 }
 
+.bg_light_white {
+  background: #f8f8f8 !important;
+}
+
 .bg_yellow {
   background-color: var(--color_yellow) !important;
 }

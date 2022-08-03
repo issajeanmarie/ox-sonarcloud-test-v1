@@ -7,11 +7,11 @@ const { Text } = Typography;
 const MediumCard: FC<AnalyticsCardTypes> = ({ title, subTitle, count }) => {
   return (
     <Card
-      className="radius4"
+      className="radius4 shadow-[0px_0px_19px_#00000008]"
       headStyle={{ border: "none", marginBottom: "0" }}
       bodyStyle={{ padding: "0 24px 24px 24px" }}
-      style={{ width: "auto" }}
-      title={<Text className="normalText">{title}</Text>}
+      style={{ width: "auto", border: "1px solid #EAEFF2" }}
+      title={<Text className="text-base font-light">{title}</Text>}
       extra={
         <Image
           width={18}
