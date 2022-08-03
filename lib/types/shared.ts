@@ -111,7 +111,8 @@ export type PaymentStatus =
   | "FULL_PAID"
   | "HALF_PAID"
   | "PENDING"
-  | "WRITTEN _OFF";
+  | "WRITTEN _OFF"
+  | "ENQUEQUE";
 
 export type Query = string | string[] | undefined;
 
