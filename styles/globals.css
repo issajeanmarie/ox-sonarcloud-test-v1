@@ -302,7 +302,7 @@ body {
 }
 
 .heading2 {
-  @apply font-semibold;
+  @apply font-bold;
   @apply text-sm;
   @apply block;
   @apply text-ox-dark !important;

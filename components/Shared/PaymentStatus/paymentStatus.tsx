@@ -10,7 +10,7 @@ interface PaymentStatusProps {
 const textStyles = "font-bold nowrap";
 
 const PaymentStatus: FC<PaymentStatusProps> = ({ amt, status }) => {
-  const value = amt ? abbreviateNumber(amt) + "RWF" : status;
+  const value = amt ? abbreviateNumber(amt) + " RWF" : status;
   switch (status) {
     case "PENDING":
       return <span className={`${textStyles} text-ox-orange`}>{value}</span>;
