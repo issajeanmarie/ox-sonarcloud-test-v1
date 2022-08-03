@@ -60,7 +60,7 @@ const Entry: FC<EntryProps> = ({
               showSearch
               placeholder={placeholder}
               size="large"
-              className={`my_input ${size === "small" && "sm"} `}
+              className={`my_input bordered_input ${size === "small" && "sm"} `}
               suffixIcon={suffixIcon}
               filterOption={(input, option) =>
                 option?.key?.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||

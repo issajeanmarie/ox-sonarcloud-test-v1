@@ -74,7 +74,9 @@ const TrucksUsage = () => {
             />
           }
         />
-        <CustomButton type="secondary">DOWNLOAD REPORT</CustomButton>
+        <CustomButton type="secondary">
+          <span className="text-sm">DOWNLOAD REPORT</span>
+        </CustomButton>
       </Col>
     </Row>
   );

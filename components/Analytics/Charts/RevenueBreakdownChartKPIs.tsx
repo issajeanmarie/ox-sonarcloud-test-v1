@@ -13,7 +13,7 @@ import { Col, Row } from "antd";
 import { BsFillSquareFill } from "react-icons/bs";
 import { firstLetterCapitalizer } from "../../../helpers/firstLetterCapitalizer";
 import { MonthLabels } from "../Dummies/MonthLabels";
-import { RevenueBreakdownIndicators } from "../Dummies/Indicators";
+import { RevenueBreakdownKPIsIndicators } from "../Dummies/Indicators";
 
 ChartJS.register(
   CategoryScale,
@@ -51,10 +51,10 @@ export const options = {
   }
 };
 
-const RevenueBreakdownChart = () => {
+const RevenueBreakdownChartKPIs = () => {
   /**
    * @author Patrick TUNEZERWANE (AWESOMITY LAB)
-   * @since AUgust 01 2022
+   * @since AUgust 02 2022
    */
 
   const data = {
@@ -63,11 +63,6 @@ const RevenueBreakdownChart = () => {
       {
         data: [24, 45, 34, 30, 44, 45, 35, 45, 47, 40, 40, 50],
         backgroundColor: ["#EBEFF2"],
-        borderWidth: 0
-      },
-      {
-        data: [19, 19, 3, 5, 20, 3, 40, 25, 20, 22, 30, 40],
-        backgroundColor: ["#A2B3D1"],
         borderWidth: 0
       },
       {
@@ -81,7 +76,7 @@ const RevenueBreakdownChart = () => {
   return (
     <>
       <Row className="my-5 flex justify-end items-center gap-4">
-        {RevenueBreakdownIndicators?.map((item) => (
+        {RevenueBreakdownKPIsIndicators?.map((item) => (
           <Col
             key={item?.id}
             style={{ display: "flex", gap: "0.4rem" }}
@@ -106,4 +101,4 @@ const RevenueBreakdownChart = () => {
   );
 };
 
-export default RevenueBreakdownChart;
+export default RevenueBreakdownChartKPIs;

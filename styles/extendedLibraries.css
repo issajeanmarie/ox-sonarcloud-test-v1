@@ -31,7 +31,7 @@
 }
 
 .ant-progress-inner {
-  background-color: var(--color_border_grey) !important;
+  background-color: #eaeff2 !important;
 }
 
 .ant-layout-header.shadow {
@@ -152,6 +152,24 @@
 
 .noborder .ant-table-tbody > tr > td,
 .ant-table-thead > tr > th {
+  border: none !important;
+}
+
+.light_white_header .ant-table-thead > tr > th {
+  background: #f8f8f8 !important;
+}
+
+.ant-table-thead > tr > th {
+  font-size: 0.875rem !important /* 14px */;
+  line-height: 1.25rem !important /* 20px */;
+}
+.light_white_table .ant-table table {
+  border-spacing: 0 5px !important;
+  background: #f8f8f8 !important;
+}
+
+.light_white_table .ant-table-tbody > tr > td {
+  background: #ffffff !important;
   border: none !important;
 }
 

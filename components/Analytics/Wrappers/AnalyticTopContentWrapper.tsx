@@ -1,9 +1,18 @@
 import React, { FC } from "react";
-import { ChildrenType } from "../../../lib/types/components/ChildrenType";
+import { AnalyticTopContentWrapperTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticTopContentWrapperTypes";
 
-const AnalyticTopContentWrapper: FC<ChildrenType> = ({ children }) => {
+const AnalyticTopContentWrapper: FC<AnalyticTopContentWrapperTypes> = ({
+  children,
+  active
+}) => {
   return (
-    <div className="bg-ox-white sticky top-[3.60rem] z-10">{children}</div>
+    <div
+      className={`bg_light_white  ${
+        active === "trucks" && "sticky top-[4rem] z-10"
+      } `}
+    >
+      {children}
+    </div>
   );
 };
 

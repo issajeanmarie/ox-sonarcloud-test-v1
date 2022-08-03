@@ -9,20 +9,19 @@ const { Text } = Typography;
 const TrucksUsageTable = () => {
   const columns = [
     {
-      title: "#",
-      key: "truckID",
-      render: (text: TrucksUsageTableTypes, record: TrucksUsageTableTypes) => (
-        <RowsWrapper>
-          <Text className="normalText opacity_56">{record.key}</Text>
-        </RowsWrapper>
-      )
-    },
-    {
-      title: "Truck",
+      title: (
+        <div className="flex gap-10">
+          <span>#</span>
+          <span>Truck</span>
+        </div>
+      ),
       key: "Truck",
       render: (text: TrucksUsageTableTypes, record: TrucksUsageTableTypes) => (
         <RowsWrapper>
-          <Text className="normalText fowe700">{record.Truck}</Text>
+          <div className="flex gap-10">
+            <Text className="normalText opacity_56">{record.key}</Text>
+            <Text className="normalText fowe700">{record.Truck}</Text>
+          </div>
         </RowsWrapper>
       )
     },
@@ -117,8 +116,7 @@ const TrucksUsageTable = () => {
   ];
   return (
     <Table
-      className="data_table"
-      rowClassName="shadow"
+      className="data_table light_white_header light_white_table"
       columns={columns}
       dataSource={TrucksUsageTableData}
       rowKey={(record) => record.key}

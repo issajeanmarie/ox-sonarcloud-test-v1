@@ -1,4 +1,4 @@
-export const RevenueBreakdownLabels = [
+export const MonthLabels = [
   "January",
   "February",
   "March",

@@ -7,7 +7,7 @@ export const MediumChartWrapper: FC<ChildrenType> = ({ children }) => {
       style={{
         background: "#ffffff",
         width: "100%",
-        height: "45vh",
+        height: "41vh",
         padding: "0.5rem 2rem",
         borderRadius: "4px",
         boxShadow: "0px 0px 19px #00000008"
