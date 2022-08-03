@@ -1,5 +1,5 @@
-import { OrdersResponse } from "../../../types/orders";
-import { ApiResponseMetadata } from "../../../types/shared";
+import { Order, OrdersResponse } from "../../../types/orders";
+import { ApiResponseMetadata, Query } from "../../../types/shared";
 import { baseAPI } from "../../api";
 
 /**
@@ -13,17 +13,19 @@ const ordersApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
     orders: builder.query<ApiResponseMetadata<OrdersResponse>, void>({
       query: () => ({
-        url: "/orders?page=0&size=40&depot=3",
+        url: "/orders?page=0&size=40&depot=",
         method: "GET"
       })
     }),
-    order: builder.query<ApiResponseMetadata<OrdersResponse>, void>({
-      query: () => ({
-        url: "/orders?page=0&size=40&depot=3",
+    order: builder.query<Order | undefined, Query>({
+      query: (id) => ({
+        url: `/orders/${id}`,
         method: "GET"
-      })
+      }),
+      transformResponse: (response: ApiResponseMetadata<Order>) =>
+        response.payload
     })
   })
 });
 
-export const { useLazyOrdersQuery } = ordersApi;
+export const { useLazyOrdersQuery, useLazyOrderQuery } = ordersApi;
