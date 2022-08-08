@@ -2,7 +2,13 @@ import { FC } from "react";
 import Button from "antd/lib/button";
 
 interface ButtonProps {
-  type: "primary" | "secondary" | "danger" | "normal" | "view";
+  type:
+    | "primary"
+    | "secondary"
+    | "danger"
+    | "danger_filled"
+    | "normal"
+    | "view";
   loading?: boolean;
   size?: "icon" | "small";
   icon?: React.ReactElement;
@@ -73,6 +79,21 @@ const CustomButton: FC<ButtonProps> = ({
           className={`my_button ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           }  bg_danger yellow ${className}`}
+          loading={loading}
+          icon={icon}
+          htmlType={htmlType}
+          onClick={onClick}
+        >
+          {children}
+        </Button>
+      );
+
+    case "danger_filled":
+      return (
+        <Button
+          className={`my_button ${size === "icon" && "icon"} ${
+            size === "small" && "sm"
+          }  bg_danger_filled white ${className}`}
           loading={loading}
           icon={icon}
           htmlType={htmlType}

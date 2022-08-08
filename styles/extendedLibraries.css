@@ -128,12 +128,12 @@
 .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
   display: flex;
   align-items: center;
-  font-size: 14px !important;
+  font-size: 12px !important;
 }
 
 .ant-select-selection-placeholder {
-  font-size: 14px !important;
   font-weight: normal !important;
+  color: black !important;
 }
 
 .ant-select-show-search.ant-select:not(.ant-select-customize-input)
@@ -314,4 +314,12 @@
   > .ant-steps-item-tail::after {
   background-color: #e3b221 !important;
   border-style: dashed !important;
+}
+
+.ant-picker-input > input {
+  font-size: 12px !important;
+}
+
+.ant-picker-input > input::placeholder {
+  font-size: 12px !important;
 }

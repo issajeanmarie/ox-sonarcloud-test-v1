@@ -176,6 +176,10 @@ body {
   @apply bg-ox-danger !important;
 }
 
+.bg_danger_filled {
+  @apply bg-ox-red !important;
+}
+
 .shadow {
   box-shadow: var(--shadow) !important;
   background: var(--white) 0% 0% no-repeat padding-box !important;

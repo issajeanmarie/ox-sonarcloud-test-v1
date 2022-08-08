@@ -12,9 +12,10 @@ const { Text } = Typography;
 interface EntryProps {
   type: "select" | "text" | "password" | "text_area" | "date" | "image";
   name: string;
+  inputType?: string;
   imageCount?: number;
   options?: { label: string; value: string | number }[];
-  suffixIcon?: React.ReactElement;
+  suffixIcon?: React.ReactElement | string;
   images?: any;
   setImages?: React.SetStateAction<React.Dispatch<any>>;
   size?: "small" | "large";
@@ -32,6 +33,7 @@ const Entry: FC<EntryProps> = ({
   imageCount,
   images,
   setImages,
+  inputType,
   label,
   rules,
   size,
@@ -46,6 +48,7 @@ const Entry: FC<EntryProps> = ({
             <Input
               className={`my_input ${size === "small" && "sm"}`}
               placeholder={placeholder}
+              type={inputType}
               suffix={suffixIcon}
             />
           </Form.Item>
