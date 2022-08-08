@@ -142,8 +142,8 @@
 }
 
 .ant-select-selection-placeholder {
-  font-size: 14px !important;
   font-weight: normal !important;
+  color: black !important;
 }
 
 .ant-select-show-search.ant-select:not(.ant-select-customize-input)

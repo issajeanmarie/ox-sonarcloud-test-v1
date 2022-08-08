@@ -144,6 +144,21 @@ const CustomButton: FC<ButtonProps> = ({
         </Button>
       );
 
+    case "danger_filled":
+      return (
+        <Button
+          className={`my_button ${size === "icon" && "icon"} ${
+            size === "small" && "sm"
+          }  bg_danger_filled white ${className}`}
+          loading={loading}
+          icon={icon}
+          htmlType={htmlType}
+          onClick={onClick}
+        >
+          {children}
+        </Button>
+      );
+
     case "normal":
       return (
         <Button
