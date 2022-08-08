@@ -1,11 +1,12 @@
 import React from "react";
+import AddOrder from "../../../components/Orders/Add";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 
 const NewOrderPage = () => {
   return (
     <Layout>
-      <p>New order page</p>
+      <AddOrder />
     </Layout>
   );
 };

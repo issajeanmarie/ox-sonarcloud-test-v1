@@ -1,5 +1,9 @@
 import { Order, OrdersResponse } from "../../../types/orders";
-import { ApiResponseMetadata, Query } from "../../../types/shared";
+import {
+  ApiResponseMetadata,
+  GenericResponse,
+  Query
+} from "../../../types/shared";
 import { baseAPI } from "../../api";
 
 /**
@@ -12,8 +16,9 @@ import { baseAPI } from "../../api";
 const ordersApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
     orders: builder.query<ApiResponseMetadata<OrdersResponse>, void>({
+      providesTags: ["Orders"],
       query: () => ({
-        url: "/orders?page=0&size=40&depot=",
+        url: "/orders?page=0&size=40&depot=1",
         method: "GET"
       })
     }),
@@ -24,8 +29,34 @@ const ordersApi = baseAPI.injectEndpoints({
       }),
       transformResponse: (response: ApiResponseMetadata<Order>) =>
         response.payload
+    }),
+    deleteOrder: builder.mutation<GenericResponse, Query>({
+      invalidatesTags: ["Orders"],
+      query: (id) => ({
+        url: `/orders/${id}`,
+        method: "DELETE"
+      })
+    }),
+    orderInvoice: builder.query<any, Query>({
+      query: (id) => ({
+        url: `/orders/${id}/invoice`,
+        method: "GET",
+        headers: { "Content-Type": "application/octet-stream" },
+        responseType: "blob",
+        responseHandler: async (response) =>
+          window.location.assign(
+            window.URL.createObjectURL(await response.blob())
+          ),
+        cache: "no-cache"
+      })
     })
   })
 });
 
-export const { useLazyOrdersQuery, useLazyOrderQuery } = ordersApi;
+export const {
+  useOrdersQuery,
+  useLazyOrdersQuery,
+  useLazyOrderQuery,
+  useLazyOrderInvoiceQuery,
+  useDeleteOrderMutation
+} = ordersApi;

@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 import Button from "../../Shared/Button";
-import { FilterOutlined } from "@ant-design/icons";
 import { OrdersResponse } from "../../../lib/types/orders";
 import { localeString } from "../../../utils/numberFormatter";
 import { ApiResponseMetadata } from "../../../lib/types/shared";
@@ -8,6 +7,7 @@ import FilterOrdersForm from "../../Forms/Orders/Filter/filter";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
+import Image from "next/image";
 
 interface OrdersHeaderProps {
   data?: ApiResponseMetadata<OrdersResponse>;
@@ -45,9 +45,16 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data }) => {
       <div className="text-[17px] font-bold">
         {localeString(data?.payload?.totalElements)} Orders
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-5">
         <div>
-          <FilterOutlined onClick={showModal} className="text-2xl" />
+          <Image
+            width={16}
+            height={16}
+            src="/icons/filter.svg"
+            onClick={showModal}
+            className="cursor-pointer"
+            alt="Filter icon"
+          />
         </div>
         <div>
           <Button type="secondary">DOWNLOAD REPORT</Button>
