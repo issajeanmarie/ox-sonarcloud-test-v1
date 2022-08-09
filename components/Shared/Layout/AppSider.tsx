@@ -9,30 +9,43 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
 import { manageSidebarMenus, moreSidebarMenus } from "../../../helpers/menus";
+import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
+import { depotGetter } from "../../../helpers/depotGetter";
+import { useState } from "react";
 
 const { Sider } = Layout;
 const { Text } = Typography;
 
 const AppSider = ({ collapsed }: any) => {
+  const { localDepotName, localDepotID } = depotGetter();
+  const [, setDepotName] = useState(localDepotName);
+  const [, setDepotID] = useState(localDepotID);
+
+  const { data, isLoading } = useDepotsQuery();
+  const handleDepotChange = (depotName: string, depotID: string) => {
+    setDepotName(depotName);
+    setDepotID(depotID);
+    localStorage.setItem("ox_depotName", depotName);
+    localStorage.setItem("ox_depotID", depotID);
+  };
+
   const menus = manageSidebarMenus();
   const moreMenus = moreSidebarMenus();
-
   const router = useRouter();
-
-  const fakeDepots = [
-    "Tyazo Depot",
-    "Gishanga Depot",
-    "Nyamabuye Depot",
-    "Karengera Depot"
-  ];
 
   const depots = (
     <Space
       className="depot_dropdown radius5 "
       style={{ width: "90%", marginLeft: "12px" }}
     >
-      {fakeDepots.map((depot) => (
-        <Row gutter={12} align="middle" key={depot} className="p-2">
+      {data?.payload?.map((depot) => (
+        <Row
+          onClick={() => handleDepotChange(depot?.name, depot?.id)}
+          gutter={12}
+          align="middle"
+          key={depot?.id}
+          className="p-2"
+        >
           <Col>
             <Image
               width={16}
@@ -42,7 +55,7 @@ const AppSider = ({ collapsed }: any) => {
             />
           </Col>
           <Col>
-            <Text className="white">{depot}</Text>
+            <Text className="white">{depot?.name}</Text>
           </Col>
         </Row>
       ))}
@@ -58,7 +71,13 @@ const AppSider = ({ collapsed }: any) => {
       collapsible
       collapsed={collapsed}
     >
-      <Dropdown overlay={depots} placement="bottom" className="pointer">
+      <Dropdown
+        trigger={["click"]}
+        disabled={isLoading}
+        overlay={depots}
+        placement="bottom"
+        className="pointer"
+      >
         <Row
           align="middle"
           justify="space-between"
@@ -74,7 +93,9 @@ const AppSider = ({ collapsed }: any) => {
             />
 
             {!collapsed && (
-              <div className="normalText text-white">Tyazo depot</div>
+              <div className="normalText text-white">
+                {isLoading ? "Loading depots" : localDepotName}
+              </div>
             )}
 
             {!collapsed && (

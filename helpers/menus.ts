@@ -7,32 +7,26 @@ const AccountsIcon = "ic-security-secured-profile.svg";
 const ClientsIcon = "ic-actions-user.svg";
 const SettingsIcon = "ic-actions-settings.svg";
 
-export const manageSidebarMenus = (depotID = "", depotName = "") => [
+export const manageSidebarMenus = () => [
   {
     name: routeConfig.Orders.name,
     icon: OrdersIcon,
     active: false,
-    url: `${routeConfig.Orders.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
+    url: routeConfig.Orders.url,
     urlKey: routeConfig.Orders.url
   },
   {
     name: routeConfig.Clients.name,
     icon: ClientsIcon,
     active: false,
-    url: `${routeConfig.Clients.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
+    url: routeConfig.Clients.url,
     urlKey: routeConfig.Clients.url
   },
   {
     name: routeConfig.Trucks.name,
     icon: TruckIcon,
     active: false,
-    url: `${routeConfig.Trucks.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
+    url: routeConfig.Trucks.url,
     urlKey: routeConfig.Trucks.url
   },
 
@@ -40,30 +34,24 @@ export const manageSidebarMenus = (depotID = "", depotName = "") => [
     name: routeConfig.Accounts.name,
     icon: AccountsIcon,
     active: false,
-    url: `${routeConfig.Accounts.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
+    url: routeConfig.Accounts.url,
     urlKey: routeConfig.Accounts.url
   }
 ];
 
-export const moreSidebarMenus = (depotID = "", depotName = "") => [
+export const moreSidebarMenus = () => [
   {
     name: routeConfig.Analytics.name,
     icon: AnalyticsIcon,
     active: false,
-    url: `${routeConfig.Analytics.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
+    url: routeConfig.Analytics.url,
     urlKey: routeConfig.Analytics.url
   },
   {
     name: routeConfig.Settings.name,
     icon: SettingsIcon,
     active: false,
-    url: `${routeConfig.Settings.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
+    url: routeConfig.Settings.url,
     urlKey: routeConfig.Settings.url
   }
 ];
