@@ -39,10 +39,21 @@ const Comopnents = () => {
     }
   ];
 
+  const [active, setActive] = useState<string>("trucks");
+
+  const toggleActiveHandler = (id: string) => {
+    setActive(id);
+  };
+
   return (
     <Layout>
       {/* PAGES NAVIGATION */}
-      <TopNavigator headerLinks={Links} />
+      <TopNavigator
+        headerLinks={Links}
+        setActive={setActive}
+        active={active}
+        toggleActiveHandler={toggleActiveHandler}
+      />
       {/*
            ***
            FIRST SECTION

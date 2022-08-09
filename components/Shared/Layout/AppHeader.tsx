@@ -10,7 +10,7 @@ const AppHeader = ({ collapsed, toggle }: any) => {
   const { loggedInUser } = getLoggedInUser();
 
   return (
-    <div className="w-full flex items-center p-4 bg-white">
+    <div className="w-full flex items-center p-4 bg-white shadow-[0px_-6px_24px_#2A35481A] z-[900]">
       <div className="flex-1 flex items-center justify-between">
         <div className="flex items-center gap-4">
           {React.createElement(

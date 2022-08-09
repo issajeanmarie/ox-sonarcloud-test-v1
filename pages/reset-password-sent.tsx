@@ -1,8 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
+import { Button as AntButton } from "antd";
 import AuthWrapper from "../components/Shared/AuthWrapper";
 import Button from "../components/Shared/Button";
 import WithPublicRoute from "../components/Shared/Routes/WithPublicRoute";
+import { routes } from "../config/route-config";
 
 const ResetPasswordSent = () => {
   return (
@@ -19,6 +22,11 @@ const ResetPasswordSent = () => {
               Open Gmail
             </Button>
           </a>
+          <Link href={routes.login.url} passHref>
+            <AntButton type="text" className="mt-4" htmlType="button">
+              Not now?
+            </AntButton>
+          </Link>
         </div>
       </div>
     </AuthWrapper>

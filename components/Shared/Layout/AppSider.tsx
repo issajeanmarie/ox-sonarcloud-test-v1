@@ -166,6 +166,7 @@ const AppSider = ({ collapsed }: any) => {
 
           return (
             <Menu.Item
+              onClick={() => router.push(moreMenu.url)}
               className={`white fowe300 text14 my_menu_bg ${
                 !collapsed && "not_collapsed"
               }`}
