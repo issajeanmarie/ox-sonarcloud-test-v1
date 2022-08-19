@@ -1,5 +1,5 @@
 import { FC, SetStateAction, Dispatch } from "react";
-import { Modal } from "antd";
+import Modal from "../../Shared/Modal";
 import Button from "../../Shared/Button";
 
 interface ReceipientCodeProps {
@@ -13,24 +13,10 @@ const ReceipientCode: FC<ReceipientCodeProps> = ({
   setIsModalVisible,
   code
 }) => {
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   return (
     <Modal
-      title={false}
-      width={500}
-      footer={false}
-      visible={isModalVisible}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      closable={false}
-      centered
+      isModalVisible={isModalVisible}
+      setIsModalVisible={setIsModalVisible}
     >
       <div className="m-10">
         <div className="text-2xl font-bold text-center text-ox-yellow-faded">
@@ -38,7 +24,7 @@ const ReceipientCode: FC<ReceipientCodeProps> = ({
         </div>
         <div className="text-center my-8 text-2xl font-bold">{code}</div>
         <div className="text-center w-1/2 m-auto">
-          <Button type="primary" onClick={handleOk}>
+          <Button type="primary" onClick={() => setIsModalVisible(false)}>
             OK
           </Button>
         </div>

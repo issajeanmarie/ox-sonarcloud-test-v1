@@ -1,19 +1,13 @@
-import { FC, SetStateAction, Dispatch, useState } from "react";
+import { FC, useState } from "react";
 import { Form, message, Modal } from "antd";
 import Button from "../../Shared/Button";
 import Input from "../../Shared/Input";
-import { Order } from "../../../lib/types/orders";
 import {
   useInitiatePaymentMutation,
   useVerifyPaymentMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-
-interface MobilePaymentProps {
-  isModalVisible: boolean;
-  setIsModalVisible: Dispatch<SetStateAction<boolean>>;
-  order: Order;
-}
+import { MobilePaymentProps } from "../../../lib/types/components/MobilePayment";
 
 const MobilePayment: FC<MobilePaymentProps> = ({
   isModalVisible,
@@ -37,7 +31,7 @@ const MobilePayment: FC<MobilePaymentProps> = ({
     setIsPaymentSuccessful(false);
   };
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: { amount: number; phone: string }) => {
     if (order) {
       initiatePayment({ orderId: order.id, data: values })
         .unwrap()

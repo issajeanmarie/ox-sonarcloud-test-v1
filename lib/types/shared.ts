@@ -22,6 +22,7 @@ export type PaymentStatus =
   | "ENQUEQUE";
 
 export type EconomicStatus = "INDIVIDUAL" | "COMPANY" | "GROUP";
+export type Payment_Plan = "PAY_PER_JOB" | "PAY_PER_KG";
 
 export type Query = string | string[] | undefined;
 

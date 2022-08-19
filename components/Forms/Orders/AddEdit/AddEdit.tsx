@@ -9,21 +9,21 @@ import {
   useClientsQuery
 } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-
-interface AddEditOrderProps {
-  mode: "edit" | "add";
-  title: string;
-}
+import { AddEditProps } from "../../../../lib/types/components/AddEditProps";
+import { OrderRequestBody } from "../../../../lib/types/orders";
 
 const { Option, OptGroup } = Select;
 
-const AddEditOrder: FC<AddEditOrderProps> = ({ title }) => {
+const AddEditOrder: FC<AddEditProps> = ({ title }) => {
   const { data: categories } = useCategoriesQuery();
   const { data: clients } = useClientsQuery();
   const [form] = Form.useForm();
   const [chosenClientId, setChosenClientId] = useState<number>();
 
-  const onValuesChange = (changedValues: any, allValues: any) => {
+  const onValuesChange = (
+    changedValues: OrderRequestBody,
+    allValues: OrderRequestBody
+  ) => {
     if (allValues?.clientId) {
       setChosenClientId(allValues?.clientId);
     }
