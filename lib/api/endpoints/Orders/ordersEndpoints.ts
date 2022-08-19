@@ -23,6 +23,7 @@ const ordersApi = baseAPI.injectEndpoints({
       })
     }),
     order: builder.query<Order | undefined, Query>({
+      providesTags: ["Order"],
       query: (id) => ({
         url: `/orders/${id}`,
         method: "GET"
@@ -37,17 +38,34 @@ const ordersApi = baseAPI.injectEndpoints({
         method: "DELETE"
       })
     }),
-    orderInvoice: builder.query<any, Query>({
+    orderInvoice: builder.mutation<any, Query>({
       query: (id) => ({
         url: `/orders/${id}/invoice`,
         method: "GET",
-        headers: { "Content-Type": "application/octet-stream" },
-        responseType: "blob",
-        responseHandler: async (response) =>
-          window.location.assign(
-            window.URL.createObjectURL(await response.blob())
-          ),
-        cache: "no-cache"
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
+      })
+    }),
+    initiatePayment: builder.mutation<
+      any,
+      { orderId: number; data: { amount: number; phone: string } }
+    >({
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}/momo-pay/initiate`,
+        method: "POST",
+        body: data
+      })
+    }),
+    verifyPayment: builder.mutation<
+      any,
+      { orderId: number; referenceId: string }
+    >({
+      invalidatesTags: ["Order", "Orders"],
+      query: ({ orderId, referenceId }) => ({
+        url: `/orders/${orderId}/momo-pay/verify?referenceId=${referenceId}`,
+        method: "GET"
       })
     })
   })
@@ -57,6 +75,8 @@ export const {
   useOrdersQuery,
   useLazyOrdersQuery,
   useLazyOrderQuery,
-  useLazyOrderInvoiceQuery,
-  useDeleteOrderMutation
+  useOrderInvoiceMutation,
+  useDeleteOrderMutation,
+  useInitiatePaymentMutation,
+  useVerifyPaymentMutation
 } = ordersApi;
