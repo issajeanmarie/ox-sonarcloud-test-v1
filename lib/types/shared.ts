@@ -131,6 +131,17 @@ export type Office = {
 
 export type Query = string | string[] | undefined;
 
+export type Office = {
+  id: number;
+  location: string;
+  names: string;
+  type: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+};
+
 export type Pagination = {
   pageable: {
     sort: {
