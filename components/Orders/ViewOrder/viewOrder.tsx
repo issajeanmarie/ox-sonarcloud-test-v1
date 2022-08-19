@@ -122,7 +122,13 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
         </div>
         <div className="flex items-center mb-5">
           <div className="flex-1 flex items-center gap-8">
-            <span className="heading2">{st.truck?.plateNumber}</span>
+            {st.truck?.plateNumber ? (
+              <span className="heading2">{st.truck?.plateNumber}</span>
+            ) : (
+              <span className="font-semibold italic text-gray-300">
+                Truck Not found
+              </span>
+            )}
           </div>
           <div className="flex-2 text-gray-400 font-light">
             {st.driver.names}
@@ -181,7 +187,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
         <Loader />
       ) : (
         <>
-          <Header orderId={orderId} code={data.deliveryCode} />
+          <Header orderId={orderId} code={data.deliveryCode} order={data} />
 
           <div className="flex flex-col lg:flex-row p-5 gap-6 overflow-auto h-[83vh]">
             <div className="flex-1 h-min bg-white shadow-[0px_0px_19px_#00000008] rounded p-14">

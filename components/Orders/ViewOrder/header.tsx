@@ -8,17 +8,24 @@ import ReceipientCodeModal from "../ReceipientCode";
 import MobilePayment from "../MobilePayment";
 import {
   useDeleteOrderMutation,
-  useLazyOrderInvoiceQuery
+  useOrderInvoiceMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
+import { Order } from "../../../lib/types/orders";
 
 interface ViewOrderHeaderProps {
   orderId: Query;
   code: string;
+  order: Order;
 }
 
-const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({ orderId, code }) => {
+const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
+  orderId,
+  order,
+  code
+}) => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] =
     useState<boolean>(false);
 
@@ -29,7 +36,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({ orderId, code }) => {
     useState<boolean>(false);
 
   const [downloadInvoice, { isLoading: invoiceLoading }] =
-    useLazyOrderInvoiceQuery();
+    useOrderInvoiceMutation();
 
   const [deleteOrderAction, { isLoading: deleteOrderLoading }] =
     useDeleteOrderMutation();
@@ -39,9 +46,15 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({ orderId, code }) => {
   const downloadOrderInvoice = () => {
     downloadInvoice(orderId)
       .unwrap()
-      .then()
+      .then((file) => {
+        handleDownloadFile(file, "Invoice", "PDF");
+      })
       .catch((e) => {
-        message.error(e.data.message);
+        if (e.status === 404) {
+          message.warning("This order is fully paid");
+        } else {
+          message.error("Cannot download file");
+        }
       });
   };
 
@@ -77,6 +90,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({ orderId, code }) => {
       <MobilePayment
         isModalVisible={isMobilePaymentModalVisible}
         setIsModalVisible={setIsMobilePaymentModalVisible}
+        order={order}
       />
       <div className="bg-white my-2 shadow-[0px_0px_19px_#00000008] p-3 px-6 flex items-center">
         <div className="flex items-center gap-4 ">

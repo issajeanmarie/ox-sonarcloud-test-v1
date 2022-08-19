@@ -56,9 +56,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data }) => {
             alt="Filter icon"
           />
         </div>
-        <div>
-          <Button type="secondary">DOWNLOAD REPORT</Button>
-        </div>
+        <div>{/* <Button type="secondary">DOWNLOAD REPORT</Button> */}</div>
         <div>
           <Button
             type="primary"

@@ -26,6 +26,7 @@
     "chart.js": "^3.8.0",
     "formik": "^2.2.9",
     "formik-antd": "^2.0.4",
+    "js-file-download": "^0.4.12",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
@@ -40,9 +41,11 @@
     "react-phone-number-input": "^3.2.2",
     "react-redux": "^7.2.6",
     "styled-components": "^5.3.5",
+    "use-places-autocomplete": "^4.0.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.49.2",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "17.0.15",
     "@types/react": "17.0.39",
