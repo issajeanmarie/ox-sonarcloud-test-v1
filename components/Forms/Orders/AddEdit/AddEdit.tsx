@@ -460,7 +460,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
         </div>
       </Form>
 
-      {/* Stop details */}
+        {/* Truck details */}
 
       <div className="mb-14">
         <div className="font-extralight text-[15px] mb-10">Stop details</div>
