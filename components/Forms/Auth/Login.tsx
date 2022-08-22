@@ -13,7 +13,6 @@ import { LoginTypes } from "../../../lib/types/LoginTypes";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import { useLoginMutation } from "../../../lib/api/endpoints/Auth/authEndpoints";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { setCredentials } from "../../../lib/redux/slices/authSlice";
 import { LoginResponse } from "../../../lib/types/auth";
@@ -28,7 +27,6 @@ const Login = () => {
     login(values)
       .unwrap()
       .then((res: LoginResponse) => {
-        SuccessMessage(res.message);
         if (res.payload) {
           dispatch(setCredentials(res));
         }

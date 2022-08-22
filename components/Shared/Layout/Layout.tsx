@@ -30,7 +30,7 @@ const AppLayout = ({ children }: Types) => {
       <Layout>
         <AppHeader collapsed={collapsed} toggle={toggle} />
 
-        <Content className="bg-ox-white text-black contents_container">
+        <Content className="bg_light_white text-black contents_container">
           {children}
         </Content>
       </Layout>
