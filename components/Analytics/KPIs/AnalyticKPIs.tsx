@@ -8,31 +8,65 @@ import RevenueBreakdownChartKPIs from "../Charts/RevenueBreakdownChartKPIs";
 import RevenueKGKChartPIs from "../Charts/RevenueKGKChartPIs";
 import { AnalyticKPIsTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticKPIsTypes";
 import LargeCard from "../Cards/LargeCard";
+import { AnalyticCardsLoader } from "../../Shared/Loaders/Loaders";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
+import { KPIsPacentageCalculator } from "../../../helpers/pacentageCalculators";
 
-const AnalyticKPIs: FC<AnalyticKPIsTypes> = ({ active }) => {
+const AnalyticKPIs: FC<AnalyticKPIsTypes> = ({
+  active,
+  KPIsData,
+  KPIsLoading,
+  KPIsFetching
+}) => {
   return (
     <>
       <AnalyticTopContentWrapper active={active}>
-        <CardRowWrapper active={active}>
-          <CardColWrapper active={active}>
-            <LargeCard
-              title="Revenue"
-              amount1="200,000"
-              amount2="700,0000"
-              percentage="40"
-              traveled=""
-            />
-          </CardColWrapper>
-          <CardColWrapper active={active}>
-            <LargeCard
-              title="Revenue / KM"
-              amount1="200,000"
-              amount2="700,0000"
-              percentage="75"
-              traveled="576 KM Travelled"
-            />
-          </CardColWrapper>
-        </CardRowWrapper>
+        {KPIsLoading ? (
+          <>
+            <CardRowWrapper active={active}>
+              {[...Array(5)].map((_, index) => (
+                <AnalyticCardsLoader key={index} />
+              ))}
+            </CardRowWrapper>
+          </>
+        ) : (
+          <CardRowWrapper active={active}>
+            <CardColWrapper active={active}>
+              <LargeCard
+                title="Revenue"
+                amount1={KPIsData?.averageActualPerDay}
+                amount2={KPIsData?.averageTargetPerDay}
+                percentage={
+                  KPIsData?.averageActualPerDay &&
+                  KPIsPacentageCalculator(
+                    KPIsData?.averageActualPerDay,
+                    KPIsData?.averageTargetPerDay
+                  )
+                }
+                traveled=""
+                isFetching={KPIsFetching}
+              />
+            </CardColWrapper>
+            <CardColWrapper active={active}>
+              <LargeCard
+                title="Revenue / KM"
+                amount1={KPIsData?.averageActualPerKm}
+                amount2={KPIsData?.averageTargetPerKm}
+                percentage={
+                  KPIsData?.averageActualPerKm &&
+                  KPIsPacentageCalculator(
+                    KPIsData?.averageActualPerKm,
+                    KPIsData?.averageTargetPerKm
+                  )
+                }
+                traveled={`${
+                  KPIsData?.totalKms && numbersFormatter(KPIsData?.totalKms)
+                } KM Travelled`}
+                isFetching={KPIsFetching}
+              />
+            </CardColWrapper>
+          </CardRowWrapper>
+        )}
       </AnalyticTopContentWrapper>
       <Row>
         <Col className="pb-4" xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>

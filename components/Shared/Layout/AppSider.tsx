@@ -10,27 +10,24 @@ import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
 import { manageSidebarMenus, moreSidebarMenus } from "../../../helpers/menus";
 import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
-import { depotGetter } from "../../../helpers/depotGetter";
-import { useState } from "react";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setDepotData } from "../../../lib/redux/slices/depotSlice";
+import { depotTypes } from "../../../lib/types/depots";
+import { RootState } from "../../../lib/redux/store";
 const { Sider } = Layout;
 const { Text } = Typography;
 
 const AppSider = ({ collapsed }: any) => {
-  const { localDepotName, localDepotID } = depotGetter();
-  const [, setDepotName] = useState(localDepotName);
-  const [, setDepotID] = useState(localDepotID);
+  const dispatch = useDispatch();
+  const { depotData } = useSelector((state: RootState) => state.depot);
 
   const { data, isLoading } = useDepotsQuery();
-  const handleDepotChange = (depotName: string, depotID: string) => {
-    setDepotName(depotName);
-    setDepotID(depotID);
-    localStorage.setItem("ox_depotName", depotName);
-    localStorage.setItem("ox_depotID", depotID);
+  const handleDepotChange = (depot: depotTypes) => {
+    dispatch(setDepotData(depot));
   };
 
-  const menus = manageSidebarMenus();
-  const moreMenus = moreSidebarMenus();
+  const menus = manageSidebarMenus(depotData?.id, depotData?.name);
+  const moreMenus = moreSidebarMenus(depotData?.id, depotData?.name);
   const router = useRouter();
 
   const depots = (
@@ -40,7 +37,7 @@ const AppSider = ({ collapsed }: any) => {
     >
       {data?.payload?.map((depot) => (
         <Row
-          onClick={() => handleDepotChange(depot?.name, depot?.id)}
+          onClick={() => handleDepotChange(depot)}
           gutter={12}
           align="middle"
           key={depot?.id}
@@ -94,7 +91,7 @@ const AppSider = ({ collapsed }: any) => {
 
             {!collapsed && (
               <div className="normalText text-white">
-                {isLoading ? "Loading depots" : localDepotName}
+                {isLoading ? "Loading depots" : depotData?.name}
               </div>
             )}
 

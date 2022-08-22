@@ -1,14 +1,17 @@
 import { Card, Progress, Typography } from "antd";
 import React, { FC } from "react";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
+import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
 
 const { Text } = Typography;
 
 type AnalyticKPIsCardTypes = {
   title: string;
-  amount1: string;
-  amount2: string;
+  amount1: number;
+  amount2: number;
   percentage: string;
   traveled: string;
+  isFetching: boolean;
 };
 
 const LargeCard: FC<AnalyticKPIsCardTypes> = ({
@@ -16,7 +19,8 @@ const LargeCard: FC<AnalyticKPIsCardTypes> = ({
   amount1,
   amount2,
   percentage,
-  traveled
+  traveled,
+  isFetching
 }) => {
   return (
     <Card
@@ -31,15 +35,23 @@ const LargeCard: FC<AnalyticKPIsCardTypes> = ({
       title={<Text className="text-base font-light">{title}</Text>}
     >
       <div className="py-2">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-1 flex-nowrap text-sm">
-            <span className="font-bold">{amount1} Rwf </span>
-            <span>of {amount2} Rwf</span>
-          </div>
-          <span className="captionText">{percentage} Reached</span>
-        </div>
-        <Progress percent={50} showInfo={false} />
-        <span className="italic text-sm">{traveled}</span>
+        {isFetching ? (
+          <SmallSpinLoader />
+        ) : (
+          <>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-1 flex-nowrap text-sm">
+                <span className="font-bold">
+                  {amount1 && numbersFormatter(amount1)} Rwf{" "}
+                </span>
+                <span>of {amount2 && numbersFormatter(amount2)} Rwf</span>
+              </div>
+              <span className="captionText">{percentage} Reached</span>
+            </div>
+            <Progress percent={50} showInfo={false} />
+            <span className="italic text-sm">{traveled}</span>
+          </>
+        )}
       </div>
     </Card>
   );

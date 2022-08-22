@@ -1,17 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export type AnalyticTrucksTypes = {
-  active: string;
-  truckData: any;
-  truckLoading: boolean;
-  truckFetching: boolean;
-  onSortChange: (sorter: string) => void;
-  sorter: string;
-};
-
-export type truckTableTypes = {
-  truckData: [
+export interface AnalyticsResponse {
+  status: number;
+  message: string;
+  payload: [
     {
-      index: number;
       plateNumber: string;
       truckModel: string;
       totalDistance: number;
@@ -27,5 +18,24 @@ export type truckTableTypes = {
       kilogramKilometre: number;
     }
   ];
-  truckFetching: boolean;
-};
+}
+
+export interface TruckAnalyticsRequest {
+  depot: number;
+  start: string;
+  end: string;
+  sortBy: string;
+  direction: string;
+}
+
+export interface RevenueAnalyticsRequest {
+  depot: number;
+  start: string;
+  end: string;
+}
+
+export interface KPIsAnalyticsRequest {
+  depot: number;
+  start: string;
+  end: string;
+}

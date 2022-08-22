@@ -3,10 +3,17 @@ export interface DepotResponse {
   message: string;
   payload: [
     {
-      id: string;
+      id: number;
       name: string;
       location: string;
-      coordinates: string;
+      coordinates: string | null;
     }
   ];
 }
+
+export type depotTypes = {
+  id: number;
+  name: string;
+  location: string;
+  coordinates: string | null;
+};

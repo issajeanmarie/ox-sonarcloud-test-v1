@@ -11,55 +11,93 @@ import {
 } from "../Wrappers/ChartWrappers";
 import OrderPerCategoriesChart from "../Charts/OrderPerCategoriesChart";
 import { AnalyticRevenuesTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticRevenuesTypes";
+import { AnalyticCardsLoader } from "../../Shared/Loaders/Loaders";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
 
-const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({ active }) => {
+const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
+  active,
+  revenueData,
+  revenueLoading,
+  revenueFetching
+}) => {
   return (
     <>
       <AnalyticTopContentWrapper active={active}>
-        <CardRowWrapper active={active}>
-          <CardColWrapper active={active}>
-            <MediumCard
-              title="Clients served"
-              subTitle="520 total clients"
-              count="5"
-            />
-          </CardColWrapper>
-          <CardColWrapper active={active}>
-            <MediumCard
-              title="Revenues made in Rwf"
-              subTitle="0 Rwf (0%) paid per KG"
-              count="120,000"
-            />
-          </CardColWrapper>
-          <CardColWrapper active={active}>
-            <MediumCard
-              title="Cash collected"
-              subTitle="0 Rwf (0%) paid per KG"
-              count="50,000"
-            />
-          </CardColWrapper>
-          <CardColWrapper active={active}>
-            <MediumCard
-              title="Total distance in KM"
-              subTitle="0 Hrs (0%) with cargo"
-              count="15"
-            />
-          </CardColWrapper>
-          <CardColWrapper active={active}>
-            <MediumCard
-              title="Total hours"
-              subTitle="0 Hrs (0%) with cargo"
-              count="72"
-            />
-          </CardColWrapper>
-          <CardColWrapper active={active}>
-            <MediumCard
-              title="Total weight in KG"
-              subTitle="..."
-              count="1,500"
-            />
-          </CardColWrapper>
-        </CardRowWrapper>
+        {revenueLoading ? (
+          <>
+            <CardRowWrapper active={active}>
+              {[...Array(5)].map((_, index) => (
+                <AnalyticCardsLoader key={index} />
+              ))}
+            </CardRowWrapper>
+          </>
+        ) : (
+          <CardRowWrapper active={active}>
+            <CardColWrapper active={active}>
+              <MediumCard
+                title="Clients served"
+                subTitle={`${
+                  revenueData?.totalCustomers &&
+                  numbersFormatter(revenueData?.totalCustomers)
+                } total clients`}
+                count={revenueData?.totalServedCustomers}
+                isFetching={revenueFetching}
+              />
+            </CardColWrapper>
+            <CardColWrapper active={active}>
+              <MediumCard
+                title="Revenues made in Rwf"
+                subTitle={`${
+                  revenueData?.totalRevenueByJobPaidByKg &&
+                  numbersFormatter(revenueData?.totalRevenueByJobPaidByKg)
+                } Rwf (0%) paid per KG`}
+                count={revenueData?.totalRevenueByJob}
+                isFetching={revenueFetching}
+              />
+            </CardColWrapper>
+            <CardColWrapper active={active}>
+              <MediumCard
+                title="Cash collected"
+                subTitle={`${
+                  revenueData?.totalCollectedAmountPaidByKg &&
+                  numbersFormatter(revenueData?.totalCollectedAmountPaidByKg)
+                } Rwf (0%) paid per KG`}
+                count={revenueData?.totalCollectedAmount}
+                isFetching={revenueFetching}
+              />
+            </CardColWrapper>
+            <CardColWrapper active={active}>
+              <MediumCard
+                title="Total distance in KM"
+                subTitle={`${
+                  revenueData?.totalDistanceByJobs &&
+                  numbersFormatter(revenueData?.totalDistanceByJobs)
+                } Hrs (0%) with cargo`}
+                count={revenueData?.totalDistance}
+                isFetching={revenueFetching}
+              />
+            </CardColWrapper>
+            <CardColWrapper active={active}>
+              <MediumCard
+                title="Total hours"
+                subTitle={`${
+                  revenueData?.totalHoursByJobs &&
+                  numbersFormatter(revenueData?.totalHoursByJobs)
+                } Hrs (0%) with cargo`}
+                count={revenueData?.totalHours}
+                isFetching={revenueFetching}
+              />
+            </CardColWrapper>
+            <CardColWrapper active={active}>
+              <MediumCard
+                title="Total weight in KG"
+                subTitle="..."
+                count={revenueData?.totalWeight}
+                isFetching={revenueFetching}
+              />
+            </CardColWrapper>
+          </CardRowWrapper>
+        )}
       </AnalyticTopContentWrapper>
       <Row>
         <Col className="pb-4" xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
