@@ -9,7 +9,7 @@ type AnalyticKPIsCardTypes = {
   title: string;
   amount1: number;
   amount2: number;
-  percentage: string;
+  percentage: number;
   traveled: string;
   isFetching: boolean;
 };
@@ -48,7 +48,7 @@ const LargeCard: FC<AnalyticKPIsCardTypes> = ({
               </div>
               <span className="captionText">{percentage} Reached</span>
             </div>
-            <Progress percent={50} showInfo={false} />
+            <Progress percent={percentage} showInfo={false} />
             <span className="italic text-sm">{traveled}</span>
           </>
         )}
