@@ -9,7 +9,7 @@ const SettingsIcon = "ic-actions-settings.svg";
 const ResourcesIcon = "link-line.svg";
 const WarehouseIcon = "ic-ecommerce-house-white.svg";
 
-export const manageSidebarMenus = () => [
+export const manageSidebarMenus = (depotID: number, depotName: string) => [
   {
     name: routeConfig.Orders.name,
     icon: OrdersIcon,
@@ -33,7 +33,9 @@ export const manageSidebarMenus = () => [
     name: routeConfig.Accounts.name,
     icon: AccountsIcon,
     active: false,
-    url: routeConfig.Accounts.url,
+    url: `${routeConfig.Accounts.url}?depotId=${depotID || ""}&depotName=${
+      depotName || ""
+    }`,
     urlKey: routeConfig.Accounts.url
   },
 
@@ -46,7 +48,7 @@ export const manageSidebarMenus = () => [
   }
 ];
 
-export const moreSidebarMenus = () => [
+export const moreSidebarMenus = (depotID: number, depotName: string) => [
   {
     name: routeConfig.Analytics.name,
     icon: AnalyticsIcon,
