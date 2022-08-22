@@ -1,10 +1,17 @@
 import { Card, Image, Typography } from "antd";
 import React, { FC } from "react";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { AnalyticsCardTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticsCardTypes";
+import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
 
 const { Text } = Typography;
 
-const MediumCard: FC<AnalyticsCardTypes> = ({ title, subTitle, count }) => {
+const MediumCard: FC<AnalyticsCardTypes> = ({
+  title,
+  subTitle,
+  count,
+  isFetching
+}) => {
   return (
     <Card
       className="radius4 shadow-[0px_0px_19px_#00000008]"
@@ -21,7 +28,13 @@ const MediumCard: FC<AnalyticsCardTypes> = ({ title, subTitle, count }) => {
         />
       }
     >
-      <Text className="text-2xl font-semibold block yellow mb-3">{count}</Text>
+      <Text className="text-2xl font-semibold block yellow mb-3">
+        {isFetching ? (
+          <SmallSpinLoader />
+        ) : (
+          <>{count !== null ? numbersFormatter(count) : "None"}</>
+        )}
+      </Text>
       <Text className="captionText">{subTitle}</Text>
     </Card>
   );

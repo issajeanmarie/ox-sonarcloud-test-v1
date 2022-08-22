@@ -1,11 +1,12 @@
 import { Col, Image, Row, Typography } from "antd";
-import React from "react";
+import React, { FC } from "react";
 import CustomInput from "../../Shared/Input";
 import CustomButton from "../../Shared/Button/button";
+import { TrucksUsageTypes } from "../../../lib/types/pageTypes/Analytics/TrucksUsageTableTypes";
 
 const { Text } = Typography;
 
-const TrucksUsage = () => {
+const TrucksUsage: FC<TrucksUsageTypes> = ({ sorter }) => {
   return (
     <Row
       justify="space-between"
@@ -14,13 +15,14 @@ const TrucksUsage = () => {
       <Col className="flex items-center gap-4">
         <Text className="heading2">Trucks usage</Text>
         <CustomInput
+          // onSelectChange={onSortChange}
           type="select"
           label=""
-          placeholder="Sort: Revenue made"
+          placeholder={`Sort: ${sorter}`}
           options={[
-            { label: "Item one", value: "one" },
-            { label: "Item two", value: "two" },
-            { label: "Item three", value: "three" }
+            { label: "Revenue", value: "REVENUE" },
+            { label: "Distance", value: "DISTANCE" },
+            { label: "Weight", value: "WEIGHT" }
           ]}
           name="sort"
           suffixIcon={
