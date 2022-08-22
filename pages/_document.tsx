@@ -18,6 +18,10 @@ class Document extends NextDocument<Props> {
         <body>
           <Main />
           <NextScript />
+          <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHgwcB3X6WdORbT2I5Ra5spl1raTEDWG8&libraries=places"
+            defer
+          />
         </body>
       </Html>
     );

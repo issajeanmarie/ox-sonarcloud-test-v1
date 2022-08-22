@@ -5,7 +5,27 @@
  * @since Jul 19 2022
  */
 
-import { PaymentStatus } from "./shared";
+import { PaymentStatus, Payment_Plan } from "./shared";
+
+export type OrderRequestBody = {
+  officeId: number;
+  clientId: number;
+  depotId: number;
+  stops: {
+    name: string;
+    location: string;
+    coordinates: string;
+    driverId: number;
+    truckId: number;
+    weight: number;
+    position: number;
+  }[];
+  paymentPlan: Payment_Plan;
+  amount: number;
+  categoryId: number;
+  startDateTime: string;
+  atPickupLocation: boolean;
+};
 
 export type OrdersResponse = {
   content: Order[];

@@ -2,12 +2,19 @@ import { FC } from "react";
 import Button from "antd/lib/button";
 
 interface ButtonProps {
-  type: "primary" | "secondary" | "danger" | "normal" | "view";
+  type:
+    | "primary"
+    | "secondary"
+    | "danger"
+    | "danger_filled"
+    | "normal"
+    | "view";
   loading?: boolean;
   size?: "icon" | "small";
   icon?: React.ReactElement;
   className?: string;
   htmlType?: "button" | "submit" | "reset";
+  onClick?: () => void;
 }
 
 const CustomButton: FC<ButtonProps> = ({
@@ -17,7 +24,8 @@ const CustomButton: FC<ButtonProps> = ({
   size,
   className,
   htmlType,
-  children
+  children,
+  onClick
 }) => {
   switch (type) {
     case "primary":
@@ -28,6 +36,7 @@ const CustomButton: FC<ButtonProps> = ({
           } bg_yellow ${className}`}
           loading={loading}
           icon={icon}
+          onClick={onClick}
           htmlType={htmlType}
         >
           {children}
@@ -42,6 +51,7 @@ const CustomButton: FC<ButtonProps> = ({
           }  bg_white_yellow yellow ${className}`}
           loading={loading}
           icon={icon}
+          onClick={onClick}
           htmlType={htmlType}
         >
           {children}
@@ -57,6 +67,7 @@ const CustomButton: FC<ButtonProps> = ({
           loading={loading}
           icon={icon}
           htmlType={htmlType}
+          onClick={onClick}
         >
           {children}
         </Button>
@@ -71,6 +82,22 @@ const CustomButton: FC<ButtonProps> = ({
           loading={loading}
           icon={icon}
           htmlType={htmlType}
+          onClick={onClick}
+        >
+          {children}
+        </Button>
+      );
+
+    case "danger_filled":
+      return (
+        <Button
+          className={`my_button ${size === "icon" && "icon"} ${
+            size === "small" && "sm"
+          }  bg_danger_filled white ${className}`}
+          loading={loading}
+          icon={icon}
+          htmlType={htmlType}
+          onClick={onClick}
         >
           {children}
         </Button>
@@ -85,6 +112,7 @@ const CustomButton: FC<ButtonProps> = ({
           loading={loading}
           icon={icon}
           htmlType={htmlType}
+          onClick={onClick}
         >
           {children}
         </Button>
