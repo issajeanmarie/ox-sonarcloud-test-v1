@@ -5,7 +5,12 @@
  * @since Jul 19 2022
  */
 
-import { PaymentStatus, Payment_Plan } from "./shared";
+import {
+  Order_Status,
+  Order_Status_Enums,
+  PaymentStatus,
+  Payment_Plan
+} from "./shared";
 
 export type OrderRequestBody = {
   officeId: number;
@@ -25,6 +30,18 @@ export type OrderRequestBody = {
   categoryId: number;
   startDateTime: string;
   atPickupLocation: boolean;
+};
+
+export type Order_Filter = {
+  depot?: number | string;
+  driver?: number | string;
+  truck?: number | string;
+  page?: number | string;
+  size?: number | string;
+  start?: string;
+  end?: string;
+  filter?: Order_Status_Enums | string;
+  momoRefCode?: string;
 };
 
 export type OrdersResponse = {
@@ -63,7 +80,7 @@ export type Order = {
   waitTimeTransactions: [];
   duration: string;
   distance: string;
-  status: string;
+  status: Order_Status;
   depot: {
     coordinates?: string;
     name: string;
@@ -73,7 +90,13 @@ export type Order = {
   startDateTime: string;
   paymentStatus: PaymentStatus;
   deliveryCode: string;
-  transactions: any[];
+  transactions: {
+    amount: number;
+    createdAt: string;
+    id: number;
+    momoRefCode: string;
+    transactionType: string;
+  }[];
   endDateTime: string;
   office: Office;
   totalAmount: number;

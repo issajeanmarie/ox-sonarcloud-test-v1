@@ -1,4 +1,4 @@
-import { Order, OrdersResponse } from "../../../types/orders";
+import { Order, OrdersResponse, Order_Filter } from "../../../types/orders";
 import {
   ApiResponseMetadata,
   GenericResponse,
@@ -15,10 +15,26 @@ import { baseAPI } from "../../api";
 
 const ordersApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
-    orders: builder.query<ApiResponseMetadata<OrdersResponse>, void>({
+    orders: builder.query<ApiResponseMetadata<OrdersResponse>, Order_Filter>({
       providesTags: ["Orders"],
-      query: () => ({
-        url: "/orders?page=0&size=40&depot=1",
+      query: ({
+        depot,
+        driver,
+        truck,
+        page,
+        size,
+        start,
+        end,
+        filter,
+        momoRefCode
+      }) => ({
+        url: `/orders?page=${page || ""}&size=${size || ""}&depot=${
+          depot || ""
+        }&driver=${driver || ""}&truck=${truck || ""}&start=${
+          start || ""
+        }&end=${end || ""}&filter=${filter || ""}&momoRefCode=${
+          momoRefCode || ""
+        }`,
         method: "GET"
       })
     }),
@@ -31,14 +47,18 @@ const ordersApi = baseAPI.injectEndpoints({
       transformResponse: (response: ApiResponseMetadata<Order>) =>
         response.payload
     }),
-    deleteOrder: builder.mutation<GenericResponse, Query>({
-      invalidatesTags: ["Orders"],
-      query: (id) => ({
-        url: `/orders/${id}`,
-        method: "DELETE"
+    cancelOrder: builder.mutation<
+      GenericResponse,
+      { id: number; data: { comment: string; status: "CANCEL" } }
+    >({
+      invalidatesTags: ["Orders", "Order"],
+      query: ({ data, id }) => ({
+        url: `/orders/${id}/change-status`,
+        body: data,
+        method: "PATCH"
       })
     }),
-    orderInvoice: builder.mutation<any, Query>({
+    orderInvoice: builder.mutation<any, Query | number>({
       query: (id) => ({
         url: `/orders/${id}/invoice`,
         method: "GET",
@@ -76,7 +96,7 @@ export const {
   useLazyOrdersQuery,
   useLazyOrderQuery,
   useOrderInvoiceMutation,
-  useDeleteOrderMutation,
+  useCancelOrderMutation,
   useInitiatePaymentMutation,
   useVerifyPaymentMutation
 } = ordersApi;

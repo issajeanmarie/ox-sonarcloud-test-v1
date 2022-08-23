@@ -96,6 +96,7 @@ const Entry = ({
               defaultValue={defaultValue}
               className={`my_input ${size === "small" && "sm"}`}
               placeholder={placeholder}
+              allowClear
               type={inputType}
               suffix={suffixIcon}
               onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
@@ -113,6 +114,7 @@ const Entry = ({
             <Select
               showSearch={showSearch || true}
               placeholder={placeholder}
+              allowClear
               size="large"
               className={`my_input bordered_input ${size === "small" && "sm"} `}
               disabled={disabled}
@@ -157,6 +159,7 @@ const Entry = ({
           <Form.Item name={name} rules={rules}>
             <Input.Password
               className="my_input p-[12px]"
+              allowClear
               placeholder={placeholder}
             />
           </Form.Item>
@@ -170,9 +173,10 @@ const Entry = ({
             <DatePicker
               onChange={onDateChange}
               className={`my_datepicker ${size === "small" && "sm"}`}
-              allowClear={false}
+              allowClear
               name={name}
               suffixIcon={suffixIcon}
+              format="YYYY-MM-DD"
               placeholder={placeholder}
               format={format ? format : false}
             />
@@ -200,6 +204,7 @@ const Entry = ({
                 className={`my_input ${size === "small" && "sm"}`}
                 placeholder={placeholder}
                 type={inputType}
+                allowClear
                 value={value}
                 onChange={handleInput}
                 disabled={!ready}

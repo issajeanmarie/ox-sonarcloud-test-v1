@@ -1,24 +1,38 @@
 import { FC, Fragment, useEffect } from "react";
 import OrdersHeader from "./OrdersHeader";
 import OneOrder from "./OneOrder";
-import { useOrdersQuery } from "../../lib/api/endpoints/Orders/ordersEndpoints";
+import { useLazyOrdersQuery } from "../../lib/api/endpoints/Orders/ordersEndpoints";
 import { message } from "antd";
 import Loader from "../Shared/Loader";
+import { Order_Filter } from "../../lib/types/orders";
 
 const Orders: FC = () => {
-  const { data, isLoading, error } = useOrdersQuery();
+  const [getOrders, { data, isLoading, isFetching }] = useLazyOrdersQuery({});
+
+  const getOrdersAction = (filters: Order_Filter) => {
+    getOrders(filters)
+      .unwrap()
+      .then()
+      .catch((e) => {
+        message.error(e.message || "Something went wrong");
+      });
+  };
 
   useEffect(() => {
-    error && message.error(error || "Something went wrong");
-  }, [error]);
+    getOrdersAction({});
+  }, []);
 
   return (
-    <div className="m-4 overflow-auto relative">
+    <div className="mx-4 relative">
       {isLoading ? (
         <Loader />
       ) : (
         <Fragment>
-          <OrdersHeader data={data} />
+          <OrdersHeader
+            data={data}
+            getOrders={getOrdersAction}
+            loading={isFetching}
+          />
           {data &&
             data?.payload?.content?.map(
               (order: object | any, index: number) => (

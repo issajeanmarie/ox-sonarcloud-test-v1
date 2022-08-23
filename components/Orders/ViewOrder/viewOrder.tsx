@@ -11,6 +11,7 @@ import { useLazyOrderQuery } from "../../../lib/api/endpoints/Orders/ordersEndpo
 import Loader from "../../Shared/Loader";
 import moment from "moment";
 import { Stop } from "../../../lib/types/orders";
+import { dateFormatterNth } from "../../../utils/dateFormatter";
 
 const { Step } = Steps;
 
@@ -37,7 +38,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
       .unwrap()
       .then()
       .catch((e) => {
-        message.error(e?.data?.message);
+        message.error(e?.data?.message || "Something went wrong");
       });
   };
 
@@ -195,7 +196,9 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
                 <span className="text-lg font-bold text-ox-dark">
                   ORDER {orderId}
                 </span>
-                <span className="font-bold">{data.status}</span>
+                <span className="font-bold">
+                  <PaymentStatus status={data.status} />
+                </span>
               </div>
               <span className="normalText">
                 {moment(data.startDateTime).format("Do MMMM YYYY")}
@@ -290,18 +293,60 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex divide-x-[1.5px]">
-                  <div className="flex-1 flex flex-col items-center justify-center">
-                    <div className="italic mb-1">Paid</div>
-                    <div className="font-bold text-lg text-gray-400">
+                <div className="flex justify-around m-14 gap-10">
+                  <div className="w-11/12 flex flex-col border rounded p-5">
+                    <div className="mb-1">Paid</div>
+                    <div className="font-bold text-lg text-ox-yellow">
                       {localeString(data.totalPaid)} Rwf
                     </div>
                   </div>
-                  <div className="flex-1 flex py-7 flex-col items-center justify-center">
-                    <div className="italic mb-1">Remaining</div>
+                  <div className="w-11/12 flex flex-col border p-5 rounded">
+                    <div className="mb-1">Remaining</div>
                     <div className="text-lg text-ox-red font-bold">
                       {localeString(data.remainingAmount)} Rwf
                     </div>
+                  </div>
+                </div>
+                <div className="px-14 pb-14">
+                  <div className="font-extralight text-lg mb-10">
+                    Payment history
+                  </div>
+                  <div>
+                    {data.transactions.map((tx, index) => {
+                      return (
+                        <div key={index} className="flex items-center mb-5">
+                          <div className="flex-1 flex items-center gap-8">
+                            <span className="text-gray-400 font-light">
+                              {index + 1}
+                            </span>
+                            <span className="heading2">{tx.amount} Rwf</span>
+                          </div>
+                          <div className="flex-1 text-sm text-gray-400 italic font-extralight">
+                            {dateFormatterNth(tx.createdAt)}
+                          </div>
+                          <div className="flex-1 font-light text-sm">
+                            <span className="font-bold">MoMo Ref: </span>
+                            <span className="text-gray-400">
+                              {tx.momoRefCode.substring(0, 12) + "..."}
+                            </span>
+                          </div>
+                          <div>
+                            <Button
+                              type="normal"
+                              size="icon"
+                              icon={
+                                <Image
+                                  src="/icons/ic-contact-edit.svg"
+                                  alt="OX Delivery Logo"
+                                  width={12}
+                                  height={12}
+                                />
+                              }
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

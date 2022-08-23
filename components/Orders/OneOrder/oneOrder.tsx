@@ -1,5 +1,5 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import { FC } from "react";
+import { FC, useState } from "react";
 import Table from "antd/lib/table";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -12,6 +12,13 @@ import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Link from "next/link";
 import { routes } from "../../../config/route-config";
+import ActionModal from "../../Shared/ActionModal";
+import {
+  useCancelOrderMutation,
+  useOrderInvoiceMutation
+} from "../../../lib/api/endpoints/Orders/ordersEndpoints";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
+import { message } from "antd";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -34,10 +41,53 @@ type Types = {
 };
 
 const Order: FC<OrderProps> = ({ order, index }) => {
-  return (
-    <div className="shadow-[0px_0px_19px_#00000008] w-full my-5">
-      {/* TOP ROW */}
+  const [isCancelOrderOpen, setIsCancelOrderOpen] = useState<boolean>(false);
+  const [downloadInvoice, { isLoading: invoiceLoading }] =
+    useOrderInvoiceMutation();
 
+  const [cancelOrderAction, { isLoading: cancelOrderLoading }] =
+    useCancelOrderMutation();
+
+  const downloadOrderInvoice = () => {
+    downloadInvoice(order.id)
+      .unwrap()
+      .then((file) => {
+        handleDownloadFile(file, "Invoice", "PDF");
+      })
+      .catch((e) => {
+        if (e.status === 404) {
+          message.warning("This order is fully paid");
+        } else {
+          message.error("Cannot download file");
+        }
+      });
+  };
+
+  const deleteOrder = () => {
+    cancelOrderAction({ id: order.id, data: { comment: "", status: "CANCEL" } })
+      .unwrap()
+      .then((res) => {
+        message.success(res.message);
+        setIsCancelOrderOpen(false);
+      })
+      .catch((e) => {
+        message.error(e.message);
+      });
+  };
+
+  return (
+    <div className="shadow-[0px_0px_19px_#00000008] w-full mb-5">
+      {/* TOP ROW */}
+      <ActionModal
+        isModalVisible={isCancelOrderOpen}
+        setIsModalVisible={setIsCancelOrderOpen}
+        action={deleteOrder}
+        title="CANCELLING"
+        description="This action is not reversible, please make sure you really want to proceed with this action!"
+        actionLabel="CANCEL ORDER"
+        type="danger"
+        loading={cancelOrderLoading}
+      />
       <div className="p-5 border-b flex items-center justify-between bg-white">
         {/* TOP ROW RIGHT SIDE */}
         <div className="flex-1">
@@ -78,7 +128,10 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
           <div className="flex justify-end flex-1 items-center gap-4">
             <Text className="captionText">Order status:</Text>
-            <Text className="normalText fowe700">{order.status}</Text>
+            <Text className="normalText fowe700">
+              {" "}
+              <PaymentStatus status={order.status} />
+            </Text>
           </div>
         </div>
       </div>
@@ -210,10 +263,12 @@ const Order: FC<OrderProps> = ({ order, index }) => {
               <div className="flex items-center gap-3 justify-end">
                 <CustomButton
                   type="normal"
+                  onClick={downloadOrderInvoice}
+                  loading={invoiceLoading}
                   size="icon"
                   icon={
                     <Image
-                      src="/icons/ic-ecommerce-invoice.svg"
+                      src="icons/receipt.png"
                       alt="OX Delivery Logo"
                       width={12}
                       preview={false}
@@ -224,6 +279,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                 <CustomButton
                   type="danger"
                   size="icon"
+                  onClick={() => setIsCancelOrderOpen(true)}
                   icon={
                     <Image
                       src="/icons/ic-actions-remove.svg"

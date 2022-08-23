@@ -7,7 +7,7 @@ import ActionModal from "../../Shared/ActionModal";
 import ReceipientCodeModal from "../ReceipientCode";
 import MobilePayment from "../MobilePayment";
 import {
-  useDeleteOrderMutation,
+  useCancelOrderMutation,
   useOrderInvoiceMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { message } from "antd";
@@ -26,7 +26,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   order,
   code
 }) => {
-  const [isDeleteModalVisible, setIsDeleteModalVisible] =
+  const [isCancelModalVisible, setIsCancelModalVisible] =
     useState<boolean>(false);
 
   const [isReceipientCodeModalVisible, setIsReceipientCodeModalVisible] =
@@ -38,8 +38,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const [downloadInvoice, { isLoading: invoiceLoading }] =
     useOrderInvoiceMutation();
 
-  const [deleteOrderAction, { isLoading: deleteOrderLoading }] =
-    useDeleteOrderMutation();
+  const [cancelOrderAction, { isLoading: deleteOrderLoading }] =
+    useCancelOrderMutation();
 
   const router = useRouter();
 
@@ -58,12 +58,15 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
       });
   };
 
-  const deleteOrder = () => {
-    deleteOrderAction(orderId)
+  const cancelOrder = () => {
+    cancelOrderAction({
+      id: order.id,
+      data: { comment: "Not set", status: "CANCEL" }
+    })
       .unwrap()
       .then((res) => {
         message.success(res.message);
-        router.back();
+        setIsCancelModalVisible(false);
       })
       .catch((e) => {
         message.error(e.message);
@@ -73,13 +76,13 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   return (
     <Fragment>
       <ActionModal
-        isModalVisible={isDeleteModalVisible}
-        setIsModalVisible={setIsDeleteModalVisible}
+        isModalVisible={isCancelModalVisible}
+        setIsModalVisible={setIsCancelModalVisible}
         title="CANCELLING"
         description="This action is not reversible, please make sure you really want to proceed with this action!"
         actionLabel="CANCEL ORDER"
         type="danger"
-        action={deleteOrder}
+        action={cancelOrder}
         loading={deleteOrderLoading}
       />
       <ReceipientCodeModal
@@ -142,7 +145,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
               alt="Backspace icon"
               width={20}
               height={20}
-              onClick={() => setIsDeleteModalVisible(true)}
+              onClick={() => setIsCancelModalVisible(true)}
             />
             <button
               className="rounded-lg bg-ox-yellow text-white w-[30px] h-[30px] flex items-center justify-center cursor-pointer"
