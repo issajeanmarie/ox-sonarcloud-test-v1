@@ -94,6 +94,18 @@ export type Order_Filter = {
   request?: any;
 };
 
+export type Order_Filter = {
+  depot?: number | string;
+  driver?: number | string;
+  truck?: number | string;
+  page?: number | string;
+  size?: number | string;
+  start?: string;
+  end?: string;
+  filter?: Order_Status_Enums | string;
+  momoRefCode?: string;
+};
+
 export type OrdersResponse = {
   content: Order[];
   pageable: {
