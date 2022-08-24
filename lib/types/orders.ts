@@ -94,6 +94,26 @@ export type Order_Filter = {
   request?: any;
 };
 
+export type EditOrderRequestBody = {
+  officeId?: number;
+  clientId?: number;
+  depotId?: number;
+  stops?: {
+    name: string;
+    location: string;
+    coordinates: string;
+    driverId: number;
+    truckId: number;
+    weight: number;
+    position: number;
+  }[];
+  paymentPlan?: Payment_Plan;
+  amount?: number;
+  categoryId?: number;
+  startDateTime?: string;
+  atPickupLocation?: boolean;
+};
+
 export type Order_Filter = {
   depot?: number | string;
   driver?: number | string;
