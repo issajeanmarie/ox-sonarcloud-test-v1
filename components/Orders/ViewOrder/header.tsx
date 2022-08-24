@@ -5,7 +5,7 @@ import Button from "../../Shared/Button";
 import { useRouter } from "next/router";
 import ActionModal from "../../Shared/ActionModal";
 import ReceipientCodeModal from "../ReceipientCode";
-import MobilePayment from "../MobilePayment";
+import MobilePayment from "../../Forms/Orders/MobilePayment";
 import {
   useCancelOrderMutation,
   useOrderInvoiceMutation
@@ -105,7 +105,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             height={20}
             onClick={() => router.back()}
           />
-          <span className="heading2">Orders</span>
+          <span className="text-md font-bold">Orders</span>
           <span className="normalText">/</span>
           <span className="text-gray-400">Order {orderId}</span>
         </div>

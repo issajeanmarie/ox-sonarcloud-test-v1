@@ -88,11 +88,13 @@ const Order: FC<OrderProps> = ({ order, index }) => {
         type="danger"
         loading={cancelOrderLoading}
       />
-      <div className="p-5 border-b flex items-center justify-between bg-white">
+      <div className="p-5 border-b-2 border-gray-100 flex items-center justify-between bg-white">
         {/* TOP ROW RIGHT SIDE */}
         <div className="flex-1">
-          <Row gutter={32}>
-            <Col className="heading2 w-[45px]">{index}.</Col>
+          <Row gutter={32} align="middle">
+            <Col className="heading2 w-[45px]">
+              <span className="font-bold text-lg">{index}.</span>
+            </Col>
             <Col>
               <Image
                 width={16}
@@ -103,7 +105,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
             </Col>
 
             <Col>
-              <Text className="heading2">
+              <Text className="text-md font-bold">
                 {order?.office?.client?.names ? (
                   order?.office?.client?.names
                 ) : (
@@ -152,7 +154,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
           title="Name"
           render={(text, record: Order) => {
             const child = (
-              <div className="flex items-center gap-7 ml-12">
+              <div className="flex items-center gap-7 ml-14">
                 <Image
                   width={22}
                   src="/icons/ic-ecommerce-delivery-yellow.svg"
@@ -162,13 +164,13 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
                 <div className="flex items-center gap-3">
                   {record?.stops[0]?.truck?.plateNumber ? (
-                    <Text className="heading2 nowrap">
+                    <Text className="text-md font-bold nowrap">
                       {record?.stops[0]?.truck?.plateNumber}
                     </Text>
                   ) : (
                     <span className=" text-gray-300">Unavailable</span>
                   )}
-                  <span className="nowrap opacity_56 text-xs">
+                  <span className="nowrap opacity_56 text-sm">
                     {record?.stops[0]?.driver?.names}
                   </span>
                 </div>
@@ -307,14 +309,14 @@ const Order: FC<OrderProps> = ({ order, index }) => {
         <Col>
           <Row gutter={12} align="middle">
             <Col>
-              <Text className="text-xs opacity_56 nowrap ml-12">
+              <Text className="text-sm opacity_56 nowrap ml-14">
                 Created: {dateFormatterNth(order.startDateTime)}
               </Text>
             </Col>
 
             <Col>
               {order.lastEditedBy && (
-                <Text className="opacity_56 italic nowrap text-xs font-bold">
+                <Text className="opacity_56  nowrap text-xs font-bold">
                   - Edited by {order.lastEditedBy}
                 </Text>
               )}

@@ -7,8 +7,8 @@ const Loader: FC = () => {
       <Image
         src="/oxloader.png"
         alt=""
-        width="80px"
-        height="80px"
+        width="120px"
+        height="120px"
         className="animate-spin duration-1000"
       />
     </div>

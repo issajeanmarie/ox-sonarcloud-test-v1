@@ -1,13 +1,13 @@
 import { FC, useState } from "react";
 import { Form, message, Modal } from "antd";
-import Button from "../../Shared/Button";
-import Input from "../../Shared/Input";
+import Button from "../../../Shared/Button";
+import Input from "../../../Shared/Input";
 import {
   useInitiatePaymentMutation,
   useVerifyPaymentMutation
-} from "../../../lib/api/endpoints/Orders/ordersEndpoints";
+} from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { MobilePaymentProps } from "../../../lib/types/components/MobilePayment";
+import { MobilePaymentProps } from "../../../../lib/types/components/MobilePayment";
 
 const MobilePayment: FC<MobilePaymentProps> = ({
   isModalVisible,
@@ -41,7 +41,7 @@ const MobilePayment: FC<MobilePaymentProps> = ({
             .unwrap()
             .then((res) => {
               setIsPaymentSuccessful(true);
-              message.success(res.data?.message || "Payment successfull");
+              message.success(res?.message || "Payment successfull");
             })
             .catch((e) => {
               message.error(e.data?.message || "Payment failed");

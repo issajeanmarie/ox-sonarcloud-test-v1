@@ -19,7 +19,7 @@ const PaymentStatus: FC<PaymentStatusProps> = ({ amt, status }) => {
     case "CANCELLED":
       return <span className={`${textStyles} text-gray-400`}>{value}</span>;
     case "COMPLETED":
-      return <span className={`${textStyles} text-ox-dark`}>{value}</span>;
+      return <span className={`${textStyles} text-black`}>{value}</span>;
     case "HALF_PAID":
       return <span className={textStyles}>{value}</span>;
     case "WRITTEN _OFF":

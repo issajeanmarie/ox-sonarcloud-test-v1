@@ -4,10 +4,10 @@ import { OrdersResponse, Order_Filter } from "../../../lib/types/orders";
 import { localeString } from "../../../utils/numberFormatter";
 import { ApiResponseMetadata } from "../../../lib/types/shared";
 import FilterOrdersForm from "../../Forms/Orders/Filter/filter";
-import { Modal } from "antd";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import Image from "next/image";
+import FilterOrdersModal from "../../Shared/Modal";
 
 interface OrdersHeaderProps {
   data?: ApiResponseMetadata<OrdersResponse>;
@@ -28,10 +28,6 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data, getOrders, loading }) => {
     setIsModalVisible(false);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   useMemo(() => {
     if (!loading) handleOk();
   }, [loading]);
@@ -39,16 +35,12 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data, getOrders, loading }) => {
   return (
     <div className="sticky top-0 py-4 z-10 bg-[#F6F6F6] shadow-[0px_0px_19px_#00000008]">
       <div className="flex items-center justify-between rounded shadow-[0px_0px_19px_#00000008] bg-white  px-4 py-3">
-        <Modal
-          title={false}
-          width={600}
-          footer={false}
-          visible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
+        <FilterOrdersModal
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
         >
           <FilterOrdersForm getOrders={getOrders} loading={loading} />
-        </Modal>
+        </FilterOrdersModal>
         <div className="text-[17px] font-bold">
           {localeString(data?.payload?.totalElements)} Orders
         </div>

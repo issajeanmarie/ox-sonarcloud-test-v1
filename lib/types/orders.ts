@@ -5,6 +5,7 @@
  * @since Jul 19 2022
  */
 
+import { LatLng } from "use-places-autocomplete";
 import {
   Order_Status,
   Order_Status_Enums,
@@ -30,6 +31,26 @@ export type OrderRequestBody = {
   categoryId: number;
   startDateTime: string;
   atPickupLocation: boolean;
+};
+
+export type EditOrderRequestBody = {
+  officeId?: number;
+  clientId?: number;
+  depotId?: number;
+  stops?: {
+    name: string;
+    location: string;
+    coordinates: string;
+    driverId: number;
+    truckId: number;
+    weight: number;
+    position: number;
+  }[];
+  paymentPlan?: Payment_Plan;
+  amount?: number;
+  categoryId?: number;
+  startDateTime?: string;
+  atPickupLocation?: boolean;
 };
 
 export type Order_Filter = {
@@ -155,4 +176,24 @@ export type Stop = {
   name: string;
   location: string;
   id: number;
+};
+
+export type AddStopRequest = {
+  name: string;
+  location: string;
+  coordinates: string;
+  driverId: number;
+  truckId: number;
+  weight: number;
+  position: number;
+};
+
+export type EditStopRequest = {
+  name: string;
+  location: string;
+  coordinates: LatLng;
+  odometer: number;
+  arrivalDateTime: string;
+  departureDateTime: string;
+  weight: number;
 };

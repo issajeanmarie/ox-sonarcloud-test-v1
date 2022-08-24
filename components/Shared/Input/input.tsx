@@ -3,15 +3,27 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 
-import React, { ChangeEvent, Fragment, useRef } from "react";
+import React, {
+  ChangeEvent,
+  Fragment,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import Form from "antd/lib/form";
 import Select from "antd/lib/select";
 import Typography from "antd/lib/typography";
 import Input from "antd/lib/input";
 import DatePicker from "antd/lib/date-picker";
 import ImageUploader from "./imageUploader";
-import usePlacesAutocomplete from "use-places-autocomplete";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng
+} from "use-places-autocomplete";
 import useOnClickOutside from "../../../utils/hooks/useOutsideClick";
+import { message } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import Image from "next/image";
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -38,9 +50,15 @@ const Entry = ({
   onDateChange,
   defaultValue,
   initialValue,
-  format
+  format,
+  setLocation,
+  dateFormat,
+  showTime,
+  location
 }: any) => {
   // Google location
+
+  const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
   const {
     ready,
@@ -65,8 +83,27 @@ const Entry = ({
 
   const handleSelect = (val: string): void => {
     setValue(val, false);
+    setCoordinatesLoading(true);
+    getGeocode({ address: val })
+      .then((results) => getLatLng(results[0]))
+      .then((coordinates) => {
+        setLocation && setLocation({ name: val, coordinates });
+        setCoordinatesLoading(false);
+      })
+      .catch((error) => {
+        setCoordinatesLoading(false);
+        message.warning(error);
+      });
     clearSuggestions();
   };
+
+  useEffect(() => {
+    if (location) {
+      setValue(location.name);
+    } else {
+      setValue("");
+    }
+  }, [location]);
 
   useOnClickOutside(placeSuggestionsRef, () => clearSuggestions());
 
@@ -76,7 +113,7 @@ const Entry = ({
         role="button"
         onClick={() => handleSelect(description)}
         key={place_id}
-        className="hover:bg-gray-50 cursor-pointer p-2 text-xs transition-all duration-100"
+        className="hover:bg-gray-50 cursor-pointer p-2 text-sm transition-all duration-100"
       >
         {description}
       </div>
@@ -175,8 +212,16 @@ const Entry = ({
               className={`my_datepicker ${size === "small" && "sm"}`}
               allowClear
               name={name}
-              suffixIcon={suffixIcon}
-              format="YYYY-MM-DD"
+              suffixIcon={
+                <Image
+                  src="/icons/ic-actions-calendar.svg"
+                  alt="Calendar icon"
+                  width={18}
+                  height={18}
+                />
+              }
+              format={dateFormat || "YYYY-MM-DD"}
+              showTime={showTime}
               placeholder={placeholder}
               format={format ? format : false}
             />
@@ -207,7 +252,8 @@ const Entry = ({
                 allowClear
                 value={value}
                 onChange={handleInput}
-                disabled={!ready}
+                suffix={coordinatesLoading ? <LoadingOutlined /> : false}
+                disabled={!ready || coordinatesLoading}
               />
               {status === "OK" && (
                 <div

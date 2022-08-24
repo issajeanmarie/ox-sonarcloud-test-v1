@@ -1,4 +1,11 @@
-import { Order, OrdersResponse, Order_Filter } from "../../../types/orders";
+import {
+  EditOrderRequestBody,
+  Order,
+  AddStopRequest,
+  OrdersResponse,
+  Order_Filter,
+  EditStopRequest
+} from "../../../types/orders";
 import {
   ApiResponseMetadata,
   GenericResponse,
@@ -47,6 +54,17 @@ const ordersApi = baseAPI.injectEndpoints({
       transformResponse: (response: ApiResponseMetadata<Order>) =>
         response.payload
     }),
+    editOrder: builder.mutation<
+      GenericResponse,
+      { orderId: Query; data: EditOrderRequestBody }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}`,
+        method: "PATCH",
+        body: data
+      })
+    }),
     cancelOrder: builder.mutation<
       GenericResponse,
       { id: number; data: { comment: string; status: "CANCEL" } }
@@ -79,13 +97,45 @@ const ordersApi = baseAPI.injectEndpoints({
       })
     }),
     verifyPayment: builder.mutation<
-      any,
+      GenericResponse,
       { orderId: number; referenceId: string }
     >({
       invalidatesTags: ["Order", "Orders"],
       query: ({ orderId, referenceId }) => ({
         url: `/orders/${orderId}/momo-pay/verify?referenceId=${referenceId}`,
         method: "GET"
+      })
+    }),
+    addStop: builder.mutation<
+      GenericResponse,
+      { orderId: number; data: AddStopRequest }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}/stops`,
+        method: "POST",
+        body: data
+      })
+    }),
+    editStop: builder.mutation<
+      GenericResponse,
+      { orderId: number; stopId: number; data: EditStopRequest }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, stopId, data }) => ({
+        url: `/orders/${orderId}/stops/${stopId}`,
+        method: "PUT",
+        body: data
+      })
+    }),
+    deleteStop: builder.mutation<
+      GenericResponse,
+      { orderId: Query; stopId: number }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, stopId }) => ({
+        url: `/orders/${orderId}/stops/${stopId}`,
+        method: "DELETE"
       })
     })
   })
@@ -96,6 +146,10 @@ export const {
   useLazyOrdersQuery,
   useLazyOrderQuery,
   useOrderInvoiceMutation,
+  useDeleteStopMutation,
+  useAddStopMutation,
+  useEditStopMutation,
+  useEditOrderMutation,
   useCancelOrderMutation,
   useInitiatePaymentMutation,
   useVerifyPaymentMutation
