@@ -67,7 +67,7 @@ build_docker_file:
   stage: docker_image_build
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -f Dockerfile --cache-from $BASE_TAG_NAME:latest -t $BASE_TAG_NAME:$CI_COMMIT_SHORT_SHA -t $BASE_TAG_NAME:latest --build-arg NEXT_PUBLIC_API_HOST=$NEXT_DEV_PUBLIC_API_HOST NEXT_PUBLIC_API_HOST=$NEXT_DEV_PUBLIC_API_JWT_KEY .
+    - docker build -f Dockerfile --cache-from $BASE_TAG_NAME:latest -t $BASE_TAG_NAME:$CI_COMMIT_SHORT_SHA -t $BASE_TAG_NAME:latest --build-arg NEXT_PUBLIC_API_HOST=$NEXT_DEV_PUBLIC_API_HOST --build-arg NEXT_PUBLIC_API_HOST=$NEXT_DEV_PUBLIC_API_JWT_KEY .
     - docker push $BASE_TAG_NAME:$CI_COMMIT_SHORT_SHA
     - docker push $BASE_TAG_NAME:latest
   only:
