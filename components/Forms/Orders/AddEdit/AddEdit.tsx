@@ -14,6 +14,14 @@ import { OrderRequestBody } from "../../../../lib/types/orders";
 
 const { Option, OptGroup } = Select;
 
+interface ObjectTypes {
+  names: string;
+  id: number | string;
+  name: string;
+  parentCategory: string;
+  subCategories: [];
+}
+
 const AddEditOrder: FC<AddEditProps> = ({ title }) => {
   const { data: categories } = useCategoriesQuery();
   const { data: clients } = useClientsQuery();
@@ -39,7 +47,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
     form.setFieldsValue({
       branchId: null
     });
-  }, [chosenClientLoading, isFetching]);
+  }, [form]);
 
   return (
     <div>
@@ -60,6 +68,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                 <span className="heading2">Client name</span>
                 <span className="link animate">New client</span>
               </div>
+
               <div>
                 <Input
                   name="clientId"
@@ -67,7 +76,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                   placeholder="Select client"
                   isGroupDropdown
                 >
-                  {clients?.payload?.content.map((client) => (
+                  {clients?.payload?.content.map((client: ObjectTypes) => (
                     <Option value={client.id} key={client.names}>
                       {client.names}
                     </Option>
@@ -87,11 +96,13 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                 }
                 isGroupDropdown
               >
-                {chosenClientInfo?.payload?.offices.map((office) => (
-                  <Option value={office.id} key={office.names}>
-                    {office.names}
-                  </Option>
-                ))}
+                {chosenClientInfo?.payload?.offices.map(
+                  (office: ObjectTypes) => (
+                    <Option value={office.id} key={office.names}>
+                      {office.names}
+                    </Option>
+                  )
+                )}
               </Input>
             </div>
           </div>
@@ -140,11 +151,11 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                   placeholder="Select category"
                   isGroupDropdown
                 >
-                  {categories?.payload?.map((el) => {
+                  {categories?.payload?.map((el: ObjectTypes) => {
                     if (!el.parentCategory && el?.subCategories?.length !== 0) {
                       return (
                         <OptGroup key={el.name} label={el.name} title={el.name}>
-                          {el?.subCategories?.map((el) => (
+                          {el?.subCategories?.map((el: ObjectTypes) => (
                             <Option key={el.name} value={el.id} title={el.name}>
                               {el.name}
                             </Option>

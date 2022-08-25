@@ -1,8 +1,8 @@
 stages:
   #This stage will consist of 3 different jobs (Build,Lint and Test)
-    - check-dev #This stage will consist of 3 different jobs (Build,Lint and Test)
-    - docker_image_build
-    - deploy
+  - check-dev #This stage will consist of 3 different jobs (Build,Lint and Test)
+  - docker_image_build
+  - deploy
 
 #Image to be used while building
 image: docker:git
@@ -60,7 +60,6 @@ run_test:
     - echo "supposed to run test here"
   rules:
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'dev'
-  
 
 #This  job will build the dockerfile to provide a docker image to be pushed inside gitlab registry
 build_docker_file:
@@ -77,8 +76,8 @@ build_docker_file:
 deploy_to_dev_environment:
   stage: deploy
   script:
-    - 'which ssh-agent || (  apk update  && apk add openssh-client )'
-    - 'which rsync || ( apk update  && apk add rsync  )'
+    - "which ssh-agent || (  apk update  && apk add openssh-client )"
+    - "which rsync || ( apk update  && apk add rsync  )"
     - eval $(ssh-agent -s)
     # Inject the remote's private key
     - echo "$EC2_DEV_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
@@ -103,7 +102,6 @@ deploy_to_dev_environment:
   only:
     - dev
 
-
 build_stg_docker_file:
   stage: docker_image_build
   script:
@@ -118,8 +116,8 @@ build_stg_docker_file:
 deploy_to_stg_environment:
   stage: deploy
   script:
-    - 'which ssh-agent || (  apk update  && apk add openssh-client )'
-    - 'which rsync || ( apk update  && apk add rsync  )'
+    - "which ssh-agent || (  apk update  && apk add openssh-client )"
+    - "which rsync || ( apk update  && apk add rsync  )"
     - eval $(ssh-agent -s)
     # Inject the remote's private key
     - echo "$STG_DO_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
@@ -144,7 +142,6 @@ deploy_to_stg_environment:
   only:
     - staging
 
-
 build_prod_docker_file:
   stage: docker_image_build
   script:
@@ -159,8 +156,8 @@ build_prod_docker_file:
 deploy_to_prod_environment:
   stage: deploy
   script:
-    - 'which ssh-agent || (  apk update  && apk add openssh-client )'
-    - 'which rsync || ( apk update  && apk add rsync  )'
+    - "which ssh-agent || (  apk update  && apk add openssh-client )"
+    - "which rsync || ( apk update  && apk add rsync  )"
     - eval $(ssh-agent -s)
     # Inject the remote's private key
     - echo "$PROD_DO_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
