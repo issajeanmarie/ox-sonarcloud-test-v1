@@ -4,10 +4,10 @@ export const ErrorMessage = (text: string | undefined) => {
   return (
     <>
       {message?.error({
-        content: text ? text : "No message to show! That's weird",
-        duration: 10,
+        content: text ? text : "Something is wrong, try again later!",
+        duration: 6,
         style: {
-          marginTop: "5vh"
+          marginTop: "3vh"
         }
       })}
     </>

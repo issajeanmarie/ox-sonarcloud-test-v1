@@ -1,4 +1,5 @@
 /* eslint-disable no-useless-escape */
+
 export const emailValidation = [
   {
     required: true,
@@ -20,4 +21,8 @@ export const requiredInput = [
     required: true,
     message: "This input is required"
   }
+];
+
+export const requiredField = (message: string) => [
+  { required: true, message: `${message} required` }
 ];

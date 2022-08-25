@@ -1,7 +1,7 @@
 export type ApiResponseMetadata<T> = {
   statusCode: number;
   message?: string;
-  payload?: T | undefined;
+  payload?: T | any;
 };
 
 export type GenericResponse = ApiResponseMetadata<void>;

@@ -234,10 +234,6 @@ body {
   color: var(--color_orage) !important;
 }
 
-.red {
-  color: var(--color_red) !important;
-}
-
 .opacity_1 {
   opacity: var(--opacity_1);
 }
@@ -542,4 +538,8 @@ body {
   left: 0% !important;
   bottom: 50%;
   transform: translateX(-50%) translateY(50%);
+}
+
+.fontwe700 {
+  font-weight: 700;
 }

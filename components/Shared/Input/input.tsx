@@ -38,6 +38,8 @@ interface EntryProps {
   placeholder?: string;
   className?: string;
   rules?: any;
+  onChange?: (val: any) => any;
+  showSearch?: boolean;
 }
 
 const Entry: FC<EntryProps> = ({
@@ -56,7 +58,9 @@ const Entry: FC<EntryProps> = ({
   label,
   rules,
   size,
-  placeholder
+  placeholder,
+  onChange,
+  showSearch
 }) => {
   // Google location
 
@@ -114,6 +118,9 @@ const Entry: FC<EntryProps> = ({
               placeholder={placeholder}
               type={inputType}
               suffix={suffixIcon}
+              onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
+                onChange && onChange(target.value)
+              }
             />
           </Form.Item>
         </Fragment>
@@ -124,12 +131,13 @@ const Entry: FC<EntryProps> = ({
           {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <Select
-              showSearch
+              showSearch={showSearch || true}
               placeholder={placeholder}
               size="large"
               className={`my_input bordered_input ${size === "small" && "sm"} `}
               disabled={disabled}
               loading={isLoading}
+              onChange={(value: string) => onChange && onChange(value)}
               suffixIcon={suffixIcon}
               filterOption={(input, option) =>
                 option?.key?.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||

@@ -20,9 +20,11 @@ const Orders: FC = () => {
         <Fragment>
           <OrdersHeader data={data} />
           {data &&
-            data?.payload?.content?.map((order, index) => (
-              <OneOrder key={index} index={index + 1} order={order} />
-            ))}
+            data?.payload?.content?.map(
+              (order: object | any, index: number) => (
+                <OneOrder key={index} index={index + 1} order={order} />
+              )
+            )}
         </Fragment>
       )}
     </div>
