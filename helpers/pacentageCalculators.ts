@@ -31,3 +31,21 @@ export const KPIsPacentageCalculator = (
     return error;
   }
 };
+
+/**
+ * This function calculates the percentage of revenue.
+ * @author Patrick TUNEZERWANE (AWESOMITY LAB)
+ * @since Aug 23 2022
+ */
+
+export const revenuePacentageCalculator = (
+  allRevenue: number,
+  perKG: number
+) => {
+  try {
+    const percentage = (allRevenue / perKG) * 100;
+    return percentage.toFixed(1);
+  } catch (error) {
+    return error;
+  }
+};

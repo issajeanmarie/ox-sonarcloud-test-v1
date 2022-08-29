@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "antd/lib/image";
@@ -23,6 +24,8 @@ const Comopnents = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [validatePhone] = useState(false);
   const [images, setImages] = useState<any[]>([]);
+  const [startD, setStartDate] = useState("");
+  const [endD, setEndDate] = useState("");
 
   const Links: Header_Links[] = [
     {
@@ -45,6 +48,15 @@ const Comopnents = () => {
     setActive(id);
   };
 
+  const onStartDateChange = (_: string, date: string) => {
+    setStartDate(date);
+    return startD;
+  };
+  const onEndDateChange = (_: string, date: string) => {
+    setEndDate(date);
+    return endD;
+  };
+
   return (
     <Layout>
       {/* PAGES NAVIGATION */}
@@ -53,6 +65,8 @@ const Comopnents = () => {
         setActive={setActive}
         active={active}
         toggleActiveHandler={toggleActiveHandler}
+        onStartDateChange={onStartDateChange}
+        onEndDateChange={onEndDateChange}
       />
       {/*
            ***

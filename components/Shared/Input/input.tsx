@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-no-duplicate-props */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 
-import React, { ChangeEvent, FC, Fragment, useRef } from "react";
+import React, { ChangeEvent, Fragment, useRef } from "react";
 import Form from "antd/lib/form";
 import Select from "antd/lib/select";
 import Typography from "antd/lib/typography";
@@ -14,35 +16,35 @@ import useOnClickOutside from "../../../utils/hooks/useOutsideClick";
 const { Option } = Select;
 const { Text } = Typography;
 
-interface EntryProps {
-  type:
-    | "select"
-    | "text"
-    | "password"
-    | "text_area"
-    | "date"
-    | "image"
-    | "location";
-  name: string;
-  isGroupDropdown?: boolean;
-  inputType?: string;
-  imageCount?: number;
-  isLoading?: boolean;
-  options?: { label: string; value: string | number }[];
-  suffixIcon?: React.ReactElement | string;
-  disabled?: boolean;
-  images?: any;
-  setImages?: React.SetStateAction<React.Dispatch<any>>;
-  size?: "small" | "large";
-  label?: string;
-  placeholder?: string;
-  className?: string;
-  rules?: any;
-  onChange?: (val: any) => any;
-  showSearch?: boolean;
-}
+// interface EntryProps {
+//   type:
+//     | "select"
+//     | "text"
+//     | "password"
+//     | "text_area"
+//     | "date"
+//     | "image"
+//     | "location";
+//   name: string;
+//   isGroupDropdown?: boolean;
+//   inputType?: string;
+//   imageCount?: number;
+//   isLoading?: boolean;
+//   options?: { label: string; value: string | number }[];
+//   suffixIcon?: React.ReactElement | string;
+//   disabled?: boolean;
+//   images?: any;
+//   setImages?: React.SetStateAction<React.Dispatch<any>>;
+//   size?: "small" | "large";
+//   label?: string;
+//   placeholder?: string;
+//   className?: string;
+//   rules?: any;
+//   onChange?: (val: any) => any;
+//   showSearch?: boolean;
+// }
 
-const Entry: FC<EntryProps> = ({
+const Entry = ({
   type,
   name,
   options,
@@ -60,8 +62,9 @@ const Entry: FC<EntryProps> = ({
   size,
   placeholder,
   onChange,
-  showSearch
-}) => {
+  showSearch,
+  onDateChange
+}: any) => {
   // Google location
 
   const {
@@ -72,7 +75,7 @@ const Entry: FC<EntryProps> = ({
     setValue
   } = usePlacesAutocomplete({
     requestOptions: {
-      location: { lat: () => 43.6532, lng: () => -79.3832 },
+      // location: { lat: () => 43.6532, lng: () => -79.3832 },
       radius: 100 * 1000,
       componentRestrictions: { country: ["rw"] }
     },
@@ -114,6 +117,7 @@ const Entry: FC<EntryProps> = ({
           {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <Input
+              // onChange={onChange}
               className={`my_input ${size === "small" && "sm"}`}
               placeholder={placeholder}
               type={inputType}
@@ -146,7 +150,7 @@ const Entry: FC<EntryProps> = ({
             >
               {isGroupDropdown
                 ? children
-                : options?.map((opt, index) => {
+                : options?.map((opt: any, index: number) => {
                     return (
                       <Option key={index} value={opt.value} title={opt.value}>
                         {opt.label}
@@ -188,6 +192,7 @@ const Entry: FC<EntryProps> = ({
           {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <DatePicker
+              onChange={onDateChange}
               className={`my_datepicker ${size === "small" && "sm"}`}
               allowClear={false}
               name={name}

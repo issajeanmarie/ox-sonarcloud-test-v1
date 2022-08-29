@@ -23,12 +23,12 @@ export const options = {
   cutout: chartCutout
 };
 
-const OrderPerCategoriesChart: FC<ChartProps> = ({ chartData }) => {
+const WeightPerCategoriesChart: FC<ChartProps> = ({ chartData }) => {
   const data = {
-    labels: chartData?.categoriesByCount?.map((item: any) => item?.category),
+    labels: chartData?.categoriesByWeight?.map((item: any) => item?.category),
     datasets: [
       {
-        data: chartData?.categoriesByCount?.map((item: any) => item?.total),
+        data: chartData?.categoriesByWeight?.map((item: any) => item?.total),
         backgroundColor: ["#E3B221", "#EAEFF2", "#2A3548"],
         borderWidth: 0
       }
@@ -42,4 +42,4 @@ const OrderPerCategoriesChart: FC<ChartProps> = ({ chartData }) => {
   );
 };
 
-export default OrderPerCategoriesChart;
+export default WeightPerCategoriesChart;

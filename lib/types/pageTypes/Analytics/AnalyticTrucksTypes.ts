@@ -1,3 +1,5 @@
+import { SearchType } from "./Inputs";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type AnalyticTrucksTypes = {
   active: string;
@@ -6,6 +8,9 @@ export type AnalyticTrucksTypes = {
   truckFetching: boolean;
   onSortChange: (sorter: string) => void;
   sorter: string;
+  onStartDateChange: (_: string, date: string) => void;
+  onEndDateChange: (_: string, date: string) => void;
+  handleSearch: (e: SearchType) => void;
 };
 
 export type truckTableTypes = {

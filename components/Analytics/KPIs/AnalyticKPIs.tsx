@@ -74,18 +74,26 @@ const AnalyticKPIs: FC<AnalyticKPIsTypes> = ({
         </Col>
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <MediumChartWrapper>
-            <RevenueBreakdownChartKPIs />
+            <RevenueBreakdownChartKPIs
+              chartData={KPIsData}
+              isLoading={KPIsLoading}
+              isFetching={KPIsFetching}
+            />
           </MediumChartWrapper>
         </Col>
       </Row>
 
       <Row className="mt-4">
         <Col className="pb-4" xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <span className="opacity-95">Revenue / KG</span>
+          <span className="opacity-95">Revenue / KM</span>
         </Col>
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <MediumChartWrapper>
-            <RevenueKGKChartPIs />
+            <RevenueKGKChartPIs
+              chartData={KPIsData}
+              isLoading={KPIsLoading}
+              isFetching={KPIsFetching}
+            />
           </MediumChartWrapper>
         </Col>
       </Row>
