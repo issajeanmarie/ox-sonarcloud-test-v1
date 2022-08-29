@@ -36,6 +36,7 @@ const clientsApi = baseAPI.injectEndpoints({
       GetClients
     >({
       providesTags: ["Clients"],
+<<<<<<< HEAD
       query: (DTO) => ({
         url: `/clients${DTO.noPagination ? "/no-pagination" : ""}?page=${
           DTO?.page || "0"

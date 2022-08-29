@@ -304,7 +304,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                     if (!el.parentCategory && el?.subCategories?.length !== 0) {
                       return (
                         <OptGroup key={el.name} label={el.name} title={el.name}>
-                          {el?.subCategories?.map((el: ObjectTypes) => (
+                          {el?.subCategories?.map((el) => (
                             <Option key={el.name} value={el.id} title={el.name}>
                               {el.name}
                             </Option>

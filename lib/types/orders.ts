@@ -114,6 +114,13 @@ export type EditOrderRequestBody = {
   atPickupLocation?: boolean;
 };
 
+export type EditPaymentStatusRequest = {
+  amount: number;
+  paymentDate: string;
+  momoRefCode: string;
+  isWaitTimeFee: boolean;
+};
+
 export type Order_Filter = {
   depot?: number | string;
   driver?: number | string;
