@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
@@ -15,33 +16,33 @@ import useOnClickOutside from "../../../utils/hooks/useOutsideClick";
 const { Option } = Select;
 const { Text } = Typography;
 
-interface EntryProps {
-  type:
-    | "select"
-    | "text"
-    | "password"
-    | "text_area"
-    | "date"
-    | "image"
-    | "location";
-  name: string;
-  isGroupDropdown?: boolean;
-  inputType?: string;
-  imageCount?: number;
-  isLoading?: boolean;
-  options?: { label: string; value: string | number }[];
-  suffixIcon?: React.ReactElement | string;
-  disabled?: boolean;
-  images?: any;
-  setImages?: React.SetStateAction<React.Dispatch<any>>;
-  size?: "small" | "large";
-  label?: string;
-  placeholder?: string;
-  className?: string;
-  rules?: any;
-  onChange?: (val: any) => any;
-  showSearch?: boolean;
-}
+// interface EntryProps {
+//   type:
+//     | "select"
+//     | "text"
+//     | "password"
+//     | "text_area"
+//     | "date"
+//     | "image"
+//     | "location";
+//   name: string;
+//   isGroupDropdown?: boolean;
+//   inputType?: string;
+//   imageCount?: number;
+//   isLoading?: boolean;
+//   options?: { label: string; value: string | number }[];
+//   suffixIcon?: React.ReactElement | string;
+//   disabled?: boolean;
+//   images?: any;
+//   setImages?: React.SetStateAction<React.Dispatch<any>>;
+//   size?: "small" | "large";
+//   label?: string;
+//   placeholder?: string;
+//   className?: string;
+//   rules?: any;
+//   onChange?: (val: any) => any;
+//   showSearch?: boolean;
+// }
 
 const Entry = ({
   type,
@@ -61,8 +62,9 @@ const Entry = ({
   size,
   placeholder,
   onChange,
-  showSearch
-}) => {
+  showSearch,
+  onDateChange
+}: any) => {
   // Google location
 
   const {
@@ -115,7 +117,7 @@ const Entry = ({
           {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules}>
             <Input
-              onChange={onChange}
+              // onChange={onChange}
               className={`my_input ${size === "small" && "sm"}`}
               placeholder={placeholder}
               type={inputType}
