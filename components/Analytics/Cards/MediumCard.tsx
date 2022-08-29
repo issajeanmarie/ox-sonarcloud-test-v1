@@ -35,7 +35,9 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
           <>{count !== null ? numbersFormatter(count) : "None"}</>
         )}
       </Text>
-      <Text className="captionText">{subTitle}</Text>
+      <Text className="captionText">
+        {isFetching ? `Hold on, getting you ${title}...` : subTitle}
+      </Text>
     </Card>
   );
 };

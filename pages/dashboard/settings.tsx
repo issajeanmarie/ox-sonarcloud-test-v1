@@ -20,9 +20,20 @@ const Settings = () => {
     }
   ];
   const [active, setActive] = useState<string>("trucks");
+  const [startD, setStartDate] = useState("");
+  const [endD, setEndDate] = useState("");
 
   const toggleActiveHandler = (id: string) => {
     setActive(id);
+  };
+
+  const onStartDateChange = (_: string, date: string) => {
+    setStartDate(date);
+    return startD;
+  };
+  const onEndDateChange = (_: string, date: string) => {
+    setEndDate(date);
+    return endD;
   };
 
   return (
@@ -33,6 +44,8 @@ const Settings = () => {
         setActive={setActive}
         active={active}
         toggleActiveHandler={toggleActiveHandler}
+        onStartDateChange={onStartDateChange}
+        onEndDateChange={onEndDateChange}
       />
 
       <div className=" w-[100%] my-5">
