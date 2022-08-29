@@ -124,3 +124,12 @@ export const ColsTableLoader = () => {
     </>
   );
 };
+
+export const ChartSmallLoader = (title: string) => {
+  return (
+    <div className="h-full w-full flex justify-center items-center flex-col gap-4">
+      <SmallSpinLoader />
+      <span className="text-xs font-thin">{title}...</span>
+    </div>
+  );
+};

@@ -1,11 +1,15 @@
 import { Image } from "antd";
-import React from "react";
-import CustomInput from "../../../../Shared/Input";
+import React, { FC } from "react";
+import { RightSideKPIsTypes } from "../../../../../lib/types/pageTypes/Analytics/RightSideKPIsTypes";
+import Input from "../../../../Shared/Input";
 
-const RightSideKPIs = () => {
+const RightSideKPIs: FC<RightSideKPIsTypes> = ({
+  onStartDateChange,
+  onEndDateChange
+}) => {
   return (
     <>
-      <CustomInput
+      <Input
         type="select"
         label=""
         placeholder="Depot: All depots"
@@ -23,7 +27,7 @@ const RightSideKPIs = () => {
           />
         }
       />
-      <CustomInput
+      <Input
         type="select"
         label=""
         placeholder="Show: Last week"
@@ -42,7 +46,8 @@ const RightSideKPIs = () => {
           />
         }
       />
-      <CustomInput
+      <Input
+        onDateChange={onStartDateChange}
         type="date"
         name="Start"
         placeholder="Start"
@@ -55,7 +60,8 @@ const RightSideKPIs = () => {
           />
         }
       />
-      <CustomInput
+      <Input
+        onDateChange={onEndDateChange}
         type="date"
         name="End"
         placeholder="End"

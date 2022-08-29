@@ -26,6 +26,7 @@ export interface TruckAnalyticsRequest {
   end: string;
   sortBy: string;
   direction: string;
+  search: string | undefined;
 }
 
 export interface RevenueAnalyticsRequest {
@@ -38,4 +39,9 @@ export interface KPIsAnalyticsRequest {
   depot: number;
   start: string;
   end: string;
+}
+
+export interface MapAnalyticsRequest {
+  depot: number;
+  category: number;
 }

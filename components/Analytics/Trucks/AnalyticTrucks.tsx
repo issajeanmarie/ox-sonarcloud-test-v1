@@ -1,15 +1,21 @@
-import React, { FC } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { FC, useEffect, useState } from "react";
 import AnalyticTopContentWrapper from "../Wrappers/AnalyticTopContentWrapper";
 import CardColWrapper from "../Cards/CardColWrapper";
 import CardRowWrapper from "../Cards/CardRowWrapper";
 import MediumCard from "../Cards/MediumCard";
 import TrucksUsageTable from "../Tables/TrucksUsageTable";
+// import CustomButton from "../../Shared/Button/button";
 import TrucksUsage from "./TrucksUsage";
 import { AnalyticTrucksTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticTrucksTypes";
 import {
   AnalyticCardsLoader,
   ColsTableLoader
 } from "../../Shared/Loaders/Loaders";
+import { useUploadFuelReportMutation } from "../../../lib/api/endpoints/Trucks/truckEndpoints";
+import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
+import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
+import { UploadProps } from "antd";
 
 const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
   active,
@@ -17,8 +23,34 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
   truckLoading,
   truckFetching,
   onSortChange,
-  sorter
+  sorter,
+  onStartDateChange,
+  onEndDateChange,
+  handleSearch
 }) => {
+  const formData = new FormData();
+  const [uploadResponse, setUploadResponse] = useState("");
+  const [uploadFuelReport, { isLoading: uploadingFuelReport }] =
+    useUploadFuelReportMutation();
+
+  const uploadFileProps: UploadProps = {
+    name: "report",
+    showUploadList: false,
+    onChange(info: any) {
+      formData.append("report", info?.file?.originFileObj);
+      uploadFuelReport({ report: formData })
+        .unwrap()
+        .then((res) => {
+          setUploadResponse(res.message);
+        })
+        .catch((err) => ErrorMessage(err.data?.message));
+    }
+  };
+
+  useEffect(() => {
+    uploadResponse !== "" && SuccessMessage(uploadResponse);
+  }, [uploadResponse, uploadingFuelReport]);
+
   return (
     <>
       <AnalyticTopContentWrapper active={active}>
@@ -75,21 +107,38 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
           </CardRowWrapper>
         )}
         {!truckLoading && (
-          <TrucksUsage onSortChange={onSortChange} sorter={sorter} />
+          <TrucksUsage
+            onSortChange={onSortChange}
+            sorter={sorter}
+            onStartDateChange={onStartDateChange}
+            onEndDateChange={onEndDateChange}
+            uploadingFuelReport={uploadingFuelReport}
+            uploadFileProps={uploadFileProps}
+            handleSearch={handleSearch}
+          />
         )}
       </AnalyticTopContentWrapper>
 
       {truckLoading ? (
         <>
-          {[...Array(15)].map((_, index) => (
+          {[...Array(13)].map((_, index) => (
             <ColsTableLoader key={index} />
           ))}
         </>
       ) : (
-        <TrucksUsageTable
-          truckData={truckData?.payload?.truckAnalytics}
-          truckFetching={truckFetching}
-        />
+        <>
+          <TrucksUsageTable
+            truckData={truckData?.payload?.truckAnalytics}
+            truckFetching={truckFetching}
+          />
+          {/* <div className="flex justify-center items-center py-10">
+            <div className="w-52">
+              <CustomButton type="secondary">
+                <span className="text-sm">Load More</span>
+              </CustomButton>
+            </div>
+          </div> */}
+        </>
       )}
     </>
   );

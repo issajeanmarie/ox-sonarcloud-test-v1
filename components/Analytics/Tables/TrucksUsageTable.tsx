@@ -168,7 +168,9 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
       render: (record: TrucksUsageTableTypes) => (
         <RowsWrapper>
           <div className="flex items-center gap-1">
-            <Text className="normalText fowe700">{record?.totalFuel} ltr</Text>
+            <Text className="normalText fowe700">
+              {record?.totalFuel && numbersFormatter(record?.totalFuel)} ltr
+            </Text>
             <Text className="text-xs fowe700 red">
               {record.totalFuel &&
                 truckPacentageCalculator(

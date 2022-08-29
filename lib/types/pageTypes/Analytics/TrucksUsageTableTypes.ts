@@ -1,3 +1,6 @@
+import { UploadProps } from "antd/es/upload";
+import { SearchType } from "./Inputs";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type TrucksUsageTableTypes = {
   index: number;
@@ -27,4 +30,9 @@ export type TrucksUsageTableColumnsTypes = {
 export type TrucksUsageTypes = {
   onSortChange: any;
   sorter: string;
+  onStartDateChange: (_: string, date: string) => void;
+  onEndDateChange: (_: string, date: string) => void;
+  uploadingFuelReport: boolean;
+  uploadFileProps: UploadProps;
+  handleSearch: (e: SearchType) => void;
 };

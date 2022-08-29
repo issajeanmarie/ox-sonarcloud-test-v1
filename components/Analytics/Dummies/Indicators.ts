@@ -7,12 +7,12 @@ export const RevenueBreakdownIndicators = [
   {
     id: 2,
     color: "#A2B3D1",
-    text: "Per kb"
+    text: "Paid"
   },
   {
     id: 3,
     color: "#E3B22B",
-    text: "per job"
+    text: "Unpaid"
   }
 ];
 
@@ -20,12 +20,12 @@ export const RevenueBreakdownKPIsIndicators = [
   {
     id: 1,
     color: "#EBEFF2",
-    text: "Total"
+    text: "Target"
   },
   {
     id: 2,
     color: "#E3B22B",
-    text: "Per kb"
+    text: "Actual"
   }
 ];
 
@@ -33,11 +33,11 @@ export const RevenueKGKPIsIndicators = [
   {
     id: 1,
     color: "#EBEFF2",
-    text: "Total"
+    text: "Target"
   },
   {
     id: 2,
     color: "#E3B22B",
-    text: "Per kb"
+    text: "Actual"
   }
 ];
