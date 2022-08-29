@@ -4,7 +4,11 @@ import {
   AddStopRequest,
   OrdersResponse,
   Order_Filter,
-  EditStopRequest
+  EditStopRequest,
+  OrderRequestBody,
+  EditPaymentStatusRequest,
+  EditTransactionRequest,
+  SupportOrderRequest
 } from "../../../types/orders";
 import {
   ApiResponseMetadata,
@@ -54,6 +58,25 @@ const ordersApi = baseAPI.injectEndpoints({
       transformResponse: (response: ApiResponseMetadata<Order>) =>
         response.payload
     }),
+    createOrder: builder.mutation<GenericResponse, OrderRequestBody>({
+      invalidatesTags: ["Orders"],
+      query: (data) => ({
+        url: `/orders/`,
+        method: "POST",
+        body: data
+      })
+    }),
+    supportOrder: builder.mutation<
+      GenericResponse,
+      { orderId: Query; data: SupportOrderRequest }
+    >({
+      invalidatesTags: ["Orders"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}/support-order`,
+        method: "POST",
+        body: data
+      })
+    }),
     editOrder: builder.mutation<
       GenericResponse,
       { orderId: Query; data: EditOrderRequestBody }
@@ -65,9 +88,9 @@ const ordersApi = baseAPI.injectEndpoints({
         body: data
       })
     }),
-    cancelOrder: builder.mutation<
+    changeOrderStatus: builder.mutation<
       GenericResponse,
-      { id: number; data: { comment: string; status: "CANCEL" } }
+      { id: number; data: { comment: string; status: "CANCEL" | "COMPLETE" } }
     >({
       invalidatesTags: ["Orders", "Order"],
       query: ({ data, id }) => ({
@@ -90,6 +113,7 @@ const ordersApi = baseAPI.injectEndpoints({
       any,
       { orderId: number; data: { amount: number; phone: string } }
     >({
+      invalidatesTags: ["Order", "Orders"],
       query: ({ orderId, data }) => ({
         url: `/orders/${orderId}/momo-pay/initiate`,
         method: "POST",
@@ -128,6 +152,39 @@ const ordersApi = baseAPI.injectEndpoints({
         body: data
       })
     }),
+    editPaymentStatus: builder.mutation<
+      GenericResponse,
+      { orderId: number; data: EditPaymentStatusRequest }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}/pay`,
+        method: "POST",
+        body: data
+      })
+    }),
+    editTransaction: builder.mutation<
+      GenericResponse,
+      { orderId: number; transactionId: number; data: EditTransactionRequest }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, transactionId, data }) => ({
+        url: `/orders/${orderId}/transactions/${transactionId}`,
+        method: "PUT",
+        body: data
+      })
+    }),
+    writeOff: builder.mutation<
+      GenericResponse,
+      { orderId: number; data: { reason: string } }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}/approve-write-off/`,
+        method: "PATCH",
+        body: data
+      })
+    }),
     deleteStop: builder.mutation<
       GenericResponse,
       { orderId: Query; stopId: number }
@@ -144,13 +201,18 @@ const ordersApi = baseAPI.injectEndpoints({
 export const {
   useOrdersQuery,
   useLazyOrdersQuery,
+  useEditPaymentStatusMutation,
   useLazyOrderQuery,
   useOrderInvoiceMutation,
+  useCreateOrderMutation,
+  useEditTransactionMutation,
+  useWriteOffMutation,
   useDeleteStopMutation,
   useAddStopMutation,
   useEditStopMutation,
   useEditOrderMutation,
-  useCancelOrderMutation,
+  useChangeOrderStatusMutation,
   useInitiatePaymentMutation,
+  useSupportOrderMutation,
   useVerifyPaymentMutation
 } = ordersApi;

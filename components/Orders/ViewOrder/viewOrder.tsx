@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import { FC, useEffect, useState } from "react";
-import { message, Steps } from "antd";
+import React, { FC, useEffect, useState } from "react";
+import { Form, message, Steps } from "antd";
 import { Query } from "../../../lib/types/shared";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Header from "./header";
@@ -12,24 +12,27 @@ import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import {
   useDeleteStopMutation,
-  useLazyOrderQuery
+  useLazyOrderQuery,
+  useWriteOffMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import Loader from "../../Shared/Loader";
 import moment from "moment";
-import { Stop } from "../../../lib/types/orders";
-import { dateFormatterNth } from "../../../utils/dateFormatter";
-import EditOrderClientModal from "../../Shared/Modal";
-import AddStopModal from "../../Shared/Modal";
-import EditStopModal from "../../Shared/Modal";
+import { Stop, Transaction } from "../../../lib/types/orders";
+import { dateFormatter } from "../../../utils/dateFormatter";
+import Modal from "../../Shared/Modal";
 import AddStop from "../../Forms/Orders/AddStop";
 import EditOrderClient from "../../Forms/Orders/EditOrderClient";
-import DeleteStopModal from "../../Shared/ActionModal";
+import ActionModal from "../../Shared/ActionModal";
 import EditStop from "../../Forms/Orders/EditStop";
+import EditPaymentStatus from "../../Forms/Orders/EditPaymentStatus";
+import { Tooltip } from "antd";
+import EditPayment from "../../Forms/Orders/EditPayment";
 
 const { Step } = Steps;
 
 interface ViewOrderProps {
   orderId: Query;
+  setSupport: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface DetailsType {
@@ -37,22 +40,40 @@ interface DetailsType {
   value: any;
 }
 
-const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
+const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [summary, setSummary] = useState<DetailsType[]>();
+  const [comment] = useState<string>("");
   const [orderDetails, setOrderDetails] = useState<DetailsType[]>();
   const [clientDetails, setClientDetails] = useState<DetailsType[]>();
   const [isEditClientModal, setIsEditClientModal] = useState<boolean>(false);
   const [isAddStopModal, setIsAddStopModal] = useState<boolean>(false);
   const [isDeleteStopModal, setIsDeleteStopModal] = useState<boolean>(false);
   const [isEditStopModal, setIsEditStopModal] = useState<boolean>(false);
+  const [isEditPayment, setIsEditPayment] = useState<boolean>(false);
+  const [isEditPaymentStatus, setIsEditPaymentStatus] =
+    useState<boolean>(false);
   const [chosenStopId, setChosenId] = useState<Stop>();
-
+  const [chosenTransaction, setChosenTransaction] = useState<Transaction>();
   let totalWeightCounter = 0;
 
   const [getOrder, { isLoading, data }] = useLazyOrderQuery();
 
   const [deleteStop, { isLoading: deleteStopLoading }] =
     useDeleteStopMutation();
+
+  const [writeOff, { isLoading: writeOffLoading }] = useWriteOffMutation();
+
+  const handleWriteOffAction = (values: { reason: string }) => {
+    data &&
+      writeOff({ orderId: data?.id, data: values })
+        .unwrap()
+        .then((res) => {
+          message.success(res?.message);
+        })
+        .catch((e) => {
+          message.error(e.data?.message);
+        });
+  };
 
   const deleteStopAction = () => {
     chosenStopId?.id &&
@@ -244,8 +265,33 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
         <Loader />
       ) : (
         <>
-          <Header orderId={orderId} code={data.deliveryCode} order={data} />
-          <EditOrderClientModal
+          <Header
+            orderId={orderId}
+            code={data.deliveryCode}
+            order={data}
+            comment={comment}
+            setSupport={setSupport}
+          />
+          <Modal
+            isModalVisible={isEditPayment}
+            setIsModalVisible={setIsEditPayment}
+          >
+            <EditPayment
+              tx={chosenTransaction}
+              orderId={data.id}
+              closeModal={() => setIsEditPayment(false)}
+            />
+          </Modal>
+          <Modal
+            isModalVisible={isEditPaymentStatus}
+            setIsModalVisible={setIsEditPaymentStatus}
+          >
+            <EditPaymentStatus
+              order={data}
+              closeModal={() => setIsEditPaymentStatus(false)}
+            />
+          </Modal>
+          <Modal
             isModalVisible={isEditClientModal}
             setIsModalVisible={setIsEditClientModal}
           >
@@ -254,14 +300,14 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
               existingClient={data.office.client.id}
               closeModal={() => setIsEditClientModal(false)}
             />
-          </EditOrderClientModal>
-          <AddStopModal
+          </Modal>
+          <Modal
             isModalVisible={isAddStopModal}
             setIsModalVisible={setIsAddStopModal}
           >
             <AddStop order={data} closeModal={() => setIsAddStopModal(false)} />
-          </AddStopModal>
-          <EditStopModal
+          </Modal>
+          <Modal
             isModalVisible={isEditStopModal}
             setIsModalVisible={setIsEditStopModal}
           >
@@ -270,8 +316,8 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
               stop={chosenStopId}
               closeModal={() => setIsEditStopModal(false)}
             />
-          </EditStopModal>
-          <DeleteStopModal
+          </Modal>
+          <ActionModal
             action={deleteStopAction}
             actionLabel="DELETE ANYWAY"
             description="This action is not reversable, please make sure you really want to procceed with this action!"
@@ -337,7 +383,8 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
                     return (
                       <Step
                         key={index}
-                        status="finish"
+                        stepIndex={st.position}
+                        status={st.arrivalDateTime ? "finish" : "wait"}
                         description={<StepDescription st={st} />}
                       />
                     );
@@ -379,20 +426,25 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
                   <div className="flex items-center justify-between">
                     <div className="heading1 text-ox-dark">PAYMENT STATUS</div>
                     <div className="w-[150px]">
-                      <Button type="secondary">UPDATE</Button>
+                      <Button
+                        onClick={() => setIsEditPaymentStatus(true)}
+                        type="secondary"
+                      >
+                        UPDATE
+                      </Button>
                     </div>
                   </div>
                 </div>
                 <div className="flex justify-around m-14 gap-10">
                   <div className="w-11/12 flex flex-col border rounded p-5">
                     <div className="mb-1">Paid</div>
-                    <div className="font-bold text-lg text-ox-yellow">
+                    <div className="font-bold text-2xl text-ox-yellow">
                       {localeString(data.totalPaid)} Rwf
                     </div>
                   </div>
                   <div className="w-11/12 flex flex-col border p-5 rounded">
                     <div className="mb-1">Remaining</div>
-                    <div className="text-lg text-ox-red font-bold">
+                    <div className="text-2xl text-ox-red font-bold">
                       {localeString(data.remainingAmount)} Rwf
                     </div>
                   </div>
@@ -401,11 +453,24 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
                   <div className="font-extralight text-lg mb-10">
                     Payment history
                   </div>
+                  {data.transactions.length === 0 && (
+                    <div className="flex flex-col gap-5 items-center justify-center">
+                      <Image
+                        src="/icons/transaction.svg"
+                        width={150}
+                        height={150}
+                        alt="No transactions"
+                      />
+                      <div className="font-extralight text-md w-[170px] text-center">
+                        There are no transactions tied to this order yet.
+                      </div>
+                    </div>
+                  )}
                   <div>
                     {data.transactions.map((tx, index) => {
                       return (
-                        <div key={index} className="flex items-center mb-5">
-                          <div className="flex-1 flex items-center gap-8">
+                        <div key={index} className="flex items-center mb-4">
+                          <div className="flex-1 flex items-center gap-5 whitespace-nowrap overflow-hidden text-ellipsis">
                             <span className="text-gray-400 font-light">
                               {index + 1}
                             </span>
@@ -413,19 +478,25 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
                               {tx.amount} Rwf
                             </span>
                           </div>
-                          <div className="flex-1 text-md text-gray-400 italic font-extralight">
-                            {dateFormatterNth(tx.createdAt)}
+                          <div className="flex-1 text-sm text-gray-400 italic font-extralight whitespace-nowrap overflow-hidden text-ellipsis">
+                            {dateFormatter(tx.createdAt)}
                           </div>
-                          <div className="flex-1 font-light text-sm">
+                          <div className="flex-1 font-light text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                             <span className="text-md font-bold">
                               MoMo Ref:{" "}
                             </span>
-                            <span className="text-gray-400">
-                              {tx.momoRefCode.substring(0, 12) + "..."}
+                            <span className="text-gray-400 ">
+                              <Tooltip title={tx.momoRefCode}>
+                                {tx.momoRefCode}
+                              </Tooltip>
                             </span>
                           </div>
-                          <div>
+                          <div className="ml-3">
                             <Button
+                              onClick={() => {
+                                setChosenTransaction(tx);
+                                setIsEditPayment(true);
+                              }}
                               type="normal"
                               size="icon"
                               icon={
@@ -444,24 +515,40 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId }) => {
                   </div>
                 </div>
               </div>
-              <div className="bg-white shadow-[0px_0px_19px_#00000008] rounded p-10">
-                <div className="flex items-center justify-between mb-7">
-                  <span className="heading1">WRITE OFF</span>
+              {data?.paymentStatus !== "WRITTEN_OFF" && (
+                <div className="bg-white shadow-[0px_0px_19px_#00000008] rounded p-10">
+                  <Form onFinish={handleWriteOffAction}>
+                    <div className="flex items-center justify-between mb-7">
+                      <span className="heading1">WRITE OFF</span>
+                    </div>
+                    <div>
+                      <Input
+                        name="reason"
+                        type="text_area"
+                        label="Reason"
+                        placeholder="Enter something"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Type reason for write off"
+                          }
+                        ]}
+                      />
+                    </div>
+                    <div className="flex justify-end mt-3">
+                      <div className="w-[150px]">
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          loading={writeOffLoading}
+                        >
+                          SUBMIT
+                        </Button>
+                      </div>
+                    </div>
+                  </Form>
                 </div>
-                <div>
-                  <Input
-                    name="reason"
-                    type="text_area"
-                    label="Reason"
-                    placeholder="Enter something"
-                  />
-                </div>
-                <div className="flex justify-end mt-3">
-                  <div className="w-[150px]">
-                    <Button type="primary">SUBMIT</Button>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </>

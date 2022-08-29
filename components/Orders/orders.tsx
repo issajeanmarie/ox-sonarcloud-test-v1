@@ -19,6 +19,7 @@ const Orders: FC = () => {
   };
 
   useEffect(() => {
+    // Apply pagination and filters here
     getOrdersAction({});
   }, []);
 

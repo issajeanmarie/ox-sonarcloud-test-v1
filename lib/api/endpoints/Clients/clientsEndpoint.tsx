@@ -30,8 +30,13 @@ const clientsApi = baseAPI.injectEndpoints({
       GetClients
     >({
       providesTags: ["Clients"],
+<<<<<<< HEAD
       query: (DTO) => ({
         url: `/clients?page=${DTO?.page}&size=${DTO?.size}&org=${DTO?.org}&dest=${DTO?.dest}&hq=${DTO?.hq}&categoryId=${DTO?.categoryId}&q=${DTO?.q}&sort=${DTO?.sort}&source=${DTO?.source}`,
+=======
+      query: () => ({
+        url: "/clients?page=0&size=50",
+>>>>>>> ft(support):implement support order
         method: "GET"
       })
     }),

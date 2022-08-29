@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import Input from "../../../Shared/Input";
 import Image from "next/image";
 import Button from "../../../../components/Shared/Button";
@@ -10,7 +10,10 @@ import {
 } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { AddEditProps } from "../../../../lib/types/components/AddEditProps";
-import { OrderRequestBody } from "../../../../lib/types/orders";
+import { OrderRequestBody, Stop_Request } from "../../../../lib/types/orders";
+import { LatLng } from "use-places-autocomplete";
+import { useForm } from "antd/lib/form/Form";
+import moment from "moment";
 
 const { Option, OptGroup } = Select;
 
@@ -37,6 +40,54 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
   });
   const [form] = Form.useForm();
   const [chosenClientId, setChosenClientId] = useState<number>();
+  const [stops, setStops] = useState<Stop_Request[]>([]);
+  const [location, setLocation] = useState<{
+    name: string;
+    coordinates: LatLng;
+  }>();
+  const [subStopLocation, setSubStopLocation] = useState<{
+    name: string;
+    coordinates: LatLng;
+  }>();
+
+  const [stopDetailsForm] = useForm();
+
+  const {
+    data: chosenClientInfo,
+    isLoading: chosenClientLoading,
+    isFetching
+  } = useClientQuery(chosenClientId ?? skipToken);
+
+  const handleCreateOrder = (values: OrderRequestBody) => {
+    const stopsWithTrucksAndDrivers: Stop_Request[] = [];
+    location &&
+      stopsWithTrucksAndDrivers.push({
+        coordinates: JSON.stringify(location.coordinates || {}),
+        driverId: values.driverId,
+        location: location.name,
+        name: location.name,
+        position: 1,
+        truckId: values.truckId,
+        weight: Number(values.weight)
+      });
+    stops.forEach((st) => {
+      stopsWithTrucksAndDrivers.push({
+        ...st,
+        truckId: values.truckId,
+        driverId: values.driverId,
+        weight: Number(values.weight),
+        position: stopsWithTrucksAndDrivers.length + 1
+      });
+    });
+    const payload: OrderRequestBody = {
+      ...values,
+      stops: stopsWithTrucksAndDrivers,
+      startDateTime: moment(values.startDateTime).format("YYYY-MM-DDTHH:mm"),
+      amount: Number(values.amount)
+    };
+
+    addOrderAction(payload);
+  };
 
   const onValuesChange = (
     changedValues: OrderRequestBody,
@@ -47,11 +98,37 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
     }
   };
 
-  const {
-    data: chosenClientInfo,
-    isLoading: chosenClientLoading,
-    isFetching
-  } = useClientQuery({ id: chosenClientId ?? skipToken });
+  const handleAddStop = () => {
+    const locationDetails: Stop_Request = {
+      position: stops?.length + 1,
+      location: subStopLocation?.name || "",
+      driverId: 0,
+      truckId: 0,
+      weight: 0,
+      name: subStopLocation?.name || "",
+      coordinates: JSON.stringify(subStopLocation?.coordinates || {})
+    };
+    setStops([...stops, locationDetails]);
+    stopDetailsForm.resetFields();
+    setSubStopLocation(undefined);
+  };
+
+  const handleRemoveStop = (index: number) => {
+    const newStops = stops.filter((value, dataIndex) => dataIndex !== index);
+    setStops(newStops);
+  };
+
+  useEffect(() => {
+    form.setFieldsValue({
+      stop1: location?.name
+    });
+  }, [location]);
+
+  useEffect(() => {
+    stopDetailsForm.setFieldsValue({
+      subStop: subStopLocation?.name
+    });
+  }, [subStopLocation]);
 
   useMemo(() => {
     form.setFieldsValue({
@@ -61,13 +138,14 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
 
   return (
     <div>
-      <div className="text-lg font-bold text-ox-dark mb-10">{title}</div>
+      <div className="text-2xl font-bold text-ox-dark mb-10">{title}</div>
       <Form
         name="Login"
         form={form}
         layout="vertical"
         title="New order"
         onValuesChange={onValuesChange}
+        onFinish={handleCreateOrder}
       >
         {/*  Client's details */}
         <div className="mb-14">
@@ -85,8 +163,11 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                   type="select"
                   placeholder="Select client"
                   isGroupDropdown
+                  isLoading={clientsLoading}
+                  disabled={clientsLoading}
+                  rules={[{ required: true, message: "Choose a client" }]}
                 >
-                  {clients?.payload?.content.map((client: ObjectTypes) => (
+                  {clients?.payload?.content.map((client) => (
                     <Option value={client.id} key={client.names}>
                       {client.names}
                     </Option>
@@ -95,24 +176,32 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
               </div>
             </div>
             <div className="flex-1">
+              <div className=" mb-2 flex items-center justify-between">
+                <span className="heading2"> Branch</span>
+
+                {!form.getFieldValue("clientId") && (
+                  <span className="text-xs text-gray-400 font-light">
+                    Choose client first to continue
+                  </span>
+                )}
+              </div>
               <Input
-                name="branchId"
+                name="officeId"
                 type="select"
                 placeholder="Select branch"
-                label="Branch"
+                // label="Branch"
                 isLoading={chosenClientLoading || isFetching}
                 disabled={
                   chosenClientLoading || isFetching || !chosenClientInfo
                 }
                 isGroupDropdown
+                rules={[{ required: true, message: "Branch is required" }]}
               >
-                {chosenClientInfo?.payload?.offices.map(
-                  (office: ObjectTypes) => (
-                    <Option value={office.id} key={office.names}>
-                      {office.names}
-                    </Option>
-                  )
-                )}
+                {chosenClientInfo?.payload?.offices.map((office) => (
+                  <Option value={office.id} key={office.names}>
+                    {office.names}
+                  </Option>
+                ))}
               </Input>
             </div>
           </div>
@@ -126,7 +215,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
             <div className="flex-1">
               <div>
                 <Input
-                  name="startTime"
+                  name="startDateTime"
                   type="date"
                   label="Date"
                   options={[{ label: "RTC", value: 1 }]}
@@ -138,16 +227,20 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                       height={18}
                     />
                   }
+                  rules={[{ required: true, message: "Select start date" }]}
                 />
               </div>
             </div>
             <div className="flex-1">
               <Input
-                name="googleLocation"
+                name="stop1"
                 type="location"
                 inputType="text"
                 placeholder="Search location"
+                setLocation={setLocation}
+                location={location}
                 label="Stop 1"
+                rules={[{ required: true, message: "Choose stop location" }]}
               />
             </div>
           </div>
@@ -155,17 +248,20 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
             <div className="flex-1">
               <div>
                 <Input
-                  name="itemsCategory"
+                  name="categoryId"
                   type="select"
                   label="Category"
                   placeholder="Select category"
+                  isLoading={categoriesLoading}
+                  disabled={categoriesLoading}
                   isGroupDropdown
+                  rules={[{ required: true, message: "Choose category" }]}
                 >
-                  {categories?.payload?.map((el: ObjectTypes) => {
+                  {categories?.payload?.map((el) => {
                     if (!el.parentCategory && el?.subCategories?.length !== 0) {
                       return (
                         <OptGroup key={el.name} label={el.name} title={el.name}>
-                          {el?.subCategories?.map((el: ObjectTypes) => (
+                          {el?.subCategories?.map((el) => (
                             <Option key={el.name} value={el.id} title={el.name}>
                               {el.name}
                             </Option>
@@ -190,12 +286,13 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
             </div>
             <div className="flex-1">
               <Input
-                name="expectedWeight"
+                name="weight"
                 type="text"
                 placeholder="00"
                 label="Expected weight"
                 inputType="number"
                 suffixIcon="KGs"
+                rules={[{ required: true, message: "Weight is required" }]}
               />
             </div>
           </div>
@@ -203,7 +300,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
             <div className="flex-1">
               <div>
                 <Input
-                  name="planId"
+                  name="paymentPlan"
                   type="select"
                   label="Plan"
                   placeholder="Select plan"
@@ -211,17 +308,21 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                     { label: "Per job", value: "PAY_BY_JOB" },
                     { label: "Per Kilogram", value: "PAY_BY_KG" }
                   ]}
+                  rules={[
+                    { required: true, message: "Select a plan to continue" }
+                  ]}
                 />
               </div>
             </div>
             <div className="flex-1">
               <Input
-                name="rate"
+                name="amount"
                 type="text"
                 placeholder="00"
                 label="Rate"
                 inputType="number"
                 suffixIcon="Rwf"
+                rules={[{ required: true, message: "Rate is required" }]}
               />
             </div>
           </div>
@@ -244,6 +345,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                     type="select"
                     placeholder="Select truck"
                     options={[{ label: "RAA 123", value: 31 }]}
+                    rules={[{ required: true, message: "Truck is required" }]}
                   />
                 </div>
               </div>
@@ -260,6 +362,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                     type="select"
                     placeholder="Select driver"
                     options={[{ label: "David KAMANZI", value: 7 }]}
+                    rules={[{ required: true, message: "Driver is required" }]}
                   />
                 </div>
               </div>
@@ -274,47 +377,67 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                   label="Depot"
                   placeholder="Select depot"
                   options={[{ label: "Tyazo Depot", value: 1 }]}
+                  rules={[
+                    { required: true, message: "Choose depot to continue" }
+                  ]}
                 />
               </div>
             </div>
             <div className="flex-1"></div>
           </div>
         </div>
+      </Form>
 
-        {/* Stop details */}
+      {/* Stop details */}
 
-        <div className="mb-14">
-          <div className="font-extralight text-[15px] mb-10">Stop details</div>
-          <div className="flex items-center mb-10">
-            <div className="flex-1 text-sm flex items-center gap-3">
-              <div className="text-gray-400">1</div>
-              <div className="heading2">Musanze, Kanzenze KK 000 St 7</div>
-            </div>
-            <div>
-              <Image
-                className="pointer"
-                width={12}
-                height={12}
-                src="/icons/ic-actions-close-simple.svg"
-                alt="Close icon"
-              />
-            </div>
+      <div className="mb-14">
+        <div className="font-extralight text-[15px] mb-10">Stop details</div>
+        {stops.length !== 0 && (
+          <div className="mb-10">
+            {stops.map((st, index) => {
+              return (
+                <div key={index} className="flex items-center mb-3">
+                  <div className="flex-1 text-sm flex items-center gap-3">
+                    <div className="text-gray-400">{index + 1}</div>
+                    <div className="heading2">{st.name}</div>
+                  </div>
+                  <div>
+                    <Image
+                      className="pointer"
+                      width={12}
+                      height={12}
+                      src="/icons/ic-actions-close-simple.svg"
+                      alt="Close icon"
+                      onClick={() => handleRemoveStop(index)}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <div className="flex items-end gap-10">
+        )}
+
+        <Form form={stopDetailsForm} onFinish={handleAddStop}>
+          <div className="flex gap-10">
             <div className="flex-1">
               <Input
-                name="stop"
+                name="subStop"
                 type="location"
                 placeholder="Search location"
+                setLocation={setSubStopLocation}
+                location={subStopLocation}
                 label="Add stop"
+                rules={[{ required: true, message: "Search for a location" }]}
               />
             </div>
-            <div className="w-[142px]">
-              <Button type="secondary">ADD STOP</Button>
+            <div className="w-[142px] h-[65px] flex items-end">
+              <Button type="secondary" htmlType="submit">
+                ADD STOP
+              </Button>
             </div>
           </div>
-        </div>
-      </Form>
+        </Form>
+      </div>
     </div>
   );
 };

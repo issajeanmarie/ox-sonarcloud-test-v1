@@ -2,10 +2,7 @@ import { FC, useState } from "react";
 import { Form, message, Modal } from "antd";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
-import {
-  useInitiatePaymentMutation,
-  useVerifyPaymentMutation
-} from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
+import { useInitiatePaymentMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { MobilePaymentProps } from "../../../../lib/types/components/MobilePayment";
 
@@ -16,8 +13,7 @@ const MobilePayment: FC<MobilePaymentProps> = ({
 }) => {
   const [initiatePayment, { isLoading: paymentInitLoading }] =
     useInitiatePaymentMutation();
-  const [verifyPayment, { isLoading: verifyPaymentLoading }] =
-    useVerifyPaymentMutation();
+
   const [isPaymentSuccessful, setIsPaymentSuccessful] =
     useState<boolean>(false);
 
@@ -35,17 +31,9 @@ const MobilePayment: FC<MobilePaymentProps> = ({
     if (order) {
       initiatePayment({ orderId: order.id, data: values })
         .unwrap()
-        .then((res) => {
-          message.success(res.message + " Waiting on client's response");
-          verifyPayment({ orderId: order.id, referenceId: res.payload })
-            .unwrap()
-            .then((res) => {
-              setIsPaymentSuccessful(true);
-              message.success(res?.message || "Payment successfull");
-            })
-            .catch((e) => {
-              message.error(e.data?.message || "Payment failed");
-            });
+        .then(() => {
+          message.success("Payment successful");
+          setIsPaymentSuccessful(true);
         })
         .catch((e) => {
           message.error(e.data?.message || "Cannot initiate payment");
@@ -124,7 +112,7 @@ const MobilePayment: FC<MobilePaymentProps> = ({
               <Button
                 type="primary"
                 htmlType="submit"
-                loading={paymentInitLoading || verifyPaymentLoading}
+                loading={paymentInitLoading}
               >
                 Confirm
               </Button>

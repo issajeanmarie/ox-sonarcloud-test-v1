@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import Form from "antd/lib/form";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
@@ -10,13 +10,16 @@ import moment from "moment";
 interface FilterOrdersFormProps {
   getOrders: (filter: Order_Filter) => void;
   loading: boolean;
+  setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   getOrders,
+  setIsFiltered,
   loading
 }) => {
   const handleOnFinish = (values: Order_Filter) => {
+    setIsFiltered(true);
     const data = {
       ...values,
       start: values.start && moment(values.start).format("YYYY-MM-DD"),
@@ -26,6 +29,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   };
 
   const clearFilter = () => {
+    setIsFiltered(false);
     form.resetFields();
     getOrders({});
   };
@@ -92,12 +96,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
           </div>
           <div className="flex justify-end gap-5">
             <div className="min-w-[150px]">
-              <Button
-                onClick={clearFilter}
-                type="secondary"
-                className="mt-5"
-                htmlType="submit"
-              >
+              <Button onClick={clearFilter} type="secondary" className="mt-5">
                 CLEAR FILTER
               </Button>
             </div>

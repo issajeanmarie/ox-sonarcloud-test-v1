@@ -18,6 +18,8 @@ interface OrdersHeaderProps {
 const OrdersHeader: FC<OrdersHeaderProps> = ({ data, getOrders, loading }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
+  const [isFiltered, setIsFiltered] = useState<boolean>(false);
+
   const router = useRouter();
 
   const showModal = () => {
@@ -39,13 +41,21 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data, getOrders, loading }) => {
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
         >
-          <FilterOrdersForm getOrders={getOrders} loading={loading} />
+          <FilterOrdersForm
+            getOrders={getOrders}
+            loading={loading}
+            setIsFiltered={setIsFiltered}
+          />
         </FilterOrdersModal>
         <div className="text-[17px] font-bold">
           {localeString(data?.payload?.totalElements)} Orders
         </div>
         <div className="flex items-center gap-5">
-          <div>
+          <div
+            className={` p-2 flex items-center justify-center ${
+              isFiltered ? "border rounded-lg border-ox-yellow" : ""
+            } `}
+          >
             <Image
               width={16}
               height={16}

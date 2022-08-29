@@ -179,6 +179,11 @@
   border: none !important;
 }
 
+.orders_table .ant-table-tbody > tr > td {
+  border: none !important;
+  padding: 14px 14px;
+}
+
 .ant-table-thead > tr > th {
   color: #2a3548 !important;
   opacity: 0.56;

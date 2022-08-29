@@ -78,12 +78,15 @@ const Entry = ({
   const placeSuggestionsRef = useRef<any>();
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
-    setValue(e?.target?.value);
+    setValue(e.target.value);
+    setLocation();
   };
 
   const handleSelect = (val: string): void => {
     setValue(val, false);
     setCoordinatesLoading(true);
+    clearSuggestions();
+
     getGeocode({ address: val })
       .then((results) => getLatLng(results[0]))
       .then((coordinates) => {
@@ -94,7 +97,6 @@ const Entry = ({
         setCoordinatesLoading(false);
         message.warning(error);
       });
-    clearSuggestions();
   };
 
   useEffect(() => {

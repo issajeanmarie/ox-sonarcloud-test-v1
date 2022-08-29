@@ -1,4 +1,4 @@
-import { FC, useState, Fragment } from "react";
+import React, { FC, useState, Fragment } from "react";
 import { Query } from "../../../lib/types/shared";
 import Image from "next/image";
 import Button from "../../Shared/Button";
@@ -7,7 +7,7 @@ import ActionModal from "../../Shared/ActionModal";
 import ReceipientCodeModal from "../ReceipientCode";
 import MobilePayment from "../../Forms/Orders/MobilePayment";
 import {
-  useCancelOrderMutation,
+  useChangeOrderStatusMutation,
   useOrderInvoiceMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { message } from "antd";
@@ -19,17 +19,24 @@ interface ViewOrderHeaderProps {
   orderId: Query;
   code: string;
   order: Order;
+  comment: string;
+  setSupport: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   orderId,
   order,
-  code
+  code,
+  setSupport,
+  comment
 }) => {
   const [isCancelModalVisible, setIsCancelModalVisible] =
     useState<boolean>(false);
 
   const [isReceipientCodeModalVisible, setIsReceipientCodeModalVisible] =
+    useState<boolean>(false);
+
+  const [isConfirmCompleteOrder, setIsConfirmCompleteOrder] =
     useState<boolean>(false);
 
   const [isMobilePaymentModalVisible, setIsMobilePaymentModalVisible] =
@@ -38,8 +45,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const [downloadInvoice, { isLoading: invoiceLoading }] =
     useOrderInvoiceMutation();
 
-  const [cancelOrderAction, { isLoading: deleteOrderLoading }] =
-    useCancelOrderMutation();
+  const [changeOrderStatus, { isLoading: orderStatusLoading }] =
+    useChangeOrderStatusMutation();
 
   const router = useRouter();
 
@@ -58,10 +65,10 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
       });
   };
 
-  const cancelOrder = () => {
-    cancelOrderAction({
+  const changeOrderStatusAction = (status: "CANCEL" | "COMPLETE") => {
+    changeOrderStatus({
       id: order.id,
-      data: { comment: "Not set", status: "CANCEL" }
+      data: { comment: comment, status: status }
     })
       .unwrap()
       .then((res) => {
@@ -82,8 +89,18 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         description="This action is not reversible, please make sure you really want to proceed with this action!"
         actionLabel="CANCEL ORDER"
         type="danger"
-        action={cancelOrder}
-        loading={deleteOrderLoading}
+        action={() => changeOrderStatusAction("CANCEL")}
+        loading={orderStatusLoading}
+      />
+      <ActionModal
+        isModalVisible={isConfirmCompleteOrder}
+        setIsModalVisible={setIsConfirmCompleteOrder}
+        title="COMPLETE"
+        description="Are you sure you want to complete this order? This action is not reversible."
+        actionLabel="COMPLETE ORDER"
+        type="normal"
+        action={() => changeOrderStatusAction("COMPLETE")}
+        loading={orderStatusLoading}
       />
       <ReceipientCodeModal
         isModalVisible={isReceipientCodeModalVisible}
@@ -155,8 +172,15 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             </button>
           </div>
           <div className="flex items-center gap-6 w-[400px]">
-            <Button type="secondary">SUPPORT</Button>
-            <Button type="primary">COMPLETE ORDER</Button>
+            <Button type="secondary" onClick={() => setSupport(true)}>
+              SUPPORT
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => setIsConfirmCompleteOrder(true)}
+            >
+              COMPLETE ORDER
+            </Button>
           </div>
         </div>
       </div>

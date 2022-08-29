@@ -14,7 +14,7 @@ import Link from "next/link";
 import { routes } from "../../../config/route-config";
 import ActionModal from "../../Shared/ActionModal";
 import {
-  useCancelOrderMutation,
+  useChangeOrderStatusMutation,
   useOrderInvoiceMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
@@ -45,8 +45,8 @@ const Order: FC<OrderProps> = ({ order, index }) => {
   const [downloadInvoice, { isLoading: invoiceLoading }] =
     useOrderInvoiceMutation();
 
-  const [cancelOrderAction, { isLoading: cancelOrderLoading }] =
-    useCancelOrderMutation();
+  const [changeOrderStatus, { isLoading: cancelOrderLoading }] =
+    useChangeOrderStatusMutation();
 
   const downloadOrderInvoice = () => {
     downloadInvoice(order.id)
@@ -64,7 +64,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
   };
 
   const deleteOrder = () => {
-    cancelOrderAction({ id: order.id, data: { comment: "", status: "CANCEL" } })
+    changeOrderStatus({ id: order.id, data: { comment: "", status: "CANCEL" } })
       .unwrap()
       .then((res) => {
         message.success(res.message);
@@ -140,7 +140,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
       {/* MIDDLE ROW */}
       <Table
-        className="data_table"
+        className="data_table orders_table"
         dataSource={[order, ...order?.supportOrders]}
         rowKey={(record) => record.id}
         pagination={false}
@@ -252,8 +252,8 @@ const Order: FC<OrderProps> = ({ order, index }) => {
         />
         <Column
           width={160}
-          render={() => (
-            <PaymentStatus amt={order.totalAmount} status="HALF_PAID" />
+          render={(text: Types, record: Order) => (
+            <PaymentStatus amt={record?.totalAmount} status="HALF_PAID" />
           )}
         />
 
@@ -270,7 +270,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                   size="icon"
                   icon={
                     <Image
-                      src="icons/receipt.png"
+                      src="/icons/receipt.png"
                       alt="OX Delivery Logo"
                       width={12}
                       preview={false}
@@ -304,7 +304,10 @@ const Order: FC<OrderProps> = ({ order, index }) => {
       </Table>
 
       {/* BOTTOM ROW */}
-      <Row justify="space-between" className="bg-white p-4">
+      <Row
+        justify="space-between"
+        className="bg-white p-4 border-t-2 border-gray-100"
+      >
         {/* TOP ROW RIGHT SIDE */}
         <Col>
           <Row gutter={12} align="middle">

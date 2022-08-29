@@ -22,8 +22,8 @@ const PaymentStatus: FC<PaymentStatusProps> = ({ amt, status }) => {
       return <span className={`${textStyles} text-black`}>{value}</span>;
     case "HALF_PAID":
       return <span className={textStyles}>{value}</span>;
-    case "WRITTEN _OFF":
-      return <span className={`${textStyles} text-ox-dark`}>{value}</span>;
+    case "WRITTEN_OFF":
+      return <span className={`${textStyles} text-gray-400`}>{value}</span>;
     default:
       return <span className={`${textStyles} text-ox-dark`}>{value}</span>;
   }

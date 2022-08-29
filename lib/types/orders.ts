@@ -17,10 +17,13 @@ export type OrderRequestBody = {
   officeId: number;
   clientId: number;
   depotId: number;
+  truckId: number;
+  driverId: number;
+  weight: number;
   stops: {
     name: string;
     location: string;
-    coordinates: string;
+    coordinates: string | LatLng;
     driverId: number;
     truckId: number;
     weight: number;
@@ -30,7 +33,21 @@ export type OrderRequestBody = {
   amount: number;
   categoryId: number;
   startDateTime: string;
-  atPickupLocation: boolean;
+  atPickupLocation?: boolean;
+};
+
+export type SupportOrderRequest = {
+  stop: Stop_Request;
+  paymentPlan: "PAY_BY_JOB" | "PAY_BY_KG";
+  amount: number;
+};
+
+export type SupportOrderFormValues = {
+  driverId: number;
+  truckId: number;
+  weight: number;
+  paymentPlan: "PAY_BY_JOB" | "PAY_BY_KG";
+  amount: number;
 };
 
 export type EditOrderRequestBody = {
@@ -51,6 +68,13 @@ export type EditOrderRequestBody = {
   categoryId?: number;
   startDateTime?: string;
   atPickupLocation?: boolean;
+};
+
+export type EditPaymentStatusRequest = {
+  amount: number;
+  paymentDate: string;
+  momoRefCode: string;
+  isWaitTimeFee: boolean;
 };
 
 export type Order_Filter = {
@@ -94,6 +118,19 @@ export type OrdersResponse = {
   empty: false;
 };
 
+export type EditTransactionRequest = {
+  amount: number;
+  momoRefCode: string;
+};
+
+export type Transaction = {
+  amount: number;
+  createdAt: string;
+  id: number;
+  momoRefCode: string;
+  transactionType: string;
+};
+
 export type Order = {
   comment: null;
   momoRefCodes: "";
@@ -111,13 +148,7 @@ export type Order = {
   startDateTime: string;
   paymentStatus: PaymentStatus;
   deliveryCode: string;
-  transactions: {
-    amount: number;
-    createdAt: string;
-    id: number;
-    momoRefCode: string;
-    transactionType: string;
-  }[];
+  transactions: Transaction[];
   endDateTime: string;
   office: Office;
   totalAmount: number;
@@ -150,6 +181,16 @@ export type Office = {
   location: string;
   id: number;
   type: string;
+};
+
+export type Stop_Request = {
+  name: string;
+  location: string;
+  coordinates: string | LatLng;
+  driverId: number;
+  truckId: number;
+  weight: number;
+  position: number;
 };
 
 export type Stop = {

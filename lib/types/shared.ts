@@ -18,7 +18,7 @@ export type PaymentStatus =
   | "FULL_PAID"
   | "HALF_PAID"
   | "PENDING"
-  | "WRITTEN _OFF"
+  | "WRITTEN_OFF"
   | "ENQUEQUE";
 
 export type Order_Status = "COMPLETED" | "CANCELLED" | "PENDING";
