@@ -6,7 +6,7 @@ interface ActionModalProps {
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const ActionModal: FC<ActionModalProps> = ({
+const ModalWrapper: FC<ActionModalProps> = ({
   isModalVisible,
   setIsModalVisible,
   children
@@ -35,4 +35,4 @@ const ActionModal: FC<ActionModalProps> = ({
   );
 };
 
-export default ActionModal;
+export default ModalWrapper;

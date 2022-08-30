@@ -151,6 +151,11 @@
   border: none !important;
 }
 
+/* MODAL */
+.ox-modal .ant-modal-header {
+  border-bottom-width: 0 !important;
+}
+
 .noborder .ant-table-tbody > tr > td,
 .ant-table-thead > tr > th {
   border: none !important;
