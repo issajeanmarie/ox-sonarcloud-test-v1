@@ -47,6 +47,7 @@ const Entry: FC<EntryProps> = ({
               className={`my_input ${size === "small" && "sm"}`}
               placeholder={placeholder}
               suffix={suffixIcon}
+              name={name}
             />
           </Form.Item>
         </Fragment>

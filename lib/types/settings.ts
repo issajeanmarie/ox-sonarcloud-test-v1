@@ -15,3 +15,25 @@ export type ProfileResponse = {
     gender: string,
     profilePic: string
 }
+export type ProfileTypes = {
+    names: string;
+    phone: string;
+  };
+
+export type PasswordTypes = {
+    currentPassword: string,
+    newPassword: string
+  };
+
+export type KPIsResponse = {
+    data: [];
+    map: any
+}
+
+export type KPI = {
+    depotId: number,
+    depotName: string,
+    targetPerDay: number,
+    targetPerKm: number
+    kpi: []
+}
