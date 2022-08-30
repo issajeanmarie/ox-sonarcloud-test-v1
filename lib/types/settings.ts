@@ -6,34 +6,34 @@
  */
 
 export type ProfileResponse = {
-    id: number,
-    email: string,
-    names: string,
-    phone: string,
-    role: string,
-    enabled: boolean,
-    gender: string,
-    profilePic: string
-}
+  id: number;
+  email: string;
+  names: string;
+  phone: string;
+  role: string;
+  enabled: boolean;
+  gender: string;
+  profilePic: string;
+};
 export type ProfileTypes = {
-    names: string;
-    phone: string;
-  };
+  names: string;
+  phone: string;
+};
 
 export type PasswordTypes = {
-    currentPassword: string,
-    newPassword: string
-  };
+  currentPassword: string;
+  newPassword: string;
+};
 
 export type KPIsResponse = {
-    data: [];
-    map: any
-}
+  data: [];
+  map: any;
+};
 
 export type KPI = {
-    depotId: number,
-    depotName: string,
-    targetPerDay: number,
-    targetPerKm: number
-    kpi: []
-}
+  depotId: number;
+  depotName: string;
+  targetPerDay: number;
+  targetPerKm: number;
+  kpi: [];
+};

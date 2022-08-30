@@ -1,4 +1,9 @@
-import { ProfileResponse, ProfileTypes, PasswordTypes,KPIsResponse } from "../../../types/settings";
+import {
+  ProfileResponse,
+  ProfileTypes,
+  PasswordTypes,
+  KPIsResponse
+} from "../../../types/settings";
 import { ApiResponseMetadata, GenericResponse } from "../../../types/shared";
 import { baseAPI } from "../../api";
 
@@ -11,10 +16,9 @@ import { baseAPI } from "../../api";
 
 const settingsApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
-
     /** Personal Information Requests */
     settings: builder.query<ApiResponseMetadata<ProfileResponse>, void>({
-      providesTags:["Settings"],
+      providesTags: ["Settings"],
       query: () => ({
         url: "/users/profile",
         method: "GET"
@@ -25,7 +29,7 @@ const settingsApi = baseAPI.injectEndpoints({
       invalidatesTags: ["Settings"],
       query: (DTO) => ({
         url: "/users/profile",
-        method: 'PATCH',
+        method: "PATCH",
         body: DTO
       })
     }),
@@ -34,7 +38,7 @@ const settingsApi = baseAPI.injectEndpoints({
       invalidatesTags: ["Settings"],
       query: (DTO) => ({
         url: "/users/profile",
-        method: 'PATCH',
+        method: "PATCH",
         body: DTO
       })
     }),
@@ -46,9 +50,13 @@ const settingsApi = baseAPI.injectEndpoints({
         url: "/kpis/current",
         method: "GET"
       })
-    }),
-
+    })
   })
 });
 
-export const { useSettingsQuery, usePersonalInfoMutation, useChangePasswordMutation, useGetKpisQuery } = settingsApi;
+export const {
+  useSettingsQuery,
+  usePersonalInfoMutation,
+  useChangePasswordMutation,
+  useGetKpisQuery
+} = settingsApi;
