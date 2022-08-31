@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import Layout from "../../components/Shared/Layout";
 import WithPrivateRoute from "../../components/Shared/Routes/WithPrivateRoute";
-import TopNavigator from "../../components/Shared/TopNavigator";
 import { Header_Links } from "../../lib/types/links";
-import { Row, Col } from "antd";
-import KPIsTable from "../../components/KPIsTable";
-import Categories from "../../components/Categories";
+import { Row, Col, Typography } from "antd";
 import PersonalInfo from "../../components/PersonalInfo";
+import SettingsKPIsTable from "../../components/Tables/Settings/SettingsKPIsTable";
+import SettingsCardWrapper from "../../components/Settings/SettingsCardWrapper";
+import CustomButton from "../../components/Shared/Button/button";
+import SettingsCategoriesTable from "../../components/Tables/Settings/SettingsCategoriesTable";
+import AddCategory from "../../components/Forms/Settings/AddCategory";
+import SettingsTopNavigator from "../../components/Settings/SettingsTopNavigator";
+
+const { Text } = Typography;
 
 const Settings = () => {
   const Links: Header_Links[] = [
@@ -20,45 +25,48 @@ const Settings = () => {
     }
   ];
   const [active, setActive] = useState<string>("trucks");
-  const [startD, setStartDate] = useState("");
-  const [endD, setEndDate] = useState("");
 
   const toggleActiveHandler = (id: string) => {
     setActive(id);
   };
 
-  const onStartDateChange = (_: string, date: string) => {
-    setStartDate(date);
-    return startD;
-  };
-  const onEndDateChange = (_: string, date: string) => {
-    setEndDate(date);
-    return endD;
-  };
-
   return (
     <Layout>
-      {/* PAGES NAVIGATION */}
-      <TopNavigator
+      <SettingsTopNavigator
         headerLinks={Links}
         setActive={setActive}
         active={active}
         toggleActiveHandler={toggleActiveHandler}
-        onStartDateChange={onStartDateChange}
-        onEndDateChange={onEndDateChange}
       />
 
       <div className=" w-[100%] my-5">
-        {/* TOP ROW */}
         <Row className="p-5 mt-5" gutter={18}>
           <Col span={14}>
-            {/* KPIs TABLE */}
-            <KPIsTable />
+            <SettingsCardWrapper>
+              <div className="mb-4">
+                <Text className="mediumText">KPIs (Daily target)</Text>
+              </div>
+              <SettingsKPIsTable />
 
-            {/* Categories TABLE */}
-            <Categories />
+              <Row className="flex justify-end mt-4">
+                <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}>
+                  <CustomButton type="primary">SAVE</CustomButton>
+                </Col>
+              </Row>
+            </SettingsCardWrapper>
+
+            <SettingsCardWrapper>
+              <div className="mb-4">
+                <Text className="mediumText">Categories (22)</Text>
+              </div>
+
+              <Row className="flex justify-between items-center mb-4 border-b pb-4">
+                <AddCategory />
+              </Row>
+
+              <SettingsCategoriesTable />
+            </SettingsCardWrapper>
           </Col>
-          {/* Personal Info TABLE */}
           <Col span={10}>
             <PersonalInfo />
           </Col>

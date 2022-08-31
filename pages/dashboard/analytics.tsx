@@ -18,7 +18,6 @@ import { RootState } from "../../lib/redux/store";
 import { useSelector } from "react-redux";
 import { useCategoriesQuery } from "../../lib/api/endpoints/Category/categoryEndpoints";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
-import { SearchType } from "../../lib/types/pageTypes/Analytics/Inputs";
 
 const Analytics = () => {
   const [active, setActive] = useState<string>("trucks");
@@ -92,8 +91,8 @@ const Analytics = () => {
     setSelectedCategory(e);
   };
 
-  const handleSearch = (e: SearchType) => {
-    setSearchQuery(e.target.value);
+  const handleSearch = (value: any) => {
+    setSearchQuery(value);
   };
 
   return (
