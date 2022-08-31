@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, { FC, useEffect, useState } from "react";
-import { Form, message, Steps } from "antd";
+import React, { FC, useEffect, useRef, useState } from "react";
+import { message, Steps, Form, Tooltip } from "antd";
 import { Query } from "../../../lib/types/shared";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Header from "./header";
@@ -25,19 +25,18 @@ import EditOrderClient from "../../Forms/Orders/EditOrderClient";
 import ActionModal from "../../Shared/ActionModal";
 import EditStop from "../../Forms/Orders/EditStop";
 import EditPaymentStatus from "../../Forms/Orders/EditPaymentStatus";
-import { Tooltip } from "antd";
 import EditPayment from "../../Forms/Orders/EditPayment";
 
 const { Step } = Steps;
 
 interface ViewOrderProps {
-  orderId: Query;
+  orderId?: Query;
   setSupport: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface DetailsType {
   label: string;
-  value: any;
+  value: JSX.Element | string;
 }
 
 const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
@@ -54,7 +53,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
     useState<boolean>(false);
   const [chosenStopId, setChosenId] = useState<Stop>();
   const [chosenTransaction, setChosenTransaction] = useState<Transaction>();
-  let totalWeightCounter = 0;
+  const totalWeightCounter = useRef(0);
 
   const [getOrder, { isLoading, data }] = useLazyOrderQuery();
 
@@ -88,19 +87,11 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
         });
   };
 
-  const generateOrder = () => {
-    getOrder(orderId)
-      .unwrap()
-      .then()
-      .catch((e) => {
-        message.error(e?.data?.message || "Something went wrong");
-      });
-  };
-
   useEffect(() => {
     if (data) {
       data?.stops.forEach(
-        (st) => (totalWeightCounter = totalWeightCounter + st.weight)
+        (st) =>
+          (totalWeightCounter.current = totalWeightCounter.current + st.weight)
       );
       setSummary([
         {
@@ -147,7 +138,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
         },
         {
           label: "Weight",
-          value: `${totalWeightCounter} KGs - 20Rwf/KG`
+          value: `${totalWeightCounter?.current} KGs - 20Rwf/KG`
         },
         {
           label: "Depot",
@@ -158,8 +149,15 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   }, [data]);
 
   useEffect(() => {
-    orderId && generateOrder();
-  }, [orderId]);
+    if (orderId) {
+      getOrder(orderId)
+        .unwrap()
+        .then()
+        .catch((e) => {
+          message.error(e?.data?.message || "Something went wrong");
+        });
+    }
+  }, [orderId, getOrder]);
 
   const StepDescription = ({ st }: { st: Stop }) => {
     return (

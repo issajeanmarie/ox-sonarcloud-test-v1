@@ -7,7 +7,7 @@ import {
   Transaction
 } from "../../../../lib/types/orders";
 import { useEditTransactionMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
-import { useForm } from "antd/es/form/Form";
+import { useForm } from "antd/lib/form/Form";
 
 interface EditPaymentProps {
   tx?: Transaction;

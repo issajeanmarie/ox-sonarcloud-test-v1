@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import Image from "next/image";
 import FilterOrdersModal from "../../Shared/Modal";
+import { LoadingOutlined } from "@ant-design/icons";
 
 interface OrdersHeaderProps {
   data?: ApiResponseMetadata<OrdersResponse>;
@@ -47,8 +48,14 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data, getOrders, loading }) => {
             setIsFiltered={setIsFiltered}
           />
         </FilterOrdersModal>
-        <div className="text-[17px] font-bold">
+        <div className="text-[17px] font-bold flex items-center gap-5">
           {localeString(data?.payload?.totalElements)} Orders
+          {loading && (
+            <LoadingOutlined
+              className="text-base"
+              style={{ color: "#E7B522" }}
+            />
+          )}
         </div>
         <div className="flex items-center gap-5">
           <div

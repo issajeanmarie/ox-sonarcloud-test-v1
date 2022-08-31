@@ -3,7 +3,7 @@ import Input from "../../../Shared/Input";
 import Image from "next/image";
 import Button from "../../../../components/Shared/Button";
 import { useCategoriesQuery } from "../../../../lib/api/endpoints/Category/categoryEndpoints";
-import { Form, Select } from "antd";
+import { Form, message, Select } from "antd";
 import {
   useClientQuery,
   useClientsQuery
@@ -14,6 +14,12 @@ import { OrderRequestBody, Stop_Request } from "../../../../lib/types/orders";
 import { LatLng } from "use-places-autocomplete";
 import { useForm } from "antd/lib/form/Form";
 import moment from "moment";
+import { Client } from "../../../../lib/types/clients";
+import { Office } from "../../../../lib/types/shared";
+import { Category } from "../../../../lib/types/categories";
+import { useGetTrucksMutation } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { TruckSchema } from "../../../../lib/types/trucksTypes";
+import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoints";
 
 const { Option, OptGroup } = Select;
 
@@ -89,6 +95,8 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
     addOrderAction(payload);
   };
 
+  const { data: depots, isLoading: depotsLoading } = useDepotsQuery();
+
   const onValuesChange = (
     changedValues: OrderRequestBody,
     allValues: OrderRequestBody
@@ -119,16 +127,25 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
   };
 
   useEffect(() => {
+    getTrucks({ page: 0, size: 10000 })
+      .unwrap()
+      .then()
+      .catch((e) => {
+        message.error(e.data?.messag || "Cannot get trucks");
+      });
+  }, [getTrucks]);
+
+  useEffect(() => {
     form.setFieldsValue({
       stop1: location?.name
     });
-  }, [location]);
+  }, [form, location]);
 
   useEffect(() => {
     stopDetailsForm.setFieldsValue({
       subStop: subStopLocation?.name
     });
-  }, [subStopLocation]);
+  }, [stopDetailsForm, subStopLocation]);
 
   useMemo(() => {
     form.setFieldsValue({
@@ -167,7 +184,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                   disabled={clientsLoading}
                   rules={[{ required: true, message: "Choose a client" }]}
                 >
-                  {clients?.payload?.content.map((client) => (
+                  {clients?.payload?.content.map((client: Client) => (
                     <Option value={client.id} key={client.names}>
                       {client.names}
                     </Option>
@@ -197,7 +214,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                 isGroupDropdown
                 rules={[{ required: true, message: "Branch is required" }]}
               >
-                {chosenClientInfo?.payload?.offices.map((office) => (
+                {chosenClientInfo?.payload?.offices.map((office: Office) => (
                   <Option value={office.id} key={office.names}>
                     {office.names}
                   </Option>
@@ -257,7 +274,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                   isGroupDropdown
                   rules={[{ required: true, message: "Choose category" }]}
                 >
-                  {categories?.payload?.map((el) => {
+                  {categories?.payload?.map((el: Category) => {
                     if (!el.parentCategory && el?.subCategories?.length !== 0) {
                       return (
                         <OptGroup key={el.name} label={el.name} title={el.name}>
@@ -344,9 +361,19 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                     name="truckId"
                     type="select"
                     placeholder="Select truck"
-                    options={[{ label: "RAA 123", value: 31 }]}
+                    isLoading={trucksLoading}
+                    disabled={trucksLoading}
+                    isGroupDropdown
                     rules={[{ required: true, message: "Truck is required" }]}
-                  />
+                  >
+                    {data?.payload?.content.map((truck: TruckSchema) => {
+                      return (
+                        <Option value={truck.id} key={truck.plateNumber}>
+                          {truck.plateNumber}
+                        </Option>
+                      );
+                    })}
+                  </Input>
                 </div>
               </div>
             </div>
@@ -376,11 +403,22 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
                   type="select"
                   label="Depot"
                   placeholder="Select depot"
+                  isGroupDropdown
+                  isLoading={depotsLoading}
+                  disabled={depotsLoading}
                   options={[{ label: "Tyazo Depot", value: 1 }]}
                   rules={[
                     { required: true, message: "Choose depot to continue" }
                   ]}
-                />
+                >
+                  {depots?.payload.map((dp) => {
+                    return (
+                      <Option value={dp.id} key={dp.name}>
+                        {dp.name}
+                      </Option>
+                    );
+                  })}
+                </Input>
               </div>
             </div>
             <div className="flex-1"></div>

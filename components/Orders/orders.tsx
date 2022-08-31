@@ -5,9 +5,13 @@ import { useLazyOrdersQuery } from "../../lib/api/endpoints/Orders/ordersEndpoin
 import { message } from "antd";
 import Loader from "../Shared/Loader";
 import { Order_Filter } from "../../lib/types/orders";
+import { useSelector } from "react-redux";
+import { RootState } from "../../lib/redux/store";
 
 const Orders: FC = () => {
   const [getOrders, { data, isLoading, isFetching }] = useLazyOrdersQuery({});
+
+  const depot = useSelector((state: RootState) => state.depot);
 
   const getOrdersAction = (filters: Order_Filter) => {
     getOrders(filters)
@@ -20,8 +24,8 @@ const Orders: FC = () => {
 
   useEffect(() => {
     // Apply pagination and filters here
-    getOrdersAction({});
-  }, []);
+    getOrdersAction({ depot: depot.depotData.id });
+  }, [depot]);
 
   return (
     <div className="mx-4 relative">

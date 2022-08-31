@@ -1,13 +1,16 @@
+import Select from "antd/lib/select";
 import { Form, message } from "antd";
-import { useForm } from "antd/es/form/Form";
+import { useForm } from "antd/lib/form/Form";
 import React, { FC, useEffect, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
 import { useSupportOrderMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
+import { useGetTrucksMutation } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import {
   SupportOrderFormValues,
   SupportOrderRequest
 } from "../../../../lib/types/orders";
 import { Query } from "../../../../lib/types/shared";
+import { TruckSchema } from "../../../../lib/types/trucksTypes";
 import Input from "../../../Shared/Input";
 import Header from "./header";
 
@@ -16,12 +19,17 @@ interface SupportOrderProps {
   setSupport: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const { Option } = Select;
+
 const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
   const [location, setLocation] = useState<{
     name: string;
     coordinates: LatLng;
   }>();
   const [supportOrder, { isLoading }] = useSupportOrderMutation();
+
+  const [getTrucks, { data, isLoading: trucksLoading }] =
+    useGetTrucksMutation();
 
   const [form] = useForm();
 
@@ -51,6 +59,15 @@ const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
   };
 
   useEffect(() => {
+    getTrucks({ page: 0, size: 10000 })
+      .unwrap()
+      .then()
+      .catch((e) => {
+        message.error(e.data?.messag || "Cannot get trucks");
+      });
+  }, []);
+
+  useEffect(() => {
     form.setFieldsValue({
       stop: location?.name
     });
@@ -78,9 +95,19 @@ const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
                   type="select"
                   label="Truck"
                   placeholder="Select truck"
-                  options={[{ label: "RAA 123", value: 31 }]}
+                  isLoading={trucksLoading}
+                  disabled={trucksLoading}
+                  isGroupDropdown
                   rules={[{ required: true, message: "Truck is required" }]}
-                />
+                >
+                  {data?.payload?.content.map((truck: TruckSchema) => {
+                    return (
+                      <Option value={truck.id} key={truck.plateNumber}>
+                        {truck.plateNumber}
+                      </Option>
+                    );
+                  })}
+                </Input>
               </div>
             </div>
             <div className="flex-1">

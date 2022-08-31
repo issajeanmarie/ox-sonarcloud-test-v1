@@ -5,6 +5,7 @@ import Button from "../../../Shared/Button";
 import { useEditOrderMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { Query } from "../../../../lib/types/shared";
 import { useClientsQuery } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
+import { Client } from "../../../../lib/types/clients";
 
 interface EditOrderClientProps {
   orderId: Query;
@@ -53,7 +54,7 @@ const EditOrderClient: FC<EditOrderClientProps> = ({
           rules={[{ required: true, message: "Select a client to continue" }]}
         >
           {data &&
-            data.payload?.content.map((el) => (
+            data.payload?.content.map((el: Client) => (
               <Option value={el.id} key={el.id} title={el.names}>
                 {el.names}
               </Option>
