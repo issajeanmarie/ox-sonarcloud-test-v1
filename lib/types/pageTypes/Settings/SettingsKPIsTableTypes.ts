@@ -1,4 +1,6 @@
 export type SettingsKPIsTableTypes = {
-  key: number;
-  depot: string;
+  depotId: number;
+  depotName: string;
+  targetPerDay: number;
+  targetPerKm: number;
 };

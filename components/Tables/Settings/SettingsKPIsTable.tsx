@@ -1,13 +1,18 @@
 import { Table } from "antd";
 import Typography from "antd/lib/typography";
-import { SettingsKPIsTableData } from "../Dummies/SettingsKPIsTableData";
 import { SettingsKPIsTableTypes } from "../../../lib/types/pageTypes/Settings/SettingsKPIsTableTypes";
 import RowsWrapper from "../RowsWrapper";
 import CustomInput from "../../Shared/Input";
+import { FC } from "react";
+import { SettingsKPIsTableProps } from "../../../lib/types/pageTypes/Settings/SettingsKPIsTableProps";
 
 const { Text } = Typography;
 
-const SettingsKPIsTable = () => {
+const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({
+  data,
+  handlePostTargetPerDaykpi,
+  handlePostTargetPerKmykpi
+}) => {
   const columns = [
     {
       title: (
@@ -16,15 +21,15 @@ const SettingsKPIsTable = () => {
           <span>Depot</span>
         </div>
       ),
-      key: "Depot",
+      key: "name",
       render: (
         text: SettingsKPIsTableTypes,
         record: SettingsKPIsTableTypes
       ) => (
         <RowsWrapper>
           <div className="flex gap-10">
-            <Text className="normalText opacity_56">{record.key}</Text>
-            <Text className="normalText fowe700">{record.depot}</Text>
+            <Text className="normalText opacity_56">{record.depotId}</Text>
+            <Text className="normalText fowe700">{record.depotName}</Text>
           </div>
         </RowsWrapper>
       )
@@ -32,10 +37,16 @@ const SettingsKPIsTable = () => {
     {
       title: "Revenue",
       key: "Revenue",
-      render: () => (
+      render: (
+        text: SettingsKPIsTableTypes,
+        record: SettingsKPIsTableTypes
+      ) => (
         <RowsWrapper>
           <CustomInput
+            onChange={handlePostTargetPerDaykpi}
+            defaultValue={record?.targetPerDay}
             type="text"
+            inputType="number"
             placeholder="Type revenue..."
             name="revenue"
             suffixIcon={
@@ -52,10 +63,16 @@ const SettingsKPIsTable = () => {
     {
       title: "Revenue/km",
       key: "Revenuekm",
-      render: () => (
+      render: (
+        text: SettingsKPIsTableTypes,
+        record: SettingsKPIsTableTypes
+      ) => (
         <RowsWrapper>
           <CustomInput
+            onChange={handlePostTargetPerKmykpi}
+            defaultValue={record?.targetPerKm}
             type="text"
+            inputType="number"
             placeholder="Type revenue/km..."
             name="rperkm"
             suffixIcon={
@@ -74,8 +91,8 @@ const SettingsKPIsTable = () => {
     <Table
       className="bordered_table"
       columns={columns}
-      dataSource={SettingsKPIsTableData}
-      rowKey={(record) => record.key}
+      dataSource={data}
+      rowKey={(record) => record.depotId}
       pagination={false}
       bordered={false}
       scroll={{ x: 0 }}

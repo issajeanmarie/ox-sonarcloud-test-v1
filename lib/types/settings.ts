@@ -37,3 +37,11 @@ export type KPI = {
   targetPerKm: number;
   kpi: [];
 };
+
+export type AddKPI = {
+  kpis: {
+    depotId: number;
+    targetPerDay: number;
+    targetPerKm: number;
+  };
+};

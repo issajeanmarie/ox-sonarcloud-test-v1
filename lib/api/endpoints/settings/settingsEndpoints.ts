@@ -2,7 +2,8 @@ import {
   ProfileResponse,
   ProfileTypes,
   PasswordTypes,
-  KPIsResponse
+  KPIsResponse,
+  AddKPI
 } from "../../../types/settings";
 import { ApiResponseMetadata, GenericResponse } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -50,6 +51,14 @@ const settingsApi = baseAPI.injectEndpoints({
         url: "/kpis/current",
         method: "GET"
       })
+    }),
+    addKpi: builder.mutation<ApiResponseMetadata<KPIsResponse>, AddKPI>({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: "/kpis",
+        method: "POST",
+        body: DTO
+      })
     })
   })
 });
@@ -58,5 +67,6 @@ export const {
   useSettingsQuery,
   usePersonalInfoMutation,
   useChangePasswordMutation,
-  useGetKpisQuery
+  useGetKpisQuery,
+  useAddKpiMutation
 } = settingsApi;
