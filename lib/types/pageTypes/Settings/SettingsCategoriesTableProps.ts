@@ -17,4 +17,6 @@ export type SettingsCategoriesTableProps = {
   isEditModalVisible: boolean;
   form: any;
   categoriesFetching: boolean;
+  isParentingCategory: boolean;
+  handleMakeCategoryParent: (id: number) => void;
 };

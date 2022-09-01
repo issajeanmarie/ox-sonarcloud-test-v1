@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * AUTH TYPES
  * @author Elie K. Gashagaza
@@ -64,4 +65,8 @@ export type UpdateCategoryRequest = {
   id: number;
   name: string;
   parentCategoryId: string | null;
+};
+
+export type MakeCategoryParentRequest = {
+  id: number;
 };

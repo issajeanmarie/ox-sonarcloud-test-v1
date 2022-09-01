@@ -7,7 +7,8 @@ import {
   CategoriesResponse,
   AddCategory,
   DeleteCategoryRequest,
-  UpdateCategoryRequest
+  UpdateCategoryRequest,
+  MakeCategoryParentRequest
 } from "../../../types/settings";
 import { ApiResponseMetadata, GenericResponse } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -110,6 +111,16 @@ const settingsApi = baseAPI.injectEndpoints({
           parentCategoryId: DTO?.parentCategoryId
         }
       })
+    }),
+    makeCategoryParent: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      MakeCategoryParentRequest
+    >({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: `/categories/${DTO?.id}/make-parent`,
+        method: "PUT"
+      })
     })
   })
 });
@@ -123,5 +134,6 @@ export const {
   useGetCategoriesQuery,
   useAddCategoryMutation,
   useDeleteCategoryMutation,
-  useUpdateCategoryMutation
+  useUpdateCategoryMutation,
+  useMakeCategoryParentMutation
 } = settingsApi;

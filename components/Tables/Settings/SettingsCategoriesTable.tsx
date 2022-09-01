@@ -27,7 +27,9 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
   handleEditCancel,
   isEditModalVisible,
   form,
-  categoriesFetching
+  categoriesFetching,
+  handleMakeCategoryParent,
+  isParentingCategory
 }) => {
   //Change the subcategory keyname to children keyname
   const _data = data?.map(({ subCategories: children, ...rest }: any) => ({
@@ -41,8 +43,9 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
       key: "id",
       render: (
         text: SettingsCategoriesTableTypes,
-        record: SettingsCategoriesTableTypes
-      ) => <Text className="normalText fowe700">{record?.id}</Text>
+        record: SettingsCategoriesTableTypes,
+        index: number
+      ) => <Text className="normalText fowe700">{index + 1}</Text>
     },
     {
       title: "Category",
@@ -50,7 +53,7 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
       render: (
         text: SettingsCategoriesTableTypes,
         record: SettingsCategoriesTableTypes
-      ) => <Text className="normalText fowe700">{record?.name}</Text>
+      ) => <span className="black">{record?.name}</span>
     },
     {
       title: "action",
@@ -61,6 +64,7 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
       ) => (
         <div className="flex items-center gap-3 justify-end">
           <CustomButton
+            className="add_category"
             onClick={() => showModal(record?.id)}
             type="secondary"
             size="icon"
@@ -73,6 +77,16 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
               />
             }
           />
+
+          <CustomButton
+            className="make_parent_category"
+            onClick={() => handleMakeCategoryParent(record?.id)}
+            type="secondary"
+            size="icon"
+            loading={isParentingCategory}
+          >
+            make it parent
+          </CustomButton>
 
           <CustomButton
             onClick={() => showEditModal(record)}
