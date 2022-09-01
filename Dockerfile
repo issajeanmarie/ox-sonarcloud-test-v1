@@ -6,6 +6,7 @@ RUN yarn
 FROM node:lts as builder
 WORKDIR /my-project
 ARG NEXT_PUBLIC_API_HOST
+ARG NEXT_PUBLIC_API_JWT_KEY
 RUN echo $NEXT_PUBLIC_API_HOST
 
 COPY . .
