@@ -63,7 +63,8 @@ const Entry = ({
   placeholder,
   onChange,
   showSearch,
-  onDateChange
+  onDateChange,
+  defaultValue
 }: any) => {
   // Google location
 
@@ -118,6 +119,7 @@ const Entry = ({
           <Form.Item name={name} rules={rules}>
             <Input
               // onChange={onChange}
+              defaultValue={defaultValue}
               className={`my_input ${size === "small" && "sm"}`}
               placeholder={placeholder}
               type={inputType}

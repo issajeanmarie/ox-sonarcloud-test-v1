@@ -194,6 +194,32 @@
   display: none;
 }
 
+/* TABLE WITH CHILDREN */
+.ant-table-row.ant-table-row-level-0
+  .ant-table-cell.ant-table-cell-with-append
+  span {
+  font-weight: 900 !important;
+}
+
+.ant-table-row.ant-table-row-level-1
+  .ant-table-cell.ant-table-cell-with-append
+  span {
+  font-weight: 400 !important;
+  color: #313622 !important;
+}
+.ant-table-row.ant-table-row-level-0 .black {
+  font-weight: 900 !important;
+}
+/* REMOVE THE PLUS BUTTON ON SUB TABLES */
+.ant-table-row.ant-table-row-level-1 .add_category {
+  display: none !important;
+}
+/* REMOVE THE MAKE PARENT BUTTON ON CATEGORIES  */
+.ant-table-row.ant-table-row-level-0 .make_parent_category {
+  display: none !important;
+}
+/* TABLE WITH CHILDREN END*/
+
 .ant-table-thead > tr > .ant-table-cell {
   font-weight: 700;
 }
