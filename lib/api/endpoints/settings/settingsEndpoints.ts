@@ -3,7 +3,11 @@ import {
   ProfileTypes,
   PasswordTypes,
   KPIsResponse,
-  AddKPI
+  AddKPI,
+  CategoriesResponse,
+  AddCategory,
+  DeleteCategoryRequest,
+  UpdateCategoryRequest
 } from "../../../types/settings";
 import { ApiResponseMetadata, GenericResponse } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -59,6 +63,53 @@ const settingsApi = baseAPI.injectEndpoints({
         method: "POST",
         body: DTO
       })
+    }),
+
+    //Categories
+    getCategories: builder.query<ApiResponseMetadata<CategoriesResponse>, void>(
+      {
+        providesTags: ["Settings"],
+        query: () => ({
+          url: "/categories",
+          method: "GET"
+        })
+      }
+    ),
+    addCategory: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      AddCategory
+    >({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: "/categories",
+        method: "POST",
+        body: DTO
+      })
+    }),
+    deleteCategory: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      DeleteCategoryRequest
+    >({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: `/categories/${DTO?.id}`,
+        method: "DELETE",
+        body: DTO
+      })
+    }),
+    updateCategory: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      UpdateCategoryRequest
+    >({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: `/categories/${DTO?.id}`,
+        method: "PUT",
+        body: {
+          name: DTO?.name,
+          parentCategoryId: DTO?.parentCategoryId
+        }
+      })
     })
   })
 });
@@ -68,5 +119,9 @@ export const {
   usePersonalInfoMutation,
   useChangePasswordMutation,
   useGetKpisQuery,
-  useAddKpiMutation
+  useAddKpiMutation,
+  useGetCategoriesQuery,
+  useAddCategoryMutation,
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation
 } = settingsApi;

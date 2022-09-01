@@ -11,19 +11,19 @@ type AddCategoryTypes = {
   isAddingCategory: boolean;
 };
 
-const AddCategory: FC<AddCategoryTypes> = ({
+const AddSubCategoryForm: FC<AddCategoryTypes> = ({
   onAddCategoryFinish,
   isAddingCategory
 }) => {
   return (
     <Form
-      name="AddCategory"
+      name="AddSubCategoryForm"
       onFinish={onAddCategoryFinish}
       layout="vertical"
-      title="AddCategory"
+      title="AddSubCategory"
     >
       <Row className="flex items-center gap-4">
-        <Col>
+        <Col flex="auto">
           <Input
             type="text"
             name="name"
@@ -31,9 +31,9 @@ const AddCategory: FC<AddCategoryTypes> = ({
             rules={requiredInput}
           />
         </Col>
-        <Col>
+        <Col flex="none">
           <Button loading={isAddingCategory} type="primary" htmlType="submit">
-            ADD CATEGORY
+            ADD SUB CATEGORY
           </Button>
         </Col>
       </Row>
@@ -41,4 +41,4 @@ const AddCategory: FC<AddCategoryTypes> = ({
   );
 };
 
-export default AddCategory;
+export default AddSubCategoryForm;

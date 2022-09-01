@@ -30,6 +30,11 @@ export type KPIsResponse = {
   map: any;
 };
 
+export type CategoriesResponse = {
+  data: [];
+  map: any;
+};
+
 export type KPI = {
   depotId: number;
   depotName: string;
@@ -44,4 +49,19 @@ export type AddKPI = {
     targetPerDay: number;
     targetPerKm: number;
   };
+};
+
+export type AddCategory = {
+  name: string;
+  parentCategoryId: string | null;
+};
+
+export type DeleteCategoryRequest = {
+  id: number;
+};
+
+export type UpdateCategoryRequest = {
+  id: number;
+  name: string;
+  parentCategoryId: string | null;
 };
