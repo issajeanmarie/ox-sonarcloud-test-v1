@@ -5,13 +5,9 @@ import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute
 import { JWT_SECRET } from "../../../config/constants";
 
 const OrdersPage = () => {
-  console.log(
-    "JWT ENV VARIABLE: ",
-    JWT_SECRET || "CAN NOT FIND JWT ENV VARIABLE"
-  );
-
   return (
     <Layout>
+      <p>JWT: {JWT_SECRET || "Not available"}</p>
       <Orders />
     </Layout>
   );
