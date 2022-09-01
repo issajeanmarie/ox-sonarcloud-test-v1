@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ClientsTable from "../../../components/Analytics/Tables/Clients/ClientsTable";
+import ClientsTable from "../../../components/Tables/Clients/ClientsTable";
 import ClientsTopNavigator from "../../../components/Clients/ClientsTopNavigator";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";

@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
-import { ClientsTableTypes } from "../../../../lib/types/pageTypes/Clients/ClientsTableTypes";
-import { ClientsTableProps } from "../../../../lib/types/pageTypes/Clients/ClientsTableProps";
+import { ClientsTableTypes } from "../../../lib/types/pageTypes/Clients/ClientsTableTypes";
+import { ClientsTableProps } from "../../../lib/types/pageTypes/Clients/ClientsTableProps";
 import RowsWrapper from "../RowsWrapper";
-import { numbersFormatter } from "../../../../helpers/numbersFormatter";
-import CustomButton from "../../../Shared/Button";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
+import CustomButton from "../../Shared/Button";
 import { ClientsTableData } from "../Dummies/ClientsTableData";
 import { Image } from "antd";
 import { FC } from "react";
-import ActionModal from "../../../Shared/ActionModal";
-import { changeRoute } from "../../../../helpers/routesHandler";
-import { routes } from "../../../../config/route-config";
+import ActionModal from "../../Shared/ActionModal";
+import { changeRoute } from "../../../helpers/routesHandler";
+import { routes } from "../../../config/route-config";
 
 const { Text } = Typography;
 

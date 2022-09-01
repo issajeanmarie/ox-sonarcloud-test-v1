@@ -1,6 +1,6 @@
 import { Col } from "antd";
 import React from "react";
-import ClientOrderHistoryTable from "../../../Analytics/Tables/Clients/ClientOrderHistoryTable";
+import ClientOrderHistoryTable from "../../../Tables/Clients/ClientOrderHistoryTable";
 import Header from "./Header";
 
 const SingleClientLeft = () => {
