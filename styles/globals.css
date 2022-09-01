@@ -851,7 +851,7 @@ body {
 }
 
 .toggle_grey {
-  color: var(--color_toggle_grey);
+  color: var(--color_toggle_grey) !important;
 }
 
 .yellow {
