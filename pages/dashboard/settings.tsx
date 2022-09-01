@@ -18,7 +18,8 @@ import {
   useGetCategoriesQuery,
   useAddCategoryMutation,
   useDeleteCategoryMutation,
-  useUpdateCategoryMutation
+  useUpdateCategoryMutation,
+  useMakeCategoryParentMutation
 } from "../../lib/api/endpoints/settings/settingsEndpoints";
 import { SuccessMessage } from "../../components/Shared/Messages/SuccessMessage";
 import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
@@ -49,6 +50,8 @@ const Settings = () => {
     useDeleteCategoryMutation();
   const [updateCategory, { isLoading: isUpdatingCategory }] =
     useUpdateCategoryMutation();
+  const [makeCategoryParent, { isLoading: isParentingCategory }] =
+    useMakeCategoryParentMutation();
   const Links: Header_Links[] = [
     {
       label: "PREFERENCES",
@@ -121,6 +124,17 @@ const Settings = () => {
 
   const handleDeleteCategory = (id: number) => {
     deleteCategory({
+      id: id
+    })
+      .unwrap()
+      .then((res: GenericResponse) => {
+        SuccessMessage(res?.message);
+      })
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
+
+  const handleMakeCategoryParent = (id: number) => {
+    makeCategoryParent({
       id: id
     })
       .unwrap()
@@ -257,6 +271,8 @@ const Settings = () => {
                   isEditModalVisible={isEditModalVisible}
                   form={form}
                   categoriesFetching={categoriesFetching}
+                  handleMakeCategoryParent={handleMakeCategoryParent}
+                  isParentingCategory={isParentingCategory}
                 />
               )}
             </SettingsCardWrapper>

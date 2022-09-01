@@ -89,3 +89,7 @@ export type GetRepairService = {
   size: number | undefined;
   query: string | undefined;
 };
+
+export type MakeCategoryParentRequest = {
+  id: number;
+};
