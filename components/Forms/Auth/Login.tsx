@@ -17,7 +17,6 @@ import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { setCredentials } from "../../../lib/redux/slices/authSlice";
 import { LoginResponse } from "../../../lib/types/auth";
 import { BackendErrorTypes } from "../../../lib/types/shared";
-import { JWT_SECRET } from "../../../config/constants";
 
 const { Title } = Typography;
 
@@ -40,8 +39,6 @@ const Login = () => {
 
   return (
     <Form name="Login" onFinish={onFinish} layout="vertical" title="Login">
-      <p>JWT: {JWT_SECRET || "Not available"}</p>
-
       <Row>
         <Col flex="auto">
           <Input
