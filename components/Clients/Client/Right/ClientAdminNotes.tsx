@@ -1,7 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Col, Divider, Image, Row } from "antd";
+import { Col, Form, Image, Row } from "antd";
 import React from "react";
-import CustomButton from "../../../Shared/Button/button";
+import { requiredInput } from "../../../../lib/validation/InputValidations";
+import Button from "../../../Shared/Button";
+import Input from "../../../Shared/Input";
 
 const ClientAdminNotes = () => {
   return (
@@ -14,7 +16,7 @@ const ClientAdminNotes = () => {
         </Col>
 
         <Col flex="none">
-          <CustomButton
+          <Button
             type="secondary"
             size="icon"
             icon={
@@ -28,9 +30,27 @@ const ClientAdminNotes = () => {
           />
         </Col>
       </Row>
-      <Divider style={{ padding: 0, margin: 0 }} />
 
-      <div className="w-full p-8">nots form</div>
+      <div className="w-full p-8">
+        <Form name="AddAdminNotes" layout="vertical" title="">
+          <Row className="flex justify-end gap-8">
+            <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+              <Input
+                type="text_area"
+                name="note"
+                label="Note"
+                placeholder="Type something"
+                rules={requiredInput}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+              <Button type="primary" htmlType="submit">
+                SAVE NOTE
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </div>
     </Row>
   );
 };

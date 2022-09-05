@@ -234,6 +234,10 @@ body {
   color: var(--color_yellow_faded_text) !important;
 }
 
+.yellow_faded_bg {
+  background-color: var(--color_yellow_faded_text) !important;
+}
+
 .orage {
   color: var(--color_orage) !important;
 }

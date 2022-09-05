@@ -2,9 +2,11 @@ import { Col, Image, Row, Typography } from "antd";
 import React from "react";
 import Input from "../Shared/Input";
 import CustomButton from "../Shared/Button/button";
+
 import { FC } from "react";
 import { ClientsTopNavigatorTypes } from "../../lib/types/pageTypes/Clients/ClientsTopNavigatorTypes";
-import Modal from "../Shared/Modal";
+import ModalWrapper from "../Modals/ModalWrapper";
+import AddNewClient from "../Forms/Clients/AddNewClient";
 
 const { Text } = Typography;
 
@@ -81,12 +83,13 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
           <span className="text-sm">NEW CLIENT</span>
         </CustomButton>
       </Col>
-      <Modal
+      <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
+        title="NEW CLIENT"
       >
-        ok
-      </Modal>
+        <AddNewClient />
+      </ModalWrapper>
     </Row>
   );
 };

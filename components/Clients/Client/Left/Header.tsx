@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <Row className="bg-white py-4 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1] flex justify-between">
       <Col className="flex items-center gap-4">
-        <span>Order history (21)</span>
+        <span className="font-bold">Order history (21)</span>
         <Input
           placeholder="Filter: All orders"
           type="select"
@@ -27,8 +27,8 @@ const Header = () => {
           }
         />
       </Col>
-      <Col className="flex items-center gap-2">
-        <span className="text-muted">Total pending:</span>
+      <Col className="flex items-center gap-4">
+        <span className=" opacity_56">Total pending:</span>
         <span className="font-bold red">88,000 Rwf</span>
       </Col>
     </Row>

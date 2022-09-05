@@ -1,6 +1,7 @@
-import { Col, Divider, Image, Row } from "antd";
+import { Col, Divider, Image, Row, Tag } from "antd";
 import React from "react";
 import CustomButton from "../../../Shared/Button/button";
+import { ClientTags } from "../../Dummies/ClientTags";
 
 const ClientTages = () => {
   return (
@@ -29,7 +30,13 @@ const ClientTages = () => {
       </Row>
       <Divider style={{ padding: 0, margin: 0 }} />
 
-      <div className="w-full p-8">tags</div>
+      <div className="w-full p-8">
+        {ClientTags?.map((tag) => (
+          <Tag key={tag?.id} closable>
+            {tag?.name}
+          </Tag>
+        ))}
+      </div>
     </Row>
   );
 };

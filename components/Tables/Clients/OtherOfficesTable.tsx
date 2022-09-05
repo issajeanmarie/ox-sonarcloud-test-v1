@@ -1,38 +1,48 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
-import { ClientOrderRecipientTableTypes } from "../../../lib/types/pageTypes/Clients/ClientOrderRecipientTypes";
+import { OtherOfficesTableTypes } from "../../../lib/types/pageTypes/Clients/OtherOfficesTableTypes";
 import RowsWrapper from "../RowsWrapper";
-import { ClientOrderRecipientData } from "../Dummies/ClientOrderRecipientData";
+import { OtherOfficesTableData } from "../Dummies/OtherOfficesTableData";
 
 const { Text } = Typography;
 
-const ClientOrderRecipientTable = () => {
+const OtherOfficesTable = () => {
   const columns: any = [
     {
       title: (
         <div className="flex gap-10">
           <span>#</span>
-          <span>name</span>
+          <span>office</span>
         </div>
       ),
-      key: "name",
+      key: "office",
       render: (
-        text: ClientOrderRecipientTableTypes,
-        record: ClientOrderRecipientTableTypes
+        text: OtherOfficesTableTypes,
+        record: OtherOfficesTableTypes
       ) => (
         <RowsWrapper>
           <div className="flex gap-10">
             <Text className="normalText opacity_56">{record?.key}</Text>
             <div className="flex flex-col">
-              <Text className="normalText fowe900">{record?.name}</Text>
-              <Text className="normalText opacity_56">{record?.telphone}</Text>
+              <Text className="normalText fowe900">{record?.office}</Text>
             </div>
           </div>
         </RowsWrapper>
       )
     },
-
+    {
+      title: "Cordinates",
+      key: "Cordinates",
+      render: (
+        text: OtherOfficesTableTypes,
+        record: OtherOfficesTableTypes
+      ) => (
+        <RowsWrapper>
+          <Text className="normalText opacity_56">{record?.cordinates}</Text>
+        </RowsWrapper>
+      )
+    },
     {
       title: "action",
       key: "action",
@@ -43,7 +53,7 @@ const ClientOrderRecipientTable = () => {
     <Table
       className="data_table  noborder"
       columns={columns}
-      dataSource={ClientOrderRecipientData}
+      dataSource={OtherOfficesTableData}
       rowKey={(record) => record?.key}
       pagination={false}
       bordered={false}
@@ -53,4 +63,4 @@ const ClientOrderRecipientTable = () => {
   );
 };
 
-export default ClientOrderRecipientTable;
+export default OtherOfficesTable;

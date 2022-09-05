@@ -29,7 +29,21 @@ const ClientOrderDays = () => {
       </Row>
       <Divider style={{ padding: 0, margin: 0 }} />
 
-      <div className="w-full p-8">order days</div>
+      <Row justify="space-between" className="w-full p-8">
+        {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+          <Col key={`${index * 2}-${day}`}>
+            <span
+              className={`rounded-full ${
+                day === "M" || day === "F"
+                  ? "yellow_faded_bg text-white"
+                  : "bg_white_input"
+              }  day_circle cursor-pointer`}
+            >
+              {day}
+            </span>
+          </Col>
+        ))}
+      </Row>
     </Row>
   );
 };

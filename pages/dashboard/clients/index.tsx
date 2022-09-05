@@ -21,7 +21,7 @@ const Clients = () => {
 
   return (
     <Layout>
-      <div className="p-5 sticky top-0 right-0 left-0 z-30">
+      <div className="p-5 sticky top-0 right-0 left-0 z-30 bg-[#f8f8f8]">
         <ClientsTopNavigator
           isModalVisible={isModalVisible}
           showModal={showModal}

@@ -354,3 +354,17 @@
 .ant-picker-input > input::placeholder {
   font-size: 12px !important;
 }
+
+/* TAG */
+.ant-tag {
+  padding: 4px !important;
+  background: var(--color_input_white) !important;
+  border: 2px solid var(--color_input_white) !important;
+  /* min-width: 100px !important; */
+}
+
+.ant-tag .anticon > * {
+  color: var(--color_yellow_faded) !important;
+  display: flex !important;
+  align-items: center !important;
+}
