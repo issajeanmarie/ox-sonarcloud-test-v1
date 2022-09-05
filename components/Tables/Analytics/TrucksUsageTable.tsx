@@ -2,7 +2,7 @@
 import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
 import { TrucksUsageTableTypes } from "../../../lib/types/pageTypes/Analytics/TrucksUsageTableTypes";
-import RowsWrapper from "./RowsWrapper";
+import RowsWrapper from "../RowsWrapper";
 import { truckTableTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticTrucksTypes";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";

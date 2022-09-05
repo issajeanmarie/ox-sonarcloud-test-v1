@@ -1,15 +1,17 @@
 import { FC, SetStateAction } from "react";
 import { Modal } from "antd";
 
-interface ActionModalProps {
+interface ModalProps {
   isModalVisible: boolean;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
+  title: string;
 }
 
-const ModalWrapper: FC<ActionModalProps> = ({
+const ModalWrapper: FC<ModalProps> = ({
   isModalVisible,
   setIsModalVisible,
-  children
+  children,
+  title
 }) => {
   const handleOk = () => {
     setIsModalVisible(false);
@@ -21,13 +23,13 @@ const ModalWrapper: FC<ActionModalProps> = ({
 
   return (
     <Modal
-      title={false}
+      className="ox-modal"
+      title={<span className="font-bold text-2xl">{title}</span>}
       width={550}
       footer={false}
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={handleCancel}
-      closable={false}
       centered
     >
       {children}

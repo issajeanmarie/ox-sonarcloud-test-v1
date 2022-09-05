@@ -27,6 +27,10 @@ export const routes = {
     name: "Clients",
     url: "/dashboard/clients"
   },
+  Client: {
+    name: "Client",
+    url: "/dashboard/clients/client"
+  },
   Trucks: {
     name: "Trucks",
     url: "/dashboard/trucks"

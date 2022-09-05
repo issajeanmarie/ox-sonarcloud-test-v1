@@ -215,7 +215,7 @@ body {
 }
 
 .toggle_grey {
-  color: var(--color_toggle_grey);
+  color: var(--color_toggle_grey) !important;
 }
 
 .yellow {
@@ -232,6 +232,10 @@ body {
 
 .yellow_faded_text {
   color: var(--color_yellow_faded_text) !important;
+}
+
+.yellow_faded_bg {
+  background-color: var(--color_yellow_faded_text) !important;
 }
 
 .orage {

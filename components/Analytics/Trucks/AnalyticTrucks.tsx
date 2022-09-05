@@ -4,7 +4,7 @@ import AnalyticTopContentWrapper from "../Wrappers/AnalyticTopContentWrapper";
 import CardColWrapper from "../Cards/CardColWrapper";
 import CardRowWrapper from "../Cards/CardRowWrapper";
 import MediumCard from "../Cards/MediumCard";
-import TrucksUsageTable from "../Tables/TrucksUsageTable";
+import TrucksUsageTable from "../../Tables/Analytics/TrucksUsageTable";
 // import CustomButton from "../../Shared/Button/button";
 import TrucksUsage from "./TrucksUsage";
 import { AnalyticTrucksTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticTrucksTypes";

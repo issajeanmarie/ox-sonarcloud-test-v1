@@ -170,7 +170,7 @@ const Entry = ({
           <Form.Item name={name} rules={rules}>
             <Input.TextArea
               className="my_input"
-              rows={6}
+              rows={4}
               placeholder={placeholder}
             />
           </Form.Item>
