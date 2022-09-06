@@ -6,6 +6,7 @@ import { useCreateTruckMutation } from "../../lib/api/endpoints/Trucks/trucksEnd
 import { yearsList } from "../../helpers/yearsList";
 import { BackendErrorTypes } from "../../lib/types/shared";
 import { useDispatch } from "react-redux";
+import { useDepotsQuery } from "../../lib/api/endpoints/Depots/depotEndpoints";
 import {
   CreateTruckRequest,
   CreateTruckResponse
@@ -21,10 +22,17 @@ type Types = {
 
 const NewTruckModal = ({ isVisible, setIsVisible }: Types) => {
   const years = yearsList().map((year) => ({ label: `${year}`, value: year }));
+
   const [form] = Form.useForm();
 
+  const { data } = useDepotsQuery();
   const [createTruck, { isLoading }] = useCreateTruckMutation();
   const dispatch = useDispatch();
+
+  const depots = data?.payload?.map((depot) => ({
+    label: `${depot.name}`,
+    value: depot.id
+  }));
 
   const onFinish = (values: CreateTruckRequest) => {
     createTruck(values)
@@ -249,10 +257,7 @@ const NewTruckModal = ({ isVisible, setIsVisible }: Types) => {
                 type="select"
                 label="Depot"
                 placeholder="Choose depot"
-                options={[
-                  { label: "Depot one", value: 1 },
-                  { label: "Depot two", value: 2 }
-                ]}
+                options={depots}
                 rules={requiredField("Depot")}
               />
             </div>

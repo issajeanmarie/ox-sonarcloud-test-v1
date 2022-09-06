@@ -14,7 +14,7 @@ interface ButtonProps {
   icon?: React.ReactElement;
   className?: string;
   htmlType?: "button" | "submit" | "reset";
-  onClick?: () => void;
+  onClick?: (value: any) => any;
 }
 
 const CustomButton: FC<ButtonProps> = ({

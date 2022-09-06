@@ -8,7 +8,7 @@ export type LoadMoreTrucksResponse = {
   payload: string;
 };
 
-export type CreateTruckRequest = {
+export interface CreateTruckRequest {
   depotId: 0;
   model: string;
   plateNumber: string;
@@ -23,7 +23,7 @@ export type CreateTruckRequest = {
   tireSize: string;
   trackingUnitSerialNumber: string;
   fuelCardAssigned: string;
-};
+}
 
 export type LoadMoreTrucksRequest = {
   page?: number;
@@ -37,3 +37,35 @@ export type CreateTruckResponse = {
   message: string;
   payload: string;
 };
+
+export type ToggleTruckRequest = {
+  id: number;
+};
+
+export type ToggleTruckResponse = {
+  message: string;
+  payload: string;
+};
+
+export type SingleLogTypes = {
+  odometer: string;
+  images: [];
+  inDate: string;
+  outDate: string;
+  serviceDone: [];
+  spareParts: [];
+  description: string;
+  id: number;
+  cost: number;
+};
+
+export type SingleTruckIssueTypes = {
+  id: number;
+  createdAt: string;
+  description: string;
+  status: string;
+};
+
+export interface TruckDataTypes extends CreateTruckRequest {
+  truck: any;
+}

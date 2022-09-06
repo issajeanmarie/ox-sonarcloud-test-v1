@@ -16,34 +16,6 @@ import useOnClickOutside from "../../../utils/hooks/useOutsideClick";
 const { Option } = Select;
 const { Text } = Typography;
 
-// interface EntryProps {
-//   type:
-//     | "select"
-//     | "text"
-//     | "password"
-//     | "text_area"
-//     | "date"
-//     | "image"
-//     | "location";
-//   name: string;
-//   isGroupDropdown?: boolean;
-//   inputType?: string;
-//   imageCount?: number;
-//   isLoading?: boolean;
-//   options?: { label: string; value: string | number }[];
-//   suffixIcon?: React.ReactElement | string;
-//   disabled?: boolean;
-//   images?: any;
-//   setImages?: React.SetStateAction<React.Dispatch<any>>;
-//   size?: "small" | "large";
-//   label?: string;
-//   placeholder?: string;
-//   className?: string;
-//   rules?: any;
-//   onChange?: (val: any) => any;
-//   showSearch?: boolean;
-// }
-
 const Entry = ({
   type,
   name,
@@ -64,7 +36,9 @@ const Entry = ({
   onChange,
   showSearch,
   onDateChange,
-  defaultValue
+  defaultValue,
+  initialValue,
+  format
 }: any) => {
   // Google location
 
@@ -86,7 +60,7 @@ const Entry = ({
   const placeSuggestionsRef = useRef<any>();
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
-    setValue(e.target.value);
+    setValue(e?.target?.value);
   };
 
   const handleSelect = (val: string): void => {
@@ -116,7 +90,7 @@ const Entry = ({
       return (
         <Fragment>
           {label && <Text className="heading2 mb-[8px]">{label}</Text>}
-          <Form.Item name={name} rules={rules}>
+          <Form.Item name={name} rules={rules} initialValue={initialValue}>
             <Input
               // onChange={onChange}
               defaultValue={defaultValue}
@@ -200,6 +174,7 @@ const Entry = ({
               name={name}
               suffixIcon={suffixIcon}
               placeholder={placeholder}
+              format={format ? format : false}
             />
           </Form.Item>
         </Fragment>

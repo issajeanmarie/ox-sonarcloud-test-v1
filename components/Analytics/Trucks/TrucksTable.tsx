@@ -1,18 +1,25 @@
-import { FC } from "react";
+import { FC, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Table from "antd/lib/table";
 import Row from "antd/lib/row";
+import moment from "moment";
 import Col from "antd/lib/col";
+import info from "antd/lib/message";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
 import CustomButton from "../../../components/Shared/Button/button";
 import Loader from "../../../components/Shared/Loader";
-import moment from "moment";
+import { useToggleTruckMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { displayTrucks } from "../../../lib/redux/slices/trucksSlice";
+import { NewTruckModal } from "../../../components/Modals";
+import { routes } from "../../../config/route-config";
+import { useRouter } from "next/router";
 
 const { Column } = Table;
 const { Text } = Typography;
 
 interface TrucksProps {
-  data: [];
+  data: any;
   isLoading: boolean;
 }
 
@@ -30,9 +37,58 @@ type SingleTruckTypes = {
   active: boolean;
 };
 
+type State = {
+  trucks: any;
+};
+
 const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
+  const [loadingBtn, setLoadingBtn] = useState<number | null>(null);
+  const [toggleTruck] = useToggleTruckMutation();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const trucksState = useSelector((state: State) => state.trucks.displayTrucks);
+
+  const handleToggleTruck = (id: number) => {
+    setLoadingBtn(id);
+
+    toggleTruck({
+      id: id
+    })
+      .unwrap()
+      .then((res: any) => {
+        const newResult: object[] = [];
+
+        trucksState?.content?.map((result: SingleTruckTypes) => {
+          if (result.id !== res?.payload?.id) {
+            newResult.push(result);
+          } else {
+            newResult.push(res?.payload);
+          }
+        });
+
+        const newPayload = {
+          message: "Test",
+          payload: {
+            totalPages: 10000,
+            content: newResult
+          }
+        };
+
+        dispatch(displayTrucks({ ...newPayload, replace: true }));
+        setLoadingBtn(null);
+      })
+      .catch((err) => {
+        setLoadingBtn(null);
+        if (err) info.error(err?.data?.message || "Something went wrong");
+      });
+  };
+
   return (
     <div className="mx-4">
+      <NewTruckModal isVisible={isVisible} setIsVisible={setIsVisible} />
+
       {isLoading ? (
         <Loader />
       ) : (
@@ -150,10 +206,10 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             width="20%"
             key="key"
             title="Action"
-            render={() => {
+            render={(record: any) => {
               const child = (
                 <Row align="middle" gutter={16} wrap={false}>
-                  <Col>
+                  <Col onClick={() => setIsVisible(true)}>
                     <CustomButton
                       type="normal"
                       size="icon"
@@ -168,14 +224,17 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                     />
                   </Col>
 
-                  <Col>
+                  <Col onClick={() => handleToggleTruck(record?.id)}>
                     <CustomButton
                       type="normal"
                       size="icon"
                       className="bg_danger"
+                      loading={record?.id === loadingBtn}
                       icon={
                         <Image
-                          src="/icons/ic-media-stop.svg"
+                          src={`/icons/ic-media-${
+                            record?.active ? "stop" : "play"
+                          }.svg`}
                           alt=""
                           width={16}
                           preview={false}
@@ -184,7 +243,11 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                     />
                   </Col>
 
-                  <Col>
+                  <Col
+                    onClick={() =>
+                      router.push(`${routes.Trucks.url}/${record.id}`)
+                    }
+                  >
                     <CustomButton type="view" size="small">
                       View
                     </CustomButton>
