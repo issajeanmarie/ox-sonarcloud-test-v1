@@ -1,4 +1,4 @@
-import { Col, Image, Row, Typography } from "antd";
+import { Col, Image, Row, Select, Typography } from "antd";
 import React from "react";
 import Input from "../Shared/Input";
 import CustomButton from "../Shared/Button/button";
@@ -7,13 +7,30 @@ import { FC } from "react";
 import { ClientsTopNavigatorTypes } from "../../lib/types/pageTypes/Clients/ClientsTopNavigatorTypes";
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewClient from "../Forms/Clients/AddNewClient";
+import { numbersFormatter } from "../../helpers/numbersFormatter";
+import { ExtraSmallSpinLoader } from "../Shared/Loaders/Loaders";
 
 const { Text } = Typography;
+const { Option } = Select;
+
+type ObjectTypes = {
+  id: number;
+  name: string;
+};
 
 const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   isModalVisible,
   showModal,
-  setIsModalVisible
+  setIsModalVisible,
+  clients,
+  isClientsLoading,
+  handleSearch,
+  isCategoriesLoading,
+  categories,
+  onCategoryChange,
+  onSortChange,
+  handleDownloadClients,
+  isDownloadingClientsLoading
 }) => {
   return (
     <Row
@@ -21,8 +38,27 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       className="bg-white py-4 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1]"
     >
       <Col className="flex items-center gap-4">
-        <Text className="heading2">520 Clients</Text>
+        <Text className="heading2 flex items-center">
+          {isClientsLoading ? (
+            <ExtraSmallSpinLoader />
+          ) : (
+            <>
+              {clients?.totalElements !== 0 && (
+                <>
+                  {clients?.totalElements &&
+                    numbersFormatter(clients?.totalElements)}{" "}
+                </>
+              )}
+            </>
+          )}
+          {clients?.totalElements === 0 ? (
+            "No clients"
+          ) : (
+            <>{clients?.totalElements === 1 ? "Client" : "Clients"}</>
+          )}
+        </Text>
         <Input
+          onChange={handleSearch}
           type="text"
           placeholder="Search name, location or phone"
           name="searchClient"
@@ -35,16 +71,14 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
             />
           }
         />
+
         <Input
-          placeholder="Category: All categories"
+          onChange={onCategoryChange}
+          name="categories"
           type="select"
-          label=""
-          options={[
-            { label: "Item one", value: "Item one" },
-            { label: "Item two", value: "Item two" },
-            { label: "Item three", value: "Item three" }
-          ]}
-          name="chooseCategory"
+          placeholder="Category: All categories"
+          isGroupDropdown
+          isLoading={isCategoriesLoading}
           suffixIcon={
             <Image
               preview={false}
@@ -53,15 +87,24 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
               width={10}
             />
           }
-        />
+        >
+          {categories?.map((item: ObjectTypes) => (
+            <Option value={item?.id} key={item?.name}>
+              {item?.name}
+            </Option>
+          ))}
+        </Input>
+
         <Input
+          onChange={onSortChange}
           placeholder="Sort: Name (A-Z)"
           type="select"
           label=""
           options={[
-            { label: "Item one", value: "Item one" },
-            { label: "Item two", value: "Item two" },
-            { label: "Item three", value: "Item three" }
+            { label: "Z-A (Names)", value: "names__desc" },
+            { label: "A-Z (Names)", value: "names__asc" },
+            { label: "Z-A (Locations)", value: "location__desc" },
+            { label: "A-Z (Locations)", value: "location__asc" }
           ]}
           name="sortClients"
           suffixIcon={
@@ -76,7 +119,11 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       </Col>
 
       <Col className="flex items-center gap-4">
-        <CustomButton type="secondary">
+        <CustomButton
+          onClick={handleDownloadClients}
+          loading={isDownloadingClientsLoading}
+          type="secondary"
+        >
           <span className="text-sm">DOWNLOAD LIST</span>
         </CustomButton>
         <CustomButton onClick={showModal} type="primary">

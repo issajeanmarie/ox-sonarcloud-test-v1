@@ -1,8 +1,7 @@
 export type ClientsTableTypes = {
-  key: number;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
+  id: number;
+  names: string;
+  phone: string;
   email: string;
   location: string;
   pendingPayment: number | undefined;

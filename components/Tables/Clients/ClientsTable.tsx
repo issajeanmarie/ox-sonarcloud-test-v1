@@ -6,36 +6,60 @@ import { ClientsTableProps } from "../../../lib/types/pageTypes/Clients/ClientsT
 import RowsWrapper from "../RowsWrapper";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import CustomButton from "../../Shared/Button";
-import { ClientsTableData } from "../Dummies/ClientsTableData";
 import { Image } from "antd";
-import { FC } from "react";
+import { FC, SetStateAction, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
+import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
+import { useDeleteClientMutation } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
+import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
+import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
+import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 
 const { Text } = Typography;
 
 const ClientsTable: FC<ClientsTableProps> = ({
   isModalVisible,
   showModal,
-  setIsModalVisible
+  setIsModalVisible,
+  clients,
+  isClientsFetching
 }) => {
+  const [itemToDelete, setItemToDelete] =
+    useState<SetStateAction<number | undefined>>();
+  const [deleteClient, { isLoading }] = useDeleteClientMutation();
+
+  const handleDeleteClient = () => {
+    deleteClient({
+      id: itemToDelete
+    })
+      .unwrap()
+      .then((res: GenericResponse) => {
+        SuccessMessage(res?.message);
+        setIsModalVisible(false);
+      })
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
+
   const columns: any = [
     {
       title: (
         <div className="flex gap-10">
           <span>#</span>
-          <span>Name</span>
+          <span>Names</span>
         </div>
       ),
-      key: "Name",
-      render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
+      key: "Names",
+      render: (
+        text: ClientsTableTypes,
+        record: ClientsTableTypes,
+        index: number
+      ) => (
         <RowsWrapper>
           <div className="flex gap-10">
-            <Text className="normalText opacity_56">{record?.key}</Text>
-            <Text className="normalText fowe700">
-              {record?.firstName} {record?.lastName}
-            </Text>
+            <Text className="normalText opacity_56">{index + 1}</Text>
+            <Text className="normalText fowe700">{record?.names}</Text>
           </div>
         </RowsWrapper>
       )
@@ -45,7 +69,7 @@ const ClientsTable: FC<ClientsTableProps> = ({
       key: "phoneNumber",
       render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">{record?.phoneNumber}</Text>
+          <Text className="normalText opacity_56">{record?.phone}</Text>
         </RowsWrapper>
       )
     },
@@ -90,11 +114,11 @@ const ClientsTable: FC<ClientsTableProps> = ({
       ),
       width: "100px",
       key: "Action",
-      render: () => (
+      render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
         <RowsWrapper>
           <div className="flex justify-start items-center gap-4">
             <CustomButton
-              onClick={showModal}
+              onClick={() => showModal(setItemToDelete(record?.id))}
               type="danger"
               size="icon"
               icon={
@@ -123,11 +147,12 @@ const ClientsTable: FC<ClientsTableProps> = ({
       <Table
         className="data_table light_white_header light_white_table"
         columns={columns}
-        dataSource={ClientsTableData}
+        dataSource={clients?.content}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}
         scroll={{ x: 0 }}
+        loading={TableOnActionLoading(isClientsFetching)}
       />
 
       <ActionModal
@@ -137,8 +162,8 @@ const ClientsTable: FC<ClientsTableProps> = ({
         description="This action is not reversible, please make sure you really want to proceed with this action!"
         actionLabel="PROCEED"
         type="danger"
-        action={() => null}
-        loading={false}
+        action={() => handleDeleteClient()}
+        loading={isLoading}
       />
     </>
   );

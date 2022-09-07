@@ -9,6 +9,9 @@ const loadingIcon = (
 const smallLoadingIcon = (
   <LoadingOutlined style={{ fontSize: 13, color: "#e7b522" }} spin />
 );
+const extraSmallLoadingIcon = (
+  <LoadingOutlined style={{ fontSize: 8, color: "#e7b522" }} spin />
+);
 
 export const AppLoadingLoader = () => {
   return (
@@ -56,6 +59,10 @@ export const ComponentLoadingLoader = () => {
 
 export const SmallSpinLoader = () => {
   return <Spin indicator={smallLoadingIcon} />;
+};
+
+export const ExtraSmallSpinLoader = () => {
+  return <Spin indicator={extraSmallLoadingIcon} />;
 };
 
 export const TableOnActionLoading = (actionLoader: boolean) => {

@@ -24,7 +24,17 @@ interface ObjectTypes {
 
 const AddEditOrder: FC<AddEditProps> = ({ title }) => {
   const { data: categories } = useCategoriesQuery();
-  const { data: clients } = useClientsQuery();
+  const { data: clients } = useClientsQuery({
+    page: "",
+    size: "",
+    org: "",
+    dest: "",
+    hq: "",
+    categoryId: "",
+    q: "",
+    sort: "",
+    source: ""
+  });
   const [form] = Form.useForm();
   const [chosenClientId, setChosenClientId] = useState<number>();
 

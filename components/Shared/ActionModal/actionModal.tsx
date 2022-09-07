@@ -41,14 +41,17 @@ const ActionModal: FC<ActionModalProps> = ({
       onCancel={handleCancel}
       closable={false}
       centered
+      maskClosable={loading ? false : true}
     >
       <div className="m-10">
         <div className="text-2xl font-bold text-ox-dark mb-10">{title}</div>
         <div className="w-[90%] mb-10">{description}</div>
         <div className="flex items-center justify-between ">
-          <button className="underline" onClick={handleCancel}>
-            Discard
-          </button>
+          {!loading && (
+            <button className="underline" onClick={handleCancel}>
+              Discard
+            </button>
+          )}
           <div className="w-[160px]">
             <Button
               onClick={action}
