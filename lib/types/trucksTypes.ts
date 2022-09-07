@@ -229,3 +229,32 @@ export interface Sort {
   unsorted: boolean;
   empty: boolean;
 }
+
+export interface CreateTruckIssueRequest {
+  description: string;
+  id: any;
+}
+
+export type TruckNewIssueProps = {
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export interface ToggleTruckIssueRequest {
+  truckId: number | any;
+  issueId: number;
+}
+
+export interface ToogleTruckIssueResponse {
+  message: string;
+  payload: {
+    payload: {
+      createdAt: string;
+      deletedAt: null;
+      description: string;
+      id: number;
+      status: string;
+      updatedAt: string;
+    };
+  };
+}

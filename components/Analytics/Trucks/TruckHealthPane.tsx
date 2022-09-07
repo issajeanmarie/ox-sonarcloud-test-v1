@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
+import info from "antd/lib/message";
 import Divider from "antd/lib/divider";
 import Collapse from "antd/lib/collapse";
 import moment from "moment";
@@ -85,6 +86,13 @@ const TruckHealthPane = () => {
       .catch((err) => {
         ErrorMessage(err?.data?.message || "Something is wrong");
       });
+  };
+
+  const onStartDateChange = (_: string, date: string) => {
+    setStartDate(date);
+  };
+  const onEndDateChange = (_: string, date: string) => {
+    setEndDate(date);
   };
 
   return (
