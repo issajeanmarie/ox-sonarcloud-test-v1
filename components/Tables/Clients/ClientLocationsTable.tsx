@@ -3,11 +3,15 @@ import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
 import { ClientLocationsTableTypes } from "../../../lib/types/pageTypes/Clients/ClientLocationsTableTypes";
 import RowsWrapper from "../RowsWrapper";
-import { ClientLocationsData } from "../Dummies/ClientLocationsData";
+import { FC } from "react";
 
 const { Text } = Typography;
 
-const ClientLocationsTable = () => {
+type ClientLocationsTypes = {
+  offices: any;
+};
+
+const ClientLocationsTable: FC<ClientLocationsTypes> = ({ offices }) => {
   const columns: any = [
     {
       title: (
@@ -19,17 +23,18 @@ const ClientLocationsTable = () => {
       key: "office",
       render: (
         text: ClientLocationsTableTypes,
-        record: ClientLocationsTableTypes
+        record: ClientLocationsTableTypes,
+        index: number
       ) => (
         <RowsWrapper>
           <div className="flex gap-10">
-            <Text className="normalText opacity_56">{record?.key}</Text>
+            <Text className="normalText opacity_56">{index + 1}</Text>
             <div className="flex flex-col">
               <Text className="normalText fowe900">
-                {record?.office}{" "}
-                {record?.Main && (
+                {record?.names}{" "}
+                {record?.type && (
                   <>
-                    - <span className="yellow_faded_text">{record?.Main}</span>
+                    - <span className="yellow_faded_text">{record?.type}</span>
                   </>
                 )}
               </Text>
@@ -50,7 +55,7 @@ const ClientLocationsTable = () => {
     <Table
       className="data_table  noborder"
       columns={columns}
-      dataSource={ClientLocationsData}
+      dataSource={offices && offices}
       rowKey={(record) => record?.key}
       pagination={false}
       bordered={false}

@@ -1,5 +1,6 @@
 export type OtherOfficesTableTypes = {
-  key: number;
-  office: string;
+  id: number;
+  names: string;
   cordinates: string;
+  location: string;
 };

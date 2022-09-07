@@ -1,8 +1,9 @@
 import { Col, Divider, Image, Row } from "antd";
-import React from "react";
+import React, { FC } from "react";
+import { ClientOrderDaysTypes } from "../../../../lib/types/pageTypes/Clients/ClientOrderDaysTypes";
 import CustomButton from "../../../Shared/Button/button";
 
-const ClientOrderDays = () => {
+const ClientOrderDays: FC<ClientOrderDaysTypes> = () => {
   return (
     <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] mt-4">
       <Row justify="space-between" align="middle" className="w-full p-8">

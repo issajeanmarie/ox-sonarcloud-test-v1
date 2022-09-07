@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Image, Row, Select, Typography } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import Input from "../Shared/Input";
 import CustomButton from "../Shared/Button/button";
 
@@ -9,6 +10,10 @@ import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewClient from "../Forms/Clients/AddNewClient";
 import { numbersFormatter } from "../../helpers/numbersFormatter";
 import { ExtraSmallSpinLoader } from "../Shared/Loaders/Loaders";
+import { usePostClientMutation } from "../../lib/api/endpoints/Clients/clientsEndpoint";
+import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
+import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
+import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -32,6 +37,52 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   handleDownloadClients,
   isDownloadingClientsLoading
 }) => {
+  const [offices, setOffices]: any = useState([]);
+  const [officeName, setOfficeName] = useState("");
+  const [officeLocation, setOfficeLocation] = useState("");
+  const [postClient, { isLoading }] = usePostClientMutation();
+
+  const onOfficeNameChange = (value: string) => {
+    setOfficeName(value);
+  };
+  const onOfficeLocationChange = (value: string) => {
+    setOfficeLocation(value);
+  };
+
+  // ADD CLIENT
+  const createOffices = () => {
+    setOffices([
+      ...offices,
+      {
+        id: offices.length + 1,
+        location: officeLocation,
+        coordinates: "",
+        names: officeName,
+        type: "HQ"
+      }
+    ]);
+  };
+
+  const onAddClientFinish = (values: any) => {
+    postClient({
+      names: values?.names,
+      email: values?.email,
+      phone: values?.phone,
+      source: values?.source,
+      offices: offices,
+      location: values?.location,
+      coordinates: values?.coordinates,
+      tinNumber: values?.tinNumber,
+      economicStatus: values?.economicStatus
+    })
+      .unwrap()
+      .then((res: GenericResponse) => {
+        SuccessMessage(res?.message);
+        setOffices([]);
+      })
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
+
   return (
     <Row
       justify="space-between"
@@ -134,8 +185,17 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="NEW CLIENT"
+        loading={isLoading}
       >
-        <AddNewClient />
+        <AddNewClient
+          onAddClientFinish={onAddClientFinish}
+          createOffices={createOffices}
+          onOfficeNameChange={onOfficeNameChange}
+          onOfficeLocationChange={onOfficeLocationChange}
+          offices={offices}
+          setOffices={setOffices}
+          isLoading={isLoading}
+        />
       </ModalWrapper>
     </Row>
   );

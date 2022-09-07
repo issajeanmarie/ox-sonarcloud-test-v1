@@ -1,6 +1,6 @@
 export type ClientLocationsTableTypes = {
-  key: number;
-  office: string;
-  Main: string;
+  id: number;
+  names: string;
+  type: string;
   location: string;
 };

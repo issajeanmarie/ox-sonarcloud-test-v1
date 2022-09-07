@@ -3,7 +3,9 @@ import {
   ClientResponse,
   DeleteClientRequest,
   DownoadClients,
-  GetClients
+  GetClient,
+  GetClients,
+  PostClientRequest
 } from "../../../types/clients";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -37,12 +39,23 @@ const clientsApi = baseAPI.injectEndpoints({
         method: "GET"
       })
     }),
-    client: builder.query<ApiResponseMetadata<Client>, number>({
+    client: builder.query<ApiResponseMetadata<Client>, GetClient>({
       providesTags: ["Clients"],
-      query: (id) => ({
-        url: `/clients/${id}`,
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}`,
         method: "GET",
         cache: "no-cache"
+      })
+    }),
+    postClient: builder.mutation<
+      ApiResponseMetadata<Client>,
+      PostClientRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients`,
+        method: "POST",
+        body: DTO
       })
     }),
     deleteClient: builder.mutation<
@@ -63,5 +76,6 @@ export const {
   useClientQuery,
   useDownloadClientsQuery,
   useLazyDownloadClientsQuery,
+  usePostClientMutation,
   useDeleteClientMutation
 } = clientsApi;

@@ -51,7 +51,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
     data: chosenClientInfo,
     isLoading: chosenClientLoading,
     isFetching
-  } = useClientQuery(chosenClientId ?? skipToken);
+  } = useClientQuery({ id: chosenClientId ?? skipToken });
 
   useMemo(() => {
     form.setFieldsValue({

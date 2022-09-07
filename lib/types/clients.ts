@@ -16,6 +16,25 @@ export type Client = {
   location: string;
 };
 
+export type PostClientRequest = {
+  names: string;
+  email: string;
+  phone: string;
+  source: string;
+  offices: [
+    {
+      location: string;
+      coordinates: string;
+      names: string;
+      type: string;
+    }
+  ];
+  location: string;
+  coordinates: string;
+  tinNumber: string;
+  economicStatus: string;
+};
+
 export type DeleteClientRequest = {
   id: any;
 };
@@ -30,6 +49,10 @@ export type GetClients = {
   q: string;
   sort: string;
   source: string;
+};
+
+export type GetClient = {
+  id: any;
 };
 
 export type DownoadClients = {

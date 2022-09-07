@@ -69,7 +69,9 @@ const ClientsTable: FC<ClientsTableProps> = ({
       key: "phoneNumber",
       render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">{record?.phone}</Text>
+          <Text className="normalText opacity_56">
+            {record?.phone ? record?.phone : "---"}
+          </Text>
         </RowsWrapper>
       )
     },
@@ -78,7 +80,9 @@ const ClientsTable: FC<ClientsTableProps> = ({
       key: "email",
       render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">{record?.email}</Text>
+          <Text className="normalText opacity_56">
+            {record?.email ? record?.email : "---"}
+          </Text>
         </RowsWrapper>
       )
     },
@@ -131,7 +135,9 @@ const ClientsTable: FC<ClientsTableProps> = ({
               }
             />
             <CustomButton
-              onClick={() => changeRoute(routes.Client.url)}
+              onClick={() =>
+                changeRoute(`${routes.Client.url}?client=${record?.id}`)
+              }
               type="view"
               size="small"
             >

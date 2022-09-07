@@ -1,20 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Divider, Row } from "antd";
-import React from "react";
+import React, { FC } from "react";
+import { abbreviator } from "../../../../helpers/abbreviator";
+import { ClientInfoTypes } from "../../../../lib/types/pageTypes/Clients/ClientInfoTypes";
 import MediumAvatar from "../../../Avatars/MediumAvatar";
 import { YellowEditIcon } from "../../../Icons";
 import CustomButton from "../../../Shared/Button/button";
 import ClientInfoWrapper from "./ClientInfoWrapper";
 
-const SingleClientRightCardWrapper = () => {
+const ClientInfo: FC<ClientInfoTypes> = ({ client }) => {
   return (
     <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008]">
       <Row justify="space-between" align="middle" className="w-full p-8">
         <Col flex="auto">
           <div className="flex items-center gap-4">
             <MediumAvatar>
-              <span className="dark font-semibold text-lg opacity-90">YB</span>
+              <span className="dark font-semibold text-lg opacity-90">
+                {client?.names && abbreviator(client?.names)}
+              </span>
             </MediumAvatar>
-            <span className="font-bold text-lg">TWAGIRAYEZU Simeon</span>
+            <span className="font-bold text-lg">{client?.names}</span>
           </div>
         </Col>
 
@@ -27,13 +32,13 @@ const SingleClientRightCardWrapper = () => {
       <Divider style={{ padding: 0, margin: 0 }} />
 
       <div className="w-full p-8">
-        <ClientInfoWrapper title="Phone number" infoItem="+250 789 427 561" />
-        <ClientInfoWrapper title="Source" infoItem="Referral" />
-        <ClientInfoWrapper title="Economic class" infoItem="2" />
-        <ClientInfoWrapper title="Email" infoItem="yveshonore14@gmail.com" />
+        <ClientInfoWrapper title="Phone number" infoItem={client?.phone} />
+        <ClientInfoWrapper title="Source" infoItem={client?.source} />
+        <ClientInfoWrapper title="Economic class" infoItem="-" />
+        <ClientInfoWrapper title="Email" infoItem={client?.email} />
       </div>
     </Row>
   );
 };
 
-export default SingleClientRightCardWrapper;
+export default ClientInfo;
