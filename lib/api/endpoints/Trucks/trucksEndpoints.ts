@@ -1,10 +1,12 @@
 import { TruckTypes } from "../../../types/pageTypes/Analytics/TruckTypes";
 import { ApiResponseMetadata } from "../../../types/shared";
 import {
+  CreateTruckIssueRequest,
   CreateTruckRequest,
   CreateTruckResponse,
   ToggleTruckRequest,
-  ToggleTruckResponse
+  ToggleTruckResponse,
+  ToggleTruckIssueRequest
 } from "../../../types/trucksTypes";
 import { baseAPI } from "../../api";
 
@@ -21,6 +23,8 @@ type Payload = {
   sort?: any;
   search?: any;
   id?: number;
+  truckId?: any;
+  issueId?: number;
 };
 
 const trucksApi = baseAPI.injectEndpoints({
@@ -72,8 +76,10 @@ const trucksApi = baseAPI.injectEndpoints({
 
     getSingleTruck: builder.query({
       providesTags: ["Trucks"],
-      query: (id) => ({
-        url: `/daily_inspections?truck_id=${id || ""}`,
+      query: ({ id, startDate, endDate }) => ({
+        url: `/daily_inspections?truck_id=${id}&start=${startDate || ""}&end=${
+          endDate || ""
+        }`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
@@ -92,8 +98,10 @@ const trucksApi = baseAPI.injectEndpoints({
 
     getTruckRepairLog: builder.query({
       providesTags: ["Trucks"],
-      query: (id) => ({
-        url: `/trucks/${id}/repairs`,
+      query: ({ id, startDate, endDate }) => ({
+        url: `/trucks/${id}/repairs?start=${startDate || ""}&end=${
+          endDate || ""
+        }`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
@@ -112,12 +120,41 @@ const trucksApi = baseAPI.injectEndpoints({
 
     getTruckFuelReport: builder.query({
       providesTags: ["Trucks"],
-      query: (id) => ({
-        url: `/trucks/${id}/fuel-report?start=2021-08-02&end=2022-09-05`,
+      query: ({ id, startDate, endDate }) => ({
+        url: `/trucks/${id}/fuel-report?start=${startDate || ""}&end=${
+          endDate || ""
+        }`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
         response.payload
+    }),
+
+    createTruckIssue: builder.mutation<
+      CreateTruckResponse,
+      CreateTruckIssueRequest
+    >({
+      invalidatesTags: ["Trucks"],
+      query: ({ id, ...DTO }) => {
+        return {
+          url: `/trucks/${id}/issues`,
+          method: "POST",
+          body: DTO
+        };
+      }
+    }),
+
+    toggleTruckIssueStatus: builder.mutation<
+      ToggleTruckResponse,
+      ToggleTruckIssueRequest
+    >({
+      invalidatesTags: ["Trucks"],
+      query: ({ truckId, issueId }) => {
+        return {
+          url: `/trucks/${truckId}/issues/${issueId}/toggle-status`,
+          method: "PATCH"
+        };
+      }
     })
   })
 });
@@ -132,5 +169,7 @@ export const {
   useLazyGetTruckOverviewQuery,
   useLazyGetTruckRepairLogQuery,
   useLazyGetTruckIssuesQuery,
-  useLazyGetTruckFuelReportQuery
+  useLazyGetTruckFuelReportQuery,
+  useCreateTruckIssueMutation,
+  useToggleTruckIssueStatusMutation
 } = trucksApi;

@@ -1,19 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
+import info from "antd/lib/message";
 import Divider from "antd/lib/divider";
 import Collapse from "antd/lib/collapse";
 import moment from "moment";
-import CustomInput from "../../Shared/Input";
 import CustomButton from "../../Shared/Button/button";
 import { useLazyGetSingleTruckQuery } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import Loader from "../../Shared/Loader";
+import Input from "../../Shared/Input";
+import { useRouter } from "next/router";
+import { displaySingleTruck } from "../../../lib/redux/slices/trucksSlice";
+import { useDispatch } from "react-redux";
 
 const { Panel } = Collapse;
 
 const TruckHelthPane = ({ truckData }: any) => {
-  const [, { isLoading }] = useLazyGetSingleTruckQuery();
+  const [getSingleTruck] = useLazyGetSingleTruckQuery();
+  const [isPageLoading, setIsPageLoading] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const dispatch = useDispatch();
+
+  const router = useRouter();
+  const { id: truckId } = router.query;
+
+  useEffect(() => {
+    setIsPageLoading(true);
+
+    getSingleTruck({
+      id: truckId,
+      startDate: startDate || "",
+      endDate: endDate || ""
+    })
+      .unwrap()
+      .then((res) => {
+        setIsPageLoading(false);
+        dispatch(displaySingleTruck(res));
+      })
+      .catch((err) => {
+        setIsPageLoading(false);
+        info.error(err?.data?.message || "Something is wrong");
+      });
+  }, [startDate, endDate, truckId, getSingleTruck]);
 
   const objectsMaped = (inspection: any) => {
     const inspectionResult: any = [];
@@ -24,73 +54,63 @@ const TruckHelthPane = ({ truckData }: any) => {
     return inspectionResult;
   };
 
+  const onStartDateChange = (_: string, date: string) => {
+    setStartDate(date);
+  };
+  const onEndDateChange = (_: string, date: string) => {
+    setEndDate(date);
+  };
+
   return (
     <>
-      {isLoading ? (
+      <Row
+        justify="space-between"
+        className="bg-white my-4 mb-12 rounded shadow-[0px_0px_19px_#2A354808]"
+      >
+        <Col className="flex items-center gap-4">
+          <Input
+            onDateChange={onStartDateChange}
+            type="date"
+            name="Start"
+            placeholder="Start"
+            suffixIcon={
+              <Image
+                preview={false}
+                src="/icons/ic-actions-calendar.svg"
+                alt=""
+                width={18}
+              />
+            }
+          />
+          <Input
+            onDateChange={onEndDateChange}
+            type="date"
+            name="End"
+            placeholder="End"
+            suffixIcon={
+              <Image
+                preview={false}
+                src="/icons/ic-actions-calendar.svg"
+                alt=""
+                width={18}
+              />
+            }
+          />
+        </Col>
+
+        <Col className="flex items-center gap-4">
+          <CustomButton type="secondary">
+            <span className="text-sm">DOWNLOAD SHIFT</span>
+          </CustomButton>
+        </Col>
+      </Row>
+
+      <Divider />
+
+      {isPageLoading ? (
         <Loader />
       ) : (
         <>
-          <Row
-            justify="space-between"
-            className="bg-white my-4 mb-12 rounded shadow-[0px_0px_19px_#2A354808]"
-          >
-            <Col className="flex items-center gap-4">
-              <CustomInput
-                // onSelectChange={onSortChange}
-                type="select"
-                label=""
-                options={[
-                  { label: "Revenue", value: "REVENUE" },
-                  { label: "Distance", value: "DISTANCE" },
-                  { label: "Weight", value: "WEIGHT" }
-                ]}
-                name="sort"
-                suffixIcon={
-                  <Image
-                    preview={false}
-                    src="/icons/expand_more_black_24dp.svg"
-                    alt=""
-                    width={10}
-                  />
-                }
-              />
-              <CustomInput
-                type="date"
-                name="Start"
-                placeholder="Start"
-                suffixIcon={
-                  <Image
-                    preview={false}
-                    src="/icons/ic-actions-calendar.svg"
-                    alt=""
-                    width={18}
-                  />
-                }
-              />
-              <CustomInput
-                type="date"
-                name="End"
-                placeholder="End"
-                suffixIcon={
-                  <Image
-                    preview={false}
-                    src="/icons/ic-actions-calendar.svg"
-                    alt=""
-                    width={18}
-                  />
-                }
-              />
-            </Col>
-
-            <Col className="flex items-center gap-4">
-              <CustomButton type="secondary">
-                <span className="text-sm">DOWNLOAD SHIFT</span>
-              </CustomButton>
-            </Col>
-          </Row>
-
-          <Divider />
-
           <Collapse bordered={false}>
             {truckData?.inspections?.content?.map(
               (inspection: any, index: number) => {

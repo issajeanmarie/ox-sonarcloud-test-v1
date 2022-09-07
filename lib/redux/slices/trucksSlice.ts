@@ -11,13 +11,19 @@ interface DisplayTrucks {
 type TrucksState = {
   displayTrucks: DisplayTrucks;
   displayTrucksFuelRecords: object;
+  displayTruckIssues: DisplayTrucks;
+  displayTrucksRepairLogs: DisplayTrucks;
+  displaySingleTruck: any;
 };
 
 const slice = createSlice({
   name: "trucks",
   initialState: {
     displayTrucks: { content: [], message: {}, totalPages: 0 },
-    displayTrucksFuelRecords: {}
+    displayTrucksFuelRecords: {},
+    displayTruckIssues: {},
+    displayTrucksRepairLogs: {},
+    displaySingleTruck: {}
   } as TrucksState,
   reducers: {
     displayTrucks: (state, { payload }) => {
@@ -42,17 +48,45 @@ const slice = createSlice({
       // CHECKING IF YOU YOU ADDED NEW TRUCK
       else {
         state.displayTrucks.content = [
-          payload?.payload,
-          ...state?.displayTrucks?.content
+          ...state?.displayTrucks?.content,
+          payload?.payload
         ];
       }
     },
 
     displayFuelRecords: (state, { payload }) => {
       state.displayTrucksFuelRecords = { ...payload };
+    },
+
+    displayTruckIssues: (state, { payload }) => {
+      if (payload?.replace) {
+        state.displayTruckIssues = { ...payload.payload };
+        return;
+      } else if (payload?.toggle) {
+        state.displayTruckIssues.content = payload.payload;
+      } else {
+        state.displayTruckIssues.content = [
+          ...state.displayTruckIssues.content,
+          payload?.payload?.payload
+        ];
+      }
+    },
+
+    displayRepairLogs: (state, { payload }) => {
+      state.displayTrucksRepairLogs = { ...payload };
+    },
+
+    displaySingleTruck: (state, { payload }) => {
+      state.displaySingleTruck = { ...payload };
     }
   }
 });
 
-export const { displayTrucks, displayFuelRecords } = slice.actions;
+export const {
+  displayTrucks,
+  displayFuelRecords,
+  displayTruckIssues,
+  displayRepairLogs,
+  displaySingleTruck
+} = slice.actions;
 export default slice.reducer;

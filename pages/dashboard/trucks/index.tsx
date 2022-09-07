@@ -64,7 +64,7 @@ const Trucks = () => {
       .catch((err) => {
         if (err) info.error(err?.data?.message || "Something went wrong");
       });
-  }, [dispatch, getTrucks, router]);
+  }, [dispatch]);
 
   const handleLoadMore = () => {
     loadMoreTrucks({
