@@ -10,3 +10,9 @@ export type ClientOrderRecipientTypes = {
   isClientLoading: boolean;
   isClientFetching: boolean;
 };
+
+export type ClientOrderRecipientTypes = {
+  client: any;
+  isClientLoading: boolean;
+  isClientFetching: boolean;
+};

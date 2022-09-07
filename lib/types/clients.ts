@@ -121,6 +121,10 @@ export type GetClient = {
   id: any;
 };
 
+export type GetClient = {
+  id: any;
+};
+
 export type DownoadClients = {
   file_type: string;
   org: string;
