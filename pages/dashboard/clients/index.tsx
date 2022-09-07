@@ -28,6 +28,53 @@ const Clients = () => {
   const [selectedCategory, setSelectedCategory]: any = useState("");
   const [sortValue, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
+  const {
+    data: clients,
+    isLoading: isClientsLoading,
+    isFetching: isClientsFetching
+  } = useClientsQuery({
+    page: "",
+    size: "",
+    org: "",
+    dest: "",
+    hq: "",
+    categoryId: selectedCategory,
+    q: searchQuery,
+    sort: sort,
+    source: ""
+  });
+
+  const [downloadClients, { isLoading: isDownloadingClientsLoading }] =
+    useLazyDownloadClientsQuery();
+
+  const { data: categories, isLoading: isCategoriesLoading } =
+    useCategoriesQuery();
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+  };
+
+  const onCategoryChange = (categoryID: number) => {
+    setSelectedCategory(categoryID);
+  };
+  const onSortChange = (sorter: string) => {
+    setSort(sorter);
+  };
+  const handleDownloadClients = () => {
+    downloadClients({
+      file_type: "PDF",
+      org: "",
+      dest: "",
+      hq: "",
+      categoryId: selectedCategory,
+      q: searchQuery,
+      sort: sort,
+      source: ""
+    })
+      .unwrap()
+      .then()
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
 
   const [getClients, { isLoading: isClientsLoading }] = useLazyClientsQuery();
 
