@@ -32,7 +32,8 @@ const AppSider = ({ collapsed }: any) => {
 
   const depots = (
     <Space
-      className="depot_dropdown radius5 "
+      className="depot_dropdown rounded-md "
+      direction="vertical"
       style={{ width: "90%", marginLeft: "12px" }}
     >
       {data?.payload?.map((depot) => (
@@ -41,7 +42,7 @@ const AppSider = ({ collapsed }: any) => {
           gutter={12}
           align="middle"
           key={depot?.id}
-          className="p-2"
+          className="p-4 cursor-pointer"
         >
           <Col>
             <Image

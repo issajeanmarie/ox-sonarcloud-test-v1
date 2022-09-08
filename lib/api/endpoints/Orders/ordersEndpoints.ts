@@ -39,7 +39,7 @@ const ordersApi = baseAPI.injectEndpoints({
         filter,
         momoRefCode
       }) => ({
-        url: `/orders?page=${page || ""}&size=${size || ""}&depot=${
+        url: `/orders?page=${page || "0"}&size=${size || "40"}&depot=${
           depot || ""
         }&driver=${driver || ""}&truck=${truck || ""}&start=${
           start || ""

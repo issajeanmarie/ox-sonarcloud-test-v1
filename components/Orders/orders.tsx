@@ -1,17 +1,20 @@
-import { FC, Fragment, useEffect } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import OrdersHeader from "./OrdersHeader";
 import OneOrder from "./OneOrder";
 import { useLazyOrdersQuery } from "../../lib/api/endpoints/Orders/ordersEndpoints";
 import { message } from "antd";
 import Loader from "../Shared/Loader";
-import { Order_Filter } from "../../lib/types/orders";
+import { Order, Order_Filter } from "../../lib/types/orders";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/redux/store";
+import Button from "../Shared/Button";
 
 const Orders: FC = () => {
+  const depot = useSelector((state: RootState) => state.depot);
+
   const [getOrders, { data, isLoading, isFetching }] = useLazyOrdersQuery({});
 
-  const depot = useSelector((state: RootState) => state.depot);
+  const [filters, setFilters] = useState<Order_Filter>();
 
   const getOrdersAction = (filters: Order_Filter) => {
     getOrders(filters)
@@ -22,10 +25,14 @@ const Orders: FC = () => {
       });
   };
 
+  const triggerPagination = (page: string) => {
+    setFilters({ ...filters, page });
+  };
+
   useEffect(() => {
     // Apply pagination and filters here
-    getOrdersAction({ depot: depot.depotData.id });
-  }, [depot]);
+    getOrdersAction({ ...filters, depot: depot.depotData.id });
+  }, [depot, filters]);
 
   return (
     <div className="mx-4 relative">
@@ -39,11 +46,24 @@ const Orders: FC = () => {
             loading={isFetching}
           />
           {data &&
-            data?.payload?.content?.map(
-              (order: object | any, index: number) => (
-                <OneOrder key={index} index={index + 1} order={order} />
-              )
-            )}
+            data.payload?.content?.map((order: Order, index: number) => (
+              <OneOrder key={index} index={index + 1} order={order} />
+            ))}
+          <div className="flex justify-center mb-4">
+            <div className="w-[100px]">
+              <Button
+                type="primary"
+                loading={isFetching}
+                onClick={() =>
+                  triggerPagination(
+                    String(data?.payload?.pageable?.pageNumber + 1)
+                  )
+                }
+              >
+                Load more
+              </Button>
+            </div>
+          </div>
         </Fragment>
       )}
     </div>

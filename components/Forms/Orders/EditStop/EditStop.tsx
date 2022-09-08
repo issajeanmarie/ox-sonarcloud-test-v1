@@ -30,7 +30,8 @@ const EditStop: FC<EditStopProps> = ({ order, stop, closeModal }) => {
         ),
         name: stop.name,
         location: stop.location,
-        coordinates: stop.coordinates || ""
+        coordinates: stop.coordinates || "",
+        position: stop.position
       };
       editStop({ orderId: order.id, stopId: stop?.id, data })
         .unwrap()

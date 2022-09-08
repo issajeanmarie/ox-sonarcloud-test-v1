@@ -26,6 +26,9 @@ import ActionModal from "../../Shared/ActionModal";
 import EditStop from "../../Forms/Orders/EditStop";
 import EditPaymentStatus from "../../Forms/Orders/EditPaymentStatus";
 import EditPayment from "../../Forms/Orders/EditPayment";
+import { userType } from "../../../helpers/getLoggedInUser";
+import { useGetTrucksMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { useClientsQuery } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 
 const { Step } = Steps;
 
@@ -57,8 +60,14 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
 
   const [getOrder, { isLoading, data }] = useLazyOrderQuery();
 
+  const { data: clients } = useClientsQuery();
+
+  const user = userType();
+
   const [deleteStop, { isLoading: deleteStopLoading }] =
     useDeleteStopMutation();
+
+  const [getTrucks, { data: trucks }] = useGetTrucksMutation();
 
   const [writeOff, { isLoading: writeOffLoading }] = useWriteOffMutation();
 
@@ -73,6 +82,32 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           message.error(e.data?.message);
         });
   };
+
+  useEffect(() => {
+    getTrucks({ page: 0, size: 10000 })
+      .unwrap()
+      .then()
+      .catch((e) => {
+        message.error(e.data?.messag || "Cannot get trucks");
+      });
+  }, [getTrucks]);
+
+  const isOrderDisabled =
+    data?.status === "CANCELLED" ||
+    data?.status === "COMPLETED" ||
+    user.isGuest ||
+    !data;
+  const canUserDelete =
+    (data?.paymentStatus !== "FULL_PAID" &&
+      data?.paymentStatus !== "HALF_PAID" &&
+      data?.paymentStatus !== "WRITTEN_OFF" &&
+      data?.status !== "CANCELLED" &&
+      !user.isGuest) ||
+    (user.isSuperAdmin &&
+      data?.status !== "CANCELLED" &&
+      data?.status !== "WRITTEN_OFF");
+
+  const canUserPay = isOrderDisabled && data?.paymentStatus !== "FULL_PAID";
 
   const deleteStopAction = () => {
     chosenStopId?.id &&
@@ -190,14 +225,20 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           <div className="flex-1 text-black font-light text-right">
             {st.weight} KGs
           </div>
-          <div className="flex-1 flex items-center gap-5 justify-end">
+          <div
+            className={`flex-1 flex items-center gap-5 justify-end ${
+              !user.isAdmin && !user.isSuperAdmin && "opacity-50"
+            }`}
+          >
             <Image
               className="pointer"
               src="/icons/ic-contact-edit.svg"
               alt="Backspace icon"
               onClick={() => {
-                setChosenId(st);
-                setIsEditStopModal(true);
+                if (user.isAdmin || user.isSuperAdmin) {
+                  setChosenId(st);
+                  setIsEditStopModal(true);
+                }
               }}
               width={15}
               height={15}
@@ -207,8 +248,10 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
               src="/icons/ic-actions-remove.svg"
               alt="Backspace icon"
               onClick={() => {
-                setChosenId(st);
-                setIsDeleteStopModal(true);
+                if (user.isAdmin || user.isSuperAdmin) {
+                  setChosenId(st);
+                  setIsDeleteStopModal(true);
+                }
               }}
               width={15}
               height={15}
@@ -269,6 +312,9 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             order={data}
             comment={comment}
             setSupport={setSupport}
+            isOrderDisabled={isOrderDisabled}
+            canUserDelete={canUserDelete}
+            canUserPay={canUserPay}
           />
           <Modal
             isModalVisible={isEditPayment}
@@ -295,15 +341,20 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           >
             <EditOrderClient
               orderId={orderId}
-              existingClient={data.office.client.id}
+              existingClient={data?.office?.client?.id}
               closeModal={() => setIsEditClientModal(false)}
+              clients={clients?.payload?.content}
             />
           </Modal>
           <Modal
             isModalVisible={isAddStopModal}
             setIsModalVisible={setIsAddStopModal}
           >
-            <AddStop order={data} closeModal={() => setIsAddStopModal(false)} />
+            <AddStop
+              order={data}
+              closeModal={() => setIsAddStopModal(false)}
+              trucks={trucks?.payload?.content}
+            />
           </Modal>
           <Modal
             isModalVisible={isEditStopModal}
@@ -325,7 +376,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             loading={deleteStopLoading}
             type="danger"
           />
-          <div className="flex flex-col lg:flex-row p-5 gap-6 overflow-auto h-[83vh]">
+          <div className="flex flex-col xl:flex-row p-5 gap-6 overflow-auto h-[83vh]">
             <div className="flex-1 h-min bg-white shadow-[0px_0px_19px_#00000008] rounded p-14">
               <div className="flex items-center justify-between mb-3">
                 <span className="heading1 text-ox-dark">ORDER {orderId}</span>
@@ -341,29 +392,31 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                 header="Client details"
               />
               <DetailsComponent details={orderDetails} header="Order details" />
-              <div className="my-20">
-                <div className="font-extralight text-[17px] mb-6">
-                  Truck details
-                </div>
-                {/* {data.stops.map((st, index) => {
+              {data.stops[0] && (
+                <div className="my-20">
+                  <div className="font-extralight text-[17px] mb-6">
+                    Truck details
+                  </div>
+                  {/* {data.stops.map((st, index) => {
                   return ( */}
-                <div className="flex items-center mb-5">
-                  <div className="flex-1 flex items-center gap-8">
-                    <span className="text-gray-400 font-light">1</span>
-                    <span className="heading2">
-                      {data.stops[0].truck?.plateNumber}
-                    </span>
+                  <div className="flex items-center mb-5">
+                    <div className="flex-1 flex items-center gap-8">
+                      <span className="text-gray-400 font-light">1</span>
+                      <span className="heading2">
+                        {data.stops[0].truck?.plateNumber}
+                      </span>
+                    </div>
+                    <div className="flex-1 normalText">
+                      {data.stops[0].weight} KGs
+                    </div>
+                    <div className="flex-1 text-gray-400 font-light">
+                      {data.stops[0].driver.names}
+                    </div>
                   </div>
-                  <div className="flex-1 normalText">
-                    {data.stops[0].weight} KGs
-                  </div>
-                  <div className="flex-1 text-gray-400 font-light">
-                    {data.stops[0].driver.names}
-                  </div>
+                  {/* ); */}
+                  {/* })} */}
                 </div>
-                {/* ); */}
-                {/* })} */}
-              </div>
+              )}
               <div className="mt-20">
                 <div className=" mb-6 flex items-center justify-between">
                   <span className="text-[17px] font-extralight">
@@ -376,21 +429,29 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                     + Add new stop
                   </span>
                 </div>
-                <Steps direction="vertical" size="small" current={1}>
-                  {data.stops.map((st, index) => {
-                    return (
-                      <Step
-                        key={index}
-                        stepIndex={st.position}
-                        status={st.arrivalDateTime ? "finish" : "wait"}
-                        description={<StepDescription st={st} />}
-                      />
-                    );
-                  })}
+                {data.stops?.length > 0 ? (
+                  <Steps direction="vertical" size="small" current={1}>
+                    {[...data.stops]
+                      .sort((a, b) => a.position - b.position)
+                      .map((st, index) => {
+                        return (
+                          <Step
+                            key={index}
+                            stepIndex={st.position}
+                            status={st.arrivalDateTime ? "finish" : "wait"}
+                            description={<StepDescription st={st} />}
+                          />
+                        );
+                      })}
 
-                  {/* <Step status="finish" description={<StepDescription />} /> */}
-                  {/* <Step description={<StepDescription />} /> */}
-                </Steps>
+                    {/* <Step status="finish" description={<StepDescription />} /> */}
+                    {/* <Step description={<StepDescription />} /> */}
+                  </Steps>
+                ) : (
+                  <div className="text-center text-ox-yellow-faded-text uppercase">
+                    No stops available
+                  </div>
+                )}
               </div>
               <div className="mt-20">
                 <div className="font-extralight text-[17px] mb-6">
@@ -412,7 +473,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                 </div>
               </div>
             </div>
-            <div className="w-full lg:w-[45%] flex flex-col gap-7">
+            <div className="w-full xl:w-[45%] flex flex-col gap-7">
               <div className="bg-white shadow-[0px_0px_19px_#00000008] rounded pt-14 px-14 pb-1">
                 <div className="flex items-center justify-between mb-3">
                   <span className="heading1  text-ox-dark">ORDER SUMMARY</span>
@@ -423,14 +484,16 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                 <div className="p-14 py-5 border-b">
                   <div className="flex items-center justify-between">
                     <div className="heading1 text-ox-dark">PAYMENT STATUS</div>
-                    <div className="w-[150px]">
-                      <Button
-                        onClick={() => setIsEditPaymentStatus(true)}
-                        type="secondary"
-                      >
-                        UPDATE
-                      </Button>
-                    </div>
+                    {(user.isAdmin || user.isSuperAdmin) && (
+                      <div className="w-[150px]">
+                        <Button
+                          onClick={() => setIsEditPaymentStatus(true)}
+                          type="secondary"
+                        >
+                          UPDATE
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="flex justify-around m-14 gap-10">
@@ -473,7 +536,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                               {index + 1}
                             </span>
                             <span className="text-md font-bold">
-                              {tx.amount} Rwf
+                              {localeString(tx.amount)} Rwf
                             </span>
                           </div>
                           <div className="flex-1 text-sm text-gray-400 italic font-extralight whitespace-nowrap overflow-hidden text-ellipsis">
@@ -490,22 +553,24 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                             </span>
                           </div>
                           <div className="ml-3">
-                            <Button
-                              onClick={() => {
-                                setChosenTransaction(tx);
-                                setIsEditPayment(true);
-                              }}
-                              type="normal"
-                              size="icon"
-                              icon={
-                                <Image
-                                  src="/icons/ic-contact-edit.svg"
-                                  alt="OX Delivery Logo"
-                                  width={12}
-                                  height={12}
-                                />
-                              }
-                            />
+                            {(user.isAdmin || user.isSuperAdmin) && (
+                              <Button
+                                onClick={() => {
+                                  setChosenTransaction(tx);
+                                  setIsEditPayment(true);
+                                }}
+                                type="normal"
+                                size="icon"
+                                icon={
+                                  <Image
+                                    src="/icons/ic-contact-edit.svg"
+                                    alt="OX Delivery Logo"
+                                    width={12}
+                                    height={12}
+                                  />
+                                }
+                              />
+                            )}
                           </div>
                         </div>
                       );

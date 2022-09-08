@@ -21,6 +21,9 @@ interface ViewOrderHeaderProps {
   order: Order;
   comment: string;
   setSupport: React.Dispatch<React.SetStateAction<boolean>>;
+  isOrderDisabled: boolean;
+  canUserDelete: boolean;
+  canUserPay: boolean;
 }
 
 const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
@@ -28,6 +31,9 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   order,
   code,
   setSupport,
+  isOrderDisabled,
+  canUserPay,
+  canUserDelete,
   comment
 }) => {
   const [isCancelModalVisible, setIsCancelModalVisible] =
@@ -74,6 +80,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
       .then((res) => {
         message.success(res.message);
         setIsCancelModalVisible(false);
+        setIsConfirmCompleteOrder(false);
       })
       .catch((e) => {
         message.error(e.message);
@@ -132,24 +139,28 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
               <LoadingOutlined />
             ) : (
               <Image
-                className="pointer"
+                className={
+                  canUserDelete
+                    ? "cursor-pointer"
+                    : "opacity-50 cursor-not-allowed"
+                }
                 src="/icons/receipt.png"
                 alt="Backspace icon"
-                onClick={downloadOrderInvoice}
+                onClick={() => canUserDelete && downloadOrderInvoice()}
                 width={18}
                 height={18}
               />
             )}
 
-            <Image
+            {/* <Image
               className="pointer"
               src="/icons/ic-contact-edit.svg"
               alt="Backspace icon"
               width={16}
               height={16}
-            />
+            /> */}
             <Image
-              className="pointer"
+              className="cursor-pointer"
               src="/icons/code.svg"
               alt="Backspace icon"
               width={16}
@@ -157,31 +168,44 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
               onClick={() => setIsReceipientCodeModalVisible(true)}
             />
             <Image
-              className="cursor-pointer"
+              className={
+                canUserDelete
+                  ? "cursor-pointer"
+                  : "opacity-50 cursor-not-allowed"
+              }
               src="/icons/close.png"
               alt="Backspace icon"
               width={20}
               height={20}
-              onClick={() => setIsCancelModalVisible(true)}
+              onClick={() => canUserDelete && setIsCancelModalVisible(true)}
             />
             <button
-              className="rounded-lg bg-ox-yellow text-white w-[30px] h-[30px] flex items-center justify-center cursor-pointer"
-              onClick={() => setIsMobilePaymentModalVisible(true)}
+              className={`rounded-lg bg-ox-yellow text-white w-[30px] h-[30px] flex items-center justify-center ${
+                canUserPay ? "cursor-pointer" : "cursor-not-allowed opacity-50"
+              } `}
+              onClick={() => canUserPay && setIsMobilePaymentModalVisible(true)}
             >
               $
             </button>
           </div>
-          <div className="flex items-center gap-6 w-[400px]">
-            <Button type="secondary" onClick={() => setSupport(true)}>
-              SUPPORT
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => setIsConfirmCompleteOrder(true)}
-            >
-              COMPLETE ORDER
-            </Button>
-          </div>
+          {!isOrderDisabled && (
+            <div className="flex items-center gap-6 w-[400px]">
+              <Button
+                type="secondary"
+                disabled={isOrderDisabled}
+                onClick={() => setSupport(true)}
+              >
+                SUPPORT
+              </Button>
+              <Button
+                type="primary"
+                disabled={isOrderDisabled}
+                onClick={() => setIsConfirmCompleteOrder(true)}
+              >
+                COMPLETE ORDER
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </Fragment>

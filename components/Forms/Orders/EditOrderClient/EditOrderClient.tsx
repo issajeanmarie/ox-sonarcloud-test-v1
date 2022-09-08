@@ -4,13 +4,13 @@ import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
 import { useEditOrderMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { Query } from "../../../../lib/types/shared";
-import { useClientsQuery } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { Client } from "../../../../lib/types/clients";
 
 interface EditOrderClientProps {
   orderId: Query;
   existingClient: number;
   closeModal: () => void;
+  clients: Client[];
 }
 
 const { Option } = Select;
@@ -18,11 +18,10 @@ const { Option } = Select;
 const EditOrderClient: FC<EditOrderClientProps> = ({
   orderId,
   existingClient,
+  clients,
   closeModal
 }) => {
   const [editOrder, { isLoading }] = useEditOrderMutation();
-
-  const { isLoading: clientsLoading, data } = useClientsQuery();
 
   const handleOnFinish = (values: { clientId: number }) => {
     editOrder({ orderId, data: values })
@@ -48,13 +47,11 @@ const EditOrderClient: FC<EditOrderClientProps> = ({
           type="select"
           label="Clients"
           placeholder="Select a client"
-          isLoading={clientsLoading}
-          disabled={clientsLoading}
           isGroupDropdown
           rules={[{ required: true, message: "Select a client to continue" }]}
         >
-          {data &&
-            data.payload?.content.map((el: Client) => (
+          {clients &&
+            clients?.map((el: Client) => (
               <Option value={el.id} key={el.id} title={el.names}>
                 {el.names}
               </Option>

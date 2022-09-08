@@ -21,7 +21,11 @@ export type PaymentStatus =
   | "WRITTEN_OFF"
   | "ENQUEQUE";
 
-export type Order_Status = "COMPLETED" | "CANCELLED" | "PENDING";
+export type Order_Status =
+  | "COMPLETED"
+  | "CANCELLED"
+  | "PENDING"
+  | "WRITTEN_OFF";
 
 export type Order_Status_Enums =
   | "PAYMENT_PENDING"

@@ -1,18 +1,22 @@
-import { Form, message } from "antd";
+import { Form, message, Select } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { FC, useEffect, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
 import { useAddStopMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { AddStopRequest, Order } from "../../../../lib/types/orders";
+import { TruckSchema } from "../../../../lib/types/trucksTypes";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
+
+const { Option } = Select;
 
 interface AddStopProps {
   order: Order;
   closeModal: () => void;
+  trucks: TruckSchema[];
 }
 
-const AddStop: FC<AddStopProps> = ({ order, closeModal }) => {
+const AddStop: FC<AddStopProps> = ({ order, closeModal, trucks }) => {
   const [addStop, { isLoading }] = useAddStopMutation();
 
   const [form] = useForm();
@@ -83,11 +87,19 @@ const AddStop: FC<AddStopProps> = ({ order, closeModal }) => {
                 type="select"
                 label="Truck"
                 placeholder="Choose truck"
-                options={[{ label: "RAA 123", value: 31 }]}
+                isGroupDropdown
                 rules={[
                   { required: true, message: "Select a truck to continue" }
                 ]}
-              />
+              >
+                {trucks?.map((truck: TruckSchema) => {
+                  return (
+                    <Option value={truck.id} key={truck.plateNumber}>
+                      {truck.plateNumber}
+                    </Option>
+                  );
+                })}
+              </Input>
             </div>
           </div>
           <div className="mb-10">

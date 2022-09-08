@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import Form from "antd/lib/form";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
@@ -6,6 +6,11 @@ import { PAYMENT_STATUS } from "../../../../utils/options";
 import { Order_Filter } from "../../../../lib/types/orders";
 import { useForm } from "antd/lib/form/Form";
 import moment from "moment";
+import { useGetTrucksMutation } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { message, Select } from "antd";
+import { TruckSchema } from "../../../../lib/types/trucksTypes";
+
+const { Option } = Select;
 
 interface FilterOrdersFormProps {
   getOrders: (filter: Order_Filter) => void;
@@ -18,6 +23,9 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   setIsFiltered,
   loading
 }) => {
+  const [getTrucks, { data, isLoading: trucksLoading }] =
+    useGetTrucksMutation();
+
   const handleOnFinish = (values: Order_Filter) => {
     setIsFiltered(true);
     const data = {
@@ -33,6 +41,15 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
     form.resetFields();
     getOrders({});
   };
+
+  useEffect(() => {
+    getTrucks({ page: 0, size: 10000 })
+      .unwrap()
+      .then()
+      .catch((e) => {
+        message.error(e.data?.messag || "Cannot get trucks");
+      });
+  }, [getTrucks]);
 
   const [form] = useForm();
 
@@ -73,8 +90,19 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
                 type="select"
                 label="By truck"
                 placeholder="Choose truck"
+                loading={trucksLoading}
+                disabled={trucksLoading}
+                isGroupDropdown
                 options={[{ label: "RAA 123", value: 31 }]}
-              />
+              >
+                {data?.payload?.content.map((truck: TruckSchema) => {
+                  return (
+                    <Option value={truck.id} key={truck.plateNumber}>
+                      {truck.plateNumber}
+                    </Option>
+                  );
+                })}
+              </Input>
             </div>
             <div className="flex-1">
               <Input
