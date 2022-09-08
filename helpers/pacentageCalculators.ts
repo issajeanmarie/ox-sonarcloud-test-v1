@@ -49,3 +49,15 @@ export const revenuePacentageCalculator = (
     return error;
   }
 };
+
+/**
+ * @author Issa Jean Marie <jeanmarieissa@gmail.com>
+ * @since Feb 2022
+ */
+
+export const percentageCalculator = (prev: number, current: number) =>
+  !prev && !current
+    ? 0
+    : !prev && current
+    ? 100
+    : Math.round((current * 100) / prev);

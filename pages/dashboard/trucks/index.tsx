@@ -8,7 +8,8 @@ import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
 import CustomInput from "../../../components/Shared/Input";
 import CustomButton from "../../../components/Shared/Button/button";
-import TrucksTable from "./TrucksTable";
+import { pagination } from "../../../config/pagination";
+import TrucksTable from "../../../components/Analytics/Trucks/TrucksTable";
 import { displayTrucks } from "../../../lib/redux/slices/trucksSlice";
 import { NewTruckModal } from "../../../components/Modals";
 import { useFilterTrucksMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
@@ -16,12 +17,11 @@ import {
   useLoadMoreTrucksMutation,
   useGetTrucksMutation
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import { pagination } from "../../../config/pagination";
 
 const { Text } = Typography;
 
 interface Trucks {
-  content: [];
+  displayTrucks: { content: [] };
 }
 
 type State = {
@@ -39,7 +39,7 @@ const Trucks = () => {
     useFilterTrucksMutation();
 
   const dispatch = useDispatch();
-  const trucksState = useSelector((state: State) => state.trucks);
+  const trucksState = useSelector((state: State) => state.trucks.displayTrucks);
   const router = useRouter();
   const { browserStatus, browserSort, browserSearch } = router.query;
 
@@ -64,7 +64,7 @@ const Trucks = () => {
       .catch((err) => {
         if (err) info.error(err?.data?.message || "Something went wrong");
       });
-  }, []);
+  }, [dispatch, getTrucks]);
 
   const handleLoadMore = () => {
     loadMoreTrucks({
@@ -176,8 +176,14 @@ const Trucks = () => {
       <NewTruckModal isVisible={isVisible} setIsVisible={setIsVisible} />
 
       <div
-        className="flex items-center justify-between dashboard_header shadow p-4"
-        style={{ width: "98%", margin: "0 auto" }}
+        style={{
+          background: "#fcfcfc",
+          padding: "6px 12px",
+          width: "98%",
+          margin: "auto",
+          borderRadius: "4px"
+        }}
+        className="w-full shadow-[0px_-6px_24px_#0000001A] px-5 py-1 sticky top-4 z-50 flex justify-between items-center"
       >
         {/* LEFT SIDE  */}
         <div className="flex items-center gap-4">
