@@ -60,7 +60,17 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
 
   const [getOrder, { isLoading, data }] = useLazyOrderQuery();
 
-  const { data: clients } = useClientsQuery();
+  const { data: clients } = useClientsQuery({
+    page: "0",
+    size: "10000",
+    org: "",
+    dest: "",
+    hq: "",
+    categoryId: "",
+    q: "",
+    sort: "",
+    source: ""
+  });
 
   const user = userType();
 

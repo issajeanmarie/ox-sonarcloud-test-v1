@@ -23,19 +23,12 @@ import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoi
 
 const { Option, OptGroup } = Select;
 
-interface ObjectTypes {
-  names: string;
-  id: number | string;
-  name: string;
-  parentCategory: string;
-  subCategories: [];
-}
-
-const AddEditOrder: FC<AddEditProps> = ({ title }) => {
-  const { data: categories } = useCategoriesQuery();
-  const { data: clients } = useClientsQuery({
-    page: "",
-    size: "",
+const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
+  const { data: categories, isLoading: categoriesLoading } =
+    useCategoriesQuery();
+  const { data: clients, isLoading: clientsLoading } = useClientsQuery({
+    page: "0",
+    size: "10000",
     org: "",
     dest: "",
     hq: "",
@@ -44,7 +37,9 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
     sort: "",
     source: ""
   });
-  const [form] = Form.useForm();
+
+  const [getTrucks, { data, isLoading: trucksLoading }] =
+    useGetTrucksMutation();
   const [chosenClientId, setChosenClientId] = useState<number>();
   const [stops, setStops] = useState<Stop_Request[]>([]);
   const [location, setLocation] = useState<{
@@ -62,7 +57,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
     data: chosenClientInfo,
     isLoading: chosenClientLoading,
     isFetching
-  } = useClientQuery(chosenClientId ?? skipToken);
+  } = useClientQuery(chosenClientId ? { id: chosenClientId } : skipToken);
 
   const handleCreateOrder = (values: OrderRequestBody) => {
     const stopsWithTrucksAndDrivers: Stop_Request[] = [];
