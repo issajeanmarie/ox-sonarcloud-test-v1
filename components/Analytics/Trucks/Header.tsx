@@ -95,7 +95,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({ truckData }) => {
             onClick={() => router.back()}
             preview={false}
           />
-          <span className="heading2">Truckssssss</span>
+          <span className="heading2">Trucks</span>
 
           <Dropdown placement="bottomLeft" overlay={menu}>
             <Row align="middle" gutter={12} className="pointer">

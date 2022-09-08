@@ -40,7 +40,7 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
   };
 
   const userProfile = (
-    <Space className="bg-white radius5 ">
+    <Space direction="vertical" className="bg-white rounded-md p-4 shadow-md ">
       <Row gutter={24} align="middle" className="pad24 mb-3">
         <Col>
           {data?.payload?.profilePic ? (

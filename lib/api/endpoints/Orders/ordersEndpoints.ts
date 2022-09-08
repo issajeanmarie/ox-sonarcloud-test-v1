@@ -1,4 +1,15 @@
-import { Order, OrdersResponse } from "../../../types/orders";
+import {
+  EditOrderRequestBody,
+  Order,
+  AddStopRequest,
+  OrdersResponse,
+  Order_Filter,
+  EditStopRequest,
+  OrderRequestBody,
+  EditPaymentStatusRequest,
+  EditTransactionRequest,
+  SupportOrderRequest
+} from "../../../types/orders";
 import {
   ApiResponseMetadata,
   GenericResponse,
@@ -15,10 +26,26 @@ import { baseAPI } from "../../api";
 
 const ordersApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
-    orders: builder.query<ApiResponseMetadata<OrdersResponse>, void>({
+    orders: builder.query<ApiResponseMetadata<OrdersResponse>, Order_Filter>({
       providesTags: ["Orders"],
-      query: () => ({
-        url: "/orders?page=0&size=40&depot=1",
+      query: ({
+        depot,
+        driver,
+        truck,
+        page,
+        size,
+        start,
+        end,
+        filter,
+        momoRefCode
+      }) => ({
+        url: `/orders?page=${page || "0"}&size=${size || "40"}&depot=${
+          depot || ""
+        }&driver=${driver || ""}&truck=${truck || ""}&start=${
+          start || ""
+        }&end=${end || ""}&filter=${filter || ""}&momoRefCode=${
+          momoRefCode || ""
+        }`,
         method: "GET"
       })
     }),
@@ -31,14 +58,48 @@ const ordersApi = baseAPI.injectEndpoints({
       transformResponse: (response: ApiResponseMetadata<Order>) =>
         response.payload
     }),
-    deleteOrder: builder.mutation<GenericResponse, Query>({
+    createOrder: builder.mutation<GenericResponse, OrderRequestBody>({
       invalidatesTags: ["Orders"],
-      query: (id) => ({
-        url: `/orders/${id}`,
-        method: "DELETE"
+      query: (data) => ({
+        url: `/orders/`,
+        method: "POST",
+        body: data
       })
     }),
-    orderInvoice: builder.mutation<any, Query>({
+    supportOrder: builder.mutation<
+      GenericResponse,
+      { orderId: Query; data: SupportOrderRequest }
+    >({
+      invalidatesTags: ["Orders"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}/support-order`,
+        method: "POST",
+        body: data
+      })
+    }),
+    editOrder: builder.mutation<
+      GenericResponse,
+      { orderId: Query; data: EditOrderRequestBody }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}`,
+        method: "PATCH",
+        body: data
+      })
+    }),
+    changeOrderStatus: builder.mutation<
+      GenericResponse,
+      { id: number; data: { comment: string; status: "CANCEL" | "COMPLETE" } }
+    >({
+      invalidatesTags: ["Orders", "Order"],
+      query: ({ data, id }) => ({
+        url: `/orders/${id}/change-status`,
+        body: data,
+        method: "PATCH"
+      })
+    }),
+    orderInvoice: builder.mutation<any, Query | number>({
       query: (id) => ({
         url: `/orders/${id}/invoice`,
         method: "GET",
@@ -52,6 +113,7 @@ const ordersApi = baseAPI.injectEndpoints({
       any,
       { orderId: number; data: { amount: number; phone: string } }
     >({
+      invalidatesTags: ["Order", "Orders"],
       query: ({ orderId, data }) => ({
         url: `/orders/${orderId}/momo-pay/initiate`,
         method: "POST",
@@ -59,13 +121,78 @@ const ordersApi = baseAPI.injectEndpoints({
       })
     }),
     verifyPayment: builder.mutation<
-      any,
+      GenericResponse,
       { orderId: number; referenceId: string }
     >({
       invalidatesTags: ["Order", "Orders"],
       query: ({ orderId, referenceId }) => ({
         url: `/orders/${orderId}/momo-pay/verify?referenceId=${referenceId}`,
         method: "GET"
+      })
+    }),
+    addStop: builder.mutation<
+      GenericResponse,
+      { orderId: number; data: AddStopRequest }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}/stops`,
+        method: "POST",
+        body: data
+      })
+    }),
+    editStop: builder.mutation<
+      GenericResponse,
+      { orderId: number; stopId: number; data: EditStopRequest }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, stopId, data }) => ({
+        url: `/orders/${orderId}/stops/${stopId}`,
+        method: "PUT",
+        body: data
+      })
+    }),
+    editPaymentStatus: builder.mutation<
+      GenericResponse,
+      { orderId: number; data: EditPaymentStatusRequest }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}/pay`,
+        method: "POST",
+        body: data
+      })
+    }),
+    editTransaction: builder.mutation<
+      GenericResponse,
+      { orderId: number; transactionId: number; data: EditTransactionRequest }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, transactionId, data }) => ({
+        url: `/orders/${orderId}/transactions/${transactionId}`,
+        method: "PUT",
+        body: data
+      })
+    }),
+    writeOff: builder.mutation<
+      GenericResponse,
+      { orderId: number; data: { reason: string } }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, data }) => ({
+        url: `/orders/${orderId}/approve-write-off/`,
+        method: "PATCH",
+        body: data
+      })
+    }),
+    deleteStop: builder.mutation<
+      GenericResponse,
+      { orderId: Query; stopId: number }
+    >({
+      invalidatesTags: ["Order"],
+      query: ({ orderId, stopId }) => ({
+        url: `/orders/${orderId}/stops/${stopId}`,
+        method: "DELETE"
       })
     })
   })
@@ -74,9 +201,18 @@ const ordersApi = baseAPI.injectEndpoints({
 export const {
   useOrdersQuery,
   useLazyOrdersQuery,
+  useEditPaymentStatusMutation,
   useLazyOrderQuery,
   useOrderInvoiceMutation,
-  useDeleteOrderMutation,
+  useCreateOrderMutation,
+  useEditTransactionMutation,
+  useWriteOffMutation,
+  useDeleteStopMutation,
+  useAddStopMutation,
+  useEditStopMutation,
+  useEditOrderMutation,
+  useChangeOrderStatusMutation,
   useInitiatePaymentMutation,
+  useSupportOrderMutation,
   useVerifyPaymentMutation
 } = ordersApi;

@@ -10,7 +10,26 @@ export type LoadMoreTrucksResponse = {
   payload: string;
 };
 
-export interface CreateTruckRequest {
+export type Inspection = {
+  createdAt: string;
+  dailyKms: number;
+  id: number;
+  odometer: number;
+  score: number;
+};
+
+export type TruckSchema = {
+  active: boolean;
+  capacity: number;
+  id: number;
+  lastInspection?: Inspection;
+  model: string;
+  plateNumber: string;
+  trackingOdometer?: number;
+  trackingUnitSerialNumber: string;
+};
+
+export type CreateTruckRequest = {
   depotId: 0;
   model: string;
   plateNumber: string;
@@ -25,7 +44,7 @@ export interface CreateTruckRequest {
   tireSize: string;
   trackingUnitSerialNumber: string;
   fuelCardAssigned: string;
-}
+};
 
 export type LoadMoreTrucksRequest = {
   page?: number;

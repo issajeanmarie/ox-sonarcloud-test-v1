@@ -56,7 +56,7 @@ const ActionModal: FC<ActionModalProps> = ({
             <Button
               onClick={action}
               loading={loading}
-              type={type === "danger" ? "danger_filled" : "secondary"}
+              type={type === "danger" ? "danger_filled" : "primary"}
             >
               {actionLabel}
             </Button>
