@@ -1,11 +1,21 @@
-import { Col, Image, Row, Typography } from "antd";
-import React from "react";
-import CustomInput from "../../Shared/Input";
+import { Col, Image, Row, Typography, Upload } from "antd";
+import React, { FC } from "react";
+import Input from "../../Shared/Input";
 import CustomButton from "../../Shared/Button/button";
+import { TrucksUsageTypes } from "../../../lib/types/pageTypes/Analytics/TrucksUsageTableTypes";
+import { YellowDownloadIcon } from "../../Icons";
 
 const { Text } = Typography;
 
-const TrucksUsage = () => {
+const TrucksUsage: FC<TrucksUsageTypes> = ({
+  sorter,
+  onSortChange,
+  onStartDateChange,
+  onEndDateChange,
+  uploadingFuelReport,
+  uploadFileProps,
+  handleSearch
+}) => {
   return (
     <Row
       justify="space-between"
@@ -13,14 +23,15 @@ const TrucksUsage = () => {
     >
       <Col className="flex items-center gap-4">
         <Text className="heading2">Trucks usage</Text>
-        <CustomInput
+        <Input
+          onSelectChange={onSortChange}
           type="select"
           label=""
-          placeholder="Sort: Revenue made"
+          placeholder={`Sort: ${sorter}`}
           options={[
-            { label: "Item one", value: "one" },
-            { label: "Item two", value: "two" },
-            { label: "Item three", value: "three" }
+            { label: "Revenue", value: "REVENUE" },
+            { label: "Distance", value: "DISTANCE" },
+            { label: "Weight", value: "WEIGHT" }
           ]}
           name="sort"
           suffixIcon={
@@ -32,7 +43,8 @@ const TrucksUsage = () => {
             />
           }
         />
-        <CustomInput
+        <Input
+          onDateChange={onStartDateChange}
           type="date"
           name="Start"
           placeholder="Start"
@@ -45,7 +57,8 @@ const TrucksUsage = () => {
             />
           }
         />
-        <CustomInput
+        <Input
+          onDateChange={onEndDateChange}
           type="date"
           name="End"
           placeholder="End"
@@ -61,7 +74,8 @@ const TrucksUsage = () => {
       </Col>
 
       <Col className="flex items-center gap-4">
-        <CustomInput
+        <Input
+          onChange={handleSearch}
           type="text"
           placeholder="Search truck"
           name="searchTruckUsage"
@@ -74,9 +88,14 @@ const TrucksUsage = () => {
             />
           }
         />
-        <CustomButton type="secondary">
-          <span className="text-sm">DOWNLOAD REPORT</span>
+        <CustomButton type="secondary" size="small">
+          <span className="text-sm">{YellowDownloadIcon}</span>
         </CustomButton>
+        <Upload {...uploadFileProps}>
+          <CustomButton loading={uploadingFuelReport} type="primary">
+            <span className="text-sm">UPLOAD FUEL REPORT</span>
+          </CustomButton>
+        </Upload>
       </Col>
     </Row>
   );

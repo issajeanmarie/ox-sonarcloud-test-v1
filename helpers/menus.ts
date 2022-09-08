@@ -7,7 +7,7 @@ const AccountsIcon = "ic-security-secured-profile.svg";
 const ClientsIcon = "ic-actions-user.svg";
 const SettingsIcon = "ic-actions-settings.svg";
 
-export const manageSidebarMenus = (depotID = "", depotName = "") => [
+export const manageSidebarMenus = (depotID: number, depotName: string) => [
   {
     name: routeConfig.Orders.name,
     icon: OrdersIcon,
@@ -47,7 +47,7 @@ export const manageSidebarMenus = (depotID = "", depotName = "") => [
   }
 ];
 
-export const moreSidebarMenus = (depotID = "", depotName = "") => [
+export const moreSidebarMenus = (depotID: number, depotName: string) => [
   {
     name: routeConfig.Analytics.name,
     icon: AnalyticsIcon,

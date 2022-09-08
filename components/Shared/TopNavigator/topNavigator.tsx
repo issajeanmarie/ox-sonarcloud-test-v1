@@ -1,24 +1,19 @@
 import { FC, useEffect } from "react";
-import { Header_Links } from "../../../lib/types/links";
 import { Typography } from "antd";
 import TopNavigatorRightSideWrapper from "./RightSide/TopNavigatorRightSideWrapper";
 import RightSideRevenue from "./RightSide/Analytics/RightSideRevenue";
 import RightSideKPIs from "./RightSide/Analytics/RightSideKPIs";
+import { TopNavigatorProps } from "../../../lib/types/components/TopNavigatorProps";
 
 const { Text } = Typography;
-
-interface TopNavigatorProps {
-  headerLinks: Header_Links[];
-  setActive: (menu: string) => void;
-  active: string;
-  toggleActiveHandler: (menuID: string) => void;
-}
 
 const TopNavigator: FC<TopNavigatorProps> = ({
   headerLinks,
   setActive,
   active,
-  toggleActiveHandler
+  toggleActiveHandler,
+  onStartDateChange,
+  onEndDateChange
 }) => {
   useEffect(() => {
     headerLinks && setActive && setActive(headerLinks[0].id);
@@ -49,12 +44,18 @@ const TopNavigator: FC<TopNavigatorProps> = ({
 
       {active === "revenues" && (
         <TopNavigatorRightSideWrapper>
-          <RightSideRevenue />
+          <RightSideRevenue
+            onStartDateChange={onStartDateChange}
+            onEndDateChange={onEndDateChange}
+          />
         </TopNavigatorRightSideWrapper>
       )}
       {active === "KPIs" && (
         <TopNavigatorRightSideWrapper>
-          <RightSideKPIs />
+          <RightSideKPIs
+            onStartDateChange={onStartDateChange}
+            onEndDateChange={onEndDateChange}
+          />
         </TopNavigatorRightSideWrapper>
       )}
     </div>

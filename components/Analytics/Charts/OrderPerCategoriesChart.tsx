@@ -1,7 +1,9 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { FC } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { chartCutout } from "../../../lib/charts/cutouts";
+import { ChartProps } from "../../../lib/types/pageTypes/Analytics/ChartProps";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -21,14 +23,13 @@ export const options = {
   cutout: chartCutout
 };
 
-const OrderPerCategoriesChart = () => {
+const OrderPerCategoriesChart: FC<ChartProps> = ({ chartData }) => {
   const data = {
-    labels: ["Coffee", "Furniture"],
+    labels: chartData?.categoriesByCount?.map((item: any) => item?.category),
     datasets: [
       {
-        label: "# of Votes",
-        data: [30, 70],
-        backgroundColor: ["#E3B221", "#EAEFF2"],
+        data: chartData?.categoriesByCount?.map((item: any) => item?.total),
+        backgroundColor: ["#E3B221", "#EAEFF2", "#2A3548"],
         borderWidth: 0
       }
     ]

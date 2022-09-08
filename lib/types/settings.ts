@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * AUTH TYPES
  * @author Elie K. Gashagaza
@@ -30,10 +31,42 @@ export type KPIsResponse = {
   map: any;
 };
 
+export type CategoriesResponse = {
+  data: [];
+  map: any;
+};
+
 export type KPI = {
   depotId: number;
   depotName: string;
   targetPerDay: number;
   targetPerKm: number;
   kpi: [];
+};
+
+export type AddKPI = {
+  kpis: {
+    depotId: number;
+    targetPerDay: number;
+    targetPerKm: number;
+  };
+};
+
+export type AddCategory = {
+  name: string;
+  parentCategoryId: string | null;
+};
+
+export type DeleteCategoryRequest = {
+  id: number;
+};
+
+export type UpdateCategoryRequest = {
+  id: number;
+  name: string;
+  parentCategoryId: string | null;
+};
+
+export type MakeCategoryParentRequest = {
+  id: number;
 };

@@ -1,21 +1,16 @@
 import { FC, Fragment, useEffect } from "react";
 import OrdersHeader from "./OrdersHeader";
 import OneOrder from "./OneOrder";
-import { useLazyOrdersQuery } from "../../lib/api/endpoints/Orders/ordersEndpoints";
+import { useOrdersQuery } from "../../lib/api/endpoints/Orders/ordersEndpoints";
 import { message } from "antd";
 import Loader from "../Shared/Loader";
 
 const Orders: FC = () => {
-  const [getOrders, { data, isLoading }] = useLazyOrdersQuery();
+  const { data, isLoading, error } = useOrdersQuery();
 
   useEffect(() => {
-    getOrders()
-      .unwrap()
-      .then()
-      .catch((e) => {
-        message.error(e.data.message || "Something went wrong");
-      });
-  }, [getOrders]);
+    error && message.error(error || "Something went wrong");
+  }, [error]);
 
   return (
     <div className="m-4 overflow-auto relative">
@@ -25,9 +20,11 @@ const Orders: FC = () => {
         <Fragment>
           <OrdersHeader data={data} />
           {data &&
-            data?.payload?.content?.map((order, index) => (
-              <OneOrder key={index} order={order} />
-            ))}
+            data?.payload?.content?.map(
+              (order: object | any, index: number) => (
+                <OneOrder key={index} index={index + 1} order={order} />
+              )
+            )}
         </Fragment>
       )}
     </div>

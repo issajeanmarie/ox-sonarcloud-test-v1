@@ -9,7 +9,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 5px;
+  height: 2px;
 }
 
 #nprogress .peg {
@@ -128,12 +128,12 @@
 .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
   display: flex;
   align-items: center;
-  font-size: 14px !important;
+  font-size: 12px !important;
 }
 
 .ant-select-selection-placeholder {
-  font-size: 14px !important;
   font-weight: normal !important;
+  color: black !important;
 }
 
 .ant-select-show-search.ant-select:not(.ant-select-customize-input)
@@ -149,6 +149,11 @@
   background-color: #ffffff !important;
   height: inherit !important;
   border: none !important;
+}
+
+/* MODAL */
+.ox-modal .ant-modal-header {
+  border-bottom-width: 0 !important;
 }
 
 .noborder .ant-table-tbody > tr > td,
@@ -193,6 +198,32 @@
   > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
   display: none;
 }
+
+/* TABLE WITH CHILDREN */
+.ant-table-row.ant-table-row-level-0
+  .ant-table-cell.ant-table-cell-with-append
+  span {
+  font-weight: 900 !important;
+}
+
+.ant-table-row.ant-table-row-level-1
+  .ant-table-cell.ant-table-cell-with-append
+  span {
+  font-weight: 400 !important;
+  color: #313622 !important;
+}
+.ant-table-row.ant-table-row-level-0 .black {
+  font-weight: 900 !important;
+}
+/* REMOVE THE PLUS BUTTON ON SUB TABLES */
+.ant-table-row.ant-table-row-level-1 .add_category {
+  display: none !important;
+}
+/* REMOVE THE MAKE PARENT BUTTON ON CATEGORIES  */
+.ant-table-row.ant-table-row-level-0 .make_parent_category {
+  display: none !important;
+}
+/* TABLE WITH CHILDREN END*/
 
 .ant-table-thead > tr > .ant-table-cell {
   font-weight: 700;
@@ -298,4 +329,42 @@
   font-size: 13px !important;
   color: #dc0000 !important;
   margin-top: 1px;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon {
+  background-color: #e3b221 !important;
+  border-color: #e3b221 !important;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: white !important;
+}
+
+.ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
+  background-color: #e3b221 !important;
+  border-style: dashed !important;
+}
+
+.ant-picker-input > input {
+  font-size: 12px !important;
+}
+
+.ant-picker-input > input::placeholder {
+  font-size: 12px !important;
+}
+
+/* TAG */
+.ant-tag {
+  padding: 4px !important;
+  background: var(--color_input_white) !important;
+  border: 2px solid var(--color_input_white) !important;
+  /* min-width: 100px !important; */
+}
+
+.ant-tag .anticon > * {
+  color: var(--color_yellow_faded) !important;
+  display: flex !important;
+  align-items: center !important;
 }

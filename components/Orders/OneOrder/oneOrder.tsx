@@ -10,12 +10,15 @@ import { Order, Order as OrderType } from "../../../lib/types/orders";
 import { dateFormatterNth } from "../../../utils/dateFormatter";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
+import Link from "next/link";
+import { routes } from "../../../config/route-config";
 
 const { Column } = Table;
 const { Text } = Typography;
 
 interface OrderProps {
   order: OrderType;
+  index: number;
 }
 
 type Types = {
@@ -30,14 +33,16 @@ type Types = {
   supporting: string;
 };
 
-const Order: FC<OrderProps> = ({ order }) => {
+const Order: FC<OrderProps> = ({ order, index }) => {
   return (
-    <div className="shadow w-full my-5">
+    <div className="shadow-[0px_0px_19px_#00000008] w-full my-5">
       {/* TOP ROW */}
+
       <div className="p-5 border-b flex items-center justify-between bg-white">
         {/* TOP ROW RIGHT SIDE */}
         <div className="flex-1">
-          <Row align="middle" gutter={32}>
+          <Row gutter={32}>
+            <Col className="heading2 w-[45px]">{index}.</Col>
             <Col>
               <Image
                 width={16}
@@ -48,7 +53,13 @@ const Order: FC<OrderProps> = ({ order }) => {
             </Col>
 
             <Col>
-              <Text className="heading2">{order?.office?.client?.names}</Text>
+              <Text className="heading2">
+                {order?.office?.client?.names ? (
+                  order?.office?.client?.names
+                ) : (
+                  <span className=" text-gray-300">Unknown client</span>
+                )}
+              </Text>
             </Col>
             <Col>
               <Text className="normalText opacity_56">{order.clientPhone}</Text>
@@ -88,7 +99,7 @@ const Order: FC<OrderProps> = ({ order }) => {
           title="Name"
           render={(text, record: Order) => {
             const child = (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-7 ml-12">
                 <Image
                   width={22}
                   src="/icons/ic-ecommerce-delivery-yellow.svg"
@@ -102,7 +113,7 @@ const Order: FC<OrderProps> = ({ order }) => {
                       {record?.stops[0]?.truck?.plateNumber}
                     </Text>
                   ) : (
-                    <span className=" text-gray-300">Truck unavailable</span>
+                    <span className=" text-gray-300">Unavailable</span>
                   )}
                   <span className="nowrap opacity_56 text-xs">
                     {record?.stops[0]?.driver?.names}
@@ -128,7 +139,7 @@ const Order: FC<OrderProps> = ({ order }) => {
                   {abbreviateNumber(totalWeight)} KG
                 </Text>
 
-                <span className="text-xs opacity_56 nowrap">20 Rwf / Kg</span>
+                <span className="opacity_56 nowrap">20 Rwf / Kg</span>
               </div>
             );
             return { children: child, props: { "data-label": "Name" } };
@@ -142,7 +153,7 @@ const Order: FC<OrderProps> = ({ order }) => {
             const child = (
               <div className="flex items-center gap-4">
                 <Text className="heading2">From</Text>
-                <Text className="font-extralight text-xs">
+                <Text className="font-light">
                   {record.stops[0]?.location?.split(" ")[0] || "---"}
                 </Text>
               </div>
@@ -158,7 +169,7 @@ const Order: FC<OrderProps> = ({ order }) => {
             const child = (
               <div className="flex items-center gap-4">
                 <Text className="heading2">To</Text>
-                <Text className="font-extralight text-xs">
+                <Text className="font-light">
                   {record?.stops[record?.stops?.length - 1]?.location?.split(
                     " "
                   )[0] || "---"}
@@ -194,7 +205,7 @@ const Order: FC<OrderProps> = ({ order }) => {
         <Column
           key="key"
           title="Action"
-          render={() => {
+          render={(text, record: Order) => {
             const child = (
               <div className="flex items-center gap-3 justify-end">
                 <CustomButton
@@ -222,10 +233,11 @@ const Order: FC<OrderProps> = ({ order }) => {
                     />
                   }
                 />
-
-                <CustomButton type="view" size="small">
-                  View
-                </CustomButton>
+                <Link href={routes.viewOrder.url + record.id}>
+                  <CustomButton type="view" size="small">
+                    View
+                  </CustomButton>
+                </Link>
               </div>
             );
             return { children: child, props: { "data-label": "Status" } };
@@ -234,26 +246,19 @@ const Order: FC<OrderProps> = ({ order }) => {
       </Table>
 
       {/* BOTTOM ROW */}
-      <Row
-        justify="space-between"
-        style={{
-          borderTop: "1px solid #eaeff2",
-          padding: "16px 24px"
-        }}
-        className="bg-white"
-      >
+      <Row justify="space-between" className="bg-white p-4">
         {/* TOP ROW RIGHT SIDE */}
         <Col>
           <Row gutter={12} align="middle">
             <Col>
-              <Text className="text-xs opacity_56 nowrap">
+              <Text className="text-xs opacity_56 nowrap ml-12">
                 Created: {dateFormatterNth(order.startDateTime)}
               </Text>
             </Col>
 
             <Col>
               {order.lastEditedBy && (
-                <Text className="normalText opacity_56 italic nowrap ">
+                <Text className="opacity_56 italic nowrap text-xs font-bold">
                   - Edited by {order.lastEditedBy}
                 </Text>
               )}

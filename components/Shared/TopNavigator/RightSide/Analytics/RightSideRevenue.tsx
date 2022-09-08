@@ -1,11 +1,15 @@
 import { Image } from "antd";
-import React from "react";
-import CustomInput from "../../../../Shared/Input";
+import React, { FC } from "react";
+import { RightSideRevenueTypes } from "../../../../../lib/types/pageTypes/Analytics/RightSideRevenueTypes";
+import Input from "../../../../Shared/Input";
 
-const RightSideRevenue = () => {
+const RightSideRevenue: FC<RightSideRevenueTypes> = ({
+  onStartDateChange,
+  onEndDateChange
+}) => {
   return (
     <>
-      <CustomInput
+      <Input
         type="select"
         label=""
         placeholder="Show: Last 7 days"
@@ -24,7 +28,8 @@ const RightSideRevenue = () => {
           />
         }
       />
-      <CustomInput
+      <Input
+        onDateChange={onStartDateChange}
         type="date"
         name="Start"
         placeholder="Start"
@@ -37,7 +42,8 @@ const RightSideRevenue = () => {
           />
         }
       />
-      <CustomInput
+      <Input
+        onDateChange={onEndDateChange}
         type="date"
         name="End"
         placeholder="End"

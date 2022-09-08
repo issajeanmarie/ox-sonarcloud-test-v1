@@ -2,7 +2,13 @@ import {
   ProfileResponse,
   ProfileTypes,
   PasswordTypes,
-  KPIsResponse
+  KPIsResponse,
+  AddKPI,
+  CategoriesResponse,
+  AddCategory,
+  DeleteCategoryRequest,
+  UpdateCategoryRequest,
+  MakeCategoryParentRequest
 } from "../../../types/settings";
 import { ApiResponseMetadata, GenericResponse } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -50,6 +56,71 @@ const settingsApi = baseAPI.injectEndpoints({
         url: "/kpis/current",
         method: "GET"
       })
+    }),
+    addKpi: builder.mutation<ApiResponseMetadata<KPIsResponse>, AddKPI>({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: "/kpis",
+        method: "POST",
+        body: DTO
+      })
+    }),
+
+    //Categories
+    getCategories: builder.query<ApiResponseMetadata<CategoriesResponse>, void>(
+      {
+        providesTags: ["Settings"],
+        query: () => ({
+          url: "/categories",
+          method: "GET"
+        })
+      }
+    ),
+    addCategory: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      AddCategory
+    >({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: "/categories",
+        method: "POST",
+        body: DTO
+      })
+    }),
+    deleteCategory: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      DeleteCategoryRequest
+    >({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: `/categories/${DTO?.id}`,
+        method: "DELETE",
+        body: DTO
+      })
+    }),
+    updateCategory: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      UpdateCategoryRequest
+    >({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: `/categories/${DTO?.id}`,
+        method: "PUT",
+        body: {
+          name: DTO?.name,
+          parentCategoryId: DTO?.parentCategoryId
+        }
+      })
+    }),
+    makeCategoryParent: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      MakeCategoryParentRequest
+    >({
+      invalidatesTags: ["Settings"],
+      query: (DTO) => ({
+        url: `/categories/${DTO?.id}/make-parent`,
+        method: "PUT"
+      })
     })
   })
 });
@@ -58,5 +129,11 @@ export const {
   useSettingsQuery,
   usePersonalInfoMutation,
   useChangePasswordMutation,
-  useGetKpisQuery
+  useGetKpisQuery,
+  useAddKpiMutation,
+  useGetCategoriesQuery,
+  useAddCategoryMutation,
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation,
+  useMakeCategoryParentMutation
 } = settingsApi;
