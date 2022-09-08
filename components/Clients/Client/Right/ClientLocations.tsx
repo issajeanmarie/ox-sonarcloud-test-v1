@@ -14,7 +14,10 @@ import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
 import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 import ClientLocationsTable from "../../../Tables/Clients/ClientLocationsTable";
 
-const ClientLocations: FC<ClientLocationsTypes> = ({ client }) => {
+const ClientLocations: FC<ClientLocationsTypes> = ({
+  client,
+  isClientFetching
+}) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const showModal = () => {
     setIsModalVisible(true);
@@ -67,7 +70,10 @@ const ClientLocations: FC<ClientLocationsTypes> = ({ client }) => {
       <Divider style={{ padding: 0, margin: 0 }} />
 
       <div className="w-full p-8">
-        <ClientLocationsTable offices={client?.offices} />
+        <ClientLocationsTable
+          offices={client?.offices}
+          isClientFetching={isClientFetching}
+        />
       </div>
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}

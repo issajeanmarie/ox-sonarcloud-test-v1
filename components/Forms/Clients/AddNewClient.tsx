@@ -124,7 +124,7 @@ const AddNewClient: FC<AddClientTypes> = ({
           />
         </Col>
 
-        <Col flex="none">
+        <Col flex="auto">
           <Input
             onChange={onOfficeLocationChange}
             name="officeLocation"
@@ -134,7 +134,7 @@ const AddNewClient: FC<AddClientTypes> = ({
             rules={requiredInput}
           />
         </Col>
-        <Col flex="auto">
+        <Col flex="none">
           <Button onClick={() => createOffices()} type="secondary">
             Icon
           </Button>

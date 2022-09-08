@@ -14,7 +14,10 @@ import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
 import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 import ClientOrderRecipientTable from "../../../Tables/Clients/ClientOrderRecipientTable";
 
-const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({ client }) => {
+const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
+  client,
+  isClientFetching
+}) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const showModal = () => {
     setIsModalVisible(true);
@@ -65,7 +68,10 @@ const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({ client }) => {
 
       <div className="w-full p-8">
         {client?.affiliates?.length > 0 ? (
-          <ClientOrderRecipientTable recipients={client?.affiliates} />
+          <ClientOrderRecipientTable
+            recipients={client?.affiliates}
+            isClientFetching={isClientFetching}
+          />
         ) : (
           <span className="font-light">Order recipients will appear here</span>
         )}

@@ -36,10 +36,24 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({
               <span className="text-gray-400">{client?.names}</span>
             </div>
           </Col>
-          <Col>
+          <Col className="flex gap-8 items-center">
             <Image
               className="pointer"
               src="/icons/receipt.png"
+              alt="Backspace icon"
+              width={18}
+              height={18}
+            />
+            <Image
+              className="pointer"
+              src="/icons/ic-media-stop.svg"
+              alt="Backspace icon"
+              width={18}
+              height={18}
+            />
+            <Image
+              className="pointer"
+              src="/icons/ic-actions-remove.svg"
               alt="Backspace icon"
               width={18}
               height={18}

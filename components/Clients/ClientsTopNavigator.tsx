@@ -9,7 +9,6 @@ import { ClientsTopNavigatorTypes } from "../../lib/types/pageTypes/Clients/Clie
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewClient from "../Forms/Clients/AddNewClient";
 import { numbersFormatter } from "../../helpers/numbersFormatter";
-import { ExtraSmallSpinLoader } from "../Shared/Loaders/Loaders";
 import { usePostClientMutation } from "../../lib/api/endpoints/Clients/clientsEndpoint";
 import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
 import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
@@ -91,7 +90,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       <Col className="flex items-center gap-4">
         <Text className="heading2 flex items-center">
           {isClientsLoading ? (
-            <ExtraSmallSpinLoader />
+            <span>...</span>
           ) : (
             <>
               {clients?.totalElements !== 0 && (

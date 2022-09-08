@@ -11,15 +11,19 @@ import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import ActionModal from "../../Shared/ActionModal";
 import { useDeleteClientRecipientMutation } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { useRouter } from "next/router";
+import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
+import Image from "next/image";
 
 const { Text } = Typography;
 
 type ClientOrderRecipientTableProps = {
   recipients: any;
+  isClientFetching: boolean;
 };
 
 const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
-  recipients
+  recipients,
+  isClientFetching
 }) => {
   const { query } = useRouter();
   const [itemToDelete, setItemToDelete]: any = useState();
@@ -79,20 +83,32 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
         record: ClientOrderRecipientTableTypes
       ) => (
         <RowsWrapper>
-          <div className="flex justify-end items-center gap-4">
+          <div className="flex justify-end items-center gap-8">
             <Button
               // onClick={() => showEditModal(record)}
               style={{ margin: 0, padding: 0 }}
               type="text"
             >
-              edit
+              <Image
+                className="pointer"
+                src="/icons/ic-contact-edit.svg"
+                alt="Backspace icon"
+                width={18}
+                height={18}
+              />
             </Button>
             <Button
               onClick={() => showModal(record)}
               style={{ margin: 0, padding: 0 }}
               type="text"
             >
-              del
+              <Image
+                className="pointer"
+                src="/icons/ic-media-stop.svg"
+                alt="Backspace icon"
+                width={18}
+                height={18}
+              />
             </Button>
           </div>
         </RowsWrapper>
@@ -110,6 +126,7 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
         bordered={false}
         scroll={{ x: 0 }}
         showHeader={false}
+        loading={TableOnActionLoading(isClientFetching)}
       />
       <ActionModal
         isModalVisible={isModalVisible}

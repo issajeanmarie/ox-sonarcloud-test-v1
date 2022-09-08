@@ -1,6 +1,7 @@
 import { HiDownload } from "react-icons/hi";
 import { FiEdit2 } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
+import { BiPauseCircle } from "react-icons/bi";
 
 export const YellowDownloadIcon = (
   <HiDownload style={{ fontSize: "1.3rem", color: "#E3B221" }} />
@@ -11,3 +12,5 @@ export const YellowEditIcon = (
 
 //GREY
 export const CloseIcon = <AiOutlineClose style={{ fontSize: "1.3rem" }} />;
+export const GreyEditIcon = <FiEdit2 style={{ fontSize: "1.3rem" }} />;
+export const PauseCircleIcon = <BiPauseCircle style={{ fontSize: "1.3rem" }} />;

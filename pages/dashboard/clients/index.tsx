@@ -12,6 +12,7 @@ import {
 import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/categoryEndpoints";
 import { BackendErrorTypes } from "../../../lib/types/shared";
 import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
+import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 
 const Clients = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -97,7 +98,11 @@ const Clients = () => {
       </div>
       <div className="px-5">
         {isClientsLoading ? (
-          "loading"
+          <>
+            {[...Array(20)].map((_, index) => (
+              <ColsTableLoader key={index} />
+            ))}
+          </>
         ) : (
           <ClientsTable
             isModalVisible={isWarningModalVisible}
