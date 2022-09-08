@@ -3,15 +3,27 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 
-import React, { ChangeEvent, Fragment, useRef } from "react";
+import React, {
+  ChangeEvent,
+  Fragment,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import Form from "antd/lib/form";
 import Select from "antd/lib/select";
 import Typography from "antd/lib/typography";
 import Input from "antd/lib/input";
 import DatePicker from "antd/lib/date-picker";
 import ImageUploader from "./imageUploader";
-import usePlacesAutocomplete from "use-places-autocomplete";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng
+} from "use-places-autocomplete";
 import useOnClickOutside from "../../../utils/hooks/useOutsideClick";
+import { message } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import Image from "next/image";
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -38,9 +50,15 @@ const Entry = ({
   onDateChange,
   defaultValue,
   initialValue,
-  format
+  setLocation,
+  dateFormat,
+  format,
+  showTime,
+  location
 }: any) => {
   // Google location
+
+  const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
   const {
     ready,
@@ -50,8 +68,6 @@ const Entry = ({
     setValue
   } = usePlacesAutocomplete({
     requestOptions: {
-      // location: { lat: () => 43.6532, lng: () => -79.3832 },
-      radius: 100 * 1000,
       componentRestrictions: { country: ["rw"] }
     },
     debounce: 300
@@ -60,13 +76,34 @@ const Entry = ({
   const placeSuggestionsRef = useRef<any>();
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
-    setValue(e?.target?.value);
+    setValue(e.target.value);
+    setLocation();
   };
 
   const handleSelect = (val: string): void => {
     setValue(val, false);
+    setCoordinatesLoading(true);
     clearSuggestions();
+
+    getGeocode({ address: val })
+      .then((results) => getLatLng(results[0]))
+      .then((coordinates) => {
+        setLocation && setLocation({ name: val, coordinates });
+        setCoordinatesLoading(false);
+      })
+      .catch((error) => {
+        setCoordinatesLoading(false);
+        message.warning(error);
+      });
   };
+
+  useEffect(() => {
+    if (location) {
+      setValue(location.name);
+    } else {
+      setValue("");
+    }
+  }, [location]);
 
   useOnClickOutside(placeSuggestionsRef, () => clearSuggestions());
 
@@ -76,7 +113,7 @@ const Entry = ({
         role="button"
         onClick={() => handleSelect(description)}
         key={place_id}
-        className="hover:bg-gray-50 cursor-pointer p-2 text-xs transition-all duration-100"
+        className="hover:bg-gray-50 cursor-pointer p-2 text-sm transition-all duration-100"
       >
         {description}
       </div>
@@ -96,6 +133,7 @@ const Entry = ({
               defaultValue={defaultValue}
               className={`my_input ${size === "small" && "sm"}`}
               placeholder={placeholder}
+              allowClear
               type={inputType}
               suffix={suffixIcon}
               onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
@@ -113,6 +151,7 @@ const Entry = ({
             <Select
               showSearch={showSearch || true}
               placeholder={placeholder}
+              allowClear
               size="large"
               className={`my_input bordered_input ${size === "small" && "sm"} `}
               disabled={disabled}
@@ -157,6 +196,7 @@ const Entry = ({
           <Form.Item name={name} rules={rules}>
             <Input.Password
               className="my_input p-[12px]"
+              allowClear
               placeholder={placeholder}
             />
           </Form.Item>
@@ -170,11 +210,20 @@ const Entry = ({
             <DatePicker
               onChange={onDateChange}
               className={`my_datepicker ${size === "small" && "sm"}`}
-              allowClear={false}
+              allowClear
               name={name}
-              suffixIcon={suffixIcon}
+              suffixIcon={
+                <Image
+                  src="/icons/ic-actions-calendar.svg"
+                  alt="Calendar icon"
+                  width={18}
+                  height={18}
+                />
+              }
+              format={dateFormat || format || "YYYY-MM-DD"}
+              showTime={showTime}
               placeholder={placeholder}
-              format={format ? format : false}
+              // format={format ? format : false}
             />
           </Form.Item>
         </Fragment>
@@ -200,9 +249,11 @@ const Entry = ({
                 className={`my_input ${size === "small" && "sm"}`}
                 placeholder={placeholder}
                 type={inputType}
+                allowClear
                 value={value}
                 onChange={handleInput}
-                disabled={!ready}
+                suffix={coordinatesLoading ? <LoadingOutlined /> : false}
+                disabled={!ready || coordinatesLoading}
               />
               {status === "OK" && (
                 <div

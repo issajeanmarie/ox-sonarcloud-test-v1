@@ -21,3 +21,18 @@ export const getLoggedInUser = () => {
     loggedInUser
   };
 };
+
+export const userType = () => {
+  const data = localStorage.getItem("_ox_tkn_");
+  const role: any = data ? jwt_decode(data) : {};
+  const { scope } = role;
+
+  const types = {
+    isGuest: scope === "ADMIN_GUEST",
+    isDispatcher: scope === "DISPATCHER",
+    isAdmin: scope === "ADMIN",
+    isSuperAdmin: scope === "SUPER_ADMIN"
+  };
+
+  return { ...types };
+};

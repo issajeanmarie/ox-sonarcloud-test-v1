@@ -27,6 +27,7 @@ const ModalWrapper: FC<ActionModalProps> = ({
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={handleCancel}
+      // destroyOnClose={true}
       closable={false}
       centered
     >

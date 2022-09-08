@@ -1,5 +1,5 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import { FC } from "react";
+import { FC, useState } from "react";
 import Table from "antd/lib/table";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -12,6 +12,13 @@ import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Link from "next/link";
 import { routes } from "../../../config/route-config";
+import ActionModal from "../../Shared/ActionModal";
+import {
+  useChangeOrderStatusMutation,
+  useOrderInvoiceMutation
+} from "../../../lib/api/endpoints/Orders/ordersEndpoints";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
+import { message } from "antd";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -34,15 +41,60 @@ type Types = {
 };
 
 const Order: FC<OrderProps> = ({ order, index }) => {
-  return (
-    <div className="shadow-[0px_0px_19px_#00000008] w-full my-5">
-      {/* TOP ROW */}
+  const [isCancelOrderOpen, setIsCancelOrderOpen] = useState<boolean>(false);
+  const [downloadInvoice, { isLoading: invoiceLoading }] =
+    useOrderInvoiceMutation();
 
-      <div className="p-5 border-b flex items-center justify-between bg-white">
+  const [changeOrderStatus, { isLoading: cancelOrderLoading }] =
+    useChangeOrderStatusMutation();
+
+  const downloadOrderInvoice = () => {
+    downloadInvoice(order.id)
+      .unwrap()
+      .then((file) => {
+        handleDownloadFile(file, "Invoice", "PDF");
+      })
+      .catch((e) => {
+        if (e.status === 404) {
+          message.warning("This order is fully paid");
+        } else {
+          message.error("Cannot download file");
+        }
+      });
+  };
+
+  const deleteOrder = () => {
+    changeOrderStatus({ id: order.id, data: { comment: "", status: "CANCEL" } })
+      .unwrap()
+      .then((res) => {
+        message.success(res.message);
+        setIsCancelOrderOpen(false);
+      })
+      .catch((e) => {
+        message.error(e.message);
+      });
+  };
+
+  return (
+    <div className="shadow-[0px_0px_19px_#00000008] w-full mb-5">
+      {/* TOP ROW */}
+      <ActionModal
+        isModalVisible={isCancelOrderOpen}
+        setIsModalVisible={setIsCancelOrderOpen}
+        action={deleteOrder}
+        title="CANCELLING"
+        description="This action is not reversible, please make sure you really want to proceed with this action!"
+        actionLabel="CANCEL ORDER"
+        type="danger"
+        loading={cancelOrderLoading}
+      />
+      <div className="p-5 border-b-2 border-gray-100 flex items-center justify-between bg-white">
         {/* TOP ROW RIGHT SIDE */}
         <div className="flex-1">
-          <Row gutter={32}>
-            <Col className="heading2 w-[45px]">{index}.</Col>
+          <Row gutter={32} align="middle">
+            <Col className="heading2 w-[45px]">
+              <span className="font-bold text-lg">{index}.</span>
+            </Col>
             <Col>
               <Image
                 width={16}
@@ -53,7 +105,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
             </Col>
 
             <Col>
-              <Text className="heading2">
+              <Text className="text-md font-bold">
                 {order?.office?.client?.names ? (
                   order?.office?.client?.names
                 ) : (
@@ -78,14 +130,17 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
           <div className="flex justify-end flex-1 items-center gap-4">
             <Text className="captionText">Order status:</Text>
-            <Text className="normalText fowe700">{order.status}</Text>
+            <Text className="normalText fowe700">
+              {" "}
+              <PaymentStatus status={order.status} />
+            </Text>
           </div>
         </div>
       </div>
 
       {/* MIDDLE ROW */}
       <Table
-        className="data_table"
+        className="data_table orders_table"
         dataSource={[order, ...order?.supportOrders]}
         rowKey={(record) => record.id}
         pagination={false}
@@ -99,7 +154,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
           title="Name"
           render={(text, record: Order) => {
             const child = (
-              <div className="flex items-center gap-7 ml-12">
+              <div className="flex items-center gap-7 ml-14">
                 <Image
                   width={22}
                   src="/icons/ic-ecommerce-delivery-yellow.svg"
@@ -109,13 +164,13 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
                 <div className="flex items-center gap-3">
                   {record?.stops[0]?.truck?.plateNumber ? (
-                    <Text className="heading2 nowrap">
+                    <Text className="text-md font-bold nowrap">
                       {record?.stops[0]?.truck?.plateNumber}
                     </Text>
                   ) : (
                     <span className=" text-gray-300">Unavailable</span>
                   )}
-                  <span className="nowrap opacity_56 text-xs">
+                  <span className="nowrap opacity_56 text-sm">
                     {record?.stops[0]?.driver?.names}
                   </span>
                 </div>
@@ -197,8 +252,8 @@ const Order: FC<OrderProps> = ({ order, index }) => {
         />
         <Column
           width={160}
-          render={() => (
-            <PaymentStatus amt={order.totalAmount} status="HALF_PAID" />
+          render={(text: Types, record: Order) => (
+            <PaymentStatus amt={record?.totalAmount} status="HALF_PAID" />
           )}
         />
 
@@ -210,10 +265,12 @@ const Order: FC<OrderProps> = ({ order, index }) => {
               <div className="flex items-center gap-3 justify-end">
                 <CustomButton
                   type="normal"
+                  onClick={downloadOrderInvoice}
+                  loading={invoiceLoading}
                   size="icon"
                   icon={
                     <Image
-                      src="/icons/ic-ecommerce-invoice.svg"
+                      src="/icons/receipt.png"
                       alt="OX Delivery Logo"
                       width={12}
                       preview={false}
@@ -224,6 +281,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                 <CustomButton
                   type="danger"
                   size="icon"
+                  onClick={() => setIsCancelOrderOpen(true)}
                   icon={
                     <Image
                       src="/icons/ic-actions-remove.svg"
@@ -246,19 +304,22 @@ const Order: FC<OrderProps> = ({ order, index }) => {
       </Table>
 
       {/* BOTTOM ROW */}
-      <Row justify="space-between" className="bg-white p-4">
+      <Row
+        justify="space-between"
+        className="bg-white p-4 border-t-2 border-gray-100"
+      >
         {/* TOP ROW RIGHT SIDE */}
         <Col>
           <Row gutter={12} align="middle">
             <Col>
-              <Text className="text-xs opacity_56 nowrap ml-12">
+              <Text className="text-sm opacity_56 nowrap ml-14">
                 Created: {dateFormatterNth(order.startDateTime)}
               </Text>
             </Col>
 
             <Col>
               {order.lastEditedBy && (
-                <Text className="opacity_56 italic nowrap text-xs font-bold">
+                <Text className="opacity_56  nowrap text-xs font-bold">
                   - Edited by {order.lastEditedBy}
                 </Text>
               )}
