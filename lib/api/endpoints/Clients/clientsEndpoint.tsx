@@ -2,6 +2,7 @@ import {
   Client,
   ClientResponse,
   DeleteClientLocationRequest,
+  DeleteClientRecipientRequest,
   DeleteClientRequest,
   DownoadClients,
   EditClientLocationRequest,
@@ -115,6 +116,16 @@ const clientsApi = baseAPI.injectEndpoints({
         method: "DELETE"
       })
     }),
+    deleteClientRecipient: builder.mutation<
+      ApiResponseMetadata<Client>,
+      DeleteClientRecipientRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/affiliates/${DTO?.affiliateId}`,
+        method: "DELETE"
+      })
+    }),
     editClientLocation: builder.mutation<
       ApiResponseMetadata<Client>,
       EditClientLocationRequest
@@ -140,5 +151,6 @@ export const {
   usePostClientLocationMutation,
   useDeleteClientLocationMutation,
   useEditClientLocationMutation,
-  usePostClientRecipientMutation
+  usePostClientRecipientMutation,
+  useDeleteClientRecipientMutation
 } = clientsApi;

@@ -58,6 +58,11 @@ export type DeleteClientLocationRequest = {
   officeId: number;
 };
 
+export type DeleteClientRecipientRequest = {
+  id: any;
+  affiliateId: number;
+};
+
 export type EditClientLocationRequest = {
   clientId: any;
   officeId: number;
