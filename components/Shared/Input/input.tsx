@@ -50,9 +50,9 @@ const Entry = ({
   onDateChange,
   defaultValue,
   initialValue,
-  format,
   setLocation,
   dateFormat,
+  format,
   showTime,
   location
 }: any) => {
@@ -220,10 +220,10 @@ const Entry = ({
                   height={18}
                 />
               }
-              format={dateFormat || "YYYY-MM-DD"}
+              format={dateFormat || format || "YYYY-MM-DD"}
               showTime={showTime}
               placeholder={placeholder}
-              format={format ? format : false}
+              // format={format ? format : false}
             />
           </Form.Item>
         </Fragment>
