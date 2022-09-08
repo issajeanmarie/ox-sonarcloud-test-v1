@@ -227,6 +227,16 @@ const clientsApi = baseAPI.injectEndpoints({
         method: "DELETE"
       })
     }),
+    deleteClientRecipient: builder.mutation<
+      ApiResponseMetadata<Client>,
+      DeleteClientRecipientRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/affiliates/${DTO?.affiliateId}`,
+        method: "DELETE"
+      })
+    }),
     editClientLocation: builder.mutation<
       ApiResponseMetadata<Client>,
       EditClientLocationRequest
