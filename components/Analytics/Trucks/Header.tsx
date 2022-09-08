@@ -250,6 +250,78 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
     </Button>
   );
 
+  const menu = (
+    <div className="radius4 myCard p-6 py-12 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
+      <CustomInput
+        type="text"
+        placeholder="Search category"
+        name="searchTruckUsage"
+        suffixIcon={
+          <Image
+            width={10}
+            src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
+            preview={false}
+            alt=""
+          />
+        }
+      />
+
+      <Row
+        justify="space-between"
+        gutter={6}
+        className="mt-6 hover:bg-gray-50 cursor-pointer hover:p-1 rounded transition-all duration-100"
+        align="middle"
+        wrap={false}
+      >
+        <Col span={2} className="text-gray-400">
+          1
+        </Col>
+        <Col flex="auto" className="heading2 text-left text_ellipsis">
+          RAC 787 J
+        </Col>
+        <Col flex="none" className="text-right text-gray-400 text_ellipsis">
+          Mitsubishi
+        </Col>
+      </Row>
+
+      <Row
+        justify="space-between"
+        gutter={6}
+        className="mt-6 hover:bg-gray-50 cursor-pointer hover:p-1 rounded transition-all duration-100"
+        align="middle"
+        wrap={false}
+      >
+        <Col span={2} className="text-gray-400">
+          2
+        </Col>
+        <Col flex="auto" className="heading2 text-left text_ellipsis">
+          RAD 898 K
+        </Col>
+        <Col flex="none" className="text-right text-gray-400 text_ellipsis">
+          Mitsubishi
+        </Col>
+      </Row>
+
+      <Row
+        justify="space-between"
+        gutter={6}
+        className="mt-6 hover:bg-gray-50 cursor-pointer hover:p-1 rounded transition-all duration-100"
+        align="middle"
+        wrap={false}
+      >
+        <Col span={2} className="text-gray-400">
+          3
+        </Col>
+        <Col flex="auto" className="heading2 text-left text_ellipsis">
+          RAZ 898 K
+        </Col>
+        <Col flex="none" className="text-right text-gray-400 text_ellipsis">
+          Mitsubishi
+        </Col>
+      </Row>
+    </div>
+  );
+
   return (
     <Navbar
       LeftSide={LeftSide}
