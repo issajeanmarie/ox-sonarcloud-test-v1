@@ -176,6 +176,17 @@ const clientsApi = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+    postClientRecipient: builder.mutation<
+      ApiResponseMetadata<Client>,
+      PostClientRecipientRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `clients/${DTO?.id}/affiliates`,
+        method: "POST",
+        body: DTO
+      })
+    }),
     deleteClient: builder.mutation<
       ApiResponseMetadata<Client>,
       DeleteClientRequest
