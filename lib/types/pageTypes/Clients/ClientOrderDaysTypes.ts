@@ -3,4 +3,5 @@ export type ClientOrderDaysTypes = {
   client: any;
   isClientLoading: boolean;
   isClientFetching: boolean;
+  orderDays: any;
 };

@@ -3,11 +3,19 @@ import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
 import { ClientOrderHistoryTableTypes } from "../../../lib/types/pageTypes/Clients/ClientOrderHistoryTableTypes";
 import RowsWrapper from "../RowsWrapper";
-import { ClientOrderHistoryTableData } from "../Dummies/ClientOrderHistoryTableData";
+import moment from "moment";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
+import { FC } from "react";
 
 const { Text } = Typography;
 
-const ClientOrderHistoryTable = () => {
+type ClientOrderHistoryTableProps = {
+  orders: any;
+};
+
+const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
+  orders
+}) => {
   const columns: any = [
     {
       title: (
@@ -19,14 +27,13 @@ const ClientOrderHistoryTable = () => {
       key: "Order",
       render: (
         text: ClientOrderHistoryTableTypes,
-        record: ClientOrderHistoryTableTypes
+        record: ClientOrderHistoryTableTypes,
+        index: number
       ) => (
         <RowsWrapper>
           <div className="flex gap-10">
-            <Text className="normalText opacity_56">{record?.key}</Text>
-            <Text className="normalText fowe900 underline">
-              {record?.Order}
-            </Text>
+            <Text className="normalText opacity_56">{index + 1}</Text>
+            <Text className="normalText fowe900 underline">{record?.id}</Text>
           </div>
         </RowsWrapper>
       )
@@ -39,7 +46,10 @@ const ClientOrderHistoryTable = () => {
         record: ClientOrderHistoryTableTypes
       ) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">{record?.Date}</Text>
+          <Text className="normalText opacity_56">
+            {record?.startDateTime &&
+              moment(record?.startDateTime).format("ll")}
+          </Text>
         </RowsWrapper>
       )
     },
@@ -51,7 +61,9 @@ const ClientOrderHistoryTable = () => {
         record: ClientOrderHistoryTableTypes
       ) => (
         <RowsWrapper>
-          <Text className="normalText fowe900">{record?.JobValue}</Text>
+          <Text className="normalText fowe900">
+            {record?.totalAmount && numbersFormatter(record?.totalAmount)} Rwf
+          </Text>
         </RowsWrapper>
       )
     },
@@ -66,14 +78,14 @@ const ClientOrderHistoryTable = () => {
           <div className="flex gap-4">
             <Text
               className={`normalText fowe900 
-            ${record?.Payment === "HALF PAID" && "yellow_faded_text"}
-             ${record?.Payment === "FULLY PAID" && "toggle_grey"}
-              ${record?.Payment === "NOT PAID" && "red"}
+            ${record?.paymentStatus === "HALF_PAID" && "yellow_faded_text"}
+             ${record?.paymentStatus === "FULL_PAID" && "toggle_grey"}
+              ${record?.paymentStatus === "NOT_PAID" && "red"}
             `}
             >
-              {record?.Payment}
+              {record?.paymentStatus}
             </Text>
-            {record?.Payment === "HALF PAID" && (
+            {record?.paymentStatus === "HALF_PAID" && (
               <Text className="normalText opacity_56">
                 {record?.paidAmount}
               </Text>
@@ -92,12 +104,12 @@ const ClientOrderHistoryTable = () => {
         <RowsWrapper>
           <Text
             className={`normalText fowe900 
-            ${record?.OrderStatus === "COMPLETED" && "toggle_grey"}
-            ${record?.OrderStatus === "CANCELLED" && "red"}
-               ${record?.OrderStatus === "PENDING" && "black"}
+            ${record?.status === "COMPLETED" && "toggle_grey"}
+            ${record?.status === "CANCELLED" && "red"}
+               ${record?.status === "PENDING" && "black"}
             `}
           >
-            {record?.OrderStatus}
+            {record?.status}
           </Text>
         </RowsWrapper>
       )
@@ -107,7 +119,7 @@ const ClientOrderHistoryTable = () => {
     <Table
       className="data_table light_white_header light_white_table"
       columns={columns}
-      dataSource={ClientOrderHistoryTableData}
+      dataSource={orders}
       rowKey={(record) => record?.key}
       pagination={false}
       bordered={false}

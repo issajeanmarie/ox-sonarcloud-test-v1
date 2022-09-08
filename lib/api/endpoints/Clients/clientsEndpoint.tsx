@@ -4,6 +4,7 @@ import {
   DeleteClientRequest,
   DownoadClients,
   GetClient,
+  GetClientOrders,
   GetClients,
   PostClientRequest
 } from "../../../types/clients";
@@ -26,6 +27,16 @@ const clientsApi = baseAPI.injectEndpoints({
       providesTags: ["Clients"],
       query: (DTO) => ({
         url: `/clients?page=${DTO?.page}&size=${DTO?.size}&org=${DTO?.org}&dest=${DTO?.dest}&hq=${DTO?.hq}&categoryId=${DTO?.categoryId}&q=${DTO?.q}&sort=${DTO?.sort}&source=${DTO?.source}`,
+        method: "GET"
+      })
+    }),
+    clientOrders: builder.query<
+      ApiResponseMetadata<{ content: ClientResponse }>,
+      GetClientOrders
+    >({
+      providesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/orders?page=${DTO?.page}&size=${DTO?.size}`,
         method: "GET"
       })
     }),
@@ -76,6 +87,7 @@ export const {
   useClientQuery,
   useDownloadClientsQuery,
   useLazyDownloadClientsQuery,
+  useClientOrdersQuery,
   usePostClientMutation,
   useDeleteClientMutation
 } = clientsApi;

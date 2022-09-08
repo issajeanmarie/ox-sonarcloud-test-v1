@@ -3,4 +3,7 @@ export type SingleClientRightTypes = {
   client: any;
   isClientLoading: boolean;
   isClientFetching: boolean;
+  clientOrders: any;
+  isClientOrdersLoading: boolean;
+  isClientOrdersFetching: boolean;
 };

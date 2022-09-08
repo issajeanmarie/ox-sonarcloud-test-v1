@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { ClientOrderDaysTypes } from "../../../../lib/types/pageTypes/Clients/ClientOrderDaysTypes";
 import CustomButton from "../../../Shared/Button/button";
 
-const ClientOrderDays: FC<ClientOrderDaysTypes> = () => {
+const ClientOrderDays: FC<ClientOrderDaysTypes> = ({ orderDays }) => {
   return (
     <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] mt-4">
       <Row justify="space-between" align="middle" className="w-full p-8">
@@ -31,7 +31,7 @@ const ClientOrderDays: FC<ClientOrderDaysTypes> = () => {
       <Divider style={{ padding: 0, margin: 0 }} />
 
       <Row justify="space-between" className="w-full p-8">
-        {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+        {orderDays?.map((day: string, index: number) => (
           <Col key={`${index * 2}-${day}`}>
             <span
               className={`rounded-full ${
@@ -40,7 +40,7 @@ const ClientOrderDays: FC<ClientOrderDaysTypes> = () => {
                   : "bg_white_input"
               }  day_circle cursor-pointer`}
             >
-              {day}
+              {day?.charAt(0)}
             </span>
           </Col>
         ))}

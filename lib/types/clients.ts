@@ -65,3 +65,9 @@ export type DownoadClients = {
   sort: string;
   source: string;
 };
+
+export type GetClientOrders = {
+  id: any;
+  page: number | string;
+  size: number | string;
+};

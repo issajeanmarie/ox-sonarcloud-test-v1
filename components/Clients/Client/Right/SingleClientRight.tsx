@@ -11,7 +11,8 @@ import { SingleClientRightTypes } from "../../../../lib/types/pageTypes/Clients/
 const SingleClientRight: FC<SingleClientRightTypes> = ({
   client,
   isClientLoading,
-  isClientFetching
+  isClientFetching,
+  clientOrders
 }) => {
   return (
     <Col flex="auto">
@@ -34,6 +35,7 @@ const SingleClientRight: FC<SingleClientRightTypes> = ({
         client={client}
         isClientLoading={isClientLoading}
         isClientFetching={isClientFetching}
+        orderDays={clientOrders?.orderDays}
       />
       <ClientTages
         client={client}
