@@ -9,6 +9,7 @@ import {
   GetClientOrders,
   GetClients,
   PostClientLocationRequest,
+  PostClientRecipientRequest,
   PostClientRequest
 } from "../../../types/clients";
 import { ApiResponseMetadata } from "../../../types/shared";
@@ -83,6 +84,17 @@ const clientsApi = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+    postClientRecipient: builder.mutation<
+      ApiResponseMetadata<Client>,
+      PostClientRecipientRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `clients/${DTO?.id}/affiliates`,
+        method: "POST",
+        body: DTO
+      })
+    }),
     deleteClient: builder.mutation<
       ApiResponseMetadata<Client>,
       DeleteClientRequest
@@ -127,5 +139,6 @@ export const {
   useDeleteClientMutation,
   usePostClientLocationMutation,
   useDeleteClientLocationMutation,
-  useEditClientLocationMutation
+  useEditClientLocationMutation,
+  usePostClientRecipientMutation
 } = clientsApi;

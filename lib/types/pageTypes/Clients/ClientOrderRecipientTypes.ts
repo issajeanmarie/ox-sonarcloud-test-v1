@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type ClientOrderRecipientTableTypes = {
   key: number;
-  name: string;
-  telphone: string;
+  names: string;
+  phone: string;
 };
 
 export type ClientOrderRecipientTypes = {

@@ -43,6 +43,12 @@ export type PostClientLocationRequest = {
   type: string;
 };
 
+export type PostClientRecipientRequest = {
+  id: number;
+  names: string;
+  phone: string;
+};
+
 export type DeleteClientRequest = {
   id: any;
 };
