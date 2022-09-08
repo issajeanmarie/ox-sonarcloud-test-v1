@@ -1,34 +1,57 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import info from "antd/lib/message";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Divider from "antd/lib/divider";
-import CustomInput from "../../Shared/Input";
+import Progress from "antd/lib/progress";
 import CustomButton from "../../Shared/Button/button";
 import TruckOverviewCard from "./TruckOverviewCard";
-import { useLazyGetTruckOverviewQuery } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import {
+  useLazyDownloadTruckShiftsQuery,
+  useLazyGetTruckOverviewQuery
+} from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useRouter } from "next/router";
 import Loader from "../../Shared/Loader";
+import fileDownload from "js-file-download";
+import moment from "moment";
+import Input from "../../Shared/Input";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
+import { percentageCalculator } from "../../../helpers/pacentageCalculators";
 
 const OvervieWPane = () => {
-  const [getTruckOverview, { isLoading, data }] =
-    useLazyGetTruckOverviewQuery();
-  const componentDidMount = useRef(false);
+  const [getTruckOverview, { data }] = useLazyGetTruckOverviewQuery();
+  const [downloadTruckShifts, { isLoading: isDownloadLoading }] =
+    useLazyDownloadTruckShiftsQuery();
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [isPageLoading, setIsPageLoading] = useState(false);
 
   const router = useRouter();
   const { id: truckId } = router.query;
 
   useEffect(() => {
-    if (!componentDidMount.current && truckId) {
-      getTruckOverview(truckId)
-        .unwrap()
-        .then()
-        .catch((err) => info.error(err?.data?.message || "Something is wrong"));
+    if (truckId) {
+      setIsPageLoading(true);
 
-      componentDidMount.current = true;
+      getTruckOverview({ id: truckId, start: startDate, end: endDate })
+        .unwrap()
+        .then(() => {
+          setIsPageLoading(false);
+        })
+        .catch((err) => {
+          setIsPageLoading(false);
+          info.error(err?.data?.message || "Something is wrong");
+        });
     }
-  }, [truckId, getTruckOverview]);
+  }, [truckId, getTruckOverview, startDate, endDate]);
+
+  const onStartDateChange = (_: string, date: string) => {
+    setStartDate(date);
+  };
+  const onEndDateChange = (_: string, date: string) => {
+    setEndDate(date);
+  };
 
   const cardsData = [
     { name: "Repairs done", num: data?.repairsDone },
@@ -45,73 +68,76 @@ const OvervieWPane = () => {
     { name: "KMs since last repair", num: data?.kmsSinceLastRepair }
   ];
 
+  const handleDownloadFile = (file: File) => {
+    const date = moment().format("YYYY-MM-DD");
+    fileDownload(file, `Report-${date}.xlsx`);
+  };
+
+  const handleDownloadShift = () => {
+    downloadTruckShifts({ id: truckId })
+      .unwrap()
+      .then((res) => {
+        handleDownloadFile(res);
+      })
+      .catch((err) => {
+        info.error(err?.data?.message || "Something is wrong");
+      });
+  };
+
   return (
     <>
-      {isLoading ? (
+      <Row
+        justify="space-between"
+        className="bg-white my-4 mb-12 rounded shadow-[0px_0px_19px_#2A354808]"
+      >
+        <Col className="flex items-center gap-4">
+          <Input
+            onDateChange={onStartDateChange}
+            type="date"
+            name="Start"
+            placeholder="Start"
+            suffixIcon={
+              <Image
+                preview={false}
+                src="/icons/ic-actions-calendar.svg"
+                alt=""
+                width={18}
+              />
+            }
+          />
+          <Input
+            onDateChange={onEndDateChange}
+            type="date"
+            name="End"
+            placeholder="End"
+            suffixIcon={
+              <Image
+                preview={false}
+                src="/icons/ic-actions-calendar.svg"
+                alt=""
+                width={18}
+              />
+            }
+          />
+        </Col>
+
+        <Col className="flex items-center gap-4">
+          <CustomButton
+            type="secondary"
+            onClick={handleDownloadShift}
+            loading={isDownloadLoading}
+          >
+            <span className="text-sm">DOWNLOAD SHIFT</span>
+          </CustomButton>
+        </Col>
+      </Row>
+
+      <Divider />
+
+      {isPageLoading ? (
         <Loader />
       ) : (
         <>
-          <Row
-            justify="space-between"
-            className="bg-white my-4 mb-12 rounded shadow-[0px_0px_19px_#2A354808]"
-          >
-            <Col className="flex items-center gap-4">
-              <CustomInput
-                // onSelectChange={onSortChange}
-                type="select"
-                label=""
-                options={[
-                  { label: "Revenue", value: "REVENUE" },
-                  { label: "Distance", value: "DISTANCE" },
-                  { label: "Weight", value: "WEIGHT" }
-                ]}
-                name="sort"
-                suffixIcon={
-                  <Image
-                    preview={false}
-                    src="/icons/expand_more_black_24dp.svg"
-                    alt=""
-                    width={10}
-                  />
-                }
-              />
-              <CustomInput
-                type="date"
-                name="Start"
-                placeholder="Start"
-                suffixIcon={
-                  <Image
-                    preview={false}
-                    src="/icons/ic-actions-calendar.svg"
-                    alt=""
-                    width={18}
-                  />
-                }
-              />
-              <CustomInput
-                type="date"
-                name="End"
-                placeholder="End"
-                suffixIcon={
-                  <Image
-                    preview={false}
-                    src="/icons/ic-actions-calendar.svg"
-                    alt=""
-                    width={18}
-                  />
-                }
-              />
-            </Col>
-
-            <Col className="flex items-center gap-4">
-              <CustomButton type="secondary">
-                <span className="text-sm">DOWNLOAD SHIFT</span>
-              </CustomButton>
-            </Col>
-          </Row>
-
-          <Divider />
-
           <Row
             gutter={24}
             className="overviewcards_row p-0"
@@ -122,6 +148,114 @@ const OvervieWPane = () => {
                 <TruckOverviewCard data={data} />
               </Col>
             ))}
+          </Row>
+
+          <Row align="middle" gutter={32} className="overviewcards_row p-0">
+            <Col span={8}>
+              <p className="mb-6">Revenues KPIs</p>
+
+              <Row align="middle" justify="space-between">
+                <Col>
+                  <span className="font-bold">
+                    {" "}
+                    {numbersFormatter(data?.totalRevenues)} Rwf{" "}
+                  </span>
+
+                  <span className=" text-gray-400">
+                    of {numbersFormatter(data?.totalKpis)} Rwf
+                  </span>
+                </Col>
+
+                <Col>
+                  <span className="text-gray-400 italic">
+                    {percentageCalculator(data?.totalKpis, data?.totalRevenues)}
+                    %
+                  </span>
+                </Col>
+              </Row>
+
+              <Progress
+                percent={percentageCalculator(
+                  data?.totalKpis,
+                  data?.totalRevenues
+                )}
+                strokeColor="#E3B221"
+                trailColor="#EAEFF2"
+                showInfo={false}
+              />
+            </Col>
+
+            <Col span={8}>
+              <p className="mb-6">Repair cost vs Revenues</p>
+
+              <Row align="middle" justify="space-between">
+                <Col>
+                  <span className="font-bold">
+                    {numbersFormatter(data?.totalRepairCost)} Rwf{" "}
+                  </span>
+
+                  <span className=" text-gray-400">
+                    vs {numbersFormatter(data?.totalRevenues)} Rwf
+                  </span>
+                </Col>
+
+                <Col>
+                  <span className="text-gray-400 italic">
+                    {percentageCalculator(
+                      data?.totalRevenues,
+                      data?.totalRepairCost
+                    )}
+                    %
+                  </span>
+                </Col>
+              </Row>
+
+              <Progress
+                percent={percentageCalculator(
+                  data?.totalRevenues,
+                  data?.totalRepairCost
+                )}
+                strokeColor="#A2B3D1"
+                trailColor="#EAEFF2"
+                showInfo={false}
+              />
+            </Col>
+
+            <Col span={8}>
+              <p className="mb-6">Fuel cost vs Revenues</p>
+
+              <Row align="middle" justify="space-between">
+                <Col>
+                  <span className="font-bold">
+                    {numbersFormatter(data?.totalFuelCost)} Rwf{" "}
+                  </span>
+
+                  <span className=" text-gray-400">
+                    vs {numbersFormatter(data?.totalRevenues)} Rwf
+                  </span>
+                </Col>
+
+                <Col>
+                  <span className="text-gray-400 italic">
+                    {percentageCalculator(
+                      data?.totalRevenues,
+                      data?.totalFuelCost
+                    )}
+                    %
+                  </span>
+                </Col>
+              </Row>
+
+              <Progress
+                percent={percentageCalculator(
+                  data?.totalRevenues,
+                  data?.totalFuelCost
+                )}
+                strokeColor="#A2B3D1"
+                trailColor="#EAEFF2"
+                showInfo={false}
+              />
+            </Col>
           </Row>
         </>
       )}

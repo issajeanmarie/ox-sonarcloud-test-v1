@@ -5,7 +5,6 @@ import moment from "moment";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Divider from "antd/lib/divider";
-import CustomInput from "../../Shared/Input";
 import Input from "../../Shared/Input";
 import { useLazyGetTruckFuelReportQuery } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useRouter } from "next/router";
@@ -75,24 +74,6 @@ const FuelRecordsPane = () => {
         className="bg-white my-4 mb-12 rounded shadow-[0px_0px_19px_#2A354808]"
       >
         <Col className="flex items-center gap-4">
-          <CustomInput
-            type="select"
-            label=""
-            options={[
-              { label: "Revenue", value: "REVENUE" },
-              { label: "Distance", value: "DISTANCE" },
-              { label: "Weight", value: "WEIGHT" }
-            ]}
-            name="sort"
-            suffixIcon={
-              <Image
-                preview={false}
-                src="/icons/expand_more_black_24dp.svg"
-                alt=""
-                width={10}
-              />
-            }
-          />
           <Input
             onDateChange={onStartDateChange}
             type="date"

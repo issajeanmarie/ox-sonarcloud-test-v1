@@ -7,12 +7,16 @@ import Divider from "antd/lib/divider";
 import Collapse from "antd/lib/collapse";
 import moment from "moment";
 import CustomButton from "../../Shared/Button/button";
-import { useLazyGetSingleTruckQuery } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import {
+  useLazyDownloadTruckDailyInspectionQuery,
+  useLazyGetSingleTruckQuery
+} from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import Loader from "../../Shared/Loader";
 import Input from "../../Shared/Input";
 import { useRouter } from "next/router";
 import { displaySingleTruck } from "../../../lib/redux/slices/trucksSlice";
 import { useDispatch } from "react-redux";
+import fileDownload from "js-file-download";
 
 const { Panel } = Collapse;
 
@@ -23,6 +27,9 @@ const TruckHelthPane = ({ truckData }: any) => {
   const [endDate, setEndDate] = useState("");
   const dispatch = useDispatch();
 
+  const [downloadTruckDailyInspection, { isLoading }] =
+    useLazyDownloadTruckDailyInspectionQuery();
+
   const router = useRouter();
   const { id: truckId } = router.query;
 
@@ -31,8 +38,8 @@ const TruckHelthPane = ({ truckData }: any) => {
 
     getSingleTruck({
       id: truckId,
-      startDate: startDate || "",
-      endDate: endDate || ""
+      startDate: startDate,
+      endDate: endDate
     })
       .unwrap()
       .then((res) => {
@@ -59,6 +66,26 @@ const TruckHelthPane = ({ truckData }: any) => {
   };
   const onEndDateChange = (_: string, date: string) => {
     setEndDate(date);
+  };
+
+  const handleDownloadFile = (file: File) => {
+    const date = moment().format("YYYY-MM-DD");
+    fileDownload(file, `Report-${date}.xlsx`);
+  };
+
+  const handleDownloadReport = () => {
+    downloadTruckDailyInspection({
+      id: truckId,
+      start: startDate,
+      end: endDate
+    })
+      .unwrap()
+      .then((res) => {
+        handleDownloadFile(res);
+      })
+      .catch((err) => {
+        info.error(err?.data?.message || "Something is wrong");
+      });
   };
 
   return (
@@ -99,8 +126,12 @@ const TruckHelthPane = ({ truckData }: any) => {
         </Col>
 
         <Col className="flex items-center gap-4">
-          <CustomButton type="secondary">
-            <span className="text-sm">DOWNLOAD SHIFT</span>
+          <CustomButton
+            type="secondary"
+            onClick={handleDownloadReport}
+            loading={isLoading}
+          >
+            <span className="text-sm">DOWNLOAD REPORT</span>
           </CustomButton>
         </Col>
       </Row>

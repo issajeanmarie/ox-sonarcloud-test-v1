@@ -88,8 +88,8 @@ const trucksApi = baseAPI.injectEndpoints({
 
     getTruckOverview: builder.query({
       providesTags: ["Trucks"],
-      query: (id) => ({
-        url: `/trucks/${id}/overview`,
+      query: ({ id, start, end }) => ({
+        url: `/trucks/${id}/overview?start=${start || ""}&end=${end || ""}`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
@@ -155,6 +155,36 @@ const trucksApi = baseAPI.injectEndpoints({
           method: "PATCH"
         };
       }
+    }),
+
+    downloadTruckDailyInspection: builder.query({
+      providesTags: ["Trucks"],
+      query: ({ id, start, end, fileType }) => ({
+        url: `/daily_inspections/download?truck_id=${id}&start=${
+          start || ""
+        }&end=${end || ""}&file_type=${fileType}`,
+        method: "GET",
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
+      }),
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
+        response.payload
+    }),
+
+    downloadTruckShifts: builder.query({
+      providesTags: ["Trucks"],
+      query: ({ id, fileType }) => ({
+        url: `/trucks/${id}/shifts/download?file_type=${fileType || ""}`,
+        method: "GET",
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
+      }),
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
+        response.payload
     })
   })
 });
@@ -171,5 +201,7 @@ export const {
   useLazyGetTruckIssuesQuery,
   useLazyGetTruckFuelReportQuery,
   useCreateTruckIssueMutation,
-  useToggleTruckIssueStatusMutation
+  useToggleTruckIssueStatusMutation,
+  useLazyDownloadTruckDailyInspectionQuery,
+  useLazyDownloadTruckShiftsQuery
 } = trucksApi;
