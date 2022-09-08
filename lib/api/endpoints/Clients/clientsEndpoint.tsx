@@ -1,11 +1,14 @@
 import {
   Client,
   ClientResponse,
+  DeleteClientLocationRequest,
   DeleteClientRequest,
   DownoadClients,
+  EditClientLocationRequest,
   GetClient,
   GetClientOrders,
   GetClients,
+  PostClientLocationRequest,
   PostClientRequest
 } from "../../../types/clients";
 import { ApiResponseMetadata } from "../../../types/shared";
@@ -69,6 +72,17 @@ const clientsApi = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+    postClientLocation: builder.mutation<
+      ApiResponseMetadata<Client>,
+      PostClientLocationRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `clients/${DTO?.id}/offices`,
+        method: "POST",
+        body: DTO
+      })
+    }),
     deleteClient: builder.mutation<
       ApiResponseMetadata<Client>,
       DeleteClientRequest
@@ -77,6 +91,27 @@ const clientsApi = baseAPI.injectEndpoints({
       query: (DTO) => ({
         url: `/clients/${DTO?.id}`,
         method: "DELETE"
+      })
+    }),
+    deleteClientLocation: builder.mutation<
+      ApiResponseMetadata<Client>,
+      DeleteClientLocationRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.clientId}/offices/${DTO?.officeId}`,
+        method: "DELETE"
+      })
+    }),
+    editClientLocation: builder.mutation<
+      ApiResponseMetadata<Client>,
+      EditClientLocationRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.clientId}/offices/${DTO?.officeId}`,
+        method: "PUT",
+        body: DTO
       })
     })
   })
@@ -89,5 +124,8 @@ export const {
   useLazyDownloadClientsQuery,
   useClientOrdersQuery,
   usePostClientMutation,
-  useDeleteClientMutation
+  useDeleteClientMutation,
+  usePostClientLocationMutation,
+  useDeleteClientLocationMutation,
+  useEditClientLocationMutation
 } = clientsApi;

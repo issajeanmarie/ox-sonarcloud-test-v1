@@ -27,7 +27,7 @@ const ModalWrapper: FC<ModalProps> = ({
     <Modal
       className="ox-modal"
       title={<span className="font-bold text-2xl">{title}</span>}
-      width={550}
+      width={430}
       footer={false}
       visible={isModalVisible}
       onOk={handleOk}

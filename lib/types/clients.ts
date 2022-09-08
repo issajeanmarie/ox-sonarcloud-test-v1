@@ -35,8 +35,30 @@ export type PostClientRequest = {
   economicStatus: string;
 };
 
+export type PostClientLocationRequest = {
+  id: number;
+  location: string;
+  coordinates: string;
+  names: string;
+  type: string;
+};
+
 export type DeleteClientRequest = {
   id: any;
+};
+
+export type DeleteClientLocationRequest = {
+  clientId: any;
+  officeId: number;
+};
+
+export type EditClientLocationRequest = {
+  clientId: any;
+  officeId: number;
+  location: string;
+  coordinates: string;
+  names: string;
+  type: string;
 };
 
 export type GetClients = {
