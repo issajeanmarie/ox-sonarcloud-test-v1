@@ -24,7 +24,17 @@ interface ObjectTypes {
 
 const AddEditOrder: FC<AddEditProps> = ({ title }) => {
   const { data: categories } = useCategoriesQuery();
-  const { data: clients } = useClientsQuery();
+  const { data: clients } = useClientsQuery({
+    page: "",
+    size: "",
+    org: "",
+    dest: "",
+    hq: "",
+    categoryId: "",
+    q: "",
+    sort: "",
+    source: ""
+  });
   const [form] = Form.useForm();
   const [chosenClientId, setChosenClientId] = useState<number>();
 
@@ -41,7 +51,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title }) => {
     data: chosenClientInfo,
     isLoading: chosenClientLoading,
     isFetching
-  } = useClientQuery(chosenClientId ?? skipToken);
+  } = useClientQuery({ id: chosenClientId ?? skipToken });
 
   useMemo(() => {
     form.setFieldsValue({

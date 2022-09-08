@@ -1,9 +1,14 @@
 import { Col, Divider, Image, Row, Tag } from "antd";
-import React from "react";
+import React, { FC } from "react";
+import { ClientTagesTypes } from "../../../../lib/types/pageTypes/Clients/ClientTagesTypes";
 import CustomButton from "../../../Shared/Button/button";
-import { ClientTags } from "../../Dummies/ClientTags";
 
-const ClientTages = () => {
+type clientTags = {
+  name: string | undefined;
+  id: number | undefined;
+};
+
+const ClientTages: FC<ClientTagesTypes> = ({ client }) => {
   return (
     <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] mt-4">
       <Row justify="space-between" align="middle" className="w-full p-8">
@@ -31,11 +36,17 @@ const ClientTages = () => {
       <Divider style={{ padding: 0, margin: 0 }} />
 
       <div className="w-full p-8">
-        {ClientTags?.map((tag) => (
-          <Tag key={tag?.id} closable>
-            {tag?.name}
-          </Tag>
-        ))}
+        {client?.tags?.length < 1 ? (
+          <span className="font-light">Tags will appear here</span>
+        ) : (
+          <>
+            {client?.tags?.map((tag: clientTags) => (
+              <Tag key={tag?.id} closable>
+                {tag?.name}
+              </Tag>
+            ))}
+          </>
+        )}
       </div>
     </Row>
   );

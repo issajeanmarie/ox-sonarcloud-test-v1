@@ -4,7 +4,7 @@ import { DepotResponse } from "../../../types/depots";
 const depotsEndpoints = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
     depots: builder.query<DepotResponse, void>({
-      providesTags: ["Depot", "Analytics"],
+      providesTags: ["Depot", "Analytics", "Clients"],
       query: () => ({
         url: "/depots",
         method: "GET"

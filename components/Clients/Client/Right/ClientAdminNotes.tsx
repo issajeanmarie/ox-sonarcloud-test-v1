@@ -1,11 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Col, Form, Image, Row } from "antd";
-import React from "react";
+import React, { FC } from "react";
+import { ClientAdminNotesTypes } from "../../../../lib/types/pageTypes/Clients/ClientAdminNotesTypes";
 import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
 
-const ClientAdminNotes = () => {
+const ClientAdminNotes: FC<ClientAdminNotesTypes> = () => {
   return (
     <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] mt-4">
       <Row justify="space-between" align="middle" className="w-full p-8">

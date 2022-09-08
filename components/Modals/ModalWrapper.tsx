@@ -5,13 +5,15 @@ interface ModalProps {
   isModalVisible: boolean;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   title: string;
+  loading: boolean;
 }
 
 const ModalWrapper: FC<ModalProps> = ({
   isModalVisible,
   setIsModalVisible,
   children,
-  title
+  title,
+  loading
 }) => {
   const handleOk = () => {
     setIsModalVisible(false);
@@ -25,12 +27,13 @@ const ModalWrapper: FC<ModalProps> = ({
     <Modal
       className="ox-modal"
       title={<span className="font-bold text-2xl">{title}</span>}
-      width={550}
+      width={450}
       footer={false}
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={handleCancel}
       centered
+      maskClosable={loading ? false : true}
     >
       {children}
     </Modal>

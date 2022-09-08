@@ -1,12 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Image, Row } from "antd";
-import React from "react";
+import React, { FC } from "react";
+import { numbersFormatter } from "../../../../helpers/numbersFormatter";
 import Input from "../../../Shared/Input";
 
-const Header = () => {
+type HeaderTypes = {
+  orders: any;
+};
+
+const Header: FC<HeaderTypes> = ({ orders }) => {
   return (
     <Row className="bg-white py-4 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1] flex justify-between">
       <Col className="flex items-center gap-4">
-        <span className="font-bold">Order history (21)</span>
+        <span className="font-bold">
+          Order history (
+          {orders?.totalElements && numbersFormatter(orders?.totalElements)})
+        </span>
         <Input
           placeholder="Filter: All orders"
           type="select"
@@ -29,7 +38,7 @@ const Header = () => {
       </Col>
       <Col className="flex items-center gap-4">
         <span className=" opacity_56">Total pending:</span>
-        <span className="font-bold red">88,000 Rwf</span>
+        <span className="font-bold red">88,000 Rwf(DUMMY)</span>
       </Col>
     </Row>
   );

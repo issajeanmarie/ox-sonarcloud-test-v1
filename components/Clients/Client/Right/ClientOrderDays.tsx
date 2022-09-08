@@ -1,8 +1,9 @@
 import { Col, Divider, Image, Row } from "antd";
-import React from "react";
+import React, { FC } from "react";
+import { ClientOrderDaysTypes } from "../../../../lib/types/pageTypes/Clients/ClientOrderDaysTypes";
 import CustomButton from "../../../Shared/Button/button";
 
-const ClientOrderDays = () => {
+const ClientOrderDays: FC<ClientOrderDaysTypes> = ({ orderDays }) => {
   return (
     <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] mt-4">
       <Row justify="space-between" align="middle" className="w-full p-8">
@@ -30,7 +31,7 @@ const ClientOrderDays = () => {
       <Divider style={{ padding: 0, margin: 0 }} />
 
       <Row justify="space-between" className="w-full p-8">
-        {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+        {orderDays?.map((day: string, index: number) => (
           <Col key={`${index * 2}-${day}`}>
             <span
               className={`rounded-full ${
@@ -39,7 +40,7 @@ const ClientOrderDays = () => {
                   : "bg_white_input"
               }  day_circle cursor-pointer`}
             >
-              {day}
+              {day?.charAt(0)}
             </span>
           </Col>
         ))}

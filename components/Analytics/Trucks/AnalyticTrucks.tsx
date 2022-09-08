@@ -121,7 +121,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
 
       {truckLoading ? (
         <>
-          {[...Array(13)].map((_, index) => (
+          {[...Array(20)].map((_, index) => (
             <ColsTableLoader key={index} />
           ))}
         </>

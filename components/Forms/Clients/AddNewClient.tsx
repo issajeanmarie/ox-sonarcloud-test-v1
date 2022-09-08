@@ -1,17 +1,31 @@
 import { Col, Form, Image, Row } from "antd";
-import React from "react";
+import React, { FC } from "react";
 import { requiredInput } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import OtherOfficesTable from "../../Tables/Clients/OtherOfficesTable";
+import { AddClientTypes } from "../../../lib/types/pageTypes/Clients/AddClientTypes";
 
-const AddNewClient = () => {
+const AddNewClient: FC<AddClientTypes> = ({
+  onAddClientFinish,
+  createOffices,
+  onOfficeNameChange,
+  onOfficeLocationChange,
+  offices,
+  setOffices,
+  isLoading
+}) => {
   return (
-    <Form name="AddNewClient" layout="vertical" title="">
+    <Form
+      onFinish={onAddClientFinish}
+      name="AddNewClient"
+      layout="vertical"
+      title=""
+    >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
-            name="name"
+            name="names"
             type="text"
             label="Full name"
             placeholder="Enter full name"
@@ -24,12 +38,8 @@ const AddNewClient = () => {
             type="select"
             label="Economic status"
             placeholder="2"
-            options={[
-              { label: "1", value: "one" },
-              { label: "2", value: "two" },
-              { label: "3", value: "three" }
-            ]}
-            name="sort"
+            options={[{ label: "INDIVIDUAL", value: "INDIVIDUAL" }]}
+            name="economicStatus"
             suffixIcon={
               <Image
                 preview={false}
@@ -63,15 +73,12 @@ const AddNewClient = () => {
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
+            rules={requiredInput}
             type="select"
             label="Source"
-            placeholder="Referral"
-            options={[
-              { label: "Item one", value: "one" },
-              { label: "Item two", value: "two" },
-              { label: "Item three", value: "three" }
-            ]}
-            name="select"
+            placeholder="Select source"
+            options={[{ label: "REFERRAL", value: "REFERRAL" }]}
+            name="source"
             suffixIcon={
               <Image
                 preview={false}
@@ -99,14 +106,17 @@ const AddNewClient = () => {
           <div className="mb-4">
             <span className="font-light">Add other offices</span>
           </div>
-          <div className="mb-4">
-            <OtherOfficesTable />
-          </div>
+          {offices.length > 0 && (
+            <div className="mb-4">
+              <OtherOfficesTable offices={offices} setOffices={setOffices} />
+            </div>
+          )}
         </Col>
 
         <Col flex="none">
           <Input
-            name="name"
+            onChange={onOfficeNameChange}
+            name="officeName"
             type="text"
             label="Name"
             placeholder="Office name"
@@ -114,23 +124,26 @@ const AddNewClient = () => {
           />
         </Col>
 
-        <Col flex="none">
+        <Col flex="auto">
           <Input
-            name="name"
+            onChange={onOfficeLocationChange}
+            name="officeLocation"
             type="text"
             label="Location"
             placeholder="Search location"
             rules={requiredInput}
           />
         </Col>
-        <Col flex="auto">
-          <Button type="secondary">Icon</Button>
+        <Col flex="none">
+          <Button onClick={() => createOffices()} type="secondary">
+            Icon
+          </Button>
         </Col>
       </Row>
 
       <Row justify="end" className="mt-7">
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button type="primary" htmlType="submit">
+          <Button loading={isLoading} type="primary" htmlType="submit">
             ADD CLIENT
           </Button>
         </Col>
