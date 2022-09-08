@@ -11,9 +11,9 @@ import Router from "next/router";
 import { useDispatch } from "react-redux";
 import { removeCredentials } from "../../../lib/redux/slices/authSlice";
 import { routes } from "../../../config/route-config";
-import { getLoggedInUser } from "../../../helpers/getLoggedInUser";
 import { Avatar } from "antd";
 import { abbreviator } from "../../../helpers/abbreviator";
+import { useSettingsQuery } from "../../../lib/api/endpoints/settings/settingsEndpoints";
 
 /**
  * @author Kundwa Bruno M <kundwabruno@gmail.com> and
@@ -25,14 +25,14 @@ const { Text } = Typography;
 
 interface ProfileBoxProps {
   user: {
-    names: string;
-    sub: string;
+    names: string | undefined;
+    sub: string | undefined;
   };
 }
 
 const ProfileBox: FC<ProfileBoxProps> = () => {
   const dispatch = useDispatch();
-  const { loggedInUser } = getLoggedInUser();
+  const { data } = useSettingsQuery();
 
   const logout = () => {
     dispatch(removeCredentials());
@@ -40,10 +40,10 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
   };
 
   const userProfile = (
-    <Space className="bg-white radius5 ">
+    <Space direction="vertical" className="bg-white rounded-md p-4 shadow-md ">
       <Row gutter={24} align="middle" className="pad24 mb-3">
         <Col>
-          {loggedInUser?.profilePic ? (
+          {data?.payload?.profilePic ? (
             <Image
               className="rounded img_fit"
               width={64}
@@ -55,16 +55,16 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
           ) : (
             <Avatar size={60} className="bg_dark" shape="square">
               <span className="font-bold">
-                {abbreviator(loggedInUser?.names)}
+                {data?.payload?.names ? abbreviator(data.payload.names) : null}
               </span>
             </Avatar>
           )}
         </Col>
 
         <Col>
-          <Text className="heading2 block">{loggedInUser?.names}</Text>
+          <Text className="heading2 block">{data?.payload?.names}</Text>
           <Text className="text14 dark fowe400 opacity_56">
-            {loggedInUser?.sub}
+            {data?.payload?.email}
           </Text>
         </Col>
       </Row>
@@ -116,7 +116,7 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
   return (
     <Dropdown overlay={userProfile} className="pointer" trigger={["click"]}>
       <div className="flex items-center gap-2">
-        {loggedInUser?.profilePic ? (
+        {data?.payload?.profilePic ? (
           <Image
             className="rounded img_fit"
             width={30}
@@ -128,12 +128,12 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
         ) : (
           <Avatar className="bg_dark" shape="square">
             <span className="font-bold">
-              {abbreviator(loggedInUser?.names)}
+              {data?.payload?.names ? abbreviator(data.payload.names) : null}
             </span>
           </Avatar>
         )}
 
-        <Text className="heading2">{loggedInUser?.names}</Text>
+        <Text className="heading2">{data?.payload?.names}</Text>
 
         <Image
           className="ml-1 img_fit"

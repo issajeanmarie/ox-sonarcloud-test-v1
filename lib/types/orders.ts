@@ -5,16 +5,25 @@
  * @since Jul 19 2022
  */
 
-import { PaymentStatus, Payment_Plan } from "./shared";
+import { LatLng } from "use-places-autocomplete";
+import {
+  Order_Status,
+  Order_Status_Enums,
+  PaymentStatus,
+  Payment_Plan
+} from "./shared";
 
 export type OrderRequestBody = {
   officeId: number;
   clientId: number;
   depotId: number;
+  truckId: number;
+  driverId: number;
+  weight: number;
   stops: {
     name: string;
     location: string;
-    coordinates: string;
+    coordinates: string | LatLng;
     driverId: number;
     truckId: number;
     weight: number;
@@ -24,7 +33,60 @@ export type OrderRequestBody = {
   amount: number;
   categoryId: number;
   startDateTime: string;
-  atPickupLocation: boolean;
+  atPickupLocation?: boolean;
+};
+
+export type SupportOrderRequest = {
+  stop: Stop_Request;
+  paymentPlan: "PAY_BY_JOB" | "PAY_BY_KG";
+  amount: number;
+};
+
+export type SupportOrderFormValues = {
+  driverId: number;
+  truckId: number;
+  weight: number;
+  paymentPlan: "PAY_BY_JOB" | "PAY_BY_KG";
+  amount: number;
+};
+
+export type EditOrderRequestBody = {
+  officeId?: number;
+  clientId?: number;
+  depotId?: number;
+  stops?: {
+    name: string;
+    location: string;
+    coordinates: string;
+    driverId: number;
+    truckId: number;
+    weight: number;
+    position: number;
+  }[];
+  paymentPlan?: Payment_Plan;
+  amount?: number;
+  categoryId?: number;
+  startDateTime?: string;
+  atPickupLocation?: boolean;
+};
+
+export type EditPaymentStatusRequest = {
+  amount: number;
+  paymentDate: string;
+  momoRefCode: string;
+  isWaitTimeFee: boolean;
+};
+
+export type Order_Filter = {
+  depot?: number | string;
+  driver?: number | string;
+  truck?: number | string;
+  page?: number | string;
+  size?: number | string;
+  start?: string;
+  end?: string;
+  filter?: Order_Status_Enums | string;
+  momoRefCode?: string;
 };
 
 export type OrdersResponse = {
@@ -56,6 +118,19 @@ export type OrdersResponse = {
   empty: false;
 };
 
+export type EditTransactionRequest = {
+  amount: number;
+  momoRefCode: string;
+};
+
+export type Transaction = {
+  amount: number;
+  createdAt: string;
+  id: number;
+  momoRefCode: string;
+  transactionType: string;
+};
+
 export type Order = {
   comment: null;
   momoRefCodes: "";
@@ -63,7 +138,7 @@ export type Order = {
   waitTimeTransactions: [];
   duration: string;
   distance: string;
-  status: string;
+  status: Order_Status;
   depot: {
     coordinates?: string;
     name: string;
@@ -73,7 +148,7 @@ export type Order = {
   startDateTime: string;
   paymentStatus: PaymentStatus;
   deliveryCode: string;
-  transactions: any[];
+  transactions: Transaction[];
   endDateTime: string;
   office: Office;
   totalAmount: number;
@@ -108,6 +183,16 @@ export type Office = {
   type: string;
 };
 
+export type Stop_Request = {
+  name: string;
+  location: string;
+  coordinates: string | LatLng;
+  driverId: number;
+  truckId: number;
+  weight: number;
+  position: number;
+};
+
 export type Stop = {
   position: number;
   truck: {
@@ -132,4 +217,24 @@ export type Stop = {
   name: string;
   location: string;
   id: number;
+};
+
+export type AddStopRequest = {
+  name: string;
+  location: string;
+  coordinates: string;
+  driverId: number;
+  truckId: number;
+  weight: number;
+  position: number;
+};
+
+export type EditStopRequest = {
+  name: string;
+  location: string;
+  coordinates: LatLng;
+  odometer: number;
+  arrivalDateTime: string;
+  departureDateTime: string;
+  weight: number;
 };

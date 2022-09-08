@@ -215,7 +215,7 @@ body {
 }
 
 .toggle_grey {
-  color: var(--color_toggle_grey);
+  color: var(--color_toggle_grey) !important;
 }
 
 .yellow {
@@ -232,6 +232,10 @@ body {
 
 .yellow_faded_text {
   color: var(--color_yellow_faded_text) !important;
+}
+
+.yellow_faded_bg {
+  background-color: var(--color_yellow_faded_text) !important;
 }
 
 .orage {
@@ -261,6 +265,10 @@ body {
 .bg_white {
   background-color: var(--color_white) !important;
   color: var(--color_black);
+}
+
+.bg_yellow_faded {
+  background-color: #fbf3db !important;
 }
 
 .bg_dark {
@@ -546,4 +554,34 @@ body {
 
 .fontwe700 {
   font-weight: 700;
+}
+
+.ant-card.myCard .ant-card-body {
+  padding: 12px !important;
+}
+
+.ant-tabs.truck_tabs .ant-tabs-nav-list .ant-tabs-ink-bar {
+  background-color: var(--color_yellow) !important;
+}
+
+.ant-tabs-top > .ant-tabs-nav::before,
+.ant-tabs-bottom > .ant-tabs-nav::before,
+.ant-tabs-top > div > .ant-tabs-nav::before,
+.ant-tabs-bottom > div > .ant-tabs-nav::before {
+  border-bottom: none !important;
+}
+
+.ant-tabs.truck_tabs .ant-tabs-nav {
+  margin: 0 !important;
+}
+
+.overviewcards_row {
+  margin: 0 0 24px 0 !important;
+  padding: 0 !important;
+}
+
+.text_ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

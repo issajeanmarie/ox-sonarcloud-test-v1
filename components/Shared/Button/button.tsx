@@ -10,11 +10,12 @@ interface ButtonProps {
     | "normal"
     | "view";
   loading?: boolean;
+  disabled?: boolean;
   size?: "icon" | "small";
   icon?: React.ReactElement;
   className?: string;
   htmlType?: "button" | "submit" | "reset";
-  onClick?: () => void;
+  onClick?: (value: any) => any;
 }
 
 const CustomButton: FC<ButtonProps> = ({
@@ -22,6 +23,7 @@ const CustomButton: FC<ButtonProps> = ({
   icon,
   loading,
   size,
+  disabled,
   className,
   htmlType,
   children,
@@ -35,6 +37,7 @@ const CustomButton: FC<ButtonProps> = ({
             size === "small" && "sm"
           } bg_yellow ${className}`}
           loading={loading}
+          disabled={loading || disabled}
           icon={icon}
           onClick={onClick}
           htmlType={htmlType}
@@ -50,6 +53,7 @@ const CustomButton: FC<ButtonProps> = ({
             size === "small" && "sm"
           }  bg_white_yellow yellow ${className}`}
           loading={loading}
+          disabled={loading || disabled}
           icon={icon}
           onClick={onClick}
           htmlType={htmlType}
@@ -65,6 +69,7 @@ const CustomButton: FC<ButtonProps> = ({
             size === "small" && "sm"
           }  bg_yellow_view_btn yellow ${className}`}
           loading={loading}
+          disabled={loading || disabled}
           icon={icon}
           htmlType={htmlType}
           onClick={onClick}
@@ -80,6 +85,7 @@ const CustomButton: FC<ButtonProps> = ({
             size === "small" && "sm"
           }  bg_danger yellow ${className}`}
           loading={loading}
+          disabled={loading || disabled}
           icon={icon}
           htmlType={htmlType}
           onClick={onClick}
@@ -95,6 +101,7 @@ const CustomButton: FC<ButtonProps> = ({
             size === "small" && "sm"
           }  bg_danger_filled white ${className}`}
           loading={loading}
+          disabled={loading || disabled}
           icon={icon}
           htmlType={htmlType}
           onClick={onClick}
@@ -110,6 +117,7 @@ const CustomButton: FC<ButtonProps> = ({
             size === "small" && "sm"
           }  bg_white_edit_btn black ${className}`}
           loading={loading}
+          disabled={loading || disabled}
           icon={icon}
           htmlType={htmlType}
           onClick={onClick}

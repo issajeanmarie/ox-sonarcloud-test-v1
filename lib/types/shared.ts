@@ -18,8 +18,24 @@ export type PaymentStatus =
   | "FULL_PAID"
   | "HALF_PAID"
   | "PENDING"
-  | "WRITTEN _OFF"
+  | "WRITTEN_OFF"
   | "ENQUEQUE";
+
+export type Order_Status =
+  | "COMPLETED"
+  | "CANCELLED"
+  | "PENDING"
+  | "WRITTEN_OFF";
+
+export type Order_Status_Enums =
+  | "PAYMENT_PENDING"
+  | "PAYMENT_WRITTEN_OFF"
+  | "PAYMENT_PAID"
+  | "PAYMENT_HALD_PAID"
+  | "ORDER_ENQUEUE"
+  | "ORDER_STARTED"
+  | "ORDER_COMPLETED"
+  | "ORDER_CANCELLED";
 
 export type EconomicStatus = "INDIVIDUAL" | "COMPANY" | "GROUP";
 export type Payment_Plan = "PAY_PER_JOB" | "PAY_PER_KG";
