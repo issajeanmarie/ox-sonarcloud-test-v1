@@ -91,6 +91,10 @@ const Orders: FC = () => {
     });
   };
 
+  const triggerPagination = (page: string) => {
+    setFilters({ ...filters, page });
+  };
+
   useEffect(() => {
     setCurrentPages(1);
     setDepotBasedLoader(true);

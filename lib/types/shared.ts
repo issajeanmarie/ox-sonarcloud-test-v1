@@ -43,7 +43,11 @@ export type Order_Status_Enums =
   | "ORDER_COMPLETED"
   | "ORDER_CANCELLED";
 
-export type Order_Status = "COMPLETED" | "CANCELLED" | "PENDING";
+export type Order_Status =
+  | "COMPLETED"
+  | "CANCELLED"
+  | "PENDING"
+  | "WRITTEN_OFF";
 
 export type Order_Status_Enums =
   | "PAYMENT_PENDING"

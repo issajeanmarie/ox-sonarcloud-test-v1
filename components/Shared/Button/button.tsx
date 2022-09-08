@@ -166,7 +166,7 @@ const CustomButton: FC<ButtonProps> = ({
             size === "small" && "sm"
           }  bg_danger_filled white ${className}`}
           loading={loading}
-          disabled={loading}
+          disabled={loading || disabled}
           icon={icon}
           htmlType={htmlType}
           onClick={onClick}

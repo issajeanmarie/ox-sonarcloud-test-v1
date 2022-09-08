@@ -73,6 +73,8 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [deleteStop, { isLoading: deleteStopLoading }] =
     useDeleteStopMutation();
 
+  const [getTrucks, { data: trucks }] = useGetTrucksMutation();
+
   const [writeOff, { isLoading: writeOffLoading }] = useWriteOffMutation();
 
   const handleWriteOffAction = (values: { reason: string }) => {
@@ -104,6 +106,32 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const handleDeleteStopSuccess = () => {
     setIsDeleteStopModal(false);
   };
+
+  useEffect(() => {
+    getTrucks({ page: 0, size: 10000 })
+      .unwrap()
+      .then()
+      .catch((e) => {
+        message.error(e.data?.messag || "Cannot get trucks");
+      });
+  }, [getTrucks]);
+
+  const isOrderDisabled =
+    data?.status === "CANCELLED" ||
+    data?.status === "COMPLETED" ||
+    user.isGuest ||
+    !data;
+  const canUserDelete =
+    (data?.paymentStatus !== "FULL_PAID" &&
+      data?.paymentStatus !== "HALF_PAID" &&
+      data?.paymentStatus !== "WRITTEN_OFF" &&
+      data?.status !== "CANCELLED" &&
+      !user.isGuest) ||
+    (user.isSuperAdmin &&
+      data?.status !== "CANCELLED" &&
+      data?.status !== "WRITTEN_OFF");
+
+  const canUserPay = isOrderDisabled && data?.paymentStatus !== "FULL_PAID";
 
   const deleteStopAction = () => {
     handleAPIRequests({

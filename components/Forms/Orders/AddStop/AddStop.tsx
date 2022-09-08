@@ -18,6 +18,8 @@ import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 
 const { Option } = Select;
 
+const { Option } = Select;
+
 interface AddStopProps {
   order: Order;
   closeModal: () => void;
