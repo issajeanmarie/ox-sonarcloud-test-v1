@@ -7,7 +7,10 @@ import SingleClientTop from "../../../components/Clients/Client/SingleClientTop"
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import { routes } from "../../../config/route-config";
-import { useClientQuery } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
+import {
+  useClientOrdersQuery,
+  useClientQuery
+} from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 
 const Client = () => {
   const { query } = useRouter();
@@ -27,6 +30,12 @@ const Client = () => {
     isFetching: isClientFetching
   } = useClientQuery({ id: query?.client });
 
+  const {
+    data: clientOrders,
+    isLoading: isClientOrdersLoading,
+    isFetching: isClientOrdersFetching
+  } = useClientOrdersQuery({ id: query?.client, page: "", size: "" });
+
   return (
     <Layout>
       <SingleClientTop
@@ -39,12 +48,18 @@ const Client = () => {
           client={client?.payload}
           isClientLoading={isClientLoading}
           isClientFetching={isClientFetching}
+          clientOrders={clientOrders?.payload}
+          isClientOrdersLoading={isClientOrdersLoading}
+          isClientOrdersFetching={isClientOrdersFetching}
         />
 
         <SingleClientRight
           client={client?.payload}
           isClientLoading={isClientLoading}
           isClientFetching={isClientFetching}
+          clientOrders={clientOrders?.payload}
+          isClientOrdersLoading={isClientOrdersLoading}
+          isClientOrdersFetching={isClientOrdersFetching}
         />
       </Row>
     </Layout>

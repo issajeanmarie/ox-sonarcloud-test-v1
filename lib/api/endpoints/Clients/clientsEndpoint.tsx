@@ -69,6 +69,16 @@ const clientsApi = baseAPI.injectEndpoints({
         method: "GET"
       })
     }),
+    clientOrders: builder.query<
+      ApiResponseMetadata<{ content: ClientResponse }>,
+      GetClientOrders
+    >({
+      providesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/orders?page=${DTO?.page}&size=${DTO?.size}`,
+        method: "GET"
+      })
+    }),
     downloadClients: builder.query<
       ApiResponseMetadata<{ content: ClientResponse }>,
       DownoadClients
