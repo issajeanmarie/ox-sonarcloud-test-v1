@@ -144,18 +144,36 @@ const OvervieWPane = () => {
             justify="space-between"
           >
             {cardsData?.map((data) => (
-              <Col key={data?.name} span={8} className="mb-8">
+              <Col
+                sm={{ span: 24 }}
+                md={{ span: 12 }}
+                xl={{ span: 8 }}
+                key={data?.name}
+                className="mb-8"
+              >
                 <TruckOverviewCard data={data} />
               </Col>
             ))}
           </Row>
 
           <Row align="middle" gutter={32} className="overviewcards_row p-0">
-            <Col span={8}>
-              <p className="mb-6">Revenues KPIs</p>
+            <Col
+              sm={{ span: 24 }}
+              md={{ span: 12 }}
+              xl={{ span: 8 }}
+              className="mb-6"
+            >
+              <p className="mb-6 text_ellipsis" title="Revenue KPIs">
+                Revenues KPIs
+              </p>
 
-              <Row align="middle" justify="space-between">
-                <Col>
+              <Row align="middle" justify="space-between" wrap={false}>
+                <Col
+                  className="text_ellipsis"
+                  title={`${numbersFormatter(
+                    data?.totalRevenues
+                  )} Rwf of ${numbersFormatter(data?.totalKpis)} Rwf`}
+                >
                   <span className="font-bold">
                     {" "}
                     {numbersFormatter(data?.totalRevenues)} Rwf{" "}
@@ -185,16 +203,27 @@ const OvervieWPane = () => {
               />
             </Col>
 
-            <Col span={8}>
-              <p className="mb-6">Repair cost vs Revenues</p>
+            <Col
+              sm={{ span: 24 }}
+              md={{ span: 12 }}
+              xl={{ span: 8 }}
+              className="mb-6"
+            >
+              <p className="mb-6 text_ellipsis" title="Repair cost vs Revenues">
+                Repair cost vs Revenues
+              </p>
 
-              <Row align="middle" justify="space-between">
-                <Col>
+              <Row align="middle" justify="space-between" wrap={false}>
+                <Col
+                  className="text_ellipsis"
+                  title={`${numbersFormatter(
+                    data?.totalRepairCost
+                  )} RWf vs ${numbersFormatter(data?.totalRevenues)} Rwf`}
+                >
                   <span className="font-bold">
                     {numbersFormatter(data?.totalRepairCost)} Rwf{" "}
                   </span>
-
-                  <span className=" text-gray-400">
+                  <span className="text-gray-400">
                     vs {numbersFormatter(data?.totalRevenues)} Rwf
                   </span>
                 </Col>
@@ -221,11 +250,23 @@ const OvervieWPane = () => {
               />
             </Col>
 
-            <Col span={8}>
-              <p className="mb-6">Fuel cost vs Revenues</p>
+            <Col
+              sm={{ span: 24 }}
+              md={{ span: 12 }}
+              xl={{ span: 8 }}
+              className="mb-6"
+            >
+              <p className="mb-6 text_ellipsis" title="Fuel cost vs Revenues">
+                Fuel cost vs Revenues
+              </p>
 
-              <Row align="middle" justify="space-between">
-                <Col>
+              <Row align="middle" justify="space-between" wrap={false}>
+                <Col
+                  className="text_ellipsis"
+                  title={`${numbersFormatter(
+                    data?.totalFuelCost
+                  )} Rwf vs ${numbersFormatter(data?.totalRevenues)} Rwf`}
+                >
                   <span className="font-bold">
                     {numbersFormatter(data?.totalFuelCost)} Rwf{" "}
                   </span>

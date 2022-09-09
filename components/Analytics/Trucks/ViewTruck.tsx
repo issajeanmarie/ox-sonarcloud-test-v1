@@ -63,9 +63,13 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
         <>
           <Header truckId={truckId} truckData={truckData} />
 
-          <div className="flex flex-col lg:flex-row mt-8">
-            <div className="flex-1 h-[83vh]  overflow-auto rounded px-6">
-              <div className="bg-white shadow-[0px_0px_19px_#00000008] p-12 mb-6">
+          <Row align="middle" gutter={32} justify="space-between">
+            <Col
+              span={12}
+              className="h-[83vh]  overflow-auto p-6 pl-12 pt-0 mt-6"
+              // style={{ background: "red", padding: "38px" }}
+            >
+              <div className="bg-white shadow-[0px_0px_19px_#00000008] p-12 pb-6 mb-6">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-lg font-bold text-ox-dark">
                     {truckData?.truck?.plateNumber || "Unknown"}
@@ -107,17 +111,25 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
                 <Row gutter={24} className="p-12">
                   {truckData?.truck?.documents?.map(
                     (document: { id: number }) => (
-                      <Col key={document.id} span={12} className="mb-8">
+                      <Col
+                        key={document.id}
+                        sm={{ span: 24 }}
+                        md={{ span: 24 }}
+                        lg={{ span: 12 }}
+                        className="mb-8"
+                      >
                         <DocumentCard document={document} />
                       </Col>
                     )
                   )}
                 </Row>
               </div>
-            </div>
+            </Col>
 
-            <TruckTabs truckData={truckData} />
-          </div>
+            <Col span={12} className="h-[83vh]  overflow-auto">
+              <TruckTabs truckData={truckData} />
+            </Col>
+          </Row>
         </>
       )}
     </div>

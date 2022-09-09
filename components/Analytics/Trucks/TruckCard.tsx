@@ -10,17 +10,21 @@ const DocumentCard = ({ document }: any) => {
       headStyle={{ border: "none", marginBottom: "0" }}
     >
       <Row justify="space-between" wrap={false} gutter={12}>
-        <Col>
-          <Image
-            preview={false}
-            width={16}
-            src="/icons/description_FILL0_wght400_GRAD0_opsz48.svg"
-            alt=""
-          />
-        </Col>
+        <Col flex="auto">
+          <Row wrap={false} gutter={12}>
+            <Col>
+              <Image
+                preview={false}
+                width={16}
+                src="/icons/description_FILL0_wght400_GRAD0_opsz48.svg"
+                alt=""
+              />
+            </Col>
 
-        <Col className="text_ellipsis" title={document.title}>
-          {document.title}
+            <Col className="text_ellipsis text-left" title={document.title}>
+              {document.title}
+            </Col>
+          </Row>
         </Col>
 
         <Col>
