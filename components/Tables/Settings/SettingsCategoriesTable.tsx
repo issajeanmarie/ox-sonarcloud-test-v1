@@ -84,9 +84,15 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
             type="secondary"
             size="icon"
             loading={isParentingCategory}
-          >
-            make it parent
-          </CustomButton>
+            icon={
+              <Image
+                src="/icons/keyboard_forwad_black_24dp.svg"
+                alt="OX Delivery Logo"
+                width={18}
+                preview={false}
+              />
+            }
+          ></CustomButton>
 
           <CustomButton
             onClick={() => showEditModal(record)}
@@ -124,7 +130,11 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
     <>
       <Table
         key="settingsCategoriesTable"
-        pagination={false}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "50", "100"]
+        }}
         showHeader={false}
         columns={columns}
         expandable={{

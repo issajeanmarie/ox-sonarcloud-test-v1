@@ -3,12 +3,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import Form from "antd/lib/form";
 
 type Types = {
   width: string;
   name: string;
   validatePhone: boolean;
-  phoneNumber: string;
+  phoneNumber: any;
   setPhoneNumber: any;
 };
 
@@ -19,7 +20,7 @@ const CustomPhoneInput = ({
   phoneNumber,
   setPhoneNumber
 }: Types) => (
-  <>
+  <Form.Item name={name}>
     <PhoneInput
       className="my_input"
       width={width}
@@ -31,7 +32,7 @@ const CustomPhoneInput = ({
     {validatePhone && !phoneNumber && (
       <span className="validation_err">Phone is required</span>
     )}
-  </>
+  </Form.Item>
 );
 
 CustomPhoneInput.propTypes = {

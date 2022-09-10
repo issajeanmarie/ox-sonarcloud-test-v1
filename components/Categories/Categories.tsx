@@ -9,24 +9,24 @@ import Image from "antd/lib/image";
 const { Column } = Table;
 const { Text } = Typography;
 
-type Types = {
-  key: number;
-  category: string;
-};
+// type Types = {
+//   key: number;
+//   category: string;
+// };
 
 const CategoryData = [
   {
     key: 1,
-    category: "Bell Pepper/Poivron"
+    parentCategory: "Bell Pepper/Poivron"
   },
   {
     key: 2,
-    category: "Butter"
+    parentCategory: "Butter"
   },
   {
     key: 3,
-    category: "Carrots",
-    sub_category: [
+    parentCategory: "Carrots",
+    subCategories: [
       {
         id: 1,
         name: "Salad"
@@ -89,21 +89,28 @@ const CategoriesTable = () => (
     <Table
       className="data_table noborder"
       dataSource={CategoryData}
-      rowKey={(record) => record.key}
+      rowKey={() => "record.key"}
       pagination={false}
       showHeader={false}
       bordered={false}
       scroll={{ x: "100%" }}
       tableLayout="auto"
+      expandable={{
+        // expandedRowRender: record => <p style={{ margin: 0 }}>record.subCategories</p>,
+        // rowExpandable: record => record.subCategories !== 'Not Expandable',
+        childrenColumnName: "subCategories",
+        defaultExpandAllRows: true,
+        expandIcon: () => null
+      }}
     >
       {/* BOTTOM ROW */}
       <Column
         width="5%"
         key="key"
         title="#"
-        render={(text: Types, record: Types) => {
+        render={() => {
           const child = (
-            <Text className="normalText opacity_56">{record.key}</Text>
+            <Text className="normalText opacity_56">record.key</Text>
           );
           return { children: child, props: { "data-label": "#" } };
         }}
@@ -113,11 +120,11 @@ const CategoriesTable = () => (
         width="30%"
         key="key"
         title="Depot"
-        render={(text: Types, record: Types) => {
+        render={() => {
           const child = (
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-3">
-                <Text className="heading2 nowrap">{record.category}</Text>
+                <Text className="heading2 nowrap">record.parentCategory</Text>
               </div>
             </div>
           );
