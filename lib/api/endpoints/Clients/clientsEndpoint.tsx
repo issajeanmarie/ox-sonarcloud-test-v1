@@ -113,6 +113,16 @@ const clientsApi = baseAPI.injectEndpoints({
         responseHandler: (response) => response.blob()
       })
     }),
+    downloadClientInvoice: builder.query<
+      ApiResponseMetadata<{ content: ClientResponse }>,
+      DownoadInvoice
+    >({
+      providesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/invoice`,
+        method: "GET"
+      })
+    }),
     client: builder.query<ApiResponseMetadata<Client>, GetClient>({
       providesTags: ["Clients"],
       query: (DTO) => ({
@@ -187,6 +197,17 @@ const clientsApi = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+    postClientTag: builder.mutation<
+      ApiResponseMetadata<Client>,
+      PostClientTagRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `clients/${DTO?.id}/tag`,
+        method: "POST",
+        body: DTO
+      })
+    }),
     deleteClient: builder.mutation<
       ApiResponseMetadata<Client>,
       DeleteClientRequest
@@ -204,6 +225,16 @@ const clientsApi = baseAPI.injectEndpoints({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
         url: `/clients/${DTO?.id || ""}/tag/${DTO.tagId || ""}`,
+        method: "DELETE"
+      })
+    }),
+    deleteClientTag: builder.mutation<
+      ApiResponseMetadata<Client>,
+      DeleteClientTagRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/tag/${DTO.tagId}`,
         method: "DELETE"
       })
     }),
@@ -266,6 +297,28 @@ const clientsApi = baseAPI.injectEndpoints({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
         url: `/clients/${DTO?.id || ""}`,
+        method: "PUT",
+        body: DTO
+      })
+    }),
+    editClientRecipient: builder.mutation<
+      ApiResponseMetadata<Client>,
+      EditClientRecipientRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/affiliates/${DTO?.affiliateId}`,
+        method: "PUT",
+        body: DTO
+      })
+    }),
+    editClient: builder.mutation<
+      ApiResponseMetadata<Client>,
+      EditClientRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}`,
         method: "PUT",
         body: DTO
       })

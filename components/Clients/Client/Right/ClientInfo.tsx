@@ -10,6 +10,8 @@ import EditNewClient from "../../../Forms/Clients/EditClient";
 import { YellowEditIcon } from "../../../Icons";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import CustomButton from "../../../Shared/Button/button";
+import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
+import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 import ClientInfoWrapper from "./ClientInfoWrapper";
 import Button from "../../../Shared/Button";
 

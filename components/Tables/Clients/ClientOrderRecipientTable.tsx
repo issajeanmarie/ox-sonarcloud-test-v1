@@ -88,6 +88,25 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
     });
   };
 
+  //EDIT
+  const [editClientRecipient, { isLoading: isEditing }] =
+    useEditClientRecipientMutation();
+
+  const onEditClientRecipientFinish = (values: any) => {
+    editClientRecipient({
+      id: query?.client,
+      affiliateId: itemToEdit,
+      names: values?.names,
+      phone: values?.phone
+    })
+      .unwrap()
+      .then((res: GenericResponse) => {
+        SuccessMessage(res?.message);
+        setIsEditModalVisible(false);
+      })
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
+
   const columns: any = [
     {
       title: (
