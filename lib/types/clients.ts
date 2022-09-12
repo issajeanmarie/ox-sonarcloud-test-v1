@@ -42,6 +42,11 @@ export type PostClientLocationRequest = {
   names: string;
   type: string;
 };
+export type PostClientTagRequest = {
+  id: number | string | string[] | undefined;
+  tagId: any;
+  name: string;
+};
 
 export type PostClientRecipientRequest = {
   id: number;
@@ -51,6 +56,11 @@ export type PostClientRecipientRequest = {
 
 export type DeleteClientRequest = {
   id: any;
+};
+
+export type DeleteClientTagRequest = {
+  id: any;
+  tagId: number | undefined;
 };
 
 export type DeleteClientLocationRequest = {
@@ -70,6 +80,23 @@ export type EditClientLocationRequest = {
   coordinates: string;
   names: string;
   type: string;
+};
+
+export type EditClientRecipientRequest = {
+  id: number | string | string[] | undefined;
+  affiliateId: number;
+  names: string;
+  phone: string;
+};
+
+export type EditClientRequest = {
+  id: number | string | string[] | undefined;
+  names: string;
+  email: string;
+  phone: string;
+  source: string;
+  tinNumber: string;
+  economicStatus: string;
 };
 
 export type GetClients = {
@@ -97,6 +124,10 @@ export type DownoadClients = {
   q: string;
   sort: string;
   source: string;
+};
+
+export type DownoadInvoice = {
+  id: string | string[] | undefined | number;
 };
 
 export type GetClientOrders = {

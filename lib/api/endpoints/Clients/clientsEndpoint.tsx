@@ -4,14 +4,19 @@ import {
   DeleteClientLocationRequest,
   DeleteClientRecipientRequest,
   DeleteClientRequest,
+  DeleteClientTagRequest,
   DownoadClients,
+  DownoadInvoice,
   EditClientLocationRequest,
+  EditClientRecipientRequest,
+  EditClientRequest,
   GetClient,
   GetClientOrders,
   GetClients,
   PostClientLocationRequest,
   PostClientRecipientRequest,
-  PostClientRequest
+  PostClientRequest,
+  PostClientTagRequest
 } from "../../../types/clients";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -52,6 +57,16 @@ const clientsApi = baseAPI.injectEndpoints({
       providesTags: ["Clients"],
       query: (DTO) => ({
         url: `/clients?file_type=${DTO?.file_type}&org=${DTO?.org}&dest=${DTO?.dest}&hq=${DTO?.hq}&categoryId=${DTO?.categoryId}&q=${DTO?.q}&sort=${DTO?.sort}&source=${DTO?.source}`,
+        method: "GET"
+      })
+    }),
+    downloadClientInvoice: builder.query<
+      ApiResponseMetadata<{ content: ClientResponse }>,
+      DownoadInvoice
+    >({
+      providesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/invoice`,
         method: "GET"
       })
     }),
@@ -96,6 +111,17 @@ const clientsApi = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+    postClientTag: builder.mutation<
+      ApiResponseMetadata<Client>,
+      PostClientTagRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `clients/${DTO?.id}/tag`,
+        method: "POST",
+        body: DTO
+      })
+    }),
     deleteClient: builder.mutation<
       ApiResponseMetadata<Client>,
       DeleteClientRequest
@@ -103,6 +129,16 @@ const clientsApi = baseAPI.injectEndpoints({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
         url: `/clients/${DTO?.id}`,
+        method: "DELETE"
+      })
+    }),
+    deleteClientTag: builder.mutation<
+      ApiResponseMetadata<Client>,
+      DeleteClientTagRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/tag/${DTO.tagId}`,
         method: "DELETE"
       })
     }),
@@ -136,6 +172,28 @@ const clientsApi = baseAPI.injectEndpoints({
         method: "PUT",
         body: DTO
       })
+    }),
+    editClientRecipient: builder.mutation<
+      ApiResponseMetadata<Client>,
+      EditClientRecipientRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}/affiliates/${DTO?.affiliateId}`,
+        method: "PUT",
+        body: DTO
+      })
+    }),
+    editClient: builder.mutation<
+      ApiResponseMetadata<Client>,
+      EditClientRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `/clients/${DTO?.id}`,
+        method: "PUT",
+        body: DTO
+      })
     })
   })
 });
@@ -152,5 +210,11 @@ export const {
   useDeleteClientLocationMutation,
   useEditClientLocationMutation,
   usePostClientRecipientMutation,
-  useDeleteClientRecipientMutation
+  useDeleteClientRecipientMutation,
+  useEditClientRecipientMutation,
+  usePostClientTagMutation,
+  useDownloadClientInvoiceQuery,
+  useLazyDownloadClientInvoiceQuery,
+  useEditClientMutation,
+  useDeleteClientTagMutation
 } = clientsApi;

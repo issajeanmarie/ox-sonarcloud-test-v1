@@ -3,16 +3,21 @@ import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
 import { ClientOrderRecipientTableTypes } from "../../../lib/types/pageTypes/Clients/ClientOrderRecipientTypes";
 import RowsWrapper from "../RowsWrapper";
-import { Button } from "antd";
+import { Button, Form } from "antd";
 import { FC, useState } from "react";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import ActionModal from "../../Shared/ActionModal";
-import { useDeleteClientRecipientMutation } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
+import {
+  useDeleteClientRecipientMutation,
+  useEditClientRecipientMutation
+} from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { useRouter } from "next/router";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import Image from "next/image";
+import ModalWrapper from "../../Modals/ModalWrapper";
+import EditClientRecipient from "../../Forms/Clients/EditClientRecipient";
 
 const { Text } = Typography;
 
@@ -26,6 +31,17 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
   isClientFetching
 }) => {
   const { query } = useRouter();
+  const [form] = Form.useForm();
+
+  const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
+  const [itemToEdit, setItemToEdit]: any = useState();
+
+  const showEditModal = (record: any) => {
+    setItemToEdit(record?.id);
+    setIsEditModalVisible(true);
+    form.setFieldsValue(record);
+  };
+
   const [itemToDelete, setItemToDelete]: any = useState();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const showModal = (record: any) => {
@@ -45,6 +61,25 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
       .then((res: GenericResponse) => {
         SuccessMessage(res?.message);
         setIsModalVisible(false);
+      })
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
+
+  //EDIT
+  const [editClientRecipient, { isLoading: isEditing }] =
+    useEditClientRecipientMutation();
+
+  const onEditClientRecipientFinish = (values: any) => {
+    editClientRecipient({
+      id: query?.client,
+      affiliateId: itemToEdit,
+      names: values?.names,
+      phone: values?.phone
+    })
+      .unwrap()
+      .then((res: GenericResponse) => {
+        SuccessMessage(res?.message);
+        setIsEditModalVisible(false);
       })
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
@@ -85,7 +120,7 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
         <RowsWrapper>
           <div className="flex justify-end items-center gap-8">
             <Button
-              // onClick={() => showEditModal(record)}
+              onClick={() => showEditModal(record)}
               style={{ margin: 0, padding: 0 }}
               type="text"
             >
@@ -138,6 +173,18 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
         action={() => handleDeleteClientRecipient()}
         loading={isLoading}
       />
+      <ModalWrapper
+        setIsModalVisible={setIsEditModalVisible}
+        isModalVisible={isEditModalVisible}
+        title="EDIT RECIPIENT"
+        loading={isEditing}
+      >
+        <EditClientRecipient
+          onEditClientRecipientFinish={onEditClientRecipientFinish}
+          isLoading={isEditing}
+          form={form}
+        />
+      </ModalWrapper>
     </>
   );
 };

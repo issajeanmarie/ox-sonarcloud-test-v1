@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
+import fileDownload from "js-file-download";
 import ClientsTable from "../../../components/Tables/Clients/ClientsTable";
 import ClientsTopNavigator from "../../../components/Clients/ClientsTopNavigator";
 import Layout from "../../../components/Shared/Layout";
@@ -52,6 +53,11 @@ const Clients = () => {
   const onSortChange = (sorter: string) => {
     setSort(sorter);
   };
+
+  const handleDownloadFile = (file: File) => {
+    fileDownload(file, `Clients-Report.xls`);
+  };
+
   const handleDownloadClients = () => {
     downloadClients({
       file_type: "PDF",
@@ -64,7 +70,7 @@ const Clients = () => {
       source: ""
     })
       .unwrap()
-      .then()
+      .then((res: any) => handleDownloadFile(res?.payload?.content))
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 
