@@ -73,7 +73,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [deleteStop, { isLoading: deleteStopLoading }] =
     useDeleteStopMutation();
 
-  const [getTrucks, { data: trucks }] = useGetTrucksMutation();
+  const [getTrucks, { data: trucks }] = useLazyGetTrucksQuery();
 
   const [writeOff, { isLoading: writeOffLoading }] = useWriteOffMutation();
 
@@ -111,7 +111,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
     getTrucks({ page: 0, size: 10000 })
       .unwrap()
       .then()
-      .catch((e) => {
+      .catch((e: any) => {
         message.error(e.data?.messag || "Cannot get trucks");
       });
   }, [getTrucks]);
