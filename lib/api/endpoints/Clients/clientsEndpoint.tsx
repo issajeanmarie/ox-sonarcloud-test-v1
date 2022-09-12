@@ -120,7 +120,11 @@ const clientsApi = baseAPI.injectEndpoints({
       providesTags: ["Clients"],
       query: (DTO) => ({
         url: `/clients/${DTO?.id}/invoice`,
-        method: "GET"
+        method: "GET",
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
       })
     }),
     client: builder.query<ApiResponseMetadata<Client>, GetClient>({

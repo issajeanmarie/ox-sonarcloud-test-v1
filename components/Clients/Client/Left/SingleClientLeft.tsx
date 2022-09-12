@@ -59,6 +59,13 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
           </CustomButton>
         </div>
       )}
+      <div className="flex justify-center items-center py-10">
+        <div className="w-52">
+          <CustomButton type="secondary">
+            <span className="text-sm">Load More</span>
+          </CustomButton>
+        </div>
+      </div>
     </Col>
   );
 };

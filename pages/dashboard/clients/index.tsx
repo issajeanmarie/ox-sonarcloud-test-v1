@@ -61,10 +61,6 @@ const Clients = () => {
     setSort(sorter);
   };
 
-  const handleDownloadFile = (file: File) => {
-    fileDownload(file, `Clients-Report.xls`);
-  };
-
   const handleDownloadClients = () => {
     downloadClients({
       file_type: "PDF",
@@ -77,7 +73,7 @@ const Clients = () => {
       source: ""
     })
       .unwrap()
-      .then((res: any) => handleDownloadFile(res?.payload?.content))
+      .then((file: any) => handleDownloadFile(file, "Clients-Report", "PDF"))
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 

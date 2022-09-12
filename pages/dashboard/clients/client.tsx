@@ -42,7 +42,7 @@ const Client = () => {
       {router.isReady && !isClientLoading && !client ? (
         <PageNotFound />
       ) : (
-        <>
+        <div className="m-0 h-full overflow-hidden">
           <SingleClientTop
             client={client?.payload}
             isClientLoading={isClientLoading}
@@ -68,7 +68,7 @@ const Client = () => {
               isClientOrdersFetching={isClientOrdersFetching}
             />
           </Row>
-        </>
+        </div>
       )}
     </Layout>
   );
