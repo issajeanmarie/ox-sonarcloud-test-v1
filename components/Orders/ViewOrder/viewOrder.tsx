@@ -27,7 +27,7 @@ import EditStop from "../../Forms/Orders/EditStop";
 import EditPaymentStatus from "../../Forms/Orders/EditPaymentStatus";
 import EditPayment from "../../Forms/Orders/EditPayment";
 import { userType } from "../../../helpers/getLoggedInUser";
-import { useGetTrucksMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { useLazyGetTrucksQuery } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useClientsQuery } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 
 const { Step } = Steps;
@@ -77,7 +77,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [deleteStop, { isLoading: deleteStopLoading }] =
     useDeleteStopMutation();
 
-  const [getTrucks, { data: trucks }] = useGetTrucksMutation();
+  const [getTrucks, { data: trucks }] = useLazyGetTrucksQuery();
 
   const [writeOff, { isLoading: writeOffLoading }] = useWriteOffMutation();
 
@@ -97,7 +97,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
     getTrucks({ page: 0, size: 10000 })
       .unwrap()
       .then()
-      .catch((e) => {
+      .catch((e: any) => {
         message.error(e.data?.messag || "Cannot get trucks");
       });
   }, [getTrucks]);

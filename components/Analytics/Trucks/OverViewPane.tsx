@@ -146,8 +146,10 @@ const OvervieWPane = () => {
             {cardsData?.map((data) => (
               <Col
                 sm={{ span: 24 }}
-                md={{ span: 12 }}
-                xl={{ span: 8 }}
+                md={{ span: 24 }}
+                lg={{ span: 24 }}
+                xl={{ span: 12 }}
+                xxl={{ span: 8 }}
                 key={data?.name}
                 className="mb-8"
               >
@@ -160,6 +162,7 @@ const OvervieWPane = () => {
             <Col
               sm={{ span: 24 }}
               md={{ span: 12 }}
+              lg={{ span: 12 }}
               xl={{ span: 8 }}
               className="mb-6"
             >

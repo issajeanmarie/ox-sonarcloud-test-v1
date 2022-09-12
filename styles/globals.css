@@ -211,7 +211,7 @@ body {
 }
 
 .border_grey {
-  color: var(--color_border_grey);
+  border: 1px solid var(--color_border_grey) !important;
 }
 
 .toggle_grey {
@@ -584,4 +584,16 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.ant-table-tbody > tr > td {
+  border-bottom: 8px solid #f8f8f8 !important;
+}
+
+.ant-table-thead > tr {
+  background-color: #f8f8f8 !important;
+}
+
+.border_faded {
+  border: 1px solid #f5f5f5;
 }

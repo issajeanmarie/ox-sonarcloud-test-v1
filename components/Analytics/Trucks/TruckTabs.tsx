@@ -9,7 +9,7 @@ import FuelRecordsPane from "./FuelRecordsPane";
 const { TabPane } = Tabs;
 
 const TruckTabs = ({ truckData }: any) => (
-  <div className="flex-1 h-[85vh] rounded bg-white p-12 pt-6">
+  <div className="h-[100%] rounded bg-white p-12 pt-6">
     <Tabs defaultActiveKey="0" className="truck_tabs">
       <TabPane
         tab={<span className="text-lg font-bold text-ox-dark">OVERVIEW</span>}

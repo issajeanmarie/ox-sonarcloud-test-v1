@@ -56,18 +56,23 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
   ];
 
   return (
-    <div>
+    <div className="overflow-hidden">
       {isLoading ? (
         <Loader />
       ) : (
         <>
           <Header truckId={truckId} truckData={truckData} />
 
-          <Row align="middle" gutter={32} justify="space-between">
+          <Row align="middle" gutter={12} justify="space-between">
             <Col
-              span={12}
-              className="h-[83vh]  overflow-auto p-6 pl-12 pt-0 mt-6"
-              // style={{ background: "red", padding: "38px" }}
+              md={{ span: 24 }}
+              lg={{ span: 12 }}
+              className="h-[86vh]  overflow-auto"
+              style={{
+                padding: "38px",
+                marginTop: "24px",
+                paddingTop: "0"
+              }}
             >
               <div className="bg-white shadow-[0px_0px_19px_#00000008] p-12 pb-6 mb-6">
                 <div className="flex items-center justify-between mb-3">
@@ -126,7 +131,16 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
               </div>
             </Col>
 
-            <Col span={12} className="h-[83vh]  overflow-auto">
+            <Col
+              md={{ span: 24 }}
+              lg={{ span: 12 }}
+              className="h-[86vh]"
+              style={{
+                padding: "38px",
+                marginTop: "24px",
+                paddingTop: "0"
+              }}
+            >
               <TruckTabs truckData={truckData} />
             </Col>
           </Row>
