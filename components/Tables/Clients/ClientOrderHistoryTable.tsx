@@ -6,6 +6,8 @@ import RowsWrapper from "../RowsWrapper";
 import moment from "moment";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { FC } from "react";
+import { routes } from "../../../config/route-config";
+import Link from "next/link";
 
 const { Text } = Typography;
 
@@ -31,10 +33,12 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
         index: number
       ) => (
         <RowsWrapper>
-          <div className="flex gap-10">
-            <Text className="normalText opacity_56">{index + 1}</Text>
-            <Text className="normalText fowe900 underline">{record?.id}</Text>
-          </div>
+          <Link passHref href={routes.viewOrder.url + record.id}>
+            <div className="flex gap-10 cursor-pointer">
+              <Text className="normalText opacity_56">{index + 1}</Text>
+              <Text className="normalText fowe900 underline">{record?.id}</Text>
+            </div>
+          </Link>
         </RowsWrapper>
       )
     },

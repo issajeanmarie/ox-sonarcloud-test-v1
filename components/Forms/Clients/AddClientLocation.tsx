@@ -1,4 +1,4 @@
-import { Col, Form, Image, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import React, { FC } from "react";
 import { requiredInput } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
@@ -7,11 +7,15 @@ import { AddClientLocationTypes } from "../../../lib/types/pageTypes/Clients/Add
 
 const AddClientLocation: FC<AddClientLocationTypes> = ({
   onAddClientLocationFinish,
-  isLoading
+  isLoading,
+  setLocation,
+  location,
+  form
 }) => {
   return (
     <Form
       onFinish={onAddClientLocationFinish}
+      form={form}
       name="AddClientLocation"
       layout="vertical"
       title=""
@@ -20,10 +24,11 @@ const AddClientLocation: FC<AddClientLocationTypes> = ({
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             name="location"
-            type="text"
+            type="location"
             label="Location"
             placeholder="Search for location"
-            rules={requiredInput}
+            setLocation={setLocation}
+            location={location}
           />
         </Col>
 
@@ -36,30 +41,18 @@ const AddClientLocation: FC<AddClientLocationTypes> = ({
             rules={requiredInput}
           />
         </Col>
-
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <Input
-            rules={requiredInput}
-            type="select"
-            label="Type"
-            placeholder="Type"
-            options={[{ label: "HQ", value: "HQ" }]}
-            name="type"
-            suffixIcon={
-              <Image
-                preview={false}
-                src="/icons/expand_more_black_24dp.svg"
-                alt=""
-                width={10}
-              />
-            }
-          />
-        </Col>
       </Row>
 
       <Row justify="end" className="mt-7">
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
+          <Button
+            disabled={
+              !location || Object.keys(location).length === 0 ? true : false
+            }
+            loading={isLoading}
+            type="primary"
+            htmlType="submit"
+          >
             ADD LOCATION
           </Button>
         </Col>

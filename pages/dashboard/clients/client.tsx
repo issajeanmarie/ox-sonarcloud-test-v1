@@ -5,6 +5,7 @@ import SingleClientLeft from "../../../components/Clients/Client/Left/SingleClie
 import SingleClientRight from "../../../components/Clients/Client/Right/SingleClientRight";
 import SingleClientTop from "../../../components/Clients/Client/SingleClientTop";
 import Layout from "../../../components/Shared/Layout";
+import PageNotFound from "../../../components/Shared/PageNotFound";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import { routes } from "../../../config/route-config";
 import {
@@ -38,30 +39,37 @@ const Client = () => {
 
   return (
     <Layout>
-      <SingleClientTop
-        client={client?.payload}
-        isClientLoading={isClientLoading}
-        isClientFetching={isClientFetching}
-      />
-      <Row className="p-5 flex justify-between gap-5">
-        <SingleClientLeft
-          client={client?.payload}
-          isClientLoading={isClientLoading}
-          isClientFetching={isClientFetching}
-          clientOrders={clientOrders?.payload}
-          isClientOrdersLoading={isClientOrdersLoading}
-          isClientOrdersFetching={isClientOrdersFetching}
-        />
+      {router.isReady && !isClientLoading && !client ? (
+        <PageNotFound />
+      ) : (
+        <div className="m-0 h-full overflow-hidden">
+          <SingleClientTop
+            client={client?.payload}
+            isClientLoading={isClientLoading}
+            isClientFetching={isClientFetching}
+            router={router}
+          />
+          <Row className="p-5 flex justify-between gap-5">
+            <SingleClientLeft
+              client={client?.payload}
+              isClientLoading={isClientLoading}
+              isClientFetching={isClientFetching}
+              clientOrders={clientOrders?.payload}
+              isClientOrdersLoading={isClientOrdersLoading}
+              isClientOrdersFetching={isClientOrdersFetching}
+            />
 
-        <SingleClientRight
-          client={client?.payload}
-          isClientLoading={isClientLoading}
-          isClientFetching={isClientFetching}
-          clientOrders={clientOrders?.payload}
-          isClientOrdersLoading={isClientOrdersLoading}
-          isClientOrdersFetching={isClientOrdersFetching}
-        />
-      </Row>
+            <SingleClientRight
+              client={client?.payload}
+              isClientLoading={isClientLoading}
+              isClientFetching={isClientFetching}
+              clientOrders={clientOrders?.payload}
+              isClientOrdersLoading={isClientOrdersLoading}
+              isClientOrdersFetching={isClientOrdersFetching}
+            />
+          </Row>
+        </div>
+      )}
     </Layout>
   );
 };

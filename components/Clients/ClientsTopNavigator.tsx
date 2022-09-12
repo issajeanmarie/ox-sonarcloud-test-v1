@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, Image, Row, Select, Typography } from "antd";
+import { Col, Form, Image, Row, Select, Typography } from "antd";
 import React, { useState } from "react";
 import Input from "../Shared/Input";
 import CustomButton from "../Shared/Button/button";
 
 import { FC } from "react";
+import { LatLng } from "use-places-autocomplete";
 import { ClientsTopNavigatorTypes } from "../../lib/types/pageTypes/Clients/ClientsTopNavigatorTypes";
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewClient from "../Forms/Clients/AddNewClient";
@@ -36,16 +37,17 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   handleDownloadClients,
   isDownloadingClientsLoading
 }) => {
+  const [form] = Form.useForm();
   const [offices, setOffices]: any = useState([]);
   const [officeName, setOfficeName] = useState("");
-  const [officeLocation, setOfficeLocation] = useState("");
+  const [location, setLocation] = useState<{
+    name: string;
+    coordinates: LatLng;
+  }>();
   const [postClient, { isLoading }] = usePostClientMutation();
 
   const onOfficeNameChange = (value: string) => {
     setOfficeName(value);
-  };
-  const onOfficeLocationChange = (value: string) => {
-    setOfficeLocation(value);
   };
 
   // ADD CLIENT
@@ -54,12 +56,14 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       ...offices,
       {
         id: offices.length + 1,
-        location: officeLocation,
-        coordinates: "",
-        names: officeName,
-        type: "HQ"
+        location: location ? location?.name : "",
+        coordinates: location ? JSON.stringify(location?.coordinates) : "",
+        names: officeName
+        // type: "HQ"
       }
     ]);
+    form.resetFields(["officeName"]);
+    setLocation(undefined);
   };
 
   const onAddClientFinish = (values: any) => {
@@ -78,6 +82,8 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       .then((res: GenericResponse) => {
         SuccessMessage(res?.message);
         setOffices([]);
+        form.resetFields();
+        setIsModalVisible(false);
       })
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
@@ -190,10 +196,13 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
           onAddClientFinish={onAddClientFinish}
           createOffices={createOffices}
           onOfficeNameChange={onOfficeNameChange}
-          onOfficeLocationChange={onOfficeLocationChange}
           offices={offices}
           setOffices={setOffices}
           isLoading={isLoading}
+          setLocation={setLocation}
+          location={location}
+          officeName={officeName}
+          form={form}
         />
       </ModalWrapper>
     </Row>

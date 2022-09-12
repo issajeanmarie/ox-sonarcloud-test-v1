@@ -31,19 +31,25 @@ const ClientOrderDays: FC<ClientOrderDaysTypes> = ({ orderDays }) => {
       <Divider style={{ padding: 0, margin: 0 }} />
 
       <Row justify="space-between" className="w-full p-8">
-        {orderDays?.map((day: string, index: number) => (
-          <Col key={`${index * 2}-${day}`}>
-            <span
-              className={`rounded-full ${
-                day === "M" || day === "F"
-                  ? "yellow_faded_bg text-white"
-                  : "bg_white_input"
-              }  day_circle cursor-pointer`}
-            >
-              {day?.charAt(0)}
-            </span>
-          </Col>
-        ))}
+        {orderDays?.length === 0 ? (
+          <span className="font-light">Oder days will appear here</span>
+        ) : (
+          <>
+            {orderDays?.map((day: string, index: number) => (
+              <Col key={`${index * 2}-${day}`}>
+                <span
+                  className={`rounded-full ${
+                    day === "M" || day === "F"
+                      ? "yellow_faded_bg text-white"
+                      : "bg_white_input"
+                  }  day_circle cursor-pointer`}
+                >
+                  {day?.charAt(0)}
+                </span>
+              </Col>
+            ))}
+          </>
+        )}
       </Row>
     </Row>
   );

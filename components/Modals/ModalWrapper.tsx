@@ -1,5 +1,6 @@
 import { FC, SetStateAction } from "react";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
+import { CloseIcon } from "../Icons";
 
 interface ModalProps {
   isModalVisible: boolean;
@@ -26,14 +27,28 @@ const ModalWrapper: FC<ModalProps> = ({
   return (
     <Modal
       className="ox-modal"
-      title={<span className="font-bold text-2xl">{title}</span>}
-      width={450}
+      title={
+        <div className="flex justify-between items-center">
+          <span className="font-bold text-2xl">{title}</span>
+          {!loading && (
+            <Button
+              onClick={handleCancel}
+              style={{ margin: 0, padding: 0 }}
+              type="text"
+            >
+              {CloseIcon}
+            </Button>
+          )}
+        </div>
+      }
+      width={500}
       footer={false}
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={handleCancel}
       centered
       maskClosable={loading ? false : true}
+      closable={false}
     >
       {children}
     </Modal>

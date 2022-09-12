@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { LatLng } from "use-places-autocomplete";
+
 export type AddClientTypes = {
   onAddClientFinish: (values: any) => void;
   createOffices: () => void;
   onOfficeNameChange: (value: string) => void;
-  onOfficeLocationChange: (value: string) => void;
   offices: [
     {
       id: number;
@@ -15,4 +16,21 @@ export type AddClientTypes = {
   ];
   setOffices: any;
   isLoading: boolean;
+  setLocation: React.Dispatch<
+    React.SetStateAction<
+      | {
+          name: string;
+          coordinates: LatLng;
+        }
+      | undefined
+    >
+  >;
+  location:
+    | {
+        name: string;
+        coordinates: LatLng;
+      }
+    | undefined;
+  officeName: string;
+  form: any;
 };

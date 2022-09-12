@@ -1,4 +1,4 @@
-import { Col, Form, Image, Popover, Row } from "antd";
+import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
 import {
   emailValidationNotRequired,
@@ -7,26 +7,18 @@ import {
 } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
-import OtherOfficesTable from "../../Tables/Clients/OtherOfficesTable";
-import { AddClientTypes } from "../../../lib/types/pageTypes/Clients/AddClientTypes";
-import { YellowCheckIcon } from "../../Icons";
-const AddNewClient: FC<AddClientTypes> = ({
-  onAddClientFinish,
-  createOffices,
-  onOfficeNameChange,
-  offices,
-  setOffices,
+import { EditClientTypes } from "../../../lib/types/pageTypes/Clients/EditClientTypes";
+
+const EditClient: FC<EditClientTypes> = ({
+  onEditClientFinish,
   isLoading,
-  setLocation,
-  location,
-  officeName,
   form
 }) => {
   return (
     <Form
-      onFinish={onAddClientFinish}
+      onFinish={onEditClientFinish}
       form={form}
-      name="AddNewClient"
+      name="EditClient"
       layout="vertical"
       title=""
     >
@@ -112,86 +104,12 @@ const AddNewClient: FC<AddClientTypes> = ({
             }
           />
         </Col>
-
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
-            name="location"
-            type="text"
-            label="Main location"
-            placeholder="Search for location"
-            rules={requiredInput}
-          />
-        </Col>
-      </Row>
-
-      <Row className="mt-12 ">
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <div className="mb-4">
-            <span className="font-light">Add other offices</span>
-          </div>
-          {offices.length > 0 && (
-            <div className="mb-4">
-              <OtherOfficesTable offices={offices} setOffices={setOffices} />
-            </div>
-          )}
-        </Col>
-      </Row>
-
-      <Row
-        justify="space-between"
-        gutter={[16, 16]}
-        align="bottom"
-        className="mt-4"
-      >
-        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
-          <Input
-            onChange={onOfficeNameChange}
-            name="officeName"
-            type="text"
-            label="Name"
-            placeholder="Office name"
-          />
-        </Col>
-
-        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
-          <Input
-            name="officeLocation"
-            type="location"
-            label="Location"
-            placeholder="Search location"
-            setLocation={setLocation}
-            location={location}
-          />
-        </Col>
-        <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-          {!location ||
-          Object.keys(location).length === 0 ||
-          officeName === "" ? (
-            <Popover
-              placement="left"
-              content={
-                <div className="flex flex-col">
-                  <span className="font-light">Select office name </span>
-                  <span className="font-light">and location</span>
-                </div>
-              }
-              title={false}
-              trigger="click"
-            >
-              <Button type="secondary">{YellowCheckIcon}</Button>
-            </Popover>
-          ) : (
-            <Button onClick={() => createOffices()} type="secondary">
-              {YellowCheckIcon}
-            </Button>
-          )}
-        </Col>
       </Row>
 
       <Row justify="end" className="mt-7">
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
           <Button loading={isLoading} type="primary" htmlType="submit">
-            ADD CLIENT
+            SAVE CHANGES
           </Button>
         </Col>
       </Row>
@@ -199,4 +117,4 @@ const AddNewClient: FC<AddClientTypes> = ({
   );
 };
 
-export default AddNewClient;
+export default EditClient;

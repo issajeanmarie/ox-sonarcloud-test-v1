@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import { SingleClientLeftTypes } from "../../../../lib/types/pageTypes/Clients/SingleClientLeftTypes";
 import { ColsTableLoader } from "../../../Shared/Loaders/Loaders";
 import ClientOrderHistoryTable from "../../../Tables/Clients/ClientOrderHistoryTable";
+import CustomButton from "../../../../components/Shared/Button";
 import Header from "./Header";
 
 const SingleClientLeft: FC<SingleClientLeftTypes> = ({
@@ -10,7 +11,15 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
   isClientLoading
 }) => {
   return (
-    <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+    <Col
+      className="h-[86vh] overflow-auto"
+      xs={24}
+      sm={24}
+      md={12}
+      lg={12}
+      xl={12}
+      xxl={12}
+    >
       <Header orders={clientOrders?.orders} />
       {isClientLoading ? (
         <div className="mt-4">
@@ -21,6 +30,13 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
       ) : (
         <ClientOrderHistoryTable orders={clientOrders?.orders?.content} />
       )}
+      <div className="flex justify-center items-center py-10">
+        <div className="w-52">
+          <CustomButton type="secondary">
+            <span className="text-sm">Load More</span>
+          </CustomButton>
+        </div>
+      </div>
     </Col>
   );
 };

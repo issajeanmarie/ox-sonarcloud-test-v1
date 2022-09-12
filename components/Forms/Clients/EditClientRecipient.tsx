@@ -6,16 +6,18 @@ import {
 } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
-import { AddClientRecipientTypes } from "../../../lib/types/pageTypes/Clients/AddClientRecipientTypes";
+import { EditClientRecipientTypes } from "../../../lib/types/pageTypes/Clients/EditClientRecipientTypes";
 
-const AddClientRecipient: FC<AddClientRecipientTypes> = ({
-  onAddClientRecipientFinish,
-  isLoading
+const EditClientRecipient: FC<EditClientRecipientTypes> = ({
+  onEditClientRecipientFinish,
+  isLoading,
+  form
 }) => {
   return (
     <Form
-      onFinish={onAddClientRecipientFinish}
-      name="AddClientRecipient"
+      onFinish={onEditClientRecipientFinish}
+      form={form}
+      name="EditClientRecipient"
       layout="vertical"
       title=""
     >
@@ -44,7 +46,7 @@ const AddClientRecipient: FC<AddClientRecipientTypes> = ({
       <Row justify="end" className="mt-7">
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
           <Button loading={isLoading} type="primary" htmlType="submit">
-            ADD RECIPIENT
+            SAVE CHANGES
           </Button>
         </Col>
       </Row>
@@ -52,4 +54,4 @@ const AddClientRecipient: FC<AddClientRecipientTypes> = ({
   );
 };
 
-export default AddClientRecipient;
+export default EditClientRecipient;

@@ -18,6 +18,7 @@ import ModalWrapper from "../../Modals/ModalWrapper";
 import EditClientLocation from "../../Forms/Clients/EditClientLocation";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import Image from "next/image";
+import { LatLng } from "use-places-autocomplete";
 
 const { Text } = Typography;
 
@@ -32,6 +33,11 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
 }) => {
   const { query } = useRouter();
   const [form] = Form.useForm();
+
+  const [location, setLocation] = useState<{
+    name: string;
+    coordinates: LatLng;
+  }>();
 
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
@@ -192,6 +198,8 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
           onEditClientLocationFinish={onEditClientLocationFinish}
           isLoading={isEditing}
           form={form}
+          setLocation={setLocation}
+          location={location}
         />
       </ModalWrapper>
     </>

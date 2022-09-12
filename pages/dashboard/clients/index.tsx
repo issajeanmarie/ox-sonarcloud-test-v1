@@ -13,6 +13,7 @@ import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/category
 import { BackendErrorTypes } from "../../../lib/types/shared";
 import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
 import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 
 const Clients = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -52,6 +53,7 @@ const Clients = () => {
   const onSortChange = (sorter: string) => {
     setSort(sorter);
   };
+
   const handleDownloadClients = () => {
     downloadClients({
       file_type: "PDF",
@@ -64,7 +66,7 @@ const Clients = () => {
       source: ""
     })
       .unwrap()
-      .then()
+      .then((file: any) => handleDownloadFile(file, "Clients-Report", "PDF"))
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 
