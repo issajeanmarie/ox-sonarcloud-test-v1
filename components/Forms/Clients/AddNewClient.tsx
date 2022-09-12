@@ -9,7 +9,7 @@ import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import OtherOfficesTable from "../../Tables/Clients/OtherOfficesTable";
 import { AddClientTypes } from "../../../lib/types/pageTypes/Clients/AddClientTypes";
-
+import { YellowCheckIcon } from "../../Icons";
 const AddNewClient: FC<AddClientTypes> = ({
   onAddClientFinish,
   createOffices,
@@ -124,7 +124,7 @@ const AddNewClient: FC<AddClientTypes> = ({
         </Col>
       </Row>
 
-      <Row className="mt-12 flex justify-between items-end gap-4">
+      <Row className="mt-12 ">
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <div className="mb-4">
             <span className="font-light">Add other offices</span>
@@ -135,8 +135,15 @@ const AddNewClient: FC<AddClientTypes> = ({
             </div>
           )}
         </Col>
+      </Row>
 
-        <Col flex="none">
+      <Row
+        justify="space-between"
+        gutter={[16, 16]}
+        align="bottom"
+        className="mt-4"
+      >
+        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
           <Input
             onChange={onOfficeNameChange}
             name="officeName"
@@ -146,7 +153,7 @@ const AddNewClient: FC<AddClientTypes> = ({
           />
         </Col>
 
-        <Col flex="auto">
+        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
           <Input
             name="officeLocation"
             type="location"
@@ -156,7 +163,7 @@ const AddNewClient: FC<AddClientTypes> = ({
             location={location}
           />
         </Col>
-        <Col flex="none">
+        <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
           {!location ||
           Object.keys(location).length === 0 ||
           officeName === "" ? (
@@ -171,11 +178,11 @@ const AddNewClient: FC<AddClientTypes> = ({
               title={false}
               trigger="click"
             >
-              <Button type="secondary">Icon</Button>
+              <Button type="secondary">{YellowCheckIcon}</Button>
             </Popover>
           ) : (
             <Button onClick={() => createOffices()} type="secondary">
-              Icon
+              {YellowCheckIcon}
             </Button>
           )}
         </Col>

@@ -7,6 +7,7 @@ import { FC } from "react";
 import { CloseIcon } from "../../Icons";
 import { Button } from "antd";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
+import { limitStringLengthSmall } from "../../../helpers/limitStringLength";
 
 const { Text } = Typography;
 
@@ -54,7 +55,9 @@ const OtherOfficesTable: FC<OtherOfficesTableProps> = ({
         record: OtherOfficesTableTypes
       ) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">{record?.location}</Text>
+          <Text className="normalText opacity_56">
+            {record?.location && limitStringLengthSmall(record?.location)}
+          </Text>
         </RowsWrapper>
       )
     },

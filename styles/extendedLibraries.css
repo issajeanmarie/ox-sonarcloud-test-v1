@@ -153,7 +153,18 @@
 
 /* MODAL */
 .ox-modal .ant-modal-header {
+  padding: 40px 40px 0 40px !important;
+}
+.ox-modal .ant-modal-header {
   border-bottom-width: 0 !important;
+}
+.ox-modal .ant-modal-body {
+  padding: 40px !important;
+}
+
+.ox-modal .ant-modal-content,
+.ox-modal .ant-modal-header {
+  border-radius: 4px !important;
 }
 
 .noborder .ant-table-tbody > tr > td,

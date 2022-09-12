@@ -56,8 +56,12 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       providesTags: ["Clients"],
       query: (DTO) => ({
-        url: `/clients?file_type=${DTO?.file_type}&org=${DTO?.org}&dest=${DTO?.dest}&hq=${DTO?.hq}&categoryId=${DTO?.categoryId}&q=${DTO?.q}&sort=${DTO?.sort}&source=${DTO?.source}`,
-        method: "GET"
+        url: `/clients/download?file_type=${DTO?.file_type}&org=${DTO?.org}&dest=${DTO?.dest}&hq=${DTO?.hq}&categoryId=${DTO?.categoryId}&q=${DTO?.q}&sort=${DTO?.sort}&source=${DTO?.source}`,
+        method: "GET",
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
       })
     }),
     downloadClientInvoice: builder.query<
@@ -67,7 +71,11 @@ const clientsApi = baseAPI.injectEndpoints({
       providesTags: ["Clients"],
       query: (DTO) => ({
         url: `/clients/${DTO?.id}/invoice`,
-        method: "GET"
+        method: "GET",
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
       })
     }),
     client: builder.query<ApiResponseMetadata<Client>, GetClient>({

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import fileDownload from "js-file-download";
 import ClientsTable from "../../../components/Tables/Clients/ClientsTable";
 import ClientsTopNavigator from "../../../components/Clients/ClientsTopNavigator";
 import Layout from "../../../components/Shared/Layout";
@@ -14,6 +13,7 @@ import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/category
 import { BackendErrorTypes } from "../../../lib/types/shared";
 import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
 import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 
 const Clients = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -54,10 +54,6 @@ const Clients = () => {
     setSort(sorter);
   };
 
-  const handleDownloadFile = (file: File) => {
-    fileDownload(file, `Clients-Report.xls`);
-  };
-
   const handleDownloadClients = () => {
     downloadClients({
       file_type: "PDF",
@@ -70,7 +66,7 @@ const Clients = () => {
       source: ""
     })
       .unwrap()
-      .then((res: any) => handleDownloadFile(res?.payload?.content))
+      .then((file: any) => handleDownloadFile(file, "Clients-Report", "PDF"))
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 

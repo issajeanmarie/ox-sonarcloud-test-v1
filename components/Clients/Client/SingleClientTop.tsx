@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Row, Image as AntDImage } from "antd";
-import fileDownload from "js-file-download";
 import React, { FC, SetStateAction, useState } from "react";
 import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
@@ -10,6 +9,7 @@ import {
 } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { SingleClientTopTypes } from "../../../lib/types/pageTypes/Clients/SingleClientTopTypes";
 import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import ActionModal from "../../Shared/ActionModal";
 import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
@@ -46,17 +46,13 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 
-  const handleDownloadFile = (file: File) => {
-    fileDownload(file, `Clients-Invoice.pdf`);
-  };
-
   const handleDownloadClientInvoice = () => {
     downloadClientInvoice({
       id: client?.id
     })
       .unwrap()
-      .then((res: any) => {
-        handleDownloadFile(res);
+      .then((file: any) => {
+        handleDownloadFile(file, "Invoice", "PDF");
       })
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
@@ -81,6 +77,7 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({
                 alt=""
                 width={20}
                 height={20}
+                preview={false}
               />
               <span className="heading2">Clients</span>
               <span className="normalText">/</span>
