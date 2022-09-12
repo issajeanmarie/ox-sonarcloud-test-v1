@@ -4,7 +4,7 @@ import { useForm } from "antd/lib/form/Form";
 import React, { FC, useEffect, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
 import { useSupportOrderMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
-import { useGetTrucksMutation } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import {
   SupportOrderFormValues,
   SupportOrderRequest
@@ -29,7 +29,7 @@ const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
   const [supportOrder, { isLoading }] = useSupportOrderMutation();
 
   const [getTrucks, { data, isLoading: trucksLoading }] =
-    useGetTrucksMutation();
+    useLazyGetTrucksQuery();
 
   const [form] = useForm();
 

@@ -17,7 +17,7 @@ import moment from "moment";
 import { Client } from "../../../../lib/types/clients";
 import { Office } from "../../../../lib/types/shared";
 import { Category } from "../../../../lib/types/categories";
-import { useGetTrucksMutation } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { TruckSchema } from "../../../../lib/types/trucksTypes";
 import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoints";
 
@@ -39,7 +39,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
   });
 
   const [getTrucks, { data, isLoading: trucksLoading }] =
-    useGetTrucksMutation();
+    useLazyGetTrucksQuery();
   const [chosenClientId, setChosenClientId] = useState<number>();
   const [stops, setStops] = useState<Stop_Request[]>([]);
   const [location, setLocation] = useState<{
@@ -125,8 +125,8 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     getTrucks({ page: 0, size: 10000 })
       .unwrap()
       .then()
-      .catch((e) => {
-        message.error(e.data?.messag || "Cannot get trucks");
+      .catch((e: any) => {
+        message.error(e.data?.message || "Cannot get trucks");
       });
   }, [getTrucks]);
 

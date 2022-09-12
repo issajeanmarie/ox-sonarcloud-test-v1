@@ -94,10 +94,10 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
       ) : (
         <Table
           className="data_table"
-          rowClassName="shadow"
+          rowClassName="rounded"
           dataSource={data}
           rowKey={(record: SingleTruckTypes) => {
-            return record.id;
+            return record?.id;
           }}
           pagination={false}
           bordered={false}
@@ -125,7 +125,9 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             title="Plate number"
             render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
               const child = (
-                <Text className="normalText fowe700">{record.plateNumber}</Text>
+                <Text className="normalText fowe700">
+                  {record?.plateNumber}
+                </Text>
               );
               return {
                 children: child,
@@ -140,7 +142,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             title="Model"
             render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
               const child = (
-                <Text className="normalText opacity_56">{record.model}</Text>
+                <Text className="normalText opacity_56">{record?.model}</Text>
               );
               return { children: child, props: { "data-label": "Model" } };
             }}
@@ -152,7 +154,9 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             title="Capacity"
             render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
               const child = (
-                <Text className="normalText opacity_56">{record.capacity}</Text>
+                <Text className="normalText opacity_56">
+                  {record?.capacity}
+                </Text>
               );
               return { children: child, props: { "data-label": "Capacity" } };
             }}
@@ -192,10 +196,10 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
               const child = (
                 <Text
                   className={`normalText fontwe700 ${
-                    record.active ? "dark" : "red"
+                    record?.active ? "dark" : "red"
                   } uppercase`}
                 >
-                  {record.active ? "IN USE" : "OUT OF SERVICE"}
+                  {record?.active ? "IN USE" : "OUT OF SERVICE"}
                 </Text>
               );
               return { children: child, props: { "data-label": "Status" } };
@@ -245,7 +249,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
 
                   <Col
                     onClick={() =>
-                      router.push(`${routes.Trucks.url}/${record.id}`)
+                      router.push(`${routes.Trucks.url}/${record?.id}`)
                     }
                   >
                     <CustomButton type="view" size="small">

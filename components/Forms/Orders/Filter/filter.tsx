@@ -6,7 +6,7 @@ import { PAYMENT_STATUS } from "../../../../utils/options";
 import { Order_Filter } from "../../../../lib/types/orders";
 import { useForm } from "antd/lib/form/Form";
 import moment from "moment";
-import { useGetTrucksMutation } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { message, Select } from "antd";
 import { TruckSchema } from "../../../../lib/types/trucksTypes";
 
@@ -24,7 +24,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   loading
 }) => {
   const [getTrucks, { data, isLoading: trucksLoading }] =
-    useGetTrucksMutation();
+    useLazyGetTrucksQuery();
 
   const handleOnFinish = (values: Order_Filter) => {
     setIsFiltered(true);

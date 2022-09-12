@@ -27,14 +27,15 @@ const slice = createSlice({
   } as TrucksState,
   reducers: {
     displayTrucks: (state, { payload }) => {
-      // CHECK IF YOU ARE LOADING DATA, FILTERING, OR PAGINATING
-      if (payload.payload.content) {
-        //CHECKING IF YOU FILTERED TO REPLACE CURRENT STATE DATA WITH NEW DATA
-        if (payload?.replace) {
-          state.displayTrucks.content = [...payload?.payload?.content];
-          (state.displayTrucks.message = payload?.message),
-            (state.displayTrucks.totalPages = payload?.payload?.totalPages);
+      if (payload?.payload?.content) {
+        if (payload.onReder) {
+          state.displayTrucks = payload.payload;
 
+          return;
+        }
+
+        if (payload.replace) {
+          state.displayTrucks = payload?.payload;
           return;
         }
 
@@ -44,13 +45,6 @@ const slice = createSlice({
         ];
         (state.displayTrucks.message = payload?.message),
           (state.displayTrucks.totalPages = payload?.payload?.totalPages);
-      }
-      // CHECKING IF YOU YOU ADDED NEW TRUCK
-      else {
-        state.displayTrucks.content = [
-          ...state?.displayTrucks?.content,
-          payload?.payload
-        ];
       }
     },
 

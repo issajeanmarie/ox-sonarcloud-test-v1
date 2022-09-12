@@ -29,12 +29,14 @@ type Payload = {
 
 const trucksApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
-    getTrucks: builder.mutation({
-      invalidatesTags: ["Trucks"],
-      query: ({ page, size }: Payload) => ({
+    getTrucks: builder.query({
+      providesTags: ["Trucks"],
+      query: ({ page, size }) => ({
         url: `/trucks?page=${page || ""}&size=${size || ""}`,
         method: "GET"
-      })
+      }),
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
+        response.payload
     }),
 
     loadMoreTrucks: builder.mutation({
@@ -190,8 +192,7 @@ const trucksApi = baseAPI.injectEndpoints({
 });
 
 export const {
-  useGetTrucksMutation,
-  useCreateTruckMutation,
+  useLazyGetTrucksQuery,
   useLoadMoreTrucksMutation,
   useFilterTrucksMutation,
   useToggleTruckMutation,
@@ -203,5 +204,6 @@ export const {
   useCreateTruckIssueMutation,
   useToggleTruckIssueStatusMutation,
   useLazyDownloadTruckDailyInspectionQuery,
-  useLazyDownloadTruckShiftsQuery
+  useLazyDownloadTruckShiftsQuery,
+  useCreateTruckMutation
 } = trucksApi;
