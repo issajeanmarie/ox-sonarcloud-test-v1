@@ -2,21 +2,29 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import info from "antd/lib/message";
+import Button from "antd/lib/button";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
+import Dropdown from "antd/lib/dropdown";
 import CustomInput from "../../../components/Shared/Input";
 import CustomButton from "../../../components/Shared/Button/button";
 import { pagination } from "../../../config/pagination";
 import TrucksTable from "../../../components/Analytics/Trucks/TrucksTable";
 import { displayTrucks } from "../../../lib/redux/slices/trucksSlice";
 import { NewTruckModal } from "../../../components/Modals";
-import { useFilterTrucksMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import {
+  useFilterTrucksMutation,
+  useLazyDownloadOOSReportQuery
+} from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import {
   useLoadMoreTrucksMutation,
   useLazyGetTrucksQuery
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { handleDownloadSuccess } from "./functions";
 
 const { Text } = Typography;
 
@@ -31,20 +39,37 @@ type State = {
   trucks: Trucks;
 };
 
+type BrowserState = {
+  status: string | string[];
+  search: string | string[];
+  sort: string | string[];
+};
+
 const Trucks = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentPages, setCurrentPages] = useState(1);
   const [loadMoreTrucks, { isLoading: loadMoreLoading }] =
     useLoadMoreTrucksMutation();
-  const [getTrucks, { isLoading: getTrucksLoading, data }] =
-    useLazyGetTrucksQuery();
+  const [getTrucks, { isLoading: getTrucksLoading }] = useLazyGetTrucksQuery();
   const [filterTrucks, { isLoading: filterTrucksLoading }] =
     useFilterTrucksMutation();
+  const [downloadOOSReport, { isLoading: isDownloadLoading }] =
+    useLazyDownloadOOSReportQuery();
 
   const dispatch = useDispatch();
-  const trucksState = useSelector((state: State) => state.trucks.displayTrucks);
+  const trucksState: any = useSelector(
+    (state: State) => state.trucks.displayTrucks
+  );
   const router = useRouter();
   const { browserStatus, browserSort, browserSearch } = router.query;
+
+  const handleGetTrucksSuccess = (res: any) => {
+    res && dispatch(displayTrucks({ payload: res, onReder: true }));
+  };
+
+  const handleLoadMoreTrucksSuccess = ({ payload }: any) => {
+    dispatch(displayTrucks({ payload, paginate: true }));
+  };
 
   useEffect(() => {
     dispatch(displayTrucks({}));
@@ -56,116 +81,121 @@ const Trucks = () => {
       }
     });
 
-    getTrucks({
+    handleAPIRequests({
+      request: getTrucks,
+      handleSuccess: handleGetTrucksSuccess,
       size: pagination.trucks,
-      page: 0
-    })
-      .unwrap()
-      .then((res) => {
-        res && dispatch(displayTrucks({ payload: res, onReder: true }));
-      })
-      .catch((err) => {
-        if (err) info.error(err?.data?.message || "Something went wrong");
-      });
+      page: 0,
+      showSuccess: false
+    });
   }, [dispatch, getTrucks]);
 
   const handleLoadMore = () => {
     setCurrentPages(currentPages + 1);
 
-    loadMoreTrucks({
+    handleAPIRequests({
+      request: loadMoreTrucks,
+      handleSuccess: handleLoadMoreTrucksSuccess,
       size: pagination.trucks,
       page: currentPages,
       status: browserStatus,
       sort: browserSort,
-      search: browserSearch
-    })
-      .unwrap()
-      .then((res: any) => {
-        dispatch(displayTrucks(res));
-      })
-      .catch((err: { data: { message: string | object | [] } }) => {
-        if (err) info.error(err?.data?.message || "Something went wrong");
-      });
+      search: browserSearch,
+      showSuccess: false
+    });
   };
 
   const showPaginationBtn =
     (trucksState?.totalPages > currentPages || loadMoreLoading) &&
     !(filterTrucksLoading || getTrucksLoading);
 
+  const handleFilterTrucksSuccess = (res: any) => {
+    setCurrentPages(1);
+    dispatch(displayTrucks({ ...res, replace: true }));
+  };
+
+  const setBrowserStates = ({ search, sort, status }: BrowserState) => {
+    router.push({
+      query: {
+        browserSearch: search,
+        browserSort: sort,
+        browserStatus: status
+      }
+    });
+  };
+
   const handleFilterTrucks = (status: string) => {
-    filterTrucks({
+    setBrowserStates({
+      search: browserSearch || "",
+      sort: browserSort || "",
+      status
+    });
+
+    handleAPIRequests({
+      request: filterTrucks,
+      handleSuccess: handleFilterTrucksSuccess,
       size: pagination.trucks,
       page: 0,
-      status: status,
+      status,
       sort: browserSort,
-      search: browserSearch
-    })
-      .unwrap()
-      .then((res) => {
-        router.push({
-          query: {
-            browserSearch: browserSearch || "",
-            browserSort: browserSort || "",
-            browserStatus: status
-          }
-        });
-        setCurrentPages(1);
-        dispatch(displayTrucks({ ...res, replace: true }));
-      })
-      .catch((err) => {
-        if (err) info.error(err?.data?.message || "Something went wrong");
-      });
+      search: browserSearch,
+      showSuccess: false
+    });
   };
 
   const handleSortTrucks = (sort: string) => {
-    filterTrucks({
+    setBrowserStates({
+      status: browserStatus || "",
+      sort,
+      search: browserSearch || ""
+    });
+
+    handleAPIRequests({
+      request: filterTrucks,
+      handleSuccess: handleFilterTrucksSuccess,
       size: pagination.trucks,
       page: 0,
       status: browserStatus,
       search: browserSearch,
       sort: sort
-    })
-      .unwrap()
-      .then((res) => {
-        router.push({
-          query: {
-            browserSort: sort,
-            browserStatus: browserStatus || "",
-            browserSearch: browserSearch || ""
-          }
-        });
-        setCurrentPages(1);
-        dispatch(displayTrucks({ ...res, replace: true }));
-      })
-      .catch((err) => {
-        if (err) info.error(err?.data?.message || "Something went wrong");
-      });
+    });
   };
 
   const handleSearchTruck = (search: string) => {
-    filterTrucks({
+    setBrowserStates({
+      status: browserStatus || "",
+      search,
+      sort: browserSort || ""
+    });
+
+    handleAPIRequests({
+      request: filterTrucks,
+      handleSuccess: handleFilterTrucksSuccess,
       size: pagination.trucks,
       page: 0,
       status: browserStatus,
       sort: browserSort,
-      search: search
-    })
-      .unwrap()
-      .then((res) => {
-        router.push({
-          query: {
-            browserSort: browserSort || "",
-            browserStatus: browserStatus || "",
-            browserSearch: search
-          }
-        });
-        setCurrentPages(1);
-        dispatch(displayTrucks({ ...res, replace: true }));
-      })
-      .catch((err: any) => {
-        if (err) info.error(err?.data?.message || "Something went wrong");
-      });
+      search: search,
+      showSuccess: false
+    });
   };
+
+  const handleDownloadOOSReport = () => {
+    handleAPIRequests({
+      request: downloadOOSReport,
+      successMessage: "File downloaded successfully!",
+      handleSuccess: handleDownloadSuccess,
+      fileType: "PDF"
+    });
+  };
+
+  const dropDownMenu = (
+    <div className="radius4 p-3 py-6 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
+      <Row className="text-sm pointer" onClick={handleDownloadOOSReport}>
+        <Col>Download OOS Report</Col>
+      </Row>
+    </div>
+  );
   return (
     <>
       <NewTruckModal isVisible={isVisible} setIsVisible={setIsVisible} />
@@ -173,7 +203,9 @@ const Trucks = () => {
       <div className="flex items-center justify-between mt-6 bg-white py-2 rounded px-4 m-auto w-[98%] border_faded mb-4">
         {/* LEFT SIDE  */}
         <div className="flex items-center gap-12">
-          <Text className="heading2">{data?.totalElements || 0} Trucks</Text>
+          <Text className="heading2">
+            {trucksState?.totalElements || 0} Trucks
+          </Text>
 
           <CustomInput
             type="text"
@@ -239,12 +271,16 @@ const Trucks = () => {
 
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-4">
-          <CustomButton type="secondary" size="small">
-            DOWNLOAD
-          </CustomButton>
+          <Dropdown overlay={dropDownMenu} placement="bottomLeft">
+            <Button loading={isDownloadLoading}>Download</Button>
+          </Dropdown>
 
-          <CustomButton type="primary" size="small">
-            NEW ORDER
+          <CustomButton
+            type="primary"
+            size="small"
+            onClick={() => setIsVisible(true)}
+          >
+            NEW TRUCK
           </CustomButton>
         </div>
       </div>

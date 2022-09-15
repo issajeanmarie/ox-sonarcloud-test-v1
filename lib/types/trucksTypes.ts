@@ -89,6 +89,7 @@ export type SingleTruckIssueTypes = {
 
 export interface TruckDataTypes extends CreateTruckRequest {
   truck: any;
+  documents: any;
 }
 
 export interface CreateTruckIssueRequest {
@@ -118,4 +119,8 @@ export interface ToogleTruckIssueResponse {
       updatedAt: string;
     };
   };
+}
+
+export interface EditTruckRequest extends CreateTruckRequest {
+  id: number;
 }

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import Divider from "antd/lib/divider";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -11,11 +11,14 @@ import DocumentCard from "./TruckCard";
 import CustomButton from "../../Shared/Button";
 import TruckTabs from "./TruckTabs";
 import { TruckDataTypes } from "../../../lib/types/trucksTypes";
+import { NewTruckModal } from "../../Modals";
+import NewTRuckDocumentModal from "../../Modals/NewTruckDocumentModal";
 
 interface ViewTruckProps {
   truckId: Query;
   isLoading: boolean;
   truckData: TruckDataTypes;
+  isPageLoading: boolean;
 }
 
 const DetailsComponent = ({ truckData }: any) => {
@@ -31,29 +34,44 @@ const DetailsComponent = ({ truckData }: any) => {
   );
 };
 
-const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
+const ViewTruck: FC<ViewTruckProps> = ({
+  truckId,
+  truckData,
+  isLoading,
+  isPageLoading
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isNewDocumetModalVisible, setIsNewDocumetModalVisible] =
+    useState(false);
+  const [isUserEditing, setIsUserEditing] = useState(false);
+
   const truckInfo = [
-    { name: "CHASSIS NUMBER", value: truckData?.truck?.chassisNumber || 0 },
+    { name: "CHASSIS NUMBER", value: truckData?.chassisNumber || 0 },
     {
       name: "ENGINE NUMBER",
-      value: truckData?.truck?.engineNumber || "Unknown"
+      value: truckData?.engineNumber || "Unknown"
     },
-    { name: "FUEL TYPE", value: truckData?.truck?.fuelType || "Unknown" },
+    { name: "FUEL TYPE", value: truckData?.fuelType || "Unknown" },
     {
       name: "ENGINE OIL TYPE",
-      value: truckData?.truck?.engineOilType || "Unknown"
+      value: truckData?.engineOilType || "Unknown"
     },
-    { name: "TIRE BRAND", value: truckData?.truck?.tireBrand || "Unknown" },
-    { name: "TIRE SIZE", value: truckData?.truck?.tireSize || "Unknown" },
+    { name: "TIRE BRAND", value: truckData?.tireBrand || "Unknown" },
+    { name: "TIRE SIZE", value: truckData?.tireSize || "Unknown" },
     {
       name: "TRACKING UNIT SERIAL NUMBER",
-      value: truckData?.truck?.trackingUnitSerialNumber || "Uknown"
+      value: truckData?.trackingUnitSerialNumber || "Uknown"
     },
     {
       name: "FUEL CARD ASSIGNED",
-      value: truckData?.truck?.fuelCardAssigned || "Unknown"
+      value: truckData?.fuelCardAssigned || "Unknown"
     }
   ];
+
+  const handleEditTruckModal = () => {
+    setIsVisible(true);
+    setIsUserEditing(true);
+  };
 
   return (
     <div className="overflow-hidden">
@@ -61,7 +79,26 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
         <Loader />
       ) : (
         <>
-          <Header truckId={truckId} truckData={truckData} />
+          <NewTruckModal
+            isVisible={isVisible}
+            setIsVisible={setIsVisible}
+            editTruckData={truckData}
+            isUserEditing={isUserEditing}
+            setIsUserEditing={setIsUserEditing}
+            fromTruckProfile={true}
+          />
+
+          <NewTRuckDocumentModal
+            truckData={truckData}
+            isVisible={isNewDocumetModalVisible}
+            setIsVisible={setIsNewDocumetModalVisible}
+          />
+
+          <Header
+            truckId={truckId}
+            truckData={truckData}
+            isPageLoading={isPageLoading}
+          />
 
           <Row align="middle" gutter={12} justify="space-between">
             <Col
@@ -77,10 +114,11 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
               <div className="bg-white shadow-[0px_0px_19px_#00000008] p-12 pb-6 mb-6">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-lg font-bold text-ox-dark">
-                    {truckData?.truck?.plateNumber || "Unknown"}
+                    {truckData?.plateNumber || "Unknown"}
                   </span>
 
                   <Image
+                    onClick={handleEditTruckModal}
                     className="pointer"
                     src="/icons/ic-contact-edit@4x@2x.png"
                     alt=""
@@ -90,8 +128,8 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
                 </div>
 
                 <span className="text-gray-400">
-                  {truckData?.truck?.yearManufactured} -{" "}
-                  {truckData?.truck?.model} - {truckData?.truck?.type}
+                  {truckData?.yearManufactured} - {truckData?.model} -{" "}
+                  {truckData?.type}
                 </span>
 
                 <DetailsComponent truckData={truckInfo} />
@@ -104,6 +142,7 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
                   </span>
 
                   <CustomButton
+                    onClick={() => setIsNewDocumetModalVisible(true)}
                     type="secondary"
                     size="icon"
                     loading={false}
@@ -114,19 +153,17 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
                 <Divider />
 
                 <Row gutter={24} className="p-12">
-                  {truckData?.truck?.documents?.map(
-                    (document: { id: number }) => (
-                      <Col
-                        key={document.id}
-                        sm={{ span: 24 }}
-                        md={{ span: 24 }}
-                        lg={{ span: 12 }}
-                        className="mb-8"
-                      >
-                        <DocumentCard document={document} />
-                      </Col>
-                    )
-                  )}
+                  {truckData?.documents?.map((document: { id: number }) => (
+                    <Col
+                      key={document.id}
+                      sm={{ span: 24 }}
+                      md={{ span: 24 }}
+                      lg={{ span: 12 }}
+                      className="mb-8"
+                    >
+                      <DocumentCard document={document} />
+                    </Col>
+                  ))}
                 </Row>
               </div>
             </Col>
@@ -141,7 +178,7 @@ const ViewTruck: FC<ViewTruckProps> = ({ truckId, truckData, isLoading }) => {
                 paddingTop: "0"
               }}
             >
-              <TruckTabs truckData={truckData} />
+              <TruckTabs />
             </Col>
           </Row>
         </>

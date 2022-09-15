@@ -42,5 +42,5 @@ export const requiredInput = [
 ];
 
 export const requiredField = (message: string) => [
-  { required: true, message: `${message} required` }
+  { required: true, message: `${message} is required` }
 ];
