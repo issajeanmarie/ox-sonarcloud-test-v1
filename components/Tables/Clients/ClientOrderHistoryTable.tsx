@@ -8,15 +8,18 @@ import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { FC } from "react";
 import { routes } from "../../../config/route-config";
 import Link from "next/link";
+import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 
 const { Text } = Typography;
 
 type ClientOrderHistoryTableProps = {
   orders: any;
+  isClientOrdersFetching: boolean;
 };
 
 const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
-  orders
+  orders,
+  isClientOrdersFetching
 }) => {
   const columns: any = [
     {
@@ -128,6 +131,7 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
       pagination={false}
       bordered={false}
       scroll={{ x: 0 }}
+      loading={TableOnActionLoading(isClientOrdersFetching)}
     />
   );
 };

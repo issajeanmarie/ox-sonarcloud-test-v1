@@ -134,4 +134,5 @@ export type GetClientOrders = {
   id: any;
   page: number | string;
   size: number | string;
+  paymentStatus: string;
 };

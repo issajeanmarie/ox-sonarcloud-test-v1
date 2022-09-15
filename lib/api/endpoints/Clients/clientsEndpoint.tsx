@@ -46,7 +46,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       providesTags: ["Clients"],
       query: (DTO) => ({
-        url: `/clients/${DTO?.id}/orders?page=${DTO?.page}&size=${DTO?.size}`,
+        url: `/clients/${DTO?.id}/orders?page=${DTO?.page}&size=${DTO?.size}&paymentStatus=${DTO?.paymentStatus}`,
         method: "GET"
       })
     }),

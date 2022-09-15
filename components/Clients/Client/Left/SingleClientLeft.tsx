@@ -8,7 +8,9 @@ import Header from "./Header";
 
 const SingleClientLeft: FC<SingleClientLeftTypes> = ({
   clientOrders,
-  isClientLoading
+  isClientLoading,
+  isClientOrdersFetching,
+  handleFilterChange
 }) => {
   return (
     <Col
@@ -20,7 +22,11 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
       xl={12}
       xxl={12}
     >
-      <Header orders={clientOrders?.orders} />
+      <Header
+        orders={clientOrders?.orders}
+        handleFilterChange={handleFilterChange}
+        totalPending={clientOrders?.totalPending}
+      />
       {isClientLoading ? (
         <div className="mt-4">
           {[...Array(20)].map((_, index) => (
@@ -28,7 +34,10 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
           ))}
         </div>
       ) : (
-        <ClientOrderHistoryTable orders={clientOrders?.orders?.content} />
+        <ClientOrderHistoryTable
+          orders={clientOrders?.orders?.content}
+          isClientOrdersFetching={isClientOrdersFetching}
+        />
       )}
       <div className="flex justify-center items-center py-10">
         <div className="w-52">
