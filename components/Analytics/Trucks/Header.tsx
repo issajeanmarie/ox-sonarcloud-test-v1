@@ -251,74 +251,54 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   );
 
   const menu = (
-    <div className="radius4 myCard p-6 py-12 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
+    <div className="radius4 h-[500px] myCard p-6 py-12 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
       <CustomInput
         type="text"
         placeholder="Search category"
         name="searchTruckUsage"
+        loading={true}
+        onChange={handleSearchTruck}
         suffixIcon={
-          <Image
-            width={10}
-            src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
-            preview={false}
-            alt=""
-          />
+          isGetTrucksLoading ? (
+            <LoadingOutlined spin />
+          ) : (
+            <Image
+              width={10}
+              src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
+              preview={false}
+              alt=""
+            />
+          )
         }
       />
 
-      <Row
-        justify="space-between"
-        gutter={6}
-        className="mt-6 hover:bg-gray-50 cursor-pointer hover:p-1 rounded transition-all duration-100"
-        align="middle"
-        wrap={false}
-      >
-        <Col span={2} className="text-gray-400">
-          1
-        </Col>
-        <Col flex="auto" className="heading2 text-left text_ellipsis">
-          RAC 787 J
-        </Col>
-        <Col flex="none" className="text-right text-gray-400 text_ellipsis">
-          Mitsubishi
-        </Col>
-      </Row>
-
-      <Row
-        justify="space-between"
-        gutter={6}
-        className="mt-6 hover:bg-gray-50 cursor-pointer hover:p-1 rounded transition-all duration-100"
-        align="middle"
-        wrap={false}
-      >
-        <Col span={2} className="text-gray-400">
-          2
-        </Col>
-        <Col flex="auto" className="heading2 text-left text_ellipsis">
-          RAD 898 K
-        </Col>
-        <Col flex="none" className="text-right text-gray-400 text_ellipsis">
-          Mitsubishi
-        </Col>
-      </Row>
-
-      <Row
-        justify="space-between"
-        gutter={6}
-        className="mt-6 hover:bg-gray-50 cursor-pointer hover:p-1 rounded transition-all duration-100"
-        align="middle"
-        wrap={false}
-      >
-        <Col span={2} className="text-gray-400">
-          3
-        </Col>
-        <Col flex="auto" className="heading2 text-left text_ellipsis">
-          RAZ 898 K
-        </Col>
-        <Col flex="none" className="text-right text-gray-400 text_ellipsis">
-          Mitsubishi
-        </Col>
-      </Row>
+      <div className="h-[400px] overflow-y-auto overflow-x-hidden mt-2">
+        {allTrucks?.map((truck: TrucksHoverTypes, index: number) => (
+          <Row
+            onClick={() => handleSelectTruck(truck)}
+            key={truck.id}
+            justify="space-between"
+            gutter={6}
+            className={`${
+              (selectedTruck.id || truckData.id) === truck.id
+                ? "bg-ox-danger cursor-pointer p-3"
+                : "hover:bg-gray-50 hover:p-1"
+            } mt-6  cursor-pointer  rounded transition-all duration-100`}
+            align="middle"
+            wrap={false}
+          >
+            <Col span={3} className="text-gray-400 ml-1">
+              {index + 1}
+            </Col>
+            <Col flex="auto" className="heading2 text-left text_ellipsis">
+              {truck.plateNumber}
+            </Col>
+            <Col flex="none" className="text-right text-gray-400 text_ellipsis">
+              {truck.model}
+            </Col>
+          </Row>
+        ))}
+      </div>
     </div>
   );
 

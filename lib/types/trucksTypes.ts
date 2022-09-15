@@ -258,3 +258,7 @@ export interface ToogleTruckIssueResponse {
     };
   };
 }
+
+export interface EditTruckRequest extends CreateTruckRequest {
+  id: number;
+}

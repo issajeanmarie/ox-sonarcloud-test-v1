@@ -35,6 +35,12 @@ type State = {
   paginatedData: Trucks;
 };
 
+type BrowserState = {
+  status: string | string[];
+  search: string | string[];
+  sort: string | string[];
+};
+
 const Trucks = () => {
   const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -95,6 +101,14 @@ const Trucks = () => {
       showSuccess,
       request
     });
+  };
+
+  const handleGetTrucksSuccess = (res: any) => {
+    res && dispatch(displayTrucks({ payload: res, onReder: true }));
+  };
+
+  const handleLoadMoreTrucksSuccess = ({ payload }: any) => {
+    dispatch(displayTrucks({ payload, paginate: true }));
   };
 
   useEffect(() => {
