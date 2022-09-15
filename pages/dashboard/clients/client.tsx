@@ -1,6 +1,7 @@
 import { Row } from "antd";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { useState } from "react";
 import SingleClientLeft from "../../../components/Clients/Client/Left/SingleClientLeft";
 import SingleClientRight from "../../../components/Clients/Client/Right/SingleClientRight";
 import SingleClientTop from "../../../components/Clients/Client/SingleClientTop";
@@ -16,6 +17,11 @@ import {
 const Client = () => {
   const { query } = useRouter();
   const router = useRouter();
+  const [paymentStatus, setPaymentStatus] = useState("");
+
+  const handleFilterChange = (value: string) => {
+    setPaymentStatus(value);
+  };
 
   useEffect(() => {
     if (router.isReady) {
@@ -35,7 +41,12 @@ const Client = () => {
     data: clientOrders,
     isLoading: isClientOrdersLoading,
     isFetching: isClientOrdersFetching
-  } = useClientOrdersQuery({ id: query?.client, page: "", size: "" });
+  } = useClientOrdersQuery({
+    id: query?.client,
+    page: "",
+    size: "",
+    paymentStatus: paymentStatus
+  });
 
   return (
     <Layout>
@@ -57,6 +68,7 @@ const Client = () => {
               clientOrders={clientOrders?.payload}
               isClientOrdersLoading={isClientOrdersLoading}
               isClientOrdersFetching={isClientOrdersFetching}
+              handleFilterChange={handleFilterChange}
             />
 
             <SingleClientRight
