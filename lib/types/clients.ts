@@ -54,6 +54,11 @@ export type PostClientRecipientRequest = {
   phone: string;
 };
 
+export type PostClientNoteRequest = {
+  id: number;
+  comment: string;
+};
+
 export type DeleteClientRequest = {
   id: any;
 };
@@ -134,4 +139,5 @@ export type GetClientOrders = {
   id: any;
   page: number | string;
   size: number | string;
+  paymentStatus: string;
 };

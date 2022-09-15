@@ -22,7 +22,7 @@ const EditClientRecipient: FC<EditClientRecipientTypes> = ({
       title=""
     >
       <Row justify="space-between" gutter={[16, 16]}>
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <Input
             name="names"
             type="text"
@@ -32,7 +32,7 @@ const EditClientRecipient: FC<EditClientRecipientTypes> = ({
           />
         </Col>
 
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <Input
             name="phone"
             type="text"

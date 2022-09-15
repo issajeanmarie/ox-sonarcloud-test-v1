@@ -14,6 +14,7 @@ import {
   GetClientOrders,
   GetClients,
   PostClientLocationRequest,
+  PostClientNoteRequest,
   PostClientRecipientRequest,
   PostClientRequest,
   PostClientTagRequest
@@ -46,7 +47,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       providesTags: ["Clients"],
       query: (DTO) => ({
-        url: `/clients/${DTO?.id}/orders?page=${DTO?.page}&size=${DTO?.size}`,
+        url: `/clients/${DTO?.id}/orders?page=${DTO?.page}&size=${DTO?.size}&paymentStatus=${DTO?.paymentStatus}`,
         method: "GET"
       })
     }),
@@ -116,6 +117,17 @@ const clientsApi = baseAPI.injectEndpoints({
       query: (DTO) => ({
         url: `clients/${DTO?.id}/affiliates`,
         method: "POST",
+        body: DTO
+      })
+    }),
+    postClientNote: builder.mutation<
+      ApiResponseMetadata<Client>,
+      PostClientNoteRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `clients/${DTO?.id}/add-comment`,
+        method: "PATCH",
         body: DTO
       })
     }),
@@ -224,5 +236,6 @@ export const {
   useDownloadClientInvoiceQuery,
   useLazyDownloadClientInvoiceQuery,
   useEditClientMutation,
-  useDeleteClientTagMutation
+  useDeleteClientTagMutation,
+  usePostClientNoteMutation
 } = clientsApi;

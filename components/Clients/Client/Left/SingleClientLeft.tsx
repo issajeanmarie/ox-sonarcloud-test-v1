@@ -3,12 +3,14 @@ import React, { FC } from "react";
 import { SingleClientLeftTypes } from "../../../../lib/types/pageTypes/Clients/SingleClientLeftTypes";
 import { ColsTableLoader } from "../../../Shared/Loaders/Loaders";
 import ClientOrderHistoryTable from "../../../Tables/Clients/ClientOrderHistoryTable";
-import CustomButton from "../../../../components/Shared/Button";
+// import CustomButton from "../../../../components/Shared/Button";
 import Header from "./Header";
 
 const SingleClientLeft: FC<SingleClientLeftTypes> = ({
   clientOrders,
-  isClientLoading
+  isClientLoading,
+  isClientOrdersFetching,
+  handleFilterChange
 }) => {
   return (
     <Col
@@ -20,7 +22,11 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
       xl={12}
       xxl={12}
     >
-      <Header orders={clientOrders?.orders} />
+      <Header
+        orders={clientOrders?.orders}
+        handleFilterChange={handleFilterChange}
+        totalPending={clientOrders?.totalPending}
+      />
       {isClientLoading ? (
         <div className="mt-4">
           {[...Array(20)].map((_, index) => (
@@ -28,15 +34,18 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
           ))}
         </div>
       ) : (
-        <ClientOrderHistoryTable orders={clientOrders?.orders?.content} />
+        <ClientOrderHistoryTable
+          orders={clientOrders?.orders?.content}
+          isClientOrdersFetching={isClientOrdersFetching}
+        />
       )}
-      <div className="flex justify-center items-center py-10">
+      {/* <div className="flex justify-center items-center py-10">
         <div className="w-52">
           <CustomButton type="secondary">
             <span className="text-sm">Load More</span>
           </CustomButton>
         </div>
-      </div>
+      </div> */}
     </Col>
   );
 };
