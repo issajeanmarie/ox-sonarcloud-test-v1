@@ -18,6 +18,7 @@ import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import Image from "next/image";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditClientRecipient from "../../Forms/Clients/EditClientRecipient";
+import { RemoveCircleOutlineIcon } from "../../Icons";
 
 const { Text } = Typography;
 
@@ -137,13 +138,7 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
               style={{ margin: 0, padding: 0 }}
               type="text"
             >
-              <Image
-                className="pointer"
-                src="/icons/ic-media-stop.svg"
-                alt="Backspace icon"
-                width={18}
-                height={18}
-              />
+              {RemoveCircleOutlineIcon}
             </Button>
           </div>
         </RowsWrapper>

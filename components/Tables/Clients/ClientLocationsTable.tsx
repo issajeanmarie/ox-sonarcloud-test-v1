@@ -19,6 +19,7 @@ import EditClientLocation from "../../Forms/Clients/EditClientLocation";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import Image from "next/image";
 import { LatLng } from "use-places-autocomplete";
+import { RemoveCircleOutlineIcon } from "../../Icons";
 
 const { Text } = Typography;
 
@@ -150,13 +151,7 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
               style={{ margin: 0, padding: 0 }}
               type="text"
             >
-              <Image
-                className="pointer"
-                src="/icons/ic-media-stop.svg"
-                alt="Backspace icon"
-                width={18}
-                height={18}
-              />
+              {RemoveCircleOutlineIcon}
             </Button>
           </div>
         </RowsWrapper>

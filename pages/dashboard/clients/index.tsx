@@ -4,7 +4,7 @@ import ClientsTable from "../../../components/Tables/Clients/ClientsTable";
 import ClientsTopNavigator from "../../../components/Clients/ClientsTopNavigator";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
-import CustomButton from "../../../components/Shared/Button";
+// import CustomButton from "../../../components/Shared/Button";
 import {
   useClientsQuery,
   useLazyDownloadClientsQuery
@@ -115,13 +115,13 @@ const Clients = () => {
           />
         )}
 
-        <div className="flex justify-center items-center py-10">
+        {/* <div className="flex justify-center items-center py-10">
           <div className="w-52">
             <CustomButton type="secondary">
               <span className="text-sm">Load More</span>
             </CustomButton>
           </div>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );
