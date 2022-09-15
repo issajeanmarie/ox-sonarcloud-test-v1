@@ -38,7 +38,6 @@ const slice = createSlice({
 
         // CHECK IF YOU HAVE TO REPLACE STATE WITH NEW STATE (EX: AFTER FILTERING, SORTING...)
         if (payload.replace) {
-          console.log("PAYLOAD: ", payload);
           state.displayTrucks = payload?.payload;
           return;
         }

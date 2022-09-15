@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
