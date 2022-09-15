@@ -54,6 +54,11 @@ export type PostClientRecipientRequest = {
   phone: string;
 };
 
+export type PostClientNoteRequest = {
+  id: number;
+  comment: string;
+};
+
 export type DeleteClientRequest = {
   id: any;
 };
