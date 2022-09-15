@@ -52,7 +52,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
     downloadInvoice(order.id)
       .unwrap()
       .then((file) => {
-        handleDownloadFile(file, "Invoice", "PDF");
+        handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
       })
       .catch((e) => {
         if (e.status === 404) {

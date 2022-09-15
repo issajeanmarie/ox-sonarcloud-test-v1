@@ -52,7 +52,7 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({
     })
       .unwrap()
       .then((file: any) => {
-        handleDownloadFile(file, "Invoice", "PDF");
+        handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
       })
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };

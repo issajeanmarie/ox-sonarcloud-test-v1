@@ -478,7 +478,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                 <div className="flex justify-end mt-5">
                   <span className="text-sm opacity_56 nowrap italic text-gray-600">
                     <span className="font-bold">Order created by:</span>{" "}
-                    {data?.office?.names}
+                    {data?.createdBy}
                   </span>
                 </div>
               </div>

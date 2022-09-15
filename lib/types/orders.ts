@@ -132,6 +132,7 @@ export type Transaction = {
 };
 
 export type Order = {
+  createdBy: string;
   comment: null;
   momoRefCodes: "";
   isSupportOrder: false;

@@ -9,11 +9,18 @@ import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
 import CustomButton from "../../../components/Shared/Button/button";
 import Loader from "../../../components/Shared/Loader";
-import { useToggleTruckMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import { displayTrucks } from "../../../lib/redux/slices/trucksSlice";
+import {
+  useLazyGetSingleTruckQuery,
+  useToggleTruckMutation
+} from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import {
+  displaySingleTruck,
+  displayTrucks
+} from "../../../lib/redux/slices/trucksSlice";
 import { NewTruckModal } from "../../../components/Modals";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -44,50 +51,81 @@ type State = {
 const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
   const [loadingBtn, setLoadingBtn] = useState<number | null>(null);
   const [toggleTruck] = useToggleTruckMutation();
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [editTruckData, setEditTruckData] = useState();
+  const [isGetSingleTruckLoading, setIsGetSingleTruckLoading] = useState(null);
+  const [isUserEditing, setIsUserEditing] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
   const trucksState = useSelector((state: State) => state.trucks.displayTrucks);
+  const [getSingleTruck] = useLazyGetSingleTruckQuery();
+
+  const handleToggleTruckSuccess = (res: any) => {
+    const newResult: object[] = [];
+
+    trucksState?.content?.map((result: SingleTruckTypes) => {
+      if (result.id !== res?.payload?.id) {
+        newResult.push(result);
+      } else {
+        newResult.push(res?.payload);
+      }
+    });
+
+    const newPayload = {
+      payload: {
+        ...trucksState,
+        content: newResult
+      }
+    };
+
+    dispatch(displayTrucks({ ...newPayload, replace: true }));
+    setLoadingBtn(null);
+  };
+
+  const handleToggleTruckFailure = () => {
+    setLoadingBtn(null);
+  };
 
   const handleToggleTruck = (id: number) => {
     setLoadingBtn(id);
+    handleAPIRequests({
+      request: toggleTruck,
+      id: id,
+      handleSuccess: handleToggleTruckSuccess,
+      handleFailure: handleToggleTruckFailure
+    });
+  };
 
-    toggleTruck({
-      id: id
-    })
+  const handleEditTruckModal = (record: any) => {
+    setIsGetSingleTruckLoading(record.id);
+    setIsUserEditing(true);
+
+    getSingleTruck({ id: record?.id })
       .unwrap()
-      .then((res: any) => {
-        const newResult: object[] = [];
+      .then((res) => {
+        setIsGetSingleTruckLoading(null);
+        dispatch(displaySingleTruck(res));
 
-        trucksState?.content?.map((result: SingleTruckTypes) => {
-          if (result.id !== res?.payload?.id) {
-            newResult.push(result);
-          } else {
-            newResult.push(res?.payload);
-          }
-        });
-
-        const newPayload = {
-          message: "Test",
-          payload: {
-            totalPages: 10000,
-            content: newResult
-          }
-        };
-
-        dispatch(displayTrucks({ ...newPayload, replace: true }));
-        setLoadingBtn(null);
+        setEditTruckData(res);
+        setIsVisible(true);
       })
       .catch((err) => {
-        setLoadingBtn(null);
-        if (err) info.error(err?.data?.message || "Something went wrong");
+        setIsGetSingleTruckLoading(null);
+        info.error(err?.data?.message || "Something is wrong");
       });
   };
 
   return (
     <div className="mx-4">
-      <NewTruckModal isVisible={isVisible} setIsVisible={setIsVisible} />
+      <NewTruckModal
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        editTruckData={editTruckData}
+        setEditTruckData={setEditTruckData}
+        isUserEditing={isUserEditing}
+        setIsUserEditing={setIsUserEditing}
+      />
 
       {isLoading ? (
         <Loader />
@@ -213,10 +251,11 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             render={(record: any) => {
               const child = (
                 <Row align="middle" gutter={16} wrap={false}>
-                  <Col onClick={() => setIsVisible(true)}>
+                  <Col onClick={() => handleEditTruckModal(record)}>
                     <CustomButton
                       type="normal"
                       size="icon"
+                      loading={record?.id === isGetSingleTruckLoading}
                       icon={
                         <Image
                           src="/icons/ic-contact-edit.svg"

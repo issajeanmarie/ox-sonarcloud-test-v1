@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { Col, Row, Divider } from "antd";
 import Typography from "antd/lib/typography";

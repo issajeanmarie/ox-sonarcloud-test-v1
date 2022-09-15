@@ -66,7 +66,9 @@ const Clients = () => {
       source: ""
     })
       .unwrap()
-      .then((file: any) => handleDownloadFile(file, "Clients-Report", "PDF"))
+      .then((file: any) =>
+        handleDownloadFile({ file, name: "Clients-Report", fileFormat: "PDF" })
+      )
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 

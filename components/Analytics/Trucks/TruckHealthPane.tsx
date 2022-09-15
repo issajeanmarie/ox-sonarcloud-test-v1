@@ -9,23 +9,21 @@ import moment from "moment";
 import CustomButton from "../../Shared/Button/button";
 import {
   useLazyDownloadTruckDailyInspectionQuery,
-  useLazyGetSingleTruckQuery
+  useLazyGetTruckDailyInspectionQuery
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import Loader from "../../Shared/Loader";
 import Input from "../../Shared/Input";
 import { useRouter } from "next/router";
-import { displaySingleTruck } from "../../../lib/redux/slices/trucksSlice";
-import { useDispatch } from "react-redux";
 import fileDownload from "js-file-download";
 
 const { Panel } = Collapse;
 
-const TruckHelthPane = ({ truckData }: any) => {
-  const [getSingleTruck] = useLazyGetSingleTruckQuery();
+const TruckHelthPane = () => {
+  const [getTruckDailyInspection, { data: truckDailyInspections }] =
+    useLazyGetTruckDailyInspectionQuery();
   const [isPageLoading, setIsPageLoading] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const dispatch = useDispatch();
 
   const [downloadTruckDailyInspection, { isLoading }] =
     useLazyDownloadTruckDailyInspectionQuery();
@@ -36,21 +34,20 @@ const TruckHelthPane = ({ truckData }: any) => {
   useEffect(() => {
     setIsPageLoading(true);
 
-    getSingleTruck({
+    getTruckDailyInspection({
       id: truckId,
       startDate: startDate,
       endDate: endDate
     })
       .unwrap()
-      .then((res) => {
+      .then(() => {
         setIsPageLoading(false);
-        dispatch(displaySingleTruck(res));
       })
       .catch((err) => {
         setIsPageLoading(false);
         info.error(err?.data?.message || "Something is wrong");
       });
-  }, [startDate, endDate, truckId, getSingleTruck]);
+  }, [startDate, endDate, truckId, getTruckDailyInspection]);
 
   const objectsMaped = (inspection: any) => {
     const inspectionResult: any = [];
@@ -143,7 +140,7 @@ const TruckHelthPane = ({ truckData }: any) => {
       ) : (
         <>
           <Collapse bordered={false}>
-            {truckData?.inspections?.content?.map(
+            {truckDailyInspections?.content?.map(
               (inspection: any, index: number) => {
                 const fluidLevelData = objectsMaped(inspection.fluidLevel);
                 const electricalCheckData = objectsMaped(

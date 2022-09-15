@@ -6,7 +6,8 @@ import {
   CreateTruckResponse,
   ToggleTruckRequest,
   ToggleTruckResponse,
-  ToggleTruckIssueRequest
+  ToggleTruckIssueRequest,
+  EditTruckRequest
 } from "../../../types/trucksTypes";
 import { baseAPI } from "../../api";
 
@@ -31,8 +32,10 @@ const trucksApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
     getTrucks: builder.query({
       providesTags: ["Trucks"],
-      query: ({ page, size }) => ({
-        url: `/trucks?page=${page || ""}&size=${size || ""}`,
+      query: ({ noPagination, page, size }) => ({
+        url: `/trucks${noPagination ? "/no-pagination" : ""}?page=${
+          page || ""
+        }&size=${size || ""}`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
@@ -78,10 +81,8 @@ const trucksApi = baseAPI.injectEndpoints({
 
     getSingleTruck: builder.query({
       providesTags: ["Trucks"],
-      query: ({ id, startDate, endDate }) => ({
-        url: `/daily_inspections?truck_id=${id}&start=${startDate || ""}&end=${
-          endDate || ""
-        }`,
+      query: ({ id }) => ({
+        url: `/trucks/${id}`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
@@ -187,6 +188,58 @@ const trucksApi = baseAPI.injectEndpoints({
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
         response.payload
+    }),
+
+    downloadOOSReport: builder.query({
+      providesTags: ["Trucks"],
+      query: ({ fileType }) => ({
+        url: `/trucks/repairs/download?file_type=${
+          fileType || ""
+        }&start=2022-05-05&end=2022-07-07`,
+        method: "GET",
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
+      }),
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
+        response.payload
+    }),
+
+    getTruckDailyInspection: builder.query({
+      providesTags: ["Trucks"],
+      query: ({ id }) => ({
+        url: `/trucks/${id}/daily-inspections`,
+        method: "GET"
+      }),
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
+        response.payload
+    }),
+
+    editTruck: builder.mutation<CreateTruckResponse, EditTruckRequest>({
+      invalidatesTags: ["Trucks"],
+      query: ({ id, ...DTO }) => ({
+        url: `/trucks/${id}`,
+        method: "PUT",
+        body: DTO
+      })
+    }),
+
+    deleteTruck: builder.mutation<CreateTruckResponse, EditTruckRequest>({
+      invalidatesTags: ["Trucks"],
+      query: ({ id }) => ({
+        url: `/trucks/${id}`,
+        method: "DELETE"
+      })
+    }),
+
+    uploadTruckDocument: builder.mutation({
+      invalidatesTags: ["Trucks"],
+      query: ({ id, ...DTO }) => ({
+        url: `/trucks/${id}/documents`,
+        method: "POST",
+        body: DTO
+      })
     })
   })
 });
@@ -205,5 +258,10 @@ export const {
   useToggleTruckIssueStatusMutation,
   useLazyDownloadTruckDailyInspectionQuery,
   useLazyDownloadTruckShiftsQuery,
-  useCreateTruckMutation
+  useCreateTruckMutation,
+  useLazyDownloadOOSReportQuery,
+  useLazyGetTruckDailyInspectionQuery,
+  useEditTruckMutation,
+  useDeleteTruckMutation,
+  useUploadTruckDocumentMutation
 } = trucksApi;

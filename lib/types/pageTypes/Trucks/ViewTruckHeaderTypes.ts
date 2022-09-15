@@ -4,4 +4,5 @@ import { Query } from "../../shared";
 export type ViewTruckHeaderTypes = {
   truckId: Query | number | undefined;
   truckData: any;
+  isPageLoading: boolean;
 };

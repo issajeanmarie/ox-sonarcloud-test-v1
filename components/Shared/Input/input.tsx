@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -56,8 +57,6 @@ const Entry = ({
   showTime,
   location
 }: any) => {
-  // Google location
-
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
   const {
@@ -129,6 +128,7 @@ const Entry = ({
           {label && <Text className="heading2 mb-[8px]">{label}</Text>}
           <Form.Item name={name} rules={rules} initialValue={initialValue}>
             <Input
+              disabled={disabled}
               // onChange={onChange}
               defaultValue={defaultValue}
               className={`my_input ${size === "small" && "sm"}`}
@@ -156,10 +156,13 @@ const Entry = ({
               className={`my_input bordered_input ${size === "small" && "sm"} `}
               disabled={disabled}
               loading={isLoading}
+              defaultValue={defaultValue}
               onChange={(value: string) => onChange && onChange(value)}
               suffixIcon={suffixIcon}
               filterOption={(input, option) =>
-                option?.key?.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||
+                (option &&
+                  option?.key?.toLowerCase().indexOf(input.toLowerCase()) >=
+                    0) ||
                 option?.title?.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
             >

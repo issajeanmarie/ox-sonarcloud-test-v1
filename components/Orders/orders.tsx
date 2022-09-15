@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, Fragment, useEffect, useState } from "react";
 import OrdersHeader from "./OrdersHeader";
 import OneOrder from "./OneOrder";
