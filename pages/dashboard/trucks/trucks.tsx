@@ -24,7 +24,7 @@ import {
   useLazyGetTrucksQuery
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
-import { handleDownloadSuccess } from "./functions";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 
 const { Text } = Typography;
 
@@ -55,6 +55,10 @@ const Trucks = () => {
     useFilterTrucksMutation();
   const [downloadOOSReport, { isLoading: isDownloadLoading }] =
     useLazyDownloadOOSReportQuery();
+
+  const handleDownloadSuccess = (file: File) => {
+    handleDownloadFile({ file, name: "OOS Report", fileFormat: "PDF" });
+  };
 
   const dispatch = useDispatch();
   const trucksState: any = useSelector(
