@@ -201,6 +201,17 @@ const clientsApi = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+    postClientNote: builder.mutation<
+      ApiResponseMetadata<Client>,
+      PostClientNoteRequest
+    >({
+      invalidatesTags: ["Clients"],
+      query: (DTO) => ({
+        url: `clients/${DTO?.id}/add-comment`,
+        method: "PATCH",
+        body: DTO
+      })
+    }),
     postClientTag: builder.mutation<
       ApiResponseMetadata<Client>,
       PostClientTagRequest
