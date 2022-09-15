@@ -62,6 +62,10 @@ const Trucks = () => {
     });
   };
 
+  const handleDownloadSuccess = (file: File) => {
+    handleDownloadFile({ file, name: "OOS Report", fileFormat: "PDF" });
+  };
+
   const dispatch = useDispatch();
   const trucksState: any = useSelector(
     (state: State) => state.paginatedData.displayPaginatedData
