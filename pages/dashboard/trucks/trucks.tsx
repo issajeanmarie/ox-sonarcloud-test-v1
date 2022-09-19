@@ -17,7 +17,7 @@ import { displayTrucks } from "../../../lib/redux/slices/trucksSlice";
 import { NewTruckModal } from "../../../components/Modals";
 import {
   useFilterTrucksMutation,
-  useLazyDownloadOOSReportQuery
+  useDownloadOOSReportMutation
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import {
   useLoadMoreTrucksMutation,
@@ -54,10 +54,14 @@ const Trucks = () => {
   const [filterTrucks, { isLoading: filterTrucksLoading }] =
     useFilterTrucksMutation();
   const [downloadOOSReport, { isLoading: isDownloadLoading }] =
-    useLazyDownloadOOSReportQuery();
+    useDownloadOOSReportMutation();
 
   const handleDownloadSuccess = (file: File) => {
-    handleDownloadFile({ file, name: "OOS Report", fileFormat: "PDF" });
+    handleDownloadFile({
+      file,
+      name: "OOS Report",
+      fileFormat: "xls"
+    });
   };
 
   const dispatch = useDispatch();
@@ -189,7 +193,7 @@ const Trucks = () => {
       request: downloadOOSReport,
       successMessage: "File downloaded successfully!",
       handleSuccess: handleDownloadSuccess,
-      fileType: "PDF"
+      fileType: "XLS"
     });
   };
 

@@ -16,6 +16,7 @@ import { Header_Links } from "../../lib/types/links";
 import CustomInput from "../../components/Shared/Input";
 import CustomButton from "../../components/Shared/Button/button";
 import Layout from "../../components/Shared/Layout";
+import ImageUploader from "../../components/Shared/Input/imageUploader";
 
 const { Text } = Typography;
 
@@ -23,9 +24,13 @@ const Comopnents = () => {
   const [checkbox, setCheckbox] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [validatePhone] = useState(false);
-  const [images, setImages] = useState<any[]>([]);
   const [startD, setStartDate] = useState("");
   const [endD, setEndDate] = useState("");
+  const [uploadLoading, setUploadLoading] = useState(false);
+  const [uploadFailure, setUploadFailure] = useState(null);
+  const [uploadedPicInfo, setUploadedPicInfo] = useState();
+  const [, setUploadSuccess] = useState(false);
+  const [allIMGs, setAllIMGs] = useState([]);
 
   const Links: Header_Links[] = [
     {
@@ -492,13 +497,16 @@ const Comopnents = () => {
 
         {/* UPLOAD CARD */}
         <Col>
-          <CustomInput
-            name="image"
-            size="large"
-            imageCount={2}
-            images={images}
-            setImages={setImages}
-            type="image"
+          <ImageUploader
+            uploadLoading={uploadLoading}
+            setUploadLoading={setUploadLoading}
+            uploadFailure={uploadFailure}
+            setUploadFailure={setUploadFailure}
+            uploadedPicInfo={uploadedPicInfo}
+            setUploadedPicInfo={setUploadedPicInfo}
+            setUploadSuccess={setUploadSuccess}
+            allIMGs={allIMGs}
+            setAllIMGs={setAllIMGs}
           />
         </Col>
       </Row>

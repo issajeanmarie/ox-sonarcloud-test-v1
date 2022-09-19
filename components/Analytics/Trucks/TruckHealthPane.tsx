@@ -8,7 +8,7 @@ import Collapse from "antd/lib/collapse";
 import moment from "moment";
 import CustomButton from "../../Shared/Button/button";
 import {
-  useLazyDownloadTruckDailyInspectionQuery,
+  useDownloadTruckDailyInspectionMutation,
   useLazyGetTruckDailyInspectionQuery
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import Loader from "../../Shared/Loader";
@@ -26,7 +26,7 @@ const TruckHelthPane = () => {
   const [endDate, setEndDate] = useState("");
 
   const [downloadTruckDailyInspection, { isLoading }] =
-    useLazyDownloadTruckDailyInspectionQuery();
+    useDownloadTruckDailyInspectionMutation();
 
   const router = useRouter();
   const { id: truckId } = router.query;

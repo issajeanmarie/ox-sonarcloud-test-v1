@@ -8,7 +8,7 @@ import Progress from "antd/lib/progress";
 import CustomButton from "../../Shared/Button/button";
 import TruckOverviewCard from "./TruckOverviewCard";
 import {
-  useLazyDownloadTruckShiftsQuery,
+  useDownloadTruckShiftsMutation,
   useLazyGetTruckOverviewQuery
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useRouter } from "next/router";
@@ -22,7 +22,7 @@ import { percentageCalculator } from "../../../helpers/pacentageCalculators";
 const OvervieWPane = () => {
   const [getTruckOverview, { data }] = useLazyGetTruckOverviewQuery();
   const [downloadTruckShifts, { isLoading: isDownloadLoading }] =
-    useLazyDownloadTruckShiftsQuery();
+    useDownloadTruckShiftsMutation();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isPageLoading, setIsPageLoading] = useState(false);
@@ -60,7 +60,7 @@ const OvervieWPane = () => {
       num: data?.unresolvedIssues
     },
     { name: "KMs driven by OX", num: data?.kmsDriven },
-    { name: "Out of service days", num: data?.outOfServiceDays },
+    { name: "Out of service days", num: data?.outOfServiceDays, url: data },
     {
       name: "Days since last repair",
       num: data?.daysSinceLastRepair

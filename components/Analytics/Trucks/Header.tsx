@@ -89,9 +89,10 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   }, [getTrucks]);
 
   const handleSearchTruck = (query: string) => {
-    const filteredTrucks = trucks.filter(
+    const filteredTrucks = trucks?.filter(
       (truck: any) =>
-        truck.plateNumber.includes(query) || truck.model.includes(query)
+        truck.plateNumber.toLowerCase().includes(query.toLowerCase()) ||
+        truck.model.toLowerCase().includes(query.toLowerCase())
     );
     setAllTrucks(filteredTrucks);
   };
@@ -132,7 +133,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
             gutter={6}
             className={`${
               (selectedTruck.id || truckData.id) === truck.id
-                ? "bg-ox-danger cursor-pointer p-3"
+                ? "bg_white_yellow cursor-pointer p-3"
                 : "hover:bg-gray-50 hover:p-1"
             } mt-6  cursor-pointer  rounded transition-all duration-100`}
             align="middle"

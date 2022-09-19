@@ -161,7 +161,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
                       lg={{ span: 12 }}
                       className="mb-8"
                     >
-                      <DocumentCard document={document} />
+                      <DocumentCard document={document} truckData={truckData} />
                     </Col>
                   ))}
                 </Row>
