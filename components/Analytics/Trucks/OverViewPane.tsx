@@ -9,7 +9,9 @@ import CustomButton from "../../Shared/Button/button";
 import TruckOverviewCard from "./TruckOverviewCard";
 import {
   useDownloadTruckShiftsMutation,
-  useLazyGetTruckOverviewQuery
+  useLazyGetTruckOverviewQuery,
+  useLazyGetTruckRevenueAnalyticsQuery,
+  useLazyGetTruckShiftsAnalyticsQuery
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useRouter } from "next/router";
 import Loader from "../../Shared/Loader";
@@ -18,9 +20,16 @@ import moment from "moment";
 import Input from "../../Shared/Input";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { percentageCalculator } from "../../../helpers/pacentageCalculators";
+import TruckActivityBreakdownChart from "../Charts/TruckActivityBreakdownChart";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { TruckRevenueBreakdownChart } from "../Charts/TruckRevenueBreakdownChart";
 
 const OvervieWPane = () => {
   const [getTruckOverview, { data }] = useLazyGetTruckOverviewQuery();
+  const [getTruckShiftsAnalytics, { data: truckShiftAnalyticsData }] =
+    useLazyGetTruckShiftsAnalyticsQuery();
+  const [getTruckRevenueAnalytics, { data: truckRevenueAnalyticsData }] =
+    useLazyGetTruckRevenueAnalyticsQuery();
   const [downloadTruckShifts, { isLoading: isDownloadLoading }] =
     useDownloadTruckShiftsMutation();
   const [startDate, setStartDate] = useState("");
@@ -30,21 +39,50 @@ const OvervieWPane = () => {
   const router = useRouter();
   const { id: truckId } = router.query;
 
+  const handleGetTruckOverviewSuccess = () => {
+    setIsPageLoading(false);
+  };
+
+  const handleGetTruckOverviewFailure = () => {
+    setIsPageLoading(false);
+  };
+
   useEffect(() => {
     if (truckId) {
       setIsPageLoading(true);
 
-      getTruckOverview({ id: truckId, start: startDate, end: endDate })
-        .unwrap()
-        .then(() => {
-          setIsPageLoading(false);
-        })
-        .catch((err) => {
-          setIsPageLoading(false);
-          info.error(err?.data?.message || "Something is wrong");
-        });
+      handleAPIRequests({
+        request: getTruckOverview,
+        id: truckId,
+        start: startDate,
+        end: endDate,
+        handleSuccess: handleGetTruckOverviewSuccess,
+        handleFailure: handleGetTruckOverviewFailure
+      });
     }
   }, [truckId, getTruckOverview, startDate, endDate]);
+
+  useEffect(() => {
+    if (truckId) {
+      handleAPIRequests({
+        request: getTruckShiftsAnalytics,
+        id: truckId,
+        start: startDate,
+        end: endDate
+      });
+    }
+  }, [truckId, getTruckShiftsAnalytics, startDate, endDate]);
+
+  useEffect(() => {
+    if (truckId) {
+      handleAPIRequests({
+        request: getTruckRevenueAnalytics,
+        id: truckId,
+        start: startDate,
+        end: endDate
+      });
+    }
+  }, [truckId, getTruckRevenueAnalytics, startDate, endDate]);
 
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
@@ -301,6 +339,24 @@ const OvervieWPane = () => {
               />
             </Col>
           </Row>
+
+          <p className="mb-6">Revenue breakdown</p>
+
+          <div className="h-[300px] border p-6 relative mb-12">
+            <TruckRevenueBreakdownChart
+              chartData={truckRevenueAnalyticsData || []}
+            />
+          </div>
+
+          <p className="mb-6">Activity breakdown</p>
+
+          <div className="h-[300px] pb-24 border p-6 relative">
+            <TruckActivityBreakdownChart
+              chartData={truckShiftAnalyticsData || []}
+              isLoading={false}
+              isFetching={false}
+            />
+          </div>
         </>
       )}
     </>

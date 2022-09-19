@@ -32,31 +32,53 @@ const AppSider = ({ collapsed }: any) => {
 
   const depots = (
     <Space
-      className="depot_dropdown rounded-md "
+      className="depot_dropdown rounded-md p-0"
       direction="vertical"
       style={{ width: "90%", marginLeft: "12px" }}
     >
-      {data?.payload?.map((depot) => (
-        <Row
-          onClick={() => handleDepotChange(depot)}
-          gutter={12}
-          align="middle"
-          key={depot?.id}
-          className="p-4 cursor-pointer"
-        >
-          <Col>
-            <Image
-              width={16}
-              src={`/icons/headphonesalt.svg`}
-              preview={false}
-              alt=""
-            />
-          </Col>
-          <Col>
-            <Text className="white">{depot?.name}</Text>
-          </Col>
-        </Row>
-      ))}
+      <div className="text-white border-b border-black p-5">
+        <div className="bg-ox-yellow rounded">
+          <Row align="middle">
+            <Col className="p-4 pb-3 border-r border-ox-shadow-dark">
+              <Image
+                className="mt-1"
+                width={20}
+                src={`/icons/ic-ecommerce-house-white.svg`}
+                preview={false}
+                alt=""
+              />
+            </Col>
+
+            <Col className="p-4 text-black font-bold pointer">
+              Add new depot
+            </Col>
+          </Row>
+        </div>
+      </div>
+
+      <div className="p-6">
+        {data?.payload?.map((depot) => (
+          <Row
+            className="p-4 cursor-pointer"
+            onClick={() => handleDepotChange(depot)}
+            gutter={12}
+            align="middle"
+            key={depot?.id}
+          >
+            <Col>
+              <Image
+                width={16}
+                src={`/icons/ic-ecommerce-house.svg`}
+                preview={false}
+                alt=""
+              />
+            </Col>
+            <Col>
+              <Text className="white">{depot?.name}</Text>
+            </Col>
+          </Row>
+        ))}
+      </div>
     </Space>
   );
 
@@ -79,13 +101,12 @@ const AppSider = ({ collapsed }: any) => {
         <Row
           align="middle"
           justify="space-between"
-          className="pad24 mb12"
-          style={{ borderBottom: ".8px solid black" }}
+          className="pad24 mb12 border-b border-ox-dark-border"
         >
           <div className="flex justify-center items-center p-5 gap-3 w-full">
             <Image
               width={22}
-              src={`/icons/headphonesalt.svg`}
+              src={`/icons/ic-ecommerce-house.svg`}
               preview={false}
               alt=""
             />

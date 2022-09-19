@@ -197,7 +197,7 @@ const Trucks = () => {
     });
   };
 
-  const dropDownMenu = (
+  const downloadOOSdropdown = (
     <div className="radius4 p-3 py-6 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
       <Row className="text-sm pointer" onClick={handleDownloadOOSReport}>
         <Col>Download OOS Report</Col>
@@ -279,8 +279,13 @@ const Trucks = () => {
 
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-4">
-          <Dropdown overlay={dropDownMenu} placement="bottomLeft">
-            <Button loading={isDownloadLoading}>Download</Button>
+          <Dropdown overlay={downloadOOSdropdown} placement="bottomLeft">
+            <Button
+              className="my_button bg_white_yellow yellow"
+              loading={isDownloadLoading}
+            >
+              Download
+            </Button>
           </Dropdown>
 
           <CustomButton
