@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Form from "antd/lib/form";
 import Modal from "antd/lib/modal";
-import Typography from "antd/lib/typography";
 import Input from "../Shared/Input";
 import info from "antd/lib/message";
 import { requiredField } from "../../lib/validation/InputValidations";
@@ -11,12 +10,14 @@ import CircleCheckbox from "../Shared/Custom/CircleCheckbox";
 import { Col, Row } from "antd";
 import { s3Clients } from "../../helpers/AWSClient";
 import Image from "antd/lib/image";
-import { useUploadTruckDocumentMutation } from "../../lib/api/endpoints/Trucks/trucksEndpoints";
+import {
+  useUploadTruckDocumentMutation,
+  useEditTruckDocumentMutation
+} from "../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import { displaySingleTruck } from "../../lib/redux/slices/trucksSlice";
-
-const { Text } = Typography;
+import moment from "moment";
 
 type RequestTypes = {
   title: string;
@@ -28,13 +29,21 @@ type Props = {
   isVisible: boolean;
   setIsVisible: any;
   truckData: any;
+  isUserEditing?: boolean;
+  editTruckData?: any;
+  setEditTruckData?: any;
 };
 
 const NewTRuckDocumentModal = ({
   isVisible,
   setIsVisible,
-  truckData
+  truckData,
+  isUserEditing = false,
+  editTruckData,
+  setEditTruckData
 }: Props) => {
+  const [form] = Form.useForm();
+
   const [photoData, setPhotoData] = useState<any>([]);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -42,31 +51,71 @@ const NewTRuckDocumentModal = ({
   const [uploadedPicInfo, setUploadedPicInfo] = useState("");
   const [truckDocumentData, setTruckDocumentData] = useState({});
 
+  const initialValues = {
+    title: editTruckData?.title,
+    validFrom: editTruckData?.validFrom
+      ? moment(editTruckData?.validFrom, "YYYY-MM-DD HH:mm")
+      : "",
+    validTo: editTruckData?.validTo
+      ? moment(editTruckData?.validTo, "YYYY-MM-DD HH:mm")
+      : "",
+    document: editTruckData?.url || ""
+  };
+
   const [uploadTruckDocument, { isLoading }] = useUploadTruckDocumentMutation();
+  const [editTruckDocument, { isLoading: editDocumentLoading }] =
+    useEditTruckDocumentMutation();
   const dispatch = useDispatch();
 
   const handleCancel = () => {
     setIsVisible(false);
+    setEditTruckData && setEditTruckData({});
+    form.setFieldsValue({ document: "" });
+    setPhotoData([]);
   };
 
-  const initialValues = {};
+  const handlePhotoData = (files: File) => {
+    setPhotoData(files);
+  };
 
-  const handlePhotoData = (files: File) => setPhotoData(files);
-
-  const handleNewDocumentSuccess = (res: any) => {
+  const handleDocumentSuccess = (res: any) => {
     info.success(res.message);
-
-    dispatch(
-      displaySingleTruck({
-        ...truckData,
-        documents: [res.payload, ...truckData.documents]
-      })
-    );
-
+    form.resetFields();
     handleCancel();
+
+    if (!isUserEditing) {
+      dispatch(
+        displaySingleTruck({
+          ...truckData,
+          documents: [res.payload, ...truckData.documents]
+        })
+      );
+    } else {
+      const newDocumentsList: object[] = [];
+
+      truckData?.documents?.map((document: { id: string }) => {
+        if (document.id !== res?.payload.id) {
+          newDocumentsList.push(document);
+        } else {
+          newDocumentsList.push(res?.payload);
+        }
+      });
+
+      dispatch(
+        displaySingleTruck({
+          ...truckData,
+          documents: newDocumentsList
+        })
+      );
+    }
   };
 
   const onFinish = ({ title, validFrom, validTo }: RequestTypes) => {
+    if (photoData?.length <= 0 && !editTruckData?.url) {
+      info.warn("Document is required!");
+      return;
+    }
+
     setTruckDocumentData({
       title,
       validFrom,
@@ -91,12 +140,28 @@ const NewTRuckDocumentModal = ({
 
   useEffect(() => {
     if (uploadSuccess) {
+      if (!isUserEditing) {
+        handleAPIRequests({
+          request: isUserEditing ? editTruckDocument : uploadTruckDocument,
+          id: truckData?.id,
+          url: uploadedPicInfo,
+          handleSuccess: handleDocumentSuccess,
+          ...truckDocumentData
+        });
+
+        setUploadSuccess(false);
+        setUploadFailure(null);
+
+        return;
+      }
+
       handleAPIRequests({
-        request: uploadTruckDocument,
-        id: 62,
-        url: uploadedPicInfo,
-        ...truckDocumentData,
-        handleSuccess: handleNewDocumentSuccess
+        request: editTruckDocument,
+        id: truckData?.id,
+        documentId: editTruckData?.id,
+        url: uploadedPicInfo || editTruckData?.url,
+        handleSuccess: handleDocumentSuccess,
+        ...truckDocumentData
       });
 
       setUploadSuccess(false);
@@ -104,17 +169,15 @@ const NewTRuckDocumentModal = ({
     }
   }, [uploadSuccess, uploadFailure]);
 
-  const [form] = Form.useForm();
-
   return (
     <Modal
       title={false}
       footer={false}
       visible={isVisible}
-      closable={!isLoading}
+      closable={!isLoading && !uploadLoading && !editDocumentLoading}
       onCancel={handleCancel}
       centered
-      maskClosable={!isLoading}
+      maskClosable={!isLoading && !uploadLoading && !editDocumentLoading}
     >
       <div className="m-10">
         <div className="text-2xl font-bold  text-ox-dark mb-10">
@@ -146,13 +209,15 @@ const NewTRuckDocumentModal = ({
 
           <div className="mb-5">
             <div>
-              <Text className="heading2 mb-[8px]">Document</Text>
-              <input
-                name="truckDocument"
-                placeholder="Upload file"
-                className="styledInput"
+              <Input
+                name="document"
                 type="file"
-                onChange={(e: any) => handlePhotoData(e.target.files)}
+                placeholder="Choose file to upload"
+                inputType="file"
+                label="Document"
+                onChange={handlePhotoData}
+                fileName={photoData[0]?.name || editTruckData?.url}
+                value=""
               />
             </div>
           </div>
@@ -216,11 +281,15 @@ const NewTRuckDocumentModal = ({
 
             <div className="flex-1">
               <Button
-                loading={uploadLoading || isLoading}
+                loading={uploadLoading || isLoading || editDocumentLoading}
                 type="primary"
                 htmlType="submit"
               >
-                Save
+                {uploadLoading
+                  ? "Uploading"
+                  : editDocumentLoading
+                  ? "Saving"
+                  : "Save"}
               </Button>
             </div>
           </div>

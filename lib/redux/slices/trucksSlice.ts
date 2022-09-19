@@ -82,6 +82,13 @@ const slice = createSlice({
     },
 
     displayRepairLogs: (state, { payload }) => {
+      if (payload.add) {
+        state.displayTrucksRepairLogs.content = [
+          payload.payload.payload,
+          ...state.displayTrucksRepairLogs.content
+        ];
+        return;
+      }
       state.displayTrucksRepairLogs = { ...payload };
     },
 

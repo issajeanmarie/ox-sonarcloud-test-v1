@@ -17,6 +17,7 @@ import { SingleLogTypes } from "../../../lib/types/trucksTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { displayRepairLogs } from "../../../lib/redux/slices/trucksSlice";
 import { TruckRepairLogs } from "../../../lib/types/pageTypes/Trucks/DisplayTrucksTypes";
+import NewRepairLogModal from "../../Modals/NewRepairLogModal";
 
 const { Panel } = Collapse;
 
@@ -26,6 +27,7 @@ const RepairLogPane = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isPageLoading, setIsPageLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const data = useSelector(
     (state: TruckRepairLogs["state"]) => state.trucks.displayTrucksRepairLogs
@@ -75,6 +77,12 @@ const RepairLogPane = () => {
 
   return (
     <>
+      <NewRepairLogModal
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        truckId={truckId}
+      />
+
       <Row
         justify="space-between"
         className="bg-white my-4 mb-12 rounded shadow-[0px_0px_19px_#2A354808]"
@@ -111,7 +119,7 @@ const RepairLogPane = () => {
         </Col>
 
         <Col className="flex items-center gap-4">
-          <CustomButton type="primary">
+          <CustomButton type="primary" onClick={() => setIsVisible(true)}>
             <span className="text-sm">LOG REPAIR</span>
           </CustomButton>
         </Col>
@@ -179,8 +187,11 @@ const RepairLogPane = () => {
 
                           <Col md={6} lg={6} xl={24} xxl={24}>
                             <span className="text-gray-400">
-                              {moment(data.inDate).format("MMMM DD, YYYY")} -{" "}
-                              {moment(data.outDate).format("MMMM DD, YYYY")}
+                              {data.inDate &&
+                                moment(data.inDate).format("MMM DD, YYYY")}{" "}
+                              -{" "}
+                              {data?.inDate &&
+                                moment(data.outDate).format("MMM DD, YYYY")}
                             </span>
                           </Col>
                         </Row>
@@ -242,9 +253,11 @@ const RepairLogPane = () => {
                                         style={{ margin: "12px  0 26px 0" }}
                                       >
                                         <Image
+                                          className="object-cover"
                                           alt=""
                                           src={photo}
                                           width={69}
+                                          height={69}
                                           preview={false}
                                         />
                                       </Col>

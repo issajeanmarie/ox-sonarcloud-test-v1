@@ -160,24 +160,20 @@ const trucksApi = baseAPI.injectEndpoints({
       }
     }),
 
-    downloadTruckDailyInspection: builder.query({
-      providesTags: ["Trucks"],
+    downloadTruckDailyInspection: builder.mutation({
       query: ({ id, start, end, fileType }) => ({
         url: `/daily_inspections/download?truck_id=${id}&start=${
           start || ""
-        }&end=${end || ""}&file_type=${fileType}`,
+        }&end=${end || ""}&file_type=${fileType || ""}`,
         method: "GET",
         headers: {
           "content-type": "application/octet-stream"
         },
         responseHandler: (response) => response.blob()
-      }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
+      })
     }),
 
-    downloadTruckShifts: builder.query({
-      providesTags: ["Trucks"],
+    downloadTruckShifts: builder.mutation({
       query: ({ id, fileType }) => ({
         url: `/trucks/${id}/shifts/download?file_type=${fileType || ""}`,
         method: "GET",
@@ -185,25 +181,18 @@ const trucksApi = baseAPI.injectEndpoints({
           "content-type": "application/octet-stream"
         },
         responseHandler: (response) => response.blob()
-      }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
+      })
     }),
 
-    downloadOOSReport: builder.query({
-      providesTags: ["Trucks"],
+    downloadOOSReport: builder.mutation({
       query: ({ fileType }) => ({
-        url: `/trucks/repairs/download?file_type=${
-          fileType || ""
-        }&start=2022-05-05&end=2022-07-07`,
+        url: `/trucks/repairs/download?file_type=${fileType || ""}`,
         method: "GET",
         headers: {
           "content-type": "application/octet-stream"
         },
         responseHandler: (response) => response.blob()
-      }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
+      })
     }),
 
     getTruckDailyInspection: builder.query({
@@ -240,6 +229,29 @@ const trucksApi = baseAPI.injectEndpoints({
         method: "POST",
         body: DTO
       })
+    }),
+
+    editTruckDocument: builder.mutation({
+      invalidatesTags: ["Trucks"],
+      query: ({ id, documentId, ...DTO }) => ({
+        url: `/trucks/${id}/documents/${documentId}`,
+        method: "PUT",
+        body: DTO
+      })
+    }),
+
+    createTruckRepairLog: builder.mutation<
+      CreateTruckResponse,
+      CreateTruckIssueRequest
+    >({
+      invalidatesTags: ["Trucks"],
+      query: ({ id, ...DTO }) => {
+        return {
+          url: `/trucks/${id}/repairs`,
+          method: "POST",
+          body: DTO
+        };
+      }
     })
   })
 });
@@ -256,12 +268,14 @@ export const {
   useLazyGetTruckFuelReportQuery,
   useCreateTruckIssueMutation,
   useToggleTruckIssueStatusMutation,
-  useLazyDownloadTruckDailyInspectionQuery,
-  useLazyDownloadTruckShiftsQuery,
+  useDownloadTruckDailyInspectionMutation,
+  useDownloadTruckShiftsMutation,
   useCreateTruckMutation,
-  useLazyDownloadOOSReportQuery,
+  useDownloadOOSReportMutation,
   useLazyGetTruckDailyInspectionQuery,
   useEditTruckMutation,
   useDeleteTruckMutation,
-  useUploadTruckDocumentMutation
+  useUploadTruckDocumentMutation,
+  useEditTruckDocumentMutation,
+  useCreateTruckRepairLogMutation
 } = trucksApi;
