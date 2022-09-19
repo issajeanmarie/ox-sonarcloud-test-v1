@@ -63,7 +63,11 @@ const Trucks = () => {
   };
 
   const handleDownloadSuccess = (file: File) => {
-    handleDownloadFile({ file, name: "OOS Report", fileFormat: "PDF" });
+    handleDownloadFile({
+      file,
+      name: "OOS Report",
+      fileFormat: "xls"
+    });
   };
 
   const dispatch = useDispatch();
