@@ -252,6 +252,28 @@ const trucksApi = baseAPI.injectEndpoints({
           body: DTO
         };
       }
+    }),
+
+    getTruckShiftsAnalytics: builder.query({
+      providesTags: ["Trucks"],
+      query: ({ id, start, end }) => ({
+        url: `/analytics/truck-shifts?truck=${id}&start=${start}&end=${end}`,
+        method: "GET"
+      }),
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
+        response.payload
+    }),
+
+    getTruckRevenueAnalytics: builder.query({
+      providesTags: ["Trucks"],
+      query: ({ truckId, id, start, end }) => ({
+        url: `/analytics/truck-revenue?depot=${
+          truckId || ""
+        }&truck=${id}&start=${start}&end=${end}`,
+        method: "GET"
+      }),
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
+        response.payload
     })
   })
 });
@@ -277,5 +299,7 @@ export const {
   useDeleteTruckMutation,
   useUploadTruckDocumentMutation,
   useEditTruckDocumentMutation,
-  useCreateTruckRepairLogMutation
+  useCreateTruckRepairLogMutation,
+  useLazyGetTruckShiftsAnalyticsQuery,
+  useLazyGetTruckRevenueAnalyticsQuery
 } = trucksApi;

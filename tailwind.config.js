@@ -18,7 +18,8 @@ module.exports = {
         "ox-yellow-faded-text": "#e3b221",
         "ox-orange": "#ed7818",
         "ox-red": "#bd062d",
-        "ox-danger": "#FCF2F4"
+        "ox-danger": "#FCF2F4",
+        "ox-dark-border": "#181f2b"
       }
     }
   },

@@ -377,7 +377,7 @@ body {
 }
 
 .depot_dropdown {
-  background-color: var(--color_black) !important;
+  background-color: #181f2b !important;
   min-width: 200px;
 }
 

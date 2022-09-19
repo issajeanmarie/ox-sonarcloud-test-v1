@@ -41,3 +41,16 @@ export const RevenueKGKPIsIndicators = [
     text: "Actual"
   }
 ];
+
+export const TruckActivityBreakdownIndicators = [
+  {
+    id: 1,
+    color: "#000000",
+    text: "Distance (km)"
+  },
+  {
+    id: 2,
+    color: "#E7B522",
+    text: "Tiime (hr)"
+  }
+];
