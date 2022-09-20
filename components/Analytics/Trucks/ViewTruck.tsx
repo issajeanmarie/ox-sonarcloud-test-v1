@@ -25,10 +25,15 @@ const DetailsComponent = ({ truckData }: any) => {
   return (
     <div className="my-12">
       {truckData?.map((data: { name: string; value: number | any }) => (
-        <div key={data.name} className="flex items-center mb-5">
-          <div className="w-[110%] font-bold">{data.name}</div>
-          <div className="w-[90%] text-gray-400">{data.value}</div>
-        </div>
+        <Row key={data.name} gutter={12} align="middle" className="mb-4">
+          <Col span={12} className="font-bold">
+            {data.name}
+          </Col>
+
+          <Col span={12} className="text-gray-400">
+            {data.value}
+          </Col>
+        </Row>
       ))}
     </div>
   );
@@ -100,15 +105,14 @@ const ViewTruck: FC<ViewTruckProps> = ({
             isPageLoading={isPageLoading}
           />
 
-          <Row align="middle" gutter={12} justify="space-between">
+          <Row align="middle" gutter={0} justify="space-between">
             <Col
               md={{ span: 24 }}
-              lg={{ span: 12 }}
-              className="h-[86vh]  overflow-auto"
+              lg={{ span: 10 }}
+              className="h-[85vh]  overflow-auto"
               style={{
-                padding: "38px",
-                marginTop: "24px",
-                paddingTop: "0"
+                padding: "0 12px 38px 24px",
+                marginTop: "24px"
               }}
             >
               <div className="bg-white shadow-[0px_0px_19px_#00000008] p-12 pb-6 mb-6">
@@ -170,12 +174,11 @@ const ViewTruck: FC<ViewTruckProps> = ({
 
             <Col
               md={{ span: 24 }}
-              lg={{ span: 12 }}
-              className="h-[86vh]"
+              lg={{ span: 14 }}
+              className="h-[85vh]"
               style={{
-                padding: "38px",
-                marginTop: "24px",
-                paddingTop: "0"
+                padding: "0 24px 38px 12px",
+                marginTop: "24px"
               }}
             >
               <TruckTabs />

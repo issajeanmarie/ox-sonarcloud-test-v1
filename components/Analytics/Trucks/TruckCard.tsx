@@ -47,14 +47,14 @@ const DocumentCard = ({ document, truckData }: any) => {
           </Col>
 
           <Col>
-            <Row align="middle" gutter={12} wrap={false}>
+            <Row align="middle" gutter={14} wrap={false}>
               <Col onClick={handleNewTruckModal}>
                 <Image
                   className="pointer"
-                  src="/icons/ic-contact-edit.svg"
+                  src="/icons/edit.svg"
                   alt=""
                   preview={false}
-                  width={15}
+                  width={11}
                 />
               </Col>
 
@@ -66,9 +66,8 @@ const DocumentCard = ({ document, truckData }: any) => {
                 >
                   <Image
                     className="pointer"
-                    width={18}
-                    height={18}
-                    src="/icons/download.svg"
+                    width={12}
+                    src="/icons/download_2.svg"
                     alt=""
                     preview={false}
                   />
