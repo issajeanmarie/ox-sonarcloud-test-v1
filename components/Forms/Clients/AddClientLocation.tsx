@@ -1,6 +1,5 @@
-import { Col, Form, Row } from "antd";
+import { Col, Form, Popover, Row } from "antd";
 import React, { FC } from "react";
-import { requiredInput } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import { AddClientLocationTypes } from "../../../lib/types/pageTypes/Clients/AddClientLocationTypes";
@@ -10,7 +9,9 @@ const AddClientLocation: FC<AddClientLocationTypes> = ({
   isLoading,
   setLocation,
   location,
-  form
+  form,
+  locationName,
+  setLocationName
 }) => {
   return (
     <Form
@@ -35,26 +36,38 @@ const AddClientLocation: FC<AddClientLocationTypes> = ({
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <Input
             name="names"
-            type="text"
+            type="location"
             label="Names"
-            placeholder="Names"
-            rules={requiredInput}
+            placeholder="Search location name"
+            setLocation={setLocationName}
+            location={locationName}
           />
         </Col>
       </Row>
 
       <Row justify="end" className="mt-7">
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button
-            disabled={
-              !location || Object.keys(location).length === 0 ? true : false
-            }
-            loading={isLoading}
-            type="primary"
-            htmlType="submit"
-          >
-            ADD LOCATION
-          </Button>
+          {!location || !locationName ? (
+            <Popover
+              placement="left"
+              content={
+                <div className="flex flex-col">
+                  <span className="font-light">Select location </span>
+                  <span className="font-light">and names</span>
+                </div>
+              }
+              title={false}
+              trigger="click"
+            >
+              <Button type="primary" htmlType="submit">
+                ADD LOCATION
+              </Button>
+            </Popover>
+          ) : (
+            <Button loading={isLoading} type="primary" htmlType="submit">
+              ADD LOCATION
+            </Button>
+          )}
         </Col>
       </Row>
     </Form>

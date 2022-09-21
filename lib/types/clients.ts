@@ -25,11 +25,11 @@ export type PostClientRequest = {
     {
       location: string;
       coordinates: string;
-      names: string;
+      names: string | undefined;
       type: string;
     }
   ];
-  location: string;
+  location: string | undefined;
   coordinates: string;
   tinNumber: string;
   economicStatus: string;
