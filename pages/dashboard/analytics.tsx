@@ -26,8 +26,14 @@ import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
 const Analytics = () => {
   const [active, setActive] = useState<string>("trucks");
   const [sorter, setSorter] = useState("REVENUE");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(
+    localStorage.getItem("ox_startDate")
+      ? localStorage.getItem("ox_startDate")
+      : ""
+  );
+  const [endDate, setEndDate] = useState(
+    localStorage.getItem("ox_endDate") ? localStorage.getItem("ox_endDate") : ""
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory]: any = useState([]);
   const { depotData } = useSelector((state: RootState) => state.depot);
@@ -112,9 +118,11 @@ const Analytics = () => {
 
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
+    localStorage.setItem("ox_startDate", date);
   };
   const onEndDateChange = (_: string, date: string) => {
     setEndDate(date);
+    localStorage.setItem("ox_endDate", date);
   };
 
   const onCategoryChange = (e: CheckboxChangeEvent) => {
