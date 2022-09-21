@@ -40,6 +40,11 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
     coordinates: LatLng;
   }>();
 
+  const [locationName, setLocationName] = useState<{
+    name: string;
+    coordinates: LatLng;
+  }>();
+
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
 
@@ -228,6 +233,8 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
           form={form}
           setLocation={setLocation}
           location={location}
+          setLocationName={setLocationName}
+          locationName={locationName}
         />
       </ModalWrapper>
     </>

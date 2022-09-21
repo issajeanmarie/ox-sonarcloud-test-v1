@@ -1,4 +1,4 @@
-import { Col, Form, Row } from "antd";
+import { Col, Form, Popover, Row } from "antd";
 import React, { FC } from "react";
 import Input from "../../Shared/Input";
 import { EditClientLocationTypes } from "../../../lib/types/pageTypes/Clients/EditClientLocationTypes";
@@ -8,7 +8,9 @@ const EditClientLocation: FC<EditClientLocationTypes> = ({
   onEditClientLocationFinish,
   form,
   setLocation,
-  location
+  location,
+  setLocationName,
+  locationName
 }) => {
   return (
     <Form
@@ -34,7 +36,7 @@ const EditClientLocation: FC<EditClientLocationTypes> = ({
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <Input
             name="names"
-            type="text"
+            type="location"
             label="Names"
             placeholder="Location name"
             rules={requiredInput}

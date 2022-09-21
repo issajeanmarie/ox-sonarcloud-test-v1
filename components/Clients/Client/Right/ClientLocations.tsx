@@ -22,6 +22,10 @@ const ClientLocations: FC<ClientLocationsTypes> = ({
     name: string;
     coordinates: LatLng;
   }>();
+  const [locationName, setLocationName] = useState<{
+    name: string;
+    coordinates: LatLng;
+  }>();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -137,6 +141,8 @@ const ClientLocations: FC<ClientLocationsTypes> = ({
           isLoading={isPostingLocation}
           setLocation={setLocation}
           location={location}
+          setLocationName={setLocationName}
+          locationName={locationName}
           form={form}
         />
       </ModalWrapper>
