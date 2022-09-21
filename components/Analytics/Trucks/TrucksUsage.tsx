@@ -49,6 +49,7 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
         />
         <Input
           onDateChange={onStartDateChange}
+          defaultValue={localStorage.getItem("ox_startDate")}
           type="date"
           name="Start"
           placeholder="Start"
@@ -63,6 +64,7 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
         />
         <Input
           onDateChange={onEndDateChange}
+          defaultValue={localStorage.getItem("ox_endDate")}
           type="date"
           name="End"
           placeholder="End"

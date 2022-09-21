@@ -22,16 +22,16 @@ export interface AnalyticsResponse {
 
 export interface TruckAnalyticsRequest {
   depot: number;
-  start: string;
-  end: string;
+  start: string | null;
+  end: string | null;
   sortBy: string;
   direction: string;
   search: string | undefined;
 }
 export interface DownloadTruckAnalyticsRequest {
   depot: number;
-  start: string;
-  end: string;
+  start: string | null;
+  end: string | null;
   sortBy: string;
   direction: string;
   search: string | undefined;
@@ -40,14 +40,14 @@ export interface DownloadTruckAnalyticsRequest {
 
 export interface RevenueAnalyticsRequest {
   depot: number;
-  start: string;
-  end: string;
+  start: string | null;
+  end: string | null;
 }
 
 export interface KPIsAnalyticsRequest {
   depot: number;
-  start: string;
-  end: string;
+  start: string | null;
+  end: string | null;
 }
 
 export interface MapAnalyticsRequest {

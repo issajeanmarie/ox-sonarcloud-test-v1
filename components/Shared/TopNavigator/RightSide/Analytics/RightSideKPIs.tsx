@@ -47,6 +47,7 @@ const RightSideKPIs: FC<RightSideKPIsTypes> = ({
         }
       />
       <Input
+        defaultValue={localStorage.getItem("ox_startDate")}
         onDateChange={onStartDateChange}
         type="date"
         name="Start"
@@ -61,6 +62,7 @@ const RightSideKPIs: FC<RightSideKPIsTypes> = ({
         }
       />
       <Input
+        defaultValue={localStorage.getItem("ox_endDate")}
         onDateChange={onEndDateChange}
         type="date"
         name="End"
