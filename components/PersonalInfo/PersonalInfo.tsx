@@ -5,10 +5,8 @@ import Typography from "antd/lib/typography";
 import Card from "antd/lib/card";
 import CustomInput from "../../components/Shared/Input";
 import Form from "antd/lib/form";
-// import CustomPhoneInput from "../../components/Shared/Custom/CustomPhoneInput";
 import Image from "antd/lib/image";
 import Button from "../Shared/Button";
-// import Loader from "../Shared/Loader";
 import { ProfileTypes, PasswordTypes } from "../../lib/types/settings";
 import {
   useSettingsQuery,
