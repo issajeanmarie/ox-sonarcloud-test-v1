@@ -4,6 +4,7 @@ import Input from "../../Shared/Input";
 import CustomButton from "../../Shared/Button/button";
 import { TrucksUsageTypes } from "../../../lib/types/pageTypes/Analytics/TrucksUsageTableTypes";
 import { YellowDownloadIcon } from "../../Icons";
+import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
 
 const { Text } = Typography;
 
@@ -14,7 +15,10 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
   onEndDateChange,
   uploadingFuelReport,
   uploadFileProps,
-  handleSearch
+  handleSearch,
+  handleDownloadClients,
+  isDownloadingTruckReport,
+  isDownloadFetching
 }) => {
   return (
     <Row
@@ -88,8 +92,19 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
             />
           }
         />
-        <CustomButton type="secondary" size="small">
-          <span className="text-sm">{YellowDownloadIcon}</span>
+        <CustomButton
+          onClick={handleDownloadClients}
+          disabled={isDownloadingTruckReport || isDownloadFetching}
+          type="secondary"
+          size="small"
+        >
+          <span className="text-sm">
+            {isDownloadingTruckReport || isDownloadFetching ? (
+              <SmallSpinLoader />
+            ) : (
+              YellowDownloadIcon
+            )}
+          </span>
         </CustomButton>
         <Upload {...uploadFileProps}>
           <CustomButton loading={uploadingFuelReport} type="primary">

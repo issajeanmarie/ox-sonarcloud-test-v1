@@ -35,4 +35,7 @@ export type TrucksUsageTypes = {
   uploadingFuelReport: boolean;
   uploadFileProps: UploadProps;
   handleSearch: (e: SearchType) => void;
+  handleDownloadClients: () => void;
+  isDownloadingTruckReport: boolean;
+  isDownloadFetching: boolean;
 };

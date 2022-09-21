@@ -12,12 +12,16 @@ import {
   useTruckAnalyticsQuery,
   useRevenueAnalyticsQuery,
   useMapAnalyticsQuery,
-  useKPIsAnalyticsQuery
+  useKPIsAnalyticsQuery,
+  useLazyDownloadTruckAnalyticsQuery
 } from "../../lib/api/endpoints/Analytics/analyticEndpoints";
 import { RootState } from "../../lib/redux/store";
 import { useSelector } from "react-redux";
 import { useCategoriesQuery } from "../../lib/api/endpoints/Category/categoryEndpoints";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
+import { handleDownloadFile } from "../../utils/handleDownloadFile";
+import { BackendErrorTypes } from "../../lib/types/shared";
+import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
 
 const Analytics = () => {
   const [active, setActive] = useState<string>("trucks");
@@ -72,6 +76,32 @@ const Analytics = () => {
     end: endDate
   });
 
+  const [
+    downloadTruckAnalytics,
+    { isLoading: isDownloadingTruckReport, isFetching: isDownloadFetching }
+  ] = useLazyDownloadTruckAnalyticsQuery();
+
+  const handleDownloadClients = () => {
+    downloadTruckAnalytics({
+      file_type: "PDF",
+      depot: depotData?.id,
+      start: startDate,
+      end: endDate,
+      sortBy: sorter,
+      direction: "",
+      search: searchQuery
+    })
+      .unwrap()
+      .then((file: any) =>
+        handleDownloadFile({
+          file,
+          name: "Truck-Report",
+          fileFormat: "PDF"
+        })
+      )
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
+
   const toggleActiveHandler = (id: string) => {
     setActive(id);
   };
@@ -117,6 +147,9 @@ const Analytics = () => {
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
             handleSearch={handleSearch}
+            handleDownloadClients={handleDownloadClients}
+            isDownloadingTruckReport={isDownloadingTruckReport}
+            isDownloadFetching={isDownloadFetching}
           />
         )}
         {active === "revenues" && (

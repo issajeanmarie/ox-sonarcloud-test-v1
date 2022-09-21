@@ -28,6 +28,15 @@ export interface TruckAnalyticsRequest {
   direction: string;
   search: string | undefined;
 }
+export interface DownloadTruckAnalyticsRequest {
+  depot: number;
+  start: string;
+  end: string;
+  sortBy: string;
+  direction: string;
+  search: string | undefined;
+  file_type: string;
+}
 
 export interface RevenueAnalyticsRequest {
   depot: number;
