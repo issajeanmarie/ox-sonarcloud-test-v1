@@ -40,11 +40,16 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
     coordinates: LatLng;
   }>();
 
+  const [locationName, setLocationName] = useState<{
+    name: string;
+    coordinates: LatLng;
+  }>();
+
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
 
   const showEditModal = (record: any) => {
-    setItemToEdit(record?.id);
+    setItemToEdit(record);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
   };
@@ -73,15 +78,14 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
 
   const [editClientLocation, { isLoading: isEditing }] =
     useEditClientLocationMutation();
-
-  const onEditClientLocationFinish = (values: any) => {
+  const onEditClientLocationFinish = () => {
     editClientLocation({
       clientId: query?.client,
-      officeId: itemToEdit,
-      location: values?.location,
-      coordinates: "",
-      names: values?.names,
-      type: values?.type
+      officeId: itemToEdit?.id,
+      location: location ? location?.name : "",
+      coordinates: location ? JSON.stringify(location?.coordinates) : "",
+      names: locationName ? locationName?.name : "",
+      type: itemToEdit?.type
     })
       .unwrap()
       .then((res: GenericResponse) => {
@@ -195,6 +199,8 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
           form={form}
           setLocation={setLocation}
           location={location}
+          setLocationName={setLocationName}
+          locationName={locationName}
         />
       </ModalWrapper>
     </>

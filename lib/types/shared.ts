@@ -9,7 +9,13 @@ export type GenericResponse = ApiResponseMetadata<void>;
 export type BackendErrorTypes = {
   data: {
     message: string;
-    payload: any;
+    payload: [
+      {
+        fieldName: string;
+        messageError: string;
+        rejectedValue: string;
+      }
+    ];
   };
   status: number;
 };

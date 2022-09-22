@@ -36,7 +36,7 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
         index: number
       ) => (
         <RowsWrapper>
-          <Link passHref href={routes.viewOrder.url + record.id}>
+          <Link passHref href={routes.viewOrder.url + record?.id}>
             <div className="flex gap-10 cursor-pointer">
               <Text className="normalText opacity_56">{index + 1}</Text>
               <Text className="normalText fowe900 underline">{record?.id}</Text>

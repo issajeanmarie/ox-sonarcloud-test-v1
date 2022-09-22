@@ -4,9 +4,10 @@ import ClientsTable from "../../../components/Tables/Clients/ClientsTable";
 import ClientsTopNavigator from "../../../components/Clients/ClientsTopNavigator";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
-// import CustomButton from "../../../components/Shared/Button";
+import CustomButton from "../../../components/Shared/Button";
 import {
   useClientsQuery,
+  useLazyClientsQuery,
   useLazyDownloadClientsQuery
 } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/categoryEndpoints";
@@ -21,13 +22,16 @@ const Clients = () => {
   const [selectedCategory, setSelectedCategory]: any = useState("");
   const [sort, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
+  const [pageSize, setPageSize] = useState(20);
+  const [moreClients, setMoreClients] = useState([]);
+
   const {
-    data: clients,
+    data: Allclients,
     isLoading: isClientsLoading,
     isFetching: isClientsFetching
   } = useClientsQuery({
     page: "",
-    size: "",
+    size: pageSize,
     org: "",
     dest: "",
     hq: "",
@@ -36,6 +40,8 @@ const Clients = () => {
     sort: sort,
     source: ""
   });
+
+  const [clients, { isFetching: loadingMoreFetching }] = useLazyClientsQuery();
 
   const [downloadClients, { isLoading: isDownloadingClientsLoading }] =
     useLazyDownloadClientsQuery();
@@ -72,6 +78,28 @@ const Clients = () => {
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 
+  const handleLoadMore = () => {
+    clients({
+      page: "",
+      size: pageSize,
+      org: "",
+      dest: "",
+      hq: "",
+      categoryId: selectedCategory,
+      q: searchQuery,
+      sort: sort,
+      source: ""
+    })
+      .unwrap()
+      .then((res) => {
+        setPageSize(pageSize + 20);
+        setMoreClients(res?.payload);
+      })
+      .catch((error) => {
+        return error;
+      });
+  };
+
   //MODAL
   const showModal = () => {
     setIsModalVisible(true);
@@ -89,7 +117,7 @@ const Clients = () => {
           isModalVisible={isModalVisible}
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
-          clients={clients?.payload}
+          clients={Allclients?.payload}
           isClientsLoading={isClientsLoading}
           handleSearch={handleSearch}
           isCategoriesLoading={isCategoriesLoading}
@@ -112,18 +140,24 @@ const Clients = () => {
             isModalVisible={isWarningModalVisible}
             showModal={showWarningModal}
             setIsModalVisible={setIsWarningModalVisible}
-            clients={clients?.payload}
+            clients={Allclients?.payload?.content?.concat(moreClients)}
             isClientsFetching={isClientsFetching}
           />
         )}
 
-        {/* <div className="flex justify-center items-center py-10">
-          <div className="w-52">
-            <CustomButton type="secondary">
-              <span className="text-sm">Load More</span>
-            </CustomButton>
-          </div>
-        </div> */}
+        {pageSize > 19 &&
+          Allclients?.payload?.totalElements &&
+          Allclients?.payload?.totalElements >= pageSize && (
+            <div style={{ width: "12%", margin: "32px auto" }}>
+              <CustomButton
+                loading={loadingMoreFetching}
+                onClick={handleLoadMore}
+                type="secondary"
+              >
+                Load more
+              </CustomButton>
+            </div>
+          )}
       </div>
     </Layout>
   );

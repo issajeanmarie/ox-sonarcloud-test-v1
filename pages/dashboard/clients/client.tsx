@@ -11,13 +11,16 @@ import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute
 import { routes } from "../../../config/route-config";
 import {
   useClientOrdersQuery,
-  useClientQuery
+  useClientQuery,
+  useLazyClientOrdersQuery
 } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 
 const Client = () => {
   const { query } = useRouter();
   const router = useRouter();
   const [paymentStatus, setPaymentStatus] = useState("");
+  const [pageSize, setPageSize] = useState(10);
+  const [moreClientOrders, setMoreClientOrders] = useState([]);
 
   const handleFilterChange = (value: string) => {
     setPaymentStatus(value);
@@ -38,15 +41,35 @@ const Client = () => {
   } = useClientQuery({ id: query?.client });
 
   const {
-    data: clientOrders,
+    data: AllClientOrders,
     isLoading: isClientOrdersLoading,
     isFetching: isClientOrdersFetching
   } = useClientOrdersQuery({
     id: query?.client,
     page: "",
-    size: "",
+    size: pageSize,
     paymentStatus: paymentStatus
   });
+
+  const [clientOrders, { isFetching: isMoreClientsOrderFetching }] =
+    useLazyClientOrdersQuery();
+
+  const handleLoadMore = () => {
+    clientOrders({
+      id: query?.client,
+      page: "",
+      size: pageSize,
+      paymentStatus: paymentStatus
+    })
+      .unwrap()
+      .then((res) => {
+        setPageSize(pageSize + 9);
+        setMoreClientOrders(res?.payload);
+      })
+      .catch((error) => {
+        return error;
+      });
+  };
 
   return (
     <Layout>
@@ -65,17 +88,21 @@ const Client = () => {
               client={client?.payload}
               isClientLoading={isClientLoading}
               isClientFetching={isClientFetching}
-              clientOrders={clientOrders?.payload}
+              clientOrders={AllClientOrders?.payload}
               isClientOrdersLoading={isClientOrdersLoading}
               isClientOrdersFetching={isClientOrdersFetching}
               handleFilterChange={handleFilterChange}
+              moreClientOrders={moreClientOrders}
+              handleLoadMore={handleLoadMore}
+              pageSize={pageSize}
+              isMoreClientsOrderFetching={isMoreClientsOrderFetching}
             />
 
             <SingleClientRight
               client={client?.payload}
               isClientLoading={isClientLoading}
               isClientFetching={isClientFetching}
-              clientOrders={clientOrders?.payload}
+              clientOrders={AllClientOrders?.payload}
               isClientOrdersLoading={isClientOrdersLoading}
               isClientOrdersFetching={isClientOrdersFetching}
             />

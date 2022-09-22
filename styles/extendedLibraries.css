@@ -215,6 +215,22 @@
   display: none;
 }
 
+.ox_medium_modal .ant-modal-body::-webkit-scrollbar-track {
+  background-color: inherit !important;
+  border-bottom-right-radius: 6px !important;
+  margin-bottom: 0px !important;
+}
+
+.ox_medium_modal .ant-modal-body::-webkit-scrollbar-thumb {
+  border-bottom-right-radius: 6px !important;
+}
+
+.ox_medium_modal .ant-modal-body {
+  max-height: 600px !important;
+  overflow: auto !important;
+  padding-bottom: 24px !important;
+}
+
 /* TABLE WITH CHILDREN */
 .ant-table-row.ant-table-row-level-0
   .ant-table-cell.ant-table-cell-with-append

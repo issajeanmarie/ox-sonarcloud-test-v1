@@ -4,11 +4,10 @@ import { LatLng } from "use-places-autocomplete";
 export type AddClientTypes = {
   onAddClientFinish: (values: any) => void;
   createOffices: () => void;
-  onOfficeNameChange: (value: string) => void;
   offices: [
     {
       id: number;
-      names: string;
+      names: string | undefined;
       type: string;
       locaction: string;
       coordinates: string;
@@ -31,6 +30,35 @@ export type AddClientTypes = {
         coordinates: LatLng;
       }
     | undefined;
-  officeName: string;
   form: any;
+  setMainLocation: React.Dispatch<
+    React.SetStateAction<
+      | {
+          name: string;
+          coordinates: LatLng;
+        }
+      | undefined
+    >
+  >;
+  mainLocation:
+    | {
+        name: string;
+        coordinates: LatLng;
+      }
+    | undefined;
+  setOfficeName: React.Dispatch<
+    React.SetStateAction<
+      | {
+          name: string;
+          coordinates: LatLng;
+        }
+      | undefined
+    >
+  >;
+  officeName:
+    | {
+        name: string;
+        coordinates: LatLng;
+      }
+    | undefined;
 };

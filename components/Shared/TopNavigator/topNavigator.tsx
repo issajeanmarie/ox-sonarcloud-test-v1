@@ -13,7 +13,9 @@ const TopNavigator: FC<TopNavigatorProps> = ({
   active,
   toggleActiveHandler,
   onStartDateChange,
-  onEndDateChange
+  onEndDateChange,
+  onLastWeekChange,
+  handleDepotChange
 }) => {
   useEffect(() => {
     headerLinks && setActive && setActive(headerLinks[0].id);
@@ -47,6 +49,7 @@ const TopNavigator: FC<TopNavigatorProps> = ({
           <RightSideRevenue
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
+            onLastWeekChange={onLastWeekChange}
           />
         </TopNavigatorRightSideWrapper>
       )}
@@ -55,6 +58,8 @@ const TopNavigator: FC<TopNavigatorProps> = ({
           <RightSideKPIs
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
+            onLastWeekChange={onLastWeekChange}
+            handleDepotChange={handleDepotChange}
           />
         </TopNavigatorRightSideWrapper>
       )}

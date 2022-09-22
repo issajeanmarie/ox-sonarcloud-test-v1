@@ -13,14 +13,16 @@ import { YellowCheckIcon } from "../../Icons";
 const AddNewClient: FC<AddClientTypes> = ({
   onAddClientFinish,
   createOffices,
-  onOfficeNameChange,
   offices,
   setOffices,
   isLoading,
   setLocation,
   location,
   officeName,
-  form
+  setOfficeName,
+  form,
+  mainLocation,
+  setMainLocation
 }) => {
   return (
     <Form
@@ -116,10 +118,12 @@ const AddNewClient: FC<AddClientTypes> = ({
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             name="location"
-            type="text"
+            type="location"
             label="Main location"
-            placeholder="Search for location"
-            rules={requiredInput}
+            placeholder="Search location"
+            setLocation={setMainLocation}
+            location={mainLocation}
+            // rules={requiredInput}
           />
         </Col>
       </Row>
@@ -145,11 +149,12 @@ const AddNewClient: FC<AddClientTypes> = ({
       >
         <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
           <Input
-            onChange={onOfficeNameChange}
             name="officeName"
-            type="text"
+            type="location"
             label="Name"
             placeholder="Office name"
+            setLocation={setOfficeName}
+            location={officeName}
           />
         </Col>
 
@@ -164,9 +169,7 @@ const AddNewClient: FC<AddClientTypes> = ({
           />
         </Col>
         <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-          {!location ||
-          Object.keys(location).length === 0 ||
-          officeName === "" ? (
+          {!location || Object.keys(location).length === 0 || !officeName ? (
             <Popover
               placement="left"
               content={
@@ -190,9 +193,24 @@ const AddNewClient: FC<AddClientTypes> = ({
 
       <Row justify="end" className="mt-7">
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            ADD CLIENT
-          </Button>
+          {!mainLocation ? (
+            <Popover
+              placement="left"
+              content={
+                <div className="flex flex-col">
+                  <span className="font-light"> Add main location</span>
+                </div>
+              }
+              title={false}
+              trigger="click"
+            >
+              <Button type="primary">ADD CLIENT</Button>
+            </Popover>
+          ) : (
+            <Button loading={isLoading} type="primary" htmlType="submit">
+              ADD CLIENT
+            </Button>
+          )}
         </Col>
       </Row>
     </Form>

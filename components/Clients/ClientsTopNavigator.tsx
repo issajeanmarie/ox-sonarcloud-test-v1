@@ -39,16 +39,19 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
 }) => {
   const [form] = Form.useForm();
   const [offices, setOffices]: any = useState([]);
-  const [officeName, setOfficeName] = useState("");
   const [location, setLocation] = useState<{
     name: string;
     coordinates: LatLng;
   }>();
+  const [mainLocation, setMainLocation] = useState<{
+    name: string;
+    coordinates: LatLng;
+  }>();
+  const [officeName, setOfficeName] = useState<{
+    name: string;
+    coordinates: LatLng;
+  }>();
   const [postClient, { isLoading }] = usePostClientMutation();
-
-  const onOfficeNameChange = (value: string) => {
-    setOfficeName(value);
-  };
 
   // ADD CLIENT
   const createOffices = () => {
@@ -58,7 +61,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         id: offices.length + 1,
         location: location ? location?.name : "",
         coordinates: location ? JSON.stringify(location?.coordinates) : "",
-        names: officeName
+        names: officeName ? officeName?.name : ""
         // type: "HQ"
       }
     ]);
@@ -73,7 +76,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       phone: values?.phone,
       source: values?.source,
       offices: offices,
-      location: values?.location,
+      location: mainLocation?.name,
       coordinates: values?.coordinates,
       tinNumber: values?.tinNumber,
       economicStatus: values?.economicStatus
@@ -82,10 +85,18 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       .then((res: GenericResponse) => {
         SuccessMessage(res?.message);
         setOffices([]);
+        setMainLocation(undefined);
+        setOfficeName(undefined);
         form.resetFields();
         setIsModalVisible(false);
       })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      .catch((err: BackendErrorTypes) =>
+        ErrorMessage(
+          err?.data?.payload
+            ? err?.data?.payload[0]?.messageError
+            : err?.data?.message
+        )
+      );
   };
 
   return (
@@ -144,6 +155,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
             />
           }
         >
+          <Option value="">All categories</Option>
           {categories?.map((item: ObjectTypes) => (
             <Option value={item?.id} key={item?.name}>
               {item?.name}
@@ -195,13 +207,15 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         <AddNewClient
           onAddClientFinish={onAddClientFinish}
           createOffices={createOffices}
-          onOfficeNameChange={onOfficeNameChange}
           offices={offices}
           setOffices={setOffices}
           isLoading={isLoading}
           setLocation={setLocation}
           location={location}
+          setMainLocation={setMainLocation}
+          mainLocation={mainLocation}
           officeName={officeName}
+          setOfficeName={setOfficeName}
           form={form}
         />
       </ModalWrapper>

@@ -26,7 +26,7 @@ const ModalWrapper: FC<ModalProps> = ({
 
   return (
     <Modal
-      className="ox-modal"
+      className="ox-modal ox_medium_modal"
       title={
         <div className="flex justify-between items-center">
           <span className="font-bold text-2xl">{title}</span>

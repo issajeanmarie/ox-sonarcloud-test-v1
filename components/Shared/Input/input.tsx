@@ -25,6 +25,7 @@ import { message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { FileUploader } from "./fileUploader";
+import moment from "moment";
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -53,7 +54,8 @@ const Entry = ({
   format,
   showTime,
   location,
-  fileName
+  fileName,
+  picker
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
@@ -206,10 +208,14 @@ const Entry = ({
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
       <Form.Item name={name} rules={rules}>
         <DatePicker
+          defaultValue={
+            defaultValue && moment(defaultValue && defaultValue, dateFormat)
+          }
           onChange={onDateChange}
           className={`my_datepicker ${size === "small" && "sm"}`}
           allowClear
           name={name}
+          picker={picker}
           suffixIcon={
             <Image
               src="/icons/ic-actions-calendar.svg"

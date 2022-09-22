@@ -26,7 +26,10 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
   sorter,
   onStartDateChange,
   onEndDateChange,
-  handleSearch
+  handleSearch,
+  handleDownloadClients,
+  isDownloadingTruckReport,
+  isDownloadFetching
 }) => {
   const formData = new FormData();
   const [uploadResponse, setUploadResponse] = useState("");
@@ -115,6 +118,9 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
             uploadingFuelReport={uploadingFuelReport}
             uploadFileProps={uploadFileProps}
             handleSearch={handleSearch}
+            handleDownloadClients={handleDownloadClients}
+            isDownloadingTruckReport={isDownloadingTruckReport}
+            isDownloadFetching={isDownloadFetching}
           />
         )}
       </AnalyticTopContentWrapper>
@@ -126,7 +132,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
           ))}
         </>
       ) : (
-        <>
+        <div className="mb-10">
           <TrucksUsageTable
             truckData={truckData?.payload?.truckAnalytics}
             truckFetching={truckFetching}
@@ -138,7 +144,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
               </CustomButton>
             </div>
           </div> */}
-        </>
+        </div>
       )}
     </>
   );

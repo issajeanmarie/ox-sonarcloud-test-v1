@@ -224,6 +224,7 @@ export const {
   useDownloadClientsQuery,
   useLazyDownloadClientsQuery,
   useClientOrdersQuery,
+  useLazyClientOrdersQuery,
   usePostClientMutation,
   useDeleteClientMutation,
   usePostClientLocationMutation,
@@ -237,5 +238,6 @@ export const {
   useLazyDownloadClientInvoiceQuery,
   useEditClientMutation,
   useDeleteClientTagMutation,
-  usePostClientNoteMutation
+  usePostClientNoteMutation,
+  useLazyClientsQuery
 } = clientsApi;

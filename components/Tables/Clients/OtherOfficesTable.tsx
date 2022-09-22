@@ -41,7 +41,9 @@ const OtherOfficesTable: FC<OtherOfficesTableProps> = ({
           <div className="flex gap-10">
             <Text className="normalText opacity_56">{record?.id}</Text>
             <div className="flex flex-col">
-              <Text className="normalText fowe900">{record?.names}</Text>
+              <Text className="normalText fowe900">
+                {record?.names && limitStringLengthSmall(record?.names)}
+              </Text>
             </div>
           </div>
         </RowsWrapper>

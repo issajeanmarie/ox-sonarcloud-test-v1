@@ -12,18 +12,30 @@ import {
   useTruckAnalyticsQuery,
   useRevenueAnalyticsQuery,
   useMapAnalyticsQuery,
-  useKPIsAnalyticsQuery
+  useKPIsAnalyticsQuery,
+  useLazyDownloadTruckAnalyticsQuery
 } from "../../lib/api/endpoints/Analytics/analyticEndpoints";
 import { RootState } from "../../lib/redux/store";
 import { useSelector } from "react-redux";
 import { useCategoriesQuery } from "../../lib/api/endpoints/Category/categoryEndpoints";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
+import { handleDownloadFile } from "../../utils/handleDownloadFile";
+import { BackendErrorTypes } from "../../lib/types/shared";
+import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
 
 const Analytics = () => {
   const [active, setActive] = useState<string>("trucks");
   const [sorter, setSorter] = useState("REVENUE");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [selectedDepot, setSelectedDepot] = useState();
+  const [lastWeek, setLastWeek] = useState("");
+  const [startDate, setStartDate] = useState(
+    localStorage.getItem("ox_startDate")
+      ? localStorage.getItem("ox_startDate")
+      : ""
+  );
+  const [endDate, setEndDate] = useState(
+    localStorage.getItem("ox_endDate") ? localStorage.getItem("ox_endDate") : ""
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory]: any = useState([]);
   const { depotData } = useSelector((state: RootState) => state.depot);
@@ -49,7 +61,7 @@ const Analytics = () => {
     isFetching: revenueFetching
   } = useRevenueAnalyticsQuery({
     depot: depotData?.id,
-    start: startDate,
+    start: !lastWeek ? startDate : lastWeek,
     end: endDate
   });
 
@@ -67,10 +79,36 @@ const Analytics = () => {
     isLoading: KPIsLoading,
     isFetching: KPIsFetching
   } = useKPIsAnalyticsQuery({
-    depot: depotData?.id,
-    start: startDate,
+    depot: !selectedDepot ? depotData?.id : selectedDepot,
+    start: !lastWeek ? startDate : lastWeek,
     end: endDate
   });
+
+  const [
+    downloadTruckAnalytics,
+    { isLoading: isDownloadingTruckReport, isFetching: isDownloadFetching }
+  ] = useLazyDownloadTruckAnalyticsQuery();
+
+  const handleDownloadClients = () => {
+    downloadTruckAnalytics({
+      file_type: "PDF",
+      depot: depotData?.id,
+      start: startDate,
+      end: endDate,
+      sortBy: sorter,
+      direction: "",
+      search: searchQuery
+    })
+      .unwrap()
+      .then((file: any) =>
+        handleDownloadFile({
+          file,
+          name: "Truck-Report",
+          fileFormat: "PDF"
+        })
+      )
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
 
   const toggleActiveHandler = (id: string) => {
     setActive(id);
@@ -82,9 +120,15 @@ const Analytics = () => {
 
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
+    localStorage.setItem("ox_startDate", date);
   };
   const onEndDateChange = (_: string, date: string) => {
     setEndDate(date);
+    localStorage.setItem("ox_endDate", date);
+  };
+
+  const onLastWeekChange = (_: string, date: string) => {
+    setLastWeek(date);
   };
 
   const onCategoryChange = (e: CheckboxChangeEvent) => {
@@ -93,6 +137,10 @@ const Analytics = () => {
 
   const handleSearch = (value: any) => {
     setSearchQuery(value);
+  };
+
+  const handleDepotChange = (value: any) => {
+    setSelectedDepot(value);
   };
 
   return (
@@ -104,6 +152,8 @@ const Analytics = () => {
         toggleActiveHandler={toggleActiveHandler}
         onStartDateChange={onStartDateChange}
         onEndDateChange={onEndDateChange}
+        onLastWeekChange={onLastWeekChange}
+        handleDepotChange={handleDepotChange}
       />
       <div className={`${active !== "map" ? "px-5" : "px-0"} `}>
         {active === "trucks" && (
@@ -117,6 +167,9 @@ const Analytics = () => {
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
             handleSearch={handleSearch}
+            handleDownloadClients={handleDownloadClients}
+            isDownloadingTruckReport={isDownloadingTruckReport}
+            isDownloadFetching={isDownloadFetching}
           />
         )}
         {active === "revenues" && (

@@ -7,8 +7,8 @@
 
 export const limitStringLengthSmall = (str: any) => {
   try {
-    if (str.length > 30) {
-      return `${(str = str.substring(0, 30))}...`;
+    if (str.length > 17) {
+      return `${(str = str.substring(0, 17))}...`;
     } else {
       return str;
     }
