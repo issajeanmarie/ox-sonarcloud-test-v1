@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { SingleClientLeftTypes } from "../../../../lib/types/pageTypes/Clients/SingleClientLeftTypes";
 import { ColsTableLoader } from "../../../Shared/Loaders/Loaders";
 import ClientOrderHistoryTable from "../../../Tables/Clients/ClientOrderHistoryTable";
-// import CustomButton from "../../../../components/Shared/Button";
+import CustomButton from "../../../../components/Shared/Button";
 import Header from "./Header";
 
 const SingleClientLeft: FC<SingleClientLeftTypes> = ({
@@ -65,7 +65,21 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
             <span className="text-sm">Load More</span>
           </CustomButton>
         </div>
-      </div> */}
+      )}
+
+      {pageSize > 9 &&
+        clientOrders?.orders?.totalElements &&
+        clientOrders?.orders?.totalElements >= pageSize && (
+          <div style={{ width: "12%", margin: "32px auto" }}>
+            <CustomButton
+              loading={isMoreClientsOrderFetching}
+              onClick={handleLoadMore}
+              type="secondary"
+            >
+              Load more
+            </CustomButton>
+          </div>
+        )}
     </Col>
   );
 };

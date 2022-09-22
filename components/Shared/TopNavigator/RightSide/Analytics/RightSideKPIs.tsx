@@ -8,6 +8,8 @@ import { RightSideKPIsTypes } from "../../../../../lib/types/pageTypes/Analytics
 import Input from "../../../../Shared/Input";
 import DropDownSelector from "../../../DropDownSelector";
 
+const { Option } = Select;
+
 const RightSideKPIs: FC<RightSideKPIsTypes> = ({
   onStartDateChange,
   onEndDateChange,

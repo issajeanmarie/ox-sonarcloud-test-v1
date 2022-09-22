@@ -26,6 +26,8 @@ import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
 const Analytics = () => {
   const [active, setActive] = useState<string>("trucks");
   const [sorter, setSorter] = useState("REVENUE");
+  const [selectedDepot, setSelectedDepot] = useState();
+  const [lastWeek, setLastWeek] = useState("");
   const [startDate, setStartDate] = useState(
     localStorage.getItem("ox_startDate")
       ? localStorage.getItem("ox_startDate")
@@ -59,7 +61,7 @@ const Analytics = () => {
     isFetching: revenueFetching
   } = useRevenueAnalyticsQuery({
     depot: depotData?.id,
-    start: startDate,
+    start: !lastWeek ? startDate : lastWeek,
     end: endDate
   });
 
@@ -77,8 +79,8 @@ const Analytics = () => {
     isLoading: KPIsLoading,
     isFetching: KPIsFetching
   } = useKPIsAnalyticsQuery({
-    depot: depotData?.id,
-    start: startDate,
+    depot: !selectedDepot ? depotData?.id : selectedDepot,
+    start: !lastWeek ? startDate : lastWeek,
     end: endDate
   });
 
@@ -125,12 +127,20 @@ const Analytics = () => {
     localStorage.setItem("ox_endDate", date);
   };
 
+  const onLastWeekChange = (_: string, date: string) => {
+    setLastWeek(date);
+  };
+
   const onCategoryChange = (e: CheckboxChangeEvent) => {
     setSelectedCategory(e);
   };
 
   const handleSearch = (value: any) => {
     setSearchQuery(value);
+  };
+
+  const handleDepotChange = (value: any) => {
+    setSelectedDepot(value);
   };
 
   return (
@@ -142,6 +152,8 @@ const Analytics = () => {
         toggleActiveHandler={toggleActiveHandler}
         onStartDateChange={onStartDateChange}
         onEndDateChange={onEndDateChange}
+        onLastWeekChange={onLastWeekChange}
+        handleDepotChange={handleDepotChange}
       />
       <div className={`${active !== "map" ? "px-5" : "px-0"} `}>
         {active === "trucks" && (

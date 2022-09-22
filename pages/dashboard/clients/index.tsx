@@ -5,7 +5,7 @@ import ClientsTable from "../../../components/Tables/Clients/ClientsTable";
 import ClientsTopNavigator from "../../../components/Clients/ClientsTopNavigator";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
-// import CustomButton from "../../../components/Shared/Button";
+import CustomButton from "../../../components/Shared/Button";
 import {
   useLazyClientsQuery,
   useLazyDownloadClientsQuery
@@ -28,13 +28,16 @@ const Clients = () => {
   const [selectedCategory, setSelectedCategory]: any = useState("");
   const [sortValue, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
+  const [pageSize, setPageSize] = useState(20);
+  const [moreClients, setMoreClients] = useState([]);
+
   const {
-    data: clients,
+    data: Allclients,
     isLoading: isClientsLoading,
     isFetching: isClientsFetching
   } = useClientsQuery({
     page: "",
-    size: "",
+    size: pageSize,
     org: "",
     dest: "",
     hq: "",
@@ -43,6 +46,8 @@ const Clients = () => {
     sort: sort,
     source: ""
   });
+
+  const [clients, { isFetching: loadingMoreFetching }] = useLazyClientsQuery();
 
   const [downloadClients, { isLoading: isDownloadingClientsLoading }] =
     useLazyDownloadClientsQuery();
