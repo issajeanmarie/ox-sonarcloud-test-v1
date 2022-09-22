@@ -54,7 +54,8 @@ const Entry = ({
   format,
   showTime,
   location,
-  fileName
+  fileName,
+  picker
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
@@ -214,6 +215,7 @@ const Entry = ({
           className={`my_datepicker ${size === "small" && "sm"}`}
           allowClear
           name={name}
+          picker={picker}
           suffixIcon={
             <Image
               src="/icons/ic-actions-calendar.svg"

@@ -23,6 +23,8 @@ const { Text } = Typography;
 const Comopnents = () => {
   const [checkbox, setCheckbox] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedDepot, setSelectedDepot] = useState();
+  const [lastWeek, setLastWeek] = useState("");
   const [validatePhone] = useState(false);
   const [startD, setStartDate] = useState("");
   const [endD, setEndDate] = useState("");
@@ -61,6 +63,15 @@ const Comopnents = () => {
     setEndDate(date);
     return endD;
   };
+  const onLastWeekChange = (_: string, date: string) => {
+    setLastWeek(date);
+    return lastWeek;
+  };
+
+  const handleDepotChange = (value: any) => {
+    setSelectedDepot(value);
+    return selectedDepot;
+  };
 
   return (
     <Layout>
@@ -72,6 +83,8 @@ const Comopnents = () => {
         toggleActiveHandler={toggleActiveHandler}
         onStartDateChange={onStartDateChange}
         onEndDateChange={onEndDateChange}
+        onLastWeekChange={onLastWeekChange}
+        handleDepotChange={handleDepotChange}
       />
       {/*
            ***

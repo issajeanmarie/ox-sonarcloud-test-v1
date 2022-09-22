@@ -22,7 +22,7 @@ const AppSider = ({ collapsed }: any) => {
   const { depotData } = useSelector((state: RootState) => state.depot);
 
   const { data, isLoading } = useDepotsQuery();
-  const handleDepotChange = (depot: depotTypes) => {
+  const handleDepotChange = (depot: depotTypes | undefined) => {
     dispatch(setDepotData(depot));
   };
 
@@ -57,6 +57,25 @@ const AppSider = ({ collapsed }: any) => {
       </div>
 
       <div className="p-6">
+        <Row
+          className="p-4 cursor-pointer"
+          onClick={() => handleDepotChange(undefined)}
+          gutter={12}
+          align="middle"
+        >
+          <Col>
+            <Image
+              width={16}
+              src={`/icons/ic-ecommerce-house.svg`}
+              preview={false}
+              alt=""
+            />
+          </Col>
+          <Col>
+            <Text className="white">All depots</Text>
+          </Col>
+        </Row>
+
         {data?.payload?.map((depot) => (
           <Row
             className="p-4 cursor-pointer"

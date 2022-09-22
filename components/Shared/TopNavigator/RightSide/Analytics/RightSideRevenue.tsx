@@ -5,20 +5,17 @@ import Input from "../../../../Shared/Input";
 
 const RightSideRevenue: FC<RightSideRevenueTypes> = ({
   onStartDateChange,
-  onEndDateChange
+  onEndDateChange,
+  onLastWeekChange
 }) => {
   return (
     <>
       <Input
-        type="select"
-        label=""
+        picker="week"
+        onDateChange={onLastWeekChange}
+        type="date"
+        name="Start"
         placeholder="Show: Last 7 days"
-        options={[
-          { label: "Item one", value: "one" },
-          { label: "Item two", value: "two" },
-          { label: "Item three", value: "three" }
-        ]}
-        name="sort"
         suffixIcon={
           <Image
             preview={false}

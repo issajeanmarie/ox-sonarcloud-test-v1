@@ -121,28 +121,32 @@ const ClientsTable: FC<ClientsTableProps> = ({
       render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
         <RowsWrapper>
           <div className="flex justify-start items-center gap-4">
-            <CustomButton
-              onClick={() => showModal(setItemToDelete(record?.id))}
-              type="danger"
-              size="icon"
-              icon={
-                <Image
-                  src="/icons/ic-actions-remove.svg"
-                  alt="OX Delivery Logo"
-                  width={12}
-                  preview={false}
-                />
-              }
-            />
-            <CustomButton
-              onClick={() =>
-                changeRoute(`${routes.Client.url}?client=${record?.id}`)
-              }
-              type="view"
-              size="small"
-            >
-              View
-            </CustomButton>
+            <div className="h-1 flex items-center">
+              <CustomButton
+                onClick={() => showModal(setItemToDelete(record?.id))}
+                type="danger"
+                size="icon"
+                icon={
+                  <Image
+                    src="/icons/ic-actions-remove.svg"
+                    alt="OX Delivery Logo"
+                    width={12}
+                    preview={false}
+                  />
+                }
+              />
+            </div>
+            <div className="h-1 flex items-center">
+              <CustomButton
+                onClick={() =>
+                  changeRoute(`${routes.Client.url}?client=${record?.id}`)
+                }
+                type="view"
+                size="small"
+              >
+                <span className="font-bold">View</span>
+              </CustomButton>
+            </div>
           </div>
         </RowsWrapper>
       )
@@ -153,7 +157,7 @@ const ClientsTable: FC<ClientsTableProps> = ({
       <Table
         className="data_table light_white_header light_white_table"
         columns={columns}
-        dataSource={clients?.content}
+        dataSource={clients}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}

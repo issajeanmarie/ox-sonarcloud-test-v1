@@ -1,22 +1,27 @@
-import { Image } from "antd";
+import { Image, Select } from "antd";
 import React, { FC } from "react";
+import { useDepotsQuery } from "../../../../../lib/api/endpoints/Depots/depotEndpoints";
 import { RightSideKPIsTypes } from "../../../../../lib/types/pageTypes/Analytics/RightSideKPIsTypes";
 import Input from "../../../../Shared/Input";
 
+const { Option } = Select;
+
 const RightSideKPIs: FC<RightSideKPIsTypes> = ({
   onStartDateChange,
-  onEndDateChange
+  onEndDateChange,
+  onLastWeekChange,
+  handleDepotChange
 }) => {
+  const { data, isLoading } = useDepotsQuery();
   return (
     <>
       <Input
+        onChange={handleDepotChange}
+        loading={isLoading}
         type="select"
         label=""
         placeholder="Depot: All depots"
-        options={[
-          { label: "Tyazo", value: "t" },
-          { label: "Kayove", value: "k" }
-        ]}
+        isGroupDropdown
         name="sort"
         suffixIcon={
           <Image
@@ -26,17 +31,21 @@ const RightSideKPIs: FC<RightSideKPIsTypes> = ({
             width={10}
           />
         }
-      />
+      >
+        <Option value="">All categories</Option>
+        {data?.payload?.map((item) => (
+          <Option value={item?.id} key={item?.name}>
+            {item?.name}
+          </Option>
+        ))}
+      </Input>
+
       <Input
-        type="select"
-        label=""
+        picker="week"
+        onDateChange={onLastWeekChange}
+        type="date"
+        name="Start"
         placeholder="Show: Last week"
-        options={[
-          { label: "Item one", value: "one" },
-          { label: "Item two", value: "two" },
-          { label: "Item three", value: "three" }
-        ]}
-        name="sort"
         suffixIcon={
           <Image
             preview={false}

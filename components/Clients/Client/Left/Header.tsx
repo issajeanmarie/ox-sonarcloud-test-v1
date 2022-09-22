@@ -16,7 +16,7 @@ const Header: FC<HeaderTypes> = ({
   totalPending
 }) => {
   return (
-    <Row className="bg-white py-4 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1] flex justify-between">
+    <Row className="bg-white py-4 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1] flex justify-between sticky top-0 z-10">
       <Col className="flex items-center gap-4">
         <span className="font-bold">
           Order history (

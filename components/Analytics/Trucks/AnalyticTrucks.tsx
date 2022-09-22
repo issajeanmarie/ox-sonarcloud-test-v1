@@ -132,7 +132,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
           ))}
         </>
       ) : (
-        <>
+        <div className="mb-10">
           <TrucksUsageTable
             truckData={truckData?.payload?.truckAnalytics}
             truckFetching={truckFetching}
@@ -144,7 +144,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
               </CustomButton>
             </div>
           </div> */}
-        </>
+        </div>
       )}
     </>
   );

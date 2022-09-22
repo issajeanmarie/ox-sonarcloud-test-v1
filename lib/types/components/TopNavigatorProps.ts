@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Header_Links } from "../links";
 
 export type date = {
@@ -11,4 +12,6 @@ export interface TopNavigatorProps {
   toggleActiveHandler: (menuID: string) => void;
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
+  onLastWeekChange: (_: string, date: string) => void;
+  handleDepotChange: (value: any) => void;
 }

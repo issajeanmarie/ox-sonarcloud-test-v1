@@ -155,6 +155,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
             />
           }
         >
+          <Option value="">All categories</Option>
           {categories?.map((item: ObjectTypes) => (
             <Option value={item?.id} key={item?.name}>
               {item?.name}
