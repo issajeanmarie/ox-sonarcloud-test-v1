@@ -24,11 +24,15 @@ const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({
       key: "name",
       render: (
         text: SettingsKPIsTableTypes,
-        record: SettingsKPIsTableTypes
+        record: SettingsKPIsTableTypes,
+        index: number
       ) => (
         <RowsWrapper>
           <div className="flex gap-10">
-            <Text className="normalText opacity_56">{record.depotId}</Text>
+            <Text className="normalText opacity_56">{++index}</Text>
+            <Text className="normalText opacity_56" style={{ display: "none" }}>
+              {record.depotId}
+            </Text>
             <Text className="normalText fowe700">{record.depotName}</Text>
           </div>
         </RowsWrapper>

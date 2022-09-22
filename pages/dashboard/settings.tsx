@@ -53,7 +53,6 @@ const Settings = () => {
     useUpdateCategoryMutation();
   const [makeCategoryParent, { isLoading: isParentingCategory }] =
     useMakeCategoryParentMutation();
-
   const [active, setActive] = useState<string>("preferences");
 
   const handlePostTargetPerDaykpi = (value: any) => {
@@ -71,6 +70,14 @@ const Settings = () => {
   const handleAddKPIs = () => {
     addKpi({
       kpis: data?.payload?.map((item: any) => {
+        const kpiArr = [];
+        kpiArr.push({
+          depotId: item?.depotId,
+          depotName: item?.depotName,
+          targetPerKm: targetPerDaykpi,
+          targetPerKmkpi: targetPerKmkpi
+        });
+
         return {
           depotId: item?.depotId,
           depotName: item?.depotName,
