@@ -26,10 +26,6 @@ const ClientLocations: FC<ClientLocationsTypes> = ({
     name: string;
     coordinates: LatLng;
   }>();
-  const [locationName, setLocationName] = useState<{
-    name: string;
-    coordinates: LatLng;
-  }>();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -38,12 +34,12 @@ const ClientLocations: FC<ClientLocationsTypes> = ({
   const [postClientLocation, { isLoading: isPostingLocation }] =
     usePostClientLocationMutation();
 
-  const onAddClientLocationFinish = () => {
+  const onAddClientLocationFinish = (value: any) => {
     postClientLocation({
       id: client?.id,
       location: location ? location?.name : "",
       coordinates: location ? JSON.stringify(location?.coordinates) : "",
-      names: locationName ? locationName?.name : "",
+      names: value?.names,
       type: "BRANCH"
     })
       .unwrap()
@@ -52,7 +48,6 @@ const ClientLocations: FC<ClientLocationsTypes> = ({
         setIsModalVisible(false);
         form.resetFields();
         setLocation(undefined);
-        setLocationName(undefined);
       })
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
@@ -111,8 +106,6 @@ const ClientLocations: FC<ClientLocationsTypes> = ({
           isLoading={isPostingLocation}
           setLocation={setLocation}
           location={location}
-          setLocationName={setLocationName}
-          locationName={locationName}
           form={form}
         />
       </ModalWrapper>

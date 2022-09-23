@@ -40,9 +40,13 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
       ) : (
         <div className="mb-10">
           <ClientOrderHistoryTable
-            orders={clientOrders?.orders?.content?.concat(
-              moreClientOrders?.orders?.content
-            )}
+            orders={
+              moreClientOrders?.length === 0
+                ? clientOrders?.orders?.content
+                : clientOrders?.orders?.content?.concat(
+                    moreClientOrders?.orders?.content
+                  )
+            }
             isClientOrdersFetching={isClientOrdersFetching}
           />
         </div>

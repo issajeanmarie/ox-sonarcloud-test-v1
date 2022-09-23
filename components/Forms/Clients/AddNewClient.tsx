@@ -18,8 +18,7 @@ const AddNewClient: FC<AddClientTypes> = ({
   isLoading,
   setLocation,
   location,
-  officeName,
-  setOfficeName,
+  handleChangeOfficeName,
   form,
   mainLocation,
   setMainLocation
@@ -149,12 +148,12 @@ const AddNewClient: FC<AddClientTypes> = ({
       >
         <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
           <Input
+            onChange={handleChangeOfficeName}
             name="officeName"
-            type="location"
+            type="text"
             label="Name"
             placeholder="Office name"
-            setLocation={setOfficeName}
-            location={officeName}
+            // rules={requiredInput}
           />
         </Col>
 
@@ -169,7 +168,7 @@ const AddNewClient: FC<AddClientTypes> = ({
           />
         </Col>
         <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-          {!location || Object.keys(location).length === 0 || !officeName ? (
+          {!location || Object.keys(location).length === 0 ? (
             <Popover
               placement="left"
               content={
