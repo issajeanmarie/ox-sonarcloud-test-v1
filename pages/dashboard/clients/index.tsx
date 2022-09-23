@@ -29,7 +29,7 @@ const Clients = () => {
   const [sortValue, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
   const [pageSize, setPageSize] = useState(20);
-  const [moreClients, setMoreClients] = useState([]);
+  const [moreClients, setMoreClients] = useState<any>([]);
 
   const {
     data: Allclients,
