@@ -1,14 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Row, Divider } from "antd";
 import Typography from "antd/lib/typography";
 import Card from "antd/lib/card";
 import CustomInput from "../../components/Shared/Input";
 import Form from "antd/lib/form";
-// import CustomPhoneInput from "../../components/Shared/Custom/CustomPhoneInput";
-import Image from "antd/lib/image";
 import Button from "../Shared/Button";
-// import Loader from "../Shared/Loader";
 import { ProfileTypes, PasswordTypes } from "../../lib/types/settings";
 import {
   useSettingsQuery,
@@ -18,6 +15,7 @@ import {
 import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
 import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
+import ImageUploader from "../Shared/Input/imageUploader2";
 
 /**
  * @author Elie K. Gashagaza <gashagaza@awesomity.rw>
@@ -26,22 +24,32 @@ import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 
 const { Text } = Typography;
 
-// interface userData {
-//   userProfile: ProfileResponse;
-// }
 const ProfileInfo = () => {
   const [personalInfo, { isLoading: personalLoading }] =
     usePersonalInfoMutation();
   const [changePassword] = useChangePasswordMutation();
 
   const { data, isLoading, isFetching } = useSettingsQuery();
-  // const [phoneNumber, setPhoneNumber] = useState("");
-  // const [validatePhone] = useState(false);
-  // const [images, setImages] = useState<any[]>([]);
 
   // Forms
   const [form] = Form.useForm();
   const [formChangePassword] = Form.useForm();
+
+  // Image Upload
+  const [uploadLoading, setUploadLoading] = useState(false);
+  const [uploadFailure, setUploadFailure] = useState(null);
+  const [uploadedPicInfo, setUploadedPicInfo] = useState(null);
+  const [, setUploadSuccess] = useState(false);
+  const [allIMGs, setAllIMGs] = useState([]);
+
+  useEffect(() => {
+    if (uploadedPicInfo) {
+      const imagesCopy = [...allIMGs];
+      imagesCopy.push(uploadedPicInfo);
+
+      setAllIMGs(imagesCopy);
+    }
+  }, [uploadedPicInfo]);
 
   useEffect(() => {
     form.setFieldsValue(data?.payload);
@@ -51,7 +59,8 @@ const ProfileInfo = () => {
   const profileInfo = (values: ProfileTypes) => {
     personalInfo({
       names: values?.names,
-      phone: values?.phone
+      phone: values?.phone,
+      profilePic: uploadedPicInfo
     })
       .unwrap()
       .then((res: GenericResponse) => {
@@ -89,15 +98,19 @@ const ProfileInfo = () => {
         <span>Loading</span>
       ) : (
         <div className=" items-center">
-          <Row gutter={2}>
+          <Row gutter={28}>
             <Col span={9}>
-              <Image
-                preview={false}
-                width={150}
-                height={100}
+              <ImageUploader
+                uploadLoading={uploadLoading}
+                setUploadLoading={setUploadLoading}
+                uploadFailure={uploadFailure}
+                setUploadFailure={setUploadFailure}
+                uploadedPicInfo={uploadedPicInfo}
+                setUploadedPicInfo={setUploadedPicInfo}
+                setUploadSuccess={setUploadSuccess}
+                allIMGs={allIMGs}
+                setAllIMGs={setAllIMGs}
                 src={data?.payload?.profilePic}
-                style={{ borderRadius: "4px" }}
-                alt="Profile picture"
               />
             </Col>
             {/* Personal Info TABLE */}
@@ -107,6 +120,10 @@ const ProfileInfo = () => {
               </p>
               <p>
                 <Text className="txt-small">{data?.payload?.role}</Text>
+              </p>
+
+              <p>
+                <Text className="txt-small">{data?.payload?.email}</Text>
               </p>
               <label htmlFor="imageUpload">
                 <u>Edit Profile Picture</u>

@@ -81,12 +81,12 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
           <CustomButton
             className="make_parent_category"
             onClick={() => handleMakeCategoryParent(record?.id)}
-            type="secondary"
+            type="normal"
             size="icon"
             loading={isParentingCategory}
             icon={
               <Image
-                src="/icons/keyboard_forwad_black_24dp.svg"
+                src="/icons/movement.svg"
                 alt="OX Delivery Logo"
                 width={18}
                 preview={false}

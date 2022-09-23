@@ -19,6 +19,7 @@ export type ProfileResponse = {
 export type ProfileTypes = {
   names: string;
   phone: string;
+  profilePic: string | null;
 };
 
 export type PasswordTypes = {

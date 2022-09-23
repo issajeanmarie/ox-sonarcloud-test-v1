@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import Layout from "../../components/Shared/Layout";
 import WithPrivateRoute from "../../components/Shared/Routes/WithPrivateRoute";
-import { Header_Links } from "../../lib/types/links";
+import { SettingsLinks } from "../../components/Settings/SettingsLinks";
 import { Row, Col, Typography, Image } from "antd";
 import PersonalInfo from "../../components/PersonalInfo";
+import OxApp from "../../components/OxApp";
 import SettingsKPIsTable from "../../components/Tables/Settings/SettingsKPIsTable";
 import SettingsCardWrapper from "../../components/Settings/SettingsCardWrapper";
 import CustomButton from "../../components/Shared/Button/button";
@@ -52,17 +53,7 @@ const Settings = () => {
     useUpdateCategoryMutation();
   const [makeCategoryParent, { isLoading: isParentingCategory }] =
     useMakeCategoryParentMutation();
-  const Links: Header_Links[] = [
-    {
-      label: "PREFERENCES",
-      id: "preferences"
-    },
-    {
-      label: "OX APP",
-      id: "oxapp"
-    }
-  ];
-  const [active, setActive] = useState<string>("trucks");
+  const [active, setActive] = useState<string>("preferences");
 
   const handlePostTargetPerDaykpi = (value: any) => {
     setTargetPerDaykpi(value);
@@ -79,6 +70,14 @@ const Settings = () => {
   const handleAddKPIs = () => {
     addKpi({
       kpis: data?.payload?.map((item: any) => {
+        const kpiArr = [];
+        kpiArr.push({
+          depotId: item?.depotId,
+          depotName: item?.depotName,
+          targetPerKm: targetPerDaykpi,
+          targetPerKmkpi: targetPerKmkpi
+        });
+
         return {
           depotId: item?.depotId,
           depotName: item?.depotName,
@@ -177,7 +176,7 @@ const Settings = () => {
   return (
     <Layout>
       <SettingsTopNavigator
-        headerLinks={Links}
+        headerLinks={SettingsLinks}
         setActive={setActive}
         active={active}
         toggleActiveHandler={toggleActiveHandler}
@@ -185,98 +184,107 @@ const Settings = () => {
 
       <div className=" w-[100%] my-5">
         <Row className="p-5 mt-5" gutter={18}>
-          <Col span={14}>
-            <SettingsCardWrapper>
-              <div className="mb-4">
-                <Text className="mediumText">KPIs (Daily target)</Text>
-              </div>
-              {isLoading ? (
-                "loading..."
-              ) : (
-                <SettingsKPIsTable
-                  data={data?.payload}
-                  handlePostTargetPerDaykpi={handlePostTargetPerDaykpi}
-                  handlePostTargetPerKmykpi={handlePostTargetPerKmykpi}
-                />
-              )}
-
-              {!isLoading && (
-                <Row className="flex justify-end mt-4">
-                  <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}>
-                    <CustomButton
-                      onClick={handleAddKPIs}
-                      loading={isAddingKPIs}
-                      type="primary"
-                    >
-                      SAVE
-                    </CustomButton>
-                  </Col>
-                </Row>
-              )}
-            </SettingsCardWrapper>
-
-            <SettingsCardWrapper>
-              <div className="mb-4">
-                <Text className="mediumText">
-                  Categories (
-                  {categoriesLoading || categoriesFetching ? (
-                    <SmallSpinLoader />
-                  ) : (
-                    categories?.payload?.length
-                  )}
-                  )
-                </Text>
-              </div>
-
-              <Row className="flex justify-between items-center mb-4 border-b pb-4">
-                <Col>
-                  <Input
-                    type="text"
-                    name="search"
-                    placeholder="Search category"
-                    suffixIcon={
-                      <Image
-                        width={14}
-                        src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
-                        preview={false}
-                        alt=""
-                      />
-                    }
+          {active === "preferences" && (
+            <Col span={14}>
+              <SettingsCardWrapper>
+                <div className="mb-4">
+                  <Text className="mediumText">KPIs (Daily target)</Text>
+                </div>
+                {isLoading ? (
+                  "loading..."
+                ) : (
+                  <SettingsKPIsTable
+                    data={data?.payload}
+                    handlePostTargetPerDaykpi={handlePostTargetPerDaykpi}
+                    handlePostTargetPerKmykpi={handlePostTargetPerKmykpi}
                   />
-                </Col>
-                <AddCategory
-                  onAddCategoryFinish={onAddCategoryFinish}
-                  isAddingCategory={isAddingCategory}
-                />
-              </Row>
+                )}
 
-              {categoriesLoading ? (
-                "loading.."
-              ) : (
-                <SettingsCategoriesTable
-                  data={categories?.payload}
-                  onAddCategoryFinish={onAddCategoryFinish}
-                  isAddingCategory={isAddingCategory}
-                  showModal={showModal}
-                  handleOk={handleOk}
-                  handleCancel={handleCancel}
-                  isModalVisible={isModalVisible}
-                  handleDeleteCategory={handleDeleteCategory}
-                  isDeletinCategory={isDeletinCategory}
-                  isUpdatingCategory={isUpdatingCategory}
-                  onUpdateCategoryFinish={onUpdateCategoryFinish}
-                  showEditModal={showEditModal}
-                  handleEditOk={handleEditOk}
-                  handleEditCancel={handleEditCancel}
-                  isEditModalVisible={isEditModalVisible}
-                  form={form}
-                  categoriesFetching={categoriesFetching}
-                  handleMakeCategoryParent={handleMakeCategoryParent}
-                  isParentingCategory={isParentingCategory}
-                />
-              )}
-            </SettingsCardWrapper>
-          </Col>
+                {!isLoading && (
+                  <Row className="flex justify-end mt-4">
+                    <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}>
+                      <CustomButton
+                        onClick={handleAddKPIs}
+                        loading={isAddingKPIs}
+                        type="primary"
+                      >
+                        SAVE
+                      </CustomButton>
+                    </Col>
+                  </Row>
+                )}
+              </SettingsCardWrapper>
+
+              <SettingsCardWrapper>
+                <div className="mb-4">
+                  <Text className="mediumText">
+                    Categories (
+                    {categoriesLoading || categoriesFetching ? (
+                      <SmallSpinLoader />
+                    ) : (
+                      categories?.payload?.length
+                    )}
+                    )
+                  </Text>
+                </div>
+
+                <Row className="flex justify-between items-center mb-4 border-b pb-4">
+                  <Col>
+                    <Input
+                      type="text"
+                      name="search"
+                      placeholder="Search category"
+                      suffixIcon={
+                        <Image
+                          width={14}
+                          src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
+                          preview={false}
+                          alt=""
+                        />
+                      }
+                    />
+                  </Col>
+                  <AddCategory
+                    onAddCategoryFinish={onAddCategoryFinish}
+                    isAddingCategory={isAddingCategory}
+                  />
+                </Row>
+
+                {categoriesLoading ? (
+                  "loading.."
+                ) : (
+                  <SettingsCategoriesTable
+                    data={categories?.payload}
+                    onAddCategoryFinish={onAddCategoryFinish}
+                    isAddingCategory={isAddingCategory}
+                    showModal={showModal}
+                    handleOk={handleOk}
+                    handleCancel={handleCancel}
+                    isModalVisible={isModalVisible}
+                    handleDeleteCategory={handleDeleteCategory}
+                    isDeletinCategory={isDeletinCategory}
+                    isUpdatingCategory={isUpdatingCategory}
+                    onUpdateCategoryFinish={onUpdateCategoryFinish}
+                    showEditModal={showEditModal}
+                    handleEditOk={handleEditOk}
+                    handleEditCancel={handleEditCancel}
+                    isEditModalVisible={isEditModalVisible}
+                    form={form}
+                    categoriesFetching={categoriesFetching}
+                    handleMakeCategoryParent={handleMakeCategoryParent}
+                    isParentingCategory={isParentingCategory}
+                  />
+                )}
+              </SettingsCardWrapper>
+            </Col>
+          )}
+          {active === "oxapp" && (
+            <Col span={14}>
+              <SettingsCardWrapper>
+                <OxApp />
+              </SettingsCardWrapper>
+            </Col>
+          )}
           <Col span={10}>
             <PersonalInfo />
           </Col>

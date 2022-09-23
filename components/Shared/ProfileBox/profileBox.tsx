@@ -48,7 +48,7 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
               className="rounded img_fit"
               width={64}
               height={64}
-              src="/icons/Social media icon.jpg"
+              src={data?.payload?.profilePic}
               preview={false}
               alt=""
             />
@@ -121,7 +121,7 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
             className="rounded img_fit"
             width={30}
             height={30}
-            src="/icons/Social media icon.jpg"
+            src={data?.payload?.profilePic}
             preview={false}
             alt=""
           />
