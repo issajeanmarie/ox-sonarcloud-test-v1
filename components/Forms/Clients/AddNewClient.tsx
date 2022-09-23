@@ -144,7 +144,7 @@ const AddNewClient: FC<AddClientTypes> = ({
           <Input
             onChange={handleChangeOfficeName}
             name="officeName"
-            type="location"
+            type="text"
             label="Name"
             placeholder="Office name"
             // rules={requiredInput}
