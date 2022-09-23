@@ -23,7 +23,7 @@ const Clients = () => {
   const [sort, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
   const [pageSize, setPageSize] = useState(20);
-  const [moreClients, setMoreClients] = useState([]);
+  const [moreClients, setMoreClients] = useState<any>([]);
 
   const {
     data: Allclients,
@@ -140,7 +140,11 @@ const Clients = () => {
             isModalVisible={isWarningModalVisible}
             showModal={showWarningModal}
             setIsModalVisible={setIsWarningModalVisible}
-            clients={Allclients?.payload?.content?.concat(moreClients)}
+            clients={
+              moreClients?.length === 0
+                ? Allclients?.payload?.content
+                : Allclients?.payload?.content?.concat(moreClients?.content)
+            }
             isClientsFetching={isClientsFetching}
           />
         )}
