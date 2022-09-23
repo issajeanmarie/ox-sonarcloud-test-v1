@@ -3,15 +3,14 @@ import React, { FC } from "react";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import { AddClientLocationTypes } from "../../../lib/types/pageTypes/Clients/AddClientLocationTypes";
+import { requiredInput } from "../../../lib/validation/InputValidations";
 
 const AddClientLocation: FC<AddClientLocationTypes> = ({
   onAddClientLocationFinish,
   isLoading,
   setLocation,
   location,
-  form,
-  locationName,
-  setLocationName
+  form
 }) => {
   return (
     <Form
@@ -36,18 +35,17 @@ const AddClientLocation: FC<AddClientLocationTypes> = ({
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <Input
             name="names"
-            type="location"
+            type="text"
             label="Names"
-            placeholder="Search location name"
-            setLocation={setLocationName}
-            location={locationName}
+            placeholder="Location name"
+            rules={requiredInput}
           />
         </Col>
       </Row>
 
       <Row justify="end" className="mt-7">
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          {!location || !locationName ? (
+          {!location ? (
             <Popover
               placement="left"
               content={

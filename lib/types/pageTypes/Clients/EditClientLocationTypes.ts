@@ -20,19 +20,4 @@ export type EditClientLocationTypes = {
         coordinates: LatLng;
       }
     | undefined;
-  setLocationName: React.Dispatch<
-    React.SetStateAction<
-      | {
-          name: string;
-          coordinates: LatLng;
-        }
-      | undefined
-    >
-  >;
-  locationName:
-    | {
-        name: string;
-        coordinates: LatLng;
-      }
-    | undefined;
 };

@@ -46,19 +46,6 @@ export type AddClientTypes = {
         coordinates: LatLng;
       }
     | undefined;
-  setOfficeName: React.Dispatch<
-    React.SetStateAction<
-      | {
-          name: string;
-          coordinates: LatLng;
-        }
-      | undefined
-    >
-  >;
-  officeName:
-    | {
-        name: string;
-        coordinates: LatLng;
-      }
-    | undefined;
+
+  handleChangeOfficeName: (value: string) => void;
 };

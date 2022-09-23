@@ -47,10 +47,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
     name: string;
     coordinates: LatLng;
   }>();
-  const [officeName, setOfficeName] = useState<{
-    name: string;
-    coordinates: LatLng;
-  }>();
+  const [officeName, setOfficeName] = useState("");
   const [postClient, { isLoading }] = usePostClientMutation();
 
   // ADD CLIENT
@@ -61,12 +58,16 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         id: offices.length + 1,
         location: location ? location?.name : "",
         coordinates: location ? JSON.stringify(location?.coordinates) : "",
-        names: officeName ? officeName?.name : ""
+        names: officeName
         // type: "HQ"
       }
     ]);
     form.resetFields(["officeName"]);
     setLocation(undefined);
+  };
+
+  const handleChangeOfficeName = (value: string) => {
+    setOfficeName(value);
   };
 
   const onAddClientFinish = (values: any) => {
@@ -86,7 +87,6 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         SuccessMessage(res?.message);
         setOffices([]);
         setMainLocation(undefined);
-        setOfficeName(undefined);
         form.resetFields();
         setIsModalVisible(false);
       })
@@ -214,8 +214,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
           location={location}
           setMainLocation={setMainLocation}
           mainLocation={mainLocation}
-          officeName={officeName}
-          setOfficeName={setOfficeName}
+          handleChangeOfficeName={handleChangeOfficeName}
           form={form}
         />
       </ModalWrapper>
