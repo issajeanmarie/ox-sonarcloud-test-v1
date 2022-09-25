@@ -184,9 +184,23 @@ const DriversTable: FC<DriversTableProps> = ({
                     onClick={() => handleMakeDispatcher(record?.id)}
                     style={{ marginBottom: "0.5rem" }}
                   >
-                    {record?.role === "DISPATCHER"
-                      ? "Remove dispatcher role"
-                      : "Make dispatcher"}
+                    {record?.role === "DISPATCHER" ? (
+                      <div className="flex flex-col">
+                        <span>Deny the dispatcher role</span>
+                        <span>
+                          from{" "}
+                          <span className="font-bold">{record?.names}</span>{" "}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col">
+                        <span>
+                          Make{" "}
+                          <span className="font-bold">{record?.names}</span>
+                        </span>
+                        <span> a dispatcher</span>
+                      </div>
+                    )}
                   </Menu.Item>
                 </Menu>
               }
