@@ -40,6 +40,18 @@ const Admins = () => {
 
   const dispatch = useDispatch();
 
+  const router = useRouter();
+  const { query } = useRouter();
+
+  useEffect(() => {
+    if (router.isReady) {
+      if (Object.keys(query).length === 0 || !query.tb) {
+        changeRoute(`${routes.Accounts.url}?tb=DRIVERS`);
+        setActive("DRIVERS");
+      }
+    }
+  }, [router.isReady, query, router, query?.tb]);
+
   const toggleActiveHandler = (id: string) => {
     setActive(id);
     id === "DRIVERS" && changeRoute(`${routes.Accounts.url}?tb=DRIVERS`);
