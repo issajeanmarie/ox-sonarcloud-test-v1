@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminsTable from "../../../components/Tables/Accounts/AdminsTable";
 import AdminsTopNavigator from "../../../components/Accounts/AdminsTopNavigator";
 import Layout from "../../../components/Shared/Layout";
@@ -14,19 +14,32 @@ import AllAccountsTopNavigator from "../../../components/Accounts/AllAccountsTop
 import { AccountLinks } from "../../../components/Accounts/AccountLinks";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
+import { useRouter } from "next/router";
 
 const Admins = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [active, setActive] = useState<string>("AdminS");
+  const [active, setActive] = useState<string>("ADMINS");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
   const [pageSize, setPageSize] = useState(20);
   const [moreAdmins, setMoreAdmins] = useState<any>([]);
 
+  const router = useRouter();
+  const { query } = useRouter();
+
+  useEffect(() => {
+    if (router.isReady) {
+      if (Object.keys(query).length === 0 || !query.tb) {
+        changeRoute(`${routes.Accounts.url}?tb=DRIVERS`);
+        setActive("DRIVERS");
+      }
+    }
+  }, [router.isReady, query, router, query?.tb]);
+
   const toggleActiveHandler = (id: string) => {
     setActive(id);
-    id === "DRIVERS" && changeRoute(routes.Accounts.url);
-    id === "AGENTS" && changeRoute(routes.Agents.url);
-    id === "ADMINS" && changeRoute(routes.Admins.url);
+    id === "DRIVERS" && changeRoute(`${routes.Accounts.url}?tb=DRIVERS`);
+    id === "AGENTS" && changeRoute(`${routes.Agents.url}?tb=AGENTS`);
+    id === "ADMINS" && changeRoute(`${routes.Admins.url}?tb=ADMINS`);
   };
 
   const {

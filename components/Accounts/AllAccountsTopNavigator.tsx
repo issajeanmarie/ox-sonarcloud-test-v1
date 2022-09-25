@@ -1,18 +1,20 @@
 import { FC, useEffect } from "react";
 import { Typography } from "antd";
 import { AllAccountsTopNavigatorProps } from "../../lib/types/components/AllAccountsTopNavigatorProps";
+import { useRouter } from "next/router";
 
 const { Text } = Typography;
 
 const AllAccountsTopNavigator: FC<AllAccountsTopNavigatorProps> = ({
   headerLinks,
   setActive,
-  active,
   toggleActiveHandler
 }) => {
   useEffect(() => {
     headerLinks && setActive && setActive(headerLinks[0].id);
   }, [headerLinks, setActive]);
+
+  const { query } = useRouter();
 
   return (
     <div
@@ -25,11 +27,13 @@ const AllAccountsTopNavigator: FC<AllAccountsTopNavigatorProps> = ({
             <button
               key={index}
               className={`py-4 cursor-pointer text-sm ${
-                active === link.id && "border-b-4 border-ox-yellow"
+                query?.tb === link.id && "border-b-4 border-ox-yellow"
               }`}
               onClick={() => toggleActiveHandler(link.id)}
             >
-              <Text className={`${active === link.id && "font-bold"} animate`}>
+              <Text
+                className={`${query?.tb === link.id && "font-bold"} animate`}
+              >
                 {link.label}
               </Text>
             </button>
