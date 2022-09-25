@@ -21,7 +21,8 @@ export const baseAPI = createApi({
     "Trucks",
     "Settings",
     "Tags",
-    "Drivers"
+    "Drivers",
+    "Agents"
   ],
   endpoints: () => ({})
 });

@@ -4,21 +4,21 @@ import {
   emailValidationNotRequired,
   phoneValidation,
   requiredInput
-} from "../../../lib/validation/InputValidations";
-import Input from "../../Shared/Input";
-import Button from "../../Shared/Button";
-import { AddDriverTypes } from "../../../lib/types/pageTypes/Drivers/AddDriverTypes";
+} from "../../../../lib/validation/InputValidations";
+import Input from "../../../Shared/Input";
+import Button from "../../../Shared/Button";
+import { EditAgentTypes } from "../../../../lib/types/pageTypes/Accounts/Agents/EditAgentTypes";
 
-const AddNewDriver: FC<AddDriverTypes> = ({
-  onAddDriverFinish,
+const EditAgent: FC<EditAgentTypes> = ({
+  onEditAgentFinish,
   isLoading,
   form
 }) => {
   return (
     <Form
-      onFinish={onAddDriverFinish}
+      onFinish={onEditAgentFinish}
       form={form}
-      name="AddNewDriver"
+      name="EditAgent"
       layout="vertical"
       title=""
     >
@@ -55,28 +55,6 @@ const AddNewDriver: FC<AddDriverTypes> = ({
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
-            type="select"
-            label="Driving License"
-            placeholder="Select driving license"
-            options={[
-              { label: "Category A", value: "A" },
-              { label: "Category B", value: "B" }
-            ]}
-            name="drivingLicense"
-            suffixIcon={
-              <Image
-                preview={false}
-                src="/icons/expand_more_black_24dp.svg"
-                alt=""
-                width={10}
-              />
-            }
-            rules={requiredInput}
-          />
-        </Col>
-
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
             rules={requiredInput}
             type="select"
             label="Gender"
@@ -96,21 +74,12 @@ const AddNewDriver: FC<AddDriverTypes> = ({
             }
           />
         </Col>
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
-            name="password"
-            type="password"
-            label="Password"
-            placeholder="*************"
-            rules={requiredInput}
-          />
-        </Col>
       </Row>
 
       <Row justify="end" className="mt-7">
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
           <Button loading={isLoading} type="primary" htmlType="submit">
-            ADD DRIVER
+            SAVE CHANGES
           </Button>
         </Col>
       </Row>
@@ -118,4 +87,4 @@ const AddNewDriver: FC<AddDriverTypes> = ({
   );
 };
 
-export default AddNewDriver;
+export default EditAgent;

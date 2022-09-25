@@ -39,6 +39,14 @@ export const routes = {
     name: "Accounts",
     url: "/dashboard/accounts"
   },
+  Agents: {
+    name: "Agents",
+    url: "/dashboard/accounts/agents"
+  },
+  Admins: {
+    name: "Admins",
+    url: "/dashboard/accounts/admins"
+  },
   Analytics: {
     name: "Analytics",
     url: "/dashboard/analytics"

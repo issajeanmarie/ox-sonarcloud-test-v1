@@ -5,9 +5,9 @@ import Input from "../Shared/Input";
 import CustomButton from "../Shared/Button/button";
 
 import { FC } from "react";
-import { DriversTopNavigatorTypes } from "../../lib/types/pageTypes/Drivers/DriversTopNavigatorTypes";
+import { DriversTopNavigatorTypes } from "../../lib/types/pageTypes/Accounts/Drivers/DriversTopNavigatorTypes";
 import ModalWrapper from "../Modals/ModalWrapper";
-import AddNewDriver from "../Forms/Drivers/AddNewDriver";
+import AddNewDriver from "../Forms/Accounts/Drivers/AddNewDriver";
 import { numbersFormatter } from "../../helpers/numbersFormatter";
 import { usePostDriverMutation } from "../../lib/api/endpoints/Accounts/driversEndpoints";
 import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";

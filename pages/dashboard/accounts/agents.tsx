@@ -1,29 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import DriversTable from "../../../components/Tables/Accounts/DriversTable";
-import DriversTopNavigator from "../../../components/Accounts/DriversTopNavigator";
+import AgentsTable from "../../../components/Tables/Accounts/AgentsTable";
+import AgentsTopNavigator from "../../../components/Accounts/AgentsTopNavigator";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import CustomButton from "../../../components/Shared/Button";
 import {
-  useDriversQuery,
-  useLazyDriversQuery
-} from "../../../lib/api/endpoints/Accounts/driversEndpoints";
+  useAgentsQuery,
+  useLazyAgentsQuery
+} from "../../../lib/api/endpoints/Accounts/agentsEndpoints";
 import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import AllAccountsTopNavigator from "../../../components/Accounts/AllAccountsTopNavigator";
 import { AccountLinks } from "../../../components/Accounts/AccountLinks";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 
-const Drivers = () => {
+const Agents = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [active, setActive] = useState<string>("DRIVERS");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter]: any = useState("ALL");
-  const [sort, setSort]: any = useState("");
+  const [active, setActive] = useState<string>("AgentS");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
   const [pageSize, setPageSize] = useState(20);
-  const [moreDrivers, setMoreDrivers] = useState<any>([]);
+  const [moreAgents, setMoreAgents] = useState<any>([]);
 
   const toggleActiveHandler = (id: string) => {
     setActive(id);
@@ -31,42 +28,27 @@ const Drivers = () => {
     id === "AGENTS" && changeRoute(routes.Agents.url);
     id === "ADMINS" && changeRoute(routes.Admins.url);
   };
+
   const {
-    data: AllDrivers,
-    isLoading: isDriversLoading,
-    isFetching: isDriversFetching
-  } = useDriversQuery({
+    data: AllAgents,
+    isLoading: isAgentsLoading,
+    isFetching: isAgentsFetching
+  } = useAgentsQuery({
     page: "",
-    size: pageSize,
-    sort: sort,
-    status: selectedFilter
+    size: pageSize
   });
 
-  const [Drivers, { isFetching: loadingMoreFetching }] = useLazyDriversQuery();
-
-  const handleSearch = (value: string) => {
-    setSearchQuery(value);
-    return searchQuery;
-  };
-
-  const onFilterChange = (status: string) => {
-    setSelectedFilter(status);
-  };
-  const onSortChange = (sorter: string) => {
-    setSort(sorter);
-  };
+  const [Agents, { isFetching: loadingMoreFetching }] = useLazyAgentsQuery();
 
   const handleLoadMore = () => {
-    Drivers({
+    Agents({
       page: "",
-      size: pageSize,
-      sort: sort,
-      status: selectedFilter
+      size: pageSize
     })
       .unwrap()
       .then((res) => {
         setPageSize(pageSize + 20);
-        setMoreDrivers(res?.payload);
+        setMoreAgents(res?.payload);
       })
       .catch((error) => {
         return error;
@@ -92,41 +74,38 @@ const Drivers = () => {
         toggleActiveHandler={toggleActiveHandler}
       />
       <div className="p-5 sticky top-0 right-0 left-0 z-30 bg-[#f8f8f8]">
-        <DriversTopNavigator
+        <AgentsTopNavigator
           isModalVisible={isModalVisible}
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
-          Drivers={AllDrivers?.payload}
-          isDriversLoading={isDriversLoading}
-          handleSearch={handleSearch}
-          onFilterChange={onFilterChange}
-          onSortChange={onSortChange}
+          Agents={AllAgents?.payload}
+          isAgentsLoading={isAgentsLoading}
         />
       </div>
       <div className="px-5">
-        {isDriversLoading ? (
+        {isAgentsLoading ? (
           <>
             {[...Array(20)].map((_, index) => (
               <ColsTableLoader key={index} />
             ))}
           </>
         ) : (
-          <DriversTable
+          <AgentsTable
             isModalVisible={isWarningModalVisible}
             showModal={showWarningModal}
             setIsModalVisible={setIsWarningModalVisible}
-            Drivers={
-              moreDrivers?.length === 0
-                ? AllDrivers?.payload?.content
-                : AllDrivers?.payload?.content?.concat(moreDrivers?.content)
+            Agents={
+              moreAgents?.length === 0
+                ? AllAgents?.payload?.content
+                : AllAgents?.payload?.content?.concat(moreAgents?.content)
             }
-            isDriversFetching={isDriversFetching}
+            isAgentsFetching={isAgentsFetching}
           />
         )}
 
         {pageSize > 19 &&
-          AllDrivers?.payload?.totalElements &&
-          AllDrivers?.payload?.totalElements >= pageSize && (
+          AllAgents?.payload?.totalElements &&
+          AllAgents?.payload?.totalElements >= pageSize && (
             <div style={{ width: "12%", margin: "32px auto" }}>
               <CustomButton
                 loading={loadingMoreFetching}
@@ -142,4 +121,4 @@ const Drivers = () => {
   );
 };
 
-export default WithPrivateRoute(Drivers);
+export default WithPrivateRoute(Agents);

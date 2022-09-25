@@ -1,58 +1,50 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Table from "antd/lib/table";
-import { Dropdown, Form, Menu } from "antd";
+import { Form } from "antd";
 import Typography from "antd/lib/typography";
-import { DriversTableTypes } from "../../../lib/types/pageTypes/Drivers/DriversTableTypes";
-import { DriversTableProps } from "../../../lib/types/pageTypes/Drivers/DriversTableProps";
+import { AgentsTableTypes } from "../../../lib/types/pageTypes/Accounts/Agents/AgentsTableTypes";
+import { AgentsTableProps } from "../../../lib/types/pageTypes/Accounts/Agents/AgentsTableProps";
 import RowsWrapper from "../RowsWrapper";
 import CustomButton from "../../Shared/Button";
 import { Image } from "antd";
 import { FC, SetStateAction, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
+import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import {
-  SmallSpinLoader,
-  TableOnActionLoading
-} from "../../Shared/Loaders/Loaders";
-import {
-  useDeleteDriverMutation,
-  useEditDriverMutation,
-  useMakeDriverDispatcherMutation,
-  useToggleDriverMutation
-} from "../../../lib/api/endpoints/Accounts/driversEndpoints";
+  useDeleteAgentMutation,
+  useEditAgentMutation,
+  useToggleAgentMutation
+} from "../../../lib/api/endpoints/Accounts/agentsEndpoints";
 import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import ModalWrapper from "../../Modals/ModalWrapper";
-import EditDriver from "../../Forms/Drivers/EditDriver";
+import EditAgent from "../../Forms/Accounts/Agents/EditAgent";
 
 const { Text } = Typography;
 
-const DriversTable: FC<DriversTableProps> = ({
+const AgentsTable: FC<AgentsTableProps> = ({
   isModalVisible,
   showModal,
   setIsModalVisible,
-  Drivers,
-  isDriversFetching
+  Agents,
+  isAgentsFetching
 }) => {
   const [form] = Form.useForm();
   const [itemToDelete, setItemToDelete] =
     useState<SetStateAction<number | undefined>>();
-  const [driverToToggle, setDriverToToggle] = useState();
-  const [driverToMakeDispatcher, setDriverToMakeDispatcher] = useState<
-    number | undefined
-  >();
+  const [AgentToToggle, setAgentToToggle] = useState();
+
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
 
-  const [deleteDriver, { isLoading }] = useDeleteDriverMutation();
-  const [editDriver, { isLoading: isEditing }] = useEditDriverMutation();
-  const [toggleDriver, { isLoading: isTooglingDriver }] =
-    useToggleDriverMutation();
-  const [makeDriverDispatcher, { isLoading: isMakingDispatcher }] =
-    useMakeDriverDispatcherMutation();
+  const [deleteAgent, { isLoading }] = useDeleteAgentMutation();
+  const [editAgent, { isLoading: isEditing }] = useEditAgentMutation();
+  const [toggleAgent, { isLoading: isTooglingAgent }] =
+    useToggleAgentMutation();
 
-  const handleDeleteDriver = () => {
-    deleteDriver({
+  const handleDeleteAgent = () => {
+    deleteAgent({
       id: itemToDelete
     })
       .unwrap()
@@ -70,8 +62,8 @@ const DriversTable: FC<DriversTableProps> = ({
     form.setFieldsValue(record);
   };
 
-  const onEditDriverFinish = (values: any) => {
-    editDriver({
+  const onEditAgentFinish = (values: any) => {
+    editAgent({
       names: values?.names,
       email: values?.email,
       phone: values?.phone,
@@ -94,23 +86,9 @@ const DriversTable: FC<DriversTableProps> = ({
   };
 
   //toggle
-  const hangleToggleDriver = (id: any) => {
-    setDriverToToggle(id);
-    toggleDriver({
-      id: id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
-  };
-
-  // make dispatcher
-
-  const handleMakeDispatcher = (id: number | undefined) => {
-    setDriverToMakeDispatcher(id);
-    makeDriverDispatcher({
+  const hangleToggleAgent = (id: any) => {
+    setAgentToToggle(id);
+    toggleAgent({
       id: id
     })
       .unwrap()
@@ -130,8 +108,8 @@ const DriversTable: FC<DriversTableProps> = ({
       ),
       key: "Names",
       render: (
-        text: DriversTableTypes,
-        record: DriversTableTypes,
+        text: AgentsTableTypes,
+        record: AgentsTableTypes,
         index: number
       ) => (
         <RowsWrapper>
@@ -145,7 +123,7 @@ const DriversTable: FC<DriversTableProps> = ({
     {
       title: "Phone number",
       key: "phoneNumber",
-      render: (text: DriversTableTypes, record: DriversTableTypes) => (
+      render: (text: AgentsTableTypes, record: AgentsTableTypes) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
             {record?.phone ? record?.phone : "---"}
@@ -156,7 +134,7 @@ const DriversTable: FC<DriversTableProps> = ({
     {
       title: "Email",
       key: "email",
-      render: (text: DriversTableTypes, record: DriversTableTypes) => (
+      render: (text: AgentsTableTypes, record: AgentsTableTypes) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
             {record?.email ? record?.email : "---"}
@@ -167,71 +145,16 @@ const DriversTable: FC<DriversTableProps> = ({
     {
       title: "Role",
       key: "Role",
-      render: (text: DriversTableTypes, record: DriversTableTypes) => (
+      render: (text: AgentsTableTypes, record: AgentsTableTypes) => (
         <RowsWrapper>
-          {isMakingDispatcher && driverToMakeDispatcher === record?.id ? (
-            <SmallSpinLoader />
-          ) : (
-            <Dropdown
-              overlay={
-                <Menu
-                  style={{
-                    marginTop: "15px",
-                    padding: "10px"
-                  }}
-                >
-                  <Menu.Item
-                    onClick={() => handleMakeDispatcher(record?.id)}
-                    style={{ marginBottom: "0.5rem" }}
-                  >
-                    {record?.role === "DISPATCHER" ? (
-                      <div className="flex flex-col">
-                        <span>Deny the dispatcher role</span>
-                        <span>
-                          from{" "}
-                          <span className="font-bold">{record?.names}</span>{" "}
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col">
-                        <span>
-                          Make{" "}
-                          <span className="font-bold">{record?.names}</span>
-                        </span>
-                        <span> a dispatcher</span>
-                      </div>
-                    )}
-                  </Menu.Item>
-                </Menu>
-              }
-              trigger={["click"]}
-            >
-              <div className="flex items-center gap-2 cursor-pointer">
-                <span
-                  className={`normalText ${
-                    record?.role === "DISPATCHER"
-                      ? "text-[#E3B221]"
-                      : "text-black"
-                  } fowe700`}
-                >
-                  {record?.role}
-                </span>
-                <Image
-                  preview={false}
-                  src="/icons/expand_more_black_24dp.svg"
-                  alt=""
-                  width={10}
-                />
-              </div>
-            </Dropdown>
-          )}
+          <Text className="normalText fowe700">{record?.role}</Text>
         </RowsWrapper>
       )
     },
     {
       title: "Status",
       key: "status",
-      render: (text: DriversTableTypes, record: DriversTableTypes) => (
+      render: (text: AgentsTableTypes, record: AgentsTableTypes) => (
         <RowsWrapper>
           {!record?.enabled ? (
             <Text className=" text-sm font-bold red">DEACTIVATED</Text>
@@ -249,15 +172,13 @@ const DriversTable: FC<DriversTableProps> = ({
       ),
       width: "100px",
       key: "Action",
-      render: (text: DriversTableTypes, record: DriversTableTypes) => (
+      render: (text: AgentsTableTypes, record: AgentsTableTypes) => (
         <RowsWrapper>
           <div className="flex justify-start items-center gap-4">
             <div className="h-1 flex items-center">
               <CustomButton
-                onClick={() => showEditModal(record)}
                 type="normal"
                 size="icon"
-                // loading={record?.id === isGetSingleTruckLoading}
                 icon={
                   <Image
                     src="/icons/ic-contact-edit.svg"
@@ -270,11 +191,26 @@ const DriversTable: FC<DriversTableProps> = ({
             </div>
             <div className="h-1 flex items-center">
               <CustomButton
-                onClick={() => hangleToggleDriver(record?.id)}
+                onClick={() => showEditModal(record)}
+                type="normal"
+                size="icon"
+                icon={
+                  <Image
+                    src="/icons/ic-contact-edit.svg"
+                    alt=""
+                    width={12}
+                    preview={false}
+                  />
+                }
+              />
+            </div>
+            <div className="h-1 flex items-center">
+              <CustomButton
+                onClick={() => hangleToggleAgent(record?.id)}
                 type="normal"
                 size="icon"
                 className="bg_danger"
-                loading={record?.id === driverToToggle && isTooglingDriver}
+                loading={record?.id === AgentToToggle && isTooglingAgent}
                 icon={
                   <Image
                     src={`/icons/ic-media-${
@@ -312,12 +248,12 @@ const DriversTable: FC<DriversTableProps> = ({
       <Table
         className="data_table light_white_header light_white_table"
         columns={columns}
-        dataSource={Drivers}
+        dataSource={Agents}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}
         scroll={{ x: 0 }}
-        loading={TableOnActionLoading(isDriversFetching)}
+        loading={TableOnActionLoading(isAgentsFetching)}
       />
 
       <ActionModal
@@ -327,18 +263,18 @@ const DriversTable: FC<DriversTableProps> = ({
         description="This action is not reversible, please make sure you really want to proceed with this action!"
         actionLabel="PROCEED"
         type="danger"
-        action={() => handleDeleteDriver()}
+        action={() => handleDeleteAgent()}
         loading={isLoading}
       />
 
       <ModalWrapper
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
-        title="EDIT DRIVER"
+        title="EDIT AGENT"
         loading={isEditing}
       >
-        <EditDriver
-          onEditDriverFinish={onEditDriverFinish}
+        <EditAgent
+          onEditAgentFinish={onEditAgentFinish}
           isLoading={isEditing}
           form={form}
         />
@@ -347,4 +283,4 @@ const DriversTable: FC<DriversTableProps> = ({
   );
 };
 
-export default DriversTable;
+export default AgentsTable;

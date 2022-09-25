@@ -4,10 +4,10 @@ import {
   emailValidationNotRequired,
   phoneValidation,
   requiredInput
-} from "../../../lib/validation/InputValidations";
-import Input from "../../Shared/Input";
-import Button from "../../Shared/Button";
-import { EditDriverTypes } from "../../../lib/types/pageTypes/Drivers/EditDriverTypes";
+} from "../../../../lib/validation/InputValidations";
+import Input from "../../../Shared/Input";
+import Button from "../../../Shared/Button";
+import { EditDriverTypes } from "../../../../lib/types/pageTypes/Accounts/Drivers/EditDriverTypes";
 
 const EditDriver: FC<EditDriverTypes> = ({
   onEditDriverFinish,
