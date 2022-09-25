@@ -261,7 +261,7 @@ const DriversTable: FC<DriversTableProps> = ({
                   <Image
                     src="/icons/ic-contact-edit.svg"
                     alt=""
-                    width={12}
+                    width={16}
                     preview={false}
                   />
                 }
@@ -293,9 +293,9 @@ const DriversTable: FC<DriversTableProps> = ({
                 size="icon"
                 icon={
                   <Image
-                    src="/icons/ic-actions-remove.svg"
+                    src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
                     alt="OX Delivery Logo"
-                    width={12}
+                    width={16}
                     preview={false}
                   />
                 }
@@ -333,7 +333,7 @@ const DriversTable: FC<DriversTableProps> = ({
       <ModalWrapper
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
-        title="EDIT DRIVER"
+        title={`EDIT ${itemToEdit?.names && itemToEdit?.names?.split(" ")[0]}`}
         loading={isEditing}
       >
         <EditDriver

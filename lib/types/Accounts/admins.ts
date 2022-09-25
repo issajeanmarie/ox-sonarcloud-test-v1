@@ -44,3 +44,7 @@ export type GetAdmins = {
 export type ToggleAdminRequest = {
   id: any;
 };
+
+export type ResetPWDAdminRequest = {
+  id: any;
+};

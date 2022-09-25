@@ -43,3 +43,7 @@ export type GetAgents = {
 export type ToggleAgentRequest = {
   id: any;
 };
+
+export type ResetPWDAgentRequest = {
+  id: any;
+};

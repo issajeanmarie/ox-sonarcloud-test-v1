@@ -5,6 +5,7 @@ import {
   EditAdminLocationRequest,
   GetAdmins,
   PostAdminRequest,
+  ResetPWDAdminRequest,
   ToggleAdminRequest
 } from "../../../types/Accounts/admins";
 import { ApiResponseMetadata } from "../../../types/shared";
@@ -69,6 +70,17 @@ const adminsEndpoints = baseAPI.injectEndpoints({
         method: "PATCH",
         body: DTO
       })
+    }),
+    sendResetPWDToAdmin: builder.mutation<
+      ApiResponseMetadata<Admin>,
+      ResetPWDAdminRequest
+    >({
+      invalidatesTags: ["Admins"],
+      query: (DTO) => ({
+        url: `/admins/${DTO?.id}/reset-password`,
+        method: "POST",
+        body: DTO
+      })
     })
   })
 });
@@ -79,5 +91,6 @@ export const {
   useDeleteAdminMutation,
   useEditAdminMutation,
   useToggleAdminMutation,
-  useLazyAdminsQuery
+  useLazyAdminsQuery,
+  useSendResetPWDToAdminMutation
 } = adminsEndpoints;

@@ -5,6 +5,7 @@ import {
   EditAgentLocationRequest,
   GetAgents,
   PostAgentRequest,
+  ResetPWDAgentRequest,
   ToggleAgentRequest
 } from "../../../types/Accounts/agents";
 import { ApiResponseMetadata } from "../../../types/shared";
@@ -69,6 +70,17 @@ const agentsEndpoints = baseAPI.injectEndpoints({
         method: "PATCH",
         body: DTO
       })
+    }),
+    sendResetPWDToAgent: builder.mutation<
+      ApiResponseMetadata<Agent>,
+      ResetPWDAgentRequest
+    >({
+      invalidatesTags: ["Agents"],
+      query: (DTO) => ({
+        url: `/agents/${DTO?.id}/reset-password`,
+        method: "POST",
+        body: DTO
+      })
     })
   })
 });
@@ -79,5 +91,6 @@ export const {
   useDeleteAgentMutation,
   useEditAgentMutation,
   useToggleAgentMutation,
-  useLazyAgentsQuery
+  useLazyAgentsQuery,
+  useSendResetPWDToAgentMutation
 } = agentsEndpoints;

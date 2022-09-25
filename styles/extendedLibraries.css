@@ -228,7 +228,7 @@
 .ox_medium_modal .ant-modal-body {
   max-height: 600px !important;
   overflow: auto !important;
-  padding-bottom: 24px !important;
+  padding-bottom: 40px !important;
 }
 
 /* TABLE WITH CHILDREN */
@@ -398,5 +398,13 @@
 .ant-tag .anticon > * {
   color: var(--color_yellow_faded) !important;
   display: flex !important;
+  align-items: center !important;
+}
+
+/* BUTTONS */
+
+.ant-btn.ant-btn-default.ant-btn-icon-only.my_button.icon {
+  display: flex !important;
+  justify-content: center !important;
   align-items: center !important;
 }

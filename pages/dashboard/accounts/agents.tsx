@@ -15,6 +15,10 @@ import { AccountLinks } from "../../../components/Accounts/AccountLinks";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
+import {
+  AccountsMenusNavigatorWrapper,
+  TableWrapper
+} from "../../../components/Accounts/Wrappers";
 
 const Agents = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -86,7 +90,7 @@ const Agents = () => {
         active={active}
         toggleActiveHandler={toggleActiveHandler}
       />
-      <div className="p-5 sticky top-0 right-0 left-0 z-30 bg-[#f8f8f8]">
+      <AccountsMenusNavigatorWrapper>
         <AgentsTopNavigator
           isModalVisible={isModalVisible}
           showModal={showModal}
@@ -94,8 +98,8 @@ const Agents = () => {
           Agents={AllAgents?.payload}
           isAgentsLoading={isAgentsLoading}
         />
-      </div>
-      <div className="px-5">
+      </AccountsMenusNavigatorWrapper>
+      <TableWrapper>
         {isAgentsLoading ? (
           <>
             {[...Array(20)].map((_, index) => (
@@ -129,7 +133,7 @@ const Agents = () => {
               </CustomButton>
             </div>
           )}
-      </div>
+      </TableWrapper>
     </Layout>
   );
 };

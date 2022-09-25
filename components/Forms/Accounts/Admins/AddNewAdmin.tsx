@@ -1,7 +1,7 @@
 import { Col, Form, Row } from "antd";
 import React, { FC } from "react";
 import {
-  emailValidationNotRequired,
+  emailValidation,
   requiredInput
 } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
@@ -41,7 +41,7 @@ const AddNewAdmin: FC<AddAdminTypes> = ({
             type="text"
             label="Email"
             placeholder="example@domain.rw"
-            rules={emailValidationNotRequired}
+            rules={emailValidation}
           />
         </Col>
       </Row>

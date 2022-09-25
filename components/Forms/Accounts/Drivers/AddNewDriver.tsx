@@ -35,11 +35,23 @@ const AddNewDriver: FC<AddDriverTypes> = ({
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
-            name="email"
-            type="text"
-            label="Email"
-            placeholder="example@domain.rw"
-            rules={emailValidationNotRequired}
+            rules={requiredInput}
+            type="select"
+            label="Gender"
+            placeholder="Select gender"
+            options={[
+              { label: "Male", value: "MALE" },
+              { label: "Female", value: "FEMALE" }
+            ]}
+            name="gender"
+            suffixIcon={
+              <Image
+                preview={false}
+                src="/icons/expand_more_black_24dp.svg"
+                alt=""
+                width={10}
+              />
+            }
           />
         </Col>
 
@@ -50,6 +62,16 @@ const AddNewDriver: FC<AddDriverTypes> = ({
             label="Phone number"
             placeholder="- - - - - - - -"
             rules={phoneValidation}
+          />
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Input
+            name="email"
+            type="text"
+            label="Email"
+            placeholder="example@domain.rw"
+            rules={emailValidationNotRequired}
           />
         </Col>
 
@@ -75,27 +97,6 @@ const AddNewDriver: FC<AddDriverTypes> = ({
           />
         </Col>
 
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
-            rules={requiredInput}
-            type="select"
-            label="Gender"
-            placeholder="Select gender"
-            options={[
-              { label: "Male", value: "MALE" },
-              { label: "Female", value: "FEMALE" }
-            ]}
-            name="gender"
-            suffixIcon={
-              <Image
-                preview={false}
-                src="/icons/expand_more_black_24dp.svg"
-                alt=""
-                width={10}
-              />
-            }
-          />
-        </Col>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             name="password"

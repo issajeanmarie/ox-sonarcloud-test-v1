@@ -15,6 +15,10 @@ import { AccountLinks } from "../../../components/Accounts/AccountLinks";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
+import {
+  AccountsMenusNavigatorWrapper,
+  TableWrapper
+} from "../../../components/Accounts/Wrappers";
 
 const Drivers = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -104,7 +108,7 @@ const Drivers = () => {
         active={active}
         toggleActiveHandler={toggleActiveHandler}
       />
-      <div className="p-5 sticky top-0 right-0 left-0 z-30 bg-[#f8f8f8]">
+      <AccountsMenusNavigatorWrapper>
         <DriversTopNavigator
           isModalVisible={isModalVisible}
           showModal={showModal}
@@ -115,8 +119,9 @@ const Drivers = () => {
           onFilterChange={onFilterChange}
           onSortChange={onSortChange}
         />
-      </div>
-      <div className="px-5">
+      </AccountsMenusNavigatorWrapper>
+
+      <TableWrapper>
         {isDriversLoading ? (
           <>
             {[...Array(20)].map((_, index) => (
@@ -150,7 +155,7 @@ const Drivers = () => {
               </CustomButton>
             </div>
           )}
-      </div>
+      </TableWrapper>
     </Layout>
   );
 };

@@ -1,7 +1,7 @@
 import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
 import {
-  emailValidationNotRequired,
+  emailValidation,
   phoneValidation,
   requiredInput
 } from "../../../../lib/validation/InputValidations";
@@ -35,26 +35,6 @@ const AddNewAgent: FC<AddAgentTypes> = ({
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
-            name="email"
-            type="text"
-            label="Email"
-            placeholder="example@domain.rw"
-            rules={emailValidationNotRequired}
-          />
-        </Col>
-
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
-            name="phone"
-            type="text"
-            label="Phone number"
-            placeholder="- - - - - - - -"
-            rules={phoneValidation}
-          />
-        </Col>
-
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
             rules={requiredInput}
             type="select"
             label="Gender"
@@ -72,6 +52,26 @@ const AddNewAgent: FC<AddAgentTypes> = ({
                 width={10}
               />
             }
+          />
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Input
+            name="phone"
+            type="text"
+            label="Phone number"
+            placeholder="- - - - - - - -"
+            rules={phoneValidation}
+          />
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Input
+            name="email"
+            type="text"
+            label="Email"
+            placeholder="example@domain.rw"
+            rules={emailValidation}
           />
         </Col>
       </Row>

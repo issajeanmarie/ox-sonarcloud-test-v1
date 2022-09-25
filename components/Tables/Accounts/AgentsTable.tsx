@@ -13,7 +13,8 @@ import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import {
   useDeleteAgentMutation,
   useEditAgentMutation,
-  useToggleAgentMutation
+  useToggleAgentMutation,
+  useSendResetPWDToAgentMutation
 } from "../../../lib/api/endpoints/Accounts/agentsEndpoints";
 import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
@@ -34,6 +35,7 @@ const AgentsTable: FC<AgentsTableProps> = ({
   const [itemToDelete, setItemToDelete] =
     useState<SetStateAction<number | undefined>>();
   const [AgentToToggle, setAgentToToggle] = useState();
+  const [agentToReset, setAgentToReset] = useState();
 
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
@@ -42,6 +44,8 @@ const AgentsTable: FC<AgentsTableProps> = ({
   const [editAgent, { isLoading: isEditing }] = useEditAgentMutation();
   const [toggleAgent, { isLoading: isTooglingAgent }] =
     useToggleAgentMutation();
+  const [sendResetPWDToAgent, { isLoading: isSending }] =
+    useSendResetPWDToAgentMutation();
 
   const handleDeleteAgent = () => {
     deleteAgent({
@@ -89,6 +93,19 @@ const AgentsTable: FC<AgentsTableProps> = ({
   const hangleToggleAgent = (id: any) => {
     setAgentToToggle(id);
     toggleAgent({
+      id: id
+    })
+      .unwrap()
+      .then((res: GenericResponse) => {
+        SuccessMessage(res?.message);
+      })
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
+
+  //reset
+  const handleResetPWDAgent = (id: any) => {
+    setAgentToReset(id);
+    sendResetPWDToAgent({
       id: id
     })
       .unwrap()
@@ -177,13 +194,15 @@ const AgentsTable: FC<AgentsTableProps> = ({
           <div className="flex justify-start items-center gap-4">
             <div className="h-1 flex items-center">
               <CustomButton
+                onClick={() => handleResetPWDAgent(record?.id)}
+                loading={agentToReset === record?.id && isSending}
                 type="normal"
                 size="icon"
                 icon={
                   <Image
-                    src="/icons/ic-contact-edit.svg"
+                    src="/icons/ic-security-unlocked.svg"
                     alt=""
-                    width={12}
+                    width={16}
                     preview={false}
                   />
                 }
@@ -198,7 +217,7 @@ const AgentsTable: FC<AgentsTableProps> = ({
                   <Image
                     src="/icons/ic-contact-edit.svg"
                     alt=""
-                    width={12}
+                    width={16}
                     preview={false}
                   />
                 }
@@ -230,9 +249,9 @@ const AgentsTable: FC<AgentsTableProps> = ({
                 size="icon"
                 icon={
                   <Image
-                    src="/icons/ic-actions-remove.svg"
+                    src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
                     alt="OX Delivery Logo"
-                    width={12}
+                    width={16}
                     preview={false}
                   />
                 }

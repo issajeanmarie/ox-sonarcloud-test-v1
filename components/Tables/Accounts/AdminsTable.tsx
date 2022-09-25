@@ -13,7 +13,8 @@ import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import {
   useDeleteAdminMutation,
   useEditAdminMutation,
-  useToggleAdminMutation
+  useToggleAdminMutation,
+  useSendResetPWDToAdminMutation
 } from "../../../lib/api/endpoints/Accounts/adminsEndpoints";
 import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
@@ -35,6 +36,7 @@ const AdminsTable: FC<AdminsTableProps> = ({
     useState<SetStateAction<number | undefined>>();
   const [AdminToToggle, setAdminToToggle] = useState();
   const [checkbox, setCheckbox] = useState(false);
+  const [adminToReset, setAdminToReset] = useState();
 
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
@@ -43,6 +45,8 @@ const AdminsTable: FC<AdminsTableProps> = ({
   const [editAdmin, { isLoading: isEditing }] = useEditAdminMutation();
   const [toggleAdmin, { isLoading: isTooglingAdmin }] =
     useToggleAdminMutation();
+  const [sendResetPWDToAdmin, { isLoading: isSending }] =
+    useSendResetPWDToAdminMutation();
 
   const handleDeleteAdmin = () => {
     deleteAdmin({
@@ -91,6 +95,19 @@ const AdminsTable: FC<AdminsTableProps> = ({
   const hangleToggleAdmin = (id: any) => {
     setAdminToToggle(id);
     toggleAdmin({
+      id: id
+    })
+      .unwrap()
+      .then((res: GenericResponse) => {
+        SuccessMessage(res?.message);
+      })
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
+
+  //reset
+  const handleResetPWDAdmin = (id: any) => {
+    setAdminToReset(id);
+    sendResetPWDToAdmin({
       id: id
     })
       .unwrap()
@@ -179,13 +196,15 @@ const AdminsTable: FC<AdminsTableProps> = ({
           <div className="flex justify-start items-center gap-4">
             <div className="h-1 flex items-center">
               <CustomButton
+                onClick={() => handleResetPWDAdmin(record?.id)}
+                loading={adminToReset === record?.id && isSending}
                 type="normal"
                 size="icon"
                 icon={
                   <Image
-                    src="/icons/ic-contact-edit.svg"
+                    src="/icons/ic-security-unlocked.svg"
                     alt=""
-                    width={12}
+                    width={16}
                     preview={false}
                   />
                 }
@@ -200,7 +219,7 @@ const AdminsTable: FC<AdminsTableProps> = ({
                   <Image
                     src="/icons/ic-contact-edit.svg"
                     alt=""
-                    width={12}
+                    width={16}
                     preview={false}
                   />
                 }
@@ -232,9 +251,9 @@ const AdminsTable: FC<AdminsTableProps> = ({
                 size="icon"
                 icon={
                   <Image
-                    src="/icons/ic-actions-remove.svg"
+                    src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
                     alt="OX Delivery Logo"
-                    width={12}
+                    width={16}
                     preview={false}
                   />
                 }
