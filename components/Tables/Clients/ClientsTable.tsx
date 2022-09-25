@@ -130,7 +130,7 @@ const ClientsTable: FC<ClientsTableProps> = ({
                   <Image
                     src="/icons/ic-actions-remove.svg"
                     alt="OX Delivery Logo"
-                    width={12}
+                    width={16}
                     preview={false}
                   />
                 }

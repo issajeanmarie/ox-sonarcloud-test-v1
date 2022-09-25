@@ -1,5 +1,5 @@
 import { FC, SetStateAction } from "react";
-import { Modal } from "antd";
+import { Modal, Button as AntButton } from "antd";
 import Button from "../Button";
 
 interface ActionModalProps {
@@ -47,11 +47,12 @@ const ActionModal: FC<ActionModalProps> = ({
         <div className="text-2xl font-bold text-ox-dark mb-10">{title}</div>
         <div className="w-[90%] mb-10">{description}</div>
         <div className="flex items-center justify-between ">
-          {!loading && (
-            <button className="underline" onClick={handleCancel}>
-              Discard
-            </button>
-          )}
+          <div className="w-[160px]">
+            <AntButton disabled={loading} onClick={handleCancel} type="text">
+              <span className="underline font-medium">Discard</span>
+            </AntButton>
+          </div>
+
           <div className="w-[160px]">
             <Button
               onClick={action}
