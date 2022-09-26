@@ -18,8 +18,9 @@ import { Client } from "../../../../lib/types/clients";
 import { Office } from "../../../../lib/types/shared";
 import { Category } from "../../../../lib/types/categories";
 import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import { TruckSchema } from "../../../../lib/types/trucksTypes";
+import { DriverSchema, TruckSchema } from "../../../../lib/types/trucksTypes";
 import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoints";
+import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 
 const { Option, OptGroup } = Select;
 
@@ -58,6 +59,10 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     isLoading: chosenClientLoading,
     isFetching
   } = useClientQuery(chosenClientId ? { id: chosenClientId } : skipToken);
+
+  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
+    noPagination: true
+  });
 
   const handleCreateOrder = (values: OrderRequestBody) => {
     const stopsWithTrucksAndDrivers: Stop_Request[] = [];
@@ -122,7 +127,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
   };
 
   useEffect(() => {
-    getTrucks({ page: 0, size: 10000 })
+    getTrucks({ page: 0, noPagination: true })
       .unwrap()
       .then()
       .catch((e: any) => {
@@ -361,7 +366,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                     isGroupDropdown
                     rules={[{ required: true, message: "Truck is required" }]}
                   >
-                    {data?.payload?.content.map((truck: TruckSchema) => {
+                    {data?.map((truck: TruckSchema) => {
                       return (
                         <Option value={truck.id} key={truck.plateNumber}>
                           {truck.plateNumber}
@@ -383,9 +388,19 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                     name="driverId"
                     type="select"
                     placeholder="Select driver"
-                    options={[{ label: "David KAMANZI", value: 7 }]}
+                    isLoading={driversLoading}
+                    disabled={driversLoading}
+                    isGroupDropdown
                     rules={[{ required: true, message: "Driver is required" }]}
-                  />
+                  >
+                    {drivers?.payload?.map((driver: DriverSchema) => {
+                      return (
+                        <Option value={driver.id} key={driver.id}>
+                          {driver.names}
+                        </Option>
+                      );
+                    })}
+                  </Input>
                 </div>
               </div>
             </div>

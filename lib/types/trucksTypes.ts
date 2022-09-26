@@ -29,6 +29,11 @@ export type TruckSchema = {
   trackingUnitSerialNumber: string;
 };
 
+export type DriverSchema = {
+  id: number;
+  names: string;
+};
+
 export type CreateTruckRequest = {
   depotId: 0;
   model: string;
