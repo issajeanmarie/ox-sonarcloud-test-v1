@@ -21,10 +21,15 @@ const Client = () => {
   const [paymentStatus, setPaymentStatus] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [moreClientOrders, setMoreClientOrders] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState<any>({});
 
-  const handleFilterChange = (value: string) => {
+  /*  const handleFilterChange = (value: string) => {
     setPaymentStatus(value);
-  };
+  }; */
+
+  useEffect(() => {
+    setPaymentStatus(selectedFilter.value || "");
+  }, [selectedFilter]);
 
   useEffect(() => {
     if (router.isReady) {
@@ -91,11 +96,12 @@ const Client = () => {
               clientOrders={AllClientOrders?.payload}
               isClientOrdersLoading={isClientOrdersLoading}
               isClientOrdersFetching={isClientOrdersFetching}
-              handleFilterChange={handleFilterChange}
               moreClientOrders={moreClientOrders}
               handleLoadMore={handleLoadMore}
               pageSize={pageSize}
               isMoreClientsOrderFetching={isMoreClientsOrderFetching}
+              selectedFilter={selectedFilter}
+              setSelectedFilter={setSelectedFilter}
             />
 
             <SingleClientRight

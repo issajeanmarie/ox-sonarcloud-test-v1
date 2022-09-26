@@ -22,12 +22,21 @@ import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { handleDownloadFile } from "../../utils/handleDownloadFile";
 import { BackendErrorTypes } from "../../lib/types/shared";
 import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
+import DaysCalculator from "../../helpers/daysCalculator";
+
+const daysList = [
+  { id: 0, name: "Last 7 days", value: 7 },
+  { id: 1, name: "Last 15 days", value: 15 },
+  { id: 2, name: "Last month", value: 30 },
+  { id: 3, name: "Last 2 months", value: 60 }
+];
 
 const Analytics = () => {
+  const [selectedDay, setselectedDay] = useState<any>(daysList[0]);
+  const [isDateCustom, setIsDateCustom] = useState(false);
   const [active, setActive] = useState<string>("trucks");
-  const [sorter, setSorter] = useState("REVENUE");
-  const [selectedDepot, setSelectedDepot] = useState();
-  const [lastWeek, setLastWeek] = useState("");
+  const [sorter, setSorter] = useState<any>({});
+  const [selectedDepot, setSelectedDepot] = useState<any>();
   const [startDate, setStartDate] = useState(
     localStorage.getItem("ox_startDate")
       ? localStorage.getItem("ox_startDate")
@@ -42,6 +51,8 @@ const Analytics = () => {
   const { data: categories, isLoading: isCategoriesLoading } =
     useCategoriesQuery();
 
+  const { start, end } = DaysCalculator(selectedDay?.value || "");
+
   const {
     data: truckData,
     isLoading: truckLoading,
@@ -50,7 +61,7 @@ const Analytics = () => {
     depot: depotData?.id,
     start: startDate,
     end: endDate,
-    sortBy: sorter,
+    sortBy: sorter?.value || "",
     direction: "",
     search: searchQuery
   });
@@ -61,8 +72,8 @@ const Analytics = () => {
     isFetching: revenueFetching
   } = useRevenueAnalyticsQuery({
     depot: depotData?.id,
-    start: !lastWeek ? startDate : lastWeek,
-    end: endDate
+    start: isDateCustom ? startDate : start,
+    end: isDateCustom ? endDate : end
   });
 
   const {
@@ -79,9 +90,9 @@ const Analytics = () => {
     isLoading: KPIsLoading,
     isFetching: KPIsFetching
   } = useKPIsAnalyticsQuery({
-    depot: !selectedDepot ? depotData?.id : selectedDepot,
-    start: !lastWeek ? startDate : lastWeek,
-    end: endDate
+    depot: selectedDepot?.id || depotData?.id,
+    start: isDateCustom ? startDate : start,
+    end: isDateCustom ? endDate : end
   });
 
   const [
@@ -95,7 +106,7 @@ const Analytics = () => {
       depot: depotData?.id,
       start: startDate,
       end: endDate,
-      sortBy: sorter,
+      sortBy: sorter?.value || "",
       direction: "",
       search: searchQuery
     })
@@ -114,21 +125,15 @@ const Analytics = () => {
     setActive(id);
   };
 
-  const onSortChange = (sorter: string) => {
-    setSorter(sorter);
-  };
-
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
     localStorage.setItem("ox_startDate", date);
+    setIsDateCustom(true);
   };
   const onEndDateChange = (_: string, date: string) => {
     setEndDate(date);
     localStorage.setItem("ox_endDate", date);
-  };
-
-  const onLastWeekChange = (_: string, date: string) => {
-    setLastWeek(date);
+    setIsDateCustom(true);
   };
 
   const onCategoryChange = (e: CheckboxChangeEvent) => {
@@ -137,10 +142,6 @@ const Analytics = () => {
 
   const handleSearch = (value: any) => {
     setSearchQuery(value);
-  };
-
-  const handleDepotChange = (value: any) => {
-    setSelectedDepot(value);
   };
 
   return (
@@ -152,8 +153,13 @@ const Analytics = () => {
         toggleActiveHandler={toggleActiveHandler}
         onStartDateChange={onStartDateChange}
         onEndDateChange={onEndDateChange}
-        onLastWeekChange={onLastWeekChange}
-        handleDepotChange={handleDepotChange}
+        selectedDay={selectedDay}
+        setselectedDay={setselectedDay}
+        isDateCustom={isDateCustom}
+        setIsDateCustom={setIsDateCustom}
+        daysList={daysList}
+        selectedDepot={selectedDepot}
+        setSelectedDepot={setSelectedDepot}
       />
       <div className={`${active !== "map" ? "px-5" : "px-0"} `}>
         {active === "trucks" && (
@@ -162,7 +168,6 @@ const Analytics = () => {
             truckData={truckData}
             truckLoading={truckLoading}
             truckFetching={truckFetching}
-            onSortChange={onSortChange}
             sorter={sorter}
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
@@ -170,6 +175,8 @@ const Analytics = () => {
             handleDownloadClients={handleDownloadClients}
             isDownloadingTruckReport={isDownloadingTruckReport}
             isDownloadFetching={isDownloadFetching}
+            selectedSort={sorter}
+            setSelectedSort={setSorter}
           />
         )}
         {active === "revenues" && (
