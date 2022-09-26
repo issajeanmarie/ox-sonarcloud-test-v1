@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, Form, Image, Row, Select, Typography } from "antd";
+import { Col, Form, Image, Row, Typography } from "antd";
 import React, { useState } from "react";
 import Input from "../Shared/Input";
 import CustomButton from "../Shared/Button/button";
-
 import { FC } from "react";
 import { LatLng } from "use-places-autocomplete";
 import { ClientsTopNavigatorTypes } from "../../lib/types/pageTypes/Clients/ClientsTopNavigatorTypes";
@@ -14,14 +13,9 @@ import { usePostClientMutation } from "../../lib/api/endpoints/Clients/clientsEn
 import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
 import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
+import DropDownSelector from "../Shared/DropDownSelector";
 
 const { Text } = Typography;
-const { Option } = Select;
-
-type ObjectTypes = {
-  id: number;
-  name: string;
-};
 
 const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   isModalVisible,
@@ -30,14 +24,16 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   clients,
   isClientsLoading,
   handleSearch,
-  isCategoriesLoading,
   categories,
-  onCategoryChange,
-  onSortChange,
   handleDownloadClients,
-  isDownloadingClientsLoading
+  isDownloadingClientsLoading,
+  defaultSelected,
+  setDefaultSelected,
+  sort,
+  setSort
 }) => {
   const [form] = Form.useForm();
+
   const [offices, setOffices]: any = useState([]);
   const [location, setLocation] = useState<{
     name: string;
@@ -102,88 +98,75 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   return (
     <Row
       justify="space-between"
-      className="bg-white py-4 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1]"
+      className="bg-white py-3 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1]"
     >
       <Col className="flex items-center gap-4">
-        <Text className="heading2 flex items-center">
-          {isClientsLoading ? (
-            <span>...</span>
-          ) : (
-            <>
-              {clients?.totalElements !== 0 && (
+        <Row gutter={24} align="middle" wrap={false}>
+          <Col>
+            <Text className="heading2 flex items-center">
+              {isClientsLoading ? (
+                <span>...</span>
+              ) : (
                 <>
-                  {clients?.totalElements &&
-                    numbersFormatter(clients?.totalElements)}{" "}
+                  {clients?.totalElements !== 0 && (
+                    <>
+                      {clients?.totalElements &&
+                        numbersFormatter(clients?.totalElements)}{" "}
+                    </>
+                  )}
                 </>
               )}
-            </>
-          )}
-          {clients?.totalElements === 0 ? (
-            "No clients"
-          ) : (
-            <>{clients?.totalElements === 1 ? "Client" : "Clients"}</>
-          )}
-        </Text>
-        <Input
-          onChange={handleSearch}
-          type="text"
-          placeholder="Search name, location or phone"
-          name="searchClient"
-          suffixIcon={
-            <Image
-              width={10}
-              src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
-              preview={false}
-              alt=""
-            />
-          }
-        />
+              {clients?.totalElements === 0 ? (
+                "No clients"
+              ) : (
+                <>{clients?.totalElements === 1 ? "Client" : "Clients"}</>
+              )}
+            </Text>
+          </Col>
 
-        <Input
-          onChange={onCategoryChange}
-          name="categories"
-          type="select"
-          placeholder="Category: All categories"
-          isGroupDropdown
-          isLoading={isCategoriesLoading}
-          suffixIcon={
-            <Image
-              preview={false}
-              src="/icons/expand_more_black_24dp.svg"
-              alt=""
-              width={10}
+          <Col>
+            <Input
+              onChange={handleSearch}
+              type="text"
+              placeholder="Search name, location or phone"
+              name="searchClient"
+              suffixIcon={
+                <Image
+                  width={10}
+                  src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
+                  preview={false}
+                  alt=""
+                />
+              }
             />
-          }
-        >
-          <Option value="">All categories</Option>
-          {categories?.map((item: ObjectTypes) => (
-            <Option value={item?.id} key={item?.name}>
-              {item?.name}
-            </Option>
-          ))}
-        </Input>
+          </Col>
 
-        <Input
-          onChange={onSortChange}
-          placeholder="Sort: Name (A-Z)"
-          type="select"
-          label=""
-          options={[
-            { label: "Z-A (Names)", value: "names__desc" },
-            { label: "A-Z (Names)", value: "names__asc" },
-            { label: "Z-A (Locations)", value: "location__desc" },
-            { label: "A-Z (Locations)", value: "location__asc" }
-          ]}
-          name="sortClients"
-          suffixIcon={
-            <Image
-              preview={false}
-              src="/icons/expand_more_black_24dp.svg"
-              alt=""
-              width={10}
+          <Col>
+            <DropDownSelector
+              label="Category"
+              dropDownContent={[
+                { name: "All categories", id: undefined },
+                ...categories
+              ]}
+              defaultSelected={defaultSelected}
+              setDefaultSelected={setDefaultSelected}
             />
-          }
-        />
+          </Col>
+
+          <Col>
+            <DropDownSelector
+              label="Sort"
+              dropDownContent={[
+                { id: 0, name: "Z-A (Names)", value: "names__desc" },
+                { id: 1, name: "A-Z (Names)", value: "names__asc" },
+                { id: 2, name: "Z-A (Locations)", value: "location__desc" },
+                { id: 3, name: "A-Z (Locations)", value: "location__asc" }
+              ]}
+              defaultSelected={sort}
+              setDefaultSelected={setSort}
+            />
+          </Col>
+        </Row>
       </Col>
 
       <Col className="flex items-center gap-4">
