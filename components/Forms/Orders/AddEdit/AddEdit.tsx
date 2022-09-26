@@ -16,7 +16,7 @@ import moment from "moment";
 import { Office } from "../../../../lib/types/shared";
 import { Category } from "../../../../lib/types/categories";
 import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import { TruckSchema } from "../../../../lib/types/trucksTypes";
+import { DriverSchema, TruckSchema } from "../../../../lib/types/trucksTypes";
 import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoints";
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
@@ -68,6 +68,10 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
   } = useClientQuery(chosenClientId ? { id: chosenClientId } : skipToken);
   const { data: chosenDriverInfo, isFetching: isDriverInitialFetching } =
     useDriverQuery(chosenDriverId ? { id: chosenDriverId } : skipToken);
+
+  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
+    noPagination: true
+  });
 
   const handleCreateOrder = (values: OrderRequestBody) => {
     const stopsWithTrucksAndDrivers: Stop_Request[] = [];
