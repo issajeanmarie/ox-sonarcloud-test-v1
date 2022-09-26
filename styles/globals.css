@@ -1251,3 +1251,7 @@ body {
   z-index: 10;
   opacity: 0;
 }
+
+.my_button .ant-image .ant-image-img {
+  margin-top: 6px;
+}
