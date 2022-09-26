@@ -75,7 +75,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             alt="Backspace icon"
             width={20}
             height={20}
-            onClick={() => router.back()}
+            onClick={() => router.push(routes.Orders.url)}
           />
           <span className="heading2">Orders</span>
           <span className="normalText">/</span>

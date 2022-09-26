@@ -14,6 +14,7 @@ import { message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import { Order } from "../../../lib/types/orders";
+import { routes } from "../../../config/route-config";
 
 interface ViewOrderHeaderProps {
   orderId: Query;
@@ -127,7 +128,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             alt="Backspace icon"
             width={20}
             height={20}
-            onClick={() => router.back()}
+            onClick={() => router.push(routes.Orders.url)}
           />
           <span className="text-md font-bold">Orders</span>
           <span className="normalText">/</span>
