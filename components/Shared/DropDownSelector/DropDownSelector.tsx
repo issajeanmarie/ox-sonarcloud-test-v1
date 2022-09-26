@@ -21,7 +21,7 @@ const DropDownSelector = ({
         <Row
           onClick={() => setDefaultSelected(content)}
           className={`${
-            defaultSelected.id === content.id
+            defaultSelected?.id === content.id
               ? "bg_white_yellow p-2 cursor-pointer"
               : "hover:bg-gray-50 hover:p-2"
           } cursor-pointer mb-2 rounded transition-all duration-300`}
@@ -41,14 +41,17 @@ const DropDownSelector = ({
           align="middle"
           justify="space-between"
           className="border p-2 py-2.8 rounded pointer"
+          wrap={false}
         >
-          <Col className="font-bold">{label}:</Col>
+          <Col className="font-bold text-sm">{label}:</Col>
 
-          <Col>{defaultSelected?.name || "Nothing selected"}</Col>
+          <Col className="text_ellipsis text-sm">
+            {defaultSelected?.name || "--- --- ---"}
+          </Col>
 
           <Col>
             <Image
-              className="mb-0.5"
+              className="mb-1"
               preview={false}
               src="/icons/expand_more_black_24dp.svg"
               alt=""

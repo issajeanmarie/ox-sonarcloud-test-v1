@@ -6,9 +6,10 @@ export type SingleClientLeftTypes = {
   clientOrders: any;
   isClientOrdersLoading: boolean;
   isClientOrdersFetching: boolean;
-  handleFilterChange: (value: string) => void;
   moreClientOrders: any;
   handleLoadMore: () => void;
   pageSize: number;
   isMoreClientsOrderFetching: boolean;
+  setSelectedFilter: any;
+  selectedFilter: any;
 };

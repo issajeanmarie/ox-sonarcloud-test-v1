@@ -37,10 +37,11 @@ export type EditDriverLocationRequest = {
 };
 
 export type GetDrivers = {
-  page: number | string;
-  size: number | string;
-  status: string;
-  sort: string;
+  page?: number | string;
+  size?: number | string;
+  status?: string;
+  sort?: string;
+  noPagination?: boolean | any;
 };
 
 export type ToggleDriverRequest = {

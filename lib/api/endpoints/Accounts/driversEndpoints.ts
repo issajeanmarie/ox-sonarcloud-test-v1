@@ -26,7 +26,9 @@ const driversEndpoints = baseAPI.injectEndpoints({
     >({
       providesTags: ["Drivers"],
       query: (DTO) => ({
-        url: `drivers?page=${DTO?.page}&size=${DTO?.size}&status=${DTO?.status}&sort=${DTO?.sort}`,
+        url: `drivers${DTO.noPagination ? "/no-pagination" : ""}?page=${
+          DTO?.page
+        }&size=${DTO?.size}&status=${DTO?.status}&sort=${DTO?.sort}`,
         method: "GET"
       })
     }),

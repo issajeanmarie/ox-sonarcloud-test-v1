@@ -144,10 +144,11 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
           <Col>
             <DropDownSelector
               label="Category"
-              dropDownContent={[
-                { name: "All categories", id: undefined },
-                ...categories
-              ]}
+              dropDownContent={
+                categories
+                  ? [{ name: "All categories", id: undefined }, ...categories]
+                  : []
+              }
               defaultSelected={defaultSelected}
               setDefaultSelected={setDefaultSelected}
             />

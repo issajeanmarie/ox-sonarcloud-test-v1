@@ -5,12 +5,11 @@ import CustomButton from "../../Shared/Button/button";
 import { TrucksUsageTypes } from "../../../lib/types/pageTypes/Analytics/TrucksUsageTableTypes";
 import { YellowDownloadIcon } from "../../Icons";
 import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
+import DropDownSelector from "../../Shared/DropDownSelector";
 
 const { Text } = Typography;
 
 const TrucksUsage: FC<TrucksUsageTypes> = ({
-  sorter,
-  onSortChange,
   onStartDateChange,
   onEndDateChange,
   uploadingFuelReport,
@@ -18,7 +17,9 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
   handleSearch,
   handleDownloadClients,
   isDownloadingTruckReport,
-  isDownloadFetching
+  isDownloadFetching,
+  selectedSort,
+  setSelectedSort
 }) => {
   return (
     <Row
@@ -27,7 +28,19 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
     >
       <Col className="flex items-center gap-4">
         <Text className="heading2">Trucks usage</Text>
-        <Input
+
+        <DropDownSelector
+          label="Sort"
+          dropDownContent={[
+            { id: 0, name: "Revenue", value: "REVENUE" },
+            { id: 1, name: "Distance", value: "DISTANCE" },
+            { id: 2, name: "Weight", value: "WEIGHT" }
+          ]}
+          setDefaultSelected={setSelectedSort}
+          defaultSelected={selectedSort}
+        />
+
+        {/* <Input
           onSelectChange={onSortChange}
           type="select"
           label=""
@@ -46,7 +59,7 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
               width={10}
             />
           }
-        />
+        /> */}
         <Input
           onDateChange={onStartDateChange}
           defaultValue={localStorage.getItem("ox_startDate")}

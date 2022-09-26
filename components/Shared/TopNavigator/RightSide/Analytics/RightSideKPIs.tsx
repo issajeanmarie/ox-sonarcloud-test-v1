@@ -1,60 +1,60 @@
-import { Image, Select } from "antd";
+import { Image } from "antd";
 import React, { FC } from "react";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
 import { useDepotsQuery } from "../../../../../lib/api/endpoints/Depots/depotEndpoints";
 import { RightSideKPIsTypes } from "../../../../../lib/types/pageTypes/Analytics/RightSideKPIsTypes";
 import Input from "../../../../Shared/Input";
-
-const { Option } = Select;
+import DropDownSelector from "../../../DropDownSelector";
 
 const RightSideKPIs: FC<RightSideKPIsTypes> = ({
   onStartDateChange,
   onEndDateChange,
-  onLastWeekChange,
-  handleDepotChange
+  selectedDay,
+  setSelectedDay,
+  isDateCustom,
+  setIsDateCustom,
+  daysList,
+  selectedDepot,
+  setSelectedDepot
 }) => {
-  const { data, isLoading } = useDepotsQuery();
+  const { data } = useDepotsQuery();
+
   return (
     <>
-      <Input
-        onChange={handleDepotChange}
-        loading={isLoading}
-        type="select"
-        label=""
-        placeholder="Depot: All depots"
-        isGroupDropdown
-        name="sort"
-        suffixIcon={
-          <Image
-            preview={false}
-            src="/icons/expand_more_black_24dp.svg"
-            alt=""
-            width={10}
-          />
-        }
-      >
-        <Option value="">All categories</Option>
-        {data?.payload?.map((item) => (
-          <Option value={item?.id} key={item?.name}>
-            {item?.name}
-          </Option>
-        ))}
-      </Input>
-
-      <Input
-        picker="week"
-        onDateChange={onLastWeekChange}
-        type="date"
-        name="Start"
-        placeholder="Show: Last week"
-        suffixIcon={
-          <Image
-            preview={false}
-            src="/icons/expand_more_black_24dp.svg"
-            alt=""
-            width={10}
-          />
-        }
+      <DropDownSelector
+        label="Depot"
+        dropDownContent={data?.payload || []}
+        defaultSelected={selectedDepot}
+        setDefaultSelected={setSelectedDepot}
       />
+
+      {!isDateCustom ? (
+        <DropDownSelector
+          label="Show"
+          dropDownContent={daysList}
+          defaultSelected={selectedDay}
+          setDefaultSelected={setSelectedDay}
+        />
+      ) : (
+        <Row align="middle" gutter={12}>
+          <Col className="font-bold">Custom</Col>
+          <Col>
+            <Image
+              onClick={() => {
+                setIsDateCustom(false);
+                setSelectedDay(daysList[0]);
+              }}
+              preview={false}
+              src="/icons/close_black_24dp.svg"
+              alt=""
+              className="mt-2 pointer"
+              width={16}
+            />
+          </Col>
+        </Row>
+      )}
+
       <Input
         defaultValue={localStorage.getItem("ox_startDate")}
         onDateChange={onStartDateChange}

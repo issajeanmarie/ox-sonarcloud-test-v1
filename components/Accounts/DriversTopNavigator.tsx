@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, Form, Image, Row, Select, Typography } from "antd";
+import { Col, Form, Image, Row, Typography } from "antd";
 import React from "react";
 import Input from "../Shared/Input";
 import CustomButton from "../Shared/Button/button";
-
 import { FC } from "react";
 import { DriversTopNavigatorTypes } from "../../lib/types/pageTypes/Accounts/Drivers/DriversTopNavigatorTypes";
 import ModalWrapper from "../Modals/ModalWrapper";
@@ -13,9 +12,9 @@ import { usePostDriverMutation } from "../../lib/api/endpoints/Accounts/driversE
 import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
 import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
+import DropDownSelector from "../Shared/DropDownSelector";
 
 const { Text } = Typography;
-const { Option } = Select;
 
 const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
   isModalVisible,
@@ -24,8 +23,10 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
   Drivers,
   isDriversLoading,
   handleSearch,
-  onFilterChange,
-  onSortChange
+  selectedFilter,
+  setSelectedFilter,
+  selectedSort,
+  setSelectedSort
 }) => {
   const [form] = Form.useForm();
   const [postDriver, { isLoading }] = usePostDriverMutation();
@@ -60,81 +61,73 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
       className="bg-white py-4 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1]"
     >
       <Col className="flex items-center gap-4">
-        <Text className="heading2 flex items-center">
-          {isDriversLoading ? (
-            <span>...</span>
-          ) : (
-            <>
-              {Drivers?.totalElements !== 0 && (
+        <Row gutter={24} align="middle">
+          <Col>
+            <Text className="heading2 flex items-center">
+              {isDriversLoading ? (
+                <span>...</span>
+              ) : (
                 <>
-                  {Drivers?.totalElements &&
-                    numbersFormatter(Drivers?.totalElements)}{" "}
+                  {Drivers?.totalElements !== 0 && (
+                    <>
+                      {Drivers?.totalElements &&
+                        numbersFormatter(Drivers?.totalElements)}{" "}
+                    </>
+                  )}
                 </>
               )}
-            </>
-          )}
-          {Drivers?.totalElements === 0 ? (
-            "No Drivers"
-          ) : (
-            <>{Drivers?.totalElements === 1 ? "Driver" : "Drivers"}</>
-          )}
-        </Text>
-        <Input
-          onChange={handleSearch}
-          type="text"
-          placeholder="Search driver"
-          name="searchDriver"
-          suffixIcon={
-            <Image
-              width={10}
-              src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
-              preview={false}
-              alt=""
-            />
-          }
-        />
+              {Drivers?.totalElements === 0 ? (
+                "No Drivers"
+              ) : (
+                <>{Drivers?.totalElements === 1 ? "Driver" : "Drivers"}</>
+              )}
+            </Text>
+          </Col>
 
-        <Input
-          onChange={onFilterChange}
-          name="status"
-          type="select"
-          placeholder="Filter: All drivers"
-          isGroupDropdown
-          suffixIcon={
-            <Image
-              preview={false}
-              src="/icons/expand_more_black_24dp.svg"
-              alt=""
-              width={10}
+          <Col>
+            <Input
+              onChange={handleSearch}
+              type="text"
+              placeholder="Search driver"
+              name="searchDriver"
+              suffixIcon={
+                <Image
+                  width={10}
+                  src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
+                  preview={false}
+                  alt=""
+                />
+              }
             />
-          }
-        >
-          <Option value="ALL">All drivers</Option>
-          <Option value="ACTIVE">Active</Option>
-          <Option value="INACTIVE">Inactive</Option>
-        </Input>
+          </Col>
 
-        <Input
-          onChange={onSortChange}
-          placeholder="Sort: Names (A-Z)"
-          type="select"
-          label=""
-          options={[
-            { label: "Z-A (Names)", value: "NAMES_DESC" },
-            { label: "A-Z (Names)", value: "NAMES_ASC" },
-            { label: "Z-A (Date)", value: "DATE_DESC" },
-            { label: "A-Z (Date)", value: "DATE_ASC" }
-          ]}
-          name="sortDrivers"
-          suffixIcon={
-            <Image
-              preview={false}
-              src="/icons/expand_more_black_24dp.svg"
-              alt=""
-              width={10}
+          <Col>
+            <DropDownSelector
+              label="Filter"
+              setDefaultSelected={setSelectedFilter}
+              defaultSelected={selectedFilter}
+              dropDownContent={[
+                { id: 0, name: "All", value: "ALL" },
+                { id: 1, name: "Active", value: "ACTIVE" },
+                { id: 2, name: "Inactive", value: "INACTIVE" }
+              ]}
             />
-          }
-        />
+          </Col>
+
+          <Col>
+            <DropDownSelector
+              label="Sort"
+              setDefaultSelected={setSelectedSort}
+              defaultSelected={selectedSort}
+              dropDownContent={[
+                { id: 0, name: "Z-A (Names)", value: "NAMES_DESC" },
+                { id: 1, name: "A-Z (Names)", value: "NAMES_ASC" },
+                { id: 2, name: "Z-A (Date)", value: "DATE_DESC" },
+                { id: 3, name: "A-Z (Date)", value: "DATE_ASC" }
+              ]}
+            />
+          </Col>
+        </Row>
       </Col>
 
       <Col className="flex items-center gap-4">

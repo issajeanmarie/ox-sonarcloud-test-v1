@@ -12,6 +12,11 @@ export interface TopNavigatorProps {
   toggleActiveHandler: (menuID: string) => void;
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
-  onLastWeekChange: (_: string, date: string) => void;
-  handleDepotChange: (value: any) => void;
+  selectedDay?: any;
+  setselectedDay?: any;
+  isDateCustom?: boolean;
+  setIsDateCustom?: any;
+  daysList?: any;
+  selectedDepot?: any;
+  setSelectedDepot?: any;
 }

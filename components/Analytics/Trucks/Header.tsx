@@ -164,7 +164,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
             alt="Backspace icon"
             width={20}
             height={20}
-            onClick={() => router.back()}
+            onClick={() => router.push(routes.Trucks.url)}
             preview={false}
           />
           <span className="heading2">Trucks</span>
