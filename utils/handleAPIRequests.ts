@@ -3,6 +3,7 @@ import { errorCodes } from "../config/errorCodes";
 
 export const handleAPIRequests = ({
   showSuccess = false,
+  showFailure = true,
   successMessage,
   request,
   handleSuccess = () => null,
@@ -23,22 +24,24 @@ export const handleAPIRequests = ({
     .catch((error: any) => {
       handleFailure(error);
 
-      if (error?.data?.message) {
-        info.warning(error?.data?.message);
-      } else if (error?.message) {
-        info.warning(error?.message);
-      } else if (typeof error !== "object") {
-        info.warning(error);
-      } else {
-        if (error.status === 403) {
-          info.warn("Please login to perform any action!");
-          window.location.href = "/";
-        }
+      if (showFailure) {
+        if (error?.data?.message) {
+          info.warning(error?.data?.message);
+        } else if (error?.message) {
+          info.warning(error?.message);
+        } else if (typeof error !== "object") {
+          info.warning(error);
+        } else {
+          if (error.status === 403) {
+            info.warn("Please login to perform any action!");
+            window.location.href = "/";
+          }
 
-        errorCodes.filter(
-          (errorCode) =>
-            errorCode.code === error.status && info.warning(errorCode.message)
-        );
+          errorCodes.filter(
+            (errorCode) =>
+              errorCode.code === error.status && info.warning(errorCode.message)
+          );
+        }
       }
 
       return error;

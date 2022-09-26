@@ -19,7 +19,6 @@ import Loader from "../../Shared/Loader";
 import moment from "moment";
 import { Stop, Transaction } from "../../../lib/types/orders";
 import { dateFormatter } from "../../../utils/dateFormatter";
-import Modal from "../../Shared/Modal";
 import AddStop from "../../Forms/Orders/AddStop";
 import EditOrderClient from "../../Forms/Orders/EditOrderClient";
 import ActionModal from "../../Shared/ActionModal";
@@ -326,56 +325,44 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             canUserDelete={canUserDelete}
             canUserPay={canUserPay}
           />
-          <Modal
-            isModalVisible={isEditPayment}
-            setIsModalVisible={setIsEditPayment}
-          >
-            <EditPayment
-              tx={chosenTransaction}
-              orderId={data.id}
-              closeModal={() => setIsEditPayment(false)}
-            />
-          </Modal>
-          <Modal
-            isModalVisible={isEditPaymentStatus}
-            setIsModalVisible={setIsEditPaymentStatus}
-          >
-            <EditPaymentStatus
-              order={data}
-              closeModal={() => setIsEditPaymentStatus(false)}
-            />
-          </Modal>
-          <Modal
-            isModalVisible={isEditClientModal}
-            setIsModalVisible={setIsEditClientModal}
-          >
-            <EditOrderClient
-              orderId={orderId}
-              existingClient={data?.office?.client?.id}
-              closeModal={() => setIsEditClientModal(false)}
-              clients={clients?.payload?.content}
-            />
-          </Modal>
-          <Modal
-            isModalVisible={isAddStopModal}
-            setIsModalVisible={setIsAddStopModal}
-          >
-            <AddStop
-              order={data}
-              closeModal={() => setIsAddStopModal(false)}
-              trucks={trucks?.payload?.content}
-            />
-          </Modal>
-          <Modal
-            isModalVisible={isEditStopModal}
-            setIsModalVisible={setIsEditStopModal}
-          >
-            <EditStop
-              order={data}
-              stop={chosenStopId}
-              closeModal={() => setIsEditStopModal(false)}
-            />
-          </Modal>
+          <EditPayment
+            tx={chosenTransaction}
+            orderId={data.id}
+            closeModal={() => setIsEditPayment(false)}
+            isEditPayment={isEditPayment}
+            setIsEditPayment={setIsEditPayment}
+          />
+
+          <EditPaymentStatus
+            order={data}
+            closeModal={() => setIsEditPaymentStatus(false)}
+            isEditPaymentStatus={isEditPaymentStatus}
+            setIsEditPaymentStatus={setIsEditPaymentStatus}
+          />
+          <EditOrderClient
+            orderId={orderId}
+            existingClient={data?.office?.client?.id}
+            closeModal={() => setIsEditClientModal(false)}
+            clients={clients?.payload?.content}
+            isEditClientModal={isEditClientModal}
+            setIsEditClientModal={setIsEditClientModal}
+          />
+
+          <AddStop
+            order={data}
+            closeModal={() => setIsAddStopModal(false)}
+            trucks={trucks?.payload?.content}
+            isAddStopModal={isAddStopModal}
+            setIsAddStopModal={setIsAddStopModal}
+          />
+
+          <EditStop
+            order={data}
+            stop={chosenStopId}
+            closeModal={() => setIsEditStopModal(false)}
+            isEditStopModal={isEditStopModal}
+            setIsEditStopModal={setIsEditStopModal}
+          />
           <ActionModal
             action={deleteStopAction}
             actionLabel="DELETE ANYWAY"

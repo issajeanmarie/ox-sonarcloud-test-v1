@@ -4,6 +4,8 @@ import Typography from "antd/lib/typography";
 import { ClientsTableTypes } from "../../../lib/types/pageTypes/Clients/ClientsTableTypes";
 import { ClientsTableProps } from "../../../lib/types/pageTypes/Clients/ClientsTableProps";
 import RowsWrapper from "../RowsWrapper";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import CustomButton from "../../Shared/Button";
 import { Image } from "antd";
@@ -119,36 +121,35 @@ const ClientsTable: FC<ClientsTableProps> = ({
       width: "100px",
       key: "Action",
       render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
-        <RowsWrapper>
-          <div className="flex justify-start items-center gap-4">
-            <div className="h-1 flex items-center">
-              <CustomButton
-                onClick={() => showModal(setItemToDelete(record?.id))}
-                type="danger"
-                size="icon"
-                icon={
-                  <Image
-                    src="/icons/ic-actions-remove.svg"
-                    alt="OX Delivery Logo"
-                    width={16}
-                    preview={false}
-                  />
-                }
-              />
-            </div>
-            <div className="h-1 flex items-center">
-              <CustomButton
-                onClick={() =>
-                  changeRoute(`${routes.Client.url}?client=${record?.id}`)
-                }
-                type="view"
-                size="small"
-              >
-                <span className="font-bold">View</span>
-              </CustomButton>
-            </div>
-          </div>
-        </RowsWrapper>
+        <Row align="middle" gutter={16} wrap={false}>
+          <Col className="my-[-12px]">
+            <CustomButton
+              onClick={() => showModal(setItemToDelete(record?.id))}
+              type="danger"
+              size="icon"
+              icon={
+                <Image
+                  src="/icons/ic-actions-remove.svg"
+                  alt="OX Delivery Logo"
+                  width={12}
+                  preview={false}
+                />
+              }
+            />
+          </Col>
+
+          <Col className="my-[-12px]">
+            <CustomButton
+              onClick={() =>
+                changeRoute(`${routes.Client.url}?client=${record?.id}`)
+              }
+              type="view"
+              size="small"
+            >
+              View
+            </CustomButton>
+          </Col>
+        </Row>
       )
     }
   ];

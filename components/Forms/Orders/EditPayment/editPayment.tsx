@@ -9,14 +9,23 @@ import {
 } from "../../../../lib/types/orders";
 import { useEditTransactionMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { useForm } from "antd/lib/form/Form";
+import ModalWrapper from "../../../Modals/ModalWrapper";
 
 interface EditPaymentProps {
   tx?: Transaction;
   orderId: number;
   closeModal: () => void;
+  isEditPayment: boolean;
+  setIsEditPayment: any;
 }
 
-const EditPayment: FC<EditPaymentProps> = ({ tx, orderId, closeModal }) => {
+const EditPayment: FC<EditPaymentProps> = ({
+  tx,
+  orderId,
+  closeModal,
+  isEditPayment,
+  setIsEditPayment
+}) => {
   const [editTransaction, { isLoading }] = useEditTransactionMutation();
 
   const [form] = useForm();
@@ -41,8 +50,12 @@ const EditPayment: FC<EditPaymentProps> = ({ tx, orderId, closeModal }) => {
   }, [tx]);
 
   return (
-    <div className="m-8">
-      <div className="heading1 mb-14">PAYMENT STATUS</div>
+    <ModalWrapper
+      title="PAYMENT STATUS"
+      isModalVisible={isEditPayment}
+      setIsModalVisible={setIsEditPayment}
+      loading={isLoading}
+    >
       <Form form={form} onFinish={onFinish}>
         <div className="my-10">
           <div className="mb-5">
@@ -74,7 +87,7 @@ const EditPayment: FC<EditPaymentProps> = ({ tx, orderId, closeModal }) => {
           </div>
         </div>
       </Form>
-    </div>
+    </ModalWrapper>
   );
 };
 

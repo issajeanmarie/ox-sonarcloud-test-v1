@@ -6,6 +6,7 @@ import { LatLng } from "use-places-autocomplete";
 import { useAddStopMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { AddStopRequest, Order } from "../../../../lib/types/orders";
 import { TruckSchema } from "../../../../lib/types/trucksTypes";
+import ModalWrapper from "../../../Modals/ModalWrapper";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
 
@@ -15,9 +16,17 @@ interface AddStopProps {
   order: Order;
   closeModal: () => void;
   trucks: TruckSchema[];
+  isAddStopModal: boolean;
+  setIsAddStopModal: any;
 }
 
-const AddStop: FC<AddStopProps> = ({ order, closeModal, trucks }) => {
+const AddStop: FC<AddStopProps> = ({
+  order,
+  closeModal,
+  trucks,
+  isAddStopModal,
+  setIsAddStopModal
+}) => {
   const [addStop, { isLoading }] = useAddStopMutation();
 
   const [form] = useForm();
@@ -55,10 +64,14 @@ const AddStop: FC<AddStopProps> = ({ order, closeModal, trucks }) => {
   }, [location]);
 
   return (
-    <div className="m-8">
-      <div className="heading1 mb-14">ADD A STOP</div>
+    <ModalWrapper
+      title="ADD A STOOP"
+      loading={isLoading}
+      isModalVisible={isAddStopModal}
+      setIsModalVisible={setIsAddStopModal}
+    >
       <Form form={form} onFinish={handleOnFinish}>
-        <div className="my-10">
+        <div className="mb-10">
           <div>
             <Input
               name="location"
@@ -119,7 +132,7 @@ const AddStop: FC<AddStopProps> = ({ order, closeModal, trucks }) => {
           </Button>
         </div>
       </Form>
-    </div>
+    </ModalWrapper>
   );
 };
 

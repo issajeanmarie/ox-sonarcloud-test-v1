@@ -142,7 +142,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
           scroll={{ x: 0 }}
         >
           <Column
-            width="5%"
+            width="4%"
             key="key"
             title="#"
             render={(
@@ -158,7 +158,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
           />
 
           <Column
-            width="25%"
+            width="26%"
             key="plateNumber"
             title="Plate number"
             render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
@@ -251,7 +251,10 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             render={(record: any) => {
               const child = (
                 <Row align="middle" gutter={16} wrap={false}>
-                  <Col onClick={() => handleEditTruckModal(record)}>
+                  <Col
+                    className="my-[-12px]"
+                    onClick={() => handleEditTruckModal(record)}
+                  >
                     <CustomButton
                       type="normal"
                       size="icon"
@@ -267,7 +270,10 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                     />
                   </Col>
 
-                  <Col onClick={() => handleToggleTruck(record?.id)}>
+                  <Col
+                    className="my-[-12px]"
+                    onClick={() => handleToggleTruck(record?.id)}
+                  >
                     <CustomButton
                       type="normal"
                       size="icon"
@@ -287,6 +293,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                   </Col>
 
                   <Col
+                    className="my-[-12px]"
                     onClick={() =>
                       router.push(`${routes.Trucks.url}/${record?.id}`)
                     }

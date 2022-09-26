@@ -203,7 +203,7 @@ const RepairLogPane = () => {
                             <span>{numbersFormatter(data.cost)} Rwf</span>
                           </Col>
 
-                          <Col>
+                          <Col className="mr-4">
                             <Image
                               src="/icons/unfold_more_FILL0_wght400_GRAD0_opsz48.svg"
                               preview={false}

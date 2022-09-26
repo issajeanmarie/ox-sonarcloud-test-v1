@@ -29,7 +29,7 @@ const TruckOverviewCard = ({ data }: any) => {
   };
 
   return (
-    <Card className="radius4">
+    <Card className="radius4 overviewCard">
       <span className="block mb-2 text_ellipsis" title={data?.name}>
         {data?.name}
       </span>

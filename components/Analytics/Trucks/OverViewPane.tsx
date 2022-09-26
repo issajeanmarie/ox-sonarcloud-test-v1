@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
-import info from "antd/lib/message";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Divider from "antd/lib/divider";
@@ -23,6 +22,7 @@ import { percentageCalculator } from "../../../helpers/pacentageCalculators";
 import TruckActivityBreakdownChart from "../Charts/TruckActivityBreakdownChart";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { TruckRevenueBreakdownChart } from "../Charts/TruckRevenueBreakdownChart";
+import info from "antd/lib/message";
 
 const OvervieWPane = () => {
   const [getTruckOverview, { data }] = useLazyGetTruckOverviewQuery();
@@ -111,15 +111,19 @@ const OvervieWPane = () => {
     fileDownload(file, `Report-${date}.xlsx`);
   };
 
+  const handleDownloadFileFailure = () => {
+    info.error("No data to download");
+  };
+
   const handleDownloadShift = () => {
-    downloadTruckShifts({ id: truckId })
-      .unwrap()
-      .then((res) => {
-        handleDownloadFile(res);
-      })
-      .catch((err) => {
-        info.error(err?.data?.message || "Something is wrong");
-      });
+    handleAPIRequests({
+      request: downloadTruckShifts,
+      id: truckId,
+      showSuccess: true,
+      showFailure: false,
+      handleSuccess: handleDownloadFile,
+      handleFailure: handleDownloadFileFailure
+    });
   };
 
   return (
@@ -176,11 +180,7 @@ const OvervieWPane = () => {
         <Loader />
       ) : (
         <>
-          <Row
-            gutter={24}
-            className="overviewcards_row p-0"
-            justify="space-between"
-          >
+          <Row gutter={24} className="p-0" justify="space-between">
             {cardsData?.map((data) => (
               <Col
                 sm={{ span: 24 }}
@@ -342,7 +342,7 @@ const OvervieWPane = () => {
 
           <p className="mb-6">Revenue breakdown</p>
 
-          <div className="h-[300px] border p-6 relative mb-12">
+          <div className="h-[fit-content] border p-6 relative mb-12">
             <TruckRevenueBreakdownChart
               chartData={truckRevenueAnalyticsData || []}
             />

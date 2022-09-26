@@ -177,6 +177,41 @@ const Entry = ({
     </Fragment>
   );
 
+  const dropdownSelectInput = (
+    <Fragment>
+      {label && <Text className="heading2 mb-[8px]">{label}</Text>}
+      <Form.Item name={name} rules={rules}>
+        <Select
+          showSearch={showSearch || true}
+          placeholder={placeholder}
+          // allowClear
+          size="large"
+          className={`dropdownSelectInput ${size === "small" && "sm"} `}
+          disabled={disabled}
+          loading={isLoading}
+          defaultValue={defaultValue}
+          onChange={(value: string) => onChange && onChange(value)}
+          suffixIcon={suffixIcon}
+          filterOption={(input, option) =>
+            (option &&
+              option?.key?.toLowerCase().indexOf(input.toLowerCase()) >= 0) ||
+            option?.title?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          {isGroupDropdown
+            ? children
+            : options?.map((opt: any, index: number) => {
+                return (
+                  <Option key={index} value={opt.value} title={opt.value}>
+                    {opt.label}
+                  </Option>
+                );
+              })}
+        </Select>
+      </Form.Item>
+    </Fragment>
+  );
+
   const textAreaInput = (
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
@@ -285,12 +320,16 @@ const Entry = ({
   switch (type) {
     case "text":
       return textInput;
+
     case "select":
       return selectInput;
+
     case "text_area":
       return textAreaInput;
+
     case "password":
       return passwordInput;
+
     case "date":
       return dateInput;
 
@@ -299,6 +338,10 @@ const Entry = ({
 
     case "file":
       return fileInput;
+
+    case "dropdownSelect":
+      return dropdownSelectInput;
+
     default:
       return null;
   }

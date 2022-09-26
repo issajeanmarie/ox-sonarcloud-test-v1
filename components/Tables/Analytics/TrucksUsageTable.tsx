@@ -186,7 +186,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
   ];
   return (
     <Table
-      className="data_table light_white_header light_white_table"
+      className="data_table light_white_header light_white_table@"
       columns={columns}
       dataSource={truckData}
       rowKey={(record) => record?.index}
