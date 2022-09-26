@@ -6,7 +6,6 @@ export type AnalyticTrucksTypes = {
   truckData: any;
   truckLoading: boolean;
   truckFetching: boolean;
-  onSortChange: (sorter: string) => void;
   sorter: string;
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
@@ -14,6 +13,8 @@ export type AnalyticTrucksTypes = {
   handleDownloadClients: () => void;
   isDownloadingTruckReport: boolean;
   isDownloadFetching: boolean;
+  selectedSort: any;
+  setSelectedSort: any;
 };
 
 export type truckTableTypes = {

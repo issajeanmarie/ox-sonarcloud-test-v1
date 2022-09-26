@@ -10,11 +10,12 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
   clientOrders,
   isClientLoading,
   isClientOrdersFetching,
-  handleFilterChange,
   handleLoadMore,
   pageSize,
   isMoreClientsOrderFetching,
-  moreClientOrders
+  moreClientOrders,
+  selectedFilter,
+  setSelectedFilter
 }) => {
   return (
     <Col
@@ -28,7 +29,8 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
     >
       <Header
         orders={clientOrders?.orders}
-        handleFilterChange={handleFilterChange}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
         totalPending={clientOrders?.totalPending}
       />
       {isClientLoading ? (

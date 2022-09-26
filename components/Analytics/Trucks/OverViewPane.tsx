@@ -23,6 +23,15 @@ import TruckActivityBreakdownChart from "../Charts/TruckActivityBreakdownChart";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { TruckRevenueBreakdownChart } from "../Charts/TruckRevenueBreakdownChart";
 import info from "antd/lib/message";
+import DropDownSelector from "../../Shared/DropDownSelector";
+import DaysCalculator from "../../../helpers/daysCalculator";
+
+const daysList = [
+  { id: 0, name: "Last 7 days", value: 7 },
+  { id: 1, name: "Last 15 days", value: 15 },
+  { id: 2, name: "Last month", value: 30 },
+  { id: 3, name: "Last 2 months", value: 60 }
+];
 
 const OvervieWPane = () => {
   const [getTruckOverview, { data }] = useLazyGetTruckOverviewQuery();
@@ -35,6 +44,8 @@ const OvervieWPane = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isPageLoading, setIsPageLoading] = useState(false);
+  const [selectedDay, setselectedDay] = useState<any>(daysList[0]);
+  const [isDateCustom, setIsDateCustom] = useState(false);
 
   const router = useRouter();
   const { id: truckId } = router.query;
@@ -84,11 +95,19 @@ const OvervieWPane = () => {
     }
   }, [truckId, getTruckRevenueAnalytics, startDate, endDate]);
 
+  useEffect(() => {
+    const { start, end } = DaysCalculator(selectedDay.value || 0);
+    setStartDate(start);
+    setEndDate(end);
+  }, [selectedDay]);
+
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
+    setIsDateCustom(true);
   };
   const onEndDateChange = (_: string, date: string) => {
     setEndDate(date);
+    setIsDateCustom(true);
   };
 
   const cardsData = [
@@ -132,7 +151,33 @@ const OvervieWPane = () => {
         justify="space-between"
         className="bg-white my-4 mb-12 rounded shadow-[0px_0px_19px_#2A354808]"
       >
-        <Col className="flex items-center gap-4">
+        <Col className="flex items-center gap-4 pl-2">
+          {!isDateCustom ? (
+            <DropDownSelector
+              label="Show"
+              dropDownContent={daysList}
+              defaultSelected={selectedDay}
+              setDefaultSelected={setselectedDay}
+            />
+          ) : (
+            <Row align="middle" gutter={12}>
+              <Col className="font-bold">Custom</Col>
+              <Col>
+                <Image
+                  onClick={() => {
+                    setIsDateCustom(false);
+                    setselectedDay(daysList[0]);
+                  }}
+                  preview={false}
+                  src="/icons/close_black_24dp.svg"
+                  alt=""
+                  className="mt-2 pointer"
+                  width={16}
+                />
+              </Col>
+            </Row>
+          )}
+
           <Input
             onDateChange={onStartDateChange}
             type="date"

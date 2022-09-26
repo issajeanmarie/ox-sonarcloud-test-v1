@@ -55,8 +55,8 @@ const Drivers = () => {
   } = useDriversQuery({
     page: "",
     size: pageSize,
-    sort: sort,
-    status: selectedFilter
+    sort: sort?.value || "",
+    status: selectedFilter.value || ""
   });
 
   const [Drivers, { isFetching: loadingMoreFetching }] = useLazyDriversQuery();
@@ -66,19 +66,12 @@ const Drivers = () => {
     return searchQuery;
   };
 
-  const onFilterChange = (status: string) => {
-    setSelectedFilter(status);
-  };
-  const onSortChange = (sorter: string) => {
-    setSort(sorter);
-  };
-
   const handleLoadMore = () => {
     Drivers({
       page: "",
       size: pageSize,
-      sort: sort,
-      status: selectedFilter
+      sort: sort?.value || "",
+      status: selectedFilter?.value || ""
     })
       .unwrap()
       .then((res) => {
@@ -116,8 +109,10 @@ const Drivers = () => {
           Drivers={AllDrivers?.payload}
           isDriversLoading={isDriversLoading}
           handleSearch={handleSearch}
-          onFilterChange={onFilterChange}
-          onSortChange={onSortChange}
+          selectedFilter={selectedFilter}
+          setSelectedFilter={setSelectedFilter}
+          selectedSort={sort}
+          setSelectedSort={setSort}
         />
       </AccountsMenusNavigatorWrapper>
 

@@ -25,6 +25,7 @@ import {
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
+import DropDownSelector from "../../../components/Shared/DropDownSelector";
 
 const { Text } = Typography;
 
@@ -48,6 +49,8 @@ type BrowserState = {
 const Trucks = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentPages, setCurrentPages] = useState(1);
+  const [selectedFilter, setSelectedFilter] = useState<any>({});
+  const [selectedSort, setSelectedSort] = useState<any>({});
   const [loadMoreTrucks, { isLoading: loadMoreLoading }] =
     useLoadMoreTrucksMutation();
   const [getTrucks, { isLoading: getTrucksLoading }] = useLazyGetTrucksQuery();
@@ -132,11 +135,11 @@ const Trucks = () => {
     });
   };
 
-  const handleFilterTrucks = (status: string) => {
+  useEffect(() => {
     setBrowserStates({
       search: browserSearch || "",
       sort: browserSort || "",
-      status
+      status: selectedFilter.value || ""
     });
 
     handleAPIRequests({
@@ -144,17 +147,17 @@ const Trucks = () => {
       handleSuccess: handleFilterTrucksSuccess,
       size: pagination.trucks,
       page: 0,
-      status,
+      status: selectedFilter.value || "",
       sort: browserSort,
       search: browserSearch,
       showSuccess: false
     });
-  };
+  }, [selectedFilter]);
 
-  const handleSortTrucks = (sort: string) => {
+  useEffect(() => {
     setBrowserStates({
       status: browserStatus || "",
-      sort,
+      sort: selectedSort.value || "",
       search: browserSearch || ""
     });
 
@@ -165,9 +168,9 @@ const Trucks = () => {
       page: 0,
       status: browserStatus,
       search: browserSearch,
-      sort: sort
+      sort: selectedSort.value || ""
     });
-  };
+  }, [selectedSort]);
 
   const handleSearchTruck = (search: string) => {
     setBrowserStates({
@@ -231,49 +234,27 @@ const Trucks = () => {
             }
           />
 
-          <CustomInput
-            type="select"
-            label=""
-            placeholder="Filter: All trucks"
-            options={[
-              { label: "All", value: "ALL" },
-              { label: "In use", value: "ACTIVE" },
-              { label: "Out of service", value: "INACTIVE" }
+          <DropDownSelector
+            label="Filter"
+            dropDownContent={[
+              { id: 0, name: "All", value: "ALL" },
+              { id: 1, name: "In use", value: "ACTIVE" },
+              { id: 2, name: "Out of service", value: "INACTIVE" }
             ]}
-            name="sort"
-            showSearch={false}
-            onChange={handleFilterTrucks}
-            suffixIcon={
-              <Image
-                preview={false}
-                src="/icons/expand_more_black_24dp.svg"
-                alt=""
-                width={10}
-              />
-            }
+            defaultSelected={selectedFilter}
+            setDefaultSelected={setSelectedFilter}
           />
 
-          <CustomInput
-            type="select"
-            label=""
-            placeholder="Sort: Date (New - Old)"
-            options={[
-              { label: "Date (New - Old)", value: "DATE_DESC" },
-              { label: "Date (Old - New)", value: "DATE_ASC" },
-              { label: "Name (A - Z)", value: "NAMES_ASC" },
-              { label: "Name (Z - A)", value: "NAMES_DESC" }
+          <DropDownSelector
+            label="Sort"
+            dropDownContent={[
+              { id: 0, name: "Date (New - Old)", value: "DATE_DESC" },
+              { id: 1, name: "Date (Old - New)", value: "DATE_ASC" },
+              { id: 2, name: "Name (A - Z)", value: "NAMES_ASC" },
+              { id: 3, name: "Name (Z - A)", value: "NAMES_DESC" }
             ]}
-            name="sort"
-            showSearch={false}
-            onChange={handleSortTrucks}
-            suffixIcon={
-              <Image
-                preview={false}
-                src="/icons/expand_more_black_24dp.svg"
-                alt=""
-                width={10}
-              />
-            }
+            defaultSelected={selectedSort}
+            setDefaultSelected={setSelectedSort}
           />
         </div>
 

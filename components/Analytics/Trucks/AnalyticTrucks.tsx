@@ -22,14 +22,15 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
   truckData,
   truckLoading,
   truckFetching,
-  onSortChange,
   sorter,
   onStartDateChange,
   onEndDateChange,
   handleSearch,
   handleDownloadClients,
   isDownloadingTruckReport,
-  isDownloadFetching
+  isDownloadFetching,
+  selectedSort,
+  setSelectedSort
 }) => {
   const formData = new FormData();
   const [uploadResponse, setUploadResponse] = useState("");
@@ -111,7 +112,6 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
         )}
         {!truckLoading && (
           <TrucksUsage
-            onSortChange={onSortChange}
             sorter={sorter}
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
@@ -121,6 +121,8 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
             handleDownloadClients={handleDownloadClients}
             isDownloadingTruckReport={isDownloadingTruckReport}
             isDownloadFetching={isDownloadFetching}
+            selectedSort={selectedSort}
+            setSelectedSort={setSelectedSort}
           />
         )}
       </AnalyticTopContentWrapper>

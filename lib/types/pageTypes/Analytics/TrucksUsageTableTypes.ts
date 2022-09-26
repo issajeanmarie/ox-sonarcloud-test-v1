@@ -28,7 +28,6 @@ export type TrucksUsageTableColumnsTypes = {
 };
 
 export type TrucksUsageTypes = {
-  onSortChange: any;
   sorter: string;
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
@@ -38,4 +37,6 @@ export type TrucksUsageTypes = {
   handleDownloadClients: () => void;
   isDownloadingTruckReport: boolean;
   isDownloadFetching: boolean;
+  selectedSort: any;
+  setSelectedSort: any;
 };

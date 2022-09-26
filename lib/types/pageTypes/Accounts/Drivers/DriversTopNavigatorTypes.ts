@@ -8,6 +8,8 @@ export type DriversTopNavigatorTypes = {
   Drivers: any;
   isDriversLoading: boolean;
   handleSearch: (value: string) => void;
-  onFilterChange: (status: string) => void;
-  onSortChange: (sorter: string) => void;
+  selectedFilter: any;
+  setSelectedFilter: any;
+  selectedSort: any;
+  setSelectedSort: any;
 };

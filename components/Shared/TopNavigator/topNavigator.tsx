@@ -14,8 +14,13 @@ const TopNavigator: FC<TopNavigatorProps> = ({
   toggleActiveHandler,
   onStartDateChange,
   onEndDateChange,
-  onLastWeekChange,
-  handleDepotChange
+  selectedDay,
+  setselectedDay,
+  isDateCustom,
+  setIsDateCustom,
+  daysList,
+  selectedDepot,
+  setSelectedDepot
 }) => {
   useEffect(() => {
     headerLinks && setActive && setActive(headerLinks[0].id);
@@ -49,7 +54,11 @@ const TopNavigator: FC<TopNavigatorProps> = ({
           <RightSideRevenue
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
-            onLastWeekChange={onLastWeekChange}
+            daysList={daysList}
+            selectedDay={selectedDay}
+            setSelectedDay={setselectedDay}
+            isDateCustom={isDateCustom}
+            setIsDateCustom={setIsDateCustom}
           />
         </TopNavigatorRightSideWrapper>
       )}
@@ -58,8 +67,13 @@ const TopNavigator: FC<TopNavigatorProps> = ({
           <RightSideKPIs
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
-            onLastWeekChange={onLastWeekChange}
-            handleDepotChange={handleDepotChange}
+            daysList={daysList}
+            selectedDay={selectedDay}
+            setSelectedDay={setselectedDay}
+            isDateCustom={isDateCustom}
+            setIsDateCustom={setIsDateCustom}
+            selectedDepot={selectedDepot}
+            setSelectedDepot={setSelectedDepot}
           />
         </TopNavigatorRightSideWrapper>
       )}
