@@ -41,9 +41,9 @@ const Clients = () => {
     org: "",
     dest: "",
     hq: "",
-    categoryId: selectedCategory,
+    categoryId: selectedCategory?.id || "",
     q: searchQuery,
-    sort: sort,
+    sort: sort.value || "",
     source: ""
   });
 
@@ -52,18 +52,10 @@ const Clients = () => {
   const [downloadClients, { isLoading: isDownloadingClientsLoading }] =
     useLazyDownloadClientsQuery();
 
-  const { data: categories, isLoading: isCategoriesLoading } =
-    useCategoriesQuery();
+  const { data: categories } = useCategoriesQuery();
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
-  };
-
-  const onCategoryChange = (categoryID: number) => {
-    setSelectedCategory(categoryID);
-  };
-  const onSortChange = (sorter: string) => {
-    setSort(sorter);
   };
 
   const handleDownloadClients = () => {
@@ -72,9 +64,9 @@ const Clients = () => {
       org: "",
       dest: "",
       hq: "",
-      categoryId: selectedCategory,
+      categoryId: selectedCategory?.id || "",
       q: searchQuery,
-      sort: sort,
+      sort: sort.value || "",
       source: ""
     })
       .unwrap()
