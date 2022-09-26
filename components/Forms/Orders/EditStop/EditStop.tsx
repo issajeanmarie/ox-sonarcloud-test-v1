@@ -5,6 +5,7 @@ import moment from "moment";
 import { FC, useEffect } from "react";
 import { useEditStopMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { EditStopRequest, Order, Stop } from "../../../../lib/types/orders";
+import ModalWrapper from "../../../Modals/ModalWrapper";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
 
@@ -12,9 +13,17 @@ interface EditStopProps {
   order: Order;
   stop?: Stop;
   closeModal: () => void;
+  isEditStopModal: boolean;
+  setIsEditStopModal: any;
 }
 
-const EditStop: FC<EditStopProps> = ({ order, stop, closeModal }) => {
+const EditStop: FC<EditStopProps> = ({
+  order,
+  stop,
+  closeModal,
+  isEditStopModal,
+  setIsEditStopModal
+}) => {
   const [editStop, { isLoading }] = useEditStopMutation();
 
   const [form] = useForm();
@@ -63,10 +72,14 @@ const EditStop: FC<EditStopProps> = ({ order, stop, closeModal }) => {
   }, [stop]);
 
   return (
-    <div className="m-8">
-      <div className="heading1 mb-14">Edit {stop?.name}</div>
+    <ModalWrapper
+      title={`Edit ${stop?.name?.split(",")[0]} stop`}
+      loading={isLoading}
+      isModalVisible={isEditStopModal}
+      setIsModalVisible={setIsEditStopModal}
+    >
       <Form form={form} onFinish={handleOnFinish}>
-        <div className="my-10">
+        <div className="mb-10">
           <div className="flex items-center gap-4 my-5">
             <div className="flex-1">
               <Input
@@ -128,7 +141,7 @@ const EditStop: FC<EditStopProps> = ({ order, stop, closeModal }) => {
           </div>
         </div>
       </Form>
-    </div>
+    </ModalWrapper>
   );
 };
 

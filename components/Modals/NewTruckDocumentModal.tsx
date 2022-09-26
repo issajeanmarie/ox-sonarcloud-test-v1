@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Form from "antd/lib/form";
-import Modal from "antd/lib/modal";
 import Input from "../Shared/Input";
 import info from "antd/lib/message";
 import { requiredField } from "../../lib/validation/InputValidations";
@@ -18,6 +17,7 @@ import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import { displaySingleTruck } from "../../lib/redux/slices/trucksSlice";
 import moment from "moment";
+import ModalWrapper from "./ModalWrapper";
 
 type RequestTypes = {
   title: string;
@@ -170,132 +170,124 @@ const NewTRuckDocumentModal = ({
   }, [uploadSuccess, uploadFailure]);
 
   return (
-    <Modal
-      title={false}
-      footer={false}
-      visible={isVisible}
-      closable={!isLoading && !uploadLoading && !editDocumentLoading}
+    <ModalWrapper
+      title={`${isUserEditing ? "EDIT" : "UPLOAD"} A DOCUMENT`}
+      isModalVisible={isVisible}
+      setIsModalVisible={setIsVisible}
+      loading={isLoading || uploadLoading || editDocumentLoading}
       onCancel={handleCancel}
-      centered
-      maskClosable={!isLoading && !uploadLoading && !editDocumentLoading}
     >
-      <div className="m-10">
-        <div className="text-2xl font-bold  text-ox-dark mb-10">
-          UPLOAD DOCUMENT
-        </div>
-
-        <Form
-          name="CreateTruck"
-          initialValues={initialValues}
-          onFinish={onFinish}
-          layout="vertical"
-          form={form}
-          title="Plate number"
-        >
-          <div className="flex gap-10 mb-5">
-            <div className="flex-1">
-              <div>
-                <Input
-                  name="title"
-                  type="text"
-                  placeholder="Format (AAA 000 A)"
-                  inputType="text"
-                  label="Document title"
-                  rules={requiredField("Title")}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-5">
+      <Form
+        name="CreateTruck"
+        initialValues={initialValues}
+        onFinish={onFinish}
+        layout="vertical"
+        form={form}
+        title="Plate number"
+      >
+        <div className="flex gap-10 mb-5">
+          <div className="flex-1">
             <div>
               <Input
-                name="document"
-                type="file"
-                placeholder="Choose file to upload"
-                inputType="file"
-                label="Document"
-                onChange={handlePhotoData}
-                fileName={photoData[0]?.name || editTruckData?.url}
-                value=""
+                name="title"
+                type="text"
+                placeholder="Format (AAA 000 A)"
+                inputType="text"
+                label="Document title"
+                rules={requiredField("Title")}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-5">
+          <div>
+            <Input
+              name="document"
+              type="file"
+              placeholder="Choose file to upload"
+              inputType="file"
+              label="Document"
+              onChange={handlePhotoData}
+              fileName={photoData[0]?.name || editTruckData?.url}
+              value=""
+            />
+          </div>
+        </div>
+
+        <Row gutter={24} align="middle">
+          <Col>Has an expiry date</Col>
+
+          <Col>
+            <CircleCheckbox
+              defaultValue={true}
+              checked={false}
+              setState={() => null}
+              state={false}
+            />
+          </Col>
+        </Row>
+
+        <div className="flex gap-10 my-5">
+          <div className="flex-1">
+            <div>
+              <Input
+                rules={requiredField("Start date")}
+                name="validFrom"
+                type="date"
+                label="Date"
+                suffixIcon={
+                  <Image
+                    src="/icons/ic-actions-calendar.svg"
+                    alt="Calendar icon"
+                    width={18}
+                    height={18}
+                  />
+                }
               />
             </div>
           </div>
 
-          <Row gutter={24} align="middle">
-            <Col>Has an expiry date</Col>
-
-            <Col>
-              <CircleCheckbox
-                defaultValue={true}
-                checked={false}
-                setState={() => null}
-                state={false}
+          <div className="flex-1">
+            <div>
+              <Input
+                rules={requiredField("End date")}
+                type="date"
+                label="Valid to"
+                name="validTo"
+                placeholder="Start"
+                suffixIcon={
+                  <Image
+                    preview={false}
+                    src="/icons/ic-actions-calendar.svg"
+                    alt=""
+                    width={18}
+                  />
+                }
               />
-            </Col>
-          </Row>
-
-          <div className="flex gap-10 my-5">
-            <div className="flex-1">
-              <div>
-                <Input
-                  rules={requiredField("Start date")}
-                  name="validFrom"
-                  type="date"
-                  label="Date"
-                  suffixIcon={
-                    <Image
-                      src="/icons/ic-actions-calendar.svg"
-                      alt="Calendar icon"
-                      width={18}
-                      height={18}
-                    />
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="flex-1">
-              <div>
-                <Input
-                  rules={requiredField("End date")}
-                  type="date"
-                  label="Valid to"
-                  name="validTo"
-                  placeholder="Start"
-                  suffixIcon={
-                    <Image
-                      preview={false}
-                      src="/icons/ic-actions-calendar.svg"
-                      alt=""
-                      width={18}
-                    />
-                  }
-                />
-              </div>
             </div>
           </div>
+        </div>
 
-          <div className="flex gap-10 my-5">
-            <div className="flex-1"></div>
+        <div className="flex gap-10 my-5">
+          <div className="flex-1"></div>
 
-            <div className="flex-1">
-              <Button
-                loading={uploadLoading || isLoading || editDocumentLoading}
-                type="primary"
-                htmlType="submit"
-              >
-                {uploadLoading
-                  ? "Uploading"
-                  : editDocumentLoading
-                  ? "Saving"
-                  : "Save"}
-              </Button>
-            </div>
+          <div className="flex-1">
+            <Button
+              loading={uploadLoading || isLoading || editDocumentLoading}
+              type="primary"
+              htmlType="submit"
+            >
+              {uploadLoading
+                ? "Uploading"
+                : editDocumentLoading
+                ? "Saving"
+                : "Save"}
+            </Button>
           </div>
-        </Form>
-      </div>
-    </Modal>
+        </div>
+      </Form>
+    </ModalWrapper>
   );
 };
 

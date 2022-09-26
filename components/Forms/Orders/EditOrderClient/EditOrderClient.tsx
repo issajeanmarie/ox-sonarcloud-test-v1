@@ -5,12 +5,15 @@ import Button from "../../../Shared/Button";
 import { useEditOrderMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { Query } from "../../../../lib/types/shared";
 import { Client } from "../../../../lib/types/clients";
+import ModalWrapper from "../../../Modals/ModalWrapper";
 
 interface EditOrderClientProps {
   orderId: Query;
   existingClient: number;
   closeModal: () => void;
   clients: Client[];
+  isEditClientModal: boolean;
+  setIsEditClientModal: any;
 }
 
 const { Option } = Select;
@@ -19,7 +22,9 @@ const EditOrderClient: FC<EditOrderClientProps> = ({
   orderId,
   existingClient,
   clients,
-  closeModal
+  closeModal,
+  isEditClientModal,
+  setIsEditClientModal
 }) => {
   const [editOrder, { isLoading }] = useEditOrderMutation();
 
@@ -36,8 +41,12 @@ const EditOrderClient: FC<EditOrderClientProps> = ({
   };
 
   return (
-    <div className="m-8">
-      <div className="heading1 mb-14">EDIT ORDER CLIENT</div>
+    <ModalWrapper
+      title="EDIT ORDER CLIENT"
+      loading={isLoading}
+      isModalVisible={isEditClientModal}
+      setIsModalVisible={setIsEditClientModal}
+    >
       <Form
         initialValues={{ clientId: existingClient }}
         onFinish={handleOnFinish}
@@ -63,7 +72,7 @@ const EditOrderClient: FC<EditOrderClientProps> = ({
           </Button>
         </div>
       </Form>
-    </div>
+    </ModalWrapper>
   );
 };
 

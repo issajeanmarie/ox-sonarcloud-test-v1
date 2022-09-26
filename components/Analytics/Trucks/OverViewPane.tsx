@@ -22,6 +22,7 @@ import { percentageCalculator } from "../../../helpers/pacentageCalculators";
 import TruckActivityBreakdownChart from "../Charts/TruckActivityBreakdownChart";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { TruckRevenueBreakdownChart } from "../Charts/TruckRevenueBreakdownChart";
+import info from "antd/lib/message";
 
 const OvervieWPane = () => {
   const [getTruckOverview, { data }] = useLazyGetTruckOverviewQuery();
@@ -110,12 +111,18 @@ const OvervieWPane = () => {
     fileDownload(file, `Report-${date}.xlsx`);
   };
 
+  const handleDownloadFileFailure = () => {
+    info.error("No data to download");
+  };
+
   const handleDownloadShift = () => {
     handleAPIRequests({
       request: downloadTruckShifts,
       id: truckId,
       showSuccess: true,
-      handleSuccess: handleDownloadFile
+      showFailure: false,
+      handleSuccess: handleDownloadFile,
+      handleFailure: handleDownloadFileFailure
     });
   };
 

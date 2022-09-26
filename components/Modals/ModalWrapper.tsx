@@ -7,6 +7,8 @@ interface ModalProps {
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   title: string;
   loading: boolean;
+  onCancel?: () => void;
+  destroyOnClose?: boolean;
 }
 
 const ModalWrapper: FC<ModalProps> = ({
@@ -14,7 +16,9 @@ const ModalWrapper: FC<ModalProps> = ({
   setIsModalVisible,
   children,
   title,
-  loading
+  loading,
+  onCancel,
+  destroyOnClose
 }) => {
   const handleOk = () => {
     setIsModalVisible(false);
@@ -32,7 +36,7 @@ const ModalWrapper: FC<ModalProps> = ({
           <span className="font-bold text-2xl">{title}</span>
           {!loading && (
             <Button
-              onClick={handleCancel}
+              onClick={onCancel || handleCancel}
               style={{ margin: 0, padding: 0 }}
               type="text"
             >
@@ -45,10 +49,11 @@ const ModalWrapper: FC<ModalProps> = ({
       footer={false}
       visible={isModalVisible}
       onOk={handleOk}
-      onCancel={handleCancel}
+      onCancel={onCancel || handleCancel}
       centered
-      maskClosable={loading ? false : true}
+      maskClosable={!loading}
       closable={false}
+      destroyOnClose={destroyOnClose}
     >
       {children}
     </Modal>

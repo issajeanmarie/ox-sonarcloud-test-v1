@@ -6,13 +6,21 @@ import CircleCheckbox from "../../../Shared/Custom/CircleCheckbox";
 import { EditPaymentStatusRequest, Order } from "../../../../lib/types/orders";
 import { useEditPaymentStatusMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import moment from "moment";
+import ModalWrapper from "../../../Modals/ModalWrapper";
 
 interface PaymentStatusProps {
   order: Order;
   closeModal: () => void;
+  isEditPaymentStatus: boolean;
+  setIsEditPaymentStatus: any;
 }
 
-const PaymentStatus: FC<PaymentStatusProps> = ({ order, closeModal }) => {
+const PaymentStatus: FC<PaymentStatusProps> = ({
+  order,
+  closeModal,
+  isEditPaymentStatus,
+  setIsEditPaymentStatus
+}) => {
   const [checked, setChecked] = useState<boolean>(false);
 
   const [editPaymentStatus, { isLoading }] = useEditPaymentStatusMutation();
@@ -46,10 +54,14 @@ const PaymentStatus: FC<PaymentStatusProps> = ({ order, closeModal }) => {
   };
 
   return (
-    <div className="m-8">
-      <div className="heading1 mb-14">PAYMENT STATUS</div>
+    <ModalWrapper
+      title="PAYMENT STATUS"
+      isModalVisible={isEditPaymentStatus}
+      setIsModalVisible={setIsEditPaymentStatus}
+      loading={isLoading}
+    >
       <Form onFinish={handleFinish}>
-        <div className="my-10">
+        <div className="mb-10">
           <div className="flex items-center gap-4 my-5">
             <div className="flex-1">
               <Input
@@ -84,7 +96,7 @@ const PaymentStatus: FC<PaymentStatusProps> = ({ order, closeModal }) => {
             />
           </div>
           <div className="flex items-center gap-4">
-            <div className="text-sm">Add as waiting time fee</div>
+            <div className="text-sm">Add as waiting time feez</div>
             <div>
               <CircleCheckbox
                 defaultValue={true}
@@ -103,7 +115,7 @@ const PaymentStatus: FC<PaymentStatusProps> = ({ order, closeModal }) => {
           </div>
         </div>
       </Form>
-    </div>
+    </ModalWrapper>
   );
 };
 
