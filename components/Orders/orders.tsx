@@ -3,37 +3,101 @@ import { FC, Fragment, useEffect, useState } from "react";
 import OrdersHeader from "./OrdersHeader";
 import OneOrder from "./OneOrder";
 import { useLazyOrdersQuery } from "../../lib/api/endpoints/Orders/ordersEndpoints";
-import { message } from "antd";
 import Loader from "../Shared/Loader";
 import { Order, Order_Filter } from "../../lib/types/orders";
-import { useSelector } from "react-redux";
-import { RootState } from "../../lib/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { displayOrders } from "../../lib/redux/slices/ordersSlice";
 import Button from "../Shared/Button";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
+import { pagination } from "../../config/pagination";
+import { useRouter } from "next/router";
+import { getFromLocal } from "../../helpers/handleLocalStorage";
+import { OX_ORDERS_FILTERS } from "../../config/constants";
 
 const Orders: FC = () => {
-  const depot = useSelector((state: RootState) => state.depot);
+  const [currentPages, setCurrentPages] = useState(1);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+  const ordersState = useSelector((state: any) => state.orders.displayOrders);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const { depotId, depotName } = router.query;
 
   const [getOrders, { data, isLoading, isFetching }] = useLazyOrdersQuery({});
 
-  const [filters, setFilters] = useState<Order_Filter>();
+  const filters = getFromLocal(OX_ORDERS_FILTERS);
 
-  const getOrdersAction = (filters: Order_Filter) => {
-    getOrders(filters)
-      .unwrap()
-      .then()
-      .catch((e) => {
-        message.error(e.message || "Something went wrong");
-      });
+  const handleRenderSuccess = (res: any) => {
+    dispatch(displayOrders({ payload: res, onReder: true }));
   };
 
-  const triggerPagination = (page: string) => {
-    setFilters({ ...filters, page });
+  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
+    dispatch(displayOrders({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreOrdersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const getOrdersAction = ({
+    depot = depotId && +depotId,
+    filter = filters?.filter || "",
+    page,
+    size = pagination.orders.size,
+    handleSuccess = handleRenderSuccess,
+    handleFailure,
+    start = filters?.start,
+    end = filters?.end,
+    momoRefCode = filters?.momoRefCode,
+    truck = filters?.truck,
+    driver = filters?.driver,
+    request = getOrders
+  }: Order_Filter) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      handleSuccess,
+      handleFailure,
+      depot,
+      filter,
+      start,
+      end,
+      momoRefCode,
+      truck,
+      driver
+    });
+  };
+
+  const handleLoadMore = () => {
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
+
+    getOrdersAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreOrdersFailure,
+      handleSuccess: handleLoadMoreOrdersSuccess
+    });
   };
 
   useEffect(() => {
-    // Apply pagination and filters here
-    getOrdersAction({ ...filters, depot: depot.depotData.id });
-  }, [depot, filters]);
+    if (router.isReady) {
+      if (depotName) {
+        getOrdersAction({
+          depot: depotId && +depotId
+        });
+      } else {
+        getOrdersAction({});
+        router.push({ query: { depotName: "All depots" } });
+      }
+    }
+  }, [depotId, depotName, router.isReady]);
+
+  const showPaginationBtn =
+    ordersState?.payload?.totalPages > currentPages || isLoadMoreLoading;
+
+  const isOnlyFetching = isFetching && !isLoadMoreLoading;
 
   return (
     <div className="mx-4 relative">
@@ -46,25 +110,29 @@ const Orders: FC = () => {
             getOrders={getOrdersAction}
             loading={isFetching}
           />
-          {data &&
-            data.payload?.content?.map((order: Order, index: number) => (
+
+          {isFetching && !isLoadMoreLoading ? (
+            <Loader />
+          ) : (
+            data &&
+            ordersState.payload?.content?.map((order: Order, index: number) => (
               <OneOrder key={index} index={index + 1} order={order} />
-            ))}
-          <div className="flex justify-center mb-4">
-            <div className="w-[100px]">
-              <Button
-                type="primary"
-                loading={isFetching}
-                onClick={() =>
-                  triggerPagination(
-                    String(data?.payload?.pageable?.pageNumber + 1)
-                  )
-                }
-              >
-                Load more
-              </Button>
+            ))
+          )}
+
+          {showPaginationBtn && !isOnlyFetching && (
+            <div className="flex justify-center mb-4">
+              <div className="w-[100px]">
+                <Button
+                  type="primary"
+                  loading={isLoadMoreLoading}
+                  onClick={handleLoadMore}
+                >
+                  Load more
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
         </Fragment>
       )}
     </div>

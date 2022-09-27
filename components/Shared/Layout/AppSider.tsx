@@ -10,25 +10,24 @@ import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
 import { manageSidebarMenus, moreSidebarMenus } from "../../../helpers/menus";
 import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
-import { useDispatch, useSelector } from "react-redux";
-import { setDepotData } from "../../../lib/redux/slices/depotSlice";
 import { depotTypes } from "../../../lib/types/depots";
-import { RootState } from "../../../lib/redux/store";
 const { Sider } = Layout;
 const { Text } = Typography;
 
 const AppSider = ({ collapsed }: any) => {
-  const dispatch = useDispatch();
-  const { depotData } = useSelector((state: RootState) => state.depot);
+  const router = useRouter();
+  const { depotId: depotID, depotName } = router.query;
 
   const { data, isLoading } = useDepotsQuery();
+
   const handleDepotChange = (depot: depotTypes | undefined) => {
-    dispatch(setDepotData(depot));
+    router.push({
+      query: { depotId: depot?.id, depotName: depot?.name }
+    });
   };
 
-  const menus = manageSidebarMenus(depotData?.id, depotData?.name);
-  const moreMenus = moreSidebarMenus(depotData?.id, depotData?.name);
-  const router = useRouter();
+  const menus = manageSidebarMenus();
+  const moreMenus = moreSidebarMenus();
 
   const depots = (
     <Space
@@ -59,7 +58,7 @@ const AppSider = ({ collapsed }: any) => {
       <div className="p-6">
         <Row
           className="p-4 cursor-pointer"
-          onClick={() => handleDepotChange(undefined)}
+          onClick={() => handleDepotChange({ id: 0, name: "All depots" })}
           gutter={12}
           align="middle"
         >
@@ -132,7 +131,7 @@ const AppSider = ({ collapsed }: any) => {
 
             {!collapsed && (
               <div className="normalText text-white">
-                {isLoading ? "Loading depots" : depotData?.name}
+                {isLoading ? "Loading depots" : depotName}
               </div>
             )}
 
@@ -163,7 +162,12 @@ const AppSider = ({ collapsed }: any) => {
         {menus.map((menu) => (
           <>
             <Menu.Item
-              onClick={() => router.push(menu.url)}
+              onClick={() =>
+                router.push({
+                  pathname: menu.url,
+                  query: { depotId: depotID, depotName }
+                })
+              }
               className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
               key={menu.name}
               icon={
@@ -195,7 +199,12 @@ const AppSider = ({ collapsed }: any) => {
           if (moreMenu.name === "Settings") {
             return (
               <Menu.Item
-                onClick={() => router.push(moreMenu.url)}
+                onClick={() => {
+                  router.push({
+                    pathname: moreMenu.url,
+                    query: { depotId: depotID, depotName }
+                  });
+                }}
                 className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
                 key={moreMenu.name}
                 icon={
@@ -225,7 +234,12 @@ const AppSider = ({ collapsed }: any) => {
 
           return (
             <Menu.Item
-              onClick={() => router.push(moreMenu.url)}
+              onClick={() => {
+                router.push({
+                  pathname: moreMenu.url,
+                  query: { depotId: depotID, depotName }
+                });
+              }}
               className={`white fowe300 text14 my_menu_bg ${
                 !collapsed && "not_collapsed"
               }`}

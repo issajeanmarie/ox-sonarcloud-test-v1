@@ -55,7 +55,8 @@ const Entry = ({
   showTime,
   location,
   fileName,
-  picker
+  picker,
+  allowClear
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
@@ -131,7 +132,7 @@ const Entry = ({
           defaultValue={defaultValue}
           className={`my_input ${size === "small" && "sm"}`}
           placeholder={placeholder}
-          // allowClear
+          allowClear={allowClear}
           type={inputType}
           suffix={suffixIcon}
           onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
@@ -149,7 +150,7 @@ const Entry = ({
         <Select
           showSearch={showSearch || true}
           placeholder={placeholder}
-          // allowClear
+          allowClear={allowClear}
           size="large"
           className={`my_input bordered_input ${size === "small" && "sm"} `}
           disabled={disabled}
@@ -184,7 +185,7 @@ const Entry = ({
         <Select
           showSearch={showSearch || true}
           placeholder={placeholder}
-          // allowClear
+          allowClear={allowClear}
           size="large"
           className={`dropdownSelectInput ${size === "small" && "sm"} `}
           disabled={disabled}
@@ -231,7 +232,7 @@ const Entry = ({
       <Form.Item name={name} rules={rules}>
         <Input.Password
           className="my_input p-[12px]"
-          // allowClear
+          allowClear={allowClear}
           placeholder={placeholder}
         />
       </Form.Item>

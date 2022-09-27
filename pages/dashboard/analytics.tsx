@@ -15,14 +15,13 @@ import {
   useKPIsAnalyticsQuery,
   useLazyDownloadTruckAnalyticsQuery
 } from "../../lib/api/endpoints/Analytics/analyticEndpoints";
-import { RootState } from "../../lib/redux/store";
-import { useSelector } from "react-redux";
 import { useCategoriesQuery } from "../../lib/api/endpoints/Category/categoryEndpoints";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { handleDownloadFile } from "../../utils/handleDownloadFile";
 import { BackendErrorTypes } from "../../lib/types/shared";
 import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
 import DaysCalculator from "../../helpers/daysCalculator";
+import { useRouter } from "next/router";
 
 const daysList = [
   { id: 0, name: "Last 7 days", value: 7 },
@@ -36,7 +35,10 @@ const Analytics = () => {
   const [isDateCustom, setIsDateCustom] = useState(false);
   const [active, setActive] = useState<string>("trucks");
   const [sorter, setSorter] = useState<any>({});
-  const [selectedDepot, setSelectedDepot] = useState<any>();
+  const [selectedDepot, setSelectedDepot] = useState<any>({
+    id: 0,
+    name: "All depots"
+  });
   const [startDate, setStartDate] = useState(
     localStorage.getItem("ox_startDate")
       ? localStorage.getItem("ox_startDate")
@@ -47,18 +49,20 @@ const Analytics = () => {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory]: any = useState([]);
-  const { depotData } = useSelector((state: RootState) => state.depot);
   const { data: categories, isLoading: isCategoriesLoading } =
     useCategoriesQuery();
 
   const { start, end } = DaysCalculator(selectedDay?.value || "");
+  const router = useRouter();
+
+  const { depotId } = router.query;
 
   const {
     data: truckData,
     isLoading: truckLoading,
     isFetching: truckFetching
   } = useTruckAnalyticsQuery({
-    depot: depotData?.id,
+    depot: depotId && +depotId,
     start: startDate,
     end: endDate,
     sortBy: sorter?.value || "",
@@ -71,7 +75,7 @@ const Analytics = () => {
     isLoading: revenueLoading,
     isFetching: revenueFetching
   } = useRevenueAnalyticsQuery({
-    depot: depotData?.id,
+    depot: depotId && +depotId,
     start: isDateCustom ? startDate : start,
     end: isDateCustom ? endDate : end
   });
@@ -81,7 +85,7 @@ const Analytics = () => {
     isLoading: mapLoading,
     isFetching: mapFetching
   } = useMapAnalyticsQuery({
-    depot: depotData?.id,
+    depot: depotId && +depotId,
     category: selectedCategory[0]
   });
 
@@ -90,7 +94,7 @@ const Analytics = () => {
     isLoading: KPIsLoading,
     isFetching: KPIsFetching
   } = useKPIsAnalyticsQuery({
-    depot: selectedDepot?.id || depotData?.id,
+    depot: selectedDepot?.id || "",
     start: isDateCustom ? startDate : start,
     end: isDateCustom ? endDate : end
   });
@@ -103,7 +107,7 @@ const Analytics = () => {
   const handleDownloadClients = () => {
     downloadTruckAnalytics({
       file_type: "PDF",
-      depot: depotData?.id,
+      depot: depotId && +depotId,
       start: startDate,
       end: endDate,
       sortBy: sorter?.value || "",

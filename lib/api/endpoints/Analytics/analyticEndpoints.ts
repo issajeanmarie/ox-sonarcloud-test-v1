@@ -13,7 +13,11 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
     truckAnalytics: builder.query<AnalyticsResponse, TruckAnalyticsRequest>({
       providesTags: ["Analytics", "Depot"],
       query: (DTO) => ({
-        url: `/analytics/truck-analytics/new?depot=${DTO?.depot}&start=${DTO?.start}&end=${DTO?.end}&sortBy=${DTO?.sortBy}&direction=${DTO?.direction}&search=${DTO?.search}`,
+        url: `/analytics/truck-analytics/new?depot=${DTO?.depot || ""}&start=${
+          DTO?.start || ""
+        }&end=${DTO?.end || ""}&sortBy=${DTO?.sortBy || ""}&direction=${
+          DTO?.direction || ""
+        }&search=${DTO?.search || ""}`,
         method: "GET"
       })
     }),
@@ -23,7 +27,13 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
     >({
       providesTags: ["Analytics", "Depot"],
       query: (DTO) => ({
-        url: `/analytics/truck-analytics/download?depot=${DTO?.depot}&start=${DTO?.start}&end=${DTO?.end}&sortBy=${DTO?.sortBy}&direction=${DTO?.direction}&search=${DTO?.search}&file_type=${DTO?.file_type}`,
+        url: `/analytics/truck-analytics/download?depot=${
+          DTO?.depot || ""
+        }&start=${DTO?.start || ""}&end=${DTO?.end || ""}&sortBy=${
+          DTO?.sortBy || ""
+        }&direction=${DTO?.direction || ""}&search=${
+          DTO?.search || ""
+        }&file_type=${DTO?.file_type || ""}`,
         method: "GET",
         headers: {
           "content-type": "application/octet-stream"
@@ -35,7 +45,9 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
       {
         providesTags: ["Analytics", "Depot"],
         query: (DTO) => ({
-          url: `/analytics/revenue?depot=${DTO?.depot}&start=${DTO?.start}&end=${DTO?.end}`,
+          url: `/analytics/revenue?depot=${DTO?.depot || ""}&start=${
+            DTO?.start || ""
+          }&end=${DTO?.end || ""}`,
           method: "GET"
         })
       }
@@ -43,14 +55,18 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
     mapAnalytics: builder.query<AnalyticsResponse, MapAnalyticsRequest>({
       providesTags: ["Analytics", "Depot"],
       query: (DTO) => ({
-        url: `/analytics/client-locations?depot=${DTO?.depot}&category=${DTO?.category}`,
+        url: `/analytics/client-locations?depot=${DTO?.depot || ""}&category=${
+          DTO?.category || ""
+        }`,
         method: "GET"
       })
     }),
     KPIsAnalytics: builder.query<AnalyticsResponse, KPIsAnalyticsRequest>({
       providesTags: ["Analytics", "Depot"],
       query: (DTO) => ({
-        url: `/analytics/kpis?depot=${DTO?.depot}&start=${DTO?.start}&end=${DTO?.end}`,
+        url: `/analytics/kpis?depot=${DTO?.depot || ""}&start=${
+          DTO?.start || ""
+        }&end=${DTO?.end || ""}`,
         method: "GET"
       })
     })

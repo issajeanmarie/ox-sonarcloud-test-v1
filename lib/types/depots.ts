@@ -14,6 +14,6 @@ export interface DepotResponse {
 export type depotTypes = {
   id: number;
   name: string;
-  location: string;
-  coordinates: string | null;
+  location?: string;
+  coordinates?: string | null;
 };
