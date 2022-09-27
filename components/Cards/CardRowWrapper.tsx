@@ -1,6 +1,6 @@
 import { Row } from "antd";
 import React, { FC } from "react";
-import { CardRowWrapperTypes } from "../../../lib/types/pageTypes/Analytics/CardRowWrapperTypes";
+import { CardRowWrapperTypes } from "../../lib/types/components/Cards/CardRowWrapperTypes";
 
 const CardRowWrapper: FC<CardRowWrapperTypes> = ({ children, active }) => {
   return (

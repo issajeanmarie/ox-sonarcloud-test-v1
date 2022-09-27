@@ -1,9 +1,9 @@
 import { Col, Row } from "antd";
 import React, { FC } from "react";
 import AnalyticTopContentWrapper from "../Wrappers/AnalyticTopContentWrapper";
-import CardColWrapper from "../Cards/CardColWrapper";
-import CardRowWrapper from "../Cards/CardRowWrapper";
-import MediumCard from "../Cards/MediumCard";
+import CardColWrapper from "../../Cards/CardColWrapper";
+import CardRowWrapper from "../../Cards/CardRowWrapper";
+import MediumCard from "../../Cards/MediumCard";
 import RevenueBreakdownChart from "../Charts/RevenueBreakdownChart";
 import {
   MediumChartWrapper,

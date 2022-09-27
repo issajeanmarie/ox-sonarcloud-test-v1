@@ -1,7 +1,7 @@
 import { Card, Progress, Typography } from "antd";
 import React, { FC } from "react";
-import { numbersFormatter } from "../../../helpers/numbersFormatter";
-import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
+import { numbersFormatter } from "../../helpers/numbersFormatter";
+import { SmallSpinLoader } from "../Shared/Loaders/Loaders";
 
 const { Text } = Typography;
 

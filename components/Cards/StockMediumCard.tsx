@@ -1,12 +1,18 @@
 import { Card, Image, Typography } from "antd";
 import React, { FC } from "react";
-import { numbersFormatter } from "../../../helpers/numbersFormatter";
-import { AnalyticsCardTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticsCardTypes";
-import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
+import { numbersFormatter } from "../../helpers/numbersFormatter";
+import { SmallSpinLoader } from "../Shared/Loaders/Loaders";
 
 const { Text } = Typography;
 
-const MediumCard: FC<AnalyticsCardTypes> = ({
+type StockMediumCardTypes = {
+  title: string;
+  subTitle: string;
+  count: number;
+  isFetching: boolean;
+};
+
+const StockMediumCard: FC<StockMediumCardTypes> = ({
   title,
   subTitle,
   count,
@@ -32,7 +38,7 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
         {isFetching ? (
           <SmallSpinLoader />
         ) : (
-          <>{count !== null ? numbersFormatter(count) : "None"}</>
+          <>{count !== null ? <>{numbersFormatter(count)} KGS</> : "None"}</>
         )}
       </Text>
       <Text className="captionText">
@@ -42,4 +48,4 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
   );
 };
 
-export default MediumCard;
+export default StockMediumCard;

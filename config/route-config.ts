@@ -70,5 +70,21 @@ export const routes = {
   Kpis: {
     name: "KPIs",
     url: "/dashboard/kpis"
+  },
+  Warehouse: {
+    name: "Warehouse",
+    url: "/dashboard/warehouse"
+  },
+  Stock: {
+    name: "Stock",
+    url: "/dashboard/warehouse/stock"
+  },
+  Suppliers: {
+    name: "Suppliers",
+    url: "/dashboard/warehouse/suppliers"
+  },
+  SaleOrderDetails: {
+    name: "SaleOrderDetails",
+    url: "/dashboard/warehouse/order-details"
   }
 };
