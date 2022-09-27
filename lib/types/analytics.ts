@@ -21,7 +21,7 @@ export interface AnalyticsResponse {
 }
 
 export interface TruckAnalyticsRequest {
-  depot: number;
+  depot: number | "" | undefined;
   start: string | null;
   end: string | null;
   sortBy: string;
@@ -29,7 +29,7 @@ export interface TruckAnalyticsRequest {
   search: string | undefined;
 }
 export interface DownloadTruckAnalyticsRequest {
-  depot: number;
+  depot: number | "" | undefined;
   start: string | null;
   end: string | null;
   sortBy: string;
@@ -39,18 +39,18 @@ export interface DownloadTruckAnalyticsRequest {
 }
 
 export interface RevenueAnalyticsRequest {
-  depot: number;
+  depot: number | "" | undefined;
   start: string | null;
   end: string | null;
 }
 
 export interface KPIsAnalyticsRequest {
-  depot: number;
+  depot: number | "" | undefined;
   start: string | null;
   end: string | null;
 }
 
 export interface MapAnalyticsRequest {
-  depot: number;
+  depot: number | "" | undefined;
   category: number;
 }

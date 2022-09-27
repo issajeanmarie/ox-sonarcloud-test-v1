@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import Button from "../../Shared/Button";
 import { OrdersResponse, Order_Filter } from "../../../lib/types/orders";
 import { localeString } from "../../../utils/numberFormatter";
@@ -8,7 +8,8 @@ import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import Image from "next/image";
 import FilterOrdersModal from "../../Shared/Modal";
-import { LoadingOutlined } from "@ant-design/icons";
+import { getFromLocal } from "../../../helpers/handleLocalStorage";
+import { OX_ORDERS_FILTERS } from "../../../config/constants";
 
 interface OrdersHeaderProps {
   data?: ApiResponseMetadata<OrdersResponse>;
@@ -35,8 +36,13 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data, getOrders, loading }) => {
     if (!loading) handleOk();
   }, [loading]);
 
+  useEffect(() => {
+    const savedFilters = getFromLocal(OX_ORDERS_FILTERS);
+    if (savedFilters) setIsFiltered(true);
+  }, []);
+
   return (
-    <div className="sticky top-0 py-4 z-10 bg-[#F6F6F6] shadow-[0px_0px_19px_#00000008]">
+    <div className="sticky top-0 py-4 z-20 bg-[#F6F6F6] shadow-[0px_0px_19px_#00000008]">
       <div className="flex items-center justify-between rounded shadow-[0px_0px_19px_#00000008] bg-white  px-4 py-3">
         <FilterOrdersModal
           isModalVisible={isModalVisible}
@@ -50,12 +56,6 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data, getOrders, loading }) => {
         </FilterOrdersModal>
         <div className="text-[17px] font-bold flex items-center gap-5">
           {localeString(data?.payload?.totalElements)} Orders
-          {loading && (
-            <LoadingOutlined
-              className="text-base"
-              style={{ color: "#E7B522" }}
-            />
-          )}
         </div>
         <div className="flex items-center gap-5">
           <div
@@ -72,7 +72,6 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({ data, getOrders, loading }) => {
               alt="Filter icon"
             />
           </div>
-          {/* <div><Button type="secondary">DOWNLOAD REPORT</Button></div> */}
           <div>
             <Button
               type="primary"

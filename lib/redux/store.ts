@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { baseAPI } from "../api/api";
 import authReducer from "./slices/authSlice";
-import depotReducer from "./slices/depotSlice";
 import trucksReducer from "./slices/trucksSlice";
+import ordersReducer from "./slices/ordersSlice";
 
 /**
  * @author Kundwa Bruno M <kundwabruno@gmail.com>
@@ -13,8 +13,8 @@ export const store = configureStore({
   reducer: {
     [baseAPI.reducerPath]: baseAPI.reducer,
     auth: authReducer,
-    depot: depotReducer,
-    trucks: trucksReducer
+    trucks: trucksReducer,
+    orders: ordersReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseAPI.middleware)
