@@ -6,6 +6,7 @@ const TruckIcon = "ic-ecommerce-delivery.svg";
 const AccountsIcon = "ic-security-secured-profile.svg";
 const ClientsIcon = "ic-actions-user.svg";
 const SettingsIcon = "ic-actions-settings.svg";
+const WarehouseIcon = "ic-ecommerce-house-white.svg";
 
 export const manageSidebarMenus = () => [
   {
@@ -31,7 +32,16 @@ export const manageSidebarMenus = () => [
     name: routeConfig.Accounts.name,
     icon: AccountsIcon,
     active: false,
-    url: routeConfig.Accounts.url
+    url: routeConfig.Accounts.url,
+    urlKey: routeConfig.Accounts.url
+  },
+
+  {
+    name: routeConfig.Warehouse.name,
+    icon: WarehouseIcon,
+    active: false,
+    url: routeConfig.Warehouse.url,
+    urlKey: routeConfig.Warehouse.url
   }
 ];
 

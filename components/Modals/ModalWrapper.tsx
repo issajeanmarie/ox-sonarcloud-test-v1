@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, SetStateAction } from "react";
 import { Button, Modal } from "antd";
 import { CloseIcon } from "../Icons";
@@ -5,7 +6,7 @@ import { CloseIcon } from "../Icons";
 interface ModalProps {
   isModalVisible: boolean;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
-  title: string;
+  title: any;
   loading: boolean;
   onCancel?: () => void;
   destroyOnClose?: boolean;

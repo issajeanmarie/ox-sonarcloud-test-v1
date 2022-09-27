@@ -1,13 +1,13 @@
 import { Col, Row } from "antd";
 import React, { FC } from "react";
 import AnalyticTopContentWrapper from "../Wrappers/AnalyticTopContentWrapper";
-import CardColWrapper from "../Cards/CardColWrapper";
-import CardRowWrapper from "../Cards/CardRowWrapper";
+import CardColWrapper from "../../Cards/CardColWrapper";
+import CardRowWrapper from "../../Cards/CardRowWrapper";
 import { MediumChartWrapper } from "../Wrappers/ChartWrappers";
 import RevenueBreakdownChartKPIs from "../Charts/RevenueBreakdownChartKPIs";
 import RevenueKGKChartPIs from "../Charts/RevenueKGKChartPIs";
 import { AnalyticKPIsTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticKPIsTypes";
-import LargeCard from "../Cards/LargeCard";
+import LargeCard from "../../Cards/LargeCard";
 import { AnalyticCardsLoader } from "../../Shared/Loaders/Loaders";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { KPIsPacentageCalculator } from "../../../helpers/pacentageCalculators";
