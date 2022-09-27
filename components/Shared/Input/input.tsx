@@ -233,7 +233,7 @@ const Entry = ({
         <Select
           showSearch={showSearch || true}
           placeholder={placeholder}
-          // allowClear
+          allowClear={allowClear}
           size="large"
           className={`dropdownSelectInput ${size === "small" && "sm"} `}
           disabled={disabled}

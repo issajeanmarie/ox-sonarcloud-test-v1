@@ -146,6 +146,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
       <Form
         name="Filter orders"
         form={form}
+        initialValues={initialValues}
         layout="vertical"
         title="FILTER ORDERS"
         onFinish={handleOnFinish}
