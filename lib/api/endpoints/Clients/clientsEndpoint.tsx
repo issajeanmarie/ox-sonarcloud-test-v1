@@ -85,7 +85,9 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       providesTags: ["Clients"],
       query: (DTO) => ({
-        url: `/clients/${DTO?.id}/orders?page=${DTO?.page}&size=${DTO?.size}&paymentStatus=${DTO?.paymentStatus}`,
+        url: `/clients/${DTO?.id || ""}/orders?page=${DTO?.page || ""}&size=${
+          DTO?.size || ""
+        }&paymentStatus=${DTO?.paymentStatus || ""}`,
         method: "GET"
       })
     }),
@@ -129,7 +131,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       providesTags: ["Clients"],
       query: (DTO) => ({
-        url: `/clients/${DTO?.id}/invoice`,
+        url: `/clients/${DTO?.id || ""}/invoice`,
         method: "GET",
         headers: {
           "content-type": "application/octet-stream"
@@ -206,7 +208,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
-        url: `clients/${DTO?.id}/affiliates`,
+        url: `clients/${DTO?.id || ""}/affiliates`,
         method: "POST",
         body: DTO
       })
@@ -217,7 +219,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
-        url: `clients/${DTO?.id}/add-comment`,
+        url: `clients/${DTO?.id || ""}/add-comment`,
         method: "PATCH",
         body: DTO
       })
@@ -228,7 +230,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
-        url: `clients/${DTO?.id}/tag`,
+        url: `clients/${DTO?.id || ""}/tag`,
         method: "POST",
         body: DTO
       })
@@ -259,7 +261,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
-        url: `/clients/${DTO?.id}/tag/${DTO.tagId}`,
+        url: `/clients/${DTO?.id || ""}/tag/${DTO.tagId || ""}`,
         method: "DELETE"
       })
     }),
@@ -289,7 +291,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
-        url: `/clients/${DTO?.id}/affiliates/${DTO?.affiliateId}`,
+        url: `/clients/${DTO?.id || ""}/affiliates/${DTO?.affiliateId || ""}`,
         method: "DELETE"
       })
     }),
@@ -332,7 +334,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
-        url: `/clients/${DTO?.id}/affiliates/${DTO?.affiliateId}`,
+        url: `/clients/${DTO?.id || ""}/affiliates/${DTO?.affiliateId || ""}`,
         method: "PUT",
         body: DTO
       })
@@ -343,7 +345,7 @@ const clientsApi = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Clients"],
       query: (DTO) => ({
-        url: `/clients/${DTO?.id}`,
+        url: `/clients/${DTO?.id || ""}`,
         method: "PUT",
         body: DTO
       })
