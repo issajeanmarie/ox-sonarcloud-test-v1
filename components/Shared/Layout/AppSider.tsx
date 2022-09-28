@@ -165,7 +165,10 @@ const AppSider = ({ collapsed }: any) => {
               onClick={() =>
                 router.push({
                   pathname: menu.url,
-                  query: { depotId: depotID, depotName }
+                  query: {
+                    depotId: depotID || 0,
+                    depotName: depotName || "All depots"
+                  }
                 })
               }
               className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
@@ -202,7 +205,10 @@ const AppSider = ({ collapsed }: any) => {
                 onClick={() => {
                   router.push({
                     pathname: moreMenu.url,
-                    query: { depotId: depotID, depotName }
+                    query: {
+                      depotId: depotID || 0,
+                      depotName: depotName || "All depots"
+                    }
                   });
                 }}
                 className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
@@ -237,7 +243,10 @@ const AppSider = ({ collapsed }: any) => {
               onClick={() => {
                 router.push({
                   pathname: moreMenu.url,
-                  query: { depotId: depotID, depotName }
+                  query: {
+                    depotId: depotID || 0,
+                    depotName: depotName || "All depots"
+                  }
                 });
               }}
               className={`white fowe300 text14 my_menu_bg ${
