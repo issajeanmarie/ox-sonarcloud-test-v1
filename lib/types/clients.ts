@@ -105,15 +105,16 @@ export type EditClientRequest = {
 };
 
 export type GetClients = {
-  page: number | string;
-  size: number | string;
-  org: string;
-  dest: string;
-  hq: string;
-  categoryId: number | string;
-  q: string;
-  sort: string;
-  source: string;
+  page?: number | string;
+  size?: number | string;
+  org?: string;
+  dest?: string;
+  hq?: string;
+  categoryId?: number | string;
+  q?: string;
+  sort?: string;
+  source?: string;
+  noPagination?: boolean;
 };
 
 export type GetClient = {

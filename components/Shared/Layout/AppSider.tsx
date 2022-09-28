@@ -37,7 +37,7 @@ const AppSider = ({ collapsed }: any) => {
     >
       <div className="text-white border-b border-black p-5">
         <div className="bg-ox-yellow rounded">
-          <Row align="middle">
+          <Row align="middle" wrap={false}>
             <Col className="p-4 pb-3 border-r border-ox-shadow-dark">
               <Image
                 className="mt-1"
@@ -48,7 +48,7 @@ const AppSider = ({ collapsed }: any) => {
               />
             </Col>
 
-            <Col className="p-4 text-black font-bold pointer">
+            <Col className="p-4 text-black font-bold pointer text_ellipsis">
               Add new depot
             </Col>
           </Row>

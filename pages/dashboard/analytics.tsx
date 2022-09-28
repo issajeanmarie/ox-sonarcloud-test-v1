@@ -189,6 +189,8 @@ const Analytics = () => {
             revenueData={revenueData?.payload}
             revenueLoading={revenueLoading}
             revenueFetching={revenueFetching}
+            start={startDate || start || ""}
+            end={endDate || end || ""}
           />
         )}
         {active === "map" && (

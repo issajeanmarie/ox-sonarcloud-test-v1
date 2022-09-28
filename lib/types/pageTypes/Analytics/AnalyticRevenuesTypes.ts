@@ -4,4 +4,6 @@ export type AnalyticRevenuesTypes = {
   revenueData: any;
   revenueLoading: boolean;
   revenueFetching: boolean;
+  start: string | undefined;
+  end: string | undefined;
 };

@@ -41,6 +41,20 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
         responseHandler: (response) => response.blob()
       })
     }),
+
+    downloadAnalyticsReport: builder.mutation({
+      query: (DTO) => ({
+        url: `/reports?startDate=${DTO.start}&endDate=${DTO.end}&scope=${
+          DTO.scope
+        }&file_type=${DTO.file_type || "XLS"}`,
+        method: "GET",
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
+      })
+    }),
+
     revenueAnalytics: builder.query<AnalyticsResponse, RevenueAnalyticsRequest>(
       {
         providesTags: ["Analytics", "Depot"],
@@ -79,5 +93,6 @@ export const {
   useMapAnalyticsQuery,
   useKPIsAnalyticsQuery,
   useDownloadTruckAnalyticsQuery,
-  useLazyDownloadTruckAnalyticsQuery
+  useLazyDownloadTruckAnalyticsQuery,
+  useDownloadAnalyticsReportMutation
 } = analyticsEndpoints;

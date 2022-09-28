@@ -56,7 +56,8 @@ const Entry = ({
   location,
   fileName,
   picker,
-  allowClear
+  allowClear,
+  onKeyUp
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
@@ -157,6 +158,7 @@ const Entry = ({
           loading={isLoading}
           defaultValue={defaultValue}
           onChange={(value: string) => onChange && onChange(value)}
+          onKeyUp={({ target }: any) => onKeyUp && onKeyUp(target.value)}
           suffixIcon={suffixIcon}
           filterOption={(input, option) =>
             (option &&
