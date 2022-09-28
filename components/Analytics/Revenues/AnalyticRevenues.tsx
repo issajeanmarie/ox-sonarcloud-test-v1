@@ -52,7 +52,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
             </CardColWrapper>
             <CardColWrapper active={active}>
               <MediumCard
-                title="Revenues made in Rwf"
+                title="Revenue made in Rwf"
                 subTitle={`${
                   revenueData?.totalRevenueByJobPaidByKg &&
                   numbersFormatter(revenueData?.totalRevenueByJobPaidByKg)

@@ -65,7 +65,7 @@ const AddStop: FC<AddStopProps> = ({
 
   return (
     <ModalWrapper
-      title="ADD A STOOP"
+      title="ADD A STOP"
       loading={isLoading}
       isModalVisible={isAddStopModal}
       setIsModalVisible={setIsAddStopModal}

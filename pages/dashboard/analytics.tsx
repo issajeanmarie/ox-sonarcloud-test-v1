@@ -183,7 +183,7 @@ const Analytics = () => {
             setSelectedSort={setSorter}
           />
         )}
-        {active === "revenues" && (
+        {active === "revenue" && (
           <AnalyticRevenues
             active={active}
             revenueData={revenueData?.payload}

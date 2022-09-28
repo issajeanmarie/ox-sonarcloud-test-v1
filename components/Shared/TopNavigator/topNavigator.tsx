@@ -49,7 +49,7 @@ const TopNavigator: FC<TopNavigatorProps> = ({
         })}
       </div>
 
-      {active === "revenues" && (
+      {active === "revenue" && (
         <TopNavigatorRightSideWrapper>
           <RightSideRevenue
             onStartDateChange={onStartDateChange}
