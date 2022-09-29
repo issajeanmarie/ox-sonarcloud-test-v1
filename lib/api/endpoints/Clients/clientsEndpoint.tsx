@@ -41,6 +41,16 @@ const clientsApi = baseAPI.injectEndpoints({
         method: "GET"
       })
     }),
+    clientsUnpaginated: builder.query<
+      ApiResponseMetadata<{ content: ClientResponse }>,
+      void
+    >({
+      providesTags: ["Clients"],
+      query: () => ({
+        url: "/clients/no-pagination",
+        method: "GET"
+      })
+    }),
     clientOrders: builder.query<
       ApiResponseMetadata<{ content: ClientResponse }>,
       GetClientOrders
@@ -239,5 +249,6 @@ export const {
   useEditClientMutation,
   useDeleteClientTagMutation,
   usePostClientNoteMutation,
-  useLazyClientsQuery
+  useLazyClientsQuery,
+  useClientsUnpaginatedQuery
 } = clientsApi;

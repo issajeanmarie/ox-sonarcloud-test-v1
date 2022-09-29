@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
@@ -16,6 +17,7 @@ const SalesPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
   const { query } = useRouter();
+  const [sort, setSort]: any = useState("");
 
   useEffect(() => {
     if (router.isReady) {
@@ -53,6 +55,10 @@ const SalesPage = () => {
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
           query={query}
+          setSort={setSort}
+          sort={sort}
+          data=""
+          dataLoading={false}
         />
       </WarehoueMenusNavigatorWrapper>
 

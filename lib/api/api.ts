@@ -23,7 +23,10 @@ export const baseAPI = createApi({
     "Tags",
     "Drivers",
     "Agents",
-    "Admins"
+    "Admins",
+    "Stock",
+    "Suppliers",
+    "Sales"
   ],
   endpoints: () => ({})
 });

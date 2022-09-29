@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type SuppliersTableTypes = {
-  key: number;
-  Name: string;
-  PhoneNumber: string;
-  Address: string;
-  TIN: string;
-  Status: string;
+  id: number;
+  names: string;
+  phone: string;
+  offices: any;
+  tinNumber: string;
+  enabled: string;
 };

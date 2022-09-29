@@ -3,12 +3,13 @@ import React, { FC } from "react";
 import Input from "../../Shared/Input";
 import CustomButton from "../../Shared/Button/button";
 import { StockHistoryTyes } from "../../../lib/types/pageTypes/Warehouse/Stock/StockHistoryTyes";
+import DropDownSelector from "../../Shared/DropDownSelector";
 
 const { Text } = Typography;
 
 const StockHistory: FC<StockHistoryTyes> = ({
-  sorter,
-  onSortChange,
+  filter,
+  setFilter,
   onStartDateChange,
   onEndDateChange
 }) => {
@@ -19,25 +20,15 @@ const StockHistory: FC<StockHistoryTyes> = ({
     >
       <Col className="flex items-center gap-4">
         <Text className="heading2">Stock history</Text>
-        <Input
-          onSelectChange={onSortChange}
-          type="select"
-          label=""
-          placeholder={`Sort: ${sorter}`}
-          options={[
-            { label: "Item one", value: "REVENUE" },
-            { label: "Item two", value: "DISTANCE" },
-            { label: "Item three", value: "WEIGHT" }
+        <DropDownSelector
+          label="Filter"
+          dropDownContent={[
+            { id: 0, name: "View all", value: "" },
+            { id: 1, name: "Expired", value: "EXPIRED" },
+            { id: 2, name: "Not expired", value: "NOT_EXPIRED" }
           ]}
-          name="sort"
-          suffixIcon={
-            <Image
-              preview={false}
-              src="/icons/expand_more_black_24dp.svg"
-              alt=""
-              width={10}
-            />
-          }
+          defaultSelected={filter}
+          setDefaultSelected={setFilter}
         />
         <Input
           onDateChange={onStartDateChange}

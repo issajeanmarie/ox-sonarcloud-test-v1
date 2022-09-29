@@ -49,6 +49,16 @@ const ordersApi = baseAPI.injectEndpoints({
         method: "GET"
       })
     }),
+    lhsOrders: builder.query<
+      ApiResponseMetadata<{ content: OrdersResponse }>,
+      void
+    >({
+      providesTags: ["Clients"],
+      query: () => ({
+        url: "/orders/lhs?size=10000000",
+        method: "GET"
+      })
+    }),
     order: builder.query<Order | undefined, Query>({
       providesTags: ["Order"],
       query: (id) => ({
@@ -214,5 +224,6 @@ export const {
   useChangeOrderStatusMutation,
   useInitiatePaymentMutation,
   useSupportOrderMutation,
-  useVerifyPaymentMutation
+  useVerifyPaymentMutation,
+  useLhsOrdersQuery
 } = ordersApi;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
@@ -9,12 +10,36 @@ import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { WarehoueMenusNavigatorWrapper } from "../../../components/Warehouse/Wrappers";
 import SuppliersTable from "../../../components/Tables/Warehouse/SuppliersTable";
+import {
+  useLazySuppliersQuery,
+  useSuppliersQuery
+} from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
+import CustomButton from "../../../components/Shared/Button";
+import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 
 const SuppliersPage = () => {
   const [active, setActive] = useState<string>("SALES");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
   const router = useRouter();
   const { query } = useRouter();
+
+  const [sort, setSort]: any = useState("");
+  const [pageSize, setPageSize] = useState(20);
+  const [moreSuppliers, setMoreSuppliers] = useState<any>([]);
+
+  const [suppliers, { isFetching: loadingMoreFetching }] =
+    useLazySuppliersQuery();
+
+  const {
+    data: AllSuppliers,
+    isLoading: isSuppliersLoading,
+    isFetching: isSuppliersFetching
+  } = useSuppliersQuery({
+    page: "",
+    size: pageSize,
+    sort: sort.value || ""
+  });
 
   useEffect(() => {
     if (router.isReady) {
@@ -32,9 +57,29 @@ const SuppliersPage = () => {
     id === "SUPPLIERS" && changeRoute(`${routes.Suppliers.url}?wtb=SUPPLIERS`);
   };
 
+  const handleLoadMore = () => {
+    suppliers({
+      page: "",
+      size: pageSize,
+      sort: sort.id || ""
+    })
+      .unwrap()
+      .then((res) => {
+        setPageSize(pageSize + 20);
+        setMoreSuppliers(res?.payload);
+      })
+      .catch((error) => {
+        return error;
+      });
+  };
   //MODAL
   const showModal = () => {
     setIsModalVisible(true);
+  };
+
+  //WARNING MODAL
+  const showWarningModal = () => {
+    setIsWarningModalVisible(true);
   };
 
   return (
@@ -52,11 +97,47 @@ const SuppliersPage = () => {
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
           query={query}
+          setSort={setSort}
+          sort={sort}
+          data={AllSuppliers?.payload}
+          dataLoading={isSuppliersLoading}
         />
       </WarehoueMenusNavigatorWrapper>
 
       <div className="px-5">
-        <SuppliersTable />
+        {isSuppliersLoading ? (
+          <>
+            {[...Array(20)].map((_, index) => (
+              <ColsTableLoader key={index} />
+            ))}
+          </>
+        ) : (
+          <SuppliersTable
+            isModalVisible={isWarningModalVisible}
+            showModal={showWarningModal}
+            setIsModalVisible={setIsWarningModalVisible}
+            suppliers={
+              moreSuppliers?.length === 0
+                ? AllSuppliers?.payload?.content
+                : AllSuppliers?.payload?.content?.concat(moreSuppliers?.content)
+            }
+            isSuppliersFetching={isSuppliersFetching}
+          />
+        )}
+
+        {pageSize > 19 &&
+          AllSuppliers?.payload?.totalElements &&
+          AllSuppliers?.payload?.totalElements >= pageSize && (
+            <div style={{ width: "12%", margin: "32px auto" }}>
+              <CustomButton
+                loading={loadingMoreFetching}
+                onClick={handleLoadMore}
+                type="secondary"
+              >
+                Load more
+              </CustomButton>
+            </div>
+          )}
       </div>
     </Layout>
   );
