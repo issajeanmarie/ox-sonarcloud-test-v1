@@ -72,10 +72,10 @@ const AddStock: FC<AddStockTypes> = ({
         justify="space-between"
         gutter={[16, 16]}
         align="bottom"
-        className="mt-4"
+        className="mt-6"
       >
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <div className="mb-4">
+          <div className="mb-6">
             <span className="font-light">Item info</span>
           </div>
           <Input
@@ -123,15 +123,20 @@ const AddStock: FC<AddStockTypes> = ({
         align="bottom"
         className="mt-4"
       >
-        <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-          <Input name="weight" type="text" label="KGs" placeholder="00" />
+        <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}>
+          <Input
+            name="weight"
+            type="text"
+            label="KGs"
+            placeholder="Enter the KGs"
+          />
         </Col>
-        <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+        <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}>
           <Input
             name="unitCost"
             type="text"
             label="Unit cost"
-            placeholder="00"
+            placeholder="Amount"
           />
         </Col>
         <Col flex="auto">
@@ -156,10 +161,10 @@ const AddStock: FC<AddStockTypes> = ({
         justify="space-between"
         gutter={[16, 16]}
         align="bottom"
-        className="mt-4"
+        className="mt-6"
       >
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <div className="mb-4">
+          <div className="mb-2">
             <span className="font-light">Transport</span>
           </div>
         </Col>

@@ -271,7 +271,7 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
       <ModalWrapper
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
-        title="EDIT SUPPLIER"
+        title={`EDIT ${itemToEdit?.names && itemToEdit?.names.split(" ")[0]}`}
         loading={isEditing}
       >
         <EditSupplier
