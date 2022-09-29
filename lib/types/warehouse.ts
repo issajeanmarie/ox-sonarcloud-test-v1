@@ -1,0 +1,77 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { LatLng } from "use-places-autocomplete";
+
+export type AddWarehouseOrderTypes = {
+  setLocation: React.Dispatch<
+    React.SetStateAction<
+      | {
+          name: string;
+          coordinates: LatLng;
+        }
+      | undefined
+    >
+  >;
+  location:
+    | {
+        name: string;
+        coordinates: LatLng;
+      }
+    | undefined;
+  createItems: () => void;
+  setItems: React.Dispatch<React.SetStateAction<any>>;
+  items: [
+    {
+      id: number;
+      weight: string;
+      type: string;
+      stockItem: string;
+    }
+  ];
+  onTransportChange: any;
+  transport: any;
+  onAddSaleFinish: any;
+  form: any;
+  handleChangeWarehouse: any;
+  isPostingSale: boolean;
+};
+
+export type WarehouseItemsTableTypes = {
+  id: number;
+  weight: string;
+  type: string;
+  stockItem: string;
+  category: string;
+};
+
+export type WarehouseItemsTableProps = {
+  items: any;
+  setItems: React.Dispatch<React.SetStateAction<any>>;
+};
+
+export type AddStockTypes = {
+  onAddStockFinish: (values: any) => void;
+  isAddingStock: boolean;
+  form: any;
+  categories: any;
+  isCategoriesLoading: boolean;
+  orders: any;
+  isOrdersLoading: boolean;
+  depots: any;
+  isDepotsLoading: boolean;
+  suppliers: any;
+  isSuppliersLoading: boolean;
+};
+
+export type EditStockTypes = {
+  onEditStockFinish: (values: any) => void;
+  isEditingStock: boolean;
+  form: any;
+  categories: any;
+  isCategoriesLoading: boolean;
+  orders: any;
+  isOrdersLoading: boolean;
+  depots: any;
+  isDepotsLoading: boolean;
+  suppliers: any;
+  isSuppliersLoading: boolean;
+};

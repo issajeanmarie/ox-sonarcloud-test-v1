@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
@@ -7,6 +8,7 @@ import { WarehouseLinks } from "../../../components/Warehouse/WarehouseLinks";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
+import CustomButton from "../../../components/Shared/Button";
 import {
   StockTopContentWrapper,
   WarehoueMenusNavigatorWrapper
@@ -16,6 +18,16 @@ import CardColWrapper from "../../../components/Cards/CardColWrapper";
 import StockMediumCard from "../../../components/Cards/StockMediumCard";
 import StockHistory from "../../../components/Warehouse/Stock/StockHistory";
 import StockHistoryTable from "../../../components/Tables/Warehouse/StockHistoryTable";
+import {
+  useLazyStockQuery,
+  useStockCategoriesQuery,
+  useStockQuery
+} from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
+import {
+  CardsLoader,
+  ColsTableLoader
+} from "../../../components/Shared/Loaders/Loaders";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
 
 const StockPage = () => {
   const [active, setActive] = useState<string>("SALES");
@@ -23,15 +35,37 @@ const StockPage = () => {
   const router = useRouter();
   const { query } = useRouter();
 
-  const [sorter, setSorter] = useState("Item one");
-  const [startDate, setStartDate] = useState(
-    localStorage.getItem("ox_startDate")
-      ? localStorage.getItem("ox_startDate")
-      : ""
-  );
-  const [endDate, setEndDate] = useState(
-    localStorage.getItem("ox_endDate") ? localStorage.getItem("ox_endDate") : ""
-  );
+  const [sort, setSort]: any = useState("");
+
+  const [filter, setFilter] = useState<any>({});
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [pageSize, setPageSize] = useState(20);
+  const [moreStocks, setMoreStocks] = useState<any>([]);
+
+  const onStartDateChange = (_: string, date: string) => {
+    setStartDate(date);
+  };
+  const onEndDateChange = (_: string, date: string) => {
+    setEndDate(date);
+  };
+
+  const [stock, { isFetching: loadingMoreFetching }] = useLazyStockQuery();
+  const { data: stockCategories, isLoading: isStockCategoriesLoading } =
+    useStockCategoriesQuery();
+
+  const {
+    data: AllStocks,
+    isLoading: isStocksLoading,
+    isFetching: isStocksFetching
+  } = useStockQuery({
+    page: "",
+    size: pageSize,
+    start: startDate,
+    end: endDate,
+    depot: "",
+    status: filter?.value || ""
+  });
 
   useEffect(() => {
     if (router.isReady) {
@@ -49,25 +83,28 @@ const StockPage = () => {
     id === "SUPPLIERS" && changeRoute(`${routes.Suppliers.url}?wtb=SUPPLIERS`);
   };
 
+  const handleLoadMore = () => {
+    stock({
+      page: "",
+      size: pageSize,
+      start: startDate,
+      end: endDate,
+      depot: "",
+      status: filter?.value || ""
+    })
+      .unwrap()
+      .then((res) => {
+        setPageSize(pageSize + 20);
+        setMoreStocks(res?.payload);
+      })
+      .catch((error) => {
+        return error;
+      });
+  };
+
   //MODAL
   const showModal = () => {
     setIsModalVisible(true);
-  };
-
-  //STOCK HISTORY
-  const onSortChange = (sorter: string) => {
-    setSorter(sorter);
-  };
-
-  const onStartDateChange = (_: string, date: string) => {
-    setStartDate(date);
-    localStorage.setItem("ox_startDate", date);
-    return startDate;
-  };
-  const onEndDateChange = (_: string, date: string) => {
-    setEndDate(date);
-    localStorage.setItem("ox_endDate", date);
-    return endDate;
   };
 
   return (
@@ -85,64 +122,80 @@ const StockPage = () => {
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
           query={query}
+          setSort={setSort}
+          sort={sort}
+          data={AllStocks?.payload}
+          dataLoading={isStocksLoading}
         />
       </WarehoueMenusNavigatorWrapper>
 
       <div className="px-5">
         <StockTopContentWrapper>
-          <CardRowWrapper active="STOCK">
-            <CardColWrapper active="STOCK">
-              <StockMediumCard
-                title="Animal feed (Type 1)"
-                subTitle="100 Rwf / Kg"
-                count={500}
-                isFetching={false}
-              />
-            </CardColWrapper>
-            <CardColWrapper active="STOCK">
-              <StockMediumCard
-                title="Animal feed (Type 2)"
-                subTitle="100 Rwf / Kg"
-                count={500}
-                isFetching={false}
-              />
-            </CardColWrapper>
-            <CardColWrapper active="STOCK">
-              <StockMediumCard
-                title="Animal feed (Type 3)"
-                subTitle="100 Rwf / Kg"
-                count={500}
-                isFetching={false}
-              />
-            </CardColWrapper>
-            <CardColWrapper active="STOCK">
-              <StockMediumCard
-                title="Animal feed (Type 3)"
-                subTitle="100 Rwf / Kg"
-                count={500}
-                isFetching={false}
-              />
-            </CardColWrapper>
-            <CardColWrapper active="STOCK">
-              <StockMediumCard
-                title="Animal feed (Type 3)"
-                subTitle="100 Rwf / Kg"
-                count={500}
-                isFetching={false}
-              />
-            </CardColWrapper>
-          </CardRowWrapper>
+          {isStockCategoriesLoading ? (
+            <>
+              <CardRowWrapper active={active}>
+                {[...Array(5)].map((_, index) => (
+                  <CardsLoader key={index} />
+                ))}
+              </CardRowWrapper>
+            </>
+          ) : (
+            <CardRowWrapper active="STOCK">
+              {stockCategories?.payload?.slice(0, 6)?.map((item: any) => (
+                <CardColWrapper key={item?.name} active="STOCK">
+                  <StockMediumCard
+                    title={item?.name}
+                    subTitle={`${
+                      item?.averageUnitCost &&
+                      numbersFormatter(item?.averageUnitCost)
+                    } Rwf / Kg`}
+                    count={item?.totalWeight}
+                    isFetching={false}
+                  />
+                </CardColWrapper>
+              ))}
+            </CardRowWrapper>
+          )}
 
           <StockHistory
-            onSortChange={onSortChange}
-            sorter={sorter}
+            setFilter={setFilter}
+            filter={filter}
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
           />
         </StockTopContentWrapper>
 
         <div className="mb-10">
-          <StockHistoryTable />
+          {isStocksLoading ? (
+            <div className="mt-4">
+              {[...Array(20)].map((_, index) => (
+                <ColsTableLoader key={index} />
+              ))}
+            </div>
+          ) : (
+            <StockHistoryTable
+              Stocks={
+                moreStocks?.length === 0
+                  ? AllStocks?.payload?.content
+                  : AllStocks?.payload?.content?.concat(moreStocks?.content)
+              }
+              isStocksFetching={isStocksFetching}
+            />
+          )}
+
+          {pageSize > 19 &&
+            AllStocks?.payload?.totalElements &&
+            AllStocks?.payload?.totalElements >= pageSize && (
+              <div style={{ width: "12%", margin: "32px auto" }}>
+                <CustomButton
+                  loading={loadingMoreFetching}
+                  onClick={handleLoadMore}
+                  type="secondary"
+                >
+                  Load more
+                </CustomButton>
+              </div>
+            )}
         </div>
       </div>
     </Layout>
