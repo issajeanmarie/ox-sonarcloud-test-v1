@@ -63,6 +63,15 @@ export const moreSidebarMenus = (depotID: number, depotName: string) => [
     urlKey: routeConfig.Resources.url
   },
   {
+    name: routeConfig.Resources.name,
+    icon: ResourcesIcon,
+    active: false,
+    url: `${routeConfig.Resources.url}?depotId=${depotID || ""}&depotName=${
+      depotName || ""
+    }`,
+    urlKey: routeConfig.Resources.url
+  },
+  {
     name: routeConfig.Settings.name,
     icon: SettingsIcon,
     active: false,
