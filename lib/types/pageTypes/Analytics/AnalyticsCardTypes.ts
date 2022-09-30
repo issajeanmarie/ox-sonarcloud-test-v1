@@ -3,4 +3,7 @@ export type AnalyticsCardTypes = {
   subTitle: string;
   count: number | null;
   isFetching: boolean;
+  scope?: string;
+  start?: string | undefined;
+  end?: string | undefined;
 };

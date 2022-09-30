@@ -11,6 +11,7 @@ import Typography from "antd/lib/typography";
 import { manageSidebarMenus, moreSidebarMenus } from "../../../helpers/menus";
 import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
 import { depotTypes } from "../../../lib/types/depots";
+import { getActiveMenu } from "../../../helpers/getActiveMenu";
 const { Sider } = Layout;
 const { Text } = Typography;
 
@@ -37,7 +38,7 @@ const AppSider = ({ collapsed }: any) => {
     >
       <div className="text-white border-b border-black p-5">
         <div className="bg-ox-yellow rounded">
-          <Row align="middle">
+          <Row align="middle" wrap={false}>
             <Col className="p-4 pb-3 border-r border-ox-shadow-dark">
               <Image
                 className="mt-1"
@@ -48,7 +49,7 @@ const AppSider = ({ collapsed }: any) => {
               />
             </Col>
 
-            <Col className="p-4 text-black font-bold pointer">
+            <Col className="p-4 text-black font-bold pointer text_ellipsis">
               Add new depot
             </Col>
           </Row>
@@ -159,32 +160,41 @@ const AppSider = ({ collapsed }: any) => {
         className={`bg_dark ${!collapsed && ""}`}
         defaultSelectedKeys={["1"]}
       >
-        {menus.map((menu) => (
-          <>
-            <Menu.Item
-              onClick={() =>
-                router.push({
-                  pathname: menu.url,
-                  query: { depotId: depotID, depotName }
-                })
-              }
-              className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
-              key={menu.name}
-              icon={
-                <Image
-                  width={18}
-                  src={`/icons/${menu.icon}`}
-                  preview={false}
-                  alt=""
-                />
-              }
-            >
-              <text className="text-white normalText pl-3">
-                {!collapsed && menu.name}
-              </text>
-            </Menu.Item>
-          </>
-        ))}
+        {menus.map((menu) => {
+          const { activeMenuStyles } = getActiveMenu({ menu, router });
+
+          return (
+            <>
+              <Menu.Item
+                onClick={() => {
+                  router.push({
+                    pathname: menu.url,
+                    query: {
+                      depotId: depotID || 0,
+                      depotName: depotName || "All depots"
+                    }
+                  });
+                }}
+                className={`my_menu_bg ${
+                  !collapsed && "not_collapsed"
+                } ${activeMenuStyles} `}
+                key={menu.name}
+                icon={
+                  <Image
+                    width={18}
+                    src={`/icons/${menu.icon}`}
+                    preview={false}
+                    alt=""
+                  />
+                }
+              >
+                <text className="text-white normalText pl-3">
+                  {!collapsed && menu.name}
+                </text>
+              </Menu.Item>
+            </>
+          );
+        })}
       </Menu>
 
       {!collapsed && <div className="text-gray-500 italic m-6">More</div>}
@@ -196,16 +206,26 @@ const AppSider = ({ collapsed }: any) => {
         defaultSelectedKeys={["1"]}
       >
         {moreMenus.map((moreMenu) => {
+          const { activeMenuStyles } = getActiveMenu({
+            menu: moreMenu,
+            router
+          });
+
           if (moreMenu.name === "Settings") {
             return (
               <Menu.Item
                 onClick={() => {
                   router.push({
                     pathname: moreMenu.url,
-                    query: { depotId: depotID, depotName }
+                    query: {
+                      depotId: depotID || 0,
+                      depotName: depotName || "All depots"
+                    }
                   });
                 }}
-                className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
+                className={`my_menu_bg ${
+                  !collapsed && "not_collapsed"
+                } ${activeMenuStyles} `}
                 key={moreMenu.name}
                 icon={
                   <Image
@@ -237,12 +257,15 @@ const AppSider = ({ collapsed }: any) => {
               onClick={() => {
                 router.push({
                   pathname: moreMenu.url,
-                  query: { depotId: depotID, depotName }
+                  query: {
+                    depotId: depotID || 0,
+                    depotName: depotName || "All depots"
+                  }
                 });
               }}
               className={`white fowe300 text14 my_menu_bg ${
                 !collapsed && "not_collapsed"
-              }`}
+              } ${activeMenuStyles} `}
               key={moreMenu.name}
               icon={
                 <Image

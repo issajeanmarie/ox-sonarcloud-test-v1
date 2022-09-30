@@ -24,7 +24,9 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
   active,
   revenueData,
   revenueLoading,
-  revenueFetching
+  revenueFetching,
+  start,
+  end
 }) => {
   return (
     <>
@@ -41,6 +43,9 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
           <CardRowWrapper active={active}>
             <CardColWrapper active={active}>
               <MediumCard
+                scope="CLIENTS"
+                start={start}
+                end={end}
                 title="Clients served"
                 subTitle={`${
                   revenueData?.totalCustomers &&
@@ -50,8 +55,12 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
+
             <CardColWrapper active={active}>
               <MediumCard
+                scope="REVENUE"
+                start={start}
+                end={end}
                 title="Revenue made in Rwf"
                 subTitle={`${
                   revenueData?.totalRevenueByJobPaidByKg &&
@@ -64,6 +73,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
+
             <CardColWrapper active={active}>
               <MediumCard
                 title="Cash collected"
@@ -80,6 +90,9 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
             </CardColWrapper>
             <CardColWrapper active={active}>
               <MediumCard
+                scope="DISTANCE"
+                start={start}
+                end={end}
                 title="Total distance in KM"
                 subTitle={`${
                   revenueData?.totalDistanceByJobs &&
@@ -92,8 +105,12 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
+
             <CardColWrapper active={active}>
               <MediumCard
+                scope="HOURS_BY_JOB"
+                start={start}
+                end={end}
                 title="Total hours"
                 subTitle={`${
                   revenueData?.totalHoursByJobs &&
@@ -106,6 +123,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
+
             <CardColWrapper active={active}>
               <MediumCard
                 title="Total weight in KG"

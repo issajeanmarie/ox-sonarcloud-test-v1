@@ -14,7 +14,6 @@ import ModalWrapper from "../../../Modals/ModalWrapper";
 interface EditPaymentProps {
   tx?: Transaction;
   orderId: number;
-  closeModal: () => void;
   isEditPayment: boolean;
   setIsEditPayment: any;
 }
@@ -22,7 +21,6 @@ interface EditPaymentProps {
 const EditPayment: FC<EditPaymentProps> = ({
   tx,
   orderId,
-  closeModal,
   isEditPayment,
   setIsEditPayment
 }) => {
@@ -36,7 +34,7 @@ const EditPayment: FC<EditPaymentProps> = ({
         .unwrap()
         .then((res) => {
           message.success(res?.message);
-          closeModal();
+          setIsEditPayment(false);
         })
         .catch((e) => {
           message.error(e.data?.message || "Something went wrong");

@@ -59,9 +59,9 @@ export const routes = {
     name: "Template",
     url: "/dashboard/template"
   },
-  Revenues: {
-    name: "Revenues",
-    url: "/dashboard/revenues"
+  Revenue: {
+    name: "Revenue",
+    url: "/dashboard/revenue"
   },
   Map: {
     name: "Map",

@@ -1,11 +1,9 @@
-import { Col, Form, Image, Row, Select } from "antd";
+import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
 import { requiredInput } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import { AddClientTagTypes } from "../../../lib/types/pageTypes/Clients/AddClientTagTypes";
-
-const { Option } = Select;
 
 type TagSchema = {
   id: number;
@@ -17,7 +15,6 @@ const AddClientTag: FC<AddClientTagTypes> = ({
   isLoading,
   tags,
   isTagsLoading,
-  onTagChange,
   form
 }) => {
   return (
@@ -31,10 +28,10 @@ const AddClientTag: FC<AddClientTagTypes> = ({
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <Input
-            onChange={onTagChange}
             rules={requiredInput}
+            list="tags"
             name="name"
-            type="select"
+            type="text"
             label="Tag name"
             placeholder="Select tag"
             loading={isTagsLoading}
@@ -48,15 +45,13 @@ const AddClientTag: FC<AddClientTagTypes> = ({
                 width={10}
               />
             }
-          >
+          />
+
+          <datalist id="tags">
             {tags?.map((tag: TagSchema) => {
-              return (
-                <Option value={tag.id} key={tag.id}>
-                  {tag.name}
-                </Option>
-              );
+              return <option key={tag.id} value={tag.name} />;
             })}
-          </Input>
+          </datalist>
         </Col>
       </Row>
 

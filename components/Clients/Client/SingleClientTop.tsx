@@ -84,6 +84,7 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({
               <span className="text-gray-400">{client?.names}</span>
             </div>
           </Col>
+
           <Col className="flex gap-8 items-center">
             {isDownloadingInvoice ? (
               <SmallSpinLoader />
@@ -117,6 +118,7 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({
               preview={false}
             />
           </Col>
+
           <ActionModal
             isModalVisible={isModalVisible}
             setIsModalVisible={setIsModalVisible}

@@ -35,10 +35,10 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
 
   const [toggleTruck, { isLoading }] = useToggleTruckMutation();
   const [allTrucks, setAllTrucks] = useState([]);
-  const [isGetTrucksLoading, setIsGetTrucksLoading] = useState(false);
   const [selectedTruck, setSelectedTruck] = useState<any>({});
 
-  const [getTrucks, { data: trucks }] = useLazyGetTrucksQuery();
+  const [getTrucks, { data: trucks, isLoading: isGetTrucksLoading }] =
+    useLazyGetTrucksQuery();
   const [deleteTruck, { isLoading: isDeleteLoading }] =
     useDeleteTruckMutation();
   const dispatch = useDispatch();
@@ -57,11 +57,8 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
 
   const handleGetTrucksSuccess = (res: any) => {
     setAllTrucks(res);
-    setIsGetTrucksLoading(false);
     setSelectedTruck(res);
   };
-
-  const handleGetTrucksFailure = () => setIsGetTrucksLoading(false);
 
   const handleToggleTruck = () => {
     handleAPIRequests({
@@ -83,8 +80,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
     handleAPIRequests({
       request: getTrucks,
       noPagination: true,
-      handleSuccess: handleGetTrucksSuccess,
-      handleFailure: handleGetTrucksFailure
+      handleSuccess: handleGetTrucksSuccess
     });
   }, [getTrucks]);
 
@@ -106,7 +102,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
     <div className="radius4 h-[500px] myCard p-6 py-12 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
       <CustomInput
         type="text"
-        placeholder="Search category"
+        placeholder="Search a truck"
         name="searchTruckUsage"
         loading={true}
         onChange={handleSearchTruck}
