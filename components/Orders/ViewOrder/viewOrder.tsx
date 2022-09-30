@@ -73,8 +73,6 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [deleteStop, { isLoading: deleteStopLoading }] =
     useDeleteStopMutation();
 
-  const [getTrucks, { data: trucks }] = useLazyGetTrucksQuery();
-
   const [writeOff, { isLoading: writeOffLoading }] = useWriteOffMutation();
 
   const handleWriteOffAction = (values: { reason: string }) => {
@@ -106,15 +104,6 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const handleDeleteStopSuccess = () => {
     setIsDeleteStopModal(false);
   };
-
-  useEffect(() => {
-    getTrucks({ page: 0, size: 10000 })
-      .unwrap()
-      .then()
-      .catch((e: any) => {
-        message.error(e.data?.messag || "Cannot get trucks");
-      });
-  }, [getTrucks]);
 
   const isOrderDisabled =
     data?.status === "CANCELLED" ||

@@ -50,6 +50,10 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
     chosenDriverId ? { id: chosenDriverId } : skipToken
   );
 
+  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
+    noPagination: true
+  });
+
   const handleOnFinish = (values: Order_Filter) => {
     setIsFiltered(true);
     setCurrentPages(1);
@@ -179,7 +183,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
           <div className="flex items-center gap-4 ">
             <div className="flex-1">
               <Input
-                name="truck"
+                name="truckId"
                 type="select"
                 label="Truck"
                 allowClear

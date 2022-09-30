@@ -254,7 +254,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
     <div className="radius4 h-[500px] myCard p-6 py-12 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
       <CustomInput
         type="text"
-        placeholder="Search category"
+        placeholder="Search a truck"
         name="searchTruckUsage"
         loading={true}
         onChange={handleSearchTruck}
