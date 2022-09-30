@@ -1,5 +1,6 @@
 import React, { FC, useEffect } from "react";
 import Form from "antd/lib/form";
+import Select from "antd/lib/select";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
 import { PAYMENT_STATUS } from "../../../../utils/options";
@@ -7,13 +8,21 @@ import { Order_Filter } from "../../../../lib/types/orders";
 import { useForm } from "antd/lib/form/Form";
 import moment from "moment";
 import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import { message, Select } from "antd";
-import { TruckSchema } from "../../../../lib/types/trucksTypes";
+import { DriverSchema, TruckSchema } from "../../../../lib/types/trucksTypes";
+import {
+  getFromLocal,
+  removeFromLocal,
+  saveToLocal
+} from "../../../../helpers/handleLocalStorage";
+import { OX_ORDERS_FILTERS } from "../../../../config/constants";
+import { yearDateFormat } from "../../../../config/dateFormats";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
+import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 
 const { Option } = Select;
 
 interface FilterOrdersFormProps {
-  getOrders: (filter: Order_Filter) => void;
+  getOrders: ({ filter, depot }: Order_Filter) => void;
   loading: boolean;
   setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -23,8 +32,12 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   setIsFiltered,
   loading
 }) => {
-  const [getTrucks, { data, isLoading: trucksLoading }] =
+  const [getTrucks, { data: trucks, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
+
+  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
+    noPagination: true
+  });
 
   const handleOnFinish = (values: Order_Filter) => {
     setIsFiltered(true);
@@ -33,31 +46,82 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
       start: values.start && moment(values.start).format("YYYY-MM-DD"),
       end: values.end && moment(values.end).format("YYYY-MM-DD")
     };
-    getOrders(data);
+
+    removeFromLocal(OX_ORDERS_FILTERS);
+
+    getOrders({
+      filter: data?.filter || "",
+      start: data?.start || "",
+      end: data?.end || "",
+      momoRefCode: data.momoRefCode || "",
+      truck: data.truck || "",
+      driver: data.driver || ""
+    });
+
+    // CHECK IF VALUES ARE EMPTY TO DELETE LOCAL STORAGE VALUES
+    if (
+      !data.filter &&
+      !data.start &&
+      !data.end &&
+      !data.momoRefCode &&
+      !data.truck &&
+      !data.driver
+    ) {
+      setIsFiltered(false);
+      removeFromLocal(OX_ORDERS_FILTERS);
+    } else {
+      saveToLocal({
+        name: OX_ORDERS_FILTERS,
+        value: data
+      });
+    }
   };
 
   const clearFilter = () => {
+    removeFromLocal(OX_ORDERS_FILTERS);
     setIsFiltered(false);
     form.resetFields();
-    getOrders({});
+
+    getOrders({
+      filter: "",
+      start: "",
+      end: "",
+      momoRefCode: "",
+      truck: "",
+      driver: ""
+    });
   };
 
   useEffect(() => {
-    getTrucks({ page: 0, size: 10000 })
-      .unwrap()
-      .then()
-      .catch((e) => {
-        message.error(e.data?.messag || "Cannot get trucks");
-      });
+    handleAPIRequests({
+      request: getTrucks,
+      page: 0,
+      noPagination: true,
+      showFailure: true
+    });
   }, [getTrucks]);
 
   const [form] = useForm();
+
+  const savedFilters = getFromLocal(OX_ORDERS_FILTERS);
+
+  const initialValues = {
+    start: savedFilters?.start
+      ? moment(savedFilters?.start, yearDateFormat)
+      : "",
+    end: savedFilters?.end ? moment(savedFilters?.end, yearDateFormat) : "",
+    momoRefCode: savedFilters?.momoRefCode || "",
+    filter: savedFilters?.filter || "",
+    driver: savedFilters?.driver || "",
+    truck: savedFilters?.truck || ""
+  };
 
   return (
     <div>
       <Form
         name="Filter orders"
         form={form}
+        initialValues={initialValues}
         layout="vertical"
         title="FILTER ORDERS"
         onFinish={handleOnFinish}
@@ -72,6 +136,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
                 options={PAYMENT_STATUS}
                 label="By payment status"
                 placeholder="Choose payment status"
+                allowClear
               />
             </div>
             <div className="flex-1">
@@ -80,22 +145,24 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
                 type="text"
                 label="By MoMo ref"
                 placeholder="Enter momo ref"
+                allowClear
               />
             </div>
           </div>
           <div className="flex items-center gap-4 ">
             <div className="flex-1">
               <Input
-                name="truck"
+                name="truckId"
                 type="select"
-                label="By truck"
-                placeholder="Choose truck"
-                loading={trucksLoading}
+                label="Truck"
+                allowClear
+                placeholder="Select truck"
+                isLoading={trucksLoading}
                 disabled={trucksLoading}
                 isGroupDropdown
-                options={[{ label: "RAA 123", value: 31 }]}
+                rules={[{ required: true, message: "Truck is required" }]}
               >
-                {data?.payload?.content.map((truck: TruckSchema) => {
+                {trucks?.map((truck: TruckSchema) => {
                   return (
                     <Option value={truck.id} key={truck.plateNumber}>
                       {truck.plateNumber}
@@ -106,20 +173,32 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
             </div>
             <div className="flex-1">
               <Input
-                name="driver"
+                name="driverId"
                 type="select"
-                label="By Driver"
-                options={[{ label: "David KAMANZI", value: 7 }]}
-                placeholder="Choose driver"
-              />
+                label="Driver"
+                placeholder="Select driver"
+                isLoading={driversLoading}
+                disabled={driversLoading}
+                allowClear
+                isGroupDropdown
+                rules={[{ required: true, message: "Driver is required" }]}
+              >
+                {drivers?.payload?.map((driver: DriverSchema) => {
+                  return (
+                    <Option value={driver.id} key={driver.id}>
+                      {driver.names}
+                    </Option>
+                  );
+                })}
+              </Input>
             </div>
           </div>
           <div className="flex items-center gap-4 ">
             <div className="flex-1">
-              <Input name="start" type="date" label="From" />
+              <Input name="start" type="date" label="From" allowClear />
             </div>
             <div className="flex-1">
-              <Input name="end" type="date" label="To" />
+              <Input name="end" type="date" label="To" allowClear />
             </div>
           </div>
           <div className="flex justify-end gap-5">

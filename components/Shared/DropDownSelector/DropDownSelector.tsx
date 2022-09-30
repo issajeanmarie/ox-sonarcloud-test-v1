@@ -46,7 +46,9 @@ const DropDownSelector = ({
           <Col className="font-bold text-sm">{label}:</Col>
 
           <Col className="text_ellipsis text-sm">
-            {defaultSelected?.name || "--- --- ---"}
+            {defaultSelected?.name || (
+              <span className="captionText">--- --- ---</span>
+            )}
           </Col>
 
           <Col>

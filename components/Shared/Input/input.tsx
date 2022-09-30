@@ -55,7 +55,10 @@ const Entry = ({
   showTime,
   location,
   fileName,
-  picker
+  picker,
+  allowClear,
+  onKeyUp,
+  list
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
@@ -126,12 +129,13 @@ const Entry = ({
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
       <Form.Item name={name} rules={rules} initialValue={initialValue}>
         <Input
+          list={list}
           disabled={disabled}
           // onChange={onChange}
           defaultValue={defaultValue}
           className={`my_input ${size === "small" && "sm"}`}
           placeholder={placeholder}
-          // allowClear
+          allowClear={allowClear}
           type={inputType}
           suffix={suffixIcon}
           onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
@@ -149,13 +153,14 @@ const Entry = ({
         <Select
           showSearch={showSearch || true}
           placeholder={placeholder}
-          // allowClear
+          allowClear={allowClear}
           size="large"
           className={`my_input bordered_input ${size === "small" && "sm"} `}
           disabled={disabled}
           loading={isLoading}
           defaultValue={defaultValue}
           onChange={(value: string) => onChange && onChange(value)}
+          onKeyUp={({ target }: any) => onKeyUp && onKeyUp(target.value)}
           suffixIcon={suffixIcon}
           filterOption={(input, option) =>
             (option &&
@@ -184,7 +189,7 @@ const Entry = ({
         <Select
           showSearch={showSearch || true}
           placeholder={placeholder}
-          // allowClear
+          allowClear={allowClear}
           size="large"
           className={`dropdownSelectInput ${size === "small" && "sm"} `}
           disabled={disabled}
@@ -231,7 +236,7 @@ const Entry = ({
       <Form.Item name={name} rules={rules}>
         <Input.Password
           className="my_input p-[12px]"
-          // allowClear
+          allowClear={allowClear}
           placeholder={placeholder}
         />
       </Form.Item>

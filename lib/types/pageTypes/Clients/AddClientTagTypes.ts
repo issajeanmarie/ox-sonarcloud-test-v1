@@ -4,6 +4,5 @@ export type AddClientTagTypes = {
   isLoading: boolean;
   tags: any;
   isTagsLoading: boolean;
-  onTagChange: (value: number | undefined) => void;
   form: any;
 };

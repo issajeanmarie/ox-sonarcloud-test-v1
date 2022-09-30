@@ -87,6 +87,9 @@ export type Order_Filter = {
   end?: string;
   filter?: Order_Status_Enums | string;
   momoRefCode?: string;
+  handleSuccess?: (res: object) => void;
+  handleFailure?: (res: object) => void;
+  request?: any;
 };
 
 export type OrdersResponse = {

@@ -99,6 +99,33 @@ export const AnalyticCardsLoader = () => {
   );
 };
 
+export const CardsLoader = () => {
+  return (
+    <Col
+      style={{
+        background: "#ffffff",
+        boxShadow: "0px 0px 19px #00000008",
+        border: "1px solid #EAEFF2",
+        borderRadius: "4px",
+        minWidth: "15rem",
+        minHeight: "7.75rem",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "0 1rem"
+      }}
+      flex="auto"
+    >
+      <span className="text28 primary_text fowe900 mabo8">
+        <Skeleton title={{ width: "30%" }} active paragraph={{ rows: 0 }} />
+      </span>
+      <span className="fowe700 opa8 text13">
+        <Skeleton title={{ width: "90%" }} active paragraph={{ rows: 0 }} />
+      </span>
+    </Col>
+  );
+};
+
 export const ColsTableLoader = () => {
   return (
     <>

@@ -63,9 +63,9 @@ export const routes = {
     name: "Template",
     url: "/dashboard/template"
   },
-  Revenues: {
-    name: "Revenues",
-    url: "/dashboard/revenues"
+  Revenue: {
+    name: "Revenue",
+    url: "/dashboard/revenue"
   },
   Map: {
     name: "Map",
@@ -74,5 +74,21 @@ export const routes = {
   Kpis: {
     name: "KPIs",
     url: "/dashboard/kpis"
+  },
+  Warehouse: {
+    name: "Warehouse",
+    url: "/dashboard/warehouse"
+  },
+  Stock: {
+    name: "Stock",
+    url: "/dashboard/warehouse/stock"
+  },
+  Suppliers: {
+    name: "Suppliers",
+    url: "/dashboard/warehouse/suppliers"
+  },
+  SaleOrderDetails: {
+    name: "SaleOrderDetails",
+    url: "/dashboard/warehouse/order-details"
   }
 };

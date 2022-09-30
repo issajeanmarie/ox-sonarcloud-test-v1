@@ -38,8 +38,8 @@ const Comopnents = () => {
       id: "trucks"
     },
     {
-      label: "REVENUES",
-      id: "revenues"
+      label: "REVENUE",
+      id: "revenue"
     },
     {
       label: "MAP",

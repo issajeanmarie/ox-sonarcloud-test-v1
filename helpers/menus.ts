@@ -7,73 +7,63 @@ const AccountsIcon = "ic-security-secured-profile.svg";
 const ClientsIcon = "ic-actions-user.svg";
 const SettingsIcon = "ic-actions-settings.svg";
 const ResourcesIcon = "ic-security-secured-profile.svg";
+const WarehouseIcon = "ic-ecommerce-house-white.svg";
 
-export const manageSidebarMenus = (depotID: number, depotName: string) => [
+export const manageSidebarMenus = () => [
   {
     name: routeConfig.Orders.name,
     icon: OrdersIcon,
     active: false,
-    url: `${routeConfig.Orders.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
-    urlKey: routeConfig.Orders.url
+    url: routeConfig.Orders.url
   },
   {
     name: routeConfig.Clients.name,
     icon: ClientsIcon,
     active: false,
-    url: `${routeConfig.Clients.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
-    urlKey: routeConfig.Clients.url
+    url: routeConfig.Clients.url
   },
   {
     name: routeConfig.Trucks.name,
     icon: TruckIcon,
     active: false,
-    url: `${routeConfig.Trucks.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
-    urlKey: routeConfig.Trucks.url
+    url: routeConfig.Trucks.url
   },
 
   {
     name: routeConfig.Accounts.name,
     icon: AccountsIcon,
     active: false,
-    url: `${routeConfig.Accounts.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
+    url: routeConfig.Accounts.url,
     urlKey: routeConfig.Accounts.url
+  },
+
+  {
+    name: routeConfig.Warehouse.name,
+    icon: WarehouseIcon,
+    active: false,
+    url: routeConfig.Warehouse.url,
+    urlKey: routeConfig.Warehouse.url
   }
 ];
 
-export const moreSidebarMenus = (depotID: number, depotName: string) => [
+export const moreSidebarMenus = () => [
   {
     name: routeConfig.Analytics.name,
     icon: AnalyticsIcon,
     active: false,
-    url: `${routeConfig.Analytics.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
-    urlKey: routeConfig.Analytics.url
+    url: routeConfig.Analytics.url
   },
   {
     name: routeConfig.Resources.name,
     icon: ResourcesIcon,
     active: false,
-    url: `${routeConfig.Resources.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
+    url: routeConfig.Resources.url,
     urlKey: routeConfig.Resources.url
   },
   {
     name: routeConfig.Settings.name,
     icon: SettingsIcon,
     active: false,
-    url: `${routeConfig.Settings.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
-    urlKey: routeConfig.Settings.url
+    url: routeConfig.Settings.url
   }
 ];

@@ -23,10 +23,6 @@ const Client = () => {
   const [moreClientOrders, setMoreClientOrders] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState<any>({});
 
-  /*  const handleFilterChange = (value: string) => {
-    setPaymentStatus(value);
-  }; */
-
   useEffect(() => {
     setPaymentStatus(selectedFilter.value || "");
   }, [selectedFilter]);
@@ -88,7 +84,7 @@ const Client = () => {
             isClientFetching={isClientFetching}
             router={router}
           />
-          <Row className="p-5 flex justify-between gap-5">
+          <Row className="p-5 justify-between gap-5">
             <SingleClientLeft
               client={client?.payload}
               isClientLoading={isClientLoading}

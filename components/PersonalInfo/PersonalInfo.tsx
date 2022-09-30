@@ -87,11 +87,6 @@ const ProfileInfo = () => {
     <Card
       className="radius2 noborder"
       headStyle={{ border: "none", marginBottom: "0" }}
-      style={{
-        padding: "30px",
-        borderRadius: "4px",
-        position: "fixed"
-      }}
     >
       {isLoading && isFetching ? (
         // <Loader />

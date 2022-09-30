@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Divider, Form, Image, Row, Tag } from "antd";
-import React, { FC, SetStateAction, useState } from "react";
+import React, { FC, useState } from "react";
 import {
   usePostClientTagMutation,
   useDeleteClientTagMutation
@@ -24,8 +24,6 @@ type clientTags = {
 
 const ClientTages: FC<ClientTagesTypes> = ({ client }) => {
   const [form] = Form.useForm();
-  const [tagID, setTagID] =
-    useState<SetStateAction<number | undefined>>(undefined);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const showModal = () => {
     setIsModalVisible(true);
@@ -34,14 +32,9 @@ const ClientTages: FC<ClientTagesTypes> = ({ client }) => {
   const [postClientTag, { isLoading: isPostingTag }] =
     usePostClientTagMutation();
 
-  const onTagChange = (value: number | undefined) => {
-    setTagID(value);
-  };
-
   const onAddClientTagFinish = (values: any) => {
     postClientTag({
       id: client?.id,
-      tagId: tagID,
       name: values?.name
     })
       .unwrap()
@@ -126,7 +119,6 @@ const ClientTages: FC<ClientTagesTypes> = ({ client }) => {
           isLoading={isPostingTag}
           tags={tags?.payload}
           isTagsLoading={isTagsLoading}
-          onTagChange={onTagChange}
           form={form}
         />
       </ModalWrapper>

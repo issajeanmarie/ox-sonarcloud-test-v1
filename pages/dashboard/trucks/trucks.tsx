@@ -214,7 +214,7 @@ const Trucks = () => {
       <div className="flex items-center justify-between mt-6 bg-white py-2 rounded px-4 m-auto w-[98%] border_faded mb-4">
         {/* LEFT SIDE  */}
         <div className="flex items-center gap-12">
-          <Text className="heading2">
+          <Text className="heading2 text_ellipsis">
             {trucksState?.totalElements || 0} Trucks
           </Text>
 

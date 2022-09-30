@@ -3,10 +3,10 @@ import Input from "../../../Shared/Input";
 import Image from "next/image";
 import Button from "../../../../components/Shared/Button";
 import { useCategoriesQuery } from "../../../../lib/api/endpoints/Category/categoryEndpoints";
-import { Form, message, Select } from "antd";
+import { Form, Select } from "antd";
 import {
   useClientQuery,
-  useClientsQuery
+  useLazyClientsQuery
 } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { AddEditProps } from "../../../../lib/types/components/AddEditProps";
@@ -21,23 +21,16 @@ import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/truc
 import { DriverSchema, TruckSchema } from "../../../../lib/types/trucksTypes";
 import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoints";
 import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 
 const { Option, OptGroup } = Select;
 
 const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
   const { data: categories, isLoading: categoriesLoading } =
     useCategoriesQuery();
-  const { data: clients, isLoading: clientsLoading } = useClientsQuery({
-    page: "0",
-    size: "10000",
-    org: "",
-    dest: "",
-    hq: "",
-    categoryId: "",
-    q: "",
-    sort: "",
-    source: ""
-  });
+
+  const [clients, { isLoading: clientsLoading, data: clientsList }] =
+    useLazyClientsQuery();
 
   const [getTrucks, { data, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
@@ -66,6 +59,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
 
   const handleCreateOrder = (values: OrderRequestBody) => {
     const stopsWithTrucksAndDrivers: Stop_Request[] = [];
+
     location &&
       stopsWithTrucksAndDrivers.push({
         coordinates: JSON.stringify(location.coordinates || {}),
@@ -76,15 +70,16 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
         truckId: values.truckId,
         weight: Number(values.weight)
       });
+
     stops.forEach((st) => {
       stopsWithTrucksAndDrivers.push({
         ...st,
         truckId: values.truckId,
         driverId: values.driverId,
-        weight: Number(values.weight),
         position: stopsWithTrucksAndDrivers.length + 1
       });
     });
+
     const payload: OrderRequestBody = {
       ...values,
       stops: stopsWithTrucksAndDrivers,
@@ -127,12 +122,12 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
   };
 
   useEffect(() => {
-    getTrucks({ page: 0, noPagination: true })
-      .unwrap()
-      .then()
-      .catch((e: any) => {
-        message.error(e.data?.message || "Cannot get trucks");
-      });
+    handleAPIRequests({
+      request: getTrucks,
+      page: 0,
+      noPagination: true,
+      showFailure: true
+    });
   }, [getTrucks]);
 
   useEffect(() => {
@@ -152,6 +147,13 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
       branchId: null
     });
   }, [form]);
+
+  const handleClientLiveSearch = (value: string) => {
+    handleAPIRequests({
+      request: clients,
+      q: value
+    });
+  };
 
   return (
     <div>
@@ -178,13 +180,13 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                 <Input
                   name="clientId"
                   type="select"
+                  onKeyUp={handleClientLiveSearch}
                   placeholder="Select client"
                   isGroupDropdown
                   isLoading={clientsLoading}
-                  disabled={clientsLoading}
                   rules={[{ required: true, message: "Choose a client" }]}
                 >
-                  {clients?.payload?.content.map((client: Client) => (
+                  {clientsList?.payload?.content?.map((client: Client) => (
                     <Option value={client.id} key={client.names}>
                       {client.names}
                     </Option>
@@ -206,7 +208,6 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                 name="officeId"
                 type="select"
                 placeholder="Select branch"
-                // label="Branch"
                 isLoading={chosenClientLoading || isFetching}
                 disabled={
                   chosenClientLoading || isFetching || !chosenClientInfo

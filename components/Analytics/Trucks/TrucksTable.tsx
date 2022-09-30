@@ -163,7 +163,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             title="Plate number"
             render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
               const child = (
-                <Text className="normalText fowe700">
+                <Text className="normalText fowe700 text_ellipsis">
                   {record?.plateNumber}
                 </Text>
               );
@@ -207,10 +207,10 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
               const child = (
                 <>
-                  <span className="fontwe700">
+                  <span className="fontwe700 text_ellipsis">
                     {record?.lastInspection?.score || ""}
                   </span>{" "}
-                  <span className="captionText">{`${
+                  <span className="captionText text_ellipsis">{`${
                     record?.lastInspection?.createdAt
                       ? `(${moment(
                           record?.lastInspection?.createdAt
@@ -233,7 +233,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
               const child = (
                 <Text
-                  className={`normalText fontwe700 ${
+                  className={`normalText text_ellipsis fontwe700 ${
                     record?.active ? "dark" : "red"
                   } uppercase`}
                 >

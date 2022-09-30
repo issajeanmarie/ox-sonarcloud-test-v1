@@ -13,8 +13,8 @@ export const analyticsMenu = (active = "", depotName = "") => {
       active: false
     },
     {
-      name: "REVENUES",
-      url: `${routes.Revenues.url}?depotId=${"depotID" || ""}&depotName=${
+      name: "REVENUE",
+      url: `${routes.Revenue.url}?depotId=${"depotID" || ""}&depotName=${
         depotName || ""
       }`,
       active: false
@@ -30,7 +30,7 @@ export const analyticsMenu = (active = "", depotName = "") => {
 
   const filteredMenu = menus.filter((menu: any) => {
     if (user.isDispatcher) {
-      return menu.name !== "MAP" && menu.name !== "REVENUES";
+      return menu.name !== "MAP" && menu.name !== "REVENUE";
     }
     return menu;
   });
