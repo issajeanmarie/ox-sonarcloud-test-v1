@@ -6,6 +6,7 @@ const TruckIcon = "ic-ecommerce-delivery.svg";
 const AccountsIcon = "ic-security-secured-profile.svg";
 const ClientsIcon = "ic-actions-user.svg";
 const SettingsIcon = "ic-actions-settings.svg";
+const ResourcesIcon = "ic-security-secured-profile.svg";
 
 export const manageSidebarMenus = (depotID: number, depotName: string) => [
   {
@@ -56,6 +57,15 @@ export const moreSidebarMenus = (depotID: number, depotName: string) => [
       depotName || ""
     }`,
     urlKey: routeConfig.Analytics.url
+  },
+  {
+    name: routeConfig.Resources.name,
+    icon: ResourcesIcon,
+    active: false,
+    url: `${routeConfig.Resources.url}?depotId=${depotID || ""}&depotName=${
+      depotName || ""
+    }`,
+    urlKey: routeConfig.Resources.url
   },
   {
     name: routeConfig.Settings.name,

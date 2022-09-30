@@ -132,6 +132,27 @@ export const ColsTableLoader = () => {
   );
 };
 
+export const ResourcesTableLoader = () => {
+  return (
+    <>
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={4} lg={2} xl={2}>
+          <Skeleton title={{ width: "100%" }} active paragraph={{ rows: 0 }} />
+        </Col>
+        <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+          <Skeleton title={{ width: "100%" }} active paragraph={{ rows: 0 }} />
+        </Col>
+        <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+          <Skeleton title={{ width: "100%" }} active paragraph={{ rows: 0 }} />
+        </Col>
+        <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+          <Skeleton title={{ width: "100%" }} active paragraph={{ rows: 0 }} />
+        </Col>
+      </Row>
+    </>
+  );
+};
+
 export const ChartSmallLoader = (title: string) => {
   return (
     <div className="h-full w-full flex justify-center items-center flex-col gap-4">
