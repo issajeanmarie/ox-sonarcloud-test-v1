@@ -61,7 +61,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 scope="REVENUE"
                 start={start}
                 end={end}
-                title="Revenues made in Rwf"
+                title="Revenue made in Rwf"
                 subTitle={`${
                   revenueData?.totalRevenueByJobPaidByKg &&
                   numbersFormatter(revenueData?.totalRevenueByJobPaidByKg)

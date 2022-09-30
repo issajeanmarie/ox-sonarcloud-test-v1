@@ -57,7 +57,8 @@ const Entry = ({
   fileName,
   picker,
   allowClear,
-  onKeyUp
+  onKeyUp,
+  list
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
@@ -128,6 +129,7 @@ const Entry = ({
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
       <Form.Item name={name} rules={rules} initialValue={initialValue}>
         <Input
+          list={list}
           disabled={disabled}
           // onChange={onChange}
           defaultValue={defaultValue}

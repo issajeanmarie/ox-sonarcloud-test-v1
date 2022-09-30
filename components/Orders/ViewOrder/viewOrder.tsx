@@ -26,8 +26,8 @@ import EditStop from "../../Forms/Orders/EditStop";
 import EditPaymentStatus from "../../Forms/Orders/EditPaymentStatus";
 import EditPayment from "../../Forms/Orders/EditPayment";
 import { userType } from "../../../helpers/getLoggedInUser";
-import { useLazyGetTrucksQuery } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useClientsQuery } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
+import EditOrderPrice from "../../Forms/Orders/EditOrderPrice";
 
 const { Step } = Steps;
 
@@ -47,6 +47,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [orderDetails, setOrderDetails] = useState<DetailsType[]>();
   const [clientDetails, setClientDetails] = useState<DetailsType[]>();
   const [isEditClientModal, setIsEditClientModal] = useState<boolean>(false);
+  const [isEditPriceModal, setIsEditPriceModal] = useState<boolean>(false);
   const [isAddStopModal, setIsAddStopModal] = useState<boolean>(false);
   const [isDeleteStopModal, setIsDeleteStopModal] = useState<boolean>(false);
   const [isEditStopModal, setIsEditStopModal] = useState<boolean>(false);
@@ -72,11 +73,9 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   });
 
   const user = userType();
-
+  const [editOrderData, setEditOrderData] = useState(null);
   const [deleteStop, { isLoading: deleteStopLoading }] =
     useDeleteStopMutation();
-
-  const [getTrucks, { data: trucks }] = useLazyGetTrucksQuery();
 
   const [writeOff, { isLoading: writeOffLoading }] = useWriteOffMutation();
 
@@ -91,15 +90,6 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           message.error(e.data?.message);
         });
   };
-
-  useEffect(() => {
-    getTrucks({ page: 0, size: 10000 })
-      .unwrap()
-      .then()
-      .catch((e: any) => {
-        message.error(e.data?.messag || "Cannot get trucks");
-      });
-  }, [getTrucks]);
 
   const isOrderDisabled =
     data?.status === "CANCELLED" ||
@@ -123,7 +113,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
       deleteStop({ orderId: orderId, stopId: chosenStopId?.id })
         .unwrap()
         .then((res) => {
-          message.success(res.message);
+          message.success(res?.message);
           setIsDeleteStopModal(false);
         })
         .catch((e) => {
@@ -137,10 +127,15 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
         (st) =>
           (totalWeightCounter.current = totalWeightCounter.current + st.weight)
       );
+
       setSummary([
         {
           label: "Job value",
           value: `${localeString(data?.totalAmount)} Rwf`
+        },
+        {
+          label: "Payment plan",
+          value: data?.paymentPlan.replaceAll("_", " ")
         },
         {
           label: "Payment status",
@@ -157,10 +152,11 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           value: data?.distance
         }
       ]);
+
       setClientDetails([
         {
           label: "Name",
-          value: data?.office?.client.names
+          value: data?.office?.client?.names
         },
         {
           label: "Branch",
@@ -171,6 +167,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           value: data?.deliveryCode
         }
       ]);
+
       setOrderDetails([
         {
           label: "Recipeint",
@@ -178,15 +175,21 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
         },
         {
           label: "Category",
-          value: data?.category.name
+          value: data?.category?.name
         },
         {
           label: "Weight",
-          value: `${totalWeightCounter?.current} KGs - 20Rwf/KG`
+          value: `${totalWeightCounter?.current} KGs ${
+            data?.paymentPlan === "PAY_BY_KG"
+              ? `- ${Math.round(
+                  data.totalAmount / totalWeightCounter?.current
+                )} Rwf / KG`
+              : ""
+          }`
         },
         {
           label: "Depot",
-          value: data?.depot.name
+          value: data?.depot?.name
         }
       ]);
     }
@@ -196,12 +199,20 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
     if (orderId) {
       getOrder(orderId)
         .unwrap()
-        .then()
+        .then((res: any) => {
+          setEditOrderData(res);
+        })
         .catch((e) => {
           message.error(e?.data?.message || "Something went wrong");
         });
     }
   }, [orderId, getOrder]);
+
+  const handleCopyID = () => {
+    navigator.clipboard
+      .writeText(orderId?.toString() || "")
+      .then(() => message.success("Order ID added to clipboard"));
+  };
 
   const StepDescription = ({ st }: { st: Stop }) => {
     return (
@@ -301,6 +312,19 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                     />
                   </span>
                 )}
+
+                {sm.label === "Job value" && (
+                  <span className="cursor-pointer">
+                    <Image
+                      className="pointer"
+                      src="/icons/ic-contact-edit.svg"
+                      alt="Backspace icon"
+                      width={13}
+                      height={13}
+                      onClick={() => setIsEditPriceModal(true)}
+                    />
+                  </span>
+                )}
               </div>
             </div>
           );
@@ -328,7 +352,6 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           <EditPayment
             tx={chosenTransaction}
             orderId={data.id}
-            closeModal={() => setIsEditPayment(false)}
             isEditPayment={isEditPayment}
             setIsEditPayment={setIsEditPayment}
           />
@@ -339,6 +362,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             isEditPaymentStatus={isEditPaymentStatus}
             setIsEditPaymentStatus={setIsEditPaymentStatus}
           />
+
           <EditOrderClient
             orderId={orderId}
             existingClient={data?.office?.client?.id}
@@ -348,10 +372,16 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             setIsEditClientModal={setIsEditClientModal}
           />
 
+          <EditOrderPrice
+            isVisible={isEditPriceModal}
+            setIsVisible={setIsEditPriceModal}
+            orderData={editOrderData}
+            setEditData={setEditOrderData}
+          />
+
           <AddStop
             order={data}
             closeModal={() => setIsAddStopModal(false)}
-            trucks={trucks?.payload?.content}
             isAddStopModal={isAddStopModal}
             setIsAddStopModal={setIsAddStopModal}
           />
@@ -376,7 +406,22 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           <div className="flex flex-col xl:flex-row p-5 gap-6 overflow-auto h-[83vh]">
             <div className="flex-1 h-min bg-white shadow-[0px_0px_19px_#00000008] rounded p-14">
               <div className="flex items-center justify-between mb-3">
-                <span className="heading1 text-ox-dark">ORDER {orderId}</span>
+                <div className="flex items-top gap-12 ">
+                  <span className="heading1 text-ox-dark">ORDER {orderId}</span>{" "}
+                  <div
+                    className="flex items-center gap-2 pointer"
+                    onClick={handleCopyID}
+                  >
+                    <Image
+                      width={14}
+                      height={14}
+                      src="/icons/copy.svg"
+                      alt=""
+                    />
+                    <span className="normalText">Copy ID</span>
+                  </div>
+                </div>
+
                 <span className="font-bold">
                   <PaymentStatus status={data.status} />
                 </span>
@@ -525,7 +570,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                     </div>
                   )}
                   <div>
-                    {data.transactions.map((tx, index) => {
+                    {data.transactions.map((tx: any, index: number) => {
                       return (
                         <div key={index} className="flex items-center mb-4">
                           <div className="flex-1 flex items-center gap-5 whitespace-nowrap overflow-hidden text-ellipsis">

@@ -121,6 +121,7 @@ const Clients = () => {
           setSort={setSort}
         />
       </div>
+
       <div className="px-5">
         {isClientsLoading ? (
           <>

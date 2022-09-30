@@ -6,11 +6,11 @@ import Col from "antd/lib/col";
 import info from "antd/lib/message";
 import LoadingOutlined from "@ant-design/icons/LoadingOutlined";
 import moment from "moment";
-import { numbersFormatter } from "../../../helpers/numbersFormatter";
-import { AnalyticsCardTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticsCardTypes";
-import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
-import { useDownloadAnalyticsReportMutation } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
-import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { numbersFormatter } from "../../helpers/numbersFormatter";
+import { AnalyticsCardTypes } from "../../lib/types/pageTypes/Analytics/AnalyticsCardTypes";
+import { SmallSpinLoader } from "../Shared/Loaders/Loaders";
+import { useDownloadAnalyticsReportMutation } from "../../lib/api/endpoints/Analytics/analyticEndpoints";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import fileDownload from "js-file-download";
 
 const { Text } = Typography;
@@ -99,7 +99,7 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
       style={{ width: "auto", border: "1px solid #EAEFF2" }}
       title={<Text className="text-base font-light">{title}</Text>}
       extra={
-        scope ? (
+        scope && (
           <Dropdown overlay={() => DropdownMenu(scope)} trigger={["click"]}>
             <Image
               className="pointer"
@@ -109,14 +109,6 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
               alt=""
             />
           </Dropdown>
-        ) : (
-          <Image
-            className="pointer"
-            width={18}
-            src="/icons/more_vert_FILL0_wght400_GRAD0_opsz48.svg"
-            preview={false}
-            alt=""
-          />
         )
       }
     >

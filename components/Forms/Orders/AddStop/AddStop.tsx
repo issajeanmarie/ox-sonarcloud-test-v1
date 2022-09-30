@@ -3,9 +3,12 @@ import { Form, message, Select } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { FC, useEffect, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
+import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 import { useAddStopMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
+import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { AddStopRequest, Order } from "../../../../lib/types/orders";
-import { TruckSchema } from "../../../../lib/types/trucksTypes";
+import { DriverSchema, TruckSchema } from "../../../../lib/types/trucksTypes";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
@@ -15,7 +18,6 @@ const { Option } = Select;
 interface AddStopProps {
   order: Order;
   closeModal: () => void;
-  trucks: TruckSchema[];
   isAddStopModal: boolean;
   setIsAddStopModal: any;
 }
@@ -23,7 +25,6 @@ interface AddStopProps {
 const AddStop: FC<AddStopProps> = ({
   order,
   closeModal,
-  trucks,
   isAddStopModal,
   setIsAddStopModal
 }) => {
@@ -57,11 +58,27 @@ const AddStop: FC<AddStopProps> = ({
       });
   };
 
+  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
+    noPagination: true
+  });
+
+  const [getTrucks, { data: trucks, isLoading: trucksLoading }] =
+    useLazyGetTrucksQuery();
+
   useEffect(() => {
     form.setFieldsValue({
       location: location?.name
     });
   }, [location]);
+
+  useEffect(() => {
+    handleAPIRequests({
+      request: getTrucks,
+      page: 0,
+      noPagination: true,
+      showFailure: true
+    });
+  }, [getTrucks]);
 
   return (
     <ModalWrapper
@@ -88,23 +105,32 @@ const AddStop: FC<AddStopProps> = ({
                 name="driverId"
                 type="select"
                 label="Driver"
-                placeholder="Choose driver"
-                options={[{ label: "David KAMANZI", value: 7 }]}
-                rules={[
-                  { required: true, message: "Select a driver to continue" }
-                ]}
-              />
+                placeholder="Select driver"
+                isLoading={driversLoading}
+                disabled={driversLoading}
+                isGroupDropdown
+                rules={[{ required: true, message: "Driver is required" }]}
+              >
+                {drivers?.payload?.map((driver: DriverSchema) => {
+                  return (
+                    <Option value={driver.id} key={driver.id}>
+                      {driver.names}
+                    </Option>
+                  );
+                })}
+              </Input>
             </div>
+
             <div className="flex-1">
               <Input
                 name="truckId"
                 type="select"
                 label="Truck"
-                placeholder="Choose truck"
+                placeholder="Select truck"
+                isLoading={trucksLoading}
+                disabled={trucksLoading}
                 isGroupDropdown
-                rules={[
-                  { required: true, message: "Select a truck to continue" }
-                ]}
+                rules={[{ required: true, message: "Truck is required" }]}
               >
                 {trucks?.map((truck: TruckSchema) => {
                   return (

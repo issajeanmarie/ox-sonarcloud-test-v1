@@ -20,7 +20,7 @@ interface ViewOrderHeaderProps {
   orderId: Query;
   code: string;
   order: Order;
-  comment: string;
+  comment: string | "";
   setSupport: React.Dispatch<React.SetStateAction<boolean>>;
   isOrderDisabled: boolean;
   canUserDelete: boolean;

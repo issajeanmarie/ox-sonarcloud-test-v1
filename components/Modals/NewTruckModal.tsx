@@ -16,6 +16,7 @@ import {
 import { requiredField } from "../../lib/validation/InputValidations";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import ModalWrapper from "./ModalWrapper";
+import { useEffect, useRef } from "react";
 
 type Types = {
   isVisible: boolean;
@@ -63,7 +64,6 @@ const NewTruckModal = ({
   const handleCreateTruckSuccess = (res: any) => {
     handleCancel();
     dispatch(displayTrucks(res));
-    form.resetFields();
   };
 
   const handleEditTruckSuccess = (res: any) => {
@@ -123,22 +123,29 @@ const NewTruckModal = ({
     form.resetFields();
   };
 
-  const initialValues = {
-    plateNumber: editTruckData?.plateNumber || "",
-    yearManufactured: editTruckData?.yearManufactured || "",
-    model: editTruckData?.model || "",
-    type: editTruckData?.type || "",
-    fuelCardAssigned: editTruckData?.fuelCardAssigned || "",
-    fuelType: editTruckData?.fuelType || "",
-    engineNumber: editTruckData?.engineNumber || "",
-    engineOilType: editTruckData?.engineOilType || "",
-    capacity: editTruckData?.capacity || "",
-    chassisNumber: editTruckData?.chassisNumber || "",
-    tireSize: editTruckData?.tireSize || "",
-    tireBrand: editTruckData?.tireBrand || "",
-    trackingUnitSerialNumber: editTruckData?.trackingUnitSerialNumber || "",
-    depotId: editTruckData?.depot?.id || ""
-  };
+  // let initialValues;
+  const initialValues = useRef({});
+
+  useEffect(() => {
+    if (initialValues.current) {
+      initialValues.current = {
+        plateNumber: editTruckData?.plateNumber || "",
+        yearManufactured: editTruckData?.yearManufactured || "",
+        model: editTruckData?.model || "",
+        type: editTruckData?.type || "",
+        fuelCardAssigned: editTruckData?.fuelCardAssigned || "",
+        fuelType: editTruckData?.fuelType || "",
+        engineNumber: editTruckData?.engineNumber || "",
+        engineOilType: editTruckData?.engineOilType || "",
+        capacity: editTruckData?.capacity || "",
+        chassisNumber: editTruckData?.chassisNumber || "",
+        tireSize: editTruckData?.tireSize || "",
+        tireBrand: editTruckData?.tireBrand || "",
+        trackingUnitSerialNumber: editTruckData?.trackingUnitSerialNumber || "",
+        depotId: editTruckData?.depot?.id || ""
+      };
+    }
+  }, [editTruckData]);
 
   return (
     <ModalWrapper
@@ -155,7 +162,7 @@ const NewTruckModal = ({
     >
       <Form
         name="CreateTruck"
-        initialValues={initialValues}
+        initialValues={initialValues.current || {}}
         onFinish={onFinish}
         layout="vertical"
         form={form}

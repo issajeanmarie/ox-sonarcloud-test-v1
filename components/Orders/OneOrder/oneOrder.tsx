@@ -194,7 +194,13 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                   {abbreviateNumber(totalWeight)} KG
                 </Text>
 
-                <span className="opacity_56 nowrap">20 Rwf / Kg</span>
+                <span className="opacity_56 nowrap">
+                  {record?.paymentPlan === "PAY_BY_KG"
+                    ? `- ${Math.round(
+                        record.totalAmount / totalWeight
+                      )} RWf / KG`
+                    : ""}
+                </span>
               </div>
             );
             return { children: child, props: { "data-label": "Name" } };

@@ -44,7 +44,6 @@ export type PostClientLocationRequest = {
 };
 export type PostClientTagRequest = {
   id: number | string | string[] | undefined;
-  tagId: any;
   name: string;
 };
 

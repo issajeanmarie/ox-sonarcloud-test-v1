@@ -13,7 +13,7 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
     truckAnalytics: builder.query<AnalyticsResponse, TruckAnalyticsRequest>({
       providesTags: ["Analytics", "Depot"],
       query: (DTO) => ({
-        url: `/analytics/truck-analytics/new?depot=${DTO?.depot || ""}&start=${
+        url: `/analytics/truck-analytics/v2?depot=${DTO?.depot || ""}&start=${
           DTO?.start || ""
         }&end=${DTO?.end || ""}&sortBy=${DTO?.sortBy || ""}&direction=${
           DTO?.direction || ""

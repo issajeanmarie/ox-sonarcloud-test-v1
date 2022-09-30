@@ -59,6 +59,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
 
   const handleCreateOrder = (values: OrderRequestBody) => {
     const stopsWithTrucksAndDrivers: Stop_Request[] = [];
+
     location &&
       stopsWithTrucksAndDrivers.push({
         coordinates: JSON.stringify(location.coordinates || {}),
@@ -69,15 +70,16 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
         truckId: values.truckId,
         weight: Number(values.weight)
       });
+
     stops.forEach((st) => {
       stopsWithTrucksAndDrivers.push({
         ...st,
         truckId: values.truckId,
         driverId: values.driverId,
-        weight: Number(values.weight),
         position: stopsWithTrucksAndDrivers.length + 1
       });
     });
+
     const payload: OrderRequestBody = {
       ...values,
       stops: stopsWithTrucksAndDrivers,

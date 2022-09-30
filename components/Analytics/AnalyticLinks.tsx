@@ -6,8 +6,8 @@ export const AnalyticLinks: Header_Links[] = [
     id: "trucks"
   },
   {
-    label: "REVENUES",
-    id: "revenues"
+    label: "REVENUE",
+    id: "revenue"
   },
   {
     label: "MAP",

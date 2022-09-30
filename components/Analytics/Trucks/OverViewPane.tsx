@@ -250,7 +250,7 @@ const OvervieWPane = () => {
               className="mb-6"
             >
               <p className="mb-6 text_ellipsis" title="Revenue KPIs">
-                Revenues KPIs
+                Revenue KPIs
               </p>
 
               <Row align="middle" justify="space-between" wrap={false}>
@@ -295,8 +295,8 @@ const OvervieWPane = () => {
               xl={{ span: 8 }}
               className="mb-6"
             >
-              <p className="mb-6 text_ellipsis" title="Repair cost vs Revenues">
-                Repair cost vs Revenues
+              <p className="mb-6 text_ellipsis" title="Repair cost vs Revenue">
+                Repair cost vs Revenue
               </p>
 
               <Row align="middle" justify="space-between" wrap={false}>
@@ -342,8 +342,8 @@ const OvervieWPane = () => {
               xl={{ span: 8 }}
               className="mb-6"
             >
-              <p className="mb-6 text_ellipsis" title="Fuel cost vs Revenues">
-                Fuel cost vs Revenues
+              <p className="mb-6 text_ellipsis" title="Fuel cost vs Revenue">
+                Fuel cost vs Revenue
               </p>
 
               <Row align="middle" justify="space-between" wrap={false}>

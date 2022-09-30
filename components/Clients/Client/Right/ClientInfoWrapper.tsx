@@ -7,7 +7,7 @@ type ClientInfoWrapperTypes = {
 
 const ClientInfoWrapper: FC<ClientInfoWrapperTypes> = ({ title, infoItem }) => {
   return (
-    <div className={`flex gap-4 ${title !== "Email" && "mb-4"}`}>
+    <div className={`flex text_ellipsis gap-12 ${title !== "Email" && "mb-4"}`}>
       <div className="w-1/6">
         <span className="font-bold dark">{title}:</span>
       </div>
