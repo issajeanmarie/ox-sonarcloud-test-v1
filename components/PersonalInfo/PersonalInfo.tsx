@@ -120,15 +120,6 @@ const ProfileInfo = () => {
               <p>
                 <Text className="txt-small">{data?.payload?.email}</Text>
               </p>
-              <label htmlFor="imageUpload">
-                <u>Edit Profile Picture</u>
-              </label>
-              <input
-                type="file"
-                id="imageUpload"
-                accept="image/*"
-                style={{ display: "none" }}
-              />
             </Col>
           </Row>
         </div>

@@ -24,6 +24,7 @@ export const baseAPI = createApi({
     "Drivers",
     "Agents",
     "Admins",
+    "Resources",
     "Stock",
     "Suppliers",
     "Sales"

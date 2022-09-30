@@ -252,6 +252,37 @@ const AppSider = ({ collapsed }: any) => {
             );
           }
 
+          if (moreMenu.name === "Resources") {
+            return (
+              <Menu.Item
+                onClick={() => router.push(moreMenu.url)}
+                className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
+                key={moreMenu.name}
+                icon={
+                  <Image
+                    width={18}
+                    src={`/icons/${moreMenu.icon}`}
+                    preview={false}
+                    alt=""
+                  />
+                }
+              >
+                <text className="text-white normalText pl-3">
+                  {!collapsed && moreMenu.name}
+                </text>
+
+                {/* NOTIFICATION LETTER */}
+                <Space
+                  className={`radius50 fowe400 bg_yellow rounded-full white notification_letter ${
+                    collapsed ? "collapsed_on" : "collapsed_off"
+                  }`}
+                >
+                  N
+                </Space>
+              </Menu.Item>
+            );
+          }
+
           return (
             <Menu.Item
               onClick={() => {

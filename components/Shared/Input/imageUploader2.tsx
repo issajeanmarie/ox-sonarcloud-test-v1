@@ -84,7 +84,7 @@ const ImageUploader = ({
                     width={24}
                     preview={true}
                     alt="Add sign"
-                    src="/icons/add_photo_alternate_FILL0_wght400_GRAD0_opsz48.svg"
+                    src={preview}
                   />
                   <Text>Add image</Text>
                 </>

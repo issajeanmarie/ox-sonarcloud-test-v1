@@ -51,6 +51,10 @@ export const routes = {
     name: "Analytics",
     url: "/dashboard/analytics"
   },
+  Resources: {
+    name: "Resources",
+    url: "/dashboard/resources"
+  },
   Settings: {
     name: "Settings",
     url: "/dashboard/settings"
