@@ -51,3 +51,7 @@ export type ToggleDriverRequest = {
 export type MakeDriverDispatcherRequest = {
   id: any;
 };
+
+export type SeachDriverRequest = {
+  search: string | undefined;
+};

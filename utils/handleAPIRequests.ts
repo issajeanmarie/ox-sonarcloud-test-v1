@@ -1,6 +1,17 @@
 import info from "antd/lib/message";
 import { errorCodes } from "../config/errorCodes";
 
+/**
+ * This function handles all API requests,
+ * @param {Boolean} showSuccess - Shows/hides success message from API/User - False by default as we don't need it that much
+ * @param {Boolean} showFailure - Shows/hides success message from API/User - True by default as we always need to knwo when something is wrong
+ * @param {String} successMessage - User defined success message in case API's success message isn't clear to the end-users
+ * @param {Function} request - The requst to make, endpoint
+ * @param {Function} handleSuccess - A function that runs when the request succeeds, it passes the result as a pram
+ * @param {Function} handleFailure - A function that runs when the request fails, it passes the error as a pram
+ * @param {any} props - All of the other values you want to pass to the request function/enndpoint
+ */
+
 export const handleAPIRequests = ({
   showSuccess = false,
   showFailure = true,
@@ -16,7 +27,7 @@ export const handleAPIRequests = ({
       handleSuccess(res);
 
       if (showSuccess) {
-        info.success(successMessage || "Operation successful");
+        info.success(res.message || successMessage || "Operation successful");
       }
 
       return res;

@@ -12,6 +12,7 @@ import { manageSidebarMenus, moreSidebarMenus } from "../../../helpers/menus";
 import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
 import { depotTypes } from "../../../lib/types/depots";
 import { getActiveMenu } from "../../../helpers/getActiveMenu";
+import { routes } from "../../../config/route-config";
 const { Sider } = Layout;
 const { Text } = Typography;
 
@@ -29,6 +30,10 @@ const AppSider = ({ collapsed }: any) => {
 
   const menus = manageSidebarMenus();
   const moreMenus = moreSidebarMenus();
+  const showDepots =
+    router.pathname.includes(routes.Analytics.url) ||
+    router.pathname === routes.Orders.url ||
+    router.pathname.includes(routes.viewOrder.url);
 
   const depots = (
     <Space
@@ -113,7 +118,7 @@ const AppSider = ({ collapsed }: any) => {
       <Dropdown
         trigger={["click"]}
         disabled={isLoading}
-        overlay={depots}
+        overlay={showDepots ? depots : <></>}
         placement="bottom"
         className="pointer"
       >

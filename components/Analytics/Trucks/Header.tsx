@@ -31,6 +31,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   isPageLoading
 }) => {
   const router = useRouter();
+  const { depotId, depotName } = router.query;
   const user = userType();
 
   const [toggleTruck, { isLoading }] = useToggleTruckMutation();
@@ -52,7 +53,10 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   };
 
   const handleDeleteTruckSuccess = () => {
-    router.push(routes.Trucks.url);
+    router.push({
+      pathname: routes.Trucks.url,
+      query: { depotId: depotId || 0, depotName: depotName || "All depots" }
+    });
   };
 
   const handleGetTrucksSuccess = (res: any) => {
@@ -128,7 +132,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
             justify="space-between"
             gutter={6}
             className={`${
-              (selectedTruck.id || truckData.id) === truck.id
+              (selectedTruck?.id || truckData?.id) === truck.id
                 ? "bg_white_yellow cursor-pointer p-3"
                 : "hover:bg-gray-50 hover:p-1"
             } mt-6  cursor-pointer  rounded transition-all duration-100`}
@@ -160,7 +164,15 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
             alt="Backspace icon"
             width={20}
             height={20}
-            onClick={() => router.push(routes.Trucks.url)}
+            onClick={() =>
+              router.push({
+                pathname: routes.Trucks.url,
+                query: {
+                  depotId: depotId || 0,
+                  depotName: depotName || "All depots"
+                }
+              })
+            }
             preview={false}
           />
           <span className="heading2">Trucks</span>

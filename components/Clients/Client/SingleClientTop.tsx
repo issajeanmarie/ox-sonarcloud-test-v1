@@ -2,7 +2,6 @@
 import { Col, Row, Image as AntDImage } from "antd";
 import React, { FC, SetStateAction, useState } from "react";
 import { routes } from "../../../config/route-config";
-import { changeRoute } from "../../../helpers/routesHandler";
 import {
   useDeleteClientMutation,
   useLazyDownloadClientInvoiceQuery
@@ -21,6 +20,7 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({
   isClientFetching,
   router
 }) => {
+  const { depotId, depotName } = router.query;
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [itemToDelete, setItemToDelete] =
     useState<SetStateAction<number | undefined>>();
@@ -67,7 +67,15 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({
       ) : (
         <>
           <Col
-            onClick={() => changeRoute(routes.Clients.url)}
+            onClick={() =>
+              router.push({
+                pathname: routes.Clients.url,
+                query: {
+                  depotId: depotId || 0,
+                  depotName: depotName || "All depots"
+                }
+              })
+            }
             className="cursor-pointer"
           >
             <div className="flex items-center gap-4 ">

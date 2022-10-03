@@ -29,6 +29,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
 
   const router = useRouter();
+  const { depotId, depotName } = router.query;
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -88,31 +89,23 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
 
             <div className="flex items-center gap-6 w-[200px]">
               <Button
-                onClick={() => router.push(routes.newOrder.url)}
+                onClick={() =>
+                  router.push({
+                    pathname: routes.newOrder.url,
+                    query: {
+                      depotId: depotId || 0,
+                      depotName: depotName || "All depots"
+                    }
+                  })
+                }
                 type="primary"
               >
                 NEW ORDER
               </Button>
             </div>
-
-            {/* <div>
-              <Button
-                type="primary"
-                onClick={() => router.push(routes.newOrder.url)}
-              >
-                NEW ORDER
-              </Button>
-            </div> */}
           </div>
         }
       />
-      {/* <div className="sticky top-0 py-4 z-20 bg-[#F6F6F6] shadow-[0px_0px_19px_#00000008]">
-        <div className="flex items-center justify-between rounded shadow-[0px_0px_19px_#00000008] bg-white  px-4 py-3">
-         
-          
-          
-        </div>
-      </div> */}
     </>
   );
 };
