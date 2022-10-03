@@ -22,13 +22,13 @@ import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversE
 const { Option } = Select;
 
 interface FilterOrdersFormProps {
-  getOrders: ({ filter, depot }: Order_Filter) => void;
+  getOrdersAction: ({ filter, depot }: Order_Filter) => void;
   loading: boolean;
   setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
-  getOrders,
+  getOrdersAction,
   setIsFiltered,
   loading
 }) => {
@@ -49,7 +49,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
 
     removeFromLocal(OX_ORDERS_FILTERS);
 
-    getOrders({
+    getOrdersAction({
       filter: data?.filter || "",
       start: data?.start || "",
       end: data?.end || "",
@@ -82,7 +82,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
     setIsFiltered(false);
     form.resetFields();
 
-    getOrders({
+    getOrdersAction({
       filter: "",
       start: "",
       end: "",
@@ -152,7 +152,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
           <div className="flex items-center gap-4 ">
             <div className="flex-1">
               <Input
-                name="truckId"
+                name="truck"
                 type="select"
                 label="Truck"
                 allowClear
@@ -160,7 +160,6 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
                 isLoading={trucksLoading}
                 disabled={trucksLoading}
                 isGroupDropdown
-                rules={[{ required: true, message: "Truck is required" }]}
               >
                 {trucks?.map((truck: TruckSchema) => {
                   return (
@@ -173,7 +172,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
             </div>
             <div className="flex-1">
               <Input
-                name="driverId"
+                name="driver"
                 type="select"
                 label="Driver"
                 placeholder="Select driver"
@@ -181,7 +180,6 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
                 disabled={driversLoading}
                 allowClear
                 isGroupDropdown
-                rules={[{ required: true, message: "Driver is required" }]}
               >
                 {drivers?.payload?.map((driver: DriverSchema) => {
                   return (

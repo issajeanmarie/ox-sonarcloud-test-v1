@@ -11,3 +11,13 @@ export const STATIC_DAYS = [
   { id: 5, name: "SATURDAY" },
   { id: 6, name: "SUNDAY" }
 ];
+
+export const classes = {
+  navbar:
+    "rounded w-9 shadow-[0px_0px_19px_#00000008] bg-white  px-2 py-3 center",
+  text: {
+    h1: "text-[17px] font-bold flex items-center gap-5"
+  },
+
+  content_section: "overflow-scroll"
+};

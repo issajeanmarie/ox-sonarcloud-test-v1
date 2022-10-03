@@ -47,7 +47,7 @@ body {
   background-color: var(--color_white);
   overflow-x: hidden;
   font-size: 0.875rem /* 14px */;
-  line-height: 1.25rem /* 20px */;
+  line-height: 0rem /* 20px */;
 }
 
 * {

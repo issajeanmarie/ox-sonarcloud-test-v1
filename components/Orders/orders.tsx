@@ -13,6 +13,7 @@ import { pagination } from "../../config/pagination";
 import { useRouter } from "next/router";
 import { getFromLocal } from "../../helpers/handleLocalStorage";
 import { OX_ORDERS_FILTERS } from "../../config/constants";
+import Content from "../Shared/Content";
 
 const Orders: FC = () => {
   const [currentPages, setCurrentPages] = useState(1);
@@ -98,44 +99,54 @@ const Orders: FC = () => {
     ordersState?.payload?.totalPages > currentPages || isLoadMoreLoading;
 
   const isOnlyFetching = isFetching && !isLoadMoreLoading;
+  const showPagination = showPaginationBtn && !isOnlyFetching;
+  const showFiltersLoader = isFetching && !isLoadMoreLoading;
 
   return (
-    <div className="mx-4 relative">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <Fragment>
-          <OrdersHeader
-            data={data}
-            getOrders={getOrdersAction}
-            loading={isFetching}
-          />
+    <>
+      <div className="mx-4 relative">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <Fragment>
+            <OrdersHeader
+              data={data}
+              getOrdersAction={getOrdersAction}
+              loading={isFetching}
+            />
 
-          {isFetching && !isLoadMoreLoading ? (
-            <Loader />
-          ) : (
-            data &&
-            ordersState.payload?.content?.map((order: Order, index: number) => (
-              <OneOrder key={index} index={index + 1} order={order} />
-            ))
-          )}
+            <Content navType="CENTER">
+              <>
+                {showFiltersLoader ? (
+                  <Loader />
+                ) : (
+                  data &&
+                  ordersState.payload?.content?.map(
+                    (order: Order, index: number) => (
+                      <OneOrder key={index} index={index + 1} order={order} />
+                    )
+                  )
+                )}
 
-          {showPaginationBtn && !isOnlyFetching && (
-            <div className="flex justify-center mb-4">
-              <div className="w-[100px]">
-                <Button
-                  type="primary"
-                  loading={isLoadMoreLoading}
-                  onClick={handleLoadMore}
-                >
-                  Load more
-                </Button>
-              </div>
-            </div>
-          )}
-        </Fragment>
-      )}
-    </div>
+                {showPagination && (
+                  <div className="flex justify-center mb-4">
+                    <div className="w-[100px]">
+                      <Button
+                        type="primary"
+                        loading={isLoadMoreLoading}
+                        onClick={handleLoadMore}
+                      >
+                        Load more
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </>
+            </Content>
+          </Fragment>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -29,6 +29,7 @@ const SingleOrderLeft = () => {
           <div className="mb-4">
             <span className="text-base font-light">Client details</span>
           </div>
+          x
           <InfoWrapper title="Name" infoItem="NIYONZIMA Philbert" />
           <InfoWrapper title="Branch" infoItem="Ruhango, Rwanda (Gafunzo)" />
         </div>
