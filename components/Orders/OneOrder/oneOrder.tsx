@@ -59,6 +59,9 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
   const router = useRouter();
 
+  const router = useRouter();
+  const { depotId, depotName } = router.query;
+
   const [changeOrderStatus, { isLoading: cancelOrderLoading }] =
     useChangeOrderStatusMutation();
 

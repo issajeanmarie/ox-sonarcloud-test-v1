@@ -50,10 +50,6 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
     chosenDriverId ? { id: chosenDriverId } : skipToken
   );
 
-  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
-    noPagination: true
-  });
-
   const handleOnFinish = (values: Order_Filter) => {
     setIsFiltered(true);
     setCurrentPages(1);

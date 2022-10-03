@@ -280,7 +280,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
             justify="space-between"
             gutter={6}
             className={`${
-              (selectedTruck.id || truckData.id) === truck.id
+              (selectedTruck?.id || truckData?.id) === truck.id
                 ? "bg_white_yellow cursor-pointer p-3"
                 : "hover:bg-gray-50 hover:p-1"
             } mt-6  cursor-pointer  rounded transition-all duration-100`}

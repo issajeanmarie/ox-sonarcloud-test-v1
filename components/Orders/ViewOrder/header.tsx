@@ -57,6 +57,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
     useChangeOrderStatusMutation();
 
   const router = useRouter();
+  const { depotId, depotName } = router.query;
 
   const handleDownloadInvoiceSuccess = (file: File) => {
     handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });

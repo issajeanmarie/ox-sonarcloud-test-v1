@@ -46,7 +46,11 @@ const Admins = () => {
   useEffect(() => {
     if (router.isReady) {
       if (Object.keys(query).length === 0 || !query.tb) {
-        changeRoute(`${routes.Accounts.url}?tb=DRIVERS`);
+        changeRoute(
+          `${routes.Accounts.url}?tb=DRIVERS?depotId=${
+            query.depotId || 0
+          }?depotName=${query.depotName || "All depots"}`
+        );
         setActive("DRIVERS");
       }
     }
@@ -54,9 +58,24 @@ const Admins = () => {
 
   const toggleActiveHandler = (id: string) => {
     setActive(id);
-    id === "DRIVERS" && changeRoute(`${routes.Accounts.url}?tb=DRIVERS`);
-    id === "AGENTS" && changeRoute(`${routes.Agents.url}?tb=AGENTS`);
-    id === "ADMINS" && changeRoute(`${routes.Admins.url}?tb=ADMINS`);
+    id === "DRIVERS" &&
+      changeRoute(
+        `${routes.Accounts.url}?tb=DRIVERS?depotId=${
+          query.depotId || 0
+        }?depotName=${query.depotName || "All depots"}`
+      );
+    id === "AGENTS" &&
+      changeRoute(
+        `${routes.Agents.url}?tb=AGENTS?depotId=${
+          query.depotId || 0
+        }?depotName=${query.depotName || "All depots"}`
+      );
+    id === "ADMINS" &&
+      changeRoute(
+        `${routes.Admins.url}?tb=ADMINS?depotId=${
+          query.depotId || 0
+        }?depotName=${query.depotName || "All depots"}`
+      );
   };
 
   const AllAdmins = useSelector(
