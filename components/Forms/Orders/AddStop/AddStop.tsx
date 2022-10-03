@@ -3,7 +3,6 @@ import { Form, Select } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { FC, useEffect, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
-import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 import { useAddStopMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { AddStopRequest, Order } from "../../../../lib/types/orders";
