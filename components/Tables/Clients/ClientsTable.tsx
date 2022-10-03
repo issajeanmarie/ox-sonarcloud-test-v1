@@ -11,13 +11,13 @@ import CustomButton from "../../Shared/Button";
 import { Image } from "antd";
 import { FC, SetStateAction, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
-import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import { useDeleteClientMutation } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
+import { useRouter } from "next/router";
 
 const { Text } = Typography;
 
@@ -31,6 +31,9 @@ const ClientsTable: FC<ClientsTableProps> = ({
   const [itemToDelete, setItemToDelete] =
     useState<SetStateAction<number | undefined>>();
   const [deleteClient, { isLoading }] = useDeleteClientMutation();
+
+  const router = useRouter();
+  const { depotId, depotName } = router.query;
 
   const handleDeleteClient = () => {
     deleteClient({
@@ -141,7 +144,14 @@ const ClientsTable: FC<ClientsTableProps> = ({
           <Col className="my-[-12px]">
             <CustomButton
               onClick={() =>
-                changeRoute(`${routes.Client.url}?client=${record?.id}`)
+                router.push({
+                  pathname: `${routes.Client.url}`,
+                  query: {
+                    client: record?.id,
+                    depotId: depotId || 0,
+                    depotName: depotName || "All depots"
+                  }
+                })
               }
               type="view"
               size="small"

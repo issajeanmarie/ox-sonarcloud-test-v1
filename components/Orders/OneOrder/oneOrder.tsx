@@ -10,7 +10,6 @@ import { Order, Order as OrderType } from "../../../lib/types/orders";
 import { dateFormatterNth } from "../../../utils/dateFormatter";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
-import Link from "next/link";
 import { routes } from "../../../config/route-config";
 import ActionModal from "../../Shared/ActionModal";
 import {
@@ -19,6 +18,7 @@ import {
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import { message } from "antd";
+import { useRouter } from "next/router";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -44,6 +44,9 @@ const Order: FC<OrderProps> = ({ order, index }) => {
   const [isCancelOrderOpen, setIsCancelOrderOpen] = useState<boolean>(false);
   const [downloadInvoice, { isLoading: invoiceLoading }] =
     useOrderInvoiceMutation();
+
+  const router = useRouter();
+  const { depotId, depotName } = router.query;
 
   const [changeOrderStatus, { isLoading: cancelOrderLoading }] =
     useChangeOrderStatusMutation();
@@ -297,11 +300,21 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                     />
                   }
                 />
-                <Link href={routes.viewOrder.url + record.id}>
-                  <CustomButton type="view" size="small">
-                    View
-                  </CustomButton>
-                </Link>
+                <CustomButton
+                  type="view"
+                  size="small"
+                  onClick={() =>
+                    router.push({
+                      pathname: `${routes.viewOrder.url}/${record.id}`,
+                      query: {
+                        depotId: depotId || 0,
+                        depotName: depotName || "All depots"
+                      }
+                    })
+                  }
+                >
+                  View
+                </CustomButton>
               </div>
             );
             return { children: child, props: { "data-label": "Status" } };

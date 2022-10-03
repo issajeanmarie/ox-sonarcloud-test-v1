@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { FormInstance } from "antd/lib/form/Form";
 import SuccessModal from "../../Shared/Modal";
 import { routes } from "../../../config/route-config";
+import Navbar from "../../Shared/Content/Navbar";
 
 interface ViewOrderHeaderProps {
   form: FormInstance;
@@ -23,6 +24,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
 }) => {
   const router = useRouter();
 
+  const { depotId, depotName } = router.query;
+
   const addAnotherClient = () => {
     form.setFieldsValue({
       clientId: undefined,
@@ -31,8 +34,46 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
     closeModal();
   };
 
+  const LeftSide = (
+    <div className="flex items-center gap-4 ">
+      <Image
+        className="pointer"
+        src="/icons/keyboard_backspace_black_24dp.svg"
+        alt="Backspace icon"
+        width={20}
+        height={20}
+        onClick={() =>
+          router.push({
+            pathname: routes.Orders.url,
+            query: {
+              depotId: depotId || 0,
+              depotName: depotName || "All depots"
+            }
+          })
+        }
+      />
+      <span className="heading2">Orders</span>
+      <span className="normalText">/</span>
+      <span className="text-gray-400">New order</span>
+    </div>
+  );
+
+  const RightSide = (
+    <div className="flex items-center flex-1 justify-end gap-6">
+      <div className="flex items-center gap-6 w-[200px]">
+        <Button
+          onClick={() => form.submit()}
+          loading={createOrderLoading}
+          type="primary"
+        >
+          SAVE ORDER
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="bg-ox-white shadow-[0px_0px_19px_#00000008] sticky top-0 z-50">
+    <>
       <SuccessModal
         isModalVisible={isCreateOrderSuccess}
         setIsModalVisible={setIsCreateOrderSuccess}
@@ -60,40 +101,22 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             onClick={() => {
               closeModal();
               form.resetFields();
-              router.push(routes.Orders.url);
+              router.push({
+                pathname: routes.Orders.url,
+                query: {
+                  depotId: depotId || 0,
+                  depotName: depotName || "All depots"
+                }
+              });
             }}
           >
             No, I&apos;m good
           </button>
         </div>
       </SuccessModal>
-      <div className="p-3 px-6 flex items-center">
-        <div className="flex items-center gap-4 ">
-          <Image
-            className="pointer"
-            src="/icons/keyboard_backspace_black_24dp.svg"
-            alt="Backspace icon"
-            width={20}
-            height={20}
-            onClick={() => router.push(routes.Orders.url)}
-          />
-          <span className="heading2">Orders</span>
-          <span className="normalText">/</span>
-          <span className="text-gray-400">New order</span>
-        </div>
-        <div className="flex items-center flex-1 justify-end gap-6">
-          <div className="flex items-center gap-6 w-[200px]">
-            <Button
-              onClick={() => form.submit()}
-              loading={createOrderLoading}
-              type="primary"
-            >
-              SAVE ORDER
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
+
+      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="FULL" />
+    </>
   );
 };
 

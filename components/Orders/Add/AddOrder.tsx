@@ -4,7 +4,7 @@ import AddOrderForm from "../../Forms/Orders/AddEdit";
 import { useForm } from "antd/lib/form/Form";
 import { useCreateOrderMutation } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { OrderRequestBody } from "../../../lib/types/orders";
-import { message } from "antd";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const AddOrder: FC = () => {
   const [isCreateOrderSuccess, setIsCreateOrderSuccess] =
@@ -16,16 +16,16 @@ const AddOrder: FC = () => {
 
   const [createOrder, { isLoading }] = useCreateOrderMutation();
 
+  const handleNewOrderSuccess = () => {
+    setIsCreateOrderSuccess(true);
+  };
+
   const addOrderAction = (payload: OrderRequestBody) => {
-    createOrder(payload)
-      .unwrap()
-      .then((res) => {
-        message.success(res?.message || "Order created successfuly");
-        setIsCreateOrderSuccess(true);
-      })
-      .catch((e) => {
-        message.error(e.data?.message || "Something went wrong");
-      });
+    handleAPIRequests({
+      request: createOrder,
+      ...payload,
+      handleSuccess: handleNewOrderSuccess
+    });
   };
 
   return (

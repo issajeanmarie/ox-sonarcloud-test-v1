@@ -57,6 +57,8 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
   const [isUserEditing, setIsUserEditing] = useState(false);
 
   const router = useRouter();
+  const { depotId, depotName } = router.query;
+
   const dispatch = useDispatch();
   const trucksState = useSelector((state: State) => state.trucks.displayTrucks);
   const [getSingleTruck] = useLazyGetSingleTruckQuery();
@@ -295,7 +297,13 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                   <Col
                     className="my-[-12px]"
                     onClick={() =>
-                      router.push(`${routes.Trucks.url}/${record?.id}`)
+                      router.push({
+                        pathname: `${routes.Trucks.url}/${record?.id}`,
+                        query: {
+                          depotId: depotId || 0,
+                          depotName: depotName || "All depots"
+                        }
+                      })
                     }
                   >
                     <CustomButton type="view" size="small">

@@ -56,6 +56,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
     useChangeOrderStatusMutation();
 
   const router = useRouter();
+  const { depotId, depotName } = router.query;
 
   const downloadOrderInvoice = () => {
     downloadInvoice(orderId)
@@ -128,7 +129,15 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             alt="Backspace icon"
             width={20}
             height={20}
-            onClick={() => router.push(routes.Orders.url)}
+            onClick={() =>
+              router.push({
+                pathname: routes.Orders.url,
+                query: {
+                  depotId: depotId || 0,
+                  depotName: depotName || "All depots"
+                }
+              })
+            }
           />
           <span className="text-md font-bold">Orders</span>
           <span className="normalText">/</span>

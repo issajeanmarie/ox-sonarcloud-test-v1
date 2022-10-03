@@ -72,7 +72,8 @@ const Trucks = () => {
     (state: State) => state.trucks.displayTrucks
   );
   const router = useRouter();
-  const { browserStatus, browserSort, browserSearch } = router.query;
+  const { browserStatus, browserSort, browserSearch, depotId, depotName } =
+    router.query;
 
   const handleGetTrucksSuccess = (res: any) => {
     res && dispatch(displayTrucks({ payload: res, onReder: true }));
@@ -88,7 +89,9 @@ const Trucks = () => {
       query: {
         browserSort: "",
         browserStatus: "",
-        browserSearch: ""
+        browserSearch: "",
+        depotId: depotId || 0,
+        depotName: depotName || "All depots"
       }
     });
 
@@ -130,7 +133,9 @@ const Trucks = () => {
       query: {
         browserSearch: search,
         browserSort: sort,
-        browserStatus: status
+        browserStatus: status,
+        depotId: depotId || 0,
+        depotName: depotName || "All depots"
       }
     });
   };

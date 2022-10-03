@@ -6,7 +6,8 @@ import {
   GetDrivers,
   PostDriverRequest,
   ToggleDriverRequest,
-  MakeDriverDispatcherRequest
+  MakeDriverDispatcherRequest,
+  SeachDriverRequest
 } from "../../../types/Accounts/drivers";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -76,6 +77,36 @@ const driversEndpoints = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+    /*  searchDriver: builder.mutation<
+      ApiResponseMetadata<Driver>,
+      SeachDriverRequest
+    >({
+      invalidatesTags: ["Drivers"],
+      query: ({ search }) => ({
+        url: `/drivers?search=${search}`,
+        method: "GET"
+      })
+    }), */
+
+    /* searchDriver: builder.mutation({
+      invalidatesTags: ["Trucks"],
+      query: ({ search }: any) => ({
+        url: `/drivers?search=${search || ""}`,
+        method: "GET"
+      })
+    }), */
+
+    searchDriver: builder.query<
+      ApiResponseMetadata<Driver>,
+      SeachDriverRequest
+    >({
+      providesTags: ["Clients"],
+      query: ({ search }) => ({
+        url: `./drivers?search=${search}`,
+        method: "GET"
+      })
+    }),
+
     makeDriverDispatcher: builder.mutation<
       ApiResponseMetadata<Driver>,
       MakeDriverDispatcherRequest
@@ -97,5 +128,6 @@ export const {
   useEditDriverMutation,
   useToggleDriverMutation,
   useLazyDriversQuery,
-  useMakeDriverDispatcherMutation
+  useMakeDriverDispatcherMutation,
+  useLazySearchDriverQuery
 } = driversEndpoints;

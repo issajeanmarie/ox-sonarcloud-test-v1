@@ -18,10 +18,11 @@ import { Client } from "../../../../lib/types/clients";
 import { Office } from "../../../../lib/types/shared";
 import { Category } from "../../../../lib/types/categories";
 import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import { DriverSchema, TruckSchema } from "../../../../lib/types/trucksTypes";
+import { TruckSchema } from "../../../../lib/types/trucksTypes";
 import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoints";
-import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
+import DriverSearch from "../../../Shared/Input/DriverSearch";
+import { requiredField } from "../../../../lib/validation/InputValidations";
 
 const { Option, OptGroup } = Select;
 
@@ -52,10 +53,6 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     isLoading: chosenClientLoading,
     isFetching
   } = useClientQuery(chosenClientId ? { id: chosenClientId } : skipToken);
-
-  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
-    noPagination: true
-  });
 
   const handleCreateOrder = (values: OrderRequestBody) => {
     const stopsWithTrucksAndDrivers: Stop_Request[] = [];
@@ -385,7 +382,12 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                   <span className="link animate">New driver</span>
                 </div>
                 <div>
-                  <Input
+                  <DriverSearch
+                    name="driverId"
+                    label=""
+                    rules={requiredField("Driver")}
+                  />
+                  {/* <Input
                     name="driverId"
                     type="select"
                     placeholder="Select driver"
@@ -401,7 +403,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                         </Option>
                       );
                     })}
-                  </Input>
+                  </Input> */}
                 </div>
               </div>
             </div>

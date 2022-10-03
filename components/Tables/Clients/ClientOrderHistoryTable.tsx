@@ -6,9 +6,10 @@ import RowsWrapper from "../RowsWrapper";
 import moment from "moment";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { FC } from "react";
+import Row from "antd/lib/row";
 import { routes } from "../../../config/route-config";
-import Link from "next/link";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
+import { useRouter } from "next/router";
 
 const { Text } = Typography;
 
@@ -21,6 +22,9 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
   orders,
   isClientOrdersFetching
 }) => {
+  const router = useRouter();
+  const { depotId, depotName } = router.query;
+
   const columns: any = [
     {
       title: (
@@ -36,12 +40,21 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
         index: number
       ) => (
         <RowsWrapper>
-          <Link passHref href={routes.viewOrder.url + record?.id}>
-            <div className="flex gap-10 cursor-pointer">
-              <Text className="normalText opacity_56">{index + 1}</Text>
-              <Text className="normalText fowe900 underline">{record?.id}</Text>
-            </div>
-          </Link>
+          <Row
+            className="flex gap-10 cursor-pointer"
+            onClick={() =>
+              router.push({
+                pathname: `${routes.viewOrder.url}/${record?.id}`,
+                query: {
+                  depotId: depotId || 0,
+                  depotName: depotName || "All depots"
+                }
+              })
+            }
+          >
+            <Text className="normalText opacity_56">{index + 1}</Text>
+            <Text className="normalText fowe900 underline">{record?.id}</Text>
+          </Row>
         </RowsWrapper>
       )
     },

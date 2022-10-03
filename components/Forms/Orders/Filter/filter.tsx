@@ -8,7 +8,7 @@ import { Order_Filter } from "../../../../lib/types/orders";
 import { useForm } from "antd/lib/form/Form";
 import moment from "moment";
 import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import { DriverSchema, TruckSchema } from "../../../../lib/types/trucksTypes";
+import { TruckSchema } from "../../../../lib/types/trucksTypes";
 import {
   getFromLocal,
   removeFromLocal,
@@ -17,27 +17,23 @@ import {
 import { OX_ORDERS_FILTERS } from "../../../../config/constants";
 import { yearDateFormat } from "../../../../config/dateFormats";
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
-import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
+import DriverSearch from "../../../Shared/Input/DriverSearch";
 
 const { Option } = Select;
 
 interface FilterOrdersFormProps {
-  getOrders: ({ filter, depot }: Order_Filter) => void;
+  getOrdersAction: ({ filter, depot }: Order_Filter) => void;
   loading: boolean;
   setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
-  getOrders,
+  getOrdersAction,
   setIsFiltered,
   loading
 }) => {
   const [getTrucks, { data: trucks, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
-
-  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
-    noPagination: true
-  });
 
   const handleOnFinish = (values: Order_Filter) => {
     setIsFiltered(true);
@@ -49,7 +45,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
 
     removeFromLocal(OX_ORDERS_FILTERS);
 
-    getOrders({
+    getOrdersAction({
       filter: data?.filter || "",
       start: data?.start || "",
       end: data?.end || "",
@@ -82,7 +78,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
     setIsFiltered(false);
     form.resetFields();
 
-    getOrders({
+    getOrdersAction({
       filter: "",
       start: "",
       end: "",
@@ -152,7 +148,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
           <div className="flex items-center gap-4 ">
             <div className="flex-1">
               <Input
-                name="truckId"
+                name="truck"
                 type="select"
                 label="Truck"
                 allowClear
@@ -160,7 +156,6 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
                 isLoading={trucksLoading}
                 disabled={trucksLoading}
                 isGroupDropdown
-                rules={[{ required: true, message: "Truck is required" }]}
               >
                 {trucks?.map((truck: TruckSchema) => {
                   return (
@@ -172,25 +167,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
               </Input>
             </div>
             <div className="flex-1">
-              <Input
-                name="driverId"
-                type="select"
-                label="Driver"
-                placeholder="Select driver"
-                isLoading={driversLoading}
-                disabled={driversLoading}
-                allowClear
-                isGroupDropdown
-                rules={[{ required: true, message: "Driver is required" }]}
-              >
-                {drivers?.payload?.map((driver: DriverSchema) => {
-                  return (
-                    <Option value={driver.id} key={driver.id}>
-                      {driver.names}
-                    </Option>
-                  );
-                })}
-              </Input>
+              <DriverSearch label="Driver" />
             </div>
           </div>
           <div className="flex items-center gap-4 ">
