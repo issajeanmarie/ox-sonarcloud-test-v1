@@ -1,11 +1,12 @@
 import { FC } from "react";
-import { Form, message, Select } from "antd";
-import Input from "../../../Shared/Input";
+import { Form, message } from "antd";
 import Button from "../../../Shared/Button";
 import { useEditOrderMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { Query } from "../../../../lib/types/shared";
 import { Client } from "../../../../lib/types/clients";
 import ModalWrapper from "../../../Modals/ModalWrapper";
+import ClientSearch from "../../../Shared/Input/ClientSearch";
+import { requiredField } from "../../../../lib/validation/InputValidations";
 
 interface EditOrderClientProps {
   orderId: Query;
@@ -16,12 +17,9 @@ interface EditOrderClientProps {
   setIsEditClientModal: any;
 }
 
-const { Option } = Select;
-
 const EditOrderClient: FC<EditOrderClientProps> = ({
   orderId,
   existingClient,
-  clients,
   closeModal,
   isEditClientModal,
   setIsEditClientModal
@@ -51,21 +49,7 @@ const EditOrderClient: FC<EditOrderClientProps> = ({
         initialValues={{ clientId: existingClient }}
         onFinish={handleOnFinish}
       >
-        <Input
-          name="clientId"
-          type="select"
-          label="Clients"
-          placeholder="Select a client"
-          isGroupDropdown
-          rules={[{ required: true, message: "Select a client to continue" }]}
-        >
-          {clients &&
-            clients?.map((el: Client) => (
-              <Option value={el.id} key={el.id} title={el.names}>
-                {el.names}
-              </Option>
-            ))}
-        </Input>
+        <ClientSearch label="Clients" rules={requiredField("Client")} />
         <div className="my-10">
           <Button type="primary" htmlType="submit" loading={isLoading}>
             Save

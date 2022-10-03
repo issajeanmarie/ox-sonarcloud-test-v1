@@ -4,17 +4,13 @@ import Image from "next/image";
 import Button from "../../../../components/Shared/Button";
 import { useCategoriesQuery } from "../../../../lib/api/endpoints/Category/categoryEndpoints";
 import { Form, Select } from "antd";
-import {
-  useClientQuery,
-  useLazyClientsQuery
-} from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
+import { useClientQuery } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { AddEditProps } from "../../../../lib/types/components/AddEditProps";
 import { OrderRequestBody, Stop_Request } from "../../../../lib/types/orders";
 import { LatLng } from "use-places-autocomplete";
 import { useForm } from "antd/lib/form/Form";
 import moment from "moment";
-import { Client } from "../../../../lib/types/clients";
 import { Office } from "../../../../lib/types/shared";
 import { Category } from "../../../../lib/types/categories";
 import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
@@ -23,15 +19,13 @@ import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoi
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
 import { requiredField } from "../../../../lib/validation/InputValidations";
+import ClientSearch from "../../../Shared/Input/ClientSearch";
 
 const { Option, OptGroup } = Select;
 
 const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
   const { data: categories, isLoading: categoriesLoading } =
     useCategoriesQuery();
-
-  const [clients, { isLoading: clientsLoading, data: clientsList }] =
-    useLazyClientsQuery();
 
   const [getTrucks, { data, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
@@ -145,13 +139,6 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     });
   }, [form]);
 
-  const handleClientLiveSearch = (value: string) => {
-    handleAPIRequests({
-      request: clients,
-      q: value
-    });
-  };
-
   return (
     <div>
       <div className="text-2xl font-bold text-ox-dark mb-10">{title}</div>
@@ -174,21 +161,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
               </div>
 
               <div>
-                <Input
-                  name="clientId"
-                  type="select"
-                  onKeyUp={handleClientLiveSearch}
-                  placeholder="Select client"
-                  isGroupDropdown
-                  isLoading={clientsLoading}
-                  rules={[{ required: true, message: "Choose a client" }]}
-                >
-                  {clientsList?.payload?.content?.map((client: Client) => (
-                    <Option value={client.id} key={client.names}>
-                      {client.names}
-                    </Option>
-                  ))}
-                </Input>
+                <ClientSearch name="clientId" rules={requiredField("Client")} />
               </div>
             </div>
             <div className="flex-1">
@@ -387,23 +360,6 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                     label=""
                     rules={requiredField("Driver")}
                   />
-                  {/* <Input
-                    name="driverId"
-                    type="select"
-                    placeholder="Select driver"
-                    isLoading={driversLoading}
-                    disabled={driversLoading}
-                    isGroupDropdown
-                    rules={[{ required: true, message: "Driver is required" }]}
-                  >
-                    {drivers?.payload?.map((driver: DriverSchema) => {
-                      return (
-                        <Option value={driver.id} key={driver.id}>
-                          {driver.names}
-                        </Option>
-                      );
-                    })}
-                  </Input> */}
                 </div>
               </div>
             </div>
