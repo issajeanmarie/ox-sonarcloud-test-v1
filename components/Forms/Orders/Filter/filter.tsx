@@ -183,7 +183,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
           <div className="flex items-center gap-4 ">
             <div className="flex-1">
               <Input
-                name="truckId"
+                name="truck"
                 type="select"
                 label="Truck"
                 allowClear
