@@ -73,6 +73,10 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
     }
   };
 
+  const handleClearFiltersSuccess = () => {
+    form.resetFields();
+  };
+
   const clearFilter = () => {
     removeFromLocal(OX_ORDERS_FILTERS);
     setIsFiltered(false);
@@ -84,7 +88,8 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
       end: "",
       momoRefCode: "",
       truck: "",
-      driver: ""
+      driver: "",
+      handleSuccess: handleClearFiltersSuccess
     });
   };
 

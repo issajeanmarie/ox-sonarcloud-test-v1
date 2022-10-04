@@ -3,15 +3,16 @@ import { Form, message, Select } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { FC, useEffect, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
-import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 import { useAddStopMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { useLazyGetTrucksQuery } from "../../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { AddStopRequest, Order } from "../../../../lib/types/orders";
-import { DriverSchema, TruckSchema } from "../../../../lib/types/trucksTypes";
+import { TruckSchema } from "../../../../lib/types/trucksTypes";
+import { requiredField } from "../../../../lib/validation/InputValidations";
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
+import DriverSearch from "../../../Shared/Input/DriverSearch";
 
 const { Option } = Select;
 
@@ -58,10 +59,6 @@ const AddStop: FC<AddStopProps> = ({
       });
   };
 
-  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
-    noPagination: true
-  });
-
   const [getTrucks, { data: trucks, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
 
@@ -101,24 +98,11 @@ const AddStop: FC<AddStopProps> = ({
           </div>
           <div className="flex items-center gap-4 my-5">
             <div className="flex-1">
-              <Input
-                name="driverId"
-                type="select"
+              <DriverSearch
                 label="Driver"
-                placeholder="Select driver"
-                isLoading={driversLoading}
-                disabled={driversLoading}
-                isGroupDropdown
-                rules={[{ required: true, message: "Driver is required" }]}
-              >
-                {drivers?.payload?.map((driver: DriverSchema) => {
-                  return (
-                    <Option value={driver.id} key={driver.id}>
-                      {driver.names}
-                    </Option>
-                  );
-                })}
-              </Input>
+                rules={requiredField("Driver")}
+                name="driverId"
+              />
             </div>
 
             <div className="flex-1">

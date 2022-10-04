@@ -14,6 +14,8 @@ import { Query } from "../../../../lib/types/shared";
 import { TruckSchema } from "../../../../lib/types/trucksTypes";
 import Input from "../../../Shared/Input";
 import Header from "./header";
+import DriverSearch from "../../../Shared/Input/DriverSearch";
+import { requiredField } from "../../../../lib/validation/InputValidations";
 
 interface SupportOrderProps {
   orderId: Query;
@@ -126,13 +128,10 @@ const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
           <div className="flex gap-10 mb-5">
             <div className="flex-1">
               <div>
-                <Input
-                  name="driverId"
+                <DriverSearch
                   label="Driver"
-                  type="select"
-                  placeholder="Select driver"
-                  options={[{ label: "David KAMANZI", value: 7 }]}
-                  rules={[{ required: true, message: "Driver is required" }]}
+                  rules={requiredField("Driver")}
+                  name="driverId"
                 />
               </div>
             </div>

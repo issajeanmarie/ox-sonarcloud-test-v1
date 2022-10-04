@@ -141,3 +141,9 @@ export type GetClientOrders = {
   size: number | string;
   paymentStatus: string;
 };
+
+export type ClientSearchTypes = {
+  name?: string | undefined;
+  label?: string | undefined;
+  rules?: any;
+};

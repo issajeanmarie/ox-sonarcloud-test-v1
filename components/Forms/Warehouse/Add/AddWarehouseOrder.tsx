@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Row, Select } from "antd";
 import React, { FC } from "react";
-import { requiredInput } from "../../../../lib/validation/InputValidations";
+import { requiredField } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
 import Image from "next/image";
 import WarehouseItemsTable from "../../../Tables/Warehouse/WarehouseItemsTable";
 import { YellowCheckIcon } from "../../../Icons";
 import { AddWarehouseOrderTypes } from "../../../../lib/types/warehouse";
-import { useClientsUnpaginatedQuery } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { useUnPaginatedTrucksQuery } from "../../../../lib/api/endpoints/Warehouse/salesEndpoints";
-import { useDriversQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoints";
 import { useStockQuery } from "../../../../lib/api/endpoints/Warehouse/stockEndpoints";
+import DriverSearch from "../../../Shared/Input/DriverSearch";
+import ClientSearch from "../../../Shared/Input/ClientSearch";
 
 const { Option } = Select;
 
@@ -28,14 +28,8 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
   form,
   handleChangeWarehouse
 }) => {
-  const { data: clients, isLoading: isClientsLoading } =
-    useClientsUnpaginatedQuery();
   const { data: trucks, isLoading: isTrucksLoading } =
     useUnPaginatedTrucksQuery();
-
-  const { data: drivers, isLoading: driversLoading } = useDriversQuery({
-    noPagination: true
-  });
 
   const { data: depots, isLoading: isDepotsLoading } = useDepotsQuery();
 
@@ -74,22 +68,11 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
           />
         </Col>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
+          <ClientSearch
             name="clientId"
-            type="select"
-            placeholder="Select client name"
-            label="Client name"
-            isLoading={isClientsLoading}
-            disabled={isClientsLoading}
-            isGroupDropdown
-            rules={requiredInput}
-          >
-            {clients?.payload?.map((item: any) => (
-              <Option key={item?.id} value={item?.id}>
-                {item?.names}
-              </Option>
-            ))}
-          </Input>
+            rules={requiredField("Client")}
+            label="Client"
+          />
         </Col>
       </Row>
 
@@ -209,21 +192,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           {transport !== "none" && (
-            <Input
-              name="driverId"
-              type="select"
-              placeholder="Select Driver"
-              label="Driver"
-              isLoading={driversLoading}
-              disabled={driversLoading}
-              isGroupDropdown
-            >
-              {drivers?.payload?.map((item: any) => (
-                <Option key={item?.id} value={item?.id}>
-                  {item?.names}
-                </Option>
-              ))}
-            </Input>
+            <DriverSearch name="driverId" label="Driver" />
           )}
         </Col>
 
