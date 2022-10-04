@@ -19,6 +19,7 @@ import {
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import { message } from "antd";
 import { useRouter } from "next/router";
+import { userType } from "../../../helpers/getLoggedInUser";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -78,6 +79,18 @@ const Order: FC<OrderProps> = ({ order, index }) => {
       });
   };
 
+  const user = userType();
+
+  const canUserDelete =
+    (order?.paymentStatus !== "FULL_PAID" &&
+      order?.paymentStatus !== "HALF_PAID" &&
+      order?.paymentStatus !== "WRITTEN_OFF" &&
+      order?.status !== "CANCELLED" &&
+      !user.isGuest) ||
+    (user.isSuperAdmin &&
+      order?.status !== "CANCELLED" &&
+      order?.status !== "WRITTEN_OFF");
+
   return (
     <div className="shadow-[0px_0px_19px_#00000008] w-full mb-5">
       {/* TOP ROW */}
@@ -134,7 +147,6 @@ const Order: FC<OrderProps> = ({ order, index }) => {
           <div className="flex justify-end flex-1 items-center gap-4">
             <Text className="captionText">Order status:</Text>
             <Text className="normalText fowe700">
-              {" "}
               <PaymentStatus status={order.status} />
             </Text>
           </div>
@@ -262,7 +274,10 @@ const Order: FC<OrderProps> = ({ order, index }) => {
         <Column
           width={160}
           render={(text: Types, record: Order) => (
-            <PaymentStatus amt={record?.totalAmount} status="HALF_PAID" />
+            <PaymentStatus
+              amt={record?.totalAmount}
+              status={record?.paymentStatus}
+            />
           )}
         />
 
@@ -288,6 +303,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                 />
 
                 <CustomButton
+                  disabled={!canUserDelete}
                   type="danger"
                   size="icon"
                   onClick={() => setIsCancelOrderOpen(true)}
