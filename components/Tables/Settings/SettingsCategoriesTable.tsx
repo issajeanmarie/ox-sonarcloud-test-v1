@@ -143,11 +143,7 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
     <>
       <Table
         key="settingsCategoriesTable"
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          pageSizeOptions: ["10", "50", "100"]
-        }}
+        pagination={false}
         showHeader={false}
         columns={columns}
         expandable={{

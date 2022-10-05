@@ -1019,6 +1019,7 @@ body {
 
 .img_fit {
   object-fit: cover;
+   width: 100%;
 }
 
 .dashboard_menu {

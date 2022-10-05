@@ -85,6 +85,14 @@ const ProfileInfo = () => {
     ErrorMessage(err?.data?.message);
   };
 
+  const handleUpdatePasswordSuccess = () => {
+    formChangePassword.resetFields();
+  };
+
+  const handleUpdatePasswordFailure = (err: BackendErrorTypes) => {
+    ErrorMessage(err?.data?.message);
+  };
+
   const updatePassword = (values: PasswordTypes) => {
     handleAPIRequests({
       request: changePassword,
