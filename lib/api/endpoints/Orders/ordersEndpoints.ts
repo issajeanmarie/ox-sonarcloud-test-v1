@@ -59,10 +59,10 @@ const ordersApi = baseAPI.injectEndpoints({
         method: "GET"
       })
     }),
-    order: builder.query<Order | undefined, Query>({
+    order: builder.query<Order | undefined, Query | number | any>({
       providesTags: ["Order"],
-      query: (id) => ({
-        url: `/orders/${id}`,
+      query: ({ orderId }) => ({
+        url: `/orders/${orderId}`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<Order>) =>
@@ -109,15 +109,17 @@ const ordersApi = baseAPI.injectEndpoints({
         method: "PATCH"
       })
     }),
-    orderInvoice: builder.mutation<any, Query | number>({
-      query: (id) => ({
-        url: `/orders/${id}/invoice`,
-        method: "GET",
-        headers: {
-          "content-type": "application/octet-stream"
-        },
-        responseHandler: (response) => response.blob()
-      })
+    orderInvoice: builder.mutation<any, Query | any>({
+      query: ({ orderId }) => {
+        return {
+          url: `/orders/${orderId}/invoice`,
+          method: "GET",
+          headers: {
+            "content-type": "application/octet-stream"
+          },
+          responseHandler: (response) => response.blob()
+        };
+      }
     }),
     initiatePayment: builder.mutation<
       any,

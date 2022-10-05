@@ -10,11 +10,12 @@ import {
   useChangeOrderStatusMutation,
   useOrderInvoiceMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
-import { message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import { Order } from "../../../lib/types/orders";
 import { routes } from "../../../config/route-config";
+import Navbar from "../../Shared/Content/Navbar";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 interface ViewOrderHeaderProps {
   orderId: Query;
@@ -58,36 +59,122 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const router = useRouter();
   const { depotId, depotName } = router.query;
 
+  const handleDownloadInvoiceSuccess = (file: File) => {
+    handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
+  };
+
   const downloadOrderInvoice = () => {
-    downloadInvoice(orderId)
-      .unwrap()
-      .then((file) => {
-        handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
-      })
-      .catch((e) => {
-        if (e.status === 404) {
-          message.warning("This order is fully paid");
-        } else {
-          message.error("Cannot download file");
-        }
-      });
+    handleAPIRequests({
+      request: downloadInvoice,
+      orderId: orderId,
+      handleSuccess: handleDownloadInvoiceSuccess,
+      showSuccess: true
+    });
+  };
+
+  const handleChangeOrderStatusSuccess = () => {
+    setIsCancelModalVisible(false);
+    setIsConfirmCompleteOrder(false);
   };
 
   const changeOrderStatusAction = (status: "CANCEL" | "COMPLETE") => {
-    changeOrderStatus({
+    handleAPIRequests({
+      request: changeOrderStatus,
       id: order.id,
-      data: { comment: comment, status: status }
-    })
-      .unwrap()
-      .then((res) => {
-        message.success(res.message);
-        setIsCancelModalVisible(false);
-        setIsConfirmCompleteOrder(false);
-      })
-      .catch((e) => {
-        message.error(e.message);
-      });
+      data: { comment: comment, status: status },
+      showSuccess: true,
+      handleSuccess: handleChangeOrderStatusSuccess
+    });
   };
+
+  const LeftSide = (
+    <div className="flex items-center gap-4 ">
+      <Image
+        className="pointer"
+        src="/icons/keyboard_backspace_black_24dp.svg"
+        alt="Backspace icon"
+        width={20}
+        height={20}
+        onClick={() =>
+          router.push({
+            pathname: routes.Orders.url,
+            query: {
+              depotId: depotId || 0,
+              depotName: depotName || "All depots"
+            }
+          })
+        }
+      />
+      <span className="text-md font-bold">Orders</span>
+      <span className="normalText">/</span>
+      <span className="text-gray-400">Order {orderId}</span>
+    </div>
+  );
+
+  const RightSide = (
+    <div className="flex items-center flex-1 justify-end gap-11">
+      <div className="flex items-center gap-8">
+        {invoiceLoading ? (
+          <LoadingOutlined />
+        ) : (
+          <Image
+            className={
+              canUserDelete ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
+            }
+            src="/icons/receipt.png"
+            alt="Backspace icon"
+            onClick={() => canUserDelete && downloadOrderInvoice()}
+            width={18}
+            height={18}
+          />
+        )}
+        <Image
+          className="cursor-pointer"
+          src="/icons/code.svg"
+          alt="Backspace icon"
+          width={16}
+          height={16}
+          onClick={() => setIsReceipientCodeModalVisible(true)}
+        />
+        <Image
+          className={
+            canUserDelete ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
+          }
+          src="/icons/close.png"
+          alt="Backspace icon"
+          width={20}
+          height={20}
+          onClick={() => canUserDelete && setIsCancelModalVisible(true)}
+        />
+        <button
+          className={`rounded-lg bg-ox-yellow text-white w-[30px] h-[30px] flex items-center justify-center ${
+            canUserPay ? "cursor-pointer" : "cursor-not-allowed opacity-50"
+          } `}
+          onClick={() => canUserPay && setIsMobilePaymentModalVisible(true)}
+        >
+          $
+        </button>
+      </div>
+      {!isOrderDisabled && (
+        <div className="flex items-center gap-6 w-[400px]">
+          <Button
+            type="secondary"
+            disabled={isOrderDisabled}
+            onClick={() => setSupport(true)}
+          >
+            SUPPORT
+          </Button>
+          <Button
+            type="primary"
+            disabled={isOrderDisabled}
+            onClick={() => setIsConfirmCompleteOrder(true)}
+          >
+            COMPLETE ORDER
+          </Button>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <Fragment>
@@ -121,103 +208,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         setIsModalVisible={setIsMobilePaymentModalVisible}
         order={order}
       />
-      <div className="bg-white my-2 shadow-[0px_0px_19px_#00000008] p-3 px-6 flex items-center">
-        <div className="flex items-center gap-4 ">
-          <Image
-            className="pointer"
-            src="/icons/keyboard_backspace_black_24dp.svg"
-            alt="Backspace icon"
-            width={20}
-            height={20}
-            onClick={() =>
-              router.push({
-                pathname: routes.Orders.url,
-                query: {
-                  depotId: depotId || 0,
-                  depotName: depotName || "All depots"
-                }
-              })
-            }
-          />
-          <span className="text-md font-bold">Orders</span>
-          <span className="normalText">/</span>
-          <span className="text-gray-400">Order {orderId}</span>
-        </div>
-        <div className="flex items-center flex-1 justify-end gap-11">
-          <div className="flex items-center gap-8">
-            {invoiceLoading ? (
-              <LoadingOutlined />
-            ) : (
-              <Image
-                className={
-                  canUserDelete
-                    ? "cursor-pointer"
-                    : "opacity-50 cursor-not-allowed"
-                }
-                src="/icons/receipt.png"
-                alt="Backspace icon"
-                onClick={() => canUserDelete && downloadOrderInvoice()}
-                width={18}
-                height={18}
-              />
-            )}
 
-            {/* <Image
-              className="pointer"
-              src="/icons/ic-contact-edit.svg"
-              alt="Backspace icon"
-              width={16}
-              height={16}
-            /> */}
-            <Image
-              className="cursor-pointer"
-              src="/icons/code.svg"
-              alt="Backspace icon"
-              width={16}
-              height={16}
-              onClick={() => setIsReceipientCodeModalVisible(true)}
-            />
-            <Image
-              className={
-                canUserDelete
-                  ? "cursor-pointer"
-                  : "opacity-50 cursor-not-allowed"
-              }
-              src="/icons/close.png"
-              alt="Backspace icon"
-              width={20}
-              height={20}
-              onClick={() => canUserDelete && setIsCancelModalVisible(true)}
-            />
-            <button
-              className={`rounded-lg bg-ox-yellow text-white w-[30px] h-[30px] flex items-center justify-center ${
-                canUserPay ? "cursor-pointer" : "cursor-not-allowed opacity-50"
-              } `}
-              onClick={() => canUserPay && setIsMobilePaymentModalVisible(true)}
-            >
-              $
-            </button>
-          </div>
-          {!isOrderDisabled && (
-            <div className="flex items-center gap-6 w-[400px]">
-              <Button
-                type="secondary"
-                disabled={isOrderDisabled}
-                onClick={() => setSupport(true)}
-              >
-                SUPPORT
-              </Button>
-              <Button
-                type="primary"
-                disabled={isOrderDisabled}
-                onClick={() => setIsConfirmCompleteOrder(true)}
-              >
-                COMPLETE ORDER
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
+      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="FULL" />
     </Fragment>
   );
 };

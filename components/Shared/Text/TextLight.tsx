@@ -7,16 +7,16 @@ type Props = {
   className?: string | undefined;
 };
 
-const Heading1: FC<Props> = ({ children, uppercase, className }) => {
+const TextLight: FC<Props> = ({ children, uppercase, className }) => {
   return (
-    <span
-      className={`${classes.text.h1} ${uppercase ? "uppercase" : ""} ${
+    <p
+      className={`${classes.text.text_light} ${uppercase ? "uppercase" : ""} ${
         className || ""
       }`}
     >
       {children}
-    </span>
+    </p>
   );
 };
 
-export default Heading1;
+export default TextLight;

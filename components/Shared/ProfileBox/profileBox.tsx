@@ -99,7 +99,7 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
 
       <div
         onClick={logout}
-        className="border-t w-full flex items-center gap-3 px-7 py-4 hover:bg-gray-100"
+        className="border-t w-full flex items-center gap-3 px-7 py-4 hover:bg-gray-100 pointer"
       >
         <Image
           width={14}

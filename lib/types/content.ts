@@ -9,4 +9,5 @@ export type NavbarTypes = {
 export type ContentTypes = {
   children: ReactElement;
   navType?: string | undefined;
+  className?: string | undefined;
 };
