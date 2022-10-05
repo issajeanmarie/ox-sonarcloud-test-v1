@@ -65,7 +65,7 @@ export type DeleteCategoryRequest = {
 export type UpdateCategoryRequest = {
   id: number;
   name: string;
-  parentCategoryId: string | null;
+  // parentCategoryId: string | null;
 };
 
 export type MakeCategoryParentRequest = {

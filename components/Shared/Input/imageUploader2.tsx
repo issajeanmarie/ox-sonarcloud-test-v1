@@ -54,38 +54,41 @@ const ImageUploader = ({
   return (
     <>
       <input
-        className="w-[100%] h-[120px] absolute z-10 opacity-0 pointer"
+        className="w-[120px] h-[120px] absolute z-10 opacity-0 pointer"
         type="file"
         onChange={(e: any) => handlePhotoData(e.target.files)}
       />
       {src ? (
         <Image
           preview={true}
-          width="100%"
           src={preview}
-          style={{ borderRadius: "4px" }}
+          style={{ borderRadius: "4px", width: "120px", height: "120px" }}
           alt="Profile picture"
+          className="img_fit"
         />
       ) : (
         <Row align="middle" gutter={12}>
           <Col>
-            <div className="image_upload_container flex flex-col border border-dashed relative items-center w-[120px] h-[120px]">
+            <div className="image_upload_container flex flex-col border border-dashed relative items-center w-[120px] h-[120px] ">
               {uploadLoading ? (
                 <LoadingOutlined spin={uploadLoading} className="mt-14" />
               ) : (
                 <>
                   <input
-                    className="w-[100%] h-[120px] absolute z-10 opacity-0 pointer"
+                    className="w-[120px] h-[120px] absolute z-10 opacity-0 pointer"
                     type="file"
                     onChange={(e: any) => handlePhotoData(e.target.files)}
                   />
                   <Image
                     className="mt-10"
                     width={24}
-                    preview={true}
-                    alt="Add sign"
+                    preview={false}
+                    alt=""
                     src={preview}
                   />
+                  <span>
+                    + <br />
+                  </span>
                   <Text>Add image</Text>
                 </>
               )}

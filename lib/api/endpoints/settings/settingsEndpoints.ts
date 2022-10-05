@@ -107,8 +107,8 @@ const settingsApi = baseAPI.injectEndpoints({
         url: `/categories/${DTO?.id}`,
         method: "PUT",
         body: {
-          name: DTO?.name,
-          parentCategoryId: DTO?.parentCategoryId
+          name: DTO?.name
+          // parentCategoryId: DTO?.parentCategoryId
         }
       })
     }),

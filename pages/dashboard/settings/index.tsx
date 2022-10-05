@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import Layout from "../../components/Shared/Layout";
-import WithPrivateRoute from "../../components/Shared/Routes/WithPrivateRoute";
-import { SettingsLinks } from "../../components/Settings/SettingsLinks";
-import { Row, Col, Typography, Image } from "antd";
-import PersonalInfo from "../../components/PersonalInfo";
-import OxApp from "../../components/OxApp";
-import SettingsKPIsTable from "../../components/Tables/Settings/SettingsKPIsTable";
-import SettingsCardWrapper from "../../components/Settings/SettingsCardWrapper";
-import CustomButton from "../../components/Shared/Button/button";
-import SettingsCategoriesTable from "../../components/Tables/Settings/SettingsCategoriesTable";
-import AddCategory from "../../components/Forms/Settings/AddCategory";
-import SettingsTopNavigator from "../../components/Settings/SettingsTopNavigator";
-import Input from "../../components/Shared/Input";
+import Layout from "../../../components/Shared/Layout";
+import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
+import { SettingsLinks } from "../../../components/Settings/SettingsLinks";
+import { Row, Col, Typography } from "antd";
+import PersonalInfo from "../../../components/PersonalInfo";
+import OxApp from "../.././../components/OxApp";
+import SettingsKPIsTable from "../../../components/Tables/Settings/SettingsKPIsTable";
+import SettingsCardWrapper from "../../../components/Settings/SettingsCardWrapper";
+import CustomButton from "../../../components/Shared/Button/button";
+import SettingsTopNavigator from "../../../components/Settings/SettingsTopNavigator";
 import {
   useGetKpisQuery,
   useAddKpiMutation,
@@ -21,12 +18,12 @@ import {
   useDeleteCategoryMutation,
   useUpdateCategoryMutation,
   useMakeCategoryParentMutation
-} from "../../lib/api/endpoints/settings/settingsEndpoints";
-import { SuccessMessage } from "../../components/Shared/Messages/SuccessMessage";
-import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
-import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
+} from "../../../lib/api/endpoints/settings/settingsEndpoints";
+import { SuccessMessage } from "../../../components/Shared/Messages/SuccessMessage";
+import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
+import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
 import { useForm } from "antd/lib/form/Form";
-import { SmallSpinLoader } from "../../components/Shared/Loaders/Loaders";
+import CategoriesSection from "./CategoriesSection";
 
 const { Text } = Typography;
 
@@ -38,12 +35,9 @@ const Settings = () => {
   const [categoryToEDit, setCategoryToEdit]: any = useState(null);
   const [targetPerDaykpi, setTargetPerDaykpi] = useState();
   const [targetPerKmkpi, setTargetPerKmkpi] = useState();
-  const { data, isLoading } = useGetKpisQuery();
-  const {
-    data: categories,
-    isLoading: categoriesLoading,
-    isFetching: categoriesFetching
-  } = useGetCategoriesQuery();
+  const { data, isLoading: isKPIsLoading } = useGetKpisQuery();
+  const { data: categories, isLoading: isCategoriesLoading } =
+    useGetCategoriesQuery();
   const [addKpi, { isLoading: isAddingKPIs }] = useAddKpiMutation();
   const [addCategory, { isLoading: isAddingCategory }] =
     useAddCategoryMutation();
@@ -54,6 +48,11 @@ const Settings = () => {
   const [makeCategoryParent, { isLoading: isParentingCategory }] =
     useMakeCategoryParentMutation();
   const [active, setActive] = useState<string>("preferences");
+  const [pageSize, setPageSize] = useState(10);
+
+  const handleLoadMore = () => {
+    setPageSize(pageSize + 10);
+  };
 
   const handlePostTargetPerDaykpi = (value: any) => {
     setTargetPerDaykpi(value);
@@ -110,7 +109,7 @@ const Settings = () => {
   const onUpdateCategoryFinish = (values: any) => {
     updateCategory({
       name: values?.name,
-      parentCategoryId: categoryToEDit?.id ? categoryToEDit?.id : null,
+      // parentCategoryId: categoryToEDit?.id ? categoryToEDit?.id : null,
       id: categoryToEDit?.id
     })
       .unwrap()
@@ -180,7 +179,7 @@ const Settings = () => {
         <div className="mb-4">
           <Text className="mediumText">KPIs (Daily target)</Text>
         </div>
-        {isLoading ? (
+        {isKPIsLoading ? (
           "loading..."
         ) : (
           <SettingsKPIsTable
@@ -190,7 +189,7 @@ const Settings = () => {
           />
         )}
 
-        {!isLoading && (
+        {!isKPIsLoading && (
           <Row className="flex justify-end mt-4">
             <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}>
               <CustomButton
@@ -205,67 +204,38 @@ const Settings = () => {
         )}
       </SettingsCardWrapper>
 
-      <SettingsCardWrapper>
-        <div className="mb-4">
-          <Text className="mediumText">
-            Categories (
-            {categoriesLoading || categoriesFetching ? (
-              <SmallSpinLoader />
-            ) : (
-              categories?.payload?.length
-            )}
-            )
-          </Text>
+      <CategoriesSection
+        showModal={showModal}
+        onAddCategoryFinish={onAddCategoryFinish}
+        isAddingCategory={isAddingCategory}
+        handleCancel={handleCancel}
+        handleOk={handleOk}
+        isModalVisible={isModalVisible}
+        handleDeleteCategory={handleDeleteCategory}
+        isDeletinCategory={isDeletinCategory}
+        isUpdatingCategory={isUpdatingCategory}
+        onUpdateCategoryFinish={onUpdateCategoryFinish}
+        showEditModal={showEditModal}
+        handleEditOk={handleEditOk}
+        handleEditCancel={handleEditCancel}
+        isEditModalVisible={isEditModalVisible}
+        form={form}
+        handleMakeCategoryParent={handleMakeCategoryParent}
+        isParentingCategory={isParentingCategory}
+        pageSize={pageSize}
+      />
+
+      {pageSize < categories?.payload?.length && (
+        <div style={{ width: "21%", margin: "32px auto" }}>
+          <CustomButton
+            loading={isCategoriesLoading}
+            onClick={handleLoadMore}
+            type="secondary"
+          >
+            Load more
+          </CustomButton>
         </div>
-
-        <Row className="flex justify-between items-center mb-4 border-b pb-4">
-          <Col>
-            <Input
-              type="text"
-              name="search"
-              placeholder="Search category"
-              suffixIcon={
-                <Image
-                  width={14}
-                  src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
-                  preview={false}
-                  alt=""
-                />
-              }
-            />
-          </Col>
-          <AddCategory
-            onAddCategoryFinish={onAddCategoryFinish}
-            isAddingCategory={isAddingCategory}
-          />
-        </Row>
-
-        {categoriesLoading ? (
-          "loading.."
-        ) : (
-          <SettingsCategoriesTable
-            data={categories?.payload}
-            onAddCategoryFinish={onAddCategoryFinish}
-            isAddingCategory={isAddingCategory}
-            showModal={showModal}
-            handleOk={handleOk}
-            handleCancel={handleCancel}
-            isModalVisible={isModalVisible}
-            handleDeleteCategory={handleDeleteCategory}
-            isDeletinCategory={isDeletinCategory}
-            isUpdatingCategory={isUpdatingCategory}
-            onUpdateCategoryFinish={onUpdateCategoryFinish}
-            showEditModal={showEditModal}
-            handleEditOk={handleEditOk}
-            handleEditCancel={handleEditCancel}
-            isEditModalVisible={isEditModalVisible}
-            form={form}
-            categoriesFetching={categoriesFetching}
-            handleMakeCategoryParent={handleMakeCategoryParent}
-            isParentingCategory={isParentingCategory}
-          />
-        )}
-      </SettingsCardWrapper>
+      )}
     </>
   );
 

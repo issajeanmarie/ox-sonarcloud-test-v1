@@ -19,4 +19,5 @@ export type SettingsCategoriesTableProps = {
   categoriesFetching: boolean;
   isParentingCategory: boolean;
   handleMakeCategoryParent: (id: number) => void;
+  pageSize: number;
 };

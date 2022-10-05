@@ -1,7 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import { Col, Row, Skeleton, Spin } from "antd";
+import { Col, Row, Skeleton, Spin, Space, Avatar, List } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+
+// type SizeType = 'default' | 'small' | 'large';
+// type ButtonShapeType = 'circle' | 'square' | 'round' | 'default';
+// type AvatarShapeType = 'circle' | 'square';
 
 const loadingIcon = (
   <LoadingOutlined style={{ fontSize: 24, color: "#e7b522" }} spin />
@@ -177,6 +181,49 @@ export const ResourcesTableLoader = () => {
         </Col>
       </Row>
     </>
+  );
+};
+
+export const SettingsCategoriesTableLoader = () => {
+  return (
+    <Row justify="space-between" className="mato8">
+      <Col md={1}>
+        <Skeleton.Input active size="small" />
+      </Col>
+      <Col md={8}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={5}>
+        <Row gutter={17}>
+          <Space size="small">
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+          </Space>
+        </Row>
+      </Col>
+    </Row>
+  );
+};
+
+export const SettingsProfileLoader = () => {
+  return (
+    <Skeleton avatar active>
+      <List.Item.Meta
+        avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+        title="Card title"
+        description="This is the description"
+      />
+    </Skeleton>
   );
 };
 

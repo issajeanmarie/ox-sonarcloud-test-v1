@@ -131,7 +131,6 @@ const Entry = ({
         <Input
           list={list}
           disabled={disabled}
-          // onChange={onChange}
           defaultValue={defaultValue}
           className={`my_input ${size === "small" && "sm"}`}
           placeholder={placeholder}
