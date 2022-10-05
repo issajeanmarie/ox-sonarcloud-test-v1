@@ -18,11 +18,11 @@ import {
   useOrderInvoiceMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
-import { message } from "antd";
 import { useRouter } from "next/router";
 import { userType } from "../../../helpers/getLoggedInUser";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -55,31 +55,32 @@ const Order: FC<OrderProps> = ({ order, index }) => {
   const [changeOrderStatus, { isLoading: cancelOrderLoading }] =
     useChangeOrderStatusMutation();
 
+  const handleDownloadInvoiceSuccess = (file: File) => {
+    handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
+  };
+
+  const handleDeleteOrderSuccess = () => {
+    setIsCancelOrderOpen(false);
+  };
+
   const downloadOrderInvoice = () => {
-    downloadInvoice(order.id)
-      .unwrap()
-      .then((file) => {
-        handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
-      })
-      .catch((e) => {
-        if (e.status === 404) {
-          message.warning("This order is fully paid");
-        } else {
-          message.error("Cannot download file");
-        }
-      });
+    handleAPIRequests({
+      request: downloadInvoice,
+      orderId: order.id,
+      showSuccess: true,
+      handleSuccess: handleDownloadInvoiceSuccess,
+      successMessage: "File downloaded successfully"
+    });
   };
 
   const deleteOrder = () => {
-    changeOrderStatus({ id: order.id, data: { comment: "", status: "CANCEL" } })
-      .unwrap()
-      .then((res) => {
-        message.success(res.message);
-        setIsCancelOrderOpen(false);
-      })
-      .catch((e) => {
-        message.error(e.message);
-      });
+    handleAPIRequests({
+      request: changeOrderStatus,
+      id: order.id,
+      data: { comment: "", status: "CANCEL" },
+      showSuccess: true,
+      handleSuccess: handleDeleteOrderSuccess
+    });
   };
 
   const user = userType();

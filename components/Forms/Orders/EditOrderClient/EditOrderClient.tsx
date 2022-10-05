@@ -1,15 +1,16 @@
-import { FC } from "react";
-import { Form, message } from "antd";
+import { FC, useEffect } from "react";
+import { Form } from "antd";
 import Button from "../../../Shared/Button";
 import { useEditOrderMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { Query } from "../../../../lib/types/shared";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import ClientSearch from "../../../Shared/Input/ClientSearch";
 import { requiredField } from "../../../../lib/validation/InputValidations";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 
 interface EditOrderClientProps {
   orderId: Query;
-  existingClient: number;
+  existingClient: { id: number };
   closeModal: () => void;
   isEditClientModal: boolean;
   setIsEditClientModal: any;
@@ -23,18 +24,25 @@ const EditOrderClient: FC<EditOrderClientProps> = ({
   setIsEditClientModal
 }) => {
   const [editOrder, { isLoading }] = useEditOrderMutation();
+  const [form] = Form.useForm();
+
+  const handleEditOrderSuccess = () => {
+    closeModal();
+  };
 
   const handleOnFinish = (values: { clientId: number }) => {
-    editOrder({ orderId, data: values })
-      .unwrap()
-      .then((res) => {
-        message.success(res.message);
-        closeModal();
-      })
-      .catch((e) => {
-        message.error(e.message);
-      });
+    handleAPIRequests({
+      request: editOrder,
+      orderId,
+      data: values,
+      showSuccess: true,
+      handleSuccess: handleEditOrderSuccess
+    });
   };
+
+  useEffect(() => {
+    form.setFieldsValue({ clientId: existingClient?.id });
+  }, [existingClient, form]);
 
   return (
     <ModalWrapper
@@ -43,14 +51,12 @@ const EditOrderClient: FC<EditOrderClientProps> = ({
       isModalVisible={isEditClientModal}
       setIsModalVisible={setIsEditClientModal}
     >
-      <Form
-        initialValues={{ clientId: existingClient }}
-        onFinish={handleOnFinish}
-      >
+      <Form form={form} onFinish={handleOnFinish}>
         <ClientSearch
           label="Clients"
           rules={requiredField("Client")}
           name="clientId"
+          existingValue={existingClient}
         />
 
         <div className="my-10">

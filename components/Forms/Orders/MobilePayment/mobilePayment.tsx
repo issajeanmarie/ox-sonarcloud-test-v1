@@ -1,10 +1,11 @@
 import { FC, useState } from "react";
-import { Form, message, Modal } from "antd";
+import { Form, Modal } from "antd";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
 import { useInitiatePaymentMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { MobilePaymentProps } from "../../../../lib/types/components/MobilePayment";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 
 const MobilePayment: FC<MobilePaymentProps> = ({
   isModalVisible,
@@ -27,17 +28,19 @@ const MobilePayment: FC<MobilePaymentProps> = ({
     setIsPaymentSuccessful(false);
   };
 
+  const handleInitiatePaymentSuccess = () => {
+    setIsPaymentSuccessful(true);
+  };
+
   const handleSubmit = (values: { amount: number; phone: string }) => {
     if (order) {
-      initiatePayment({ orderId: order.id, data: values })
-        .unwrap()
-        .then(() => {
-          message.success("Payment successful");
-          setIsPaymentSuccessful(true);
-        })
-        .catch((e) => {
-          message.error(e.data?.message || "Cannot initiate payment");
-        });
+      handleAPIRequests({
+        request: initiatePayment,
+        orderId: order.id,
+        data: values,
+        showSuccess: true,
+        handleSuccess: handleInitiatePaymentSuccess
+      });
     }
   };
 

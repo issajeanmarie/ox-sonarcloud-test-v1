@@ -146,4 +146,5 @@ export type ClientSearchTypes = {
   name?: string | undefined;
   label?: string | undefined;
   rules?: any;
+  existingValue?: any;
 };

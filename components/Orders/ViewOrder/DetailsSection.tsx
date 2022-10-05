@@ -1,25 +1,22 @@
 import Image from "next/image";
 import { localeString } from "../../../utils/numberFormatter";
 import TextLight from "../../Shared/Text/TextLight";
+import { userType } from "../../../helpers/getLoggedInUser";
 
 const DetailsSection = ({
   title,
   details,
   type,
-  editAction
+  editAction,
+  totalWeight
 }: {
   title: string;
   details: any;
   type: string;
-  editAction: any;
-  totalWeightCounter?: any;
+  editAction?: any;
+  totalWeight?: number;
 }) => {
-  const totalWeight = details.stops.reduce(
-    (accumulator: any, value: { weight: number }) => {
-      return accumulator + value.weight;
-    },
-    0
-  );
+  const user = userType();
 
   const clientDetails = [
     {
@@ -63,9 +60,13 @@ const DetailsSection = ({
     {
       key: 2,
       label: "Weight",
-      value: `${totalWeight} KGs ${
+      value: `${totalWeight || "N/A"} KGs ${
         details?.paymentPlan === "PAY_BY_KG"
-          ? `- ${Math.round(details.totalAmount / totalWeight)} Rwf / KG`
+          ? `- ${
+              totalWeight
+                ? Math.round(details.totalAmount / totalWeight)
+                : "N/A"
+            } Rwf / KG`
           : ""
       }`,
       editable: false,
@@ -85,7 +86,7 @@ const DetailsSection = ({
       key: 0,
       label: "Job value",
       value: `${localeString(details?.totalAmount)} Rwf`,
-      editable: true,
+      editable: user.isSuperAdmin,
       editAction: editAction
     },
 
@@ -100,7 +101,7 @@ const DetailsSection = ({
     {
       key: 2,
       label: "Duration",
-      value: `${details?.duration || 0} Hour(s)`,
+      value: `${details?.duration || "N/A"}`,
       editable: false,
       editAction: editAction
     },
