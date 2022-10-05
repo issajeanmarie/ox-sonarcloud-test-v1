@@ -16,6 +16,8 @@ import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
 import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 import ImageUploader from "../Shared/Input/imageUploader2";
+import { SettingsProfileLoader } from "../Shared/Loaders/Loaders";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
 
 /**
  * @author Elie K. Gashagaza <gashagaza@awesomity.rw>
@@ -70,17 +72,23 @@ const ProfileInfo = () => {
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 
+  const handleUpdatePasswordSuccess = () => {
+    formChangePassword.resetFields();
+  };
+
+  const handleUpdatePasswordFailure = (err: BackendErrorTypes) => {
+    ErrorMessage(err?.data?.message);
+  };
+
   const updatePassword = (values: PasswordTypes) => {
-    changePassword({
+    handleAPIRequests({
+      request: changePassword,
       currentPassword: values?.currentPassword,
-      newPassword: values?.newPassword
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        formChangePassword.resetFields();
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      newPassword: values?.newPassword,
+      showSuccess: true,
+      handleSuccess: handleUpdatePasswordSuccess,
+      handleFailure: handleUpdatePasswordFailure
+    });
   };
 
   return (
@@ -90,11 +98,11 @@ const ProfileInfo = () => {
     >
       {isLoading && isFetching ? (
         // <Loader />
-        <span>Loading</span>
+        <SettingsProfileLoader />
       ) : (
-        <div className=" items-center">
-          <Row gutter={28}>
-            <Col span={9}>
+        <div className=" ">
+          <Row>
+            <Col span={6}>
               <ImageUploader
                 uploadLoading={uploadLoading}
                 setUploadLoading={setUploadLoading}
@@ -109,7 +117,7 @@ const ProfileInfo = () => {
               />
             </Col>
             {/* Personal Info TABLE */}
-            <Col span={10}>
+            <Col span={4}>
               <p>
                 <Text className="txt-title">{data?.payload?.names}</Text>
               </p>

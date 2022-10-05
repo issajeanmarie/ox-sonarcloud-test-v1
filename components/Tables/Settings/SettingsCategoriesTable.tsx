@@ -29,13 +29,18 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
   form,
   categoriesFetching,
   handleMakeCategoryParent,
-  isParentingCategory
+  isParentingCategory,
+  pageSize
 }) => {
   //Change the subcategory keyname to children keyname
-  const _data = data?.map(({ subCategories: children, ...rest }: any) => ({
-    children,
-    ...rest
-  }));
+  const _data =
+    data &&
+    data
+      ?.slice(0, pageSize)
+      .map(({ subCategories: children, ...rest }: any) => ({
+        children,
+        ...rest
+      }));
 
   const columns = [
     {
@@ -77,7 +82,6 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
               />
             }
           />
-
           <CustomButton
             className="make_parent_category"
             onClick={() => handleMakeCategoryParent(record?.id)}
@@ -130,11 +134,7 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
     <>
       <Table
         key="settingsCategoriesTable"
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          pageSizeOptions: ["10", "50", "100"]
-        }}
+        pagination={false}
         showHeader={false}
         columns={columns}
         expandable={{
