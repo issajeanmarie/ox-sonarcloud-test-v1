@@ -11,6 +11,7 @@ import { dateFormatterNth } from "../../../utils/dateFormatter";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import { routes } from "../../../config/route-config";
+
 import ActionModal from "../../Shared/ActionModal";
 import {
   useChangeOrderStatusMutation,
@@ -20,6 +21,8 @@ import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import { message } from "antd";
 import { useRouter } from "next/router";
 import { userType } from "../../../helpers/getLoggedInUser";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
+import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -80,16 +83,18 @@ const Order: FC<OrderProps> = ({ order, index }) => {
   };
 
   const user = userType();
+  const { isFullPaid, isHalfPaid, isWrittenOff } = paymentStatus(
+    order?.paymentStatus
+  );
+  const { isCanceled } = orderStatus(order?.status);
 
   const canUserDelete =
-    (order?.paymentStatus !== "FULL_PAID" &&
-      order?.paymentStatus !== "HALF_PAID" &&
-      order?.paymentStatus !== "WRITTEN_OFF" &&
-      order?.status !== "CANCELLED" &&
+    (!isFullPaid &&
+      !isHalfPaid &&
+      !isWrittenOff &&
+      !isCanceled &&
       !user.isGuest) ||
-    (user.isSuperAdmin &&
-      order?.status !== "CANCELLED" &&
-      order?.status !== "WRITTEN_OFF");
+    (user.isSuperAdmin && !isCanceled);
 
   return (
     <div className="shadow-[0px_0px_19px_#00000008] w-full mb-5">
@@ -211,8 +216,8 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
                 <span className="opacity_56 nowrap">
                   {record?.paymentPlan === "PAY_BY_KG"
-                    ? `- ${Math.round(
-                        record.totalAmount / totalWeight
+                    ? `- ${numbersFormatter(
+                        Math.round(record.totalAmount / totalWeight)
                       )} RWf / KG`
                     : ""}
                 </span>

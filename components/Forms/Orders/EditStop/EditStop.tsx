@@ -5,6 +5,7 @@ import moment from "moment";
 import { FC, useEffect } from "react";
 import { useEditStopMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { EditStopRequest, Order, Stop } from "../../../../lib/types/orders";
+import { requiredField } from "../../../../lib/validation/InputValidations";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
@@ -88,11 +89,8 @@ const EditStop: FC<EditStopProps> = ({
                 label="Arrival time"
                 showTime
                 dateFormat="YYYY-MM-DD HH:mm a"
-                placeholder="Select time"
-                options={[{ label: "David KAMANZI", value: 7 }]}
-                rules={[
-                  { required: true, message: "Choose a start time to continue" }
-                ]}
+                placeholder="Start time"
+                rules={requiredField("Arrival time")}
               />
             </div>
             <div className="flex-1">
@@ -102,11 +100,8 @@ const EditStop: FC<EditStopProps> = ({
                 label="End time"
                 showTime
                 dateFormat="YYYY-MM-DDTHH:mm a"
-                placeholder="Select time"
-                options={[{ label: "RAA 123", value: 31 }]}
-                rules={[
-                  { required: true, message: "Choose an end time to continue" }
-                ]}
+                placeholder="End time"
+                rules={requiredField("End time")}
               />
             </div>
           </div>
@@ -119,8 +114,7 @@ const EditStop: FC<EditStopProps> = ({
                 label="Weight"
                 suffixIcon="KGs"
                 placeholder="Enter weight"
-                options={[{ label: "David KAMANZI", value: 7 }]}
-                rules={[{ required: true, message: "Weight is required" }]}
+                rules={requiredField("Weight")}
               />
             </div>
             <div className="flex-1">
@@ -129,8 +123,6 @@ const EditStop: FC<EditStopProps> = ({
                 type="text"
                 label="Odometer"
                 placeholder="Enter odometer"
-                options={[{ label: "RAA 123", value: 31 }]}
-                rules={[{ required: true, message: "Odometer is required" }]}
               />
             </div>
           </div>

@@ -3,7 +3,7 @@ import Form from "antd/lib/form";
 import Select from "antd/lib/select";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
-import { PAYMENT_STATUS } from "../../../../utils/options";
+import { PAYMENT_STATUS } from "../../../../config/constants";
 import { Order_Filter } from "../../../../lib/types/orders";
 import { useForm } from "antd/lib/form/Form";
 import moment from "moment";
@@ -18,6 +18,8 @@ import { OX_ORDERS_FILTERS } from "../../../../config/constants";
 import { yearDateFormat } from "../../../../config/dateFormats";
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
+import { displayOrders } from "../../../../lib/redux/slices/ordersSlice";
+import { useDispatch } from "react-redux";
 
 const { Option } = Select;
 
@@ -32,6 +34,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   setIsFiltered,
   loading
 }) => {
+  const dispatch = useDispatch();
   const [getTrucks, { data: trucks, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
 
@@ -73,7 +76,8 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
     }
   };
 
-  const handleClearFiltersSuccess = () => {
+  const handleClearFiltersSuccess = (payload: any) => {
+    dispatch(displayOrders({ payload, replace: true }));
     form.resetFields();
   };
 

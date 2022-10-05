@@ -103,50 +103,48 @@ const Orders: FC = () => {
   const showFiltersLoader = isFetching && !isLoadMoreLoading;
 
   return (
-    <>
-      <div className="mx-4 relative">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <Fragment>
-            <OrdersHeader
-              data={data}
-              getOrdersAction={getOrdersAction}
-              loading={isFetching}
-            />
+    <div className="mx-4 relative">
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Fragment>
+          <OrdersHeader
+            data={data}
+            getOrdersAction={getOrdersAction}
+            loading={isFetching}
+          />
 
-            <Content navType="CENTER">
-              <>
-                {showFiltersLoader ? (
-                  <Loader />
-                ) : (
-                  data &&
-                  ordersState.payload?.content?.map(
-                    (order: Order, index: number) => (
-                      <OneOrder key={index} index={index + 1} order={order} />
-                    )
+          <Content navType="CENTER">
+            <>
+              {showFiltersLoader ? (
+                <Loader />
+              ) : (
+                data &&
+                ordersState.payload?.content?.map(
+                  (order: Order, index: number) => (
+                    <OneOrder key={index} index={index + 1} order={order} />
                   )
-                )}
+                )
+              )}
 
-                {showPagination && (
-                  <div className="flex justify-center mb-4">
-                    <div className="w-[100px]">
-                      <Button
-                        type="primary"
-                        loading={isLoadMoreLoading}
-                        onClick={handleLoadMore}
-                      >
-                        Load more
-                      </Button>
-                    </div>
+              {showPagination && (
+                <div className="flex justify-center mb-4">
+                  <div className="w-[100px]">
+                    <Button
+                      type="primary"
+                      loading={isLoadMoreLoading}
+                      onClick={handleLoadMore}
+                    >
+                      Load more
+                    </Button>
                   </div>
-                )}
-              </>
-            </Content>
-          </Fragment>
-        )}
-      </div>
-    </>
+                </div>
+              )}
+            </>
+          </Content>
+        </Fragment>
+      )}
+    </div>
   );
 };
 

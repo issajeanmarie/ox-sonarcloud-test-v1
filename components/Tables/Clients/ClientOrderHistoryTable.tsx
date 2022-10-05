@@ -10,6 +10,7 @@ import Row from "antd/lib/row";
 import { routes } from "../../../config/route-config";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import { useRouter } from "next/router";
+import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
 
 const { Text } = Typography;
 
@@ -93,26 +94,32 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
       render: (
         text: ClientOrderHistoryTableTypes,
         record: ClientOrderHistoryTableTypes
-      ) => (
-        <RowsWrapper>
-          <div className="flex gap-4">
-            <Text
-              className={`normalText fowe900 
-            ${record?.paymentStatus === "HALF_PAID" && "yellow_faded_text"}
-             ${record?.paymentStatus === "FULL_PAID" && "toggle_grey"}
-              ${record?.paymentStatus === "NOT_PAID" && "red"}
+      ) => {
+        const { isFullPaid, isHalfPaid, isPending } = paymentStatus(
+          record?.paymentStatus
+        );
+
+        return (
+          <RowsWrapper>
+            <div className="flex gap-4">
+              <Text
+                className={`normalText fowe900 
+            ${isHalfPaid && "yellow_faded_text"}
+             ${isFullPaid && "toggle_grey"}
+              ${isPending && "red"}
             `}
-            >
-              {record?.paymentStatus}
-            </Text>
-            {record?.paymentStatus === "HALF_PAID" && (
-              <Text className="normalText opacity_56">
-                {record?.paidAmount}
+              >
+                {record?.paymentStatus}
               </Text>
-            )}
-          </div>
-        </RowsWrapper>
-      )
+              {isHalfPaid && (
+                <Text className="normalText opacity_56">
+                  {record?.paidAmount}
+                </Text>
+              )}
+            </div>
+          </RowsWrapper>
+        );
+      }
     },
     {
       title: "Order status",
@@ -120,19 +127,24 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
       render: (
         text: ClientOrderHistoryTableTypes,
         record: ClientOrderHistoryTableTypes
-      ) => (
-        <RowsWrapper>
-          <Text
-            className={`normalText fowe900 
-            ${record?.status === "COMPLETED" && "toggle_grey"}
-            ${record?.status === "CANCELLED" && "red"}
-               ${record?.status === "PENDING" && "black"}
+      ) => {
+        const { isPending } = paymentStatus(record?.paymentStatus);
+        const { isCanceled, isComplete } = orderStatus(record?.status);
+
+        return (
+          <RowsWrapper>
+            <Text
+              className={`normalText fowe900 
+            ${isComplete && "toggle_grey"}
+            ${isCanceled && "red"}
+               ${isPending && "black"}
             `}
-          >
-            {record?.status}
-          </Text>
-        </RowsWrapper>
-      )
+            >
+              {record?.status}
+            </Text>
+          </RowsWrapper>
+        );
+      }
     }
   ];
   return (

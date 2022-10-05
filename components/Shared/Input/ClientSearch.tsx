@@ -28,7 +28,7 @@ const ClientSearch: FC<ClientSearchTypes> = ({
 
     handleAPIRequests({
       request: clients,
-      search: value,
+      q: value,
       handleSuccess: handleSearchClientSuccess,
       handleFailure: handleSearchClientFailure
     });

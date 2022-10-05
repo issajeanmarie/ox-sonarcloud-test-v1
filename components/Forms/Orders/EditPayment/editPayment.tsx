@@ -10,6 +10,7 @@ import {
 import { useEditTransactionMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { useForm } from "antd/lib/form/Form";
 import ModalWrapper from "../../../Modals/ModalWrapper";
+import { requiredField } from "../../../../lib/validation/InputValidations";
 
 interface EditPaymentProps {
   tx?: Transaction;
@@ -72,7 +73,7 @@ const EditPayment: FC<EditPaymentProps> = ({
               type="text"
               label="MoMo ref code"
               placeholder="Enter momo ref code"
-              rules={[{ required: true, message: "Momo ref code is required" }]}
+              rules={requiredField("MoMo ref code")}
             />
           </div>
 

@@ -222,9 +222,11 @@ const Entry = ({
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
       <Form.Item name={name} rules={rules}>
         <Input.TextArea
+          defaultValue={defaultValue}
           className="my_input"
           rows={4}
           placeholder={placeholder}
+          onChange={({ target }: any) => onChange && onChange(target.value)}
         />
       </Form.Item>
     </Fragment>
