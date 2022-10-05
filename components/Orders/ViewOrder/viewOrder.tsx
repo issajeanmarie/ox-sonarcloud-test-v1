@@ -105,22 +105,26 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
     setIsDeleteStopModal(false);
   };
 
-  const isOrderDisabled =
-    data?.status === "CANCELLED" ||
-    data?.status === "COMPLETED" ||
-    user.isGuest ||
-    !data;
-  const canUserDelete =
-    (data?.paymentStatus !== "FULL_PAID" &&
-      data?.paymentStatus !== "HALF_PAID" &&
-      data?.paymentStatus !== "WRITTEN_OFF" &&
-      data?.status !== "CANCELLED" &&
-      !user.isGuest) ||
-    (user.isSuperAdmin &&
-      data?.status !== "CANCELLED" &&
-      data?.status !== "WRITTEN_OFF");
+  const { isFullPaid, isHalfPaid, isWrittenOff } = paymentStatus(
+    data?.paymentStatus
+  );
+  const { isCanceled, isComplete } = orderStatus(data?.status);
 
-  const canUserPay = isOrderDisabled && data?.paymentStatus !== "FULL_PAID";
+  const isOrderDisabled = isCanceled || isComplete || user.isGuest || !data;
+
+  const canUserDelete =
+    (!isFullPaid &&
+      !isHalfPaid &&
+      !isWrittenOff &&
+      !isCanceled &&
+      !user.isGuest) ||
+    (user.isSuperAdmin && !isCanceled);
+
+  const canUserPay = isOrderDisabled && !isFullPaid;
+
+  const handleDeleteStopSuccess = () => {
+    setIsDeleteStopModal(false);
+  };
 
   const deleteStopAction = () => {
     handleAPIRequests({
