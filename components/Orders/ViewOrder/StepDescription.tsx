@@ -2,19 +2,24 @@ import moment from "moment";
 import Image from "next/image";
 import { Stop } from "../../../lib/types/orders";
 import { userType } from "../../../helpers/getLoggedInUser";
+import { orderStatus } from "../../../utils/orderStatus";
 
 const StepDescription = ({
   st,
   setChosenId,
   setIsDeleteStopModal,
-  setIsEditStopModal
+  setIsEditStopModal,
+  data
 }: {
   st: Stop;
   setChosenId: any;
   setIsDeleteStopModal: any;
   setIsEditStopModal: any;
+  data: any;
 }) => {
   const user = userType();
+
+  const { isCanceled } = orderStatus(data?.status);
 
   return (
     <div>
@@ -49,19 +54,21 @@ const StepDescription = ({
             !user.isAdmin && !user.isSuperAdmin && "opacity-50"
           }`}
         >
-          <Image
-            className="pointer"
-            src="/icons/ic-contact-edit.svg"
-            alt="Backspace icon"
-            onClick={() => {
-              if (user.isAdmin || user.isSuperAdmin) {
-                setChosenId(st);
-                setIsEditStopModal(true);
-              }
-            }}
-            width={15}
-            height={15}
-          />
+          {!isCanceled && (
+            <Image
+              className="pointer"
+              src="/icons/ic-contact-edit.svg"
+              alt="Backspace icon"
+              onClick={() => {
+                if (user.isAdmin || user.isSuperAdmin) {
+                  setChosenId(st);
+                  setIsEditStopModal(true);
+                }
+              }}
+              width={15}
+              height={15}
+            />
+          )}
           <Image
             className="pointer"
             src="/icons/ic-actions-remove.svg"

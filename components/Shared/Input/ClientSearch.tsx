@@ -10,7 +10,8 @@ const { Option } = Select;
 const ClientSearch: FC<ClientSearchTypes> = ({
   name = "clientId",
   label,
-  rules
+  rules,
+  existingValue
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [clients, { data: clientsList }] = useLazyClientsQuery();
@@ -46,12 +47,26 @@ const ClientSearch: FC<ClientSearchTypes> = ({
       allowClear
       rules={rules}
     >
+      {existingValue && (
+        <Option
+          value={existingValue?.id}
+          key={existingValue?.id}
+          title={existingValue?.names}
+        >
+          {existingValue?.names}
+        </Option>
+      )}
+
       {clientsList?.payload?.content?.map(
-        (client: { names: string; id: number }) => (
-          <Option value={client.id} key={client.id} title={client.names}>
-            {client.names}
-          </Option>
-        )
+        (client: { names: string; id: number }) => {
+          if (client.id !== existingValue?.id) {
+            return (
+              <Option value={client.id} key={client.id} title={client.names}>
+                {client.names}
+              </Option>
+            );
+          }
+        }
       )}
     </Input>
   );

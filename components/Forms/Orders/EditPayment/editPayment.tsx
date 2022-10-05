@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect } from "react";
-import { Form, message } from "antd";
+import { Form } from "antd";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
 import {
@@ -11,6 +11,7 @@ import { useEditTransactionMutation } from "../../../../lib/api/endpoints/Orders
 import { useForm } from "antd/lib/form/Form";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import { requiredField } from "../../../../lib/validation/InputValidations";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 
 interface EditPaymentProps {
   tx?: Transaction;
@@ -29,17 +30,19 @@ const EditPayment: FC<EditPaymentProps> = ({
 
   const [form] = useForm();
 
+  const handleEditTransactionSuccess = () => {
+    setIsEditPayment(false);
+  };
+
   const onFinish = (values: EditTransactionRequest) => {
-    tx &&
-      editTransaction({ data: values, orderId, transactionId: tx?.id })
-        .unwrap()
-        .then((res) => {
-          message.success(res?.message);
-          setIsEditPayment(false);
-        })
-        .catch((e) => {
-          message.error(e.data?.message || "Something went wrong");
-        });
+    handleAPIRequests({
+      request: editTransaction,
+      data: values,
+      orderId,
+      transactionId: tx?.id,
+      showSuccess: true,
+      handleSuccess: handleEditTransactionSuccess
+    });
   };
 
   useEffect(() => {

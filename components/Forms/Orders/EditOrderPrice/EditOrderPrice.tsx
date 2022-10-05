@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Form, message, Select } from "antd";
+import { FC, useEffect } from "react";
+import { Form, Select } from "antd";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
 import { useEditOrderMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
@@ -7,13 +7,14 @@ import { Client } from "../../../../lib/types/clients";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import { requiredField } from "../../../../lib/validation/InputValidations";
 import { useForm } from "antd/lib/form/Form";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 
 interface EditOrderPriceProps {
   orderData: any;
   clients?: Client[];
   isVisible: boolean;
   setIsVisible: any;
-  setEditData: any;
+  totalWeight: number;
 }
 
 const { Option } = Select;
@@ -22,39 +23,44 @@ const EditOrderPrice: FC<EditOrderPriceProps> = ({
   orderData,
   isVisible,
   setIsVisible,
-  setEditData
+  totalWeight
 }) => {
   const [editOrder, { isLoading }] = useEditOrderMutation();
   const [form] = useForm();
 
   const handleCancel = () => {
     setIsVisible(false);
-    setEditData(null);
     form.resetFields();
   };
 
+  const handleEditPriceSuccess = () => {
+    handleCancel();
+  };
+
   const handleOnFinish = (values: { amount: number; paymentPlan: string }) => {
-    editOrder({
+    handleAPIRequests({
+      request: editOrder,
       orderId: orderData?.id,
       data: {
         amount: values.amount || orderData.amount,
         paymentPlan: values.paymentPlan || orderData.paymentPlan
-      }
-    })
-      .unwrap()
-      .then((res) => {
-        message.success(res.message);
-        handleCancel();
-      })
-      .catch((e) => {
-        message.error(e.message);
-      });
+      },
+      showSuccess: true,
+      handleSuccess: handleEditPriceSuccess
+    });
   };
 
-  const initialValues = {
-    amount: orderData?.totalAmount,
-    paymentPlan: orderData?.paymentPlan
-  };
+  useEffect(() => {
+    if (orderData) {
+      form.setFieldsValue({
+        amount:
+          orderData?.paymentPlan === "PAY_BY_KG"
+            ? Math.round(orderData?.totalAmount / totalWeight)
+            : orderData?.totalAmount,
+        paymentPlan: orderData?.paymentPlan
+      });
+    }
+  }, [orderData, form, totalWeight]);
 
   return (
     <ModalWrapper
@@ -64,19 +70,14 @@ const EditOrderPrice: FC<EditOrderPriceProps> = ({
       setIsModalVisible={setIsVisible}
       destroyOnClose={true}
     >
-      <Form
-        name="Edit a price"
-        form={form}
-        initialValues={initialValues}
-        onFinish={handleOnFinish}
-      >
+      <Form form={form} onFinish={handleOnFinish}>
         <div className="mb-4">
           <Input
             name="amount"
             type="text"
+            inputType="number"
             label="Amount"
-            placeholder="4,000"
-            isGroupDropdown
+            placeholder="Enter amount"
             rules={requiredField("Amount")}
           />
         </div>

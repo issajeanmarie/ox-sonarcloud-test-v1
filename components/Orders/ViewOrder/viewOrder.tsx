@@ -29,11 +29,12 @@ import { userType } from "../../../helpers/getLoggedInUser";
 import EditOrderPrice from "../../Forms/Orders/EditOrderPrice";
 import Content from "../../Shared/Content";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
-import Heading1 from "../../Shared/Text/Heading1";
 import TextLight from "../../Shared/Text/TextLight";
 import DetailsSection from "./DetailsSection";
 import StepDescription from "./StepDescription";
 import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
+import { requiredField } from "../../../lib/validation/InputValidations";
+import { useForm } from "antd/lib/form/Form";
 
 const { Step } = Steps;
 
@@ -43,6 +44,8 @@ interface ViewOrderProps {
 }
 
 const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
+  const [form] = useForm();
+
   const [comment, setComment] = useState<string>("");
   const [isEditClientModal, setIsEditClientModal] = useState<boolean>(false);
   const [isEditPriceModal, setIsEditPriceModal] = useState<boolean>(false);
@@ -58,7 +61,6 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [getOrder, { isLoading, data }] = useLazyOrderQuery();
 
   const user = userType();
-  const [editOrderData, setEditOrderData] = useState(null);
   const [deleteStop, { isLoading: deleteStopLoading }] =
     useDeleteStopMutation();
 
@@ -66,14 +68,11 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
 
   const handleWriteOffAction = (values: { reason: string }) => {
     data &&
-      writeOff({ orderId: data?.id, data: values })
-        .unwrap()
-        .then((res) => {
-          message.success(res?.message);
-        })
-        .catch((e) => {
-          message.error(e.data?.message);
-        });
+      handleAPIRequests({
+        request: writeOff,
+        orderId: data?.id,
+        data: values
+      });
   };
 
   const { isFullPaid, isHalfPaid, isWrittenOff } = paymentStatus(
@@ -125,6 +124,18 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const handleCommentChange = (value: string) => {
     setComment(value);
   };
+
+  const totalWeight =
+    data &&
+    data.stops.reduce((accumulator: any, value: { weight: number }) => {
+      return accumulator + value.weight;
+    }, 0);
+
+  useEffect(() => {
+    if (data) {
+      form.setFieldsValue({ comment: data?.comment });
+    }
+  }, [data]);
 
   const TruckDetails = ({ details }: any) => {
     return (
@@ -182,7 +193,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
 
           <EditOrderClient
             orderId={orderId}
-            existingClient={data?.office?.client?.id}
+            existingClient={data?.office?.client}
             closeModal={() => setIsEditClientModal(false)}
             isEditClientModal={isEditClientModal}
             setIsEditClientModal={setIsEditClientModal}
@@ -191,8 +202,8 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           <EditOrderPrice
             isVisible={isEditPriceModal}
             setIsVisible={setIsEditPriceModal}
-            orderData={editOrderData}
-            setEditData={setEditOrderData}
+            orderData={data}
+            totalWeight={totalWeight}
           />
 
           <AddStop
@@ -226,7 +237,9 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
               <div className="flex-1 h-min bg-white shadow-[0px_0px_19px_#00000008] rounded p-14">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-top gap-12 ">
-                    <Heading1 uppercase>ORDER {orderId}</Heading1>
+                    <div className="heading1 text-ox-dark">
+                      ORDER ${orderId}
+                    </div>
 
                     <div
                       className="flex items-center gap-2 pointer"
@@ -262,7 +275,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                   details={data}
                   title="Order"
                   type="ORDER"
-                  editAction={setIsEditClientModal}
+                  totalWeight={totalWeight}
                 />
 
                 <TruckDetails details={data} />
@@ -291,6 +304,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                               status={st.arrivalDateTime ? "finish" : "wait"}
                               description={
                                 <StepDescription
+                                  data={data}
                                   st={st}
                                   setChosenId={setChosenId}
                                   setIsDeleteStopModal={setIsDeleteStopModal}
@@ -308,18 +322,25 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                   )}
                 </div>
 
-                <div className="mt-20">
-                  <TextLight>Admin&apos;s comment</TextLight>
-                  <div>
-                    <Input
-                      value="Hello world"
-                      name="comment"
-                      type="text_area"
-                      label="Comment"
-                      placeholder="Enter something"
-                      onChange={handleCommentChange}
-                    />
-                  </div>
+                <div className={`${!isCanceled && !isComplete ? "mt-20" : ""}`}>
+                  {!isCanceled && !isComplete && (
+                    <>
+                      <TextLight>Admin&apos;s comment</TextLight>
+
+                      <div>
+                        <Form form={form}>
+                          <Input
+                            name="comment"
+                            type="text_area"
+                            label="Comment"
+                            placeholder="Enter something"
+                            onChange={handleCommentChange}
+                          />
+                        </Form>
+                      </div>
+                    </>
+                  )}
+
                   <div className="flex justify-end mt-5">
                     <span className="text-sm opacity_56 nowrap italic text-gray-600">
                       <span className="font-bold">Order created by:</span>{" "}
@@ -333,14 +354,14 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
               <div className="w-full xl:w-[45%] flex flex-col gap-7">
                 <div className="bg-white shadow-[0px_0px_19px_#00000008] rounded pt-14 px-14 pb-1">
                   <div className="flex items-center justify-between mb-3">
-                    <Heading1 uppercase>Order summary</Heading1>
+                    <div className="heading1 text-ox-dark">ORDER SUMMARY</div>
                   </div>
 
                   <DetailsSection
                     details={data}
                     title=""
                     type="SUMMARY"
-                    editAction={setIsEditPaymentStatus}
+                    editAction={setIsEditPriceModal}
                   />
                 </div>
 
@@ -457,12 +478,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                           type="text_area"
                           label="Reason"
                           placeholder="Enter something"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Type reason for write off"
-                            }
-                          ]}
+                          rules={requiredField("Writeoff reason")}
                         />
                       </div>
                       <div className="flex justify-end mt-3">
