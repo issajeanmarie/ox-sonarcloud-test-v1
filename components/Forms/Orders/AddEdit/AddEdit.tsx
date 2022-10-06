@@ -1,6 +1,8 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import Input from "../../../Shared/Input";
 import Image from "next/image";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
 import Button from "../../../../components/Shared/Button";
 import { useCategoriesQuery } from "../../../../lib/api/endpoints/Category/categoryEndpoints";
 import { Form, Select } from "antd";
@@ -20,12 +22,22 @@ import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
 import { requiredField } from "../../../../lib/validation/InputValidations";
 import ClientSearch from "../../../Shared/Input/ClientSearch";
+import { useRouter } from "next/router";
+import { routes } from "../../../../config/route-config";
+import {
+  getFromLocal,
+  saveToLocal
+} from "../../../../helpers/handleLocalStorage";
+import { OX_NEW_ORDER_VALUES } from "../../../../config/constants";
 
 const { Option, OptGroup } = Select;
 
 const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
   const { data: categories, isLoading: categoriesLoading } =
     useCategoriesQuery();
+
+  const router = useRouter();
+  const { depotId, depotName } = router.query;
 
   const [getTrucks, { data, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
@@ -87,6 +99,10 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     changedValues: OrderRequestBody,
     allValues: OrderRequestBody
   ) => {
+    saveToLocal({
+      name: OX_NEW_ORDER_VALUES,
+      value: { ...allValues, location }
+    });
     if (allValues?.clientId) {
       setChosenClientId(allValues?.clientId);
     }
@@ -139,6 +155,26 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     });
   }, [form]);
 
+  useEffect(() => {
+    const values = getFromLocal(OX_NEW_ORDER_VALUES);
+    setChosenClientId(values?.clientId);
+    setLocation(values?.location);
+
+    form.setFieldsValue({
+      clientId: values?.clientId,
+      officeId: values?.officeId,
+      paymentPlan: values?.paymentPlan,
+      startDateTime: moment(values?.startDateTime),
+      categoryId: values?.categoryId,
+      weight: values?.weight,
+      driverId: values?.driverId,
+      depotId: values?.depotId,
+      amount: values?.amount,
+      truckId: values?.truckId,
+      stop1: values?.stop1
+    });
+  }, [form]);
+
   return (
     <div>
       <div className="text-2xl font-bold text-ox-dark mb-10">{title}</div>
@@ -146,7 +182,6 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
         name="Login"
         form={form}
         layout="vertical"
-        title="New order"
         onValuesChange={onValuesChange}
         onFinish={handleCreateOrder}
       >
@@ -157,11 +192,28 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
             <div className="flex-1">
               <div className="flex justify-between mb-1">
                 <span className="heading2">Client name</span>
-                <span className="link animate">New client</span>
+                <Row
+                  onClick={() =>
+                    router.push({
+                      pathname: routes.Client.url,
+                      query: {
+                        depotId: depotId || 0,
+                        depotName: depotName || "All depots"
+                      }
+                    })
+                  }
+                  className="link animate"
+                >
+                  <Col>New client</Col>
+                </Row>
               </div>
 
               <div>
-                <ClientSearch name="clientId" rules={requiredField("Client")} />
+                <ClientSearch
+                  name="clientId"
+                  rules={requiredField("Client")}
+                  existingValue={chosenClientInfo?.payload}
+                />
               </div>
             </div>
             <div className="flex-1">
@@ -215,7 +267,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                       height={18}
                     />
                   }
-                  rules={[{ required: true, message: "Select start date" }]}
+                  rules={requiredField("Start date")}
                 />
               </div>
             </div>
@@ -228,7 +280,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                 setLocation={setLocation}
                 location={location}
                 label="Stop 1"
-                rules={[{ required: true, message: "Choose stop location" }]}
+                rules={requiredField("Stop location")}
               />
             </div>
           </div>
@@ -243,7 +295,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                   isLoading={categoriesLoading}
                   disabled={categoriesLoading}
                   isGroupDropdown
-                  rules={[{ required: true, message: "Choose category" }]}
+                  rules={requiredField("Category")}
                 >
                   {categories?.payload?.map((el: Category) => {
                     if (!el.parentCategory && el?.subCategories?.length !== 0) {
@@ -280,7 +332,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                 label="Expected weight"
                 inputType="number"
                 suffixIcon="KGs"
-                rules={[{ required: true, message: "Weight is required" }]}
+                rules={requiredField("Weight")}
               />
             </div>
           </div>
@@ -296,9 +348,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                     { label: "Per job", value: "PAY_BY_JOB" },
                     { label: "Per Kilogram", value: "PAY_BY_KG" }
                   ]}
-                  rules={[
-                    { required: true, message: "Select a plan to continue" }
-                  ]}
+                  rules={requiredField("Plan")}
                 />
               </div>
             </div>
@@ -310,7 +360,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                 label="Rate"
                 inputType="number"
                 suffixIcon="Rwf"
-                rules={[{ required: true, message: "Rate is required" }]}
+                rules={requiredField("Rate")}
               />
             </div>
           </div>
@@ -325,7 +375,21 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
               <div className="flex-1">
                 <div className="flex justify-between mb-1">
                   <span className="heading2">Truck</span>
-                  <span className="link animate">New truck</span>
+
+                  <Row
+                    onClick={() =>
+                      router.push({
+                        pathname: routes.Trucks.url,
+                        query: {
+                          depotId: depotId || 0,
+                          depotName: depotName || "All depots"
+                        }
+                      })
+                    }
+                    className="link animate"
+                  >
+                    <Col>New truck</Col>
+                  </Row>
                 </div>
                 <div>
                   <Input
@@ -335,7 +399,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                     isLoading={trucksLoading}
                     disabled={trucksLoading}
                     isGroupDropdown
-                    rules={[{ required: true, message: "Truck is required" }]}
+                    rules={requiredField("Truck")}
                   >
                     {data?.map((truck: TruckSchema) => {
                       return (
@@ -352,7 +416,22 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
               <div className="flex-1">
                 <div className="flex justify-between mb-1">
                   <span className="heading2">Driver</span>
-                  <span className="link animate">New driver</span>
+
+                  <Row
+                    onClick={() =>
+                      router.push({
+                        pathname: routes.Accounts.url,
+                        query: {
+                          depotId: depotId || 0,
+                          depotName: depotName || "All depots",
+                          tb: "DRIVERS"
+                        }
+                      })
+                    }
+                    className="link animate"
+                  >
+                    <Col>New driver</Col>
+                  </Row>
                 </div>
                 <div>
                   <DriverSearch
@@ -376,9 +455,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                   isLoading={depotsLoading}
                   disabled={depotsLoading}
                   options={[{ label: "Tyazo Depot", value: 1 }]}
-                  rules={[
-                    { required: true, message: "Choose depot to continue" }
-                  ]}
+                  rules={requiredField("Depot")}
                 >
                   {depots?.payload.map((dp) => {
                     return (
@@ -434,7 +511,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                 setLocation={setSubStopLocation}
                 location={subStopLocation}
                 label="Add stop"
-                rules={[{ required: true, message: "Search for a location" }]}
+                rules={requiredField("Location")}
               />
             </div>
             <div className="w-[142px] h-[65px] flex items-end">

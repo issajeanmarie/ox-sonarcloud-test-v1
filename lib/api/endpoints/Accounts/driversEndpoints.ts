@@ -77,24 +77,6 @@ const driversEndpoints = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
-    /*  searchDriver: builder.mutation<
-      ApiResponseMetadata<Driver>,
-      SeachDriverRequest
-    >({
-      invalidatesTags: ["Drivers"],
-      query: ({ search }) => ({
-        url: `/drivers?search=${search}`,
-        method: "GET"
-      })
-    }), */
-
-    /* searchDriver: builder.mutation({
-      invalidatesTags: ["Trucks"],
-      query: ({ search }: any) => ({
-        url: `/drivers?search=${search || ""}`,
-        method: "GET"
-      })
-    }), */
 
     searchDriver: builder.query<
       ApiResponseMetadata<Driver>,
