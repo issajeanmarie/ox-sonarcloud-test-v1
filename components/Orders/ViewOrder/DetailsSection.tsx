@@ -2,6 +2,7 @@ import Image from "next/image";
 import { localeString } from "../../../utils/numberFormatter";
 import TextLight from "../../Shared/Text/TextLight";
 import { userType } from "../../../helpers/getLoggedInUser";
+import { paymentStatus } from "../../../utils/orderStatus";
 
 const DetailsSection = ({
   title,
@@ -93,7 +94,7 @@ const DetailsSection = ({
     {
       key: 1,
       label: "Payment status",
-      value: details?.paymentPlan.replaceAll("_", " "),
+      value: details?.paymentStatus,
       editable: false,
       editAction: editAction
     },
@@ -122,32 +123,54 @@ const DetailsSection = ({
       ? summaryDetails
       : orderDetails;
 
+  const { isFullPaid, isHalfPaid, isPending } = paymentStatus(
+    details?.paymentStatus
+  );
+
   return (
     <div className="my-16">
       <TextLight className="mb-6">{title && `${title} details`}</TextLight>
 
-      {displayDetails.map((detail) => (
-        <div key={detail.key} className="flex items-center mb-5">
-          <div className="w-[150px] font-bold">{detail.label}: </div>
+      {displayDetails.map((detail) => {
+        const paymentStatusClass = isPending
+          ? "red"
+          : isFullPaid
+          ? "dark"
+          : isHalfPaid
+          ? "orange"
+          : "";
 
-          <div className="font-light flex items-center gap-5">
-            <span>{detail.value}</span>
+        return (
+          <div key={detail.key} className="flex items-center mb-5">
+            <div className="w-[150px] font-bold">{detail.label}: </div>
 
-            {detail.editable && (
-              <span className="cursor-pointer">
-                <Image
-                  onClick={() => detail?.editAction(true)}
-                  className="pointer"
-                  src="/icons/ic-contact-edit.svg"
-                  alt="Backspace icon"
-                  width={13}
-                  height={13}
-                />
+            <div className="font-light flex items-center gap-5">
+              <span
+                className={`${
+                  detail.label === "Payment status" ? "font-bold" : ""
+                } text-ox-${
+                  detail.label === "Payment status" && paymentStatusClass
+                }`}
+              >
+                {detail.value}
               </span>
-            )}
+
+              {detail.editable && (
+                <span className="cursor-pointer">
+                  <Image
+                    onClick={() => detail?.editAction(true)}
+                    className="pointer"
+                    src="/icons/ic-contact-edit.svg"
+                    alt="Backspace icon"
+                    width={13}
+                    height={13}
+                  />
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

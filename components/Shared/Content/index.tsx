@@ -6,18 +6,14 @@ const Content: FC<ContentTypes> = ({
   navType = "CENTER" || "FULL",
   children,
   className
-}) => {
-  const static_height = navType === "CENTER" ? "83vh" : "85vh";
-
-  return (
-    <div
-      className={`h-[${static_height}] ${classes.content_section} ${
-        className || ""
-      }`}
-    >
-      {children}
-    </div>
-  );
-};
+}) => (
+  <div
+    className={`h-[${navType === "CENTER" ? "84vh" : "86vh"}] ${
+      classes.content_section
+    } ${className || ""}`}
+  >
+    {children}
+  </div>
+);
 
 export default Content;
