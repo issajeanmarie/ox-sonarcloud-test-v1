@@ -4,7 +4,6 @@ import Table from "antd/lib/table";
 import Row from "antd/lib/row";
 import moment from "moment";
 import Col from "antd/lib/col";
-import info from "antd/lib/message";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
 import CustomButton from "../../../components/Shared/Button/button";
@@ -99,23 +98,23 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
     });
   };
 
+  const handleGetSingleTruckSuccess = (res: any) => {
+    dispatch(displaySingleTruck(res));
+    setIsGetSingleTruckLoading(null);
+
+    setEditTruckData(res);
+    setIsVisible(true);
+  };
+
   const handleEditTruckModal = (record: any) => {
     setIsGetSingleTruckLoading(record.id);
     setIsUserEditing(true);
 
-    getSingleTruck({ id: record?.id })
-      .unwrap()
-      .then((res) => {
-        setIsGetSingleTruckLoading(null);
-        dispatch(displaySingleTruck(res));
-
-        setEditTruckData(res);
-        setIsVisible(true);
-      })
-      .catch((err) => {
-        setIsGetSingleTruckLoading(null);
-        info.error(err?.data?.message || "Something is wrong");
-      });
+    handleAPIRequests({
+      request: getSingleTruck,
+      id: record?.id,
+      handleSuccess: handleGetSingleTruckSuccess
+    });
   };
 
   return (
