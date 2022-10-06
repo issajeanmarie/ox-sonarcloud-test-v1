@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Select from "antd/lib/select";
-import { Form, message } from "antd";
+import { Form } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import React, { FC, useEffect, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
@@ -16,6 +16,7 @@ import Input from "../../../Shared/Input";
 import Header from "./header";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
 import { requiredField } from "../../../../lib/validation/InputValidations";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 
 interface SupportOrderProps {
   orderId: Query;
@@ -44,30 +45,32 @@ const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
         coordinates: JSON.stringify(location?.coordinates || {}),
         driverId: values.driverId,
         truckId: values.truckId,
-        weight: values.weight,
+        weight: +values.weight,
         position: 1
       },
       paymentPlan: values.paymentPlan,
       amount: values.amount
     };
-    supportOrder({ orderId, data: payload })
-      .unwrap()
-      .then((res) => {
-        message.success(res.message);
-        setSupport(false);
-      })
-      .catch((e) => {
-        message.error(e.data?.message || "Something went wrong");
-      });
+
+    const handleSupportOrderSuccess = () => {
+      setSupport(false);
+    };
+
+    handleAPIRequests({
+      request: supportOrder,
+      orderId,
+      data: payload,
+      showSuccess: true,
+      handleSuccess: handleSupportOrderSuccess
+    });
   };
 
   useEffect(() => {
-    getTrucks({ page: 0, size: 10000 })
-      .unwrap()
-      .then()
-      .catch((e) => {
-        message.error(e.data?.messag || "Cannot get trucks");
-      });
+    handleAPIRequests({
+      request: getTrucks,
+      page: 0,
+      size: 10000
+    });
   }, []);
 
   useEffect(() => {
@@ -103,7 +106,7 @@ const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
                   isGroupDropdown
                   rules={[{ required: true, message: "Truck is required" }]}
                 >
-                  {data?.payload?.content.map((truck: TruckSchema) => {
+                  {data?.content.map((truck: TruckSchema) => {
                     return (
                       <Option value={truck.id} key={truck.plateNumber}>
                         {truck.plateNumber}
