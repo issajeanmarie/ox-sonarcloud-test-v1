@@ -117,7 +117,7 @@ const Drivers = () => {
           setSelectedSort={setSort}
         />
 
-        <Content navType="MULTIPLE">
+        <Content navType="DOUBLE">
           <TableWrapper>
             {isDriversLoading ? (
               <>

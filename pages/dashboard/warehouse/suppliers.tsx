@@ -2,13 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
-import WarehouseHeader from "../../../components/Warehouse/WarehouseHeader";
 import WarehouseTopNavigator from "../../../components/Warehouse/WarehouseTopNavigator";
 import { WarehouseLinks } from "../../../components/Warehouse/WarehouseLinks";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
-import { WarehoueMenusNavigatorWrapper } from "../../../components/Warehouse/Wrappers";
 import SuppliersTable from "../../../components/Tables/Warehouse/SuppliersTable";
 import {
   useLazySuppliersQuery,
@@ -16,6 +14,8 @@ import {
 } from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
 import CustomButton from "../../../components/Shared/Button";
 import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
+import SuppliersTopNavigator from "../../../components/Warehouse/WarehouseHeaders/SuppliersTopNavigator";
+import Content from "../../../components/Shared/Content";
 
 const SuppliersPage = () => {
   const [active, setActive] = useState<string>("SALES");
@@ -91,53 +91,55 @@ const SuppliersPage = () => {
         toggleActiveHandler={toggleActiveHandler}
       />
 
-      <WarehoueMenusNavigatorWrapper>
-        <WarehouseHeader
+      <div className="mx-4 relative">
+        <SuppliersTopNavigator
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
-          query={query}
           setSort={setSort}
           sort={sort}
           data={AllSuppliers?.payload}
-          dataLoading={isSuppliersLoading}
         />
-      </WarehoueMenusNavigatorWrapper>
 
-      <div className="px-5">
-        {isSuppliersLoading ? (
+        <Content navType="DOUBLE">
           <>
-            {[...Array(20)].map((_, index) => (
-              <ColsTableLoader key={index} />
-            ))}
-          </>
-        ) : (
-          <SuppliersTable
-            isModalVisible={isWarningModalVisible}
-            showModal={showWarningModal}
-            setIsModalVisible={setIsWarningModalVisible}
-            suppliers={
-              moreSuppliers?.length === 0
-                ? AllSuppliers?.payload?.content
-                : AllSuppliers?.payload?.content?.concat(moreSuppliers?.content)
-            }
-            isSuppliersFetching={isSuppliersFetching}
-          />
-        )}
+            {isSuppliersLoading ? (
+              <>
+                {[...Array(20)].map((_, index) => (
+                  <ColsTableLoader key={index} />
+                ))}
+              </>
+            ) : (
+              <SuppliersTable
+                isModalVisible={isWarningModalVisible}
+                showModal={showWarningModal}
+                setIsModalVisible={setIsWarningModalVisible}
+                suppliers={
+                  moreSuppliers?.length === 0
+                    ? AllSuppliers?.payload?.content
+                    : AllSuppliers?.payload?.content?.concat(
+                        moreSuppliers?.content
+                      )
+                }
+                isSuppliersFetching={isSuppliersFetching}
+              />
+            )}
 
-        {pageSize > 19 &&
-          AllSuppliers?.payload?.totalElements &&
-          AllSuppliers?.payload?.totalElements >= pageSize && (
-            <div style={{ width: "12%", margin: "32px auto" }}>
-              <CustomButton
-                loading={loadingMoreFetching}
-                onClick={handleLoadMore}
-                type="secondary"
-              >
-                Load more
-              </CustomButton>
-            </div>
-          )}
+            {pageSize > 19 &&
+              AllSuppliers?.payload?.totalElements &&
+              AllSuppliers?.payload?.totalElements >= pageSize && (
+                <div style={{ width: "12%", margin: "32px auto" }}>
+                  <CustomButton
+                    loading={loadingMoreFetching}
+                    onClick={handleLoadMore}
+                    type="secondary"
+                  >
+                    Load more
+                  </CustomButton>
+                </div>
+              )}
+          </>
+        </Content>
       </div>
     </Layout>
   );
