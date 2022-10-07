@@ -15,10 +15,11 @@ import {
   useLazyGetTrucksQuery,
   useToggleTruckMutation
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import CustomButton from "../../Shared/Button/button";
 import { displaySingleTruck } from "../../../lib/redux/slices/trucksSlice";
 import { userType } from "../../../helpers/getLoggedInUser";
 import { routes } from "../../../config/route-config";
+import Navbar from "../../Shared/Content/Navbar";
+import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
 
 type TrucksHoverTypes = {
   plateNumber: string;
@@ -154,98 +155,89 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
     </div>
   );
 
-  return (
-    <>
-      <div className="bg-white  shadow-[0px_0px_19px_#00000008] p-3 px-6 flex items-center">
-        <div className="flex items-center gap-4 ">
-          <Image
-            className="pointer"
-            src="/icons/keyboard_backspace_black_24dp.svg"
-            alt="Backspace icon"
-            width={20}
-            height={20}
-            onClick={() =>
-              router.push({
-                pathname: routes.Trucks.url,
-                query: {
-                  depotId: depotId || 0,
-                  depotName: depotName || "All depots"
-                }
-              })
+  const LeftSide = (
+    <div className="flex items-center gap-4 ">
+      <Image
+        className="pointer"
+        src="/icons/keyboard_backspace_black_24dp.svg"
+        alt="Backspace icon"
+        width={20}
+        height={20}
+        onClick={() =>
+          router.push({
+            pathname: routes.Trucks.url,
+            query: {
+              depotId: depotId || 0,
+              depotName: depotName || "All depots"
             }
-            preview={false}
-          />
-          <span className="heading2">Trucks</span>
+          })
+        }
+        preview={false}
+      />
+      <span className="heading2">Trucks</span>
 
-          <Dropdown placement="bottomLeft" overlay={menu}>
-            <Row align="middle" gutter={12} className="pointer">
-              <Col className="normalText">/</Col>
-              <Col>
-                <Row align="middle" gutter={4}>
-                  <Col className="text-gray-400">
-                    {selectedTruck?.plateNumber || truckData?.plateNumber}
-                  </Col>
-                  <Col>
-                    {isPageLoading ? (
-                      <LoadingOutlined className="mb-1" spin />
-                    ) : (
-                      <Image
-                        className="pointer mb-1"
-                        src="/icons/expand_more_black_24dp.svg"
-                        alt="Backspace icon"
-                        width={8}
-                        preview={false}
-                      />
-                    )}
-                  </Col>
-                </Row>
+      <Dropdown placement="bottomLeft" overlay={menu}>
+        <Row align="middle" gutter={12} className="pointer">
+          <Col className="normalText">/</Col>
+          <Col>
+            <Row align="middle" gutter={4}>
+              <Col className="text-gray-400">
+                {selectedTruck?.plateNumber || truckData?.plateNumber}
               </Col>
-            </Row>
-          </Dropdown>
-        </div>
-        <div className="flex items-center flex-1 justify-end gap-11">
-          <div className="flex items-center gap-6">
-            <CustomButton
-              onClick={handleToggleTruck}
-              type="normal"
-              size="icon"
-              className="bg_danger"
-              loading={isLoading}
-              icon={
-                <Image
-                  className="pointer"
-                  src={`/icons/ic-media-${
-                    truckData?.active ? "stop" : "play"
-                  }.svg`}
-                  width={16}
-                  preview={false}
-                  alt=""
-                />
-              }
-            />
-
-            {user.isSuperAdmin && (
-              <CustomButton
-                onClick={handleDeletTruck}
-                type="normal"
-                size="icon"
-                loading={isDeleteLoading}
-                icon={
+              <Col>
+                {isPageLoading ? (
+                  <LoadingOutlined className="mb-1" spin />
+                ) : (
                   <Image
-                    className="pointer"
-                    src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
+                    className="pointer mb-1"
+                    src="/icons/expand_more_black_24dp.svg"
                     alt="Backspace icon"
-                    width={22}
+                    width={8}
                     preview={false}
                   />
-                }
-              />
-            )}
-          </div>
-        </div>
-      </div>
-    </>
+                )}
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Dropdown>
+    </div>
   );
+
+  const RightSide = (
+    <Col className="flex gap-8 items-center">
+      {isLoading ? (
+        <SmallSpinLoader />
+      ) : (
+        <Image
+          onClick={handleToggleTruck}
+          className="pointer"
+          src="/icons/ic-media-stop.svg"
+          alt="Backspace icon"
+          width={18}
+          height={18}
+          preview={false}
+        />
+      )}
+
+      {user.isSuperAdmin &&
+        (isDeleteLoading ? (
+          <SmallSpinLoader />
+        ) : (
+          <Image
+            className="pointer"
+            onClick={handleDeletTruck}
+            src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
+            alt=""
+            width={22}
+            height={22}
+            preview={false}
+          />
+        ))}
+    </Col>
+  );
+
+  return <Navbar LeftSide={LeftSide} RightSide={RightSide} type="FULL" />;
 };
 
 export default ViewTruckHeader;
