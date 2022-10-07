@@ -309,6 +309,41 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
       type="FULL"
     />
   );
+
+  const RightSide = (
+    <Col className="flex gap-8 items-center">
+      {isLoading ? (
+        <SmallSpinLoader />
+      ) : (
+        <Image
+          onClick={handleToggleTruck}
+          className="pointer"
+          src="/icons/ic-media-stop.svg"
+          alt="Backspace icon"
+          width={18}
+          height={18}
+          preview={false}
+        />
+      )}
+
+      {user.isSuperAdmin &&
+        (isDeleteLoading ? (
+          <SmallSpinLoader />
+        ) : (
+          <Image
+            className="pointer"
+            onClick={handleDeletTruck}
+            src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
+            alt=""
+            width={22}
+            height={22}
+            preview={false}
+          />
+        ))}
+    </Col>
+  );
+
+  return <Navbar LeftSide={LeftSide} RightSide={RightSide} type="FULL" />;
 };
 
 export default ViewTruckHeader;
