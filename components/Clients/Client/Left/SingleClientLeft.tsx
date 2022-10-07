@@ -33,6 +33,7 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
         setSelectedFilter={setSelectedFilter}
         totalPending={clientOrders?.totalPending}
       />
+
       {isClientLoading ? (
         <div className="mt-4">
           {[...Array(20)].map((_, index) => (

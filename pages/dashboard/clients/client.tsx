@@ -5,6 +5,7 @@ import { useState } from "react";
 import SingleClientLeft from "../../../components/Clients/Client/Left/SingleClientLeft";
 import SingleClientRight from "../../../components/Clients/Client/Right/SingleClientRight";
 import SingleClientTop from "../../../components/Clients/Client/SingleClientTop";
+import Content from "../../../components/Shared/Content";
 import Layout from "../../../components/Shared/Layout";
 import PageNotFound from "../../../components/Shared/PageNotFound";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
@@ -77,39 +78,39 @@ const Client = () => {
       {router.isReady && !isClientLoading && !client ? (
         <PageNotFound />
       ) : (
-        <div className="m-0 h-full overflow-hidden">
-          <SingleClientTop
-            client={client?.payload}
-            isClientLoading={isClientLoading}
-            isClientFetching={isClientFetching}
-            router={router}
-          />
-          <Row className="p-5 justify-between gap-5">
-            <SingleClientLeft
-              client={client?.payload}
-              isClientLoading={isClientLoading}
-              isClientFetching={isClientFetching}
-              clientOrders={AllClientOrders?.payload}
-              isClientOrdersLoading={isClientOrdersLoading}
-              isClientOrdersFetching={isClientOrdersFetching}
-              moreClientOrders={moreClientOrders}
-              handleLoadMore={handleLoadMore}
-              pageSize={pageSize}
-              isMoreClientsOrderFetching={isMoreClientsOrderFetching}
-              selectedFilter={selectedFilter}
-              setSelectedFilter={setSelectedFilter}
-            />
+        <>
+          <SingleClientTop client={client?.payload} router={router} />
 
-            <SingleClientRight
-              client={client?.payload}
-              isClientLoading={isClientLoading}
-              isClientFetching={isClientFetching}
-              clientOrders={AllClientOrders?.payload}
-              isClientOrdersLoading={isClientOrdersLoading}
-              isClientOrdersFetching={isClientOrdersFetching}
-            />
-          </Row>
-        </div>
+          <div className="mx-4 relative">
+            <Content navType="FULL">
+              <Row className="p-5 justify-between gap-5">
+                <SingleClientLeft
+                  client={client?.payload}
+                  isClientLoading={isClientLoading}
+                  isClientFetching={isClientFetching}
+                  clientOrders={AllClientOrders?.payload}
+                  isClientOrdersLoading={isClientOrdersLoading}
+                  isClientOrdersFetching={isClientOrdersFetching}
+                  moreClientOrders={moreClientOrders}
+                  handleLoadMore={handleLoadMore}
+                  pageSize={pageSize}
+                  isMoreClientsOrderFetching={isMoreClientsOrderFetching}
+                  selectedFilter={selectedFilter}
+                  setSelectedFilter={setSelectedFilter}
+                />
+
+                <SingleClientRight
+                  client={client?.payload}
+                  isClientLoading={isClientLoading}
+                  isClientFetching={isClientFetching}
+                  clientOrders={AllClientOrders?.payload}
+                  isClientOrdersLoading={isClientOrdersLoading}
+                  isClientOrdersFetching={isClientOrdersFetching}
+                />
+              </Row>
+            </Content>
+          </div>
+        </>
       )}
     </Layout>
   );

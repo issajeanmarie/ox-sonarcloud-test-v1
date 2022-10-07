@@ -6,7 +6,6 @@ export type ClientsTopNavigatorTypes = {
   showModal: () => void;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   clients: any;
-  isClientsLoading: boolean;
   handleSearch: (value: string) => void;
   categories: any;
   handleDownloadClients: () => void;
