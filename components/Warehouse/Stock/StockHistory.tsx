@@ -1,11 +1,11 @@
-import { Col, Image, Row, Typography } from "antd";
+import { Col, Image, Row } from "antd";
 import React, { FC } from "react";
 import Input from "../../Shared/Input";
-import CustomButton from "../../Shared/Button/button";
 import { StockHistoryTyes } from "../../../lib/types/pageTypes/Warehouse/Stock/StockHistoryTyes";
 import DropDownSelector from "../../Shared/DropDownSelector";
-
-const { Text } = Typography;
+import Navbar from "../../Shared/Content/Navbar";
+import Heading1 from "../../Shared/Text/Heading1";
+import Button from "../../Shared/Button";
 
 const StockHistory: FC<StockHistoryTyes> = ({
   filter,
@@ -13,61 +13,77 @@ const StockHistory: FC<StockHistoryTyes> = ({
   onStartDateChange,
   onEndDateChange
 }) => {
-  return (
-    <Row
-      justify="space-between"
-      className="bg-white py-4 px-6 rounded shadow-[0px_0px_19px_#2A354808]"
-    >
-      <Col className="flex items-center gap-4">
-        <Text className="heading2">Stock history</Text>
-        <DropDownSelector
-          label="Filter"
-          dropDownContent={[
-            { id: 0, name: "View all", value: "" },
-            { id: 1, name: "Expired", value: "EXPIRED" },
-            { id: 2, name: "Not expired", value: "NOT_EXPIRED" }
-          ]}
-          defaultSelected={filter}
-          setDefaultSelected={setFilter}
-        />
-        <Input
-          onDateChange={onStartDateChange}
-          defaultValue={localStorage.getItem("ox_startDate")}
-          type="date"
-          name="Start"
-          placeholder="Start"
-          suffixIcon={
-            <Image
-              preview={false}
-              src="/icons/ic-actions-calendar.svg"
-              alt=""
-              width={18}
-            />
-          }
-        />
-        <Input
-          onDateChange={onEndDateChange}
-          defaultValue={localStorage.getItem("ox_endDate")}
-          type="date"
-          name="End"
-          placeholder="End"
-          suffixIcon={
-            <Image
-              preview={false}
-              src="/icons/ic-actions-calendar.svg"
-              alt=""
-              width={18}
-            />
-          }
-        />
-      </Col>
+  const LeftSide = (
+    <Col className="flex items-center gap-4">
+      <Row gutter={24} align="middle" wrap={false}>
+        <Col>
+          <Heading1>Stock history</Heading1>
+        </Col>
 
-      <Col className="flex items-center gap-4">
-        <CustomButton type="secondary">
-          <span className="text-sm">DOWNLOAD</span>
-        </CustomButton>
-      </Col>
-    </Row>
+        <Col>
+          <DropDownSelector
+            label="Filter"
+            dropDownContent={[
+              { id: 0, name: "View all", value: "" },
+              { id: 1, name: "Expired", value: "EXPIRED" },
+              { id: 2, name: "Not expired", value: "NOT_EXPIRED" }
+            ]}
+            defaultSelected={filter}
+            setDefaultSelected={setFilter}
+          />
+        </Col>
+
+        <Col>
+          <Input
+            onDateChange={onStartDateChange}
+            defaultValue={localStorage.getItem("ox_startDate")}
+            type="date"
+            name="Start"
+            placeholder="Start"
+            suffixIcon={
+              <Image
+                preview={false}
+                src="/icons/ic-actions-calendar.svg"
+                alt=""
+                width={18}
+              />
+            }
+          />
+        </Col>
+
+        <Col>
+          <Input
+            onDateChange={onEndDateChange}
+            defaultValue={localStorage.getItem("ox_endDate")}
+            type="date"
+            name="End"
+            placeholder="End"
+            suffixIcon={
+              <Image
+                preview={false}
+                src="/icons/ic-actions-calendar.svg"
+                alt=""
+                width={18}
+              />
+            }
+          />
+        </Col>
+      </Row>
+    </Col>
+  );
+
+  const RightSide = (
+    <div className="flex items-center gap-5">
+      <div className="flex items-center gap-6 w-[200px]">
+        <Button type="secondary">DOWNLOAD</Button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
+    </>
   );
 };
 

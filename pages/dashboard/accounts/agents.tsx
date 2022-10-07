@@ -97,7 +97,7 @@ const Agents = () => {
           Agents={AllAgents?.payload}
         />
 
-        <Content navType="MULTIPLE">
+        <Content navType="DOUBLE">
           <TableWrapper>
             {isAgentsLoading ? (
               <>

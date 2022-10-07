@@ -116,7 +116,7 @@ const Admins = () => {
           Admins={AllAdmins?.payload}
         />
 
-        <Content navType="MULTIPLE">
+        <Content navType="DOUBLE">
           <TableWrapper>
             {isAdminsLoading ? (
               <>

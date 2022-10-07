@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
-import WarehouseHeader from "../../../components/Warehouse/WarehouseHeader";
 import OneWarehouseOrder from "../../../components/Warehouse/OneWarehouseOrder";
 import CustomButton from "../../../components/Shared/Button";
 import WarehouseTopNavigator from "../../../components/Warehouse/WarehouseTopNavigator";
@@ -10,14 +9,14 @@ import { WarehouseLinks } from "../../../components/Warehouse/WarehouseLinks";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
-import { WarehoueMenusNavigatorWrapper } from "../../../components/Warehouse/Wrappers";
+import Content from "../../../components/Shared/Content";
+import SalesTopNavigator from "../../../components/Warehouse/WarehouseHeaders/SalesTopNavigator";
 
 const SalesPage = () => {
   const [active, setActive] = useState<string>("SALES");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
   const { query } = useRouter();
-  const [sort, setSort]: any = useState("");
 
   useEffect(() => {
     if (router.isReady) {
@@ -49,27 +48,24 @@ const SalesPage = () => {
         toggleActiveHandler={toggleActiveHandler}
       />
 
-      <WarehoueMenusNavigatorWrapper>
-        <WarehouseHeader
+      <div className="mx-4 relative">
+        <SalesTopNavigator
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
-          query={query}
-          setSort={setSort}
-          sort={sort}
-          data=""
-          dataLoading={false}
         />
-      </WarehoueMenusNavigatorWrapper>
 
-      <div className="px-5">
-        {[...Array(20)].map((_, index) => (
-          <OneWarehouseOrder key={index} index={index} />
-        ))}
+        <Content navType="DOUBLE">
+          <>
+            {[...Array(20)].map((_, index) => (
+              <OneWarehouseOrder key={index} index={index} />
+            ))}
 
-        <div style={{ width: "12%", margin: "32px auto" }}>
-          <CustomButton type="secondary">Load more</CustomButton>
-        </div>
+            <div style={{ width: "12%", margin: "32px auto" }}>
+              <CustomButton type="secondary">Load more</CustomButton>
+            </div>
+          </>
+        </Content>
       </div>
     </Layout>
   );
