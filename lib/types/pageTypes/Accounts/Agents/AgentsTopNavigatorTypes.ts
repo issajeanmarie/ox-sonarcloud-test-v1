@@ -6,5 +6,4 @@ export type AgentsTopNavigatorTypes = {
   showModal: () => void;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   Agents: any;
-  isAgentsLoading: boolean;
 };

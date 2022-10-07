@@ -33,5 +33,5 @@ export const classes = {
     text_light: "font-extralight text-[17px]"
   },
 
-  content_section: "overflow-scroll"
+  content_section: "overflow-auto"
 };

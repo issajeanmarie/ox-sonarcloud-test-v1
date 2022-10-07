@@ -15,10 +15,8 @@ import { AccountLinks } from "../../../components/Accounts/AccountLinks";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
-import {
-  AccountsMenusNavigatorWrapper,
-  TableWrapper
-} from "../../../components/Accounts/Wrappers";
+import { TableWrapper } from "../../../components/Accounts/Wrappers";
+import Content from "../../../components/Shared/Content";
 
 const Drivers = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -105,56 +103,58 @@ const Drivers = () => {
         active={active}
         toggleActiveHandler={toggleActiveHandler}
       />
-      <AccountsMenusNavigatorWrapper>
+
+      <div className="mx-4 relative">
         <DriversTopNavigator
           isModalVisible={isModalVisible}
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           Drivers={AllDrivers?.payload}
-          isDriversLoading={isDriversLoading}
           handleSearch={handleSearch}
           selectedFilter={selectedFilter}
           setSelectedFilter={setSelectedFilter}
           selectedSort={sort}
           setSelectedSort={setSort}
         />
-      </AccountsMenusNavigatorWrapper>
 
-      <TableWrapper>
-        {isDriversLoading ? (
-          <>
-            {[...Array(20)].map((_, index) => (
-              <ColsTableLoader key={index} />
-            ))}
-          </>
-        ) : (
-          <DriversTable
-            isModalVisible={isWarningModalVisible}
-            showModal={showWarningModal}
-            setIsModalVisible={setIsWarningModalVisible}
-            Drivers={
-              moreDrivers?.length === 0
-                ? AllDrivers?.payload?.content
-                : AllDrivers?.payload?.content?.concat(moreDrivers?.content)
-            }
-            isDriversFetching={isDriversFetching}
-          />
-        )}
+        <Content navType="MULTIPLE">
+          <TableWrapper>
+            {isDriversLoading ? (
+              <>
+                {[...Array(20)].map((_, index) => (
+                  <ColsTableLoader key={index} />
+                ))}
+              </>
+            ) : (
+              <DriversTable
+                isModalVisible={isWarningModalVisible}
+                showModal={showWarningModal}
+                setIsModalVisible={setIsWarningModalVisible}
+                Drivers={
+                  moreDrivers?.length === 0
+                    ? AllDrivers?.payload?.content
+                    : AllDrivers?.payload?.content?.concat(moreDrivers?.content)
+                }
+                isDriversFetching={isDriversFetching}
+              />
+            )}
 
-        {pageSize > 19 &&
-          AllDrivers?.payload?.totalElements &&
-          AllDrivers?.payload?.totalElements >= pageSize && (
-            <div style={{ width: "12%", margin: "32px auto" }}>
-              <CustomButton
-                loading={loadingMoreFetching}
-                onClick={handleLoadMore}
-                type="secondary"
-              >
-                Load more
-              </CustomButton>
-            </div>
-          )}
-      </TableWrapper>
+            {pageSize > 19 &&
+              AllDrivers?.payload?.totalElements &&
+              AllDrivers?.payload?.totalElements >= pageSize && (
+                <div style={{ width: "12%", margin: "32px auto" }}>
+                  <CustomButton
+                    loading={loadingMoreFetching}
+                    onClick={handleLoadMore}
+                    type="secondary"
+                  >
+                    Load more
+                  </CustomButton>
+                </div>
+              )}
+          </TableWrapper>
+        </Content>
+      </div>
     </Layout>
   );
 };
