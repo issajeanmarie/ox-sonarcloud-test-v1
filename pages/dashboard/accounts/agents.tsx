@@ -15,10 +15,8 @@ import { AccountLinks } from "../../../components/Accounts/AccountLinks";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
-import {
-  AccountsMenusNavigatorWrapper,
-  TableWrapper
-} from "../../../components/Accounts/Wrappers";
+import { TableWrapper } from "../../../components/Accounts/Wrappers";
+import Content from "../../../components/Shared/Content";
 
 const Agents = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -90,50 +88,53 @@ const Agents = () => {
         active={active}
         toggleActiveHandler={toggleActiveHandler}
       />
-      <AccountsMenusNavigatorWrapper>
+
+      <div className="mx-4 relative">
         <AgentsTopNavigator
           isModalVisible={isModalVisible}
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           Agents={AllAgents?.payload}
-          isAgentsLoading={isAgentsLoading}
         />
-      </AccountsMenusNavigatorWrapper>
-      <TableWrapper>
-        {isAgentsLoading ? (
-          <>
-            {[...Array(20)].map((_, index) => (
-              <ColsTableLoader key={index} />
-            ))}
-          </>
-        ) : (
-          <AgentsTable
-            isModalVisible={isWarningModalVisible}
-            showModal={showWarningModal}
-            setIsModalVisible={setIsWarningModalVisible}
-            Agents={
-              moreAgents?.length === 0
-                ? AllAgents?.payload?.content
-                : AllAgents?.payload?.content?.concat(moreAgents?.content)
-            }
-            isAgentsFetching={isAgentsFetching}
-          />
-        )}
 
-        {pageSize > 19 &&
-          AllAgents?.payload?.totalElements &&
-          AllAgents?.payload?.totalElements >= pageSize && (
-            <div style={{ width: "12%", margin: "32px auto" }}>
-              <CustomButton
-                loading={loadingMoreFetching}
-                onClick={handleLoadMore}
-                type="secondary"
-              >
-                Load more
-              </CustomButton>
-            </div>
-          )}
-      </TableWrapper>
+        <Content navType="MULTIPLE">
+          <TableWrapper>
+            {isAgentsLoading ? (
+              <>
+                {[...Array(20)].map((_, index) => (
+                  <ColsTableLoader key={index} />
+                ))}
+              </>
+            ) : (
+              <AgentsTable
+                isModalVisible={isWarningModalVisible}
+                showModal={showWarningModal}
+                setIsModalVisible={setIsWarningModalVisible}
+                Agents={
+                  moreAgents?.length === 0
+                    ? AllAgents?.payload?.content
+                    : AllAgents?.payload?.content?.concat(moreAgents?.content)
+                }
+                isAgentsFetching={isAgentsFetching}
+              />
+            )}
+
+            {pageSize > 19 &&
+              AllAgents?.payload?.totalElements &&
+              AllAgents?.payload?.totalElements >= pageSize && (
+                <div style={{ width: "12%", margin: "32px auto" }}>
+                  <CustomButton
+                    loading={loadingMoreFetching}
+                    onClick={handleLoadMore}
+                    type="secondary"
+                  >
+                    Load more
+                  </CustomButton>
+                </div>
+              )}
+          </TableWrapper>
+        </Content>
+      </div>
     </Layout>
   );
 };

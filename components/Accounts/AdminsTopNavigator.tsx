@@ -1,26 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, Form, Row, Typography } from "antd";
+import { Col, Form, Row } from "antd";
 import React, { useState } from "react";
-import CustomButton from "../Shared/Button/button";
-
 import { FC } from "react";
 import { AdminsTopNavigatorTypes } from "../../lib/types/pageTypes/Accounts/Admins/AdminsTopNavigatorTypes";
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewAdmin from "../Forms/Accounts/Admins/AddNewAdmin";
-import { numbersFormatter } from "../../helpers/numbersFormatter";
 import { usePostAdminMutation } from "../../lib/api/endpoints/Accounts/adminsEndpoints";
 import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
 import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
-
-const { Text } = Typography;
+import Navbar from "../Shared/Content/Navbar";
+import Heading1 from "../Shared/Text/Heading1";
+import { localeString } from "../../utils/numberFormatter";
+import Button from "../Shared/Button";
 
 const AdminsTopNavigator: FC<AdminsTopNavigatorTypes> = ({
   isModalVisible,
   showModal,
   setIsModalVisible,
-  Admins,
-  isAdminsLoading
+  Admins
 }) => {
   const [form] = Form.useForm();
   const [postAdmin, { isLoading }] = usePostAdminMutation();
@@ -49,38 +47,28 @@ const AdminsTopNavigator: FC<AdminsTopNavigatorTypes> = ({
       );
   };
 
-  return (
-    <Row
-      justify="space-between"
-      className="bg-white py-4 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1]"
-    >
-      <Col className="flex items-center gap-4">
-        <Text className="heading2 flex items-center">
-          {isAdminsLoading ? (
-            <span>...</span>
-          ) : (
-            <>
-              {Admins?.totalElements !== 0 && (
-                <>
-                  {Admins?.totalElements &&
-                    numbersFormatter(Admins?.totalElements)}{" "}
-                </>
-              )}
-            </>
-          )}
-          {Admins?.totalElements === 0 ? (
-            "No Admins"
-          ) : (
-            <>{Admins?.totalElements === 1 ? "Admin" : "Admins"}</>
-          )}
-        </Text>
-      </Col>
+  const LeftSide = (
+    <Col className="flex items-center gap-4">
+      <Row gutter={24} align="middle">
+        <Col>
+          <Heading1>{localeString(Admins?.totalElements)} Admins</Heading1>
+        </Col>
+      </Row>
+    </Col>
+  );
 
-      <Col className="flex items-center gap-4">
-        <CustomButton onClick={showModal} type="primary">
-          <span className="text-sm">NEW ADMIN</span>
-        </CustomButton>
-      </Col>
+  const RightSide = (
+    <div className="flex items-center gap-5">
+      <div className="flex items-center gap-6 w-[200px]">
+        <Button type="primary" onClick={showModal}>
+          NEW ADMIN
+        </Button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
@@ -95,7 +83,9 @@ const AdminsTopNavigator: FC<AdminsTopNavigatorTypes> = ({
           checkbox={checkbox}
         />
       </ModalWrapper>
-    </Row>
+
+      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
+    </>
   );
 };
 

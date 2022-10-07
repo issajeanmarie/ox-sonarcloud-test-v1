@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 export type NavbarTypes = {
   LeftSide: ReactElement;
-  RightSide: ReactElement;
+  RightSide?: ReactElement;
   type: string;
 };
 

@@ -36,7 +36,7 @@ export const routes = {
     url: "/dashboard/trucks"
   },
   Accounts: {
-    name: "Accounts",
+    name: "OX Accounts",
     url: "/dashboard/accounts"
   },
   Agents: {

@@ -6,5 +6,4 @@ export type AdminsTopNavigatorTypes = {
   showModal: () => void;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   Admins: any;
-  isAdminsLoading: boolean;
 };

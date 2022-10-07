@@ -6,7 +6,6 @@ export type DriversTopNavigatorTypes = {
   showModal: () => void;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   Drivers: any;
-  isDriversLoading: boolean;
   handleSearch: (value: string) => void;
   selectedFilter: any;
   setSelectedFilter: any;

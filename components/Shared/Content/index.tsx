@@ -3,14 +3,16 @@ import { ContentTypes } from "../../../lib/types/content";
 import { classes } from "../../../config/constants";
 
 const Content: FC<ContentTypes> = ({
-  navType = "CENTER" || "FULL",
+  navType = "CENTER" || "FULL" || "MULTIPLE",
   children,
   className
 }) => (
   <div
-    className={`h-[${navType === "CENTER" ? "84vh" : "86vh"}] ${
-      classes.content_section
-    } ${className || ""}`}
+    style={{
+      height:
+        navType === "CENTER" ? "84vh" : navType === "MULTIPLE" ? "75vh" : "86vh"
+    }}
+    className={`${classes.content_section} ${className || ""}`}
   >
     {children}
   </div>
