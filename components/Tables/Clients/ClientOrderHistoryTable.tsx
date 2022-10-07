@@ -147,6 +147,7 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
       }
     }
   ];
+
   return (
     <Table
       className="data_table light_white_header light_white_table"

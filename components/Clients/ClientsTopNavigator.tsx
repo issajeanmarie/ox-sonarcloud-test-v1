@@ -1,28 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, Form, Image, Row, Typography } from "antd";
+import { Col, Form, Image, Row } from "antd";
 import React, { useState } from "react";
 import Input from "../Shared/Input";
-import CustomButton from "../Shared/Button/button";
 import { FC } from "react";
 import { LatLng } from "use-places-autocomplete";
 import { ClientsTopNavigatorTypes } from "../../lib/types/pageTypes/Clients/ClientsTopNavigatorTypes";
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewClient from "../Forms/Clients/AddNewClient";
-import { numbersFormatter } from "../../helpers/numbersFormatter";
 import { usePostClientMutation } from "../../lib/api/endpoints/Clients/clientsEndpoint";
 import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
 import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 import DropDownSelector from "../Shared/DropDownSelector";
-
-const { Text } = Typography;
+import Navbar from "../Shared/Content/Navbar";
+import Heading1 from "../Shared/Text/Heading1";
+import Button from "../Shared/Button";
+import { localeString } from "../../utils/numberFormatter";
 
 const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   isModalVisible,
   showModal,
   setIsModalVisible,
   clients,
-  isClientsLoading,
   handleSearch,
   categories,
   handleDownloadClients,
@@ -55,7 +54,6 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         location: location ? location?.name : "",
         coordinates: location ? JSON.stringify(location?.coordinates) : "",
         names: officeName
-        // type: "HQ"
       }
     ]);
     form.resetFields(["officeName"]);
@@ -95,93 +93,82 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       );
   };
 
-  return (
-    <Row
-      justify="space-between"
-      className="bg-white py-3 px-6 rounded shadow-[0px_0px_19px_#2A354808] border-[1px_solid_#EAEFF2A1]"
-    >
-      <Col className="flex items-center gap-4">
-        <Row gutter={24} align="middle" wrap={false}>
-          <Col>
-            <Text className="heading2 flex items-center">
-              {isClientsLoading ? (
-                <span>...</span>
-              ) : (
-                <>
-                  {clients?.totalElements !== 0 && (
-                    <>
-                      {clients?.totalElements &&
-                        numbersFormatter(clients?.totalElements)}{" "}
-                    </>
-                  )}
-                </>
-              )}
-              {clients?.totalElements === 0 ? (
-                "No clients"
-              ) : (
-                <>{clients?.totalElements === 1 ? "Client" : "Clients"}</>
-              )}
-            </Text>
-          </Col>
+  const LeftSide = (
+    <Col className="flex items-center gap-4">
+      <Row gutter={24} align="middle" wrap={false}>
+        <Col>
+          <Heading1>{localeString(clients?.totalElements)} Clients</Heading1>
+        </Col>
 
-          <Col>
-            <Input
-              onChange={handleSearch}
-              type="text"
-              placeholder="Search name, location or phone"
-              name="searchClient"
-              suffixIcon={
-                <Image
-                  width={10}
-                  src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
-                  preview={false}
-                  alt=""
-                />
-              }
-            />
-          </Col>
+        <Col>
+          <Input
+            onChange={handleSearch}
+            type="text"
+            placeholder="Search name, location or phone"
+            name="searchClient"
+            suffixIcon={
+              <Image
+                width={10}
+                src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
+                preview={false}
+                alt=""
+              />
+            }
+          />
+        </Col>
 
-          <Col>
-            <DropDownSelector
-              label="Category"
-              dropDownContent={
-                categories
-                  ? [{ name: "All categories", id: undefined }, ...categories]
-                  : []
-              }
-              defaultSelected={defaultSelected}
-              setDefaultSelected={setDefaultSelected}
-            />
-          </Col>
+        <Col>
+          <DropDownSelector
+            label="Category"
+            dropDownContent={
+              categories
+                ? [{ name: "All categories", id: undefined }, ...categories]
+                : []
+            }
+            defaultSelected={defaultSelected}
+            setDefaultSelected={setDefaultSelected}
+          />
+        </Col>
 
-          <Col>
-            <DropDownSelector
-              label="Sort"
-              dropDownContent={[
-                { id: 0, name: "Z-A (Names)", value: "names__desc" },
-                { id: 1, name: "A-Z (Names)", value: "names__asc" },
-                { id: 2, name: "Z-A (Locations)", value: "location__desc" },
-                { id: 3, name: "A-Z (Locations)", value: "location__asc" }
-              ]}
-              defaultSelected={sort}
-              setDefaultSelected={setSort}
-            />
-          </Col>
-        </Row>
-      </Col>
+        <Col>
+          <DropDownSelector
+            label="Sort"
+            dropDownContent={[
+              { id: 0, name: "Z-A (Names)", value: "names__desc" },
+              { id: 1, name: "A-Z (Names)", value: "names__asc" },
+              { id: 2, name: "Z-A (Locations)", value: "location__desc" },
+              { id: 3, name: "A-Z (Locations)", value: "location__asc" }
+            ]}
+            defaultSelected={sort}
+            setDefaultSelected={setSort}
+          />
+        </Col>
+      </Row>
+    </Col>
+  );
 
-      <Col className="flex items-center gap-4">
-        <CustomButton
+  const RightSide = (
+    <div className="flex items-center gap-5">
+      <div className="flex items-center gap-6 w-[200px]">
+        <Button
           onClick={handleDownloadClients}
           loading={isDownloadingClientsLoading}
           type="secondary"
         >
-          <span className="text-sm">DOWNLOAD LIST</span>
-        </CustomButton>
-        <CustomButton onClick={showModal} type="primary">
-          <span className="text-sm">NEW CLIENT</span>
-        </CustomButton>
-      </Col>
+          DOWNLOAD LIST
+        </Button>
+      </div>
+
+      <div className="flex items-center gap-6 w-[200px]">
+        <Button type="primary" onClick={showModal}>
+          NEW CLIENT
+        </Button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
@@ -202,7 +189,9 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
           form={form}
         />
       </ModalWrapper>
-    </Row>
+
+      <Navbar type="CENTER" LeftSide={LeftSide} RightSide={RightSide} />
+    </>
   );
 };
 

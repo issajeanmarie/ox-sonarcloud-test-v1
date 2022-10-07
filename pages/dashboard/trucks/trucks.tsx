@@ -2,14 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "antd/lib/button";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import Image from "antd/lib/image";
-import Typography from "antd/lib/typography";
 import Dropdown from "antd/lib/dropdown";
-import CustomInput from "../../../components/Shared/Input";
 import CustomButton from "../../../components/Shared/Button/button";
 import { pagination } from "../../../config/pagination";
 import TrucksTable from "../../../components/Analytics/Trucks/TrucksTable";
@@ -26,8 +23,12 @@ import {
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import DropDownSelector from "../../../components/Shared/DropDownSelector";
-
-const { Text } = Typography;
+import Navbar from "../../../components/Shared/Content/Navbar";
+import Heading1 from "../../../components/Shared/Text/Heading1";
+import { localeString } from "../../../utils/numberFormatter";
+import Input from "../../../components/Shared/Input";
+import Button from "../../../components/Shared/Button";
+import Content from "../../../components/Shared/Content";
 
 interface Trucks {
   displayTrucks: {
@@ -212,18 +213,17 @@ const Trucks = () => {
       </Row>
     </div>
   );
-  return (
-    <>
-      <NewTruckModal isVisible={isVisible} setIsVisible={setIsVisible} />
 
-      <div className="flex items-center justify-between mt-6 bg-white py-2 rounded px-4 m-auto w-[98%] border_faded mb-4">
-        {/* LEFT SIDE  */}
-        <div className="flex items-center gap-12">
-          <Text className="heading2 text_ellipsis">
-            {trucksState?.totalElements || 0} Trucks
-          </Text>
+  const LeftSide = (
+    <Col className="flex items-center gap-4">
+      <Row gutter={24} align="middle" wrap={false}>
+        <Col>
+          <Heading1>{localeString(trucksState?.totalElements)} Trucks</Heading1>
+        </Col>
 
-          <CustomInput
+        <Col>
+          <Input
+            allowClear
             type="text"
             name="search"
             size="small"
@@ -238,7 +238,9 @@ const Trucks = () => {
               />
             }
           />
+        </Col>
 
+        <Col>
           <DropDownSelector
             label="Filter"
             dropDownContent={[
@@ -249,7 +251,9 @@ const Trucks = () => {
             defaultSelected={selectedFilter}
             setDefaultSelected={setSelectedFilter}
           />
+        </Col>
 
+        <Col>
           <DropDownSelector
             label="Sort"
             dropDownContent={[
@@ -261,48 +265,56 @@ const Trucks = () => {
             defaultSelected={selectedSort}
             setDefaultSelected={setSelectedSort}
           />
+        </Col>
+      </Row>
+    </Col>
+  );
+
+  const RightSide = (
+    <div className="flex items-center gap-5">
+      <Dropdown overlay={downloadOOSdropdown} placement="bottomLeft">
+        <div className="flex items-center gap-6 w-[200px]">
+          <Button loading={isDownloadLoading} type="secondary">
+            DOWNLOAD LIST
+          </Button>
         </div>
+      </Dropdown>
 
-        {/* RIGHT SIDE */}
-        <div className="flex items-center gap-4">
-          <Dropdown overlay={downloadOOSdropdown} placement="bottomLeft">
-            <Button
-              className="my_button bg_white_yellow yellow"
-              loading={isDownloadLoading}
-            >
-              Download
-            </Button>
-          </Dropdown>
-
-          <CustomButton
-            type="primary"
-            size="small"
-            onClick={() => setIsVisible(true)}
-          >
-            NEW TRUCK
-          </CustomButton>
-        </div>
+      <div className="flex items-center gap-6 w-[200px]">
+        <Button type="primary" onClick={() => setIsVisible(true)}>
+          NEW TRUCK
+        </Button>
       </div>
+    </div>
+  );
 
-      <div className="h-[82vh] overflow-scroll">
-        <TrucksTable
-          data={trucksState?.content}
-          isLoading={getTrucksLoading || filterTrucksLoading}
-        />
+  return (
+    <div className="mx-4 relative">
+      <NewTruckModal isVisible={isVisible} setIsVisible={setIsVisible} />
 
-        {showPaginationBtn && (
-          <div style={{ width: "12%", margin: "32px auto" }}>
-            <CustomButton
-              loading={loadMoreLoading}
-              type="secondary"
-              onClick={handleLoadMore}
-            >
-              Load more
-            </CustomButton>
-          </div>
-        )}
-      </div>
-    </>
+      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
+
+      <Content navType="CENTER">
+        <>
+          <TrucksTable
+            data={trucksState?.content}
+            isLoading={getTrucksLoading || filterTrucksLoading}
+          />
+
+          {showPaginationBtn && (
+            <div style={{ width: "12%", margin: "32px auto" }}>
+              <CustomButton
+                loading={loadMoreLoading}
+                type="secondary"
+                onClick={handleLoadMore}
+              >
+                Load more
+              </CustomButton>
+            </div>
+          )}
+        </>
+      </Content>
+    </div>
   );
 };
 

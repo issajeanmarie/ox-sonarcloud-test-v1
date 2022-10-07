@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, Row, Image as AntDImage } from "antd";
+import { Col, Image as AntDImage } from "antd";
+import Image from "next/image";
 import React, { FC, SetStateAction, useState } from "react";
 import { routes } from "../../../config/route-config";
 import {
@@ -8,18 +9,15 @@ import {
 } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { SingleClientTopTypes } from "../../../lib/types/pageTypes/Clients/SingleClientTopTypes";
 import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import ActionModal from "../../Shared/ActionModal";
+import Navbar from "../../Shared/Content/Navbar";
 import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 
-const SingleClientTop: FC<SingleClientTopTypes> = ({
-  client,
-  isClientLoading,
-  isClientFetching,
-  router
-}) => {
+const SingleClientTop: FC<SingleClientTopTypes> = ({ client, router }) => {
   const { depotId, depotName } = router.query;
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [itemToDelete, setItemToDelete] =
@@ -46,100 +44,94 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({
       .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 
-  const handleDownloadClientInvoice = () => {
-    downloadClientInvoice({
-      id: client?.id
-    })
-      .unwrap()
-      .then((file: any) => {
-        handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  const handleDownloadInvoiceSuccess = (file: File) => {
+    handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
   };
 
-  return (
-    <Row
-      style={{ background: "#fcfcfc" }}
-      className="w-full shadow-[0px_-6px_24px_#0000001A] px-5 py-4 sticky top-0 z-50 flex justify-between items-center"
-    >
-      {isClientLoading || isClientFetching ? (
-        <span className="text-gray-400">...</span>
-      ) : (
-        <>
-          <Col
-            onClick={() =>
-              router.push({
-                pathname: routes.Clients.url,
-                query: {
-                  depotId: depotId || 0,
-                  depotName: depotName || "All depots"
-                }
-              })
+  const handleDownloadClientInvoice = () => {
+    handleAPIRequests({
+      request: downloadClientInvoice,
+      id: client?.id,
+      showSuccess: true,
+      handleSuccess: handleDownloadInvoiceSuccess
+    });
+  };
+
+  const LeftSide = (
+    <div className="flex items-center gap-4 ">
+      <Image
+        onClick={() =>
+          router.push({
+            pathname: routes.Clients.url,
+            query: {
+              depotId: depotId || 0,
+              depotName: depotName || "All depots"
             }
-            className="cursor-pointer"
-          >
-            <div className="flex items-center gap-4 ">
-              <AntDImage
-                className="pointer"
-                src="/icons/keyboard_backspace_black_24dp.svg"
-                alt=""
-                width={20}
-                height={20}
-                preview={false}
-              />
-              <span className="heading2">Clients</span>
-              <span className="normalText">/</span>
-              <span className="text-gray-400">{client?.names}</span>
-            </div>
-          </Col>
+          })
+        }
+        className="pointer"
+        src="/icons/keyboard_backspace_black_24dp.svg"
+        alt="Backspace icon"
+        width={20}
+        height={20}
+      />
+      <span className="text-md font-bold">Clients</span>
+      <span className="normalText">/</span>
+      <span className="text-gray-400">{client?.names}</span>
+    </div>
+  );
 
-          <Col className="flex gap-8 items-center">
-            {isDownloadingInvoice ? (
-              <SmallSpinLoader />
-            ) : (
-              <AntDImage
-                onClick={() => handleDownloadClientInvoice()}
-                className="pointer"
-                src="/icons/receipt.png"
-                alt="Backspace icon"
-                width={18}
-                height={18}
-                preview={false}
-              />
-            )}
-
-            <AntDImage
-              className="pointer"
-              src="/icons/ic-media-stop.svg"
-              alt="Backspace icon"
-              width={18}
-              height={18}
-              preview={false}
-            />
-            <AntDImage
-              className="pointer"
-              onClick={() => showModal(setItemToDelete(client?.id))}
-              src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
-              alt=""
-              width={22}
-              height={22}
-              preview={false}
-            />
-          </Col>
-
-          <ActionModal
-            isModalVisible={isModalVisible}
-            setIsModalVisible={setIsModalVisible}
-            title="warning!"
-            description="This action is not reversible, please make sure you really want to proceed with this action!"
-            actionLabel="PROCEED"
-            type="danger"
-            action={() => handleDeleteClient()}
-            loading={isDeletingClient}
-          />
-        </>
+  const RightSide = (
+    <Col className="flex gap-8 items-center">
+      {isDownloadingInvoice ? (
+        <SmallSpinLoader />
+      ) : (
+        <AntDImage
+          onClick={() => handleDownloadClientInvoice()}
+          className="pointer"
+          src="/icons/receipt.png"
+          alt="Backspace icon"
+          width={18}
+          height={18}
+          preview={false}
+        />
       )}
-    </Row>
+
+      <AntDImage
+        className="pointer"
+        src="/icons/ic-media-stop.svg"
+        alt="Backspace icon"
+        width={18}
+        height={18}
+        preview={false}
+      />
+      <AntDImage
+        className="pointer"
+        onClick={() => showModal(setItemToDelete(client?.id))}
+        src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
+        alt=""
+        width={22}
+        height={22}
+        preview={false}
+      />
+    </Col>
+  );
+
+  return (
+    <>
+      <ActionModal
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        title="warning!"
+        description="This action is not reversible, please make sure you really want to proceed with this action!"
+        actionLabel="PROCEED"
+        type="danger"
+        action={() => handleDeleteClient()}
+        loading={isDeletingClient}
+      />
+
+      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="FULL" />
+    </>
   );
 };
 

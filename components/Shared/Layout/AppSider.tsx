@@ -261,7 +261,9 @@ const AppSider = ({ collapsed }: any) => {
             return (
               <Menu.Item
                 onClick={() => router.push(moreMenu.url)}
-                className={`my_menu_bg ${!collapsed && "not_collapsed"}`}
+                className={`my_menu_bg ${
+                  !collapsed && "not_collapsed"
+                } ${activeMenuStyles} `}
                 key={moreMenu.name}
                 icon={
                   <Image

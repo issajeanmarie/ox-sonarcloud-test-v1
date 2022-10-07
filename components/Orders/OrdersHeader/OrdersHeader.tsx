@@ -48,6 +48,46 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
     if (savedFilters) setIsFiltered(true);
   }, []);
 
+  const LeftSide = (
+    <Heading1>{localeString(data?.payload?.totalElements)} Orders</Heading1>
+  );
+
+  const RightSide = (
+    <div className="flex items-center gap-5">
+      <div
+        className={` p-2 flex items-center justify-center ${
+          isFiltered ? "border rounded-lg border-ox-yellow" : ""
+        } `}
+      >
+        <Image
+          width={16}
+          height={16}
+          src="/icons/filter.svg"
+          onClick={showModal}
+          className="cursor-pointer"
+          alt="Filter icon"
+        />
+      </div>
+
+      <div className="flex items-center gap-6 w-[200px]">
+        <Button
+          onClick={() =>
+            router.push({
+              pathname: routes.newOrder.url,
+              query: {
+                depotId: depotId || 0,
+                depotName: depotName || "All depots"
+              }
+            })
+          }
+          type="primary"
+        >
+          NEW ORDER
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <FilterOrdersModal
@@ -61,51 +101,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
         />
       </FilterOrdersModal>
 
-      <Navbar
-        type="CENTER"
-        LeftSide={
-          <>
-            <Heading1>
-              {localeString(data?.payload?.totalElements)} Orders
-            </Heading1>
-          </>
-        }
-        RightSide={
-          <div className="flex items-center gap-5">
-            <div
-              className={` p-2 flex items-center justify-center ${
-                isFiltered ? "border rounded-lg border-ox-yellow" : ""
-              } `}
-            >
-              <Image
-                width={16}
-                height={16}
-                src="/icons/filter.svg"
-                onClick={showModal}
-                className="cursor-pointer"
-                alt="Filter icon"
-              />
-            </div>
-
-            <div className="flex items-center gap-6 w-[200px]">
-              <Button
-                onClick={() =>
-                  router.push({
-                    pathname: routes.newOrder.url,
-                    query: {
-                      depotId: depotId || 0,
-                      depotName: depotName || "All depots"
-                    }
-                  })
-                }
-                type="primary"
-              >
-                NEW ORDER
-              </Button>
-            </div>
-          </div>
-        }
-      />
+      <Navbar type="CENTER" LeftSide={LeftSide} RightSide={RightSide} />
     </>
   );
 };
