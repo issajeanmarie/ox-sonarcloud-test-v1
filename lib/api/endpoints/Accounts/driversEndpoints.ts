@@ -7,7 +7,8 @@ import {
   PostDriverRequest,
   ToggleDriverRequest,
   MakeDriverDispatcherRequest,
-  SeachDriverRequest
+  SeachDriverRequest,
+  GetDriver
 } from "../../../types/Accounts/drivers";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -30,6 +31,16 @@ const driversEndpoints = baseAPI.injectEndpoints({
         url: `drivers${DTO.noPagination ? "/no-pagination" : ""}?page=${
           DTO?.page
         }&size=${DTO?.size}&status=${DTO?.status}&sort=${DTO?.sort}`,
+        method: "GET"
+      })
+    }),
+    driver: builder.query<
+      ApiResponseMetadata<{ content: DriverResponse }>,
+      GetDriver
+    >({
+      providesTags: ["Drivers"],
+      query: ({ id }) => ({
+        url: `drivers/${id}`,
         method: "GET"
       })
     }),
@@ -111,5 +122,6 @@ export const {
   useToggleDriverMutation,
   useLazyDriversQuery,
   useMakeDriverDispatcherMutation,
-  useLazySearchDriverQuery
+  useLazySearchDriverQuery,
+  useDriverQuery
 } = driversEndpoints;

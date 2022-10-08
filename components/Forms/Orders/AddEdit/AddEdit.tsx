@@ -29,6 +29,7 @@ import {
   saveToLocal
 } from "../../../../helpers/handleLocalStorage";
 import { OX_NEW_ORDER_VALUES } from "../../../../config/constants";
+import { useDriverQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 
 const { Option, OptGroup } = Select;
 
@@ -41,6 +42,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
   const [getTrucks, { data, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
   const [chosenClientId, setChosenClientId] = useState<number>();
+  const [chosenDriverId, setChosenDriverId] = useState<number>();
   const [stops, setStops] = useState<Stop_Request[]>([]);
   const [location, setLocation] = useState<{
     name: string;
@@ -58,6 +60,9 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     isLoading: chosenClientLoading,
     isFetching
   } = useClientQuery(chosenClientId ? { id: chosenClientId } : skipToken);
+  const { data: chosenDriverInfo } = useDriverQuery(
+    chosenDriverId ? { id: chosenDriverId } : skipToken
+  );
 
   const handleCreateOrder = (values: OrderRequestBody) => {
     const stopsWithTrucksAndDrivers: Stop_Request[] = [];
@@ -158,6 +163,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     const values = getFromLocal(OX_NEW_ORDER_VALUES);
     setChosenClientId(values?.clientId);
     setLocation(values?.location);
+    setChosenDriverId(values?.driverId);
 
     form.setFieldsValue({
       clientId: values?.clientId,
@@ -412,6 +418,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                     name="driverId"
                     label=""
                     rules={requiredField("Driver")}
+                    existingValue={chosenDriverInfo?.payload}
                   />
                 </div>
               </div>

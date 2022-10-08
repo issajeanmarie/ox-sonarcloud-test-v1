@@ -7,4 +7,5 @@ export type SearchDriverTypes = {
   name?: string | undefined;
   label?: string | undefined;
   rules?: any;
+  existingValue?: any;
 };
