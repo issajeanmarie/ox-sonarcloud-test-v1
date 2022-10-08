@@ -10,19 +10,24 @@ import { displayOrders } from "../../lib/redux/slices/ordersSlice";
 import Button from "../Shared/Button";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { pagination } from "../../config/pagination";
-import { useRouter } from "next/router";
 import { getFromLocal } from "../../helpers/handleLocalStorage";
 import { OX_ORDERS_FILTERS } from "../../config/constants";
 import Content from "../Shared/Content";
+
+type DepotTypes = {
+  depotName: string | undefined;
+  depotId: number | undefined;
+};
 
 const Orders: FC = () => {
   const [currentPages, setCurrentPages] = useState(1);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const ordersState = useSelector((state: any) => state.orders.displayOrders);
   const dispatch = useDispatch();
-  const router = useRouter();
 
-  const { depotId, depotName } = router.query;
+  const depotsState = useSelector(
+    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
+  );
 
   const [getOrders, { data, isLoading, isFetching }] = useLazyOrdersQuery({});
 
@@ -42,7 +47,7 @@ const Orders: FC = () => {
   };
 
   const getOrdersAction = ({
-    depot = depotId && +depotId,
+    depot = depotsState?.depotId,
     filter = filters?.filter || "",
     page,
     size = pagination.orders.size,
@@ -83,17 +88,8 @@ const Orders: FC = () => {
   };
 
   useEffect(() => {
-    if (router.isReady) {
-      if (depotName) {
-        getOrdersAction({
-          depot: depotId && +depotId
-        });
-      } else {
-        getOrdersAction({});
-        router.push({ query: { depotName: "All depots" } });
-      }
-    }
-  }, [depotId, depotName, router.isReady]);
+    getOrdersAction({ depot: depotsState?.depotId });
+  }, [depotsState]);
 
   const showPaginationBtn =
     ordersState?.payload?.totalPages > currentPages || isLoadMoreLoading;

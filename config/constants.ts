@@ -3,6 +3,7 @@ export const JWT_SECRET = process.env.NEXT_PUBLIC_API_JWT_KEY;
 export const LS_MENU_FOLDED = "LS_MENU_FOLDED";
 export const OX_ORDERS_FILTERS = "OX_ORDERS_FILTERS";
 export const OX_NEW_ORDER_VALUES = "OX_NEW_ORDER_VALUES";
+export const OX_DEPOT_FILTER = "OX_DEPOT_FILTER";
 
 export const STATIC_DAYS = [
   { id: 0, name: "MONDAY" },

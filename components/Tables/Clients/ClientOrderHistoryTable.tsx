@@ -24,7 +24,6 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
   isClientOrdersFetching
 }) => {
   const router = useRouter();
-  const { depotId, depotName } = router.query;
 
   const columns: any = [
     {
@@ -43,15 +42,7 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
         <RowsWrapper>
           <Row
             className="flex gap-10 cursor-pointer"
-            onClick={() =>
-              router.push({
-                pathname: `${routes.viewOrder.url}/${record?.id}`,
-                query: {
-                  depotId: depotId || 0,
-                  depotName: depotName || "All depots"
-                }
-              })
-            }
+            onClick={() => router.push(`${routes.viewOrder.url}/${record?.id}`)}
           >
             <Text className="normalText opacity_56">{index + 1}</Text>
             <Text className="normalText fowe900 underline">{record?.id}</Text>

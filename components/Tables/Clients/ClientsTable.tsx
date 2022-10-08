@@ -33,7 +33,6 @@ const ClientsTable: FC<ClientsTableProps> = ({
   const [deleteClient, { isLoading }] = useDeleteClientMutation();
 
   const router = useRouter();
-  const { depotId, depotName } = router.query;
 
   const handleDeleteClient = () => {
     deleteClient({
@@ -147,9 +146,7 @@ const ClientsTable: FC<ClientsTableProps> = ({
                 router.push({
                   pathname: `${routes.Client.url}`,
                   query: {
-                    client: record?.id,
-                    depotId: depotId || 0,
-                    depotName: depotName || "All depots"
+                    client: record?.id
                   }
                 })
               }

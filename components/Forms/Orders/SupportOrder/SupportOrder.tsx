@@ -17,6 +17,7 @@ import Header from "./header";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
 import { requiredField } from "../../../../lib/validation/InputValidations";
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
+import Content from "../../../Shared/Content";
 
 interface SupportOrderProps {
   orderId: Query;
@@ -87,101 +88,106 @@ const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
         form={form}
         supportOrderLoading={isLoading}
       />
-      <div className="w-[800px] m-auto bg-white shadow-[0px_0px_19px_#00000008]  p-14 h-[85vh]">
-        <Form onFinish={onFinish} form={form}>
-          <div className="text-2xl font-bold text-ox-dark mb-10">
-            CREATE A NEW SUPPORTING ORDER
-          </div>
-          <div className="font-extralight text-[15px] mb-10">Order details</div>
-          <div className="flex gap-10 mb-5">
-            <div className="flex-1">
-              <div>
-                <Input
-                  name="truckId"
-                  type="select"
-                  label="Truck"
-                  placeholder="Select truck"
-                  isLoading={trucksLoading}
-                  disabled={trucksLoading}
-                  isGroupDropdown
-                  rules={[{ required: true, message: "Truck is required" }]}
-                >
-                  {data?.content.map((truck: TruckSchema) => {
-                    return (
-                      <Option value={truck.id} key={truck.plateNumber}>
-                        {truck.plateNumber}
-                      </Option>
-                    );
-                  })}
-                </Input>
+
+      <Content navType="FULL">
+        <div className="w-[800px] h-[100%] m-auto bg-white shadow-[0px_0px_19px_#00000008] mt-5 p-14">
+          <Form onFinish={onFinish} form={form}>
+            <div className="text-2xl font-bold text-ox-dark mb-10">
+              CREATE A NEW SUPPORTING ORDER
+            </div>
+            <div className="font-extralight text-[15px] mb-10">
+              Order details
+            </div>
+            <div className="flex gap-10 mb-5">
+              <div className="flex-1">
+                <div>
+                  <Input
+                    name="truckId"
+                    type="select"
+                    label="Truck"
+                    placeholder="Select truck"
+                    isLoading={trucksLoading}
+                    disabled={trucksLoading}
+                    isGroupDropdown
+                    rules={[{ required: true, message: "Truck is required" }]}
+                  >
+                    {data?.content.map((truck: TruckSchema) => {
+                      return (
+                        <Option value={truck.id} key={truck.plateNumber}>
+                          {truck.plateNumber}
+                        </Option>
+                      );
+                    })}
+                  </Input>
+                </div>
               </div>
-            </div>
-            <div className="flex-1">
-              <Input
-                name="stop"
-                type="location"
-                placeholder="Search location"
-                setLocation={setLocation}
-                location={location}
-                label="Stop"
-                rules={[{ required: true, message: "Search for a location" }]}
-              />
-            </div>
-          </div>
-          <div className="flex gap-10 mb-5">
-            <div className="flex-1">
-              <div>
-                <DriverSearch
-                  label="Driver"
-                  rules={requiredField("Driver")}
-                  name="driverId"
+              <div className="flex-1">
+                <Input
+                  name="stop"
+                  type="location"
+                  placeholder="Search location"
+                  setLocation={setLocation}
+                  location={location}
+                  label="Stop"
+                  rules={[{ required: true, message: "Search for a location" }]}
                 />
               </div>
             </div>
-            <div className="flex-1">
-              <Input
-                name="paymentPlan"
-                type="select"
-                label="Plan"
-                placeholder="Select plan"
-                options={[
-                  { label: "Per job", value: "PAY_BY_JOB" },
-                  { label: "Per Kilogram", value: "PAY_BY_KG" }
-                ]}
-                rules={[
-                  { required: true, message: "Select a plan to continue" }
-                ]}
-              />
-            </div>
-          </div>
-          <div className="flex gap-10 mb-5">
-            <div className="flex-1">
-              <div>
+            <div className="flex gap-10 mb-5">
+              <div className="flex-1">
+                <div>
+                  <DriverSearch
+                    label="Driver"
+                    rules={requiredField("Driver")}
+                    name="driverId"
+                  />
+                </div>
+              </div>
+              <div className="flex-1">
                 <Input
-                  name="amount"
+                  name="paymentPlan"
+                  type="select"
+                  label="Plan"
+                  placeholder="Select plan"
+                  options={[
+                    { label: "Per job", value: "PAY_BY_JOB" },
+                    { label: "Per Kilogram", value: "PAY_BY_KG" }
+                  ]}
+                  rules={[
+                    { required: true, message: "Select a plan to continue" }
+                  ]}
+                />
+              </div>
+            </div>
+            <div className="flex gap-10 mb-5">
+              <div className="flex-1">
+                <div>
+                  <Input
+                    name="amount"
+                    type="text"
+                    placeholder="00"
+                    label="Rate / KG"
+                    inputType="number"
+                    suffixIcon="Rwf"
+                    rules={[{ required: true, message: "Weight is required" }]}
+                  />
+                </div>
+              </div>
+              <div className="flex-1">
+                <Input
+                  name="weight"
                   type="text"
                   placeholder="00"
-                  label="Rate / KG"
+                  label="Expected weight"
                   inputType="number"
-                  suffixIcon="Rwf"
+                  suffixIcon="KGs"
                   rules={[{ required: true, message: "Weight is required" }]}
                 />
               </div>
             </div>
-            <div className="flex-1">
-              <Input
-                name="weight"
-                type="text"
-                placeholder="00"
-                label="Expected weight"
-                inputType="number"
-                suffixIcon="KGs"
-                rules={[{ required: true, message: "Weight is required" }]}
-              />
-            </div>
-          </div>
-        </Form>
-      </div>
+          </Form>
+        </div>
+      </Content>
     </div>
   );
 };

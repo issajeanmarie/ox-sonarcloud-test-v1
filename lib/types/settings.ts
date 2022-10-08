@@ -38,8 +38,6 @@ export type CategoriesResponse = {
 };
 
 export type KPI = {
-  depotId: number;
-  depotName: string;
   targetPerDay: number;
   targetPerKm: number;
   kpi: [];

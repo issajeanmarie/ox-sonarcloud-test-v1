@@ -13,18 +13,45 @@ import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints
 import { depotTypes } from "../../../lib/types/depots";
 import { getActiveMenu } from "../../../helpers/getActiveMenu";
 import { routes } from "../../../config/route-config";
+import { getFromLocal, saveToLocal } from "../../../helpers/handleLocalStorage";
+import { OX_DEPOT_FILTER } from "../../../config/constants";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getDepots } from "../../../lib/redux/slices/depotsSlice";
 const { Sider } = Layout;
 const { Text } = Typography;
 
+type DepotTypes = {
+  depotName: string | undefined;
+  depotId: number | undefined;
+};
+
 const AppSider = ({ collapsed }: any) => {
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const router = useRouter();
-  const { depotId: depotID, depotName } = router.query;
+  const dispatch = useDispatch();
+  const depotsState = useSelector(
+    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
+  );
+
+  useEffect(() => {
+    const savedDepots = getFromLocal(OX_DEPOT_FILTER);
+
+    dispatch(getDepots(savedDepots || { depotId: 0, depotName: "All depots" }));
+  }, [dispatch]);
 
   const { data, isLoading } = useDepotsQuery();
 
   const handleDepotChange = (depot: depotTypes | undefined) => {
-    router.push({
-      query: { depotId: depot?.id, depotName: depot?.name }
+    dispatch(getDepots({ depotId: depot?.id, depotName: depot?.name }));
+    setIsDropdownVisible(false);
+
+    saveToLocal({
+      name: OX_DEPOT_FILTER,
+      value: {
+        depotId: depot?.id,
+        depotName: depot?.name
+      }
     });
   };
 
@@ -116,6 +143,7 @@ const AppSider = ({ collapsed }: any) => {
       collapsed={collapsed}
     >
       <Dropdown
+        visible={isDropdownVisible}
         trigger={["click"]}
         disabled={isLoading}
         overlay={showDepots ? depots : <></>}
@@ -123,6 +151,7 @@ const AppSider = ({ collapsed }: any) => {
         className="pointer"
       >
         <Row
+          onClick={() => setIsDropdownVisible(!isDropdownVisible)}
           align="middle"
           justify="space-between"
           className="pad24 mb12 border-b border-ox-dark-border"
@@ -137,7 +166,7 @@ const AppSider = ({ collapsed }: any) => {
 
             {!collapsed && (
               <div className="normalText text-white">
-                {isLoading ? "Loading depots" : depotName}
+                {isLoading ? "Loading" : depotsState?.depotName}
               </div>
             )}
 
@@ -171,15 +200,7 @@ const AppSider = ({ collapsed }: any) => {
           return (
             <>
               <Menu.Item
-                onClick={() => {
-                  router.push({
-                    pathname: menu.url,
-                    query: {
-                      depotId: depotID || 0,
-                      depotName: depotName || "All depots"
-                    }
-                  });
-                }}
+                onClick={() => router.push(menu.url)}
                 className={`my_menu_bg ${
                   !collapsed && "not_collapsed"
                 } ${activeMenuStyles} `}
@@ -220,15 +241,7 @@ const AppSider = ({ collapsed }: any) => {
           if (moreMenu.name === "Settings" || moreMenu.name === "Resources") {
             return (
               <Menu.Item
-                onClick={() => {
-                  router.push({
-                    pathname: moreMenu.url,
-                    query: {
-                      depotId: depotID || 0,
-                      depotName: depotName || "All depots"
-                    }
-                  });
-                }}
+                onClick={() => router.push(moreMenu.url)}
                 className={`my_menu_bg ${
                   !collapsed && "not_collapsed"
                 } ${activeMenuStyles} `}
@@ -261,15 +274,7 @@ const AppSider = ({ collapsed }: any) => {
 
           return (
             <Menu.Item
-              onClick={() => {
-                router.push({
-                  pathname: moreMenu.url,
-                  query: {
-                    depotId: depotID || 0,
-                    depotName: depotName || "All depots"
-                  }
-                });
-              }}
+              onClick={() => router.push(moreMenu.url)}
               className={`white fowe300 text14 my_menu_bg ${
                 !collapsed && "not_collapsed"
               } ${activeMenuStyles} `}

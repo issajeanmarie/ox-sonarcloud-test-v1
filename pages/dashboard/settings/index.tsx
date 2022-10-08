@@ -72,15 +72,11 @@ const Settings = () => {
       kpis: data?.payload?.map((item: any) => {
         const kpiArr = [];
         kpiArr.push({
-          depotId: item?.depotId,
-          depotName: item?.depotName,
           targetPerKm: targetPerDaykpi,
           targetPerKmkpi: targetPerKmkpi
         });
 
         return {
-          depotId: item?.depotId,
-          depotName: item?.depotName,
           targetPerDay: targetPerDaykpi ? +targetPerDaykpi : item?.targetPerDay,
           targetPerKm: targetPerKmkpi ? +targetPerKmkpi : item?.targetPerKm
         };

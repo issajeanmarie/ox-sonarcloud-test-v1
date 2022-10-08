@@ -3,6 +3,7 @@ import { baseAPI } from "../api/api";
 import authReducer from "./slices/authSlice";
 import trucksReducer from "./slices/trucksSlice";
 import ordersReducer from "./slices/ordersSlice";
+import depotsReducer from "./slices/depotsSlice";
 
 /**
  * @author Kundwa Bruno M <kundwabruno@gmail.com>
@@ -14,7 +15,8 @@ export const store = configureStore({
     [baseAPI.reducerPath]: baseAPI.reducer,
     auth: authReducer,
     trucks: trucksReducer,
-    orders: ordersReducer
+    orders: ordersReducer,
+    depots: depotsReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseAPI.middleware)
