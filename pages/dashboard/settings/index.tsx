@@ -24,6 +24,7 @@ import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
 import { useForm } from "antd/lib/form/Form";
 import CategoriesSection from "./CategoriesSection";
+import Content from "../../../components/Shared/Content";
 
 const { Text } = Typography;
 
@@ -254,15 +255,17 @@ const Settings = () => {
         toggleActiveHandler={toggleActiveHandler}
       />
 
-      <Row className="p-5 mt-5 w-full h-[84vh] overflow-hidden" gutter={18}>
-        <Col span={14} className="h-[84vh] overflow-y-scroll pb-12">
-          {active === "preferences" ? <PreferencesPane /> : <AppPane />}
-        </Col>
+      <Content navType="FULL">
+        <Row className="p-5  w-full" gutter={18}>
+          <Col span={14} className="h-[82vh] overflow-y-scroll pb-12">
+            {active === "preferences" ? <PreferencesPane /> : <AppPane />}
+          </Col>
 
-        <Col span={10} className="h-[85vh] overflow-y-scroll pb-12">
-          <PersonalInfo />
-        </Col>
-      </Row>
+          <Col span={10} className="h-[82vh] overflow-y-scroll pb-12">
+            <PersonalInfo />
+          </Col>
+        </Row>
+      </Content>
     </Layout>
   );
 };

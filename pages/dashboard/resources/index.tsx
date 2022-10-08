@@ -9,6 +9,7 @@ import ResourcesTable from "../../../components/Tables/Resources/ResourcesTable"
 import { ResourcesTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import CustomButton from "../../../components/Shared/Button";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import Content from "../../../components/Shared/Content";
 
 const Truck = () => {
   const [pageSize, setPageSize] = useState(2);
@@ -70,39 +71,45 @@ const Truck = () => {
           setSort={setSort}
         />
 
-        {isResourceLoading ? (
+        <Content navType="CENTER">
           <>
-            {[...Array(20)].map((_, index) => (
-              <ResourcesTableLoader key={index} />
-            ))}
-          </>
-        ) : (
-          <ResourcesTable
-            isModalVisible={isWarningModalVisible}
-            setIsModalVisible={setIsWarningModalVisible}
-            showModal={showWarningModal}
-            resources={
-              moreResources?.length === 0
-                ? Allresources?.payload?.content
-                : Allresources?.payload?.content?.concat(moreResources?.content)
-            }
-            isResourcesFetching={isResourceFetching}
-          />
-        )}
+            {isResourceLoading ? (
+              <>
+                {[...Array(20)].map((_, index) => (
+                  <ResourcesTableLoader key={index} />
+                ))}
+              </>
+            ) : (
+              <ResourcesTable
+                isModalVisible={isWarningModalVisible}
+                setIsModalVisible={setIsWarningModalVisible}
+                showModal={showWarningModal}
+                resources={
+                  moreResources?.length === 0
+                    ? Allresources?.payload?.content
+                    : Allresources?.payload?.content?.concat(
+                        moreResources?.content
+                      )
+                }
+                isResourcesFetching={isResourceFetching}
+              />
+            )}
 
-        {pageSize > 1 &&
-          Allresources?.payload?.totalElements &&
-          Allresources?.payload?.totalElements >= pageSize && (
-            <div style={{ width: "12%", margin: "32px auto" }}>
-              <CustomButton
-                loading={loadingMoreFetching}
-                onClick={handleLoadMore}
-                type="secondary"
-              >
-                Load more
-              </CustomButton>
-            </div>
-          )}
+            {pageSize > 1 &&
+              Allresources?.payload?.totalElements &&
+              Allresources?.payload?.totalElements >= pageSize && (
+                <div style={{ width: "12%", margin: "32px auto" }}>
+                  <CustomButton
+                    loading={loadingMoreFetching}
+                    onClick={handleLoadMore}
+                    type="secondary"
+                  >
+                    Load more
+                  </CustomButton>
+                </div>
+              )}
+          </>
+        </Content>
       </div>
     </Layout>
   );
