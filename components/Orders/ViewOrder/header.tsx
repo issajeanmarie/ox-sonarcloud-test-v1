@@ -57,7 +57,6 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
     useChangeOrderStatusMutation();
 
   const router = useRouter();
-  const { depotId, depotName } = router.query;
 
   const handleDownloadInvoiceSuccess = (file: File) => {
     handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
@@ -95,15 +94,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         alt="Backspace icon"
         width={20}
         height={20}
-        onClick={() =>
-          router.push({
-            pathname: routes.Orders.url,
-            query: {
-              depotId: depotId || 0,
-              depotName: depotName || "All depots"
-            }
-          })
-        }
+        onClick={() => router.push(routes.Orders.url)}
       />
       <span className="text-md font-bold">Orders</span>
       <span className="normalText">/</span>

@@ -18,7 +18,6 @@ import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 
 const SingleClientTop: FC<SingleClientTopTypes> = ({ client, router }) => {
-  const { depotId, depotName } = router.query;
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [itemToDelete, setItemToDelete] =
     useState<SetStateAction<number | undefined>>();
@@ -60,15 +59,7 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({ client, router }) => {
   const LeftSide = (
     <div className="flex items-center gap-4 ">
       <Image
-        onClick={() =>
-          router.push({
-            pathname: routes.Clients.url,
-            query: {
-              depotId: depotId || 0,
-              depotName: depotName || "All depots"
-            }
-          })
-        }
+        onClick={() => router.push(routes.Clients.url)}
         className="pointer"
         src="/icons/keyboard_backspace_black_24dp.svg"
         alt="Backspace icon"

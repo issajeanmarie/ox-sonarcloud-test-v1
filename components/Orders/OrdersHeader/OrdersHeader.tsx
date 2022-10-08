@@ -29,7 +29,6 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
 
   const router = useRouter();
-  const { depotId, depotName } = router.query;
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -70,18 +69,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
       </div>
 
       <div className="flex items-center gap-6 w-[200px]">
-        <Button
-          onClick={() =>
-            router.push({
-              pathname: routes.newOrder.url,
-              query: {
-                depotId: depotId || 0,
-                depotName: depotName || "All depots"
-              }
-            })
-          }
-          type="primary"
-        >
+        <Button onClick={() => router.push(routes.newOrder.url)} type="primary">
           NEW ORDER
         </Button>
       </div>

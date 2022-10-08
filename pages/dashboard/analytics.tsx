@@ -21,8 +21,8 @@ import { handleDownloadFile } from "../../utils/handleDownloadFile";
 import { BackendErrorTypes } from "../../lib/types/shared";
 import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
 import DaysCalculator from "../../helpers/daysCalculator";
-import { useRouter } from "next/router";
 import Content from "../../components/Shared/Content";
+import { useSelector } from "react-redux";
 
 const daysList = [
   { id: 0, name: "Last 7 days", value: 7 },
@@ -30,6 +30,11 @@ const daysList = [
   { id: 2, name: "Last month", value: 30 },
   { id: 3, name: "Last 2 months", value: 60 }
 ];
+
+type DepotTypes = {
+  depotName: string | undefined;
+  depotId: number | undefined;
+};
 
 const Analytics = () => {
   const [selectedDay, setselectedDay] = useState<any>(daysList[0]);
@@ -54,16 +59,17 @@ const Analytics = () => {
     useCategoriesQuery();
 
   const { start, end } = DaysCalculator(selectedDay?.value || "");
-  const router = useRouter();
 
-  const { depotId } = router.query;
+  const depotsState = useSelector(
+    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
+  );
 
   const {
     data: truckData,
     isLoading: truckLoading,
     isFetching: truckFetching
   } = useTruckAnalyticsQuery({
-    depot: depotId && +depotId,
+    depot: depotsState?.depotId,
     start: startDate,
     end: endDate,
     sortBy: sorter?.value || "",
@@ -76,7 +82,7 @@ const Analytics = () => {
     isLoading: revenueLoading,
     isFetching: revenueFetching
   } = useRevenueAnalyticsQuery({
-    depot: depotId && +depotId,
+    depot: depotsState?.depotId,
     start: isDateCustom ? startDate : start,
     end: isDateCustom ? endDate : end
   });
@@ -86,7 +92,7 @@ const Analytics = () => {
     isLoading: mapLoading,
     isFetching: mapFetching
   } = useMapAnalyticsQuery({
-    depot: depotId && +depotId,
+    depot: depotsState?.depotId,
     category: selectedCategory[0]
   });
 
@@ -108,7 +114,7 @@ const Analytics = () => {
   const handleDownloadClients = () => {
     downloadTruckAnalytics({
       file_type: "PDF",
-      depot: depotId && +depotId,
+      depot: depotsState?.depotId || "",
       start: startDate,
       end: endDate,
       sortBy: sorter?.value || "",

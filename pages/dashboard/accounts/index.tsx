@@ -34,11 +34,7 @@ const Drivers = () => {
   useEffect(() => {
     if (router.isReady) {
       if (Object.keys(query).length === 0 || !query.tb) {
-        changeRoute(
-          `${routes.Accounts.url}?tb=DRIVERS?depotId=${
-            query.depotId || 0
-          }?depotName=${query.depotName || "All depots"}`
-        );
+        changeRoute(`${routes.Accounts.url}?tb=DRIVERS`);
         setActive("DRIVERS");
       }
     }

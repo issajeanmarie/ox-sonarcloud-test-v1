@@ -50,7 +50,6 @@ const Order: FC<OrderProps> = ({ order, index }) => {
     useOrderInvoiceMutation();
 
   const router = useRouter();
-  const { depotId, depotName } = router.query;
 
   const [changeOrderStatus, { isLoading: cancelOrderLoading }] =
     useChangeOrderStatusMutation();
@@ -326,13 +325,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                   type="view"
                   size="small"
                   onClick={() =>
-                    router.push({
-                      pathname: `${routes.viewOrder.url}/${record.id}`,
-                      query: {
-                        depotId: depotId || 0,
-                        depotName: depotName || "All depots"
-                      }
-                    })
+                    router.push(`${routes.viewOrder.url}/${record.id}`)
                   }
                 >
                   View

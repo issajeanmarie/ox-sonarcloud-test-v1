@@ -3,27 +3,21 @@ import { routes } from "../config/route-config";
 
 const user: any = {};
 
-export const analyticsMenu = (active = "", depotName = "") => {
+export const analyticsMenu = (active = "") => {
   const menus: any = [
     {
       name: "TRUCKS",
-      url: `${routes.Analytics.url}?depotId=${"depotID" || ""}&depotName=${
-        depotName || ""
-      }`,
+      url: `${routes.Analytics.url}`,
       active: false
     },
     {
       name: "REVENUE",
-      url: `${routes.Revenue.url}?depotId=${"depotID" || ""}&depotName=${
-        depotName || ""
-      }`,
+      url: `${routes.Revenue.url}`,
       active: false
     },
     {
       name: "MAP",
-      url: `${routes.Map.url}?depotId=${"depotID" || ""}&depotName=${
-        depotName || ""
-      }`,
+      url: `${routes.Map.url}`,
       active: false
     }
   ];

@@ -37,7 +37,6 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     useCategoriesQuery();
 
   const router = useRouter();
-  const { depotId, depotName } = router.query;
 
   const [getTrucks, { data, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
@@ -193,15 +192,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
               <div className="flex justify-between mb-1">
                 <span className="heading2">Client name</span>
                 <Row
-                  onClick={() =>
-                    router.push({
-                      pathname: routes.Client.url,
-                      query: {
-                        depotId: depotId || 0,
-                        depotName: depotName || "All depots"
-                      }
-                    })
-                  }
+                  onClick={() => router.push(routes.Client.url)}
                   className="link animate"
                 >
                   <Col>New client</Col>
@@ -377,15 +368,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                   <span className="heading2">Truck</span>
 
                   <Row
-                    onClick={() =>
-                      router.push({
-                        pathname: routes.Trucks.url,
-                        query: {
-                          depotId: depotId || 0,
-                          depotName: depotName || "All depots"
-                        }
-                      })
-                    }
+                    onClick={() => router.push(routes.Trucks.url)}
                     className="link animate"
                   >
                     <Col>New truck</Col>
@@ -418,16 +401,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                   <span className="heading2">Driver</span>
 
                   <Row
-                    onClick={() =>
-                      router.push({
-                        pathname: routes.Accounts.url,
-                        query: {
-                          depotId: depotId || 0,
-                          depotName: depotName || "All depots",
-                          tb: "DRIVERS"
-                        }
-                      })
-                    }
+                    onClick={() => router.push(routes.Accounts.url)}
                     className="link animate"
                   >
                     <Col>New driver</Col>
