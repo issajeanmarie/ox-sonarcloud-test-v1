@@ -11,7 +11,7 @@ const Content: FC<ContentTypes> = ({
     style={{
       height:
         navType === "CENTER"
-          ? "84vh"
+          ? "83vh"
           : navType === "DOUBLE"
           ? "75vh"
           : navType === "TRIPLE"

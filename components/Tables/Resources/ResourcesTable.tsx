@@ -86,7 +86,7 @@ const ResourcesTable: FC<ResourcesTableProps> = ({
   };
 
   return (
-    <div className="mx-4">
+    <>
       {/* Table */}
 
       <Table
@@ -234,7 +234,7 @@ const ResourcesTable: FC<ResourcesTableProps> = ({
           form={form}
         />
       </ModalWrapper>
-    </div>
+    </>
   );
 };
 

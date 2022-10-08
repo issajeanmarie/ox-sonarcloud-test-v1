@@ -8,6 +8,8 @@ import {
 import ResourcesTable from "../../../components/Tables/Resources/ResourcesTable";
 import { ResourcesTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import CustomButton from "../../../components/Shared/Button";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import Content from "../../../components/Shared/Content";
 
 const Truck = () => {
   const [pageSize, setPageSize] = useState(2);
@@ -41,26 +43,25 @@ const Truck = () => {
     setIsWarningModalVisible(true);
   };
 
+  const handleLoadMoreSuccess = () => {
+    setPageSize(pageSize + 20);
+    setMoreResources("");
+  };
+
   // Load More
   const handleLoadMore = () => {
-    Resources({
+    handleAPIRequests({
+      request: Resources,
       page: "",
       size: pageSize,
-      sort: sort?.value || ""
-    })
-      .unwrap()
-      .then(() => {
-        setPageSize(pageSize + 20);
-        setMoreResources("");
-      })
-      .catch((error) => {
-        return error;
-      });
+      sort: sort?.value || "",
+      handleSuccess: handleLoadMoreSuccess
+    });
   };
 
   return (
     <Layout>
-      <div className="sticky top-0 right-0 left-0 z-30 bg-[#f8f8f8]">
+      <div className="mx-4 relative">
         <ResourcesTopNavigator
           isModalVisible={isModalVisible}
           showModal={showModal}
@@ -68,42 +69,48 @@ const Truck = () => {
           resources={Allresources?.payload}
           sort={sort}
           setSort={setSort}
-          isResourcesLoading={isResourceLoading}
         />
-      </div>
-      {isResourceLoading ? (
-        <>
-          {[...Array(20)].map((_, index) => (
-            <ResourcesTableLoader key={index} />
-          ))}
-        </>
-      ) : (
-        <ResourcesTable
-          isModalVisible={isWarningModalVisible}
-          setIsModalVisible={setIsWarningModalVisible}
-          showModal={showWarningModal}
-          resources={
-            moreResources?.length === 0
-              ? Allresources?.payload?.content
-              : Allresources?.payload?.content?.concat(moreResources?.content)
-          }
-          isResourcesFetching={isResourceFetching}
-        />
-      )}
 
-      {pageSize > 1 &&
-        Allresources?.payload?.totalElements &&
-        Allresources?.payload?.totalElements >= pageSize && (
-          <div style={{ width: "12%", margin: "32px auto" }}>
-            <CustomButton
-              loading={loadingMoreFetching}
-              onClick={handleLoadMore}
-              type="secondary"
-            >
-              Load more
-            </CustomButton>
-          </div>
-        )}
+        <Content navType="CENTER">
+          <>
+            {isResourceLoading ? (
+              <>
+                {[...Array(20)].map((_, index) => (
+                  <ResourcesTableLoader key={index} />
+                ))}
+              </>
+            ) : (
+              <ResourcesTable
+                isModalVisible={isWarningModalVisible}
+                setIsModalVisible={setIsWarningModalVisible}
+                showModal={showWarningModal}
+                resources={
+                  moreResources?.length === 0
+                    ? Allresources?.payload?.content
+                    : Allresources?.payload?.content?.concat(
+                        moreResources?.content
+                      )
+                }
+                isResourcesFetching={isResourceFetching}
+              />
+            )}
+
+            {pageSize > 1 &&
+              Allresources?.payload?.totalElements &&
+              Allresources?.payload?.totalElements >= pageSize && (
+                <div style={{ width: "12%", margin: "32px auto" }}>
+                  <CustomButton
+                    loading={loadingMoreFetching}
+                    onClick={handleLoadMore}
+                    type="secondary"
+                  >
+                    Load more
+                  </CustomButton>
+                </div>
+              )}
+          </>
+        </Content>
+      </div>
     </Layout>
   );
 };
