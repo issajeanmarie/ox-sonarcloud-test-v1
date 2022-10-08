@@ -8,7 +8,7 @@ const AnalyticTopContentWrapper: FC<AnalyticTopContentWrapperTypes> = ({
   return (
     <div
       className={`bg_light_white  ${
-        active === "trucks" && "sticky top-[4rem] z-10"
+        active === "trucks" && "sticky top-[0rem] z-10"
       } `}
     >
       {children}
