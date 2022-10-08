@@ -22,6 +22,7 @@ import { BackendErrorTypes } from "../../lib/types/shared";
 import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
 import DaysCalculator from "../../helpers/daysCalculator";
 import { useRouter } from "next/router";
+import Content from "../../components/Shared/Content";
 
 const daysList = [
   { id: 0, name: "Last 7 days", value: 7 },
@@ -165,54 +166,57 @@ const Analytics = () => {
         selectedDepot={selectedDepot}
         setSelectedDepot={setSelectedDepot}
       />
-      <div className={`${active !== "map" ? "px-5" : "px-0"} `}>
-        {active === "trucks" && (
-          <AnalyticTrucks
-            active={active}
-            truckData={truckData}
-            truckLoading={truckLoading}
-            truckFetching={truckFetching}
-            sorter={sorter}
-            onStartDateChange={onStartDateChange}
-            onEndDateChange={onEndDateChange}
-            handleSearch={handleSearch}
-            handleDownloadClients={handleDownloadClients}
-            isDownloadingTruckReport={isDownloadingTruckReport}
-            isDownloadFetching={isDownloadFetching}
-            selectedSort={sorter}
-            setSelectedSort={setSorter}
-          />
-        )}
-        {active === "revenue" && (
-          <AnalyticRevenues
-            active={active}
-            revenueData={revenueData?.payload}
-            revenueLoading={revenueLoading}
-            revenueFetching={revenueFetching}
-            start={startDate || start || ""}
-            end={endDate || end || ""}
-          />
-        )}
-        {active === "map" && (
-          <AnalyticMap
-            active={active}
-            isCategoriesLoading={isCategoriesLoading}
-            categories={categories}
-            onCategoryChange={onCategoryChange}
-            mapData={mapData}
-            mapLoading={mapLoading}
-            mapFetching={mapFetching}
-          />
-        )}
-        {active === "KPIs" && (
-          <AnalyticKPIs
-            active={active}
-            KPIsData={KPIsData?.payload}
-            KPIsLoading={KPIsLoading}
-            KPIsFetching={KPIsFetching}
-          />
-        )}
-      </div>
+
+      <Content navType="FULL">
+        <div className="mx-4 relative">
+          {active === "trucks" && (
+            <AnalyticTrucks
+              active={active}
+              truckData={truckData}
+              truckLoading={truckLoading}
+              truckFetching={truckFetching}
+              sorter={sorter}
+              onStartDateChange={onStartDateChange}
+              onEndDateChange={onEndDateChange}
+              handleSearch={handleSearch}
+              handleDownloadClients={handleDownloadClients}
+              isDownloadingTruckReport={isDownloadingTruckReport}
+              isDownloadFetching={isDownloadFetching}
+              selectedSort={sorter}
+              setSelectedSort={setSorter}
+            />
+          )}
+          {active === "revenue" && (
+            <AnalyticRevenues
+              active={active}
+              revenueData={revenueData?.payload}
+              revenueLoading={revenueLoading}
+              revenueFetching={revenueFetching}
+              start={startDate || start || ""}
+              end={endDate || end || ""}
+            />
+          )}
+          {active === "map" && (
+            <AnalyticMap
+              active={active}
+              isCategoriesLoading={isCategoriesLoading}
+              categories={categories}
+              onCategoryChange={onCategoryChange}
+              mapData={mapData}
+              mapLoading={mapLoading}
+              mapFetching={mapFetching}
+            />
+          )}
+          {active === "KPIs" && (
+            <AnalyticKPIs
+              active={active}
+              KPIsData={KPIsData?.payload}
+              KPIsLoading={KPIsLoading}
+              KPIsFetching={KPIsFetching}
+            />
+          )}
+        </div>
+      </Content>
     </Layout>
   );
 };
