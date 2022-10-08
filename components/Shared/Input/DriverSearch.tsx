@@ -10,7 +10,8 @@ const { Option } = Select;
 const DriverSearch: FC<SearchDriverTypes> = ({
   name = "driver",
   label,
-  rules
+  rules,
+  existingValue
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchDriver, { data: drivers }] = useLazySearchDriverQuery();
@@ -46,6 +47,16 @@ const DriverSearch: FC<SearchDriverTypes> = ({
       allowClear
       rules={rules}
     >
+      {existingValue && (
+        <Option
+          value={existingValue?.id}
+          key={existingValue?.id}
+          title={existingValue?.names}
+        >
+          {existingValue?.names}
+        </Option>
+      )}
+
       {drivers?.payload?.content?.map(
         (driver: { names: string; id: number }) => (
           <Option value={driver.id} key={driver.names}>

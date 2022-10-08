@@ -55,3 +55,7 @@ export type MakeDriverDispatcherRequest = {
 export type SeachDriverRequest = {
   search: string | undefined;
 };
+
+export type GetDriver = {
+  id: number;
+};
