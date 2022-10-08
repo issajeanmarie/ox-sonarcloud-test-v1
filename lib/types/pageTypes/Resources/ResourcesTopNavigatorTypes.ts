@@ -6,7 +6,6 @@ export type ResourcesTopNavigatorTypes = {
   showModal: () => void;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   resources: any;
-  isResourcesLoading: boolean;
   sort: object;
   setSort: React.Dispatch<SetStateAction<object>>;
 };

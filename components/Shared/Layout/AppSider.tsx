@@ -186,6 +186,7 @@ const AppSider = ({ collapsed }: any) => {
                 key={menu.name}
                 icon={
                   <Image
+                    className="mb-1"
                     width={18}
                     src={`/icons/${menu.icon}`}
                     preview={false}
@@ -216,7 +217,7 @@ const AppSider = ({ collapsed }: any) => {
             router
           });
 
-          if (moreMenu.name === "Settings") {
+          if (moreMenu.name === "Settings" || moreMenu.name === "Resources") {
             return (
               <Menu.Item
                 onClick={() => {
@@ -234,39 +235,7 @@ const AppSider = ({ collapsed }: any) => {
                 key={moreMenu.name}
                 icon={
                   <Image
-                    width={18}
-                    src={`/icons/${moreMenu.icon}`}
-                    preview={false}
-                    alt=""
-                  />
-                }
-              >
-                <text className="text-white normalText pl-3">
-                  {!collapsed && moreMenu.name}
-                </text>
-
-                {/* NOTIFICATION LETTER */}
-                <Space
-                  className={`radius50 fowe400 bg_yellow rounded-full white notification_letter ${
-                    collapsed ? "collapsed_on" : "collapsed_off"
-                  }`}
-                >
-                  N
-                </Space>
-              </Menu.Item>
-            );
-          }
-
-          if (moreMenu.name === "Resources") {
-            return (
-              <Menu.Item
-                onClick={() => router.push(moreMenu.url)}
-                className={`my_menu_bg ${
-                  !collapsed && "not_collapsed"
-                } ${activeMenuStyles} `}
-                key={moreMenu.name}
-                icon={
-                  <Image
+                    className="mb-1"
                     width={18}
                     src={`/icons/${moreMenu.icon}`}
                     preview={false}
@@ -307,6 +276,7 @@ const AppSider = ({ collapsed }: any) => {
               key={moreMenu.name}
               icon={
                 <Image
+                  className="mb-1"
                   width={18}
                   src={`/icons/${moreMenu.icon}`}
                   preview={false}

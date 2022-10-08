@@ -10,7 +10,7 @@ const Navbar: FC<NavbarTypes> = ({ LeftSide, RightSide, type }) => {
       style={{ margin: type === "CENTER" ? "16px auto" : "auto" }}
       className={`${type === "CENTER" ? "w-[100%]" : "100%"}  ${
         classes.navbar
-      } m-auto`}
+      } m-auto ${type === "CENTER" ? "py-4" : "py-3"}`}
       gutter={32}
       justify="space-between"
       align="middle"

@@ -26,8 +26,7 @@ export const PAYMENT_STATUS = [
 ];
 
 export const classes = {
-  navbar:
-    "rounded w-9 shadow-[0px_0px_19px_#00000008] bg-white  px-2 py-3 center",
+  navbar: "rounded w-9 shadow-[0px_0px_19px_#00000008] bg-white  px-2 center",
   text: {
     h1: "text-[21px] font-bold  text-ox-dark",
     text_light: "font-extralight text-[17px]"
