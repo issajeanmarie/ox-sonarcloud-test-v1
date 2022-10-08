@@ -19,6 +19,11 @@ type DepotTypes = {
   depotId: number | undefined;
 };
 
+type DepotTypes = {
+  depotName: string | undefined;
+  depotId: number | undefined;
+};
+
 const Orders: FC = () => {
   const [currentPages, setCurrentPages] = useState(1);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
@@ -101,7 +106,7 @@ const Orders: FC = () => {
   };
 
   const getOrdersAction = ({
-    depot = depotId && +depotId,
+    depot = depotsState?.depotId,
     filter = filters?.filter || "",
     page,
     size = pagination.orders.size,

@@ -24,8 +24,6 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
 }) => {
   const router = useRouter();
 
-  const { depotId, depotName } = router.query;
-
   const addAnotherClient = () => {
     form.setFieldsValue({
       clientId: undefined,
@@ -93,13 +91,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             onClick={() => {
               closeModal();
               form.resetFields();
-              router.push({
-                pathname: routes.Orders.url,
-                query: {
-                  depotId: depotId || 0,
-                  depotName: depotName || "All depots"
-                }
-              });
+              router.push(routes.Orders.url);
             }}
           >
             No, I&apos;m good

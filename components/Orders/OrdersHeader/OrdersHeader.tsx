@@ -31,7 +31,6 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
 
   const router = useRouter();
-  const { depotId, depotName } = router.query;
 
   const showModal = () => {
     setIsModalVisible(true);

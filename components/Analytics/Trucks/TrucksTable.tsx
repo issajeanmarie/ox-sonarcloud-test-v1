@@ -304,13 +304,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                   <Col
                     className="my-[-12px]"
                     onClick={() =>
-                      router.push({
-                        pathname: `${routes.Trucks.url}/${record?.id}`,
-                        query: {
-                          depotId: depotId || 0,
-                          depotName: depotName || "All depots"
-                        }
-                      })
+                      router.push(`${routes.Trucks.url}/${record?.id}`)
                     }
                   >
                     <CustomButton type="view" size="small">
