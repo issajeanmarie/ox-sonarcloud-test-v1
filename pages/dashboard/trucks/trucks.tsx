@@ -112,7 +112,7 @@ const Trucks = () => {
   };
 
   const handleGetTrucksSuccess = (res: any) => {
-    res && dispatch(displayTrucks({ payload: res, onReder: true }));
+    res && dispatch(displayTrucks({ payload: res, onRender: true }));
   };
 
   const handleLoadMoreTrucksSuccess = ({ payload }: any) => {
