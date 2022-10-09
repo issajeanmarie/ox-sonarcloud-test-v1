@@ -34,7 +34,7 @@ const Orders: FC = () => {
   const filters = getFromLocal(OX_ORDERS_FILTERS);
 
   const handleRenderSuccess = (res: any) => {
-    dispatch(displayOrders({ payload: res, onReder: true }));
+    dispatch(displayOrders({ payload: res, onRender: true }));
   };
 
   const handleLoadMoreOrdersSuccess = ({ payload }: any) => {

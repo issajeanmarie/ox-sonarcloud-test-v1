@@ -117,7 +117,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
   };
 
   return (
-    <div className="mx-4">
+    <>
       <NewTruckModal
         isVisible={isVisible}
         setIsVisible={setIsVisible}
@@ -309,7 +309,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
           />
         </Table>
       )}
-    </div>
+    </>
   );
 };
 

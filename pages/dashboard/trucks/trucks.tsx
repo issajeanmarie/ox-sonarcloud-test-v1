@@ -76,7 +76,7 @@ const Trucks = () => {
   const { browserStatus, browserSort, browserSearch } = router.query;
 
   const handleGetTrucksSuccess = (res: any) => {
-    res && dispatch(displayTrucks({ payload: res, onReder: true }));
+    res && dispatch(displayTrucks({ payload: res, onRender: true }));
   };
 
   const handleLoadMoreTrucksSuccess = ({ payload }: any) => {
