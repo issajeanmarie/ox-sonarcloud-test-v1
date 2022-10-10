@@ -17,12 +17,14 @@ interface OrdersHeaderProps {
   data?: ApiResponseMetadata<OrdersResponse>;
   getOrdersAction: (filters: Order_Filter) => void;
   loading: boolean;
+  setCurrentPages: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const OrdersHeader: FC<OrdersHeaderProps> = ({
   data,
   getOrdersAction,
-  loading
+  loading,
+  setCurrentPages
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -68,7 +70,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
         />
       </div>
 
-      <div className="flex items-center gap-6 w-[120px]">
+      <div className="flex items-center gap-6 w-[200px]">
         <Button onClick={() => router.push(routes.newOrder.url)} type="primary">
           NEW ORDER
         </Button>
@@ -86,6 +88,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
           getOrdersAction={getOrdersAction}
           loading={loading}
           setIsFiltered={setIsFiltered}
+          setCurrentPages={setCurrentPages}
         />
       </FilterOrdersModal>
 

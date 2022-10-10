@@ -94,8 +94,7 @@ const Orders: FC = () => {
   const showPaginationBtn =
     ordersState?.payload?.totalPages > currentPages || isLoadMoreLoading;
 
-  const isOnlyFetching = isFetching && !isLoadMoreLoading;
-  const showPagination = showPaginationBtn && !isOnlyFetching;
+  const showPagination = showPaginationBtn;
   const showFiltersLoader = isLoading && !isLoadMoreLoading;
 
   return (
@@ -108,6 +107,7 @@ const Orders: FC = () => {
             data={data}
             getOrdersAction={getOrdersAction}
             loading={isFetching}
+            setCurrentPages={setCurrentPages}
           />
 
           <Content navType="CENTER">

@@ -77,7 +77,13 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
     dispatch(
       displayOrders({
-        payload: { payload: { content: [...newOrdersList] } },
+        payload: {
+          payload: {
+            content: [...newOrdersList],
+            totalPages: ordersState.payload.totalPages,
+            totalElements: ordersState.payload.totalElements
+          }
+        },
         replace: true
       })
     );
