@@ -144,7 +144,6 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
                 placeholder="Enter the odometer"
                 inputType="text"
                 label="Odometer"
-                rules={requiredField("Spare parts field")}
               />
             </div>
           </div>

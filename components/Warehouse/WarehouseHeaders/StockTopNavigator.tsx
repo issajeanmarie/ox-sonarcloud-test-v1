@@ -95,7 +95,7 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
 
   const RightSide = (
     <div className="flex items-center gap-5">
-      <div className="flex items-center gap-6 w-[140px]">
+      <div className="flex items-center gap-6 w-[120px]">
         <Button onClick={showModal} type="primary">
           NEW STOCK
         </Button>
