@@ -11,7 +11,7 @@ import { dateFormatterNth } from "../../../utils/dateFormatter";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import { routes } from "../../../config/route-config";
-
+import { displayOrders } from "../../../lib/redux/slices/ordersSlice";
 import ActionModal from "../../Shared/ActionModal";
 import {
   useChangeOrderStatusMutation,
@@ -59,6 +59,9 @@ const Order: FC<OrderProps> = ({ order, index }) => {
   const dispatch = useDispatch();
 
   const router = useRouter();
+
+  const ordersState = useSelector((state: any) => state.orders.displayOrders);
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
