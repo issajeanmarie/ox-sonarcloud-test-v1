@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Row from "antd/lib/row";
-import info from "antd/lib/message";
 import Col from "antd/lib/col";
 import Divider from "antd/lib/divider";
 import Checkbox from "antd/lib/checkbox";
@@ -19,6 +18,7 @@ import TruckNewIssueModal from "./TruckNewIssueModal";
 import { useDispatch, useSelector } from "react-redux";
 import { displayTruckIssues } from "../../../lib/redux/slices/trucksSlice";
 import { TruckIssuesTypes } from "../../../lib/types/pageTypes/Trucks/DisplayTrucksTypes";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 type SingleIssueTypes = {
   createdAt: string;
@@ -49,14 +49,17 @@ const TruckIssuesPane = () => {
   const router = useRouter();
   const { id: truckId } = router.query;
 
+  const handleGetIssuesSuccess = (payload: any) => {
+    dispatch(displayTruckIssues({ payload, replace: true }));
+  };
+
   useEffect(() => {
     if (!componentDidMount.current && truckId) {
-      getTruckIssues(truckId)
-        .unwrap()
-        .then((payload) =>
-          dispatch(displayTruckIssues({ payload, replace: true }))
-        )
-        .catch((err) => info.error(err?.data?.message || "Something is wrong"));
+      handleAPIRequests({
+        request: getTruckIssues,
+        truckId,
+        handleSuccess: handleGetIssuesSuccess
+      });
 
       componentDidMount.current = true;
     }
@@ -66,29 +69,33 @@ const TruckIssuesPane = () => {
     setIsNewIssueModalVisible(true);
   };
 
+  const handleToggleIssueSuccess = (payload: any) => {
+    const newIssues: object[] = [];
+    truckIssues?.content?.map((truckIssue: SingleIssueTypes) => {
+      if (truckIssue?.id !== payload?.payload?.id) {
+        newIssues.push(truckIssue);
+      } else {
+        newIssues.push(payload?.payload);
+      }
+    });
+    dispatch(displayTruckIssues({ payload: newIssues, toggle: true }));
+    setLoadingBtn(null);
+  };
+
+  const handleToggleIssueFailure = () => {
+    setLoadingBtn(null);
+  };
+
   const handleCheckBoxChange = (issueId: number) => {
     setLoadingBtn(issueId);
-
-    toggleTruckIssueStatus({ truckId, issueId })
-      .unwrap()
-      .then((payload) => {
-        const newIssues: object[] = [];
-
-        truckIssues?.content?.map((truckIssue: SingleIssueTypes) => {
-          if (truckIssue?.id !== payload?.payload?.id) {
-            newIssues.push(truckIssue);
-          } else {
-            newIssues.push(payload?.payload);
-          }
-        });
-
-        dispatch(displayTruckIssues({ payload: newIssues, toggle: true }));
-        setLoadingBtn(null);
-      })
-      .catch((err) => {
-        setLoadingBtn(null);
-        info.error(err?.data?.message || "Something is wrong");
-      });
+    handleAPIRequests({
+      request: toggleTruckIssueStatus,
+      truckId,
+      issueId,
+      showSuccess: true,
+      handleSuccess: handleToggleIssueSuccess,
+      handleFailure: handleToggleIssueFailure
+    });
   };
 
   return (

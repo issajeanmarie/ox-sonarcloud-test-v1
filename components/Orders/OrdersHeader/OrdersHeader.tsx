@@ -17,12 +17,14 @@ interface OrdersHeaderProps {
   data?: ApiResponseMetadata<OrdersResponse>;
   getOrdersAction: (filters: Order_Filter) => void;
   loading: boolean;
+  setCurrentPages: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const OrdersHeader: FC<OrdersHeaderProps> = ({
   data,
   getOrdersAction,
-  loading
+  loading,
+  setCurrentPages
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -86,6 +88,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
           getOrdersAction={getOrdersAction}
           loading={loading}
           setIsFiltered={setIsFiltered}
+          setCurrentPages={setCurrentPages}
         />
       </FilterOrdersModal>
 

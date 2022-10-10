@@ -175,7 +175,11 @@ const AppSider = ({ collapsed }: any) => {
                 <Col>
                   <Image
                     width={12}
-                    src={`/icons/expand_more_black_24dp_yellow.svg`}
+                    src={`/icons/${
+                      isDropdownVisible
+                        ? "ic-actions-close-simple.svg"
+                        : "expand_more_black_24dp_yellow.svg"
+                    }`}
                     preview={false}
                     alt=""
                   />

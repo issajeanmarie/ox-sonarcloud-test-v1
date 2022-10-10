@@ -86,7 +86,7 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
 
   const RightSide = (
     <div className="flex items-center gap-5">
-      <div className="flex items-center gap-6 w-[200px]">
+      <div className="flex items-center gap-6 w-[120px]">
         <Button onClick={showModal} type="primary">
           NEW SUPPLIER
         </Button>

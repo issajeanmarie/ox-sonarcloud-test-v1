@@ -27,12 +27,14 @@ interface FilterOrdersFormProps {
   getOrdersAction: ({ filter, depot }: Order_Filter) => void;
   loading: boolean;
   setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentPages: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   getOrdersAction,
   setIsFiltered,
-  loading
+  loading,
+  setCurrentPages
 }) => {
   const dispatch = useDispatch();
   const [getTrucks, { data: trucks, isLoading: trucksLoading }] =
@@ -40,6 +42,8 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
 
   const handleOnFinish = (values: Order_Filter) => {
     setIsFiltered(true);
+    setCurrentPages(1);
+
     const data = {
       ...values,
       start: values.start && moment(values.start).format("YYYY-MM-DD"),
@@ -84,6 +88,7 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   const clearFilter = () => {
     removeFromLocal(OX_ORDERS_FILTERS);
     setIsFiltered(false);
+    setCurrentPages(1);
     form.resetFields();
 
     getOrdersAction({

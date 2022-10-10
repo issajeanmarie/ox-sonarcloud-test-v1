@@ -113,8 +113,8 @@ const trucksApi = baseAPI.injectEndpoints({
 
     getTruckIssues: builder.query({
       providesTags: ["Trucks"],
-      query: (id) => ({
-        url: `/trucks/${id}/issues`,
+      query: ({ truckId }) => ({
+        url: `/trucks/${truckId}/issues`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
