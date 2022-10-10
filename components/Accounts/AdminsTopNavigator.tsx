@@ -59,7 +59,7 @@ const AdminsTopNavigator: FC<AdminsTopNavigatorTypes> = ({
 
   const RightSide = (
     <div className="flex items-center gap-5">
-      <div className="flex items-center gap-6 w-[200px]">
+      <div className="flex items-center gap-6 w-[140px]">
         <Button type="primary" onClick={showModal}>
           NEW ADMIN
         </Button>

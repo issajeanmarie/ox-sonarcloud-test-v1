@@ -38,7 +38,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
 
   const RightSide = (
     <div className="flex items-center flex-1 justify-end gap-6">
-      <div className="flex items-center gap-6 w-[200px]">
+      <div className="flex items-center gap-6 w-[140px]">
         <Button
           onClick={() => form.submit()}
           loading={supportOrderLoading}
