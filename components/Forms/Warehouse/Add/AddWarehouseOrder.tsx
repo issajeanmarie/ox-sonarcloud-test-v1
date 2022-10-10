@@ -26,7 +26,8 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
   transport,
   onAddSaleFinish,
   form,
-  handleChangeWarehouse
+  handleChangeWarehouse,
+  handleChangeWeight
 }) => {
   const { data: trucks, isLoading: isTrucksLoading } =
     useUnPaginatedTrucksQuery();
@@ -114,7 +115,13 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
           </Input>
         </Col>
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Input name="weight" type="text" label="KGs" placeholder="00" />
+          <Input
+            onChange={handleChangeWeight}
+            name="weight"
+            type="text"
+            label="KGs"
+            placeholder="00"
+          />
         </Col>
         <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
           <Button onClick={() => createItems()} type="secondary">

@@ -3,7 +3,6 @@ import Image from "next/image";
 import { SalesTopNavigatorTypes } from "../../../lib/types/pageTypes/Warehouse/Sales/SalesTopNavigator";
 import Navbar from "../../Shared/Content/Navbar";
 import Heading1 from "../../Shared/Text/Heading1";
-import { localeString } from "../../../utils/numberFormatter";
 import Button from "../../Shared/Button";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import AddWarehouseOrder from "../../Forms/Warehouse/Add/AddWarehouseOrder";
@@ -13,15 +12,18 @@ import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { Form } from "antd";
 import { usePostSaleMutation } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
 
 const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
   showModal,
   setIsModalVisible,
-  isModalVisible
+  isModalVisible,
+  totalElements
 }) => {
   const [form] = Form.useForm();
   const [items, setItems]: any = useState([]);
   const [warehouse, setWarehouse] = useState("");
+  const [weight, setWeight] = useState("");
   const [transport, setTransport] = useState("");
   const [location, setLocation] = useState<{
     name: string;
@@ -36,7 +38,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       ...items,
       {
         id: warehouse,
-        weight: ""
+        weight: weight
       }
     ]);
     setLocation(undefined);
@@ -46,12 +48,15 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
     setWarehouse(value);
   };
 
+  const handleChangeWeight = (value: string) => {
+    setWeight(value);
+  };
+
   const [postSale, { isLoading: isPostingSale }] = usePostSaleMutation();
 
   const onAddSaleFinish = (values: any) => {
     postSale({
       depotId: values?.depotId,
-      warehouseId: values?.warehouseId,
       date: values?.date,
       clientId: values?.clientId,
       items: items,
@@ -80,7 +85,11 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       );
   };
 
-  const LeftSide = <Heading1>{localeString(12)} Orders</Heading1>;
+  const LeftSide = (
+    <Heading1>
+      {totalElements && numbersFormatter(totalElements)} Orders
+    </Heading1>
+  );
 
   const RightSide = (
     <div className="flex items-center gap-5">
@@ -121,6 +130,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
           setLocation={setLocation}
           location={location}
           handleChangeWarehouse={handleChangeWarehouse}
+          handleChangeWeight={handleChangeWeight}
           onTransportChange={onTransportChange}
           transport={transport}
           isPostingSale={isPostingSale}

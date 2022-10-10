@@ -2,10 +2,11 @@
 import {
   Sale,
   SaleResponse,
-  DeleteSaleRequest,
   EditSaleLocationRequest,
   GetSale,
-  PostSaleRequest
+  PostSaleRequest,
+  CancelSaleRequest,
+  GetSales
 } from "../../../types/Warehouses/Sales/sale";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -19,13 +20,23 @@ import { baseAPI } from "../../api";
 
 const salesEndpoints = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
-    Sale: builder.query<
+    sales: builder.query<
+      ApiResponseMetadata<{ content: SaleResponse }>,
+      GetSales
+    >({
+      providesTags: ["Sales"],
+      query: (DTO) => ({
+        url: `sales?page=${DTO?.page}&size=${DTO?.size}`,
+        method: "GET"
+      })
+    }),
+    saleDetails: builder.query<
       ApiResponseMetadata<{ content: SaleResponse }>,
       GetSale
     >({
       providesTags: ["Sales"],
       query: (DTO) => ({
-        url: `sales?page=${DTO?.page}&size=${DTO?.size}&start=${DTO?.start}&end=${DTO?.end}&depot=${DTO?.depot}&status=${DTO?.status}`,
+        url: `sales/${DTO?.id}`,
         method: "GET"
       })
     }),
@@ -45,11 +56,11 @@ const salesEndpoints = baseAPI.injectEndpoints({
       })
     }),
 
-    deleteSale: builder.mutation<ApiResponseMetadata<Sale>, DeleteSaleRequest>({
+    cancelSale: builder.mutation<ApiResponseMetadata<Sale>, CancelSaleRequest>({
       invalidatesTags: ["Sales"],
       query: (DTO) => ({
-        url: `/sales/${DTO?.id}`,
-        method: "DELETE"
+        url: `/sales/${DTO?.id}/cancel`,
+        method: "PATCH"
       })
     }),
     editSale: builder.mutation<
@@ -67,10 +78,11 @@ const salesEndpoints = baseAPI.injectEndpoints({
 });
 
 export const {
-  useSaleQuery,
+  useSalesQuery,
   usePostSaleMutation,
-  useDeleteSaleMutation,
+  useCancelSaleMutation,
   useEditSaleMutation,
-  useLazySaleQuery,
-  useUnPaginatedTrucksQuery
+  useLazySalesQuery,
+  useUnPaginatedTrucksQuery,
+  useSaleDetailsQuery
 } = salesEndpoints;

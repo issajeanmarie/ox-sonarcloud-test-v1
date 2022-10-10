@@ -11,12 +11,18 @@ import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
 import Content from "../../../components/Shared/Content";
 import SalesTopNavigator from "../../../components/Warehouse/WarehouseHeaders/SalesTopNavigator";
+import { useSalesQuery } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
 
 const SalesPage = () => {
   const [active, setActive] = useState<string>("SALES");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const router = useRouter();
   const { query } = useRouter();
+
+  const { data: sales, isLoading: isSalesLoading } = useSalesQuery({
+    page: "",
+    size: ""
+  });
 
   useEffect(() => {
     if (router.isReady) {
@@ -53,13 +59,24 @@ const SalesPage = () => {
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
+          totalElements={sales?.payload?.totalElements}
         />
 
         <Content navType="DOUBLE">
           <>
-            {[...Array(20)].map((_, index) => (
-              <OneWarehouseOrder key={index} index={index} />
-            ))}
+            {isSalesLoading ? (
+              "loading"
+            ) : (
+              <>
+                {sales?.payload?.content?.map((sale: any, index: number) => (
+                  <OneWarehouseOrder
+                    key={sale?.id}
+                    itemNumber={index + 1}
+                    sale={sale}
+                  />
+                ))}
+              </>
+            )}
 
             <div style={{ width: "12%", margin: "32px auto" }}>
               <CustomButton type="secondary">Load more</CustomButton>

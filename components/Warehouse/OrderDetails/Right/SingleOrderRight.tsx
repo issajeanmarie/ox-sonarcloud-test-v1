@@ -1,11 +1,16 @@
 import { Col, Divider, Row } from "antd";
-import React from "react";
+import React, { FC } from "react";
 import { OrderSummaryInfoWrapper } from "../Left/InfoWrapper";
 import CustomButton from "../../../Shared/Button/button";
 import PaymentStatusCard from "./PaymentStatusCard";
 import PaymentHistoryTable from "../../../Tables/Warehouse/PaymentHistoryTable";
+import { numbersFormatter } from "../../../../helpers/numbersFormatter";
 
-const SingleOrderRight = () => {
+type SingleOrderRightTypes = {
+  sale: any;
+};
+
+const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale }) => {
   return (
     <Col className="h-[86vh] overflow-auto" flex="auto">
       <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] p-7">
@@ -13,8 +18,17 @@ const SingleOrderRight = () => {
           <div className="mb-8">
             <span className="font-bold text-lg">ORDER SUMMARY</span>
           </div>
-          <OrderSummaryInfoWrapper title="Price" infoItem="10,000 Rwf" />
-          <OrderSummaryInfoWrapper title="Payment status:" infoItem="PENDING" />
+          <OrderSummaryInfoWrapper
+            title="Price"
+            infoItem={`${
+              sale?.transportOrder?.totalAmount &&
+              numbersFormatter(sale?.transportOrder?.totalAmount)
+            } Rwf`}
+          />
+          <OrderSummaryInfoWrapper
+            title="Payment status:"
+            infoItem={sale?.transportOrder?.paymentStatus}
+          />
         </div>
       </Row>
 
@@ -36,8 +50,20 @@ const SingleOrderRight = () => {
           align="middle"
           className="w-full p-7"
         >
-          <PaymentStatusCard title="Paid" count="1,000 RWF" />
-          <PaymentStatusCard title="Remaining" count="9,000 Rwf" />
+          <PaymentStatusCard
+            title="Paid"
+            count={`${
+              sale?.transportOrder?.totalPaid &&
+              numbersFormatter(sale?.transportOrder?.totalPaid)
+            } RWF`}
+          />
+          <PaymentStatusCard
+            title="Remaining"
+            count={`${
+              sale?.transportOrder?.remainingAmount &&
+              numbersFormatter(sale?.transportOrder?.remainingAmount)
+            } Rwf`}
+          />
         </Row>
       </Row>
 
