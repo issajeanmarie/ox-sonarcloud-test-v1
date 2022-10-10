@@ -101,6 +101,11 @@ const SalesPage = () => {
       getSalesAction({ depot: depotsState?.depotId });
   }, [depotsState]);
 
+  const { data: sales, isLoading: isSalesLoading } = useSalesQuery({
+    page: "",
+    size: ""
+  });
+
   useEffect(() => {
     if (router.isReady) {
       if (Object.keys(query)?.length === 0 || !query.wtb) {
