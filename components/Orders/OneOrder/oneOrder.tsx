@@ -11,7 +11,7 @@ import { dateFormatterNth } from "../../../utils/dateFormatter";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import { routes } from "../../../config/route-config";
-
+import { displayOrders } from "../../../lib/redux/slices/ordersSlice";
 import ActionModal from "../../Shared/ActionModal";
 import {
   useChangeOrderStatusMutation,
@@ -23,6 +23,7 @@ import { userType } from "../../../helpers/getLoggedInUser";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch, useSelector } from "react-redux";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -49,6 +50,9 @@ const Order: FC<OrderProps> = ({ order, index }) => {
   const [downloadInvoice, { isLoading: invoiceLoading }] =
     useOrderInvoiceMutation();
 
+  const ordersState = useSelector((state: any) => state.orders.displayOrders);
+  const dispatch = useDispatch();
+
   const router = useRouter();
 
   const [changeOrderStatus, { isLoading: cancelOrderLoading }] =
@@ -58,8 +62,25 @@ const Order: FC<OrderProps> = ({ order, index }) => {
     handleDownloadFile({ file, name: "Invoice", fileFormat: "PDF" });
   };
 
-  const handleDeleteOrderSuccess = () => {
+  const handleDeleteOrderSuccess = ({ payload }: any) => {
     setIsCancelOrderOpen(false);
+
+    const newOrdersList: any = [];
+
+    ordersState?.payload?.content?.map((order: any) => {
+      if (order.id === payload.id) {
+        newOrdersList.push({ ...order, status: payload.status });
+      } else {
+        newOrdersList.push(order);
+      }
+    });
+
+    dispatch(
+      displayOrders({
+        payload: { payload: { content: [...newOrdersList] } },
+        replace: true
+      })
+    );
   };
 
   const downloadOrderInvoice = () => {

@@ -30,7 +30,7 @@ const slice = createSlice({
     displayTrucks: (state, { payload }) => {
       if (payload?.payload) {
         // UPDATE STATE WHEN COMPONENT HAS MOUNTED
-        if (payload.onReder) {
+        if (payload.onRender) {
           state.displayTrucks = payload.payload;
 
           return;
