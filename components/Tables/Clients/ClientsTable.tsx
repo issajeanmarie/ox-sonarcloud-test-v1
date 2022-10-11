@@ -36,10 +36,8 @@ const ClientsTable: FC<ClientsTableProps> = ({
 
   const router = useRouter();
 
-  const handleDeleteClientSuccess = (res: any) => {
-    dispatch(
-      displayPaginatedData({ deleted: true, payload: { id: res.payload } })
-    );
+  const handleDeleteClientSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
 
     setIsModalVisible(false);
   };

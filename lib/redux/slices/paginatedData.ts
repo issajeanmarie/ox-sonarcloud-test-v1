@@ -65,6 +65,8 @@ const slice = createSlice({
             ...newPaginatedDataList
           ];
 
+          state.displayPaginatedData.payload.totalElements -= 1;
+
           return;
         }
 

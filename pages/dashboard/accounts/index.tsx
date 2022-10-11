@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import DriversTable from "../../../components/Tables/Accounts/DriversTable";
@@ -5,10 +6,7 @@ import DriversTopNavigator from "../../../components/Accounts/DriversTopNavigato
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import CustomButton from "../../../components/Shared/Button";
-import {
-  useDriversQuery,
-  useLazyDriversQuery
-} from "../../../lib/api/endpoints/Accounts/driversEndpoints";
+import { useLazyDriversQuery } from "../../../lib/api/endpoints/Accounts/driversEndpoints";
 import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import AllAccountsTopNavigator from "../../../components/Accounts/AllAccountsTopNavigator";
 import { AccountLinks } from "../../../components/Accounts/AccountLinks";
@@ -17,19 +15,38 @@ import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
 import { TableWrapper } from "../../../components/Accounts/Wrappers";
 import Content from "../../../components/Shared/Content";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { useDispatch, useSelector } from "react-redux";
+import { pagination } from "../../../config/pagination";
+
+type RequestTypes = {
+  page?: number | undefined;
+  size?: number | undefined;
+  sort?: string | undefined;
+  status?: string | undefined;
+  handleSuccess?: any;
+  handleFailure?: any;
+};
 
 const Drivers = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [active, setActive] = useState<string>("DRIVERS");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter]: any = useState("ALL");
-  const [sort, setSort]: any = useState("");
+  const [sortValue, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
-  const [pageSize, setPageSize] = useState(20);
-  const [moreDrivers, setMoreDrivers] = useState<any>([]);
+  const [currentPages, setCurrentPages] = useState(1);
+  const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+
+  const AllDrivers = useSelector(
+    (state: any) => state.paginatedData.displayPaginatedData
+  );
 
   const router = useRouter();
   const { query } = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (router.isReady) {
@@ -46,40 +63,63 @@ const Drivers = () => {
     id === "AGENTS" && changeRoute(`${routes.Agents.url}?tb=AGENTS`);
     id === "ADMINS" && changeRoute(`${routes.Admins.url}?tb=ADMINS`);
   };
-  const {
-    data: AllDrivers,
-    isLoading: isDriversLoading,
-    isFetching: isDriversFetching
-  } = useDriversQuery({
-    page: "",
-    size: pageSize,
-    sort: sort?.value || "",
-    status: selectedFilter.value || ""
-  });
 
-  const [Drivers, { isFetching: loadingMoreFetching }] = useLazyDriversQuery();
+  const [Drivers, { isLoading: isDriversLoading }] = useLazyDriversQuery();
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
     return searchQuery;
   };
 
-  const handleLoadMore = () => {
-    Drivers({
-      page: "",
-      size: pageSize,
-      sort: sort?.value || "",
-      status: selectedFilter?.value || ""
-    })
-      .unwrap()
-      .then((res) => {
-        setPageSize(pageSize + 20);
-        setMoreDrivers(res?.payload);
-      })
-      .catch((error) => {
-        return error;
-      });
+  const handleRenderSuccess = (res: any) => {
+    setFiltersBasedLoader(false);
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
   };
+
+  const getDriversAction = ({
+    page,
+    size = pagination.drivers.size,
+    sort = sortValue?.value,
+    status = selectedFilter?.value,
+    handleSuccess = handleRenderSuccess,
+    handleFailure
+  }: RequestTypes) => {
+    handleAPIRequests({
+      request: Drivers,
+      page,
+      size,
+      sort,
+      status,
+      handleSuccess,
+      handleFailure
+    });
+  };
+
+  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreOrdersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMore = () => {
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
+
+    getDriversAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreOrdersFailure,
+      handleSuccess: handleLoadMoreOrdersSuccess
+    });
+  };
+
+  useEffect(() => {
+    setFiltersBasedLoader(true);
+    getDriversAction({});
+    setCurrentPages(1);
+  }, [sortValue, selectedFilter]);
 
   //MODAL
   const showModal = () => {
@@ -90,6 +130,11 @@ const Drivers = () => {
   const showWarningModal = () => {
     setIsWarningModalVisible(true);
   };
+
+  const showFiltersLoader = filtersBasedLoader && !isLoadMoreLoading;
+  const showPagination =
+    (AllDrivers?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
+    !showFiltersLoader;
 
   return (
     <Layout>
@@ -109,13 +154,13 @@ const Drivers = () => {
           handleSearch={handleSearch}
           selectedFilter={selectedFilter}
           setSelectedFilter={setSelectedFilter}
-          selectedSort={sort}
+          selectedSort={sortValue}
           setSelectedSort={setSort}
         />
 
         <Content navType="DOUBLE">
           <TableWrapper>
-            {isDriversLoading ? (
+            {showFiltersLoader || isDriversLoading ? (
               <>
                 {[...Array(20)].map((_, index) => (
                   <ColsTableLoader key={index} />
@@ -126,28 +171,22 @@ const Drivers = () => {
                 isModalVisible={isWarningModalVisible}
                 showModal={showWarningModal}
                 setIsModalVisible={setIsWarningModalVisible}
-                Drivers={
-                  moreDrivers?.length === 0
-                    ? AllDrivers?.payload?.content
-                    : AllDrivers?.payload?.content?.concat(moreDrivers?.content)
-                }
-                isDriversFetching={isDriversFetching}
+                Drivers={AllDrivers?.payload?.content}
+                isDriversFetching={false}
               />
             )}
 
-            {pageSize > 19 &&
-              AllDrivers?.payload?.totalElements &&
-              AllDrivers?.payload?.totalElements >= pageSize && (
-                <div style={{ width: "12%", margin: "32px auto" }}>
-                  <CustomButton
-                    loading={loadingMoreFetching}
-                    onClick={handleLoadMore}
-                    type="secondary"
-                  >
-                    Load more
-                  </CustomButton>
-                </div>
-              )}
+            {showPagination && (
+              <div style={{ width: "12%", margin: "32px auto" }}>
+                <CustomButton
+                  loading={false}
+                  onClick={handleLoadMore}
+                  type="secondary"
+                >
+                  Load more
+                </CustomButton>
+              </div>
+            )}
           </TableWrapper>
         </Content>
       </div>

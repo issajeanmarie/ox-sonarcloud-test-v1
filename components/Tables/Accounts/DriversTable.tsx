@@ -19,11 +19,11 @@ import {
   useMakeDriverDispatcherMutation,
   useToggleDriverMutation
 } from "../../../lib/api/endpoints/Accounts/driversEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditDriver from "../../Forms/Accounts/Drivers/EditDriver";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { useDispatch, useSelector } from "react-redux";
 
 const { Text } = Typography;
 
@@ -44,6 +44,12 @@ const DriversTable: FC<DriversTableProps> = ({
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
 
+  const AllDrivers = useSelector(
+    (state: any) => state.paginatedData.displayPaginatedData
+  );
+
+  const dispatch = useDispatch();
+
   const [deleteDriver, { isLoading }] = useDeleteDriverMutation();
   const [editDriver, { isLoading: isEditing }] = useEditDriverMutation();
   const [toggleDriver, { isLoading: isTooglingDriver }] =
@@ -51,16 +57,19 @@ const DriversTable: FC<DriversTableProps> = ({
   const [makeDriverDispatcher, { isLoading: isMakingDispatcher }] =
     useMakeDriverDispatcherMutation();
 
+  const handleDeleteDriverSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
+
+    setIsModalVisible(false);
+  };
+
   const handleDeleteDriver = () => {
-    deleteDriver({
-      id: itemToDelete
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: deleteDriver,
+      id: itemToDelete,
+      showSuccess: true,
+      handleSuccess: handleDeleteDriverSuccess
+    });
   };
 
   //edit
@@ -70,54 +79,99 @@ const DriversTable: FC<DriversTableProps> = ({
     form.setFieldsValue(record);
   };
 
+  const dispatchReplace = (newContent: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          payload: {
+            content: [...newContent],
+            totalPages: AllDrivers.payload.totalPages,
+            totalElements: AllDrivers.payload.totalElements
+          }
+        },
+        replace: true
+      })
+    );
+  };
+
+  const handleEditDriverSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsEditModalVisible(false);
+
+    const newDriversList: any = [];
+
+    AllDrivers?.payload?.content?.map((driver: any) => {
+      if (driver.id === payload.id) {
+        newDriversList.push(payload);
+      } else {
+        newDriversList.push(driver);
+      }
+    });
+
+    dispatchReplace(newDriversList);
+  };
+
   const onEditDriverFinish = (values: any) => {
-    editDriver({
+    handleAPIRequests({
+      request: editDriver,
       names: values?.names,
       email: values?.email,
       phone: values?.phone,
       gender: values?.gender,
-      id: itemToEdit?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsEditModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      id: itemToEdit?.id,
+      showSuccess: true,
+      handleSuccess: handleEditDriverSuccess
+    });
+  };
+
+  const handleToggleDriverSuccess = ({ payload }: any) => {
+    const newDriversList: any = [];
+
+    AllDrivers?.payload?.content?.map((driver: any) => {
+      if (driver.id === payload.id) {
+        newDriversList.push({ ...driver, enabled: payload.enabled });
+      } else {
+        newDriversList.push(driver);
+      }
+    });
+
+    dispatchReplace(newDriversList);
   };
 
   //toggle
-  const hangleToggleDriver = (id: any) => {
+  const handleToggleDriver = (id: any) => {
     setDriverToToggle(id);
-    toggleDriver({
-      id: id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+
+    handleAPIRequests({
+      request: toggleDriver,
+      id: id,
+      showSuccess: true,
+      handleSuccess: handleToggleDriverSuccess
+    });
   };
 
-  // make dispatcher
+  const handleMakeDispatcherSuccess = ({ payload }: any) => {
+    const newDriversList: any = [];
+
+    AllDrivers?.payload?.content?.map((driver: any) => {
+      if (driver.id === payload.id) {
+        newDriversList.push({ ...driver, role: payload.role });
+      } else {
+        newDriversList.push(driver);
+      }
+    });
+
+    dispatchReplace(newDriversList);
+  };
 
   const handleMakeDispatcher = (id: number | undefined) => {
     setDriverToMakeDispatcher(id);
-    makeDriverDispatcher({
-      id: id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: makeDriverDispatcher,
+      id: id,
+      showSuccess: true,
+      handleSuccess: handleMakeDispatcherSuccess
+    });
   };
 
   const columns: any = [
@@ -269,7 +323,7 @@ const DriversTable: FC<DriversTableProps> = ({
             </div>
             <div className="h-1 flex items-center">
               <CustomButton
-                onClick={() => hangleToggleDriver(record?.id)}
+                onClick={() => handleToggleDriver(record?.id)}
                 type="normal"
                 size="icon"
                 className="bg_danger"
