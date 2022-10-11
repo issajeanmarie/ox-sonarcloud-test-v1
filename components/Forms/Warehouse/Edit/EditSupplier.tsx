@@ -7,6 +7,7 @@ import {
 } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
+import { ECONOMIC_STATUS } from "../../../../config/constants";
 
 type EditSupplierTypes = {
   onEditSupplierFinish: (values: any) => void;
@@ -63,17 +64,7 @@ const EditSupplier: FC<EditSupplierTypes> = ({
             type="select"
             label="Economic status"
             placeholder="Select economic status"
-            options={[
-              { label: "INDIVIDUAL", value: "INDIVIDUAL" },
-              { label: "COMPANY", value: "COMPANY" },
-              { label: "GROUP", value: "GROUP" },
-              { label: "UBUDEHE CATEGORY A", value: "UBUDEHE_CATEGORY_A" },
-              { label: "UBUDEHE CATEGORY B", value: "UBUDEHE_CATEGORY_B" },
-              { label: "UBUDEHE CATEGORY C", value: "UBUDEHE_CATEGORY_C" },
-              { label: "UBUDEHE CATEGORY D", value: "UBUDEHE_CATEGORY_D" },
-              { label: "UBUDEHE CATEGORY E", value: "UBUDEHE_CATEGORY_E" },
-              { label: "WAREHOUSE", value: "WAREHOUSE" }
-            ]}
+            options={ECONOMIC_STATUS}
             name="economicStatus"
             suffixIcon={
               <Image

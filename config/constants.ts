@@ -26,6 +26,18 @@ export const PAYMENT_STATUS = [
   { key: 7, label: "Order cancelled", value: "ORDER_CANCELLED" }
 ];
 
+export const ECONOMIC_STATUS = [
+  { label: "INDIVIDUAL", value: "INDIVIDUAL" },
+  { label: "COMPANY", value: "COMPANY" },
+  { label: "GROUP", value: "GROUP" },
+  { label: "UBUDEHE CATEGORY A", value: "UBUDEHE_CATEGORY_A" },
+  { label: "UBUDEHE CATEGORY B", value: "UBUDEHE_CATEGORY_B" },
+  { label: "UBUDEHE CATEGORY C", value: "UBUDEHE_CATEGORY_C" },
+  { label: "UBUDEHE CATEGORY D", value: "UBUDEHE_CATEGORY_D" },
+  { label: "UBUDEHE CATEGORY E", value: "UBUDEHE_CATEGORY_E" },
+  { label: "WAREHOUSE", value: "WAREHOUSE" }
+];
+
 export const classes = {
   navbar: "rounded w-9 shadow-[0px_0px_19px_#00000008] bg-white  px-2 center",
   text: {

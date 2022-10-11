@@ -29,8 +29,10 @@ const driversEndpoints = baseAPI.injectEndpoints({
       providesTags: ["Drivers"],
       query: (DTO) => ({
         url: `drivers${DTO.noPagination ? "/no-pagination" : ""}?page=${
-          DTO?.page
-        }&size=${DTO?.size}&status=${DTO?.status}&sort=${DTO?.sort}`,
+          DTO?.page || ""
+        }&size=${DTO?.size || ""}&status=${DTO?.status || ""}&sort=${
+          DTO?.sort || ""
+        }`,
         method: "GET"
       })
     }),
@@ -83,7 +85,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Drivers"],
       query: (DTO) => ({
-        url: `/drivers/${DTO?.id}/toggle-active`,
+        url: `/drivers/${DTO?.id || ""}/toggle-active`,
         method: "PUT",
         body: DTO
       })

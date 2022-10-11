@@ -7,14 +7,15 @@ import { DriversTopNavigatorTypes } from "../../lib/types/pageTypes/Accounts/Dri
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewDriver from "../Forms/Accounts/Drivers/AddNewDriver";
 import { usePostDriverMutation } from "../../lib/api/endpoints/Accounts/driversEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
-import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 import DropDownSelector from "../Shared/DropDownSelector";
 import Navbar from "../Shared/Content/Navbar";
 import Button from "../Shared/Button";
 import Heading1 from "../Shared/Text/Heading1";
 import { localeString } from "../../utils/numberFormatter";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
+import passwordGenerator from "../../utils/passwordGenerator";
 
 const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
   isModalVisible,
@@ -29,29 +30,27 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
 }) => {
   const [form] = Form.useForm();
   const [postDriver, { isLoading }] = usePostDriverMutation();
+  const dispatch = useDispatch();
+
+  const handleAddDriverSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsModalVisible(false);
+
+    dispatch(displayPaginatedData({ payload }));
+  };
 
   const onAddDriverFinish = (values: any) => {
-    postDriver({
+    handleAPIRequests({
+      request: postDriver,
       names: values?.names,
       email: values?.email,
       phone: values?.phone,
       drivingLicense: values?.drivingLicense,
-      password: values?.password,
-      gender: values?.gender
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      password: passwordGenerator(),
+      gender: values?.gender,
+      showSuccess: true,
+      handleSuccess: handleAddDriverSuccess
+    });
   };
 
   const LeftSide = (

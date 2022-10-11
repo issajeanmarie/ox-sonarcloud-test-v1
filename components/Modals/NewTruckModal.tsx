@@ -15,8 +15,8 @@ import {
 } from "../../lib/redux/slices/trucksSlice";
 import { requiredField } from "../../lib/validation/InputValidations";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
-import ModalWrapper from "./ModalWrapper";
 import { useEffect } from "react";
+import ModalWrapper from "../Modals/ModalWrapper";
 
 type Types = {
   isVisible: boolean;
@@ -120,7 +120,6 @@ const NewTruckModal = ({
     setIsVisible(false);
     setEditTruckData && setEditTruckData(null);
     setIsUserEditing && setIsUserEditing(false);
-    form.resetFields();
   };
 
   useEffect(() => {
@@ -166,7 +165,6 @@ const NewTruckModal = ({
           <div className="flex-1">
             <div>
               <Input
-                defaultValue={editTruckData?.plateNumber}
                 name="plateNumber"
                 type="text"
                 placeholder="Format (AAA 000 A)"
@@ -178,7 +176,6 @@ const NewTruckModal = ({
           </div>
           <div className="flex-1">
             <Input
-              defaultValue={editTruckData?.yearManufactured}
               name="yearManufactured"
               type="select"
               label="Year"
@@ -193,7 +190,6 @@ const NewTruckModal = ({
           <div className="flex-1">
             <div>
               <Input
-                defaultValue={editTruckData?.model}
                 name="model"
                 type="text"
                 label="Model"
@@ -205,7 +201,6 @@ const NewTruckModal = ({
 
           <div className="flex-1">
             <Input
-              defaultValue={editTruckData?.type}
               name="type"
               type="select"
               label="Category"
@@ -224,7 +219,6 @@ const NewTruckModal = ({
           <div className="flex-1">
             <div>
               <Input
-                defaultValue={editTruckData?.fuelCardAssigned}
                 name="fuelCardAssigned"
                 type="text"
                 placeholder="Enter fuel card assigned"
@@ -237,7 +231,6 @@ const NewTruckModal = ({
 
           <div className="flex-1">
             <Input
-              defaultValue={editTruckData?.fuelType}
               name="fuelType"
               type="select"
               label="Fuel type"
@@ -256,7 +249,6 @@ const NewTruckModal = ({
           <div className="flex-1">
             <div>
               <Input
-                defaultValue={editTruckData?.engineNumber}
                 name="engineNumber"
                 type="text"
                 placeholder="Enter engine number"
@@ -269,7 +261,6 @@ const NewTruckModal = ({
 
           <div className="flex-1">
             <Input
-              defaultValue={editTruckData?.engineOilType}
               name="engineOilType"
               type="text"
               placeholder="Enter engine oil type"
@@ -284,7 +275,6 @@ const NewTruckModal = ({
           <div className="flex-1">
             <div>
               <Input
-                defaultValue={editTruckData?.capacity}
                 name="capacity"
                 type="text"
                 placeholder="Enter weight capacity"
@@ -297,7 +287,6 @@ const NewTruckModal = ({
 
           <div className="flex-1">
             <Input
-              defaultValue={editTruckData?.chassisNumber}
               name="chassisNumber"
               type="text"
               placeholder="Enter chassis number"
@@ -312,7 +301,6 @@ const NewTruckModal = ({
           <div className="flex-1">
             <div>
               <Input
-                defaultValue={editTruckData?.tireSize}
                 name="tireSize"
                 type="text"
                 placeholder="Enter tire size"
@@ -325,7 +313,6 @@ const NewTruckModal = ({
 
           <div className="flex-1">
             <Input
-              defaultValue={editTruckData?.tireBrand}
               name="tireBrand"
               type="text"
               placeholder="Enter tire brand"
@@ -340,7 +327,6 @@ const NewTruckModal = ({
           <div className="flex-1">
             <div>
               <Input
-                defaultValue={editTruckData?.trackingUnitSerialNumber}
                 name="trackingUnitSerialNumber"
                 type="text"
                 placeholder="Enter trucking unit serial number"
@@ -353,7 +339,6 @@ const NewTruckModal = ({
 
           <div className="flex-1">
             <Input
-              defaultValue={editTruckData?.trackingUnitSerialNumber}
               depotId
               name="depotId"
               type="select"

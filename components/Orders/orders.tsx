@@ -22,6 +22,7 @@ type DepotTypes = {
 const Orders: FC = () => {
   const [currentPages, setCurrentPages] = useState(1);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+  const [depotBasedLoader, setDepotBasedLoader] = useState(false);
   const ordersState = useSelector((state: any) => state.orders.displayOrders);
   const dispatch = useDispatch();
 
@@ -35,6 +36,7 @@ const Orders: FC = () => {
 
   const handleRenderSuccess = (res: any) => {
     dispatch(displayOrders({ payload: res, onRender: true }));
+    setDepotBasedLoader(false);
   };
 
   const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
@@ -88,14 +90,17 @@ const Orders: FC = () => {
   };
 
   useEffect(() => {
-    getOrdersAction({ depot: depotsState?.depotId });
+    setCurrentPages(1);
+    setDepotBasedLoader(true);
+
+    depotsState.depotId !== undefined &&
+      getOrdersAction({ depot: depotsState?.depotId });
   }, [depotsState]);
 
-  const showPaginationBtn =
-    ordersState?.payload?.totalPages > currentPages || isLoadMoreLoading;
-
-  const showPagination = showPaginationBtn;
   const showFiltersLoader = isLoading && !isLoadMoreLoading;
+  const showPagination =
+    (ordersState?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
+    !(isFetching && !isLoadMoreLoading);
 
   return (
     <div className="mx-4 relative">
@@ -112,7 +117,7 @@ const Orders: FC = () => {
 
           <Content navType="CENTER">
             <>
-              {showFiltersLoader ? (
+              {showFiltersLoader || depotBasedLoader ? (
                 <Loader />
               ) : (
                 data &&

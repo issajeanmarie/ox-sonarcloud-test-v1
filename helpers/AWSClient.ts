@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import AWS from "aws-sdk";
 
 /**
@@ -49,7 +50,7 @@ export const s3Clients = {
     myBucket
       .putObject(params)
       .on("httpUploadProgress", (evt: any) => {
-        setUploadedPicInfo(evt);
+        console.log("Event: ", evt);
       })
       .send(async (err: any) => {
         setUploadLoading(false);

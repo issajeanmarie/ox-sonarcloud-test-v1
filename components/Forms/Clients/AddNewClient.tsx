@@ -10,6 +10,7 @@ import Button from "../../Shared/Button";
 import OtherOfficesTable from "../../Tables/Clients/OtherOfficesTable";
 import { AddClientTypes } from "../../../lib/types/pageTypes/Clients/AddClientTypes";
 import { YellowCheckIcon } from "../../Icons";
+import { ECONOMIC_STATUS } from "../../../config/constants";
 const AddNewClient: FC<AddClientTypes> = ({
   onAddClientFinish,
   createOffices,
@@ -47,17 +48,7 @@ const AddNewClient: FC<AddClientTypes> = ({
             type="select"
             label="Economic status"
             placeholder="Select economic status"
-            options={[
-              { label: "INDIVIDUAL", value: "INDIVIDUAL" },
-              { label: "COMPANY", value: "COMPANY" },
-              { label: "GROUP", value: "GROUP" },
-              { label: "UBUDEHE CATEGORY A", value: "UBUDEHE_CATEGORY_A" },
-              { label: "UBUDEHE CATEGORY B", value: "UBUDEHE_CATEGORY_B" },
-              { label: "UBUDEHE CATEGORY C", value: "UBUDEHE_CATEGORY_C" },
-              { label: "UBUDEHE CATEGORY D", value: "UBUDEHE_CATEGORY_D" },
-              { label: "UBUDEHE CATEGORY E", value: "UBUDEHE_CATEGORY_E" },
-              { label: "WAREHOUSE", value: "WAREHOUSE" }
-            ]}
+            options={ECONOMIC_STATUS}
             name="economicStatus"
             suffixIcon={
               <Image

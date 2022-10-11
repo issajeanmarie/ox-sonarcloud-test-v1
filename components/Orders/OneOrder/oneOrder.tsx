@@ -24,6 +24,7 @@ import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch, useSelector } from "react-redux";
+import { escape } from "../../../utils/keyBinders";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -122,6 +123,8 @@ const Order: FC<OrderProps> = ({ order, index }) => {
       !isCanceled &&
       !user.isGuest) ||
     (user.isSuperAdmin && !isCanceled);
+
+  escape(setIsCancelOrderOpen);
 
   return (
     <div className="shadow-[0px_0px_19px_#00000008] w-full mb-5">

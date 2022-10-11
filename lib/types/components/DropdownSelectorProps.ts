@@ -10,4 +10,5 @@ export type DropDownSelectorTypes = {
   defaultSelected: DefaultTypes | any;
   setDefaultSelected: React.Dispatch<SetStateAction<object>>;
   label: string;
+  handleStateChange?: () => void;
 };
