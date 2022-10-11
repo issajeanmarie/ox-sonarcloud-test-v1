@@ -1,48 +1,39 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ClientsTable from "../../../components/Tables/Clients/ClientsTable";
 import ClientsTopNavigator from "../../../components/Clients/ClientsTopNavigator";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import CustomButton from "../../../components/Shared/Button";
 import {
-  useClientsQuery,
   useLazyClientsQuery,
   useLazyDownloadClientsQuery
 } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/categoryEndpoints";
-import { BackendErrorTypes } from "../../../lib/types/shared";
-import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
 import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import Content from "../../../components/Shared/Content";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { pagination } from "../../../config/pagination";
+import { useDispatch, useSelector } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const Clients = () => {
+  const [currentPages, setCurrentPages] = useState(1);
+  const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory]: any = useState("");
-  const [sort, setSort]: any = useState("");
+  const [sortValue, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
-  const [pageSize, setPageSize] = useState(20);
-  const [moreClients, setMoreClients] = useState<any>([]);
 
-  const {
-    data: Allclients,
-    isLoading: isClientsLoading,
-    isFetching: isClientsFetching
-  } = useClientsQuery({
-    page: "",
-    size: pageSize,
-    org: "",
-    dest: "",
-    hq: "",
-    categoryId: selectedCategory?.id || "",
-    q: searchQuery,
-    sort: sort.value || "",
-    source: ""
-  });
+  const [getClients, { isLoading: isClientsLoading }] = useLazyClientsQuery();
 
-  const [clients, { isFetching: loadingMoreFetching }] = useLazyClientsQuery();
+  const clientsState = useSelector(
+    (state: any) => state.paginatedData.displayPaginatedData
+  );
 
   const [downloadClients, { isLoading: isDownloadingClientsLoading }] =
     useLazyDownloadClientsQuery();
@@ -51,47 +42,90 @@ const Clients = () => {
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
+    setCurrentPages(1);
   };
 
+  const handleDownloadClientsSuccess = (file: File) => {
+    handleDownloadFile({ file, name: "Clients-Report", fileFormat: "PDF" });
+  };
+
+  const dispatch = useDispatch();
+
   const handleDownloadClients = () => {
-    downloadClients({
+    handleAPIRequests({
+      request: downloadClients,
       file_type: "PDF",
       org: "",
       dest: "",
       hq: "",
       categoryId: selectedCategory?.id || "",
       q: searchQuery,
-      sort: sort.value || "",
-      source: ""
-    })
-      .unwrap()
-      .then((file: any) =>
-        handleDownloadFile({ file, name: "Clients-Report", fileFormat: "PDF" })
-      )
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      sort: sortValue.value || "",
+      source: "",
+      showSuccess: true,
+      handleSuccess: handleDownloadClientsSuccess
+    });
+  };
+
+  const handleRenderSuccess = (res: any) => {
+    setFiltersBasedLoader(false);
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
+  };
+
+  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreOrdersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const getClientsAction = ({
+    page,
+    size = pagination.clients.size,
+    org = "",
+    dest = "",
+    hq = "",
+    categoryId = selectedCategory?.id || "",
+    q = searchQuery,
+    sort = sortValue.value || "",
+    source = "",
+    handleSuccess = handleRenderSuccess,
+    handleFailure,
+    request = getClients
+  }: any) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      org,
+      dest,
+      hq,
+      categoryId,
+      q,
+      sort,
+      source,
+      handleSuccess,
+      handleFailure
+    });
   };
 
   const handleLoadMore = () => {
-    clients({
-      page: "",
-      size: pageSize,
-      org: "",
-      dest: "",
-      hq: "",
-      categoryId: selectedCategory?.id || "",
-      q: searchQuery,
-      sort: sort.id || "",
-      source: ""
-    })
-      .unwrap()
-      .then((res) => {
-        setPageSize(pageSize + 20);
-        setMoreClients(res?.payload);
-      })
-      .catch((error) => {
-        return error;
-      });
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
+
+    getClientsAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreOrdersFailure,
+      handleSuccess: handleLoadMoreOrdersSuccess
+    });
   };
+
+  useEffect(() => {
+    setFiltersBasedLoader(true);
+    getClientsAction({});
+  }, [sortValue, searchQuery, selectedCategory]);
 
   //MODAL
   const showModal = () => {
@@ -103,6 +137,11 @@ const Clients = () => {
     setIsWarningModalVisible(true);
   };
 
+  const showFiltersLoader = filtersBasedLoader && !isLoadMoreLoading;
+  const showPagination =
+    (clientsState?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
+    !showFiltersLoader;
+
   return (
     <Layout>
       <div className="mx-4 relative">
@@ -110,20 +149,21 @@ const Clients = () => {
           isModalVisible={isModalVisible}
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
-          clients={Allclients?.payload}
+          clients={clientsState?.payload}
           handleSearch={handleSearch}
           categories={categories?.payload}
           handleDownloadClients={handleDownloadClients}
           isDownloadingClientsLoading={isDownloadingClientsLoading}
           defaultSelected={selectedCategory}
           setDefaultSelected={setSelectedCategory}
-          sort={sort}
+          sort={sortValue}
           setSort={setSort}
+          setCurrentPages={setCurrentPages}
         />
 
         <Content navType="CENTER">
           <>
-            {isClientsLoading ? (
+            {isClientsLoading || showFiltersLoader ? (
               <>
                 {[...Array(20)].map((_, index) => (
                   <ColsTableLoader key={index} />
@@ -134,28 +174,22 @@ const Clients = () => {
                 isModalVisible={isWarningModalVisible}
                 showModal={showWarningModal}
                 setIsModalVisible={setIsWarningModalVisible}
-                clients={
-                  moreClients?.length === 0
-                    ? Allclients?.payload?.content
-                    : Allclients?.payload?.content?.concat(moreClients?.content)
-                }
-                isClientsFetching={isClientsFetching}
+                clients={clientsState?.payload?.content}
+                isClientsFetching={false}
               />
             )}
 
-            {pageSize > 19 &&
-              Allclients?.payload?.totalElements &&
-              Allclients?.payload?.totalElements >= pageSize && (
-                <div style={{ width: "12%", margin: "32px auto" }}>
-                  <CustomButton
-                    loading={loadingMoreFetching}
-                    onClick={handleLoadMore}
-                    type="secondary"
-                  >
-                    Load more
-                  </CustomButton>
-                </div>
-              )}
+            {showPagination && (
+              <div style={{ width: "12%", margin: "32px auto" }}>
+                <CustomButton
+                  loading={isLoadMoreLoading}
+                  onClick={handleLoadMore}
+                  type="secondary"
+                >
+                  Load more
+                </CustomButton>
+              </div>
+            )}
           </>
         </Content>
       </div>

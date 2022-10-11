@@ -8,14 +8,14 @@ import { ClientsTopNavigatorTypes } from "../../lib/types/pageTypes/Clients/Clie
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewClient from "../Forms/Clients/AddNewClient";
 import { usePostClientMutation } from "../../lib/api/endpoints/Clients/clientsEndpoint";
-import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
-import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 import DropDownSelector from "../Shared/DropDownSelector";
 import Navbar from "../Shared/Content/Navbar";
 import Heading1 from "../Shared/Text/Heading1";
 import Button from "../Shared/Button";
 import { localeString } from "../../utils/numberFormatter";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
 
 const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   isModalVisible,
@@ -29,7 +29,8 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   defaultSelected,
   setDefaultSelected,
   sort,
-  setSort
+  setSort,
+  setCurrentPages
 }) => {
   const [form] = Form.useForm();
 
@@ -44,6 +45,8 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   }>();
   const [officeName, setOfficeName] = useState("");
   const [postClient, { isLoading }] = usePostClientMutation();
+
+  const dispatch = useDispatch();
 
   // ADD CLIENT
   const createOffices = () => {
@@ -64,8 +67,18 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
     setOfficeName(value);
   };
 
+  const handlePostClientSuccess = ({ payload }: any) => {
+    setOffices([]);
+    setMainLocation(undefined);
+    form.resetFields();
+    setIsModalVisible(false);
+
+    dispatch(displayPaginatedData({ payload }));
+  };
+
   const onAddClientFinish = (values: any) => {
-    postClient({
+    handleAPIRequests({
+      request: postClient,
       names: values?.names,
       email: values?.email,
       phone: values?.phone,
@@ -74,23 +87,10 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       location: mainLocation?.name,
       coordinates: values?.coordinates,
       tinNumber: values?.tinNumber,
-      economicStatus: values?.economicStatus
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setOffices([]);
-        setMainLocation(undefined);
-        form.resetFields();
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      economicStatus: values?.economicStatus,
+      showSuccess: true,
+      handleSuccess: handlePostClientSuccess
+    });
   };
 
   const LeftSide = (
@@ -106,6 +106,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
             type="text"
             placeholder="Search name, location or phone"
             name="searchClient"
+            allowClear
             suffixIcon={
               <Image
                 width={10}
@@ -127,6 +128,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
             }
             defaultSelected={defaultSelected}
             setDefaultSelected={setDefaultSelected}
+            handleStateChange={() => setCurrentPages(1)}
           />
         </Col>
 

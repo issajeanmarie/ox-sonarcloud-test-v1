@@ -13,13 +13,17 @@ const DropDownSelector = ({
   dropDownContent,
   defaultSelected,
   setDefaultSelected,
-  label
+  label,
+  handleStateChange
 }: DropDownSelectorTypes) => {
   const dropdownMenu = (
     <div className="max-h-[50vh] overflow-y-auto radius4 p-6 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
       {dropDownContent?.map((content: ContentTypes) => (
         <Row
-          onClick={() => setDefaultSelected(content)}
+          onClick={() => {
+            handleStateChange && handleStateChange();
+            setDefaultSelected(content);
+          }}
           className={`${
             defaultSelected?.id === content.id
               ? "bg_white_yellow p-2 cursor-pointer"

@@ -14,10 +14,10 @@ import ActionModal from "../../Shared/ActionModal";
 import { routes } from "../../../config/route-config";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import { useDeleteClientMutation } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { useRouter } from "next/router";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const { Text } = Typography;
 
@@ -32,18 +32,25 @@ const ClientsTable: FC<ClientsTableProps> = ({
     useState<SetStateAction<number | undefined>>();
   const [deleteClient, { isLoading }] = useDeleteClientMutation();
 
+  const dispatch = useDispatch();
+
   const router = useRouter();
 
+  const handleDeleteClientSuccess = (res: any) => {
+    dispatch(
+      displayPaginatedData({ deleted: true, payload: { id: res.payload } })
+    );
+
+    setIsModalVisible(false);
+  };
+
   const handleDeleteClient = () => {
-    deleteClient({
-      id: itemToDelete
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: deleteClient,
+      id: itemToDelete,
+      showSuccess: true,
+      handleSuccess: handleDeleteClientSuccess
+    });
   };
 
   const columns: any = [
@@ -100,12 +107,12 @@ const ClientsTable: FC<ClientsTableProps> = ({
       )
     },
     {
-      title: "Pending payment",
+      title: <span className="text_ellipsis">Pending payment</span>,
       key: "pendingPayment",
       render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
         <RowsWrapper>
           {record?.pendingPayment ? (
-            <Text className=" text-sm font-bold red">
+            <Text className="text-sm font-bold red">
               {numbersFormatter(record?.pendingPayment)} Rwf
             </Text>
           ) : (
@@ -176,7 +183,7 @@ const ClientsTable: FC<ClientsTableProps> = ({
       <ActionModal
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
-        title="warning!"
+        title="WARNING!"
         description="This action is not reversible, please make sure you really want to proceed with this action!"
         actionLabel="PROCEED"
         type="danger"

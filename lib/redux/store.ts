@@ -4,6 +4,7 @@ import authReducer from "./slices/authSlice";
 import trucksReducer from "./slices/trucksSlice";
 import ordersReducer from "./slices/ordersSlice";
 import depotsReducer from "./slices/depotsSlice";
+import paginatedDataReducer from "./slices/paginatedData";
 
 /**
  * @author Kundwa Bruno M <kundwabruno@gmail.com>
@@ -16,7 +17,8 @@ export const store = configureStore({
     auth: authReducer,
     trucks: trucksReducer,
     orders: ordersReducer,
-    depots: depotsReducer
+    depots: depotsReducer,
+    paginatedData: paginatedDataReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseAPI.middleware)

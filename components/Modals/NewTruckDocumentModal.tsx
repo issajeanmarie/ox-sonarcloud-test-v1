@@ -50,17 +50,7 @@ const NewTRuckDocumentModal = ({
   const [uploadFailure, setUploadFailure] = useState(null);
   const [uploadedPicInfo, setUploadedPicInfo] = useState("");
   const [truckDocumentData, setTruckDocumentData] = useState({});
-
-  const initialValues = {
-    title: editTruckData?.title,
-    validFrom: editTruckData?.validFrom
-      ? moment(editTruckData?.validFrom, "YYYY-MM-DD HH:mm")
-      : "",
-    validTo: editTruckData?.validTo
-      ? moment(editTruckData?.validTo, "YYYY-MM-DD HH:mm")
-      : "",
-    document: editTruckData?.url || ""
-  };
+  const [hasExpiryDate, setHasExpiryDate] = useState(false);
 
   const [uploadTruckDocument, { isLoading }] = useUploadTruckDocumentMutation();
   const [editTruckDocument, { isLoading: editDocumentLoading }] =
@@ -169,17 +159,31 @@ const NewTRuckDocumentModal = ({
     }
   }, [uploadSuccess, uploadFailure]);
 
+  useEffect(() => {
+    form.setFieldsValue({
+      title: editTruckData?.title,
+      validFrom: editTruckData?.validFrom
+        ? moment(editTruckData?.validFrom, "YYYY-MM-DD HH:mm")
+        : "",
+      validTo: editTruckData?.validTo
+        ? moment(editTruckData?.validTo, "YYYY-MM-DD HH:mm")
+        : "",
+      document: editTruckData?.url || ""
+    });
+  }, [editTruckData]);
+
+  const areRequestsLoading = isLoading || uploadLoading || editDocumentLoading;
+
   return (
     <ModalWrapper
       title={`${isUserEditing ? "EDIT" : "UPLOAD"} A DOCUMENT`}
       isModalVisible={isVisible}
       setIsModalVisible={setIsVisible}
-      loading={isLoading || uploadLoading || editDocumentLoading}
+      loading={areRequestsLoading}
       onCancel={handleCancel}
     >
       <Form
         name="CreateTruck"
-        initialValues={initialValues}
         onFinish={onFinish}
         layout="vertical"
         form={form}
@@ -221,9 +225,9 @@ const NewTRuckDocumentModal = ({
           <Col>
             <CircleCheckbox
               defaultValue={true}
-              checked={false}
-              setState={() => null}
-              state={false}
+              checked={hasExpiryDate}
+              setState={setHasExpiryDate}
+              state={hasExpiryDate}
             />
           </Col>
         </Row>
@@ -248,25 +252,27 @@ const NewTRuckDocumentModal = ({
             </div>
           </div>
 
-          <div className="flex-1">
-            <div>
-              <Input
-                rules={requiredField("End date")}
-                type="date"
-                label="Valid to"
-                name="validTo"
-                placeholder="Start"
-                suffixIcon={
-                  <Image
-                    preview={false}
-                    src="/icons/ic-actions-calendar.svg"
-                    alt=""
-                    width={18}
-                  />
-                }
-              />
+          {hasExpiryDate && (
+            <div className="flex-1">
+              <div>
+                <Input
+                  rules={requiredField("Expiration date")}
+                  type="date"
+                  label="Valid to"
+                  name="validTo"
+                  placeholder="Start"
+                  suffixIcon={
+                    <Image
+                      preview={false}
+                      src="/icons/ic-actions-calendar.svg"
+                      alt=""
+                      width={18}
+                    />
+                  }
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="flex gap-10 my-5">

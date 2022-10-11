@@ -18,6 +18,7 @@ import { OX_DEPOT_FILTER } from "../../../config/constants";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDepots } from "../../../lib/redux/slices/depotsSlice";
+import { escape } from "../../../utils/keyBinders";
 const { Sider } = Layout;
 const { Text } = Typography;
 
@@ -61,6 +62,8 @@ const AppSider = ({ collapsed }: any) => {
     router.pathname.includes(routes.Analytics.url) ||
     router.pathname === routes.Orders.url ||
     router.pathname.includes(routes.viewOrder.url);
+
+  escape(setIsDropdownVisible);
 
   const depots = (
     <Space
@@ -151,7 +154,7 @@ const AppSider = ({ collapsed }: any) => {
         className="pointer"
       >
         <Row
-          onClick={() => setIsDropdownVisible(!isDropdownVisible)}
+          onClick={() => showDepots && setIsDropdownVisible(!isDropdownVisible)}
           align="middle"
           justify="space-between"
           className="pad24 mb12 border-b border-ox-dark-border"

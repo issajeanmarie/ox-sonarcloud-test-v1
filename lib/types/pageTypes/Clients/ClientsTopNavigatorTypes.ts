@@ -14,4 +14,5 @@ export type ClientsTopNavigatorTypes = {
   setDefaultSelected: React.Dispatch<SetStateAction<object>>;
   sort: object;
   setSort: React.Dispatch<SetStateAction<object>>;
+  setCurrentPages: React.Dispatch<SetStateAction<number>>;
 };
