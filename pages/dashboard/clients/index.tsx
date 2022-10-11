@@ -28,26 +28,12 @@ const Clients = () => {
   const [selectedCategory, setSelectedCategory]: any = useState("");
   const [sortValue, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
-  const [pageSize, setPageSize] = useState(20);
-  const [moreClients, setMoreClients] = useState<any>([]);
 
-  const {
-    data: Allclients,
-    isLoading: isClientsLoading,
-    isFetching: isClientsFetching
-  } = useClientsQuery({
-    page: "",
-    size: pageSize,
-    org: "",
-    dest: "",
-    hq: "",
-    categoryId: selectedCategory?.id || "",
-    q: searchQuery,
-    sort: sort.value || "",
-    source: ""
-  });
+  const [getClients, { isLoading: isClientsLoading }] = useLazyClientsQuery();
 
-  const [clients, { isFetching: loadingMoreFetching }] = useLazyClientsQuery();
+  const clientsState = useSelector(
+    (state: any) => state.paginatedData.displayPaginatedData
+  );
 
   const [downloadClients, { isLoading: isDownloadingClientsLoading }] =
     useLazyDownloadClientsQuery();
@@ -56,24 +42,73 @@ const Clients = () => {
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
+    setCurrentPages(1);
   };
 
+  const handleDownloadClientsSuccess = (file: File) => {
+    handleDownloadFile({ file, name: "Clients-Report", fileFormat: "PDF" });
+  };
+
+  const dispatch = useDispatch();
+
   const handleDownloadClients = () => {
-    downloadClients({
+    handleAPIRequests({
+      request: downloadClients,
       file_type: "PDF",
       org: "",
       dest: "",
       hq: "",
       categoryId: selectedCategory?.id || "",
       q: searchQuery,
-      sort: sort.value || "",
-      source: ""
-    })
-      .unwrap()
-      .then((file: any) =>
-        handleDownloadFile({ file, name: "Clients-Report", fileFormat: "PDF" })
-      )
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      sort: sortValue.value || "",
+      source: "",
+      showSuccess: true,
+      handleSuccess: handleDownloadClientsSuccess
+    });
+  };
+
+  const handleRenderSuccess = (res: any) => {
+    setFiltersBasedLoader(false);
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
+  };
+
+  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreOrdersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const getClientsAction = ({
+    page,
+    size = pagination.clients.size,
+    org = "",
+    dest = "",
+    hq = "",
+    categoryId = selectedCategory?.id || "",
+    q = searchQuery,
+    sort = sortValue.value || "",
+    source = "",
+    handleSuccess = handleRenderSuccess,
+    handleFailure,
+    request = getClients
+  }: any) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      org,
+      dest,
+      hq,
+      categoryId,
+      q,
+      sort,
+      source,
+      handleSuccess,
+      handleFailure
+    });
   };
 
   const [getClients, { isLoading: isClientsLoading }] = useLazyClientsQuery();

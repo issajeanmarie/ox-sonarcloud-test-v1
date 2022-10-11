@@ -49,6 +49,8 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
 
   const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+
   // ADD CLIENT
   const createOffices = () => {
     setOffices([
