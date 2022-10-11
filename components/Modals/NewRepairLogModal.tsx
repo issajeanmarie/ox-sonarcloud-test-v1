@@ -34,7 +34,7 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
       imagesCopy.push(uploadedPicInfo);
       setAllIMGs(imagesCopy);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploadedPicInfo]);
 
   const [form] = Form.useForm();
@@ -62,8 +62,6 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
     });
   };
 
-  const initialValues = {};
-
   return (
     <ModalWrapper
       title="New Repair log"
@@ -74,7 +72,6 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
     >
       <Form
         name="createLogRepair"
-        initialValues={initialValues}
         onFinish={onFinish}
         layout="vertical"
         form={form}
