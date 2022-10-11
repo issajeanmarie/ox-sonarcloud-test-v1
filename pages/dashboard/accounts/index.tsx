@@ -60,6 +60,7 @@ const Drivers = () => {
 
   const router = useRouter();
   const { query } = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (router.isReady) {

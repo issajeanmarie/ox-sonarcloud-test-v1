@@ -75,6 +75,12 @@ const DriversTable: FC<DriversTableProps> = ({
     setIsModalVisible(false);
   };
 
+  const handleDeleteDriverSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
+
+    setIsModalVisible(false);
+  };
+
   const handleDeleteDriver = () => {
     handleAPIRequests({
       request: deleteDriver,
@@ -111,6 +117,38 @@ const DriversTable: FC<DriversTableProps> = ({
     form.resetFields();
     setIsEditModalVisible(false);
     setPhoneNumber("");
+
+    const newDriversList: any = [];
+
+    AllDrivers?.payload?.content?.map((driver: any) => {
+      if (driver.id === payload.id) {
+        newDriversList.push(payload);
+      } else {
+        newDriversList.push(driver);
+      }
+    });
+
+    dispatchReplace(newDriversList);
+  };
+
+  const dispatchReplace = (newContent: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          payload: {
+            content: [...newContent],
+            totalPages: AllDrivers.payload.totalPages,
+            totalElements: AllDrivers.payload.totalElements
+          }
+        },
+        replace: true
+      })
+    );
+  };
+
+  const handleEditDriverSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsEditModalVisible(false);
 
     const newDriversList: any = [];
 
