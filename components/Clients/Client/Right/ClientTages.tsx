@@ -96,7 +96,9 @@ const ClientTages: FC<ClientTagesTypes> = ({ client }) => {
 
       <div className="w-full p-8">
         {client?.tags?.length < 1 ? (
-          <span className="font-light">Tags will appear here</span>
+          <span className="font-normal opacity-50 dark">
+            No tags to display
+          </span>
         ) : (
           <>
             {client?.tags?.map((tag: clientTags) => (

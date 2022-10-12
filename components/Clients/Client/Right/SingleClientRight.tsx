@@ -16,7 +16,15 @@ const SingleClientRight: FC<SingleClientRightTypes> = ({
   clientOrders
 }) => {
   return (
-    <Col className="h-[86vh] overflow-auto" flex="auto">
+    <Col
+      xs={24}
+      sm={24}
+      md={10}
+      lg={10}
+      xl={10}
+      xxl={10}
+      className="h-[86vh] overflow-auto"
+    >
       {isClientLoading ? (
         <div className="h-full w-full flex justify-center items-center">
           <Loader />
