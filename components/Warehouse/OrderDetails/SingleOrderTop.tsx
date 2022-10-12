@@ -1,19 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Row, Image as AntDImage } from "antd";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
+import { useCancelSaleMutation } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
+import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import ActionModal from "../../Shared/ActionModal";
+import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
+import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 
-const SingleOrderTop = () => {
+type SingleOrderTopTypes = {
+  sale: any;
+};
+
+const SingleOrderTop: FC<SingleOrderTopTypes> = ({ sale }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [cancelSale, { isLoading: isCancelingSale }] = useCancelSaleMutation();
 
   const showModal: any = () => {
     setIsModalVisible(true);
   };
 
-  const handleDeleteOrder = () => {
-    setIsModalVisible(false);
+  const handleCancelSale = () => {
+    cancelSale({
+      id: sale?.id
+    })
+      .unwrap()
+      .then((res: GenericResponse) => {
+        SuccessMessage(res?.message);
+        setIsModalVisible(false);
+      })
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
   };
 
   return (
@@ -36,7 +53,7 @@ const SingleOrderTop = () => {
           />
           <span className="heading2">Sales</span>
           <span className="normalText">/</span>
-          <span className="text-gray-400">WH123456789</span>
+          <span className="text-gray-400">{sale?.transportOrder?.id}</span>
         </div>
       </Col>
       <Col className="flex gap-8 items-center">
@@ -48,15 +65,17 @@ const SingleOrderTop = () => {
           height={18}
           preview={false}
         />
-        <AntDImage
-          className="pointer"
-          onClick={() => showModal()}
-          src="/icons/close.png"
-          alt=""
-          width={22}
-          height={22}
-          preview={false}
-        />
+        {sale?.status !== "CANCELLED" && (
+          <AntDImage
+            className="pointer"
+            onClick={() => showModal()}
+            src="/icons/close.png"
+            alt=""
+            width={22}
+            height={22}
+            preview={false}
+          />
+        )}
       </Col>
       <ActionModal
         isModalVisible={isModalVisible}
@@ -65,8 +84,8 @@ const SingleOrderTop = () => {
         description="This action is not reversible, please make sure you really want to proceed with this action!"
         actionLabel="PROCEED"
         type="danger"
-        action={() => handleDeleteOrder()}
-        loading={false}
+        action={() => handleCancelSale()}
+        loading={isCancelingSale}
       />
     </Row>
   );

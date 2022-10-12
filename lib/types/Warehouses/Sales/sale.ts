@@ -8,7 +8,6 @@ export type Sale = {
 
 export type PostSaleRequest = {
   depotId: number;
-  warehouseId: number;
   date: string;
   clientId: number;
   items: [
@@ -28,7 +27,7 @@ export type PostSaleRequest = {
   };
 };
 
-export type DeleteSaleRequest = {
+export type CancelSaleRequest = {
   id: any;
 };
 
@@ -55,11 +54,11 @@ export type EditSaleLocationRequest = {
   id: number;
 };
 
-export type GetSale = {
+export type GetSales = {
   page: number | string;
   size: number | string;
-  start: string;
-  end: string;
-  depot: number | string;
-  status: string;
+};
+
+export type GetSale = {
+  id: string | string[] | undefined;
 };
