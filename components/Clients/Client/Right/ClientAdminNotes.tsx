@@ -44,6 +44,7 @@ const ClientAdminNotes: FC<ClientAdminNotesTypes> = ({ client }) => {
 
       <div className="w-full p-8">
         <Form
+          initialValues={{ comment: client?.comment || "" }}
           form={form}
           onFinish={onAddClientNoteFinish}
           name="AddAdminNotes"

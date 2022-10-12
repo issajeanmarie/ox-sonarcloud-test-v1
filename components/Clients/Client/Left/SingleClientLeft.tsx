@@ -22,10 +22,10 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
       className="h-[86vh] overflow-auto"
       xs={24}
       sm={24}
-      md={12}
-      lg={12}
-      xl={12}
-      xxl={12}
+      md={13}
+      lg={13}
+      xl={13}
+      xxl={13}
     >
       <Header
         orders={clientOrders?.orders}

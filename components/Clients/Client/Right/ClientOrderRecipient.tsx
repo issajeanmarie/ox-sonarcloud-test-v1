@@ -73,7 +73,9 @@ const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
             isClientFetching={isClientFetching}
           />
         ) : (
-          <span className="font-light">Order recipients will appear here</span>
+          <span className="font-normal opacity-50 dark">
+            No order recipients to display
+          </span>
         )}
       </div>
       <ModalWrapper

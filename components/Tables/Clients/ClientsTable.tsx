@@ -147,14 +147,7 @@ const ClientsTable: FC<ClientsTableProps> = ({
 
           <Col className="my-[-12px]">
             <CustomButton
-              onClick={() =>
-                router.push({
-                  pathname: `${routes.Client.url}`,
-                  query: {
-                    client: record?.id
-                  }
-                })
-              }
+              onClick={() => router.push(`${routes.Clients.url}/${record.id}`)}
               type="view"
               size="small"
             >

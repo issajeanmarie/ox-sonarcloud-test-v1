@@ -268,7 +268,6 @@ const Entry = ({
           format={dateFormat || format || "YYYY-MM-DD"}
           showTime={showTime}
           placeholder={placeholder}
-          // format={format ? format : false}
         />
       </Form.Item>
     </Fragment>
@@ -277,13 +276,12 @@ const Entry = ({
   const locationInput = (
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
-      <div className="w-full relative z-10">
+      <div className="w-full relative">
         <Form.Item name={name} rules={rules}>
           <Input
             className={`my_input ${size === "small" && "sm"}`}
             placeholder={placeholder}
             type={inputType}
-            // allowClear
             value={value}
             onChange={handleInput}
             suffix={coordinatesLoading ? <LoadingOutlined /> : false}
@@ -292,7 +290,7 @@ const Entry = ({
           {status === "OK" && (
             <div
               ref={placeSuggestionsRef}
-              className="bg-white absolute top-[50px] inset-x-0 rounded-lg shadow-md "
+              className="bg-white absolute top-[50px] z-10 inset-x-0 rounded-lg shadow-md "
             >
               {renderSuggestions()}
             </div>
