@@ -3,12 +3,17 @@ import Head from "next/head";
 
 type Types = {
   title: string;
-  linkRel: string;
-  linkHref: string;
-  desc: string;
+  linkRel?: string;
+  linkHref?: string;
+  desc?: string;
 };
 
-const SEO = ({ title, linkRel, linkHref, desc }: Types) => (
+const SEO = ({
+  title = "OX Delivers Portal",
+  linkRel = "icon",
+  linkHref = "/logo.png",
+  desc = "OX Delivers Portal Dashboard"
+}: Types) => (
   <Head>
     <meta name="description" content={desc} />
     <title>{title}</title>

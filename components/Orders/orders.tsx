@@ -30,7 +30,7 @@ const Orders: FC = () => {
     (state: { depots: { payload: DepotTypes } }) => state.depots.payload
   );
 
-  const [getOrders, { data, isLoading, isFetching }] = useLazyOrdersQuery({});
+  const [getOrders, { isLoading, isFetching }] = useLazyOrdersQuery({});
 
   const filters = getFromLocal(OX_ORDERS_FILTERS);
 
@@ -109,7 +109,7 @@ const Orders: FC = () => {
       ) : (
         <Fragment>
           <OrdersHeader
-            data={data}
+            data={ordersState}
             getOrdersAction={getOrdersAction}
             loading={isFetching}
             setCurrentPages={setCurrentPages}
@@ -120,7 +120,7 @@ const Orders: FC = () => {
               {showFiltersLoader || depotBasedLoader ? (
                 <Loader />
               ) : (
-                data &&
+                ordersState &&
                 ordersState.payload?.content?.map(
                   (order: Order, index: number) => (
                     <OneOrder key={index} index={index + 1} order={order} />

@@ -174,7 +174,7 @@ const Clients = () => {
                 isModalVisible={isWarningModalVisible}
                 showModal={showWarningModal}
                 setIsModalVisible={setIsWarningModalVisible}
-                clients={clientsState?.payload?.content}
+                clients={clientsState}
                 isClientsFetching={false}
               />
             )}

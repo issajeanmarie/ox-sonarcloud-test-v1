@@ -365,7 +365,7 @@ const DriversTable: FC<DriversTableProps> = ({
       <Table
         className="data_table light_white_header light_white_table"
         columns={columns}
-        dataSource={Drivers}
+        dataSource={Drivers?.payload?.content}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}
