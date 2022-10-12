@@ -170,7 +170,7 @@ const ClientsTable: FC<ClientsTableProps> = ({
       <Table
         className="data_table light_white_header light_white_table"
         columns={columns}
-        dataSource={clients}
+        dataSource={clients?.payload?.content}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}
