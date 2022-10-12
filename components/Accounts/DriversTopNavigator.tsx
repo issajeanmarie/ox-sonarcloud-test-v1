@@ -45,7 +45,6 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
       names: values?.names,
       email: values?.email,
       phone: values?.phone,
-      drivingLicense: values?.drivingLicense,
       password: passwordGenerator(),
       gender: values?.gender,
       showSuccess: true,

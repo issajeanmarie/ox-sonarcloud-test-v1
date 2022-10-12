@@ -74,28 +74,6 @@ const AddNewDriver: FC<AddDriverTypes> = ({
             rules={emailValidationNotRequired}
           />
         </Col>
-
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <Input
-            type="select"
-            label="Driving License"
-            placeholder="Select driving license"
-            options={[
-              { label: "Category A", value: "A" },
-              { label: "Category B", value: "B" }
-            ]}
-            name="drivingLicense"
-            suffixIcon={
-              <Image
-                preview={false}
-                src="/icons/expand_more_black_24dp.svg"
-                alt=""
-                width={10}
-              />
-            }
-            rules={requiredInput}
-          />
-        </Col>
       </Row>
 
       <Row justify="end" className="mt-7">

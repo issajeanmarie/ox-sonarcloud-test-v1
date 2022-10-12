@@ -99,7 +99,7 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
-        title="NEW STOCK ORDER"
+        title="NEW WAREHOUSE ITEM"
         loading={false}
       >
         <AddSupplier

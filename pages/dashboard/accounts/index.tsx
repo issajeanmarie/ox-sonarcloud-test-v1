@@ -171,7 +171,7 @@ const Drivers = () => {
                 isModalVisible={isWarningModalVisible}
                 showModal={showWarningModal}
                 setIsModalVisible={setIsWarningModalVisible}
-                Drivers={AllDrivers?.payload?.content}
+                Drivers={AllDrivers}
                 isDriversFetching={false}
               />
             )}
@@ -179,7 +179,7 @@ const Drivers = () => {
             {showPagination && (
               <div style={{ width: "12%", margin: "32px auto" }}>
                 <CustomButton
-                  loading={false}
+                  loading={isLoadMoreLoading}
                   onClick={handleLoadMore}
                   type="secondary"
                 >

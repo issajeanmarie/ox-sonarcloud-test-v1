@@ -29,6 +29,7 @@ import { localeString } from "../../../utils/numberFormatter";
 import Input from "../../../components/Shared/Input";
 import Button from "../../../components/Shared/Button";
 import Content from "../../../components/Shared/Content";
+import { SEO } from "../../../components/Shared";
 
 interface Trucks {
   displayTrucks: {
@@ -284,32 +285,36 @@ const Trucks = () => {
   );
 
   return (
-    <div className="mx-4 relative">
-      <NewTruckModal isVisible={isVisible} setIsVisible={setIsVisible} />
+    <>
+      <SEO title="OX Dashboard | Trucks" />
 
-      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
+      <div className="mx-4 relative">
+        <NewTruckModal isVisible={isVisible} setIsVisible={setIsVisible} />
 
-      <Content navType="CENTER">
-        <>
-          <TrucksTable
-            data={trucksState?.content}
-            isLoading={getTrucksLoading || filterTrucksLoading}
-          />
+        <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
 
-          {showPaginationBtn && (
-            <div style={{ width: "12%", margin: "32px auto" }}>
-              <CustomButton
-                loading={loadMoreLoading}
-                type="secondary"
-                onClick={handleLoadMore}
-              >
-                Load more
-              </CustomButton>
-            </div>
-          )}
-        </>
-      </Content>
-    </div>
+        <Content navType="CENTER">
+          <>
+            <TrucksTable
+              data={trucksState?.content}
+              isLoading={getTrucksLoading || filterTrucksLoading}
+            />
+
+            {showPaginationBtn && (
+              <div style={{ width: "12%", margin: "32px auto" }}>
+                <CustomButton
+                  loading={loadMoreLoading}
+                  type="secondary"
+                  onClick={handleLoadMore}
+                >
+                  Load more
+                </CustomButton>
+              </div>
+            )}
+          </>
+        </Content>
+      </div>
+    </>
   );
 };
 

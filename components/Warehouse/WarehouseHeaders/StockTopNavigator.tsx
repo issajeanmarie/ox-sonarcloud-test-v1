@@ -108,7 +108,7 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
-        title="NEW STOCK ORDER"
+        title="NEW WAREHOUSE ITEM"
         loading={false}
       >
         <AddStock

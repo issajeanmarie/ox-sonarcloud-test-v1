@@ -6,6 +6,7 @@ import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
 import Image from "next/image";
 import { AddStockTypes } from "../../../../lib/types/warehouse";
+import { localeString } from "../../../../utils/numberFormatter";
 
 const { Option } = Select;
 
@@ -199,7 +200,8 @@ const AddStock: FC<AddStockTypes> = ({
           >
             {orders?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
-                {item?.id}
+                {localeString(item?.weight)} KGs -{" "}
+                {localeString(item.totalAmount)} Rwf
               </Option>
             ))}
           </Input>
