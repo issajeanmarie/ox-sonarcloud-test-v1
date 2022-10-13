@@ -171,14 +171,11 @@ const AgentsTable: FC<AgentsTableProps> = ({
   //reset
   const handleResetPWDAgent = (id: any) => {
     setAgentToReset(id);
-    sendResetPWDToAgent({
-      id: id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: sendResetPWDToAgent,
+      id: id,
+      showSuccess: true
+    });
   };
 
   const columns: any = [

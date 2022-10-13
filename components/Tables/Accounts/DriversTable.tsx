@@ -149,6 +149,7 @@ const DriversTable: FC<DriversTableProps> = ({
   const handleEditDriverSuccess = ({ payload }: any) => {
     form.resetFields();
     setIsEditModalVisible(false);
+    setPhoneNumber("");
 
     const newDriversList: any = [];
 

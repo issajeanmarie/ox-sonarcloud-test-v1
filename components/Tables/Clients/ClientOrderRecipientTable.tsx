@@ -92,19 +92,20 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
   const [editClientRecipient, { isLoading: isEditing }] =
     useEditClientRecipientMutation();
 
+  const handleEditRecipientSuccess = () => {
+    setIsEditModalVisible(false);
+  };
+
   const onEditClientRecipientFinish = (values: any) => {
-    editClientRecipient({
+    handleAPIRequests({
+      request: editClientRecipient,
       id: query?.client,
       affiliateId: itemToEdit,
       names: values?.names,
-      phone: values?.phone
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsEditModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      phone: phoneNumber?.replace("+", ""),
+      showSuccess: true,
+      handleSuccess: handleEditRecipientSuccess
+    });
   };
 
   const columns: any = [

@@ -1,9 +1,6 @@
 import { Col, Form, Row } from "antd";
 import React, { FC } from "react";
-import {
-  phoneValidation,
-  requiredInput
-} from "../../../lib/validation/InputValidations";
+import { requiredInput } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
 import { AddClientRecipientTypes } from "../../../lib/types/pageTypes/Clients/AddClientRecipientTypes";
 import CustomPhoneInput from "../../Shared/Custom/CustomPhoneInput";
