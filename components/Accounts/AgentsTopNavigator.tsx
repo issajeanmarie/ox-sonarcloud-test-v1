@@ -1,18 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Row } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { FC } from "react";
 import { AgentsTopNavigatorTypes } from "../../lib/types/pageTypes/Accounts/Agents/AgentsTopNavigatorTypes";
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewAgent from "../Forms/Accounts/Agents/AddNewAgent";
 import { usePostAgentMutation } from "../../lib/api/endpoints/Accounts/agentsEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
-import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 import Navbar from "../Shared/Content/Navbar";
 import Button from "../Shared/Button";
 import Heading1 from "../Shared/Text/Heading1";
 import { localeString } from "../../utils/numberFormatter";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
 
 const AgentsTopNavigator: FC<AgentsTopNavigatorTypes> = ({
   isModalVisible,
@@ -21,28 +19,26 @@ const AgentsTopNavigator: FC<AgentsTopNavigatorTypes> = ({
   Agents
 }) => {
   const [form] = Form.useForm();
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [postAgent, { isLoading }] = usePostAgentMutation();
 
+  const handleAddAgentSuccess = () => {
+    setPhoneNumber("");
+    form.resetFields();
+    setIsModalVisible(false);
+  };
+
   const onAddAgentFinish = (values: any) => {
-    postAgent({
-      names: values?.names,
-      email: values?.email,
-      phone: values?.phone,
-      gender: values?.gender
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+    phoneNumber &&
+      handleAPIRequests({
+        request: postAgent,
+        names: values?.names,
+        email: values?.email,
+        phone: phoneNumber?.replace("+", ""),
+        gender: values?.gender,
+        showSuccess: true,
+        handleSuccess: handleAddAgentSuccess
+      });
   };
 
   const LeftSide = (
@@ -77,6 +73,8 @@ const AgentsTopNavigator: FC<AgentsTopNavigatorTypes> = ({
           onAddAgentFinish={onAddAgentFinish}
           isLoading={isLoading}
           form={form}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
         />
       </ModalWrapper>
 

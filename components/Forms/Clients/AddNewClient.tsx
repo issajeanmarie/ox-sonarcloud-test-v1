@@ -2,7 +2,6 @@ import { Col, Form, Image, Popover, Row } from "antd";
 import React, { FC } from "react";
 import {
   emailValidationNotRequired,
-  phoneValidation,
   requiredInput
 } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
@@ -11,6 +10,7 @@ import OtherOfficesTable from "../../Tables/Clients/OtherOfficesTable";
 import { AddClientTypes } from "../../../lib/types/pageTypes/Clients/AddClientTypes";
 import { YellowCheckIcon } from "../../Icons";
 import { ECONOMIC_STATUS } from "../../../config/constants";
+import CustomPhoneInput from "../../Shared/Custom/CustomPhoneInput";
 const AddNewClient: FC<AddClientTypes> = ({
   onAddClientFinish,
   createOffices,
@@ -22,7 +22,9 @@ const AddNewClient: FC<AddClientTypes> = ({
   handleChangeOfficeName,
   form,
   mainLocation,
-  setMainLocation
+  setMainLocation,
+  phoneNumber,
+  setPhoneNumber
 }) => {
   return (
     <Form
@@ -62,12 +64,13 @@ const AddNewClient: FC<AddClientTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
+          <CustomPhoneInput
+            width="100%"
             name="phone"
-            type="text"
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
+            validatePhone
             label="Phone number"
-            placeholder="- - - - - - - -"
-            rules={phoneValidation}
           />
         </Col>
 

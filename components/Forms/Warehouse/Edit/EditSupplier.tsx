@@ -1,24 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
-import {
-  phoneValidation,
-  requiredInput
-} from "../../../../lib/validation/InputValidations";
+import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
 import { ECONOMIC_STATUS } from "../../../../config/constants";
+import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
 
 type EditSupplierTypes = {
   onEditSupplierFinish: (values: any) => void;
   isLoading: boolean;
   form: any;
+  phoneNumber: string;
+  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const EditSupplier: FC<EditSupplierTypes> = ({
   onEditSupplierFinish,
   isLoading,
-  form
+  form,
+  phoneNumber,
+  setPhoneNumber
 }) => {
   return (
     <Form
@@ -50,12 +52,9 @@ const EditSupplier: FC<EditSupplierTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
-            name="phone"
-            type="text"
-            label="Phone number"
-            placeholder="- - - - - - - -"
-            rules={phoneValidation}
+          <CustomPhoneInput
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
           />
         </Col>
 

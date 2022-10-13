@@ -45,6 +45,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   }>();
   const [officeName, setOfficeName] = useState("");
   const [postClient, { isLoading }] = usePostClientMutation();
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const dispatch = useDispatch();
 
@@ -68,6 +69,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   };
 
   const handlePostClientSuccess = ({ payload }: any) => {
+    setPhoneNumber("");
     setOffices([]);
     setMainLocation(undefined);
     form.resetFields();
@@ -77,20 +79,21 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   };
 
   const onAddClientFinish = (values: any) => {
-    handleAPIRequests({
-      request: postClient,
-      names: values?.names,
-      email: values?.email,
-      phone: values?.phone,
-      source: values?.source,
-      offices: offices,
-      location: mainLocation?.name,
-      coordinates: values?.coordinates,
-      tinNumber: values?.tinNumber,
-      economicStatus: values?.economicStatus,
-      showSuccess: true,
-      handleSuccess: handlePostClientSuccess
-    });
+    phoneNumber &&
+      handleAPIRequests({
+        request: postClient,
+        names: values?.names,
+        email: values?.email,
+        phone: phoneNumber?.replace("+", ""),
+        source: values?.source,
+        offices: offices,
+        location: mainLocation?.name,
+        coordinates: values?.coordinates,
+        tinNumber: values?.tinNumber,
+        economicStatus: values?.economicStatus,
+        showSuccess: true,
+        handleSuccess: handlePostClientSuccess
+      });
   };
 
   const LeftSide = (
@@ -189,6 +192,8 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
           mainLocation={mainLocation}
           handleChangeOfficeName={handleChangeOfficeName}
           form={form}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
         />
       </ModalWrapper>
 

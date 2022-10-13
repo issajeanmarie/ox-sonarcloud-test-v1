@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
-import {
-  phoneValidation,
-  requiredInput
-} from "../../../../lib/validation/InputValidations";
+import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
 import { LatLng } from "use-places-autocomplete";
 import { ECONOMIC_STATUS } from "../../../../config/constants";
+import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
 
 type AddSupplierTypes = {
   onAddSupplierFinish: (values: any) => void;
@@ -29,6 +27,8 @@ type AddSupplierTypes = {
         coordinates: LatLng;
       }
     | undefined;
+  phoneNumber: string;
+  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const AddSupplier: FC<AddSupplierTypes> = ({
@@ -36,7 +36,9 @@ const AddSupplier: FC<AddSupplierTypes> = ({
   isLoading,
   form,
   setLocation,
-  location
+  location,
+  phoneNumber,
+  setPhoneNumber
 }) => {
   return (
     <Form
@@ -68,12 +70,9 @@ const AddSupplier: FC<AddSupplierTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
-            name="phone"
-            type="text"
-            label="Phone number"
-            placeholder="- - - - - - - -"
-            rules={phoneValidation}
+          <CustomPhoneInput
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
           />
         </Col>
 

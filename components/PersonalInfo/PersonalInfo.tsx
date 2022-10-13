@@ -12,12 +12,12 @@ import {
   usePersonalInfoMutation,
   useChangePasswordMutation
 } from "../../lib/api/endpoints/settings/settingsEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
-import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
+import { BackendErrorTypes } from "../../lib/types/shared";
 import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 import ImageUploader from "../Shared/Input/imageUploader2";
 import { SettingsProfileLoader } from "../Shared/Loaders/Loaders";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
+import CustomPhoneInput from "../Shared/Custom/CustomPhoneInput";
 
 /**
  * @author Elie K. Gashagaza <gashagaza@awesomity.rw>
@@ -30,6 +30,7 @@ const ProfileInfo = () => {
   const [personalInfo, { isLoading: personalLoading }] =
     usePersonalInfoMutation();
   const [changePassword] = useChangePasswordMutation();
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const { data, isLoading, isFetching } = useSettingsQuery();
 
@@ -55,21 +56,25 @@ const ProfileInfo = () => {
 
   useEffect(() => {
     form.setFieldsValue(data?.payload);
+    setPhoneNumber((data?.payload?.phone && `+${data?.payload?.phone}`) || "");
   }, [data?.payload]);
+
+  const handleEditPersonalInfoSuccess = ({ payload }: any) => {
+    form.setFieldsValue(payload);
+    setPhoneNumber((payload?.phone && `+${payload?.phone}`) || "");
+  };
 
   // Method to update profile and sends it to API
   const profileInfo = (values: ProfileTypes) => {
-    personalInfo({
-      names: values?.names,
-      phone: values?.phone,
-      profilePic: uploadedPicInfo
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        form.setFieldsValue(res);
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    phoneNumber &&
+      handleAPIRequests({
+        request: personalInfo,
+        names: values?.names,
+        phone: phoneNumber?.replace("+", ""),
+        profilePic: uploadedPicInfo,
+        showSuccess: true,
+        handleSuccess: handleEditPersonalInfoSuccess
+      });
   };
 
   const handleUpdatePasswordSuccess = () => {
@@ -148,7 +153,10 @@ const ProfileInfo = () => {
             </Col>
 
             <Col sm={{ span: 25 }} xl={{ span: 12 }}>
-              <CustomInput type="text" name="phone" label="Phone Number" />
+              <CustomPhoneInput
+                phoneNumber={phoneNumber}
+                setPhoneNumber={setPhoneNumber}
+              />
             </Col>
           </Row>
 

@@ -48,4 +48,6 @@ export type AddClientTypes = {
     | undefined;
 
   handleChangeOfficeName: (value: string) => void;
+  phoneNumber: string;
+  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
 };

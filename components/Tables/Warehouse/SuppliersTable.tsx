@@ -8,9 +8,6 @@ import CustomButton from "../../Shared/Button";
 import { SuppliersTableTypes } from "../../../lib/types/pageTypes/Warehouse/Suppliers/SuppliersTableTypes";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import {
   useDeleteSupplierMutation,
   useEditSupplierMutation,
@@ -18,6 +15,7 @@ import {
 } from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditSupplier from "../../Forms/Warehouse/Edit/EditSupplier";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const { Text } = Typography;
 
@@ -42,6 +40,7 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
     useState<SetStateAction<number | undefined>>();
   const [itemToToggle, setItemToToggle] =
     useState<SetStateAction<number | undefined>>();
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
@@ -52,62 +51,56 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
     useToggleSupplierMutation();
   const [editSupplier, { isLoading: isEditing }] = useEditSupplierMutation();
 
+  const handleDeleteSupplierSuccess = () => {
+    setIsModalVisible(false);
+  };
+
   //DELTE
   const handleDeleteSupplier = () => {
-    deleteSupplier({
-      id: itemToDelete
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: deleteSupplier,
+      id: itemToDelete,
+      showSuccess: true,
+      handleSuccess: handleDeleteSupplierSuccess
+    });
   };
 
   //TOGGLE
   const handleToggleSupplier = (id: number) => {
     setItemToToggle(id);
-    toggleSUpplier({
-      id: id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: toggleSUpplier,
+      id: id,
+      showSuccess: true
+    });
   };
 
-  //EDIT
   //edit
   const showEditModal = (record: any) => {
     setItemToEdit(record);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
+    setPhoneNumber((record?.phone && `+${record?.phone}`) || "");
+  };
+
+  const handleEditSupplierSuccess = () => {
+    form.resetFields();
+    setIsEditModalVisible(false);
+    setPhoneNumber("");
   };
 
   const onEditSupplierFinish = (values: any) => {
-    editSupplier({
+    handleAPIRequests({
+      request: editSupplier,
       names: values?.names,
       email: values?.email,
-      phone: values?.phone,
+      phone: phoneNumber?.replace("+", ""),
       tinNumber: values?.tinNumber,
       economicStatus: values?.economicStatus,
-      id: itemToEdit?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsEditModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      id: itemToEdit?.id,
+      showSuccess: true,
+      handleSuccess: handleEditSupplierSuccess
+    });
   };
 
   const columns: any = [
@@ -278,6 +271,8 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
           onEditSupplierFinish={onEditSupplierFinish}
           isLoading={isEditing}
           form={form}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
         />
       </ModalWrapper>
     </>

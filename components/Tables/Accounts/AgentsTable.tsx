@@ -16,11 +16,9 @@ import {
   useToggleAgentMutation,
   useSendResetPWDToAgentMutation
 } from "../../../lib/api/endpoints/Accounts/agentsEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditAgent from "../../Forms/Accounts/Agents/EditAgent";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const { Text } = Typography;
 
@@ -36,6 +34,7 @@ const AgentsTable: FC<AgentsTableProps> = ({
     useState<SetStateAction<number | undefined>>();
   const [AgentToToggle, setAgentToToggle] = useState();
   const [agentToReset, setAgentToReset] = useState();
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
@@ -47,16 +46,17 @@ const AgentsTable: FC<AgentsTableProps> = ({
   const [sendResetPWDToAgent, { isLoading: isSending }] =
     useSendResetPWDToAgentMutation();
 
+  const handleDeleteAgentSuccess = () => {
+    setIsModalVisible(false);
+  };
+
   const handleDeleteAgent = () => {
-    deleteAgent({
-      id: itemToDelete
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: deleteAgent,
+      id: itemToDelete,
+      showSuccess: true,
+      handleSuccess: handleDeleteAgentSuccess
+    });
   };
 
   //edit
@@ -64,55 +64,47 @@ const AgentsTable: FC<AgentsTableProps> = ({
     setItemToEdit(record);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
+    setPhoneNumber((record?.phone && `+${record?.phone}`) || "");
+  };
+
+  const handleEditAgentSuccess = () => {
+    setPhoneNumber("");
+    form.resetFields();
+    setIsEditModalVisible(false);
   };
 
   const onEditAgentFinish = (values: any) => {
-    editAgent({
+    handleAPIRequests({
+      request: editAgent,
       names: values?.names,
       email: values?.email,
-      phone: values?.phone,
+      phone: phoneNumber?.replace("+", ""),
       gender: values?.gender,
-      id: itemToEdit?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsEditModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      id: itemToEdit?.id,
+      showSuccess: true,
+      handleSuccess: handleEditAgentSuccess
+    });
   };
 
   //toggle
-  const hangleToggleAgent = (id: any) => {
+  const handleToggleAgent = (id: any) => {
     setAgentToToggle(id);
-    toggleAgent({
-      id: id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+
+    handleAPIRequests({
+      request: toggleAgent,
+      id: id,
+      showSuccess: true
+    });
   };
 
   //reset
   const handleResetPWDAgent = (id: any) => {
     setAgentToReset(id);
-    sendResetPWDToAgent({
-      id: id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: sendResetPWDToAgent,
+      id: id,
+      showSuccess: true
+    });
   };
 
   const columns: any = [
@@ -225,7 +217,7 @@ const AgentsTable: FC<AgentsTableProps> = ({
             </div>
             <div className="h-1 flex items-center">
               <CustomButton
-                onClick={() => hangleToggleAgent(record?.id)}
+                onClick={() => handleToggleAgent(record?.id)}
                 type="normal"
                 size="icon"
                 className="bg_danger"
@@ -296,6 +288,8 @@ const AgentsTable: FC<AgentsTableProps> = ({
           onEditAgentFinish={onEditAgentFinish}
           isLoading={isEditing}
           form={form}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
         />
       </ModalWrapper>
     </>
