@@ -38,6 +38,7 @@ const DriversTable: FC<DriversTableProps> = ({
   const [itemToDelete, setItemToDelete] =
     useState<SetStateAction<number | undefined>>();
   const [driverToToggle, setDriverToToggle] = useState();
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [driverToMakeDispatcher, setDriverToMakeDispatcher] = useState<
     number | undefined
   >();
@@ -52,7 +53,7 @@ const DriversTable: FC<DriversTableProps> = ({
 
   const [deleteDriver, { isLoading }] = useDeleteDriverMutation();
   const [editDriver, { isLoading: isEditing }] = useEditDriverMutation();
-  const [toggleDriver, { isLoading: isTooglingDriver }] =
+  const [toggleDriver, { isLoading: isTogglingDriver }] =
     useToggleDriverMutation();
   const [makeDriverDispatcher, { isLoading: isMakingDispatcher }] =
     useMakeDriverDispatcherMutation();
@@ -77,6 +78,7 @@ const DriversTable: FC<DriversTableProps> = ({
     setItemToEdit(record);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
+    setPhoneNumber((record?.phone && `+${record?.phone}`) || "");
   };
 
   const dispatchReplace = (newContent: any) => {
@@ -97,6 +99,7 @@ const DriversTable: FC<DriversTableProps> = ({
   const handleEditDriverSuccess = ({ payload }: any) => {
     form.resetFields();
     setIsEditModalVisible(false);
+    setPhoneNumber("");
 
     const newDriversList: any = [];
 
@@ -112,16 +115,17 @@ const DriversTable: FC<DriversTableProps> = ({
   };
 
   const onEditDriverFinish = (values: any) => {
-    handleAPIRequests({
-      request: editDriver,
-      names: values?.names,
-      email: values?.email,
-      phone: values?.phone,
-      gender: values?.gender,
-      id: itemToEdit?.id,
-      showSuccess: true,
-      handleSuccess: handleEditDriverSuccess
-    });
+    phoneNumber &&
+      handleAPIRequests({
+        request: editDriver,
+        names: values?.names,
+        email: values?.email,
+        phone: phoneNumber?.replace("+", ""),
+        gender: values?.gender,
+        id: itemToEdit?.id,
+        showSuccess: true,
+        handleSuccess: handleEditDriverSuccess
+      });
   };
 
   const handleToggleDriverSuccess = ({ payload }: any) => {
@@ -327,7 +331,7 @@ const DriversTable: FC<DriversTableProps> = ({
                 type="normal"
                 size="icon"
                 className="bg_danger"
-                loading={record?.id === driverToToggle && isTooglingDriver}
+                loading={record?.id === driverToToggle && isTogglingDriver}
                 icon={
                   <Image
                     src={`/icons/ic-media-${
@@ -394,6 +398,8 @@ const DriversTable: FC<DriversTableProps> = ({
           onEditDriverFinish={onEditDriverFinish}
           isLoading={isEditing}
           form={form}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
         />
       </ModalWrapper>
     </>

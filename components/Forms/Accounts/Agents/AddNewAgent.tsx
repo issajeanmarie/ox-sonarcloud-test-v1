@@ -2,17 +2,19 @@ import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
 import {
   emailValidation,
-  phoneValidation,
   requiredInput
 } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
 import { AddAgentTypes } from "../../../../lib/types/pageTypes/Accounts/Agents/AddAgentTypes";
+import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
 
 const AddNewAgent: FC<AddAgentTypes> = ({
   onAddAgentFinish,
   isLoading,
-  form
+  form,
+  phoneNumber,
+  setPhoneNumber
 }) => {
   return (
     <Form
@@ -56,12 +58,9 @@ const AddNewAgent: FC<AddAgentTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
-            name="phone"
-            type="text"
-            label="Phone number"
-            placeholder="- - - - - - - -"
-            rules={phoneValidation}
+          <CustomPhoneInput
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
           />
         </Col>
 

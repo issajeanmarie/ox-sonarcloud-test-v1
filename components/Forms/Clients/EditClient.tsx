@@ -2,18 +2,20 @@ import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
 import {
   emailValidationNotRequired,
-  phoneValidation,
   requiredInput
 } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import { EditClientTypes } from "../../../lib/types/pageTypes/Clients/EditClientTypes";
 import { ECONOMIC_STATUS } from "../../../config/constants";
+import CustomPhoneInput from "../../Shared/Custom/CustomPhoneInput";
 
 const EditClient: FC<EditClientTypes> = ({
   onEditClientFinish,
   isLoading,
-  form
+  form,
+  phoneNumber,
+  setPhoneNumber
 }) => {
   return (
     <Form
@@ -53,12 +55,13 @@ const EditClient: FC<EditClientTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
+          <CustomPhoneInput
+            width="100%"
             name="phone"
-            type="text"
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
+            validatePhone
             label="Phone number"
-            placeholder="- - - - - - - -"
-            rules={phoneValidation}
           />
         </Col>
 

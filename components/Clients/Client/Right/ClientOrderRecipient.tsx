@@ -3,15 +3,10 @@ import { Col, Divider, Image, Row } from "antd";
 import React, { FC, useState } from "react";
 import { usePostClientRecipientMutation } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { ClientOrderRecipientTypes } from "../../../../lib/types/pageTypes/Clients/ClientOrderRecipientTypes";
-import {
-  BackendErrorTypes,
-  GenericResponse
-} from "../../../../lib/types/shared";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import AddClientRecipient from "../../../Forms/Clients/AddClientRecipient";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import CustomButton from "../../../Shared/Button/button";
-import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
-import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 import ClientOrderRecipientTable from "../../../Tables/Clients/ClientOrderRecipientTable";
 
 const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
@@ -19,6 +14,7 @@ const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
   isClientFetching
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -26,18 +22,21 @@ const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
   const [postClientRecipient, { isLoading: isPostingRecipient }] =
     usePostClientRecipientMutation();
 
+  const handleAddClientRecipientSuccess = () => {
+    setIsModalVisible(false);
+    setPhoneNumber("");
+  };
+
   const onAddClientRecipientFinish = (values: any) => {
-    postClientRecipient({
-      id: client?.id,
-      names: values?.names,
-      phone: values?.phone
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    phoneNumber &&
+      handleAPIRequests({
+        request: postClientRecipient,
+        id: client?.id,
+        names: values?.names,
+        phone: phoneNumber?.replace("+", ""),
+        showSuccess: true,
+        handleSuccess: handleAddClientRecipientSuccess
+      });
   };
   return (
     <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] mt-4">
@@ -81,12 +80,14 @@ const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
-        title="ADD CLIENT RECIPIENT"
+        title="ADD ORDER RECIPIENT"
         loading={isPostingRecipient}
       >
         <AddClientRecipient
           onAddClientRecipientFinish={onAddClientRecipientFinish}
           isLoading={isPostingRecipient}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
         />
       </ModalWrapper>
     </Row>

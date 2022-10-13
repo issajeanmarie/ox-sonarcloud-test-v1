@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Image, Row } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import Input from "../Shared/Input";
 import { FC } from "react";
 import { DriversTopNavigatorTypes } from "../../lib/types/pageTypes/Accounts/Drivers/DriversTopNavigatorTypes";
@@ -29,27 +29,30 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
   setSelectedSort
 }) => {
   const [form] = Form.useForm();
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [postDriver, { isLoading }] = usePostDriverMutation();
   const dispatch = useDispatch();
 
   const handleAddDriverSuccess = ({ payload }: any) => {
     form.resetFields();
     setIsModalVisible(false);
+    setPhoneNumber("");
 
     dispatch(displayPaginatedData({ payload }));
   };
 
   const onAddDriverFinish = (values: any) => {
-    handleAPIRequests({
-      request: postDriver,
-      names: values?.names,
-      email: values?.email,
-      phone: values?.phone,
-      password: passwordGenerator(),
-      gender: values?.gender,
-      showSuccess: true,
-      handleSuccess: handleAddDriverSuccess
-    });
+    phoneNumber &&
+      handleAPIRequests({
+        request: postDriver,
+        names: values?.names,
+        email: values?.email,
+        phone: phoneNumber?.replace("+", ""),
+        password: passwordGenerator(),
+        gender: values?.gender,
+        showSuccess: true,
+        handleSuccess: handleAddDriverSuccess
+      });
   };
 
   const LeftSide = (
@@ -128,6 +131,8 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
           onAddDriverFinish={onAddDriverFinish}
           isLoading={isLoading}
           form={form}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
         />
       </ModalWrapper>
 

@@ -5,9 +5,6 @@ import { ClientOrderRecipientTableTypes } from "../../../lib/types/pageTypes/Cli
 import RowsWrapper from "../RowsWrapper";
 import { Button, Form } from "antd";
 import { FC, useState } from "react";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import ActionModal from "../../Shared/ActionModal";
 import {
   useDeleteClientRecipientMutation,
@@ -19,6 +16,7 @@ import Image from "next/image";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditClientRecipient from "../../Forms/Clients/EditClientRecipient";
 import { RemoveCircleOutlineIcon } from "../../Icons";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const { Text } = Typography;
 
@@ -36,11 +34,13 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
 
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const showEditModal = (record: any) => {
     setItemToEdit(record?.id);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
+    setPhoneNumber((record?.phone && `+${record?.phone}`) || "");
   };
 
   const [itemToDelete, setItemToDelete]: any = useState();
@@ -53,36 +53,38 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
   const [deleteClientRecipient, { isLoading }] =
     useDeleteClientRecipientMutation();
 
+  const handleDeleteClientRecipientSuccess = () => {
+    setIsModalVisible(false);
+  };
+
   const handleDeleteClientRecipient = () => {
-    deleteClientRecipient({
+    handleAPIRequests({
+      request: deleteClientRecipient,
       id: query?.client,
-      affiliateId: itemToDelete?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      affiliateId: itemToDelete?.id,
+      showSuccess: true,
+      handleSuccess: handleDeleteClientRecipientSuccess
+    });
   };
 
   //EDIT
   const [editClientRecipient, { isLoading: isEditing }] =
     useEditClientRecipientMutation();
 
+  const handleEditRecipientSuccess = () => {
+    setIsEditModalVisible(false);
+  };
+
   const onEditClientRecipientFinish = (values: any) => {
-    editClientRecipient({
+    handleAPIRequests({
+      request: editClientRecipient,
       id: query?.client,
       affiliateId: itemToEdit,
       names: values?.names,
-      phone: values?.phone
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsEditModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      phone: phoneNumber?.replace("+", ""),
+      showSuccess: true,
+      handleSuccess: handleEditRecipientSuccess
+    });
   };
 
   const columns: any = [
@@ -178,6 +180,8 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
           onEditClientRecipientFinish={onEditClientRecipientFinish}
           isLoading={isEditing}
           form={form}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
         />
       </ModalWrapper>
     </>

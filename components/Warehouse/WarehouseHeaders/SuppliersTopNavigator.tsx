@@ -6,9 +6,6 @@ import Col from "antd/lib/col";
 import { localeString } from "../../../utils/numberFormatter";
 import Button from "../../Shared/Button";
 import ModalWrapper from "../../Modals/ModalWrapper";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { Form } from "antd";
 import DropDownSelector from "../../Shared/DropDownSelector";
 import AddSupplier from "../../Forms/Warehouse/Add/AddSupplier";
@@ -16,6 +13,7 @@ import AddSupplier from "../../Forms/Warehouse/Add/AddSupplier";
 import { LatLng } from "use-places-autocomplete";
 import { usePostSupplierMutation } from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
 import { SuppliersTopNavigatorTypes } from "../../../lib/types/pageTypes/Warehouse/Suppliers/SuppliersTopNavigator";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
   showModal,
@@ -26,6 +24,7 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
   data
 }) => {
   const [form] = Form.useForm();
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [location, setLocation] = useState<{
     name: string;
     coordinates: LatLng;
@@ -34,30 +33,27 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
   const [postSupplier, { isLoading: isAddingSupplier }] =
     usePostSupplierMutation();
 
+  const handleAddSupplierSuccess = () => {
+    setLocation(undefined);
+    form.resetFields();
+    setIsModalVisible(false);
+    setPhoneNumber("");
+  };
+
   const onAddSupplierFinish = (values: any) => {
-    postSupplier({
-      names: values?.names,
-      email: values?.email,
-      phone: values?.phone,
-      location: location ? location?.name : "",
-      coordinates: location ? JSON.stringify(location?.coordinates) : "",
-      tinNumber: values?.tinNumber,
-      economicStatus: values?.economicStatus
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setLocation(undefined);
-        form.resetFields();
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+    phoneNumber &&
+      handleAPIRequests({
+        request: postSupplier,
+        names: values?.names,
+        email: values?.email,
+        phone: phoneNumber?.replace("+", ""),
+        location: location ? location?.name : "",
+        coordinates: location ? JSON.stringify(location?.coordinates) : "",
+        tinNumber: values?.tinNumber,
+        economicStatus: values?.economicStatus,
+        showSuccess: true,
+        handleSuccess: handleAddSupplierSuccess
+      });
   };
 
   const LeftSide = (
@@ -99,7 +95,7 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
-        title="NEW WAREHOUSE ITEM"
+        title="NEW OX SUPPLIER"
         loading={false}
       >
         <AddSupplier
@@ -108,6 +104,8 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
           isLoading={isAddingSupplier}
           setLocation={setLocation}
           location={location}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
         />
       </ModalWrapper>
       <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />

@@ -10,9 +10,6 @@ import {
   useEditClientLocationMutation
 } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import ActionModal from "../../Shared/ActionModal";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { useRouter } from "next/router";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditClientLocation from "../../Forms/Clients/EditClientLocation";
@@ -20,6 +17,7 @@ import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import Image from "next/image";
 import { LatLng } from "use-places-autocomplete";
 import { RemoveCircleOutlineIcon } from "../../Icons";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const { Text } = Typography;
 
@@ -58,36 +56,40 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
 
   const [deleteClientLocation, { isLoading }] =
     useDeleteClientLocationMutation();
+
+  const handleDeleteClientLocationSuccess = () => {
+    setIsModalVisible(false);
+  };
+
   const handleDeleteClientLocation = () => {
-    deleteClientLocation({
+    handleAPIRequests({
+      request: deleteClientLocation,
       clientId: query?.client,
-      officeId: itemToDelete?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      officeId: itemToDelete?.id,
+      showSuccess: true,
+      handleSuccess: handleDeleteClientLocationSuccess
+    });
+  };
+
+  const handleEditClientLocationSuccess = () => {
+    setIsEditModalVisible(false);
   };
 
   const [editClientLocation, { isLoading: isEditing }] =
     useEditClientLocationMutation();
+
   const onEditClientLocationFinish = (values: any) => {
-    editClientLocation({
+    handleAPIRequests({
+      request: editClientLocation,
       clientId: query?.client,
       officeId: itemToEdit?.id,
       location: location ? location?.name : "",
       coordinates: location ? JSON.stringify(location?.coordinates) : "",
       names: values?.names,
-      type: itemToEdit?.type
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsEditModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      type: itemToEdit?.type,
+      showSuccess: true,
+      handleSuccess: handleEditClientLocationSuccess
+    });
   };
 
   const columns: any = [

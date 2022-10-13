@@ -16,6 +16,7 @@ import CustomButton from "../../../components/Shared/Button";
 import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import SuppliersTopNavigator from "../../../components/Warehouse/WarehouseHeaders/SuppliersTopNavigator";
 import Content from "../../../components/Shared/Content";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const SuppliersPage = () => {
   const [active, setActive] = useState<string>("SALES");
@@ -57,21 +58,21 @@ const SuppliersPage = () => {
     id === "SUPPLIERS" && changeRoute(`${routes.Suppliers.url}?wtb=SUPPLIERS`);
   };
 
+  const handleLoadMoreSuccess = ({ payload }: any) => {
+    setPageSize(pageSize + 20);
+    setMoreSuppliers(payload);
+  };
+
   const handleLoadMore = () => {
-    suppliers({
+    handleAPIRequests({
+      request: suppliers,
       page: "",
       size: pageSize,
-      sort: sort.id || ""
-    })
-      .unwrap()
-      .then((res) => {
-        setPageSize(pageSize + 20);
-        setMoreSuppliers(res?.payload);
-      })
-      .catch((error) => {
-        return error;
-      });
+      sort: sort.id || "",
+      handleSuccess: handleLoadMoreSuccess
+    });
   };
+
   //MODAL
   const showModal = () => {
     setIsModalVisible(true);

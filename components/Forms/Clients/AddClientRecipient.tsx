@@ -1,16 +1,16 @@
 import { Col, Form, Row } from "antd";
 import React, { FC } from "react";
-import {
-  phoneValidation,
-  requiredInput
-} from "../../../lib/validation/InputValidations";
+import { requiredInput } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import { AddClientRecipientTypes } from "../../../lib/types/pageTypes/Clients/AddClientRecipientTypes";
+import CustomPhoneInput from "../../Shared/Custom/CustomPhoneInput";
 
 const AddClientRecipient: FC<AddClientRecipientTypes> = ({
   onAddClientRecipientFinish,
-  isLoading
+  isLoading,
+  phoneNumber,
+  setPhoneNumber
 }) => {
   return (
     <Form
@@ -31,12 +31,13 @@ const AddClientRecipient: FC<AddClientRecipientTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <Input
+          <CustomPhoneInput
+            width="100%"
             name="phone"
-            type="text"
-            label="Phone"
-            placeholder="Phone"
-            rules={phoneValidation}
+            label="Phone number"
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
+            validatePhone
           />
         </Col>
       </Row>
