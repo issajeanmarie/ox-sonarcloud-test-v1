@@ -90,7 +90,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
       !user.isGuest) ||
     (user.isSuperAdmin && !isCanceled);
 
-  const canUserPay = isOrderDisabled && !isFullPaid;
+  const canUserPay = !isCanceled && !user.isGuest && !isFullPaid;
 
   const handleDeleteStopSuccess = () => {
     setIsDeleteStopModal(false);
@@ -144,16 +144,18 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
 
         {details?.stops?.map((stop: any, index: number) => {
           return (
-            <div key={stop.id} className="flex items-center mb-5">
-              <div className="flex-1 flex items-center gap-8">
-                <span className="text-gray-400 font-light">{index + 1}</span>
-                <span className="heading2">{stop.truck?.plateNumber}</span>
+            stop.position !== 1 && (
+              <div key={stop.id} className="flex items-center mb-5">
+                <div className="flex-1 flex items-center gap-8">
+                  <span className="text-gray-400 font-light">{index + 1}</span>
+                  <span className="heading2">{stop.truck?.plateNumber}</span>
+                </div>
+                <div className="flex-1 normalText">{stop?.weight} KGs</div>
+                <div className="flex-1 text-gray-400 font-light">
+                  {stop?.driver?.names}
+                </div>
               </div>
-              <div className="flex-1 normalText">{stop?.weight} KGs</div>
-              <div className="flex-1 text-gray-400 font-light">
-                {stop?.driver?.names}
-              </div>
-            </div>
+            )
           );
         })}
       </div>
@@ -323,6 +325,12 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                 </div>
 
                 <div className={`${!isCanceled && !isComplete ? "mt-20" : ""}`}>
+                  {
+                    <span className="text-gray-400 font-light">
+                      {data?.comment}
+                    </span>
+                  }
+
                   {!isCanceled && !isComplete && (
                     <>
                       <TextLight>Admin&apos;s comment</TextLight>

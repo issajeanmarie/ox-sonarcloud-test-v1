@@ -25,13 +25,13 @@ const AppHeader = ({ collapsed, toggle }: any) => {
         </div>
 
         <div className="flex items-center gap-4">
-          <Image
+          {/* <Image
             className="radius8 img_fit"
             width={15}
             src="/icons/bell.svg"
             preview={false}
             alt=""
-          />
+          /> */}
 
           <ProfileBox
             user={{

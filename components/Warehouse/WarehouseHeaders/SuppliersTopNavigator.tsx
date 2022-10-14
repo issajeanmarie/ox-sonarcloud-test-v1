@@ -46,7 +46,7 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
         request: postSupplier,
         names: values?.names,
         email: values?.email,
-        phone: phoneNumber?.replace("+", ""),
+        phone: phoneNumber,
         location: location ? location?.name : "",
         coordinates: location ? JSON.stringify(location?.coordinates) : "",
         tinNumber: values?.tinNumber,

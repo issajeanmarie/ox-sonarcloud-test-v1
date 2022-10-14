@@ -94,7 +94,7 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
       request: editSupplier,
       names: values?.names,
       email: values?.email,
-      phone: phoneNumber?.replace("+", ""),
+      phone: phoneNumber,
       tinNumber: values?.tinNumber,
       economicStatus: values?.economicStatus,
       id: itemToEdit?.id,

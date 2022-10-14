@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 import Form from "antd/lib/form";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
+import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
 import { Row, Col } from "antd";
 import { AddResourceTypes } from "../../../lib/types/pageTypes/Resources/AddResourceTypes";
@@ -66,7 +67,21 @@ const AddNewResource: FC<AddResourceTypes> = ({
       <Row>
         <Col className="gutter-row" span={18}>
           <a href={val} target="_blank" rel="noopener noreferrer">
-            <Text className="heading2 mato8">Test the pasted link</Text>
+            <Row gutter={16} align="middle">
+              <Col>
+                <Text className="heading2 mato8 underline">
+                  Test the pasted link
+                </Text>
+              </Col>
+
+              <Image
+                preview={false}
+                width={12}
+                className="mt-2"
+                alt="New tab"
+                src="/icons/newTab.png"
+              />
+            </Row>
           </a>
         </Col>
         <Col className="gutter-row" span={6}>

@@ -28,7 +28,7 @@ export type TrucksUsageTableColumnsTypes = {
 };
 
 export type TrucksUsageTypes = {
-  sorter: string;
+  sorter: any;
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
   uploadingFuelReport: boolean;

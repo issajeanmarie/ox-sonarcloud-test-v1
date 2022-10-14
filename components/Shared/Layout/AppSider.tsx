@@ -304,7 +304,7 @@ const AppSider = ({ collapsed }: any) => {
         })}
       </Menu>
 
-      <Row className="help_desk bg-black rounded-md pointer">
+      {/* <Row className="help_desk bg-black rounded-md pointer">
         <div className="flex items-center justify-center p-3 gap-3 w-full">
           <Image
             width={22}
@@ -329,7 +329,7 @@ const AppSider = ({ collapsed }: any) => {
             </div>
           )}
         </div>
-      </Row>
+      </Row> */}
     </Sider>
   );
 };

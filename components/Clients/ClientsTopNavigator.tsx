@@ -84,7 +84,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         request: postClient,
         names: values?.names,
         email: values?.email,
-        phone: phoneNumber?.replace("+", ""),
+        phone: phoneNumber,
         source: values?.source,
         offices: offices,
         location: mainLocation?.name,
