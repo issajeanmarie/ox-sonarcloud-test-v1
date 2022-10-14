@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Image, Modal, Table, Typography } from "antd";
+import { Image, Table, Typography } from "antd";
 import CustomButton from "../../Shared/Button/button";
 import { FC } from "react";
 import { SettingsCategoriesTableProps } from "../../../lib/types/pageTypes/Settings/SettingsCategoriesTableProps";
@@ -7,6 +7,7 @@ import { SettingsCategoriesTableTypes } from "../../../lib/types/pageTypes/Setti
 import AddSubCategory from "../../Forms/Settings/AddSubCategory";
 import UpdateCategory from "../../Forms/Settings/UpdateCategory";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
+import ModalWrapper from "../../Modals/ModalWrapper";
 
 const { Text } = Typography;
 
@@ -23,14 +24,15 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
   onUpdateCategoryFinish,
   isUpdatingCategory,
   showEditModal,
-  handleEditOk,
-  handleEditCancel,
   isEditModalVisible,
   form,
   categoriesFetching,
   handleMakeCategoryParent,
   isParentingCategory,
-  pageSize
+  pageSize,
+  isLoading,
+  setIsModalVisible,
+  isId
 }) => {
   //Change the subcategory keyname to children keyname
   const _data =
@@ -87,7 +89,7 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
             onClick={() => handleMakeCategoryParent(record?.id)}
             type="normal"
             size="icon"
-            loading={isParentingCategory}
+            loading={isParentingCategory && record.id == isId}
             icon={
               <Image
                 src="/icons/movement.svg"
@@ -114,7 +116,7 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
 
           <CustomButton
             onClick={() => handleDeleteCategory(record?.id)}
-            loading={isDeletinCategory}
+            loading={isDeletinCategory && record.id == isId}
             type="danger"
             size="icon"
             icon={
@@ -151,20 +153,23 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
         handleOk={handleOk}
         handleCancel={handleCancel}
         isModalVisible={isModalVisible}
+        setIsModalVisible={undefined}
+        isLoading={false}
       />
-      <Modal
+      <ModalWrapper
         title="Edit category"
-        visible={isEditModalVisible}
-        onOk={handleEditOk}
-        onCancel={handleEditCancel}
-        footer={false}
+        isModalVisible={isEditModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        onCancel={handleCancel}
+        loading={isLoading}
+        destroyOnClose
       >
         <UpdateCategory
           onUpdateCategoryFinish={onUpdateCategoryFinish}
           isUpdatingCategory={isUpdatingCategory}
           form={form}
         />
-      </Modal>
+      </ModalWrapper>
     </>
   );
 };

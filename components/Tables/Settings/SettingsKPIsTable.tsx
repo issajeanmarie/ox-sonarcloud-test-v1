@@ -3,6 +3,7 @@ import Typography from "antd/lib/typography";
 import { SettingsKPIsTableTypes } from "../../../lib/types/pageTypes/Settings/SettingsKPIsTableTypes";
 import RowsWrapper from "../RowsWrapper";
 import CustomInput from "../../Shared/Input";
+import Input from "../../Shared/Input";
 import { FC } from "react";
 import { SettingsKPIsTableProps } from "../../../lib/types/pageTypes/Settings/SettingsKPIsTableProps";
 
@@ -72,7 +73,7 @@ const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({
         record: SettingsKPIsTableTypes
       ) => (
         <RowsWrapper>
-          <CustomInput
+          <Input
             onChange={handlePostTargetPerKmykpi}
             defaultValue={record?.targetPerKm}
             type="text"
