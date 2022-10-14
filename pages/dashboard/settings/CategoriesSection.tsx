@@ -30,7 +30,8 @@ const CategoriesSection = ({
   form,
   handleMakeCategoryParent,
   isParentingCategory,
-  pageSize
+  pageSize,
+  isId
 }: any) => {
   const [state, setState] = useState("");
 
@@ -119,11 +120,14 @@ const CategoriesSection = ({
           handleEditOk={handleEditOk}
           handleEditCancel={handleEditCancel}
           isEditModalVisible={isEditModalVisible}
+          setIsModalVisible={isEditModalVisible}
           form={form}
           categoriesFetching={categoriesFetching}
           handleMakeCategoryParent={handleMakeCategoryParent}
           isParentingCategory={isParentingCategory}
           pageSize={pageSize}
+          isLoading={false}
+          isId={isId}
         />
       )}
     </SettingsCardWrapper>

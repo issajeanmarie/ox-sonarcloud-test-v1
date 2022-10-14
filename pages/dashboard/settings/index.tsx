@@ -50,6 +50,7 @@ const Settings = () => {
     useMakeCategoryParentMutation();
   const [active, setActive] = useState<string>("preferences");
   const [pageSize, setPageSize] = useState(10);
+  const [isId, setIsId] = useState(0);
 
   const handleLoadMore = () => {
     setPageSize(pageSize + 10);
@@ -70,12 +71,6 @@ const Settings = () => {
   const handleAddKPIs = () => {
     addKpi({
       kpis: data?.payload?.map((item: any) => {
-        const kpiArr = [];
-        kpiArr.push({
-          targetPerKm: targetPerDaykpi,
-          targetPerKmkpi: targetPerKmkpi
-        });
-
         return {
           targetPerDay: targetPerDaykpi ? +targetPerDaykpi : item?.targetPerDay,
           targetPerKm: targetPerKmkpi ? +targetPerKmkpi : item?.targetPerKm
@@ -118,6 +113,7 @@ const Settings = () => {
   };
 
   const handleDeleteCategory = (id: number) => {
+    setIsId(id);
     deleteCategory({
       id: id
     })
@@ -129,6 +125,7 @@ const Settings = () => {
   };
 
   const handleMakeCategoryParent = (id: number) => {
+    setIsId(id);
     makeCategoryParent({
       id: id
     })
@@ -220,6 +217,8 @@ const Settings = () => {
         handleMakeCategoryParent={handleMakeCategoryParent}
         isParentingCategory={isParentingCategory}
         pageSize={pageSize}
+        isLoading={isCategoriesLoading}
+        isId={isId}
       />
 
       {pageSize < categories?.payload?.length && (
