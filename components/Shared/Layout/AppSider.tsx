@@ -268,13 +268,13 @@ const AppSider = ({ collapsed }: any) => {
                 </text>
 
                 {/* NOTIFICATION LETTER */}
-                <Space
+                {/* <Space
                   className={`radius50 fowe400 bg_yellow rounded-full white notification_letter ${
                     collapsed ? "collapsed_on" : "collapsed_off"
                   }`}
                 >
                   N
-                </Space>
+                </Space> */}
               </Menu.Item>
             );
           }
