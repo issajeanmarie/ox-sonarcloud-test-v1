@@ -139,15 +139,9 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         />
         <button
           className={`rounded-lg bg-ox-yellow text-white w-[30px] h-[30px] flex items-center justify-center ${
-            canUserPay && !isOrderDisabled
-              ? "cursor-pointer"
-              : "cursor-not-allowed opacity-50"
+            canUserPay ? "cursor-pointer" : "cursor-not-allowed opacity-50"
           } `}
-          onClick={() =>
-            canUserPay &&
-            !isOrderDisabled &&
-            setIsMobilePaymentModalVisible(true)
-          }
+          onClick={() => canUserPay && setIsMobilePaymentModalVisible(true)}
         >
           $
         </button>
