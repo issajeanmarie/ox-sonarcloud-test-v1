@@ -1,28 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import Layout from "../../components/Shared/Layout";
-import WithPrivateRoute from "../../components/Shared/Routes/WithPrivateRoute";
-import TopNavigator from "../../components/Shared/TopNavigator";
-import { AnalyticLinks } from "../../components/Analytics/AnalyticLinks";
-import AnalyticTrucks from "../../components/Analytics/Trucks/AnalyticTrucks";
-import AnalyticRevenues from "../../components/Analytics/Revenues/AnalyticRevenues";
-import AnalyticMap from "../../components/Analytics/Map/AnalyticMap";
-import AnalyticKPIs from "../../components/Analytics/KPIs/AnalyticKPIs";
+import Layout from "../../../components/Shared/Layout";
+import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
+import TopNavigator from "../../../components/Shared/TopNavigator";
+import { AnalyticLinks } from "../../../components/Analytics/AnalyticLinks";
+import AnalyticTrucks from "../../../components/Analytics/Trucks/AnalyticTrucks";
+import AnalyticRevenues from "../../../components/Analytics/Revenues/AnalyticRevenues";
+import AnalyticMap from "../../../components/Analytics/Map/AnalyticMap";
+import AnalyticKPIs from "../../../components/Analytics/KPIs/AnalyticKPIs";
 import {
-  useTruckAnalyticsQuery,
   useRevenueAnalyticsQuery,
   useMapAnalyticsQuery,
   useKPIsAnalyticsQuery,
   useLazyDownloadTruckAnalyticsQuery
-} from "../../lib/api/endpoints/Analytics/analyticEndpoints";
-import { useCategoriesQuery } from "../../lib/api/endpoints/Category/categoryEndpoints";
+} from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
+import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/categoryEndpoints";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
-import { handleDownloadFile } from "../../utils/handleDownloadFile";
-import { BackendErrorTypes } from "../../lib/types/shared";
-import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
-import DaysCalculator from "../../helpers/daysCalculator";
-import Content from "../../components/Shared/Content";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
+import DaysCalculator from "../../../helpers/daysCalculator";
+import Content from "../../../components/Shared/Content";
 import { useSelector } from "react-redux";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const daysList = [
   { id: 0, name: "Last 7 days", value: 7 },
@@ -37,7 +35,7 @@ type DepotTypes = {
 };
 
 const Analytics = () => {
-  const [selectedDay, setselectedDay] = useState<any>(daysList[0]);
+  const [selectedDay, setSelectedDay] = useState<any>(daysList[0]);
   const [isDateCustom, setIsDateCustom] = useState(false);
   const [active, setActive] = useState<string>("trucks");
   const [sorter, setSorter] = useState<any>({});
@@ -63,19 +61,6 @@ const Analytics = () => {
   const depotsState = useSelector(
     (state: { depots: { payload: DepotTypes } }) => state.depots.payload
   );
-
-  const {
-    data: truckData,
-    isLoading: truckLoading,
-    isFetching: truckFetching
-  } = useTruckAnalyticsQuery({
-    depot: depotsState?.depotId,
-    start: startDate,
-    end: endDate,
-    sortBy: sorter?.value || "",
-    direction: "",
-    search: searchQuery
-  });
 
   const {
     data: revenueData,
@@ -111,25 +96,26 @@ const Analytics = () => {
     { isLoading: isDownloadingTruckReport, isFetching: isDownloadFetching }
   ] = useLazyDownloadTruckAnalyticsQuery();
 
+  const handleDownloadAnalyticsSuccess = (file: File) => {
+    handleDownloadFile({
+      file,
+      name: "Truck-Report",
+      fileFormat: "PDF"
+    });
+  };
+
   const handleDownloadClients = () => {
-    downloadTruckAnalytics({
+    handleAPIRequests({
+      request: downloadTruckAnalytics,
       file_type: "PDF",
       depot: depotsState?.depotId || "",
       start: startDate,
       end: endDate,
       sortBy: sorter?.value || "",
       direction: "",
-      search: searchQuery
-    })
-      .unwrap()
-      .then((file: any) =>
-        handleDownloadFile({
-          file,
-          name: "Truck-Report",
-          fileFormat: "PDF"
-        })
-      )
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      search: searchQuery,
+      handleSuccess: handleDownloadAnalyticsSuccess
+    });
   };
 
   const toggleActiveHandler = (id: string) => {
@@ -165,7 +151,7 @@ const Analytics = () => {
         onStartDateChange={onStartDateChange}
         onEndDateChange={onEndDateChange}
         selectedDay={selectedDay}
-        setselectedDay={setselectedDay}
+        setSelectedDay={setSelectedDay}
         isDateCustom={isDateCustom}
         setIsDateCustom={setIsDateCustom}
         daysList={daysList}
@@ -178,9 +164,6 @@ const Analytics = () => {
           {active === "trucks" && (
             <AnalyticTrucks
               active={active}
-              truckData={truckData}
-              truckLoading={truckLoading}
-              truckFetching={truckFetching}
               sorter={sorter}
               onStartDateChange={onStartDateChange}
               onEndDateChange={onEndDateChange}
@@ -190,6 +173,9 @@ const Analytics = () => {
               isDownloadFetching={isDownloadFetching}
               selectedSort={sorter}
               setSelectedSort={setSorter}
+              depotsState={depotsState}
+              startDate={startDate}
+              endDate={endDate}
             />
           )}
           {active === "revenue" && (

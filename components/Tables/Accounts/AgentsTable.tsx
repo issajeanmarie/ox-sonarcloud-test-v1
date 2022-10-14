@@ -78,7 +78,7 @@ const AgentsTable: FC<AgentsTableProps> = ({
       request: editAgent,
       names: values?.names,
       email: values?.email,
-      phone: phoneNumber?.replace("+", ""),
+      phone: phoneNumber,
       gender: values?.gender,
       id: itemToEdit?.id,
       showSuccess: true,

@@ -37,7 +37,7 @@ const ClientInfo: FC<ClientInfoTypes> = ({ client }) => {
         id: client?.id,
         names: values?.names,
         email: values?.email,
-        phone: phoneNumber?.replace("+", ""),
+        phone: phoneNumber,
         source: values?.source,
         tinNumber: values?.tinNumber,
         economicStatus: values?.economicStatus,

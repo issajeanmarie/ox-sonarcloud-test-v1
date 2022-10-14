@@ -5,7 +5,6 @@ import CardColWrapper from "../../Cards/CardColWrapper";
 import CardRowWrapper from "../../Cards/CardRowWrapper";
 import MediumCard from "../../Cards/MediumCard";
 import TrucksUsageTable from "../../Tables/Analytics/TrucksUsageTable";
-// import CustomButton from "../../Shared/Button/button";
 import TrucksUsage from "./TrucksUsage";
 import { AnalyticTrucksTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticTrucksTypes";
 import {
@@ -14,14 +13,12 @@ import {
 } from "../../Shared/Loaders/Loaders";
 import { useUploadFuelReportMutation } from "../../../lib/api/endpoints/Trucks/truckEndpoints";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { UploadProps } from "antd";
+import { useTruckAnalyticsQuery } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
   active,
-  truckData,
-  truckLoading,
-  truckFetching,
   sorter,
   onStartDateChange,
   onEndDateChange,
@@ -30,24 +27,45 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
   isDownloadingTruckReport,
   isDownloadFetching,
   selectedSort,
-  setSelectedSort
+  setSelectedSort,
+  depotsState,
+  startDate,
+  endDate,
+  searchQuery
 }) => {
   const formData = new FormData();
   const [uploadResponse, setUploadResponse] = useState("");
   const [uploadFuelReport, { isLoading: uploadingFuelReport }] =
     useUploadFuelReportMutation();
 
+  const {
+    data: truckData,
+    isLoading: truckLoading,
+    isFetching: truckFetching
+  } = useTruckAnalyticsQuery({
+    depot: depotsState?.depotId,
+    start: startDate,
+    end: endDate,
+    sortBy: sorter?.value || "",
+    direction: "",
+    search: searchQuery
+  });
+
+  const handleUploadFileSuccess = (res: any) => {
+    setUploadResponse(res.message);
+  };
+
   const uploadFileProps: UploadProps = {
     name: "report",
     showUploadList: false,
     onChange(info: any) {
       formData.append("report", info?.file?.originFileObj);
-      uploadFuelReport({ report: formData })
-        .unwrap()
-        .then((res) => {
-          setUploadResponse(res.message);
-        })
-        .catch((err) => ErrorMessage(err.data?.message));
+
+      handleAPIRequests({
+        request: uploadFuelReport,
+        report: formData,
+        handleSuccess: handleUploadFileSuccess
+      });
     }
   };
 
@@ -139,13 +157,6 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
             truckData={truckData?.payload?.truckAnalytics}
             truckFetching={truckFetching}
           />
-          {/* <div className="flex justify-center items-center py-10">
-            <div className="w-52">
-              <CustomButton type="secondary">
-                <span className="text-sm">Load More</span>
-              </CustomButton>
-            </div>
-          </div> */}
         </div>
       )}
     </>

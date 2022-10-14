@@ -16,7 +16,7 @@ const TopNavigator: FC<TopNavigatorProps> = ({
   onStartDateChange,
   onEndDateChange,
   selectedDay,
-  setselectedDay,
+  setSelectedDay,
   isDateCustom,
   setIsDateCustom,
   daysList,
@@ -56,7 +56,7 @@ const TopNavigator: FC<TopNavigatorProps> = ({
             onEndDateChange={onEndDateChange}
             daysList={daysList}
             selectedDay={selectedDay}
-            setSelectedDay={setselectedDay}
+            setSelectedDay={setSelectedDay}
             isDateCustom={isDateCustom}
             setIsDateCustom={setIsDateCustom}
           />
@@ -69,7 +69,7 @@ const TopNavigator: FC<TopNavigatorProps> = ({
             onEndDateChange={onEndDateChange}
             daysList={daysList}
             selectedDay={selectedDay}
-            setSelectedDay={setselectedDay}
+            setSelectedDay={setSelectedDay}
             isDateCustom={isDateCustom}
             setIsDateCustom={setIsDateCustom}
             selectedDepot={selectedDepot}

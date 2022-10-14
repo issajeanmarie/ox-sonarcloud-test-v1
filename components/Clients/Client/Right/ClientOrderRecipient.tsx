@@ -33,7 +33,7 @@ const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
         request: postClientRecipient,
         id: client?.id,
         names: values?.names,
-        phone: phoneNumber?.replace("+", ""),
+        phone: phoneNumber,
         showSuccess: true,
         handleSuccess: handleAddClientRecipientSuccess
       });

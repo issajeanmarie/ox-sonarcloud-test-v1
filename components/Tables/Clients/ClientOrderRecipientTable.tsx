@@ -81,7 +81,7 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
       id: query?.client,
       affiliateId: itemToEdit,
       names: values?.names,
-      phone: phoneNumber?.replace("+", ""),
+      phone: phoneNumber,
       showSuccess: true,
       handleSuccess: handleEditRecipientSuccess
     });

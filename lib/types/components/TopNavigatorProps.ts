@@ -13,7 +13,7 @@ export interface TopNavigatorProps {
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
   selectedDay?: any;
-  setselectedDay?: any;
+  setSelectedDay?: any;
   isDateCustom?: boolean;
   setIsDateCustom?: any;
   daysList?: any;

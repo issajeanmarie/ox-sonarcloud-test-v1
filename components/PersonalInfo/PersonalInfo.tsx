@@ -70,7 +70,7 @@ const ProfileInfo = () => {
       handleAPIRequests({
         request: personalInfo,
         names: values?.names,
-        phone: phoneNumber?.replace("+", ""),
+        phone: phoneNumber,
         profilePic: uploadedPicInfo,
         showSuccess: true,
         handleSuccess: handleEditPersonalInfoSuccess

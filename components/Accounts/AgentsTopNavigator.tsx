@@ -34,7 +34,7 @@ const AgentsTopNavigator: FC<AgentsTopNavigatorTypes> = ({
         request: postAgent,
         names: values?.names,
         email: values?.email,
-        phone: phoneNumber?.replace("+", ""),
+        phone: phoneNumber,
         gender: values?.gender,
         showSuccess: true,
         handleSuccess: handleAddAgentSuccess

@@ -3,10 +3,7 @@ import { SearchType } from "./Inputs";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type AnalyticTrucksTypes = {
   active: string;
-  truckData: any;
-  truckLoading: boolean;
-  truckFetching: boolean;
-  sorter: string;
+  sorter: { value: string };
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
   handleSearch: (e: SearchType) => void;
@@ -15,6 +12,10 @@ export type AnalyticTrucksTypes = {
   isDownloadFetching: boolean;
   selectedSort: any;
   setSelectedSort: any;
+  depotsState: any;
+  startDate: string | null;
+  endDate: string | null;
+  searchQuery?: any;
 };
 
 export type truckTableTypes = {

@@ -47,7 +47,7 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
         request: postDriver,
         names: values?.names,
         email: values?.email,
-        phone: phoneNumber?.replace("+", ""),
+        phone: phoneNumber,
         password: passwordGenerator(),
         gender: values?.gender,
         showSuccess: true,
