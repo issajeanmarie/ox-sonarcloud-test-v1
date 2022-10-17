@@ -11,18 +11,26 @@ import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
 import Content from "../../../components/Shared/Content";
 import SalesTopNavigator from "../../../components/Warehouse/WarehouseHeaders/SalesTopNavigator";
-import { useSalesQuery } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
+import {
+  useLazySalesQuery,
+  useSalesQuery
+} from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
+import Loader from "../../../components/Shared/Loader";
 
 const SalesPage = () => {
   const [active, setActive] = useState<string>("SALES");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [pageSize, setPageSize] = useState(20);
+  const [moreSales, setMoreSales] = useState<any>([]);
   const router = useRouter();
   const { query } = useRouter();
 
-  const { data: sales, isLoading: isSalesLoading } = useSalesQuery({
+  const { data: AllSales, isLoading: isSalesLoading } = useSalesQuery({
     page: "",
-    size: ""
+    size: pageSize
   });
+
+  const [sales, { isFetching: loadingMoreFetching }] = useLazySalesQuery();
 
   useEffect(() => {
     if (router.isReady) {
@@ -45,6 +53,21 @@ const SalesPage = () => {
     setIsModalVisible(true);
   };
 
+  const handleLoadMore = () => {
+    sales({
+      page: "",
+      size: pageSize
+    })
+      .unwrap()
+      .then((res) => {
+        setPageSize(pageSize + 20);
+        setMoreSales(res?.payload);
+      })
+      .catch((error) => {
+        return error;
+      });
+  };
+
   return (
     <Layout>
       <WarehouseTopNavigator
@@ -59,28 +82,41 @@ const SalesPage = () => {
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
-          totalElements={sales?.payload?.totalElements}
+          totalElements={AllSales?.payload?.totalElements}
+          isSalesLoading={isSalesLoading}
         />
 
         <Content navType="DOUBLE">
           <>
             {isSalesLoading ? (
-              "loading"
+              <Loader />
             ) : (
               <>
-                {sales?.payload?.content?.map((sale: any, index: number) => (
-                  <OneWarehouseOrder
-                    key={sale?.id}
-                    itemNumber={index + 1}
-                    sale={sale}
-                  />
-                ))}
+                {AllSales?.payload?.content
+                  ?.concat(moreSales?.content)
+                  .map((sale: any, index: number) => (
+                    <OneWarehouseOrder
+                      key={sale?.id}
+                      itemNumber={index + 1}
+                      sale={sale}
+                    />
+                  ))}
               </>
             )}
 
-            <div style={{ width: "12%", margin: "32px auto" }}>
-              <CustomButton type="secondary">Load more</CustomButton>
-            </div>
+            {pageSize > 19 &&
+              AllSales?.payload?.totalElements &&
+              AllSales?.payload?.totalElements >= pageSize && (
+                <div style={{ width: "12%", margin: "32px auto" }}>
+                  <CustomButton
+                    loading={loadingMoreFetching}
+                    onClick={handleLoadMore}
+                    type="secondary"
+                  >
+                    Load more
+                  </CustomButton>
+                </div>
+              )}
           </>
         </Content>
       </div>

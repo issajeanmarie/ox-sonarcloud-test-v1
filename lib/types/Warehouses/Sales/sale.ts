@@ -27,6 +27,13 @@ export type PostSaleRequest = {
   };
 };
 
+export type PostSalePaymentRequest = {
+  amount: number;
+  paymentDate: string;
+  momoRefCode: string;
+  isWaitTimeFee: boolean;
+};
+
 export type CancelSaleRequest = {
   id: any;
 };
@@ -52,6 +59,14 @@ export type EditSaleLocationRequest = {
     coordinates: string;
   };
   id: number;
+};
+
+export type EditSaleTransactionRequest = {
+  momoRefCode: string;
+  createdAt: string;
+  amount: number;
+  id: number;
+  transactionId: number;
 };
 
 export type GetSales = {

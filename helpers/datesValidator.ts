@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { RangePickerProps } from "formik-antd";
 import moment from "moment";
 
 /**
@@ -9,4 +10,11 @@ import moment from "moment";
 
 export const datesBeforeStartDateDisabler = (startDate: any) => {
   return startDate && startDate < moment().startOf("day");
+};
+
+export const futureDateDisabler: RangePickerProps["disabledDate"] = (
+  current
+) => {
+  // Can not select days after today
+  return current && current > moment().endOf("day");
 };

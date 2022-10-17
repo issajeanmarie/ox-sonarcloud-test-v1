@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, Form, Row, Select } from "antd";
+import { Col, Form, Popover, Row, Select } from "antd";
 import React, { FC } from "react";
 import { requiredField } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
@@ -13,6 +13,8 @@ import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoi
 import { useStockQuery } from "../../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
 import ClientSearch from "../../../Shared/Input/ClientSearch";
+import Link from "next/link";
+import { routes } from "../../../../config/route-config";
 
 const { Option } = Select;
 
@@ -27,7 +29,9 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
   onAddSaleFinish,
   form,
   handleChangeWarehouse,
-  handleChangeWeight
+  warehouse,
+  handleChangeWeight,
+  weight
 }) => {
   const { data: trucks, isLoading: isTrucksLoading } =
     useUnPaginatedTrucksQuery();
@@ -36,7 +40,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
 
   const { data: Stocks, isLoading: isStocksLoading } = useStockQuery({
     page: "",
-    size: "",
+    size: 1000000,
     start: "",
     end: "",
     depot: "",
@@ -72,20 +76,31 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
           <ClientSearch
             name="clientId"
             rules={requiredField("Client")}
-            label="Client"
+            label={
+              <div className="flex justify-between items-center">
+                <span className="font-bold">Client name</span>
+                <Link href={routes.Clients.url} passHref>
+                  <span className="font-bold underline cursor-pointer">
+                    New client
+                  </span>
+                </Link>
+              </div>
+            }
           />
         </Col>
       </Row>
 
       <Row className="mt-8">
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <div className="mb-4">
-            <span className="font-light">Items</span>
-          </div>
           {items.length > 0 && (
-            <div className="mb-4">
-              <WarehouseItemsTable items={items} setItems={setItems} />
-            </div>
+            <>
+              <div className="mb-4">
+                <span className="font-light">Items</span>
+              </div>
+              <div className="mb-4">
+                <WarehouseItemsTable items={items} setItems={setItems} />
+              </div>
+            </>
           )}
         </Col>
       </Row>
@@ -98,6 +113,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
       >
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
+            allowClear
             onChange={handleChangeWarehouse}
             name="warehouseId"
             type="select"
@@ -109,7 +125,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
           >
             {Stocks?.payload?.content?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
-                {item?.name}
+                {item?.category?.name} - {item?.weight}KGs
               </Option>
             ))}
           </Input>
@@ -119,14 +135,51 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
             onChange={handleChangeWeight}
             name="weight"
             type="text"
+            inputType="number"
             label="KGs"
             placeholder="00"
           />
         </Col>
         <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-          <Button onClick={() => createItems()} type="secondary">
-            {YellowCheckIcon}
-          </Button>
+          {!weight || warehouse === "" ? (
+            <Popover
+              placement="left"
+              content={
+                <div className="flex flex-col">
+                  <span className="font-light">Item and weight </span>
+                  <span className="font-light">please</span>
+                </div>
+              }
+              title={false}
+              trigger="click"
+            >
+              <Button type="secondary">{YellowCheckIcon}</Button>
+            </Popover>
+          ) : (
+            <>
+              {weight > 30 ? (
+                <Popover
+                  placement="left"
+                  content={
+                    <div className="flex flex-col">
+                      <span className="font-light">Weight must be</span>
+                      <span className="font-light">
+                        less than or equal to 30
+                      </span>
+                    </div>
+                  }
+                  title={false}
+                  trigger="click"
+                >
+                  <Button type="secondary">{YellowCheckIcon}</Button>
+                </Popover>
+              ) : (
+                <Button onClick={() => createItems()} type="secondary">
+                  {YellowCheckIcon}
+                </Button>
+              )}
+            </>
+          )}
         </Col>
       </Row>
 

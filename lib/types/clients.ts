@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ReactNode } from "react";
 import { EconomicStatus, Office } from "./shared";
 
 export type ClientResponse = Client[];
@@ -144,7 +145,7 @@ export type GetClientOrders = {
 
 export type ClientSearchTypes = {
   name?: string | undefined;
-  label?: string | undefined;
+  label?: string | undefined | ReactNode;
   rules?: any;
   existingValue?: any;
 };

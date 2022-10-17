@@ -2,20 +2,68 @@
 import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
 import RowsWrapper from "../RowsWrapper";
-import { Image } from "antd";
-import { PaymentHistoryTableData } from "../Dummies/PaymentHistoryTableData";
+import { Form, Image } from "antd";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import CustomButton from "../../Shared/Button/button";
+import { FC, useState } from "react";
+import moment from "moment";
+import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
+import ModalWrapper from "../../Modals/ModalWrapper";
+import EditTransaction from "../../Forms/Warehouse/Edit/EditTransaction";
+import { useEditSaleTransactionMutation } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
+import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
+import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
+import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
+import { userType } from "../../../helpers/getLoggedInUser";
 
 const { Text } = Typography;
 
 type PaymentHistoryTableTypes = {
-  key: number;
+  id: number;
   amount: number;
   date: string;
-  ref: string;
+  momoRefCode: string;
 };
-const PaymentHistoryTable = () => {
+
+type PaymentHistoryTableProps = {
+  transactions: [PaymentHistoryTableTypes];
+  isFetching: boolean;
+  saleId: number;
+};
+
+const PaymentHistoryTable: FC<PaymentHistoryTableProps> = ({
+  transactions,
+  isFetching,
+  saleId
+}) => {
+  const user = userType();
+  const [form] = Form.useForm();
+  const [itemToEdit, setItemToEdit] = useState<any>();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editSaleTransaction, { isLoading: isEditingTransaction }] =
+    useEditSaleTransactionMutation();
+  const showModal = (record: any) => {
+    setIsModalVisible(true);
+    form.setFieldsValue(record);
+    setItemToEdit(record);
+  };
+
+  const handleFinish = (value: any) => {
+    editSaleTransaction({
+      id: saleId,
+      transactionId: itemToEdit?.id,
+      amount: value?.amount,
+      momoRefCode: value?.momoRefCode,
+      createdAt: ""
+    })
+      .unwrap()
+      .then((res: GenericResponse) => {
+        SuccessMessage(res?.message);
+        setIsModalVisible(false);
+      })
+      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  };
+
   const columns: any = [
     {
       title: (
@@ -27,11 +75,12 @@ const PaymentHistoryTable = () => {
       key: "amount",
       render: (
         text: PaymentHistoryTableTypes,
-        record: PaymentHistoryTableTypes
+        record: PaymentHistoryTableTypes,
+        index: number
       ) => (
         <RowsWrapper>
           <div className="flex gap-10">
-            <Text className="normalText opacity_56">{record?.key}</Text>
+            <Text className="normalText opacity_56">{index + 1}</Text>
             <div className="flex flex-col">
               <Text className="normalText fowe900">
                 {record?.amount && numbersFormatter(record?.amount)} Rwf
@@ -49,7 +98,9 @@ const PaymentHistoryTable = () => {
         record: PaymentHistoryTableTypes
       ) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">{record?.date}</Text>
+          <Text className="normalText opacity_56">
+            {record?.date && moment(record?.date).format("ll")}
+          </Text>
         </RowsWrapper>
       )
     },
@@ -63,7 +114,7 @@ const PaymentHistoryTable = () => {
         <RowsWrapper>
           <div className="flex items-center gap-2">
             <Text className="normalText fowe700">MoMo Ref:</Text>
-            <Text className="normalText opacity_56">{record?.ref}</Text>
+            <Text className="normalText opacity_56">{record?.momoRefCode}</Text>
           </div>
         </RowsWrapper>
       )
@@ -71,39 +122,60 @@ const PaymentHistoryTable = () => {
     {
       title: "action",
       key: "action",
-      render: () => (
+      render: (
+        text: PaymentHistoryTableTypes,
+        record: PaymentHistoryTableTypes
+      ) => (
         <RowsWrapper>
-          <div className="flex justify-end items-center">
-            <div className="h-1 flex items-center">
-              <CustomButton
-                type="normal"
-                size="icon"
-                icon={
-                  <Image
-                    src="/icons/ic-contact-edit.svg"
-                    alt=""
-                    width={16}
-                    preview={false}
-                  />
-                }
-              />
+          {user?.isSuperAdmin ? (
+            <div className="flex justify-end items-center">
+              <div className="h-1 flex items-center">
+                <CustomButton
+                  onClick={() => showModal(record)}
+                  type="normal"
+                  size="icon"
+                  icon={
+                    <Image
+                      src="/icons/ic-contact-edit.svg"
+                      alt=""
+                      width={16}
+                      preview={false}
+                    />
+                  }
+                />
+              </div>
             </div>
-          </div>
+          ) : null}
         </RowsWrapper>
       )
     }
   ];
   return (
-    <Table
-      className="data_table  noborder"
-      columns={columns}
-      dataSource={PaymentHistoryTableData}
-      rowKey={(record) => record?.key}
-      pagination={false}
-      bordered={false}
-      scroll={{ x: 0 }}
-      showHeader={false}
-    />
+    <>
+      <Table
+        className="data_table  noborder"
+        columns={columns}
+        dataSource={transactions}
+        rowKey={(record) => record?.id}
+        pagination={false}
+        bordered={false}
+        scroll={{ x: 0 }}
+        showHeader={false}
+        loading={TableOnActionLoading(isFetching)}
+      />
+      <ModalWrapper
+        setIsModalVisible={setIsModalVisible}
+        isModalVisible={isModalVisible}
+        title="Edit payment history"
+        loading={isEditingTransaction}
+      >
+        <EditTransaction
+          form={form}
+          isLoading={isEditingTransaction}
+          handleFinish={handleFinish}
+        />
+      </ModalWrapper>
+    </>
   );
 };
 

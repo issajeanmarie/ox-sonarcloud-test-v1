@@ -11,9 +11,10 @@ import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 
 type SingleOrderTopTypes = {
   sale: any;
+  isSaleLoading: boolean;
 };
 
-const SingleOrderTop: FC<SingleOrderTopTypes> = ({ sale }) => {
+const SingleOrderTop: FC<SingleOrderTopTypes> = ({ sale, isSaleLoading }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [cancelSale, { isLoading: isCancelingSale }] = useCancelSaleMutation();
 
@@ -43,38 +44,50 @@ const SingleOrderTop: FC<SingleOrderTopTypes> = ({ sale }) => {
         className="cursor-pointer"
       >
         <div className="flex items-center gap-4 ">
-          <AntDImage
-            className="pointer"
-            src="/icons/keyboard_backspace_black_24dp.svg"
-            alt=""
-            width={20}
-            height={20}
-            preview={false}
-          />
-          <span className="heading2">Sales</span>
-          <span className="normalText">/</span>
-          <span className="text-gray-400">{sale?.transportOrder?.id}</span>
+          {isSaleLoading ? (
+            <span>...</span>
+          ) : (
+            <>
+              <AntDImage
+                className="pointer"
+                src="/icons/keyboard_backspace_black_24dp.svg"
+                alt=""
+                width={20}
+                height={20}
+                preview={false}
+              />
+              <span className="heading2">Sales</span>
+              <span className="normalText">/</span>
+              <span className="text-gray-400">{sale?.transportOrder?.id}</span>
+            </>
+          )}
         </div>
       </Col>
       <Col className="flex gap-8 items-center">
-        <AntDImage
-          className="pointer"
-          src="/icons/ic-contact-edit.svg"
-          alt="Backspace icon"
-          width={18}
-          height={18}
-          preview={false}
-        />
-        {sale?.status !== "CANCELLED" && (
-          <AntDImage
-            className="pointer"
-            onClick={() => showModal()}
-            src="/icons/close.png"
-            alt=""
-            width={22}
-            height={22}
-            preview={false}
-          />
+        {isSaleLoading ? (
+          <span>...</span>
+        ) : (
+          <>
+            <AntDImage
+              className="pointer"
+              src="/icons/ic-contact-edit.svg"
+              alt="Backspace icon"
+              width={18}
+              height={18}
+              preview={false}
+            />
+            {sale?.status !== "CANCELLED" && (
+              <AntDImage
+                className="pointer"
+                onClick={() => showModal()}
+                src="/icons/close.png"
+                alt=""
+                width={22}
+                height={22}
+                preview={false}
+              />
+            )}
+          </>
         )}
       </Col>
       <ActionModal
