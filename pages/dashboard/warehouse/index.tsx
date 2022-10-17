@@ -101,10 +101,12 @@ const SalesPage = () => {
       getSalesAction({ depot: depotsState?.depotId });
   }, [depotsState]);
 
-  const { data: sales, isLoading: isSalesLoading } = useSalesQuery({
+  const { data: AllSales, isLoading: isSalesLoading } = useSalesQuery({
     page: "",
-    size: ""
+    size: pageSize
   });
+
+  const [sales, { isFetching: loadingMoreFetching }] = useLazySalesQuery();
 
   useEffect(() => {
     if (router.isReady) {
