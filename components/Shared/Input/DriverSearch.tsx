@@ -40,7 +40,7 @@ const DriverSearch: FC<SearchDriverTypes> = ({
       name={name}
       type="select"
       label={label}
-      placeholder="Select driver"
+      placeholder="Type to search"
       onKeyUp={handleDriverLiveSearch}
       isGroupDropdown
       isLoading={isLoading}

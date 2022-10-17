@@ -56,12 +56,12 @@ const ProfileInfo = () => {
 
   useEffect(() => {
     form.setFieldsValue(data?.payload);
-    setPhoneNumber((data?.payload?.phone && `+${data?.payload?.phone}`) || "");
+    setPhoneNumber(data?.payload?.phone);
   }, [data?.payload]);
 
   const handleEditPersonalInfoSuccess = ({ payload }: any) => {
     form.setFieldsValue(payload);
-    setPhoneNumber((payload?.phone && `+${payload?.phone}`) || "");
+    setPhoneNumber(payload?.phone);
   };
 
   // Method to update profile and sends it to API

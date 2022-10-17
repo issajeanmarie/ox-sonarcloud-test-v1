@@ -94,7 +94,7 @@ const DetailsSection = ({
     {
       key: 1,
       label: "Payment status",
-      value: details?.paymentStatus,
+      value: details?.paymentStatus?.replaceAll("_", " "),
       editable: false,
       editAction: editAction
     },

@@ -241,7 +241,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-top gap-12 ">
                     <div className="heading1 text-ox-dark">
-                      ORDER ${orderId}
+                      ORDER #{orderId}
                     </div>
 
                     <div

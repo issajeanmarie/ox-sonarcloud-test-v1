@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FC } from "react";
 import { Row } from "antd";
 import { useRouter } from "next/router";
@@ -9,23 +11,81 @@ import SingleClientTop from "./Client/SingleClientTop";
 import Content from "../Shared/Content";
 import WithPrivateRoute from "../Shared/Routes/WithPrivateRoute";
 import {
-  useClientOrdersQuery,
-  useLazyClientOrdersQuery,
-  useClientQuery
+  useClientQuery,
+  useLazyClientOrdersQuery
 } from "../../lib/api/endpoints/Clients/clientsEndpoint";
 import { ViewClientTypes } from "../../lib/types/pageTypes/Clients/ViewClient";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
+import { useDispatch, useSelector } from "react-redux";
+import { pagination } from "../../config/pagination";
+import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
 
 const ViewClient: FC<ViewClientTypes> = ({ clientId }) => {
   const { query } = useRouter();
   const router = useRouter();
   const [paymentStatus, setPaymentStatus] = useState("");
-  const [pageSize, setPageSize] = useState(10);
-  const [moreClientOrders, setMoreClientOrders] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState<any>({});
+  const [currentPages, setCurrentPages] = useState(1);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+  const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
+
+  const AllClientOrders = useSelector(
+    (state: any) => state.paginatedData.displayPaginatedData
+  );
 
   useEffect(() => {
     setPaymentStatus(selectedFilter.value || "");
   }, [selectedFilter]);
+
+  const dispatch = useDispatch();
+
+  const [
+    clientOrders,
+    { isLoading: isClientOrdersLoading, isFetching: isClientOrdersFetching }
+  ] = useLazyClientOrdersQuery();
+
+  const handleOnRenderSuccess = ({ payload }: any) => {
+    setFiltersBasedLoader(false);
+    dispatch(
+      displayPaginatedData({
+        onRender: true,
+        payload: {
+          payload: {
+            ...payload?.orders,
+            totalPending: payload?.totalPending,
+            orderDays: payload?.orderDays
+          }
+        }
+      })
+    );
+  };
+
+  const getClientOrdersAction = ({
+    request = clientOrders,
+    id = query?.id,
+    page,
+    size = pagination.clientOrders.size,
+    ps = paymentStatus,
+    handleSuccess = handleOnRenderSuccess
+  }: any) => {
+    handleAPIRequests({
+      request,
+      id,
+      page,
+      size,
+      paymentStatus: ps,
+      handleSuccess
+    });
+  };
+
+  useEffect(() => {
+    if (query?.id) {
+      getClientOrdersAction({ id: query?.id, ps: paymentStatus });
+      dispatch(displayPaginatedData({ payload: {}, onRender: true }));
+      setFiltersBasedLoader(true);
+      setCurrentPages(1);
+    }
+  }, [query?.id, paymentStatus]);
 
   const {
     data: client,
@@ -33,36 +93,40 @@ const ViewClient: FC<ViewClientTypes> = ({ clientId }) => {
     isFetching: isClientFetching
   } = useClientQuery({ id: clientId });
 
-  const {
-    data: AllClientOrders,
-    isLoading: isClientOrdersLoading,
-    isFetching: isClientOrdersFetching
-  } = useClientOrdersQuery({
-    id: query?.client,
-    page: "",
-    size: pageSize,
-    paymentStatus: paymentStatus
-  });
+  const handleLoadMoreClientOrdersSuccess = ({ payload }: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          ...payload?.orders,
+          totalPending: payload?.totalPending,
+          orderDays: payload?.orderDays
+        },
+        paginate: true
+      })
+    );
+    setIsLoadMoreLoading(false);
+  };
 
-  const [clientOrders, { isFetching: isMoreClientsOrderFetching }] =
-    useLazyClientOrdersQuery();
+  const handleLoadMoreOrdersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
 
   const handleLoadMore = () => {
-    clientOrders({
-      id: query?.client,
-      page: "",
-      size: pageSize,
-      paymentStatus: paymentStatus
-    })
-      .unwrap()
-      .then((res) => {
-        setPageSize(pageSize + 9);
-        setMoreClientOrders(res?.payload);
-      })
-      .catch((error) => {
-        return error;
-      });
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
+
+    getClientOrdersAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreOrdersFailure,
+      handleSuccess: handleLoadMoreClientOrdersSuccess
+    });
   };
+
+  const showFiltersLoader = filtersBasedLoader && !isLoadMoreLoading;
+  const showPagination =
+    (AllClientOrders?.payload?.totalPages > currentPages ||
+      isLoadMoreLoading) &&
+    !showFiltersLoader;
 
   return (
     <>
@@ -72,18 +136,16 @@ const ViewClient: FC<ViewClientTypes> = ({ clientId }) => {
         <Content navType="FULL">
           <Row className="p-5 justify-between gap-5">
             <SingleClientLeft
-              client={client?.payload}
               isClientLoading={isClientLoading}
               isClientFetching={isClientFetching}
               clientOrders={AllClientOrders?.payload}
               isClientOrdersLoading={isClientOrdersLoading}
-              isClientOrdersFetching={isClientOrdersFetching}
-              moreClientOrders={moreClientOrders}
               handleLoadMore={handleLoadMore}
-              pageSize={pageSize}
-              isMoreClientsOrderFetching={isMoreClientsOrderFetching}
+              isLoadMoreLoading={isLoadMoreLoading}
               selectedFilter={selectedFilter}
               setSelectedFilter={setSelectedFilter}
+              showPagination={showPagination}
+              showFiltersLoader={showFiltersLoader}
             />
 
             <SingleClientRight

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Form, Modal } from "antd";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
@@ -6,6 +6,8 @@ import { useInitiatePaymentMutation } from "../../../../lib/api/endpoints/Orders
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { MobilePaymentProps } from "../../../../lib/types/components/MobilePayment";
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
+import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
+import { useForm } from "antd/es/form/Form";
 
 const MobilePayment: FC<MobilePaymentProps> = ({
   isModalVisible,
@@ -14,6 +16,8 @@ const MobilePayment: FC<MobilePaymentProps> = ({
 }) => {
   const [initiatePayment, { isLoading: paymentInitLoading }] =
     useInitiatePaymentMutation();
+
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const [isPaymentSuccessful, setIsPaymentSuccessful] =
     useState<boolean>(false);
@@ -37,12 +41,22 @@ const MobilePayment: FC<MobilePaymentProps> = ({
       handleAPIRequests({
         request: initiatePayment,
         orderId: order.id,
-        data: values,
+        data: { ...values, phone: phoneNumber.replace("+", "") },
         showSuccess: true,
         handleSuccess: handleInitiatePaymentSuccess
       });
     }
   };
+
+  const [form] = useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      amount: order?.totalAmount
+    });
+
+    setPhoneNumber(order?.clientPhone);
+  }, [order]);
 
   return (
     <Modal
@@ -84,14 +98,8 @@ const MobilePayment: FC<MobilePaymentProps> = ({
             name="Login"
             layout="vertical"
             title="Mobile payment"
-            initialValues={{
-              amount: order?.totalAmount - order?.totalPaid,
-              phone:
-                order?.clientPhone?.split("")[0] === "+"
-                  ? order?.clientPhone.substring(1)
-                  : order?.clientPhone
-            }}
             onFinish={handleSubmit}
+            form={form}
           >
             <div className="mb-5">
               <Input
@@ -104,11 +112,9 @@ const MobilePayment: FC<MobilePaymentProps> = ({
               />
             </div>
             <div className="mb-10">
-              <Input
-                name="phone"
-                type="text"
-                placeholder="Client's phone number ex: 250780000000"
-                label="Phone number"
+              <CustomPhoneInput
+                phoneNumber={phoneNumber}
+                setPhoneNumber={setPhoneNumber}
               />
             </div>
             <div className="mb-7">

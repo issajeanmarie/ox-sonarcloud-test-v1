@@ -22,32 +22,19 @@ const slice = createSlice({
   reducers: {
     displayPaginatedData: (state, { payload }) => {
       if (payload?.payload) {
-        // UPDATE STATE WHEN COMPONENT HAS MOUNTED
-        if (payload.onRender) {
+        // UPDATE STATE WHEN COMPONENT HAS MOUNTED OR IF YOU ARE REPLACING DATA WITH NEW ONES
+        if (payload.onRender || payload.replace) {
           state.displayPaginatedData = payload.payload;
 
           return;
         }
 
-        // CHECK IF YOU HAVE TO REPLACE STATE WITH NEW STATE (EX: AFTER FILTERING, SORTING...)
-        if (payload.replace) {
-          state.displayPaginatedData = payload?.payload;
-          return;
-        }
-
         // CHECK IF YOU ARE PAGINATING TO ADD NEW DATA TO THE CURRENT ONES
         if (payload.paginate) {
-          state.displayPaginatedData.payload.totalElements =
-            payload?.payload?.totalElements;
-
           state.displayPaginatedData.payload.content = [
             ...state?.displayPaginatedData?.payload?.content,
             ...payload?.payload?.content
           ];
-          (state.displayPaginatedData.message =
-            payload?.message || state.displayPaginatedData.message),
-            (state.displayPaginatedData.payload.totalPages =
-              payload?.payload?.totalPages);
 
           return;
         }

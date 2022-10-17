@@ -80,7 +80,7 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
     setItemToEdit(record);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
-    setPhoneNumber((record?.phone && `+${record?.phone}`) || "");
+    setPhoneNumber(record?.phone);
   };
 
   const handleEditSupplierSuccess = () => {
