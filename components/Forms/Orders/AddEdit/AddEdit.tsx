@@ -390,7 +390,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                     isGroupDropdown
                     rules={requiredField("Truck")}
                   >
-                    {data?.map((truck: TruckSchema) => {
+                    {data?.payload?.map((truck: TruckSchema) => {
                       return (
                         <Option value={truck.id} key={truck.plateNumber}>
                           {truck.plateNumber}

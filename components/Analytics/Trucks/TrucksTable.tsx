@@ -12,14 +12,12 @@ import {
   useLazyGetSingleTruckQuery,
   useToggleTruckMutation
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import {
-  displaySingleTruck,
-  displayTrucks
-} from "../../../lib/redux/slices/trucksSlice";
+import { displaySingleTruck } from "../../../lib/redux/slices/trucksSlice";
 import { NewTruckModal } from "../../../components/Modals";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -44,7 +42,7 @@ type SingleTruckTypes = {
 };
 
 type State = {
-  trucks: any;
+  paginatedData: any;
 };
 
 const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
@@ -58,28 +56,36 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
   const router = useRouter();
 
   const dispatch = useDispatch();
-  const trucksState = useSelector((state: State) => state.trucks.displayTrucks);
+  const trucksState = useSelector(
+    (state: State) => state.paginatedData.displayPaginatedData
+  );
   const [getSingleTruck] = useLazyGetSingleTruckQuery();
 
   const handleToggleTruckSuccess = (res: any) => {
     const newResult: object[] = [];
 
-    trucksState?.content?.map((result: SingleTruckTypes) => {
-      if (result.id !== res?.payload?.id) {
-        newResult.push(result);
-      } else {
+    trucksState?.payload?.content?.forEach((truck: SingleTruckTypes) => {
+      if (truck?.id === res?.payload?.id) {
         newResult.push(res?.payload);
+      } else {
+        newResult.push(truck);
       }
     });
 
     const newPayload = {
       payload: {
-        ...trucksState,
-        content: newResult
+        content: newResult,
+        totalPages: trucksState?.payload?.totalPages,
+        totalElements: trucksState?.payload?.totalElements
       }
     };
 
-    dispatch(displayTrucks({ ...newPayload, replace: true }));
+    dispatch(
+      displayPaginatedData({
+        payload: newPayload,
+        replace: true
+      })
+    );
     setLoadingBtn(null);
   };
 
@@ -93,7 +99,8 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
       request: toggleTruck,
       id: id,
       handleSuccess: handleToggleTruckSuccess,
-      handleFailure: handleToggleTruckFailure
+      handleFailure: handleToggleTruckFailure,
+      showSuccess: true
     });
   };
 
@@ -112,7 +119,8 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
     handleAPIRequests({
       request: getSingleTruck,
       id: record?.id,
-      handleSuccess: handleGetSingleTruckSuccess
+      handleSuccess: handleGetSingleTruckSuccess,
+      showSuccess: true
     });
   };
 

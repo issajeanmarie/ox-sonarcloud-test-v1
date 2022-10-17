@@ -116,7 +116,7 @@ const AddStop: FC<AddStopProps> = ({
                 isGroupDropdown
                 rules={[{ required: true, message: "Truck is required" }]}
               >
-                {trucks?.map((truck: TruckSchema) => {
+                {trucks?.payload?.map((truck: TruckSchema) => {
                   return (
                     <Option value={truck.id} key={truck.plateNumber}>
                       {truck.plateNumber}

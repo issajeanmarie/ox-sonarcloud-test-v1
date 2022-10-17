@@ -111,7 +111,7 @@ const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
                     isGroupDropdown
                     rules={[{ required: true, message: "Truck is required" }]}
                   >
-                    {data?.content.map((truck: TruckSchema) => {
+                    {data?.payload?.content?.map((truck: TruckSchema) => {
                       return (
                         <Option value={truck.id} key={truck.plateNumber}>
                           {truck.plateNumber}

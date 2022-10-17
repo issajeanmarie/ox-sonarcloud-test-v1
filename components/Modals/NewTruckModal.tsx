@@ -9,14 +9,12 @@ import { yearsList } from "../../helpers/yearsList";
 import { useDispatch, useSelector } from "react-redux";
 import { useDepotsQuery } from "../../lib/api/endpoints/Depots/depotEndpoints";
 import { CreateTruckRequest } from "../../lib/types/trucksTypes";
-import {
-  displaySingleTruck,
-  displayTrucks
-} from "../../lib/redux/slices/trucksSlice";
+import { displaySingleTruck } from "../../lib/redux/slices/trucksSlice";
 import { requiredField } from "../../lib/validation/InputValidations";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useEffect } from "react";
 import ModalWrapper from "../Modals/ModalWrapper";
+import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
 
 type Types = {
   isVisible: boolean;
@@ -52,7 +50,9 @@ const NewTruckModal = ({
 
   const { data } = useDepotsQuery();
   const [createTruck, { isLoading }] = useCreateTruckMutation();
-  const trucksState = useSelector((state: any) => state.trucks.displayTrucks);
+  const trucksState = useSelector(
+    (state: any) => state.paginatedData.displayPaginatedData
+  );
   const [editTruck, { isLoading: isEditTruckLoading }] = useEditTruckMutation();
   const dispatch = useDispatch();
 
@@ -63,14 +63,14 @@ const NewTruckModal = ({
 
   const handleCreateTruckSuccess = (res: any) => {
     handleCancel();
-    dispatch(displayTrucks(res));
+    dispatch(displayPaginatedData(res));
   };
 
   const handleEditTruckSuccess = (res: any) => {
     if (!fromTruckProfile) {
       const newResult: object[] = [];
 
-      trucksState?.content?.map((result: SingleTruckTypes) => {
+      trucksState?.payload?.content?.map((result: SingleTruckTypes) => {
         if (result.id !== res?.payload?.id) {
           newResult.push(result);
         } else {
@@ -80,12 +80,13 @@ const NewTruckModal = ({
 
       const newPayload = {
         payload: {
-          ...trucksState,
+          totalElements: trucksState?.payload?.totalElements,
+          totalPages: trucksState?.payload?.totalPages,
           content: newResult
         }
       };
 
-      dispatch(displayTrucks({ ...newPayload, replace: true }));
+      dispatch(displayPaginatedData({ payload: newPayload, replace: true }));
     } else {
       dispatch(displaySingleTruck(res?.payload));
     }

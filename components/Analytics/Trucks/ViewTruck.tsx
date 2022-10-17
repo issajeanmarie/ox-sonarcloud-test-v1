@@ -133,7 +133,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
 
                 <span className="text-gray-400">
                   {truckData?.yearManufactured} - {truckData?.model} -{" "}
-                  {truckData?.type}
+                  {truckData?.type?.replaceAll("_", " ")}
                 </span>
 
                 <DetailsComponent truckData={truckInfo} />

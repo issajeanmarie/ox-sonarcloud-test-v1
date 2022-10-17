@@ -32,24 +32,15 @@ const trucksApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
     getTrucks: builder.query({
       providesTags: ["Trucks"],
-      query: ({ noPagination, page, size }) => ({
+      query: ({ noPagination, page, size, sort, search, status }) => ({
         url: `/trucks${noPagination ? "/no-pagination" : ""}?page=${
           page || ""
-        }&size=${size || ""}`,
+        }&size=${size || ""}&status=${status || ""}&sort=${sort || ""}&search=${
+          search || ""
+        }`,
         method: "GET"
       }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
-    }),
-
-    loadMoreTrucks: builder.mutation({
-      invalidatesTags: ["Trucks"],
-      query: ({ page, size, status, sort, search }: Payload) => ({
-        url: `/trucks?page=${page || ""}&size=${size || ""}&status=${
-          status || ""
-        }&sort=${sort || ""}&search=${search || ""}`,
-        method: "GET"
-      })
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) => response
     }),
 
     createTruck: builder.mutation<CreateTruckResponse, CreateTruckRequest>({
@@ -280,7 +271,6 @@ const trucksApi = baseAPI.injectEndpoints({
 
 export const {
   useLazyGetTrucksQuery,
-  useLoadMoreTrucksMutation,
   useFilterTrucksMutation,
   useToggleTruckMutation,
   useLazyGetSingleTruckQuery,
