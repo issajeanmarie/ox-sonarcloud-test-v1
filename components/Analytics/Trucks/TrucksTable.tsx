@@ -117,7 +117,8 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
     handleAPIRequests({
       request: getSingleTruck,
       id: record?.id,
-      handleSuccess: handleGetSingleTruckSuccess
+      handleSuccess: handleGetSingleTruckSuccess,
+      showSuccess: true
     });
   };
 

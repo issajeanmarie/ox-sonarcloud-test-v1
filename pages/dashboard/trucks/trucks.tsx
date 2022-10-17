@@ -111,12 +111,40 @@ const Trucks = () => {
     });
   };
 
-  const handleGetTrucksSuccess = (res: any) => {
-    res && dispatch(displayTrucks({ payload: res, onRender: true }));
+  const handleRenderSuccess = (res: any) => {
+    setFiltersBasedLoader(false);
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
   };
 
-  const handleLoadMoreTrucksSuccess = ({ payload }: any) => {
-    dispatch(displayTrucks({ payload, paginate: true }));
+  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreOrdersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const getTrucksAction = ({
+    request = getTrucks,
+    handleSuccess = handleRenderSuccess,
+    page,
+    size = pagination.trucks.size,
+    status = selectedFilter.value || "",
+    sort = selectedSort.value || "",
+    search = searchValue || "",
+    showSuccess = false
+  }: any) => {
+    handleAPIRequests({
+      handleSuccess,
+      size,
+      page,
+      status,
+      sort,
+      search,
+      showSuccess,
+      request
+    });
   };
 
   useEffect(() => {
