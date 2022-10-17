@@ -14,6 +14,7 @@ import { routes } from "../../../config/route-config";
 import { Avatar } from "antd";
 import { abbreviator } from "../../../helpers/abbreviator";
 import { useSettingsQuery } from "../../../lib/api/endpoints/settings/settingsEndpoints";
+import { baseAPI } from "../../../lib/api/api";
 
 /**
  * @author Kundwa Bruno M <kundwabruno@gmail.com> and
@@ -36,6 +37,7 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
 
   const logout = () => {
     dispatch(removeCredentials());
+    dispatch(baseAPI.util.resetApiState());
     Router.replace(routes.login.url);
   };
 

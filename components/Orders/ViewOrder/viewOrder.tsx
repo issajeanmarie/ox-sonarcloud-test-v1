@@ -191,6 +191,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             closeModal={() => setIsEditPaymentStatus(false)}
             isEditPaymentStatus={isEditPaymentStatus}
             setIsEditPaymentStatus={setIsEditPaymentStatus}
+            isSaleOrder={false}
           />
 
           <EditOrderClient

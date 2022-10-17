@@ -6,7 +6,9 @@ import {
   GetSale,
   PostSaleRequest,
   CancelSaleRequest,
-  GetSales
+  GetSales,
+  PostSalePaymentRequest,
+  EditSaleTransactionRequest
 } from "../../../types/Warehouses/Sales/sale";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -56,6 +58,18 @@ const salesEndpoints = baseAPI.injectEndpoints({
       })
     }),
 
+    postSalePayment: builder.mutation<
+      ApiResponseMetadata<Sale>,
+      { orderId: number; data: PostSalePaymentRequest }
+    >({
+      invalidatesTags: ["Sales"],
+      query: ({ orderId, data }) => ({
+        url: `/sales/${orderId}/pay`,
+        method: "POST",
+        body: data
+      })
+    }),
+
     cancelSale: builder.mutation<ApiResponseMetadata<Sale>, CancelSaleRequest>({
       invalidatesTags: ["Sales"],
       query: (DTO) => ({
@@ -73,6 +87,17 @@ const salesEndpoints = baseAPI.injectEndpoints({
         method: "PATCH",
         body: DTO
       })
+    }),
+    editSaleTransaction: builder.mutation<
+      ApiResponseMetadata<Sale>,
+      EditSaleTransactionRequest
+    >({
+      invalidatesTags: ["Sales"],
+      query: (DTO) => ({
+        url: `sales/${DTO?.id}/transactions/${DTO?.transactionId}`,
+        method: "PUT",
+        body: DTO
+      })
     })
   })
 });
@@ -84,5 +109,7 @@ export const {
   useEditSaleMutation,
   useLazySalesQuery,
   useUnPaginatedTrucksQuery,
-  useSaleDetailsQuery
+  useSaleDetailsQuery,
+  usePostSalePaymentMutation,
+  useEditSaleTransactionMutation
 } = salesEndpoints;

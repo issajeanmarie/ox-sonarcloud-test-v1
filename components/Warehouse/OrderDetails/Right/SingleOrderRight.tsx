@@ -1,18 +1,32 @@
 import { Col, Divider, Row } from "antd";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { OrderSummaryInfoWrapper } from "../Left/InfoWrapper";
 import CustomButton from "../../../Shared/Button/button";
 import PaymentStatusCard from "./PaymentStatusCard";
 import PaymentHistoryTable from "../../../Tables/Warehouse/PaymentHistoryTable";
 import { numbersFormatter } from "../../../../helpers/numbersFormatter";
+import EditPaymentStatus from "../../../Forms/Orders/EditPaymentStatus";
+import EmptyData from "../../../Shared/EmptyData";
 
 type SingleOrderRightTypes = {
   sale: any;
+  isFetching: boolean;
 };
 
-const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale }) => {
+const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
+  const [isEditPaymentStatus, setIsEditPaymentStatus] =
+    useState<boolean>(false);
+
   return (
-    <Col className="h-[86vh] overflow-auto" flex="auto">
+    <Col
+      className="h-[86vh] overflow-auto"
+      xs={24}
+      sm={24}
+      md={10}
+      lg={10}
+      xl={10}
+      xxl={10}
+    >
       <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] p-7">
         <div className="w-full mt-9">
           <div className="mb-8">
@@ -26,7 +40,7 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale }) => {
             } Rwf`}
           />
           <OrderSummaryInfoWrapper
-            title="Payment status:"
+            title="Payment status"
             infoItem={sale?.transportOrder?.paymentStatus}
           />
         </div>
@@ -37,11 +51,17 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale }) => {
           <Col>
             <span className="font-bold text-lg">PAYMENT STATUS</span>
           </Col>
-          <Col>
-            <CustomButton type="secondary">
-              <span className="text-sm">UPDATE</span>
-            </CustomButton>
-          </Col>
+          {sale?.status !== "CANCELLED" && (
+            <Col>
+              <CustomButton
+                disabled={isFetching}
+                onClick={() => setIsEditPaymentStatus(true)}
+                type="secondary"
+              >
+                <span className="text-sm">UPDATE</span>
+              </CustomButton>
+            </Col>
+          )}
         </Row>
         <Divider style={{ margin: 0, padding: 0 }} />
         <Row
@@ -73,10 +93,25 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale }) => {
             <span className="font-light">Payment history</span>
           </Col>
           <Col style={{ width: "100%" }}>
-            <PaymentHistoryTable />
+            {sale?.transactions?.length === 0 ? (
+              <EmptyData text="There are no transactions tied to this order yet." />
+            ) : (
+              <PaymentHistoryTable
+                saleId={sale?.id}
+                transactions={sale?.transactions}
+                isFetching={isFetching}
+              />
+            )}
           </Col>
         </Row>
       </Row>
+      <EditPaymentStatus
+        order={sale}
+        closeModal={() => setIsEditPaymentStatus(false)}
+        isEditPaymentStatus={isEditPaymentStatus}
+        setIsEditPaymentStatus={setIsEditPaymentStatus}
+        isSaleOrder={true}
+      />
     </Col>
   );
 };

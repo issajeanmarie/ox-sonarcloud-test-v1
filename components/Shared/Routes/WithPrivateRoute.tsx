@@ -10,6 +10,7 @@ import {
   setCredentials
 } from "../../../lib/redux/slices/authSlice";
 import { routes } from "../../../config/route-config";
+import { baseAPI } from "../../../lib/api/api";
 
 const WithPrivateRoute = (Wrapped: any) => {
   return (props: any) => {
@@ -22,6 +23,7 @@ const WithPrivateRoute = (Wrapped: any) => {
 
     if (!token && !localToken) {
       dispatch(removeCredentials());
+      dispatch(baseAPI.util.resetApiState());
       router.replace(routes.login.url);
       return null;
     }
@@ -30,6 +32,7 @@ const WithPrivateRoute = (Wrapped: any) => {
       (localToken && !isValidToken(localToken))
     ) {
       dispatch(removeCredentials());
+      dispatch(baseAPI.util.resetApiState());
       router.replace(routes.login.url);
       return null;
     }

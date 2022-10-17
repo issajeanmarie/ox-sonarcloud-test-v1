@@ -58,7 +58,8 @@ const Entry = ({
   picker,
   allowClear,
   onKeyUp,
-  list
+  list,
+  disabledDate
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
 
@@ -268,6 +269,7 @@ const Entry = ({
           format={dateFormat || format || "YYYY-MM-DD"}
           showTime={showTime}
           placeholder={placeholder}
+          disabledDate={disabledDate}
         />
       </Form.Item>
     </Fragment>

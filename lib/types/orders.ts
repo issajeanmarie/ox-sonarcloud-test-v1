@@ -171,6 +171,9 @@ export type Order = {
   id: number;
   lastEditedBy?: string;
   supportOrders: Order[];
+  transportOrder: {
+    id: number;
+  };
 };
 
 export type Office = {
