@@ -20,7 +20,7 @@ export type SettingsCategoriesTableProps = {
   isParentingCategory: boolean;
   handleMakeCategoryParent: (id: number) => void;
   pageSize: number;
-  setIsModalVisible: any
-  isLoading: boolean,
-  isId: any
+  setIsModalVisible: any;
+  isLoading: boolean;
+  isId: any;
 };
