@@ -121,12 +121,12 @@ const Stock = () => {
     setFiltersBasedLoader(true);
   }, [startDate, endDate, filter, selectedSort, depotId]);
 
-  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
+  const handleLoadMoreStocksSuccess = ({ payload }: any) => {
     dispatch(displayPaginatedData({ payload, paginate: true }));
     setIsLoadMoreLoading(false);
   };
 
-  const handleLoadMoreOrdersFailure = () => {
+  const handleLoadMoreStocksFailure = () => {
     setIsLoadMoreLoading(false);
   };
 
@@ -136,8 +136,8 @@ const Stock = () => {
 
     getStocksAction({
       page: currentPages,
-      handleFailure: handleLoadMoreOrdersFailure,
-      handleSuccess: handleLoadMoreOrdersSuccess
+      handleFailure: handleLoadMoreStocksFailure,
+      handleSuccess: handleLoadMoreStocksSuccess
     });
   };
 

@@ -44,7 +44,9 @@ const ActionModal: FC<ActionModalProps> = ({
       maskClosable={loading ? false : true}
     >
       <div className="m-10">
-        <div className="text-2xl font-bold text-ox-dark mb-10">{title}</div>
+        <div className="text-2xl font-bold text-ox-dark mb-10">
+          {title?.toUpperCase()}
+        </div>
         <div className="w-[90%] mb-10">{description}</div>
         <div className="flex items-center justify-between ">
           <div className="w-[160px]">

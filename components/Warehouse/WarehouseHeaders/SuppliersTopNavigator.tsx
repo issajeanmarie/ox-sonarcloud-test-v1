@@ -14,6 +14,8 @@ import { LatLng } from "use-places-autocomplete";
 import { usePostSupplierMutation } from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
 import { SuppliersTopNavigatorTypes } from "../../../lib/types/pageTypes/Warehouse/Suppliers/SuppliersTopNavigator";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
   showModal,
@@ -21,7 +23,7 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
   isModalVisible,
   setSort,
   sort,
-  data
+  totalElements
 }) => {
   const [form] = Form.useForm();
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -33,11 +35,15 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
   const [postSupplier, { isLoading: isAddingSupplier }] =
     usePostSupplierMutation();
 
-  const handleAddSupplierSuccess = () => {
+  const dispatch = useDispatch();
+
+  const handleAddSupplierSuccess = ({ payload }: any) => {
     setLocation(undefined);
     form.resetFields();
     setIsModalVisible(false);
     setPhoneNumber("");
+
+    dispatch(displayPaginatedData({ payload }));
   };
 
   const onAddSupplierFinish = (values: any) => {
@@ -60,7 +66,7 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
     <Col className="flex items-center gap-4">
       <Row gutter={24} align="middle" wrap={false}>
         <Col>
-          <Heading1>{localeString(data?.totalElements)} Items</Heading1>
+          <Heading1>{localeString(totalElements || 0)} Items</Heading1>
         </Col>
 
         <Col>
