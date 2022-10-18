@@ -12,6 +12,7 @@ import { changeRoute } from "../../../helpers/routesHandler";
 import Content from "../../../components/Shared/Content";
 import SalesTopNavigator from "../../../components/Warehouse/WarehouseHeaders/SalesTopNavigator";
 import { useSalesQuery } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
+import { WarehouseTableLoader } from "../../../components/Shared/Loaders/Loaders";
 
 const SalesPage = () => {
   const [active, setActive] = useState<string>("SALES");
@@ -65,7 +66,11 @@ const SalesPage = () => {
         <Content navType="DOUBLE">
           <>
             {isSalesLoading ? (
-              "loading"
+              <>
+                {[...Array(10)].map((_, index) => (
+                  <WarehouseTableLoader key={index} />
+                ))}
+              </>
             ) : (
               <>
                 {sales?.payload?.content?.map((sale: any, index: number) => (

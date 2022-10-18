@@ -11,7 +11,7 @@ import {
   useLazyDownloadClientsQuery
 } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/categoryEndpoints";
-import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
+import { ClientsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import Content from "../../../components/Shared/Content";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
@@ -166,7 +166,7 @@ const Clients = () => {
             {isClientsLoading || showFiltersLoader ? (
               <>
                 {[...Array(20)].map((_, index) => (
-                  <ColsTableLoader key={index} />
+                  <ClientsTableLoader key={index} />
                 ))}
               </>
             ) : (

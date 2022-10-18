@@ -3,16 +3,16 @@ import { FC, Fragment, useEffect, useState } from "react";
 import OrdersHeader from "./OrdersHeader";
 import OneOrder from "./OneOrder";
 import { useLazyOrdersQuery } from "../../lib/api/endpoints/Orders/ordersEndpoints";
-import Loader from "../Shared/Loader";
+import { OrdersTableLoader } from "../../components/Shared/Loaders/Loaders";
 import { Order, Order_Filter } from "../../lib/types/orders";
 import { useDispatch, useSelector } from "react-redux";
 import { displayOrders } from "../../lib/redux/slices/ordersSlice";
-import Button from "../Shared/Button";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { pagination } from "../../config/pagination";
 import { getFromLocal } from "../../helpers/handleLocalStorage";
 import { OX_ORDERS_FILTERS } from "../../config/constants";
 import Content from "../Shared/Content";
+import CustomButton from "../../components/Shared/Button";
 
 type DepotTypes = {
   depotName: string | undefined;
@@ -104,47 +104,45 @@ const Orders: FC = () => {
 
   return (
     <div className="mx-4 relative">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <Fragment>
-          <OrdersHeader
-            data={ordersState}
-            getOrdersAction={getOrdersAction}
-            loading={isFetching}
-            setCurrentPages={setCurrentPages}
-          />
+      <Fragment>
+        <OrdersHeader
+          data={ordersState}
+          getOrdersAction={getOrdersAction}
+          loading={isFetching}
+          setCurrentPages={setCurrentPages}
+        />
 
-          <Content navType="CENTER">
-            <>
-              {showFiltersLoader || depotBasedLoader ? (
-                <Loader />
-              ) : (
-                ordersState &&
-                ordersState.payload?.content?.map(
-                  (order: Order, index: number) => (
-                    <OneOrder key={index} index={index + 1} order={order} />
-                  )
+        <Content navType="CENTER">
+          <>
+            {showFiltersLoader || depotBasedLoader ? (
+              <>
+                {[...Array(10)].map((_, index) => (
+                  <OrdersTableLoader key={index} />
+                ))}
+              </>
+            ) : (
+              ordersState &&
+              ordersState.payload?.content?.map(
+                (order: Order, index: number) => (
+                  <OneOrder key={index} index={index + 1} order={order} />
                 )
-              )}
+              )
+            )}
 
-              {showPagination && (
-                <div className="flex justify-center mb-4">
-                  <div className="w-[100px]">
-                    <Button
-                      type="primary"
-                      loading={isLoadMoreLoading}
-                      onClick={handleLoadMore}
-                    >
-                      Load more
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </>
-          </Content>
-        </Fragment>
-      )}
+            {showPagination && (
+              <div style={{ width: "12%", margin: "32px auto" }}>
+                <CustomButton
+                  loading={isLoadMoreLoading}
+                  onClick={handleLoadMore}
+                  type="secondary"
+                >
+                  Load more
+                </CustomButton>
+              </div>
+            )}
+          </>
+        </Content>
+      </Fragment>
     </div>
   );
 };

@@ -18,8 +18,8 @@ import {
 } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import CardRowWrapper from "../../../components/Cards/CardRowWrapper";
 import {
-  CardsLoader,
-  ColsTableLoader
+  StockCardsLoader,
+  StockTableLoader
 } from "../../../components/Shared/Loaders/Loaders";
 import CardColWrapper from "../../../components/Cards/CardColWrapper";
 import StockMediumCard from "../../../components/Cards/StockMediumCard";
@@ -128,7 +128,7 @@ const Stock = () => {
               <>
                 <CardRowWrapper active={active}>
                   {[...Array(5)].map((_, index) => (
-                    <CardsLoader key={index} />
+                    <StockCardsLoader key={index} />
                   ))}
                 </CardRowWrapper>
               </>
@@ -163,7 +163,7 @@ const Stock = () => {
               {isStocksLoading ? (
                 <div className="mt-4">
                   {[...Array(20)].map((_, index) => (
-                    <ColsTableLoader key={index} />
+                    <StockTableLoader key={index} />
                   ))}
                 </div>
               ) : (
