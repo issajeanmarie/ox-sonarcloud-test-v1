@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import Layout from "../../../components/Shared/Layout";
@@ -8,15 +9,15 @@ import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
 import SuppliersTable from "../../../components/Tables/Warehouse/SuppliersTable";
-import {
-  useLazySuppliersQuery,
-  useSuppliersQuery
-} from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
+import { useLazySuppliersQuery } from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
 import CustomButton from "../../../components/Shared/Button";
 import { AccountsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import SuppliersTopNavigator from "../../../components/Warehouse/WarehouseHeaders/SuppliersTopNavigator";
 import Content from "../../../components/Shared/Content";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch, useSelector } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { pagination } from "../../../config/pagination";
 
 const SuppliersPage = () => {
   const [active, setActive] = useState<string>("SALES");
@@ -25,22 +26,18 @@ const SuppliersPage = () => {
   const router = useRouter();
   const { query } = useRouter();
 
-  const [sort, setSort]: any = useState("");
-  const [pageSize, setPageSize] = useState(20);
-  const [moreSuppliers, setMoreSuppliers] = useState<any>([]);
+  const dispatch = useDispatch();
 
-  const [suppliers, { isFetching: loadingMoreFetching }] =
+  const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
+  const [selectedSort, setSelectedSort]: any = useState("");
+  const [currentPages, setCurrentPages] = useState(1);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+  const [getSuppliers, { isFetching: loadingMoreFetching, data: apiData }] =
     useLazySuppliersQuery();
 
-  const {
-    data: AllSuppliers,
-    isLoading: isSuppliersLoading,
-    isFetching: isSuppliersFetching
-  } = useSuppliersQuery({
-    page: "",
-    size: pageSize,
-    sort: sort.value || ""
-  });
+  const AllSuppliers = useSelector(
+    (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
+  );
 
   useEffect(() => {
     if (router.isReady) {
@@ -58,30 +55,65 @@ const SuppliersPage = () => {
     id === "SUPPLIERS" && changeRoute(`${routes.Suppliers.url}?wtb=SUPPLIERS`);
   };
 
-  const handleLoadMoreSuccess = ({ payload }: any) => {
-    setPageSize(pageSize + 20);
-    setMoreSuppliers(payload);
+  const handleRenderSuccess = (res: any) => {
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
+    setFiltersBasedLoader(false);
   };
 
-  const handleLoadMore = () => {
+  const getSuppliersAction = ({
+    page,
+    size = pagination.suppliers.size,
+    sort = selectedSort?.value || "",
+    request = getSuppliers,
+    handleSuccess = handleRenderSuccess
+  }: any) => {
     handleAPIRequests({
-      request: suppliers,
-      page: "",
-      size: pageSize,
-      sort: sort.id || "",
-      handleSuccess: handleLoadMoreSuccess
+      request,
+      sort,
+      size,
+      page,
+      handleSuccess
     });
   };
 
-  //MODAL
+  useEffect(() => {
+    getSuppliersAction({});
+    setCurrentPages(1);
+    setFiltersBasedLoader(true);
+  }, [selectedSort]);
+
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  //WARNING MODAL
   const showWarningModal = () => {
     setIsWarningModalVisible(true);
   };
+
+  const handleLoadMoreSuppliersSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreSuppliersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMore = () => {
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
+
+    getSuppliersAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreSuppliersFailure,
+      handleSuccess: handleLoadMoreSuppliersSuccess
+    });
+  };
+
+  const showFiltersLoader = filtersBasedLoader && !isLoadMoreLoading;
+  const showPagination =
+    (AllSuppliers?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
+    !showFiltersLoader;
 
   return (
     <Layout>
@@ -97,14 +129,14 @@ const SuppliersPage = () => {
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
-          setSort={setSort}
-          sort={sort}
-          data={AllSuppliers?.payload}
+          setSort={setSelectedSort}
+          sort={selectedSort}
+          totalElements={apiData?.payload?.totalElements}
         />
 
         <Content navType="DOUBLE">
           <>
-            {isSuppliersLoading ? (
+            {showFiltersLoader ? (
               <>
                 {[...Array(20)].map((_, index) => (
                   <AccountsTableLoader key={index} />
@@ -115,30 +147,22 @@ const SuppliersPage = () => {
                 isModalVisible={isWarningModalVisible}
                 showModal={showWarningModal}
                 setIsModalVisible={setIsWarningModalVisible}
-                suppliers={
-                  moreSuppliers?.length === 0
-                    ? AllSuppliers?.payload?.content
-                    : AllSuppliers?.payload?.content?.concat(
-                        moreSuppliers?.content
-                      )
-                }
-                isSuppliersFetching={isSuppliersFetching}
+                suppliers={AllSuppliers}
+                isSuppliersFetching={showFiltersLoader}
               />
             )}
 
-            {pageSize > 19 &&
-              AllSuppliers?.payload?.totalElements &&
-              AllSuppliers?.payload?.totalElements >= pageSize && (
-                <div style={{ width: "12%", margin: "32px auto" }}>
-                  <CustomButton
-                    loading={loadingMoreFetching}
-                    onClick={handleLoadMore}
-                    type="secondary"
-                  >
-                    Load more
-                  </CustomButton>
-                </div>
-              )}
+            {showPagination && (
+              <div style={{ width: "12%", margin: "32px auto" }}>
+                <CustomButton
+                  loading={loadingMoreFetching}
+                  onClick={handleLoadMore}
+                  type="secondary"
+                >
+                  Load more
+                </CustomButton>
+              </div>
+            )}
           </>
         </Content>
       </div>

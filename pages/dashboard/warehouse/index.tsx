@@ -12,25 +12,50 @@ import { changeRoute } from "../../../helpers/routesHandler";
 import Content from "../../../components/Shared/Content";
 import SalesTopNavigator from "../../../components/Warehouse/WarehouseHeaders/SalesTopNavigator";
 import { WarehouseTableLoader } from "../../../components/Shared/Loaders/Loaders";
-import {
-  useLazySalesQuery,
-  useSalesQuery
-} from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
+import { useLazySalesQuery } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
+import { pagination } from "../../../config/pagination";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch, useSelector } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const SalesPage = () => {
   const [active, setActive] = useState<string>("SALES");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [pageSize, setPageSize] = useState(20);
-  const [moreSales, setMoreSales] = useState<any>([]);
+  const [currentPages, setCurrentPages] = useState(1);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const router = useRouter();
   const { query } = useRouter();
+  const dispatch = useDispatch();
 
-  const { data: AllSales, isLoading: isSalesLoading } = useSalesQuery({
-    page: "",
-    size: pageSize
-  });
+  const AllSales = useSelector(
+    (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
+  );
 
-  const [sales, { isFetching: loadingMoreFetching }] = useLazySalesQuery();
+  const [getSales, { isLoading, isFetching, data: apiData }] =
+    useLazySalesQuery();
+
+  const handleRenderSuccess = (res: any) => {
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
+  };
+
+  const getSalesAction = ({
+    page,
+    size = pagination.sales.size,
+    request = getSales,
+    handleSuccess = handleRenderSuccess
+  }: any) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      handleSuccess
+    });
+  };
+
+  useEffect(() => {
+    getSalesAction({});
+    setCurrentPages(1);
+  }, []);
 
   useEffect(() => {
     if (router.isReady) {
@@ -53,20 +78,30 @@ const SalesPage = () => {
     setIsModalVisible(true);
   };
 
-  const handleLoadMore = () => {
-    sales({
-      page: "",
-      size: pageSize
-    })
-      .unwrap()
-      .then((res) => {
-        setPageSize(pageSize + 20);
-        setMoreSales(res?.payload);
-      })
-      .catch((error) => {
-        return error;
-      });
+  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
   };
+
+  const handleLoadMoreOrdersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMore = () => {
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
+
+    getSalesAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreOrdersFailure,
+      handleSuccess: handleLoadMoreOrdersSuccess
+    });
+  };
+
+  const onRenderLoader = isLoading && !isLoadMoreLoading;
+  const showPagination =
+    (AllSales?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
+    !(isFetching && !isLoadMoreLoading);
 
   return (
     <Layout>
@@ -82,13 +117,13 @@ const SalesPage = () => {
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
-          totalElements={AllSales?.payload?.totalElements}
-          isSalesLoading={isSalesLoading}
+          totalElements={apiData?.payload?.totalElements}
+          isSalesLoading={onRenderLoader}
         />
 
         <Content navType="DOUBLE">
           <>
-            {isSalesLoading ? (
+            {onRenderLoader ? (
               <>
                 {[...Array(10)].map((_, index) => (
                   <WarehouseTableLoader key={index} />
@@ -96,31 +131,28 @@ const SalesPage = () => {
               </>
             ) : (
               <>
-                {AllSales?.payload?.content
-                  ?.concat(moreSales?.content)
-                  .map((sale: any, index: number) => (
-                    <OneWarehouseOrder
-                      key={sale?.id}
-                      itemNumber={index + 1}
-                      sale={sale}
-                    />
-                  ))}
+                {AllSales?.payload?.content?.map((sale: any, index: number) => (
+                  <OneWarehouseOrder
+                    key={sale?.id}
+                    itemNumber={index + 1}
+                    sale={sale}
+                    AllSales={AllSales}
+                  />
+                ))}
               </>
             )}
 
-            {pageSize > 19 &&
-              AllSales?.payload?.totalElements &&
-              AllSales?.payload?.totalElements >= pageSize && (
-                <div style={{ width: "12%", margin: "32px auto" }}>
-                  <CustomButton
-                    loading={loadingMoreFetching}
-                    onClick={handleLoadMore}
-                    type="secondary"
-                  >
-                    Load more
-                  </CustomButton>
-                </div>
-              )}
+            {showPagination && (
+              <div style={{ width: "12%", margin: "32px auto" }}>
+                <CustomButton
+                  loading={isLoadMoreLoading}
+                  onClick={handleLoadMore}
+                  type="secondary"
+                >
+                  Load more
+                </CustomButton>
+              </div>
+            )}
           </>
         </Content>
       </div>

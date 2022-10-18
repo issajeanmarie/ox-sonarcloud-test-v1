@@ -58,10 +58,11 @@ const AppSider = ({ collapsed }: any) => {
 
   const menus = manageSidebarMenus();
   const moreMenus = moreSidebarMenus();
+  const doesInclude = (route: string) => router.pathname.includes(route);
   const showDepots =
-    router.pathname.includes(routes.Analytics.url) ||
+    doesInclude(routes.Analytics.url) ||
     router.pathname === routes.Orders.url ||
-    router.pathname.includes(routes.viewOrder.url);
+    doesInclude(routes.Stock.url);
 
   escape(setIsDropdownVisible);
 
@@ -159,7 +160,11 @@ const AppSider = ({ collapsed }: any) => {
           justify="space-between"
           className="pad24 mb12 border-b border-ox-dark-border"
         >
-          <div className="flex justify-center items-center p-5 gap-3 w-full">
+          <div
+            className={`flex justify-center items-center p-5 gap-3 w-full ${
+              showDepots ? "opacity-100" : "opacity-50 cursor-not-allowed"
+            }`}
+          >
             <Image
               width={22}
               src={`/icons/ic-ecommerce-house.svg`}

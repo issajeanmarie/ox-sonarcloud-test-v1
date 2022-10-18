@@ -28,7 +28,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
     >({
       providesTags: ["Sales"],
       query: (DTO) => ({
-        url: `sales?page=${DTO?.page}&size=${DTO?.size}`,
+        url: `sales?page=${DTO?.page || ""}&size=${DTO?.size || ""}`,
         method: "GET"
       })
     }),

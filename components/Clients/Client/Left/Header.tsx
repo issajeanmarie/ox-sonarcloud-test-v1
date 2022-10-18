@@ -41,7 +41,7 @@ const Header: FC<HeaderTypes> = ({
       <Col className="flex items-center gap-4">
         <span className=" opacity_56">Total pending:</span>
         <span className="font-bold red">
-          {totalPending && numbersFormatter(totalPending)} Rwf
+          {totalPending ? numbersFormatter(totalPending) : 0} Rwf
         </span>
       </Col>
     </Row>

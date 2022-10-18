@@ -24,7 +24,11 @@ const stockEndpoints = baseAPI.injectEndpoints({
     >({
       providesTags: ["Stock"],
       query: (DTO) => ({
-        url: `/warehouse-items?page=${DTO?.page}&size=${DTO?.size}&start=${DTO?.start}&end=${DTO?.end}&depot=${DTO?.depot}&status=${DTO?.status}`,
+        url: `/warehouse-items?page=${DTO?.page || ""}&size=${
+          DTO?.size || ""
+        }&start=${DTO?.start || ""}&end=${DTO?.end || ""}&depot=${
+          DTO?.depot || ""
+        }&status=${DTO?.status || ""}&sort=${DTO?.sort || ""}`,
         method: "GET"
       })
     }),

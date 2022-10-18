@@ -6,13 +6,13 @@ import { AdminsTopNavigatorTypes } from "../../lib/types/pageTypes/Accounts/Admi
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewAdmin from "../Forms/Accounts/Admins/AddNewAdmin";
 import { usePostAdminMutation } from "../../lib/api/endpoints/Accounts/adminsEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
-import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 import Navbar from "../Shared/Content/Navbar";
 import Heading1 from "../Shared/Text/Heading1";
 import { localeString } from "../../utils/numberFormatter";
 import Button from "../Shared/Button";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
 
 const AdminsTopNavigator: FC<AdminsTopNavigatorTypes> = ({
   isModalVisible,
@@ -24,27 +24,26 @@ const AdminsTopNavigator: FC<AdminsTopNavigatorTypes> = ({
   const [postAdmin, { isLoading }] = usePostAdminMutation();
   const [checkbox, setCheckbox] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const handleAddAdminSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsModalVisible(false);
+    setCheckbox(false);
+
+    dispatch(displayPaginatedData({ payload }));
+  };
+
   const onAddAdminFinish = (values: any) => {
-    postAdmin({
+    handleAPIRequests({
+      request: postAdmin,
       names: values?.names,
       email: values?.email,
       isGuest: checkbox,
-      isSuperAdmin: !checkbox
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsModalVisible(false);
-        setCheckbox(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      isSuperAdmin: !checkbox,
+      showSuccess: true,
+      handleSuccess: handleAddAdminSuccess
+    });
   };
 
   const LeftSide = (

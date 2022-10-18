@@ -47,7 +47,8 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
     start: "",
     end: "",
     depot: "",
-    status: ""
+    status: "",
+    sort: ""
   });
 
   return (

@@ -40,7 +40,7 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
     setItemToEdit(record?.id);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
-    setPhoneNumber((record?.phone && `+${record?.phone}`) || "");
+    setPhoneNumber(record?.phone);
   };
 
   const [itemToDelete, setItemToDelete]: any = useState();

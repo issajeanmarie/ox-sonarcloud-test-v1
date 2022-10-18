@@ -12,10 +12,10 @@ import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { useCancelSaleMutation } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import moment from "moment";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import Link from "next/link";
 
 const { Text } = Typography;
@@ -23,42 +23,79 @@ const { Text } = Typography;
 type OneWarehouseOrderTypes = {
   sale: any;
   itemNumber: number;
+  AllSales: any;
 };
 
 const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
   sale,
-  itemNumber
+  itemNumber,
+  AllSales
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
   const [cancelSale, { isLoading: isCancelingSale }] = useCancelSaleMutation();
+
+  const dispatch = useDispatch();
 
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  const handleCancelSale = () => {
-    cancelSale({
-      id: sale?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
+  const dispatchReplace = (newContent: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          payload: {
+            content: [...newContent],
+            totalPages: AllSales.payload.totalPages,
+            totalElements: AllSales.payload.totalElements
+          }
+        },
+        replace: true
       })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    );
+  };
+
+  const handleCancelSaleSuccess = ({ payload }: any) => {
+    setIsModalVisible(false);
+
+    const newSalesList: any = [];
+
+    AllSales?.payload?.content?.map((oneSale: any) => {
+      if (oneSale.id === payload.id) {
+        newSalesList.push({ ...oneSale, status: payload.status });
+      } else {
+        newSalesList.push(oneSale);
+      }
+    });
+
+    dispatchReplace(newSalesList);
+  };
+
+  const handleCancelSale = () => {
+    handleAPIRequests({
+      request: cancelSale,
+      id: sale?.id,
+      showSuccess: true,
+      handleSuccess: handleCancelSaleSuccess
+    });
   };
 
   return (
     <div className="shadow-[0px_0px_19px_#00000008] w-full mb-2">
       <div className="py-8 px-4 border-b-2 border-gray-100 flex items-center justify-between bg-white">
-        <div className="flex-1">
+        <div
+          className={`flex-1 ${
+            sale.status === "CANCELLED" ? "opacity-50" : ""
+          }`}
+        >
           <Row gutter={32} align="middle">
             <Col className="heading2 w-[32px]">
               <span className="font-bold text-lg">{itemNumber}.</span>
             </Col>
             <Col>
               <Text className="text-md font-bold">
-                {sale?.saleItems.length !== 0 ? (
+                {sale?.saleItems.length > 0 ? (
                   <>{sale?.saleItems[0]?.warehouseItem?.parentCategory?.name}</>
                 ) : (
                   "Unkown Item"
@@ -74,7 +111,11 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
           </Row>
         </div>
 
-        <div className="flex-1">
+        <div
+          className={`flex-1 ${
+            sale.status === "CANCELLED" ? "opacity-50" : ""
+          }`}
+        >
           <Row gutter={32} align="middle">
             <Col>
               <Text className="text-md font-bold">{sale?.client?.names}</Text>
@@ -87,7 +128,11 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
           </Row>
         </div>
 
-        <div className="flex-1">
+        <div
+          className={`flex-1 ${
+            sale.status === "CANCELLED" ? "opacity-50" : ""
+          }`}
+        >
           <Row gutter={32} align="middle">
             <Col>
               <Text className="normalText opacity_56">
@@ -111,13 +156,15 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
           </Row>
         </div>
 
-        <div className="flex-1">
+        <div
+          className={`flex-1 ${
+            sale.status === "CANCELLED" ? "opacity-50" : ""
+          }`}
+        >
           <Row gutter={32} align="middle">
             <Col>
               <Text className="text-md font-bold">
-                {sale?.saleItems &&
-                  numbersFormatter(sale?.saleItems[0]?.weight)}{" "}
-                KG
+                {numbersFormatter(sale?.transportOrder?.totalWeight || 0)} KG
               </Text>
             </Col>
 
@@ -146,7 +193,7 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
         <div className="flex gap-10 ">
           <div className="text-right">
             <Row align="middle" gutter={16} wrap={false}>
-              {sale?.status !== "CANCELLED" && (
+              {sale?.status !== "CANCELLED" ? (
                 <Col className="my-[-12px]">
                   <CustomButton
                     onClick={showModal}
@@ -162,6 +209,8 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
                     }
                   />
                 </Col>
+              ) : (
+                <span className="font-bold nowrap text-ox-red">CANCELLED</span>
               )}
 
               <Col className="my-[-12px]">

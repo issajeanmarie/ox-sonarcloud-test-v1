@@ -26,7 +26,9 @@ const supplierEndpoints = baseAPI.injectEndpoints({
     >({
       providesTags: ["Suppliers"],
       query: (DTO) => ({
-        url: `/suppliers?page=${DTO?.page}&size=${DTO?.size}&sort=${DTO?.sort}`,
+        url: `/suppliers?page=${DTO?.page || ""}&size=${DTO?.size || ""}&sort=${
+          DTO?.sort || ""
+        }`,
         method: "GET"
       })
     }),

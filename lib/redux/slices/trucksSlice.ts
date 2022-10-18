@@ -10,7 +10,6 @@ interface DisplayTrucks {
 }
 
 type TrucksState = {
-  displayTrucks: DisplayTrucks;
   displayTrucksFuelRecords: object;
   displayTruckIssues: DisplayTrucks;
   displayTrucksRepairLogs: DisplayTrucks;
@@ -20,49 +19,12 @@ type TrucksState = {
 const slice = createSlice({
   name: "trucks",
   initialState: {
-    displayTrucks: { content: [], message: {}, totalPages: 0 },
     displayTrucksFuelRecords: {},
     displayTruckIssues: {},
     displayTrucksRepairLogs: {},
     displaySingleTruck: {}
   } as TrucksState,
   reducers: {
-    displayTrucks: (state, { payload }) => {
-      if (payload?.payload) {
-        // UPDATE STATE WHEN COMPONENT HAS MOUNTED
-        if (payload.onRender) {
-          state.displayTrucks = payload.payload;
-
-          return;
-        }
-
-        // CHECK IF YOU HAVE TO REPLACE STATE WITH NEW STATE (EX: AFTER FILTERING, SORTING...)
-        if (payload.replace) {
-          state.displayTrucks = payload?.payload;
-          return;
-        }
-
-        // CHECK IF YOU ARE PAGINATING TO ADD NEW DATA TO THE CURRENT ONES
-        if (payload.paginate) {
-          state.displayTrucks.totalElements = payload?.payload?.totalElements;
-          state.displayTrucks.content = [
-            ...state?.displayTrucks?.content,
-            ...payload?.payload?.content
-          ];
-          (state.displayTrucks.message = payload?.message),
-            (state.displayTrucks.totalPages = payload?.payload?.totalPages);
-
-          return;
-        }
-
-        // DO THIS OTHERWISE - LIKE WHEN YOU ADDED NEW ELEMENT
-        state.displayTrucks.content = [
-          payload?.payload,
-          ...state?.displayTrucks?.content
-        ];
-      }
-    },
-
     displayFuelRecords: (state, { payload }) => {
       state.displayTrucksFuelRecords = { ...payload };
     },
@@ -99,7 +61,6 @@ const slice = createSlice({
 });
 
 export const {
-  displayTrucks,
   displayFuelRecords,
   displayTruckIssues,
   displayRepairLogs,

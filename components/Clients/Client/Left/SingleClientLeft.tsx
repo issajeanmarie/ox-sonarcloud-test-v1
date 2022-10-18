@@ -9,13 +9,12 @@ import Header from "./Header";
 const SingleClientLeft: FC<SingleClientLeftTypes> = ({
   clientOrders,
   isClientLoading,
-  isClientOrdersFetching,
   handleLoadMore,
-  pageSize,
-  isMoreClientsOrderFetching,
-  moreClientOrders,
+  isLoadMoreLoading,
   selectedFilter,
-  setSelectedFilter
+  setSelectedFilter,
+  showPagination,
+  showFiltersLoader
 }) => {
   return (
     <Col
@@ -28,7 +27,7 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
       xxl={13}
     >
       <Header
-        orders={clientOrders?.orders}
+        orders={clientOrders}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         totalPending={clientOrders?.totalPending}
@@ -43,31 +42,23 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
       ) : (
         <div className="mb-10">
           <ClientOrderHistoryTable
-            orders={
-              moreClientOrders?.length === 0
-                ? clientOrders?.orders?.content
-                : clientOrders?.orders?.content?.concat(
-                    moreClientOrders?.orders?.content
-                  )
-            }
-            isClientOrdersFetching={isClientOrdersFetching}
+            orders={clientOrders?.content}
+            isClientOrdersFetching={showFiltersLoader}
           />
         </div>
       )}
 
-      {pageSize > 9 &&
-        clientOrders?.orders?.totalElements &&
-        clientOrders?.orders?.totalElements >= pageSize && (
-          <div style={{ width: "12%", margin: "32px auto" }}>
-            <CustomButton
-              loading={isMoreClientsOrderFetching}
-              onClick={handleLoadMore}
-              type="secondary"
-            >
-              Load more
-            </CustomButton>
-          </div>
-        )}
+      {showPagination && (
+        <div style={{ width: "12%", margin: "32px auto" }}>
+          <CustomButton
+            loading={isLoadMoreLoading}
+            onClick={handleLoadMore}
+            type="secondary"
+          >
+            Load more
+          </CustomButton>
+        </div>
+      )}
     </Col>
   );
 };

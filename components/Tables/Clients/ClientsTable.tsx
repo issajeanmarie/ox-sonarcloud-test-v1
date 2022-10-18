@@ -109,9 +109,9 @@ const ClientsTable: FC<ClientsTableProps> = ({
       key: "pendingPayment",
       render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
         <RowsWrapper>
-          {record?.pendingPayment ? (
+          {record?.pendingAmount ? (
             <Text className="text-sm font-bold red">
-              {numbersFormatter(record?.pendingPayment)} Rwf
+              {numbersFormatter(record?.pendingAmount)} Rwf
             </Text>
           ) : (
             <Text className="normalText opacity_56">...</Text>

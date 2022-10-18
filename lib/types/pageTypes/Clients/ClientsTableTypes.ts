@@ -4,5 +4,5 @@ export type ClientsTableTypes = {
   phone: string;
   email: string;
   location: string;
-  pendingPayment: number | undefined;
+  pendingAmount: number | undefined;
 };

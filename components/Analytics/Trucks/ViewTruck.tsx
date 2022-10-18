@@ -46,7 +46,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
   isPageLoading
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isNewDocumetModalVisible, setIsNewDocumetModalVisible] =
+  const [isNewDocumentModalVisible, setIsNewDocumentModalVisible] =
     useState(false);
   const [isUserEditing, setIsUserEditing] = useState(false);
 
@@ -95,8 +95,8 @@ const ViewTruck: FC<ViewTruckProps> = ({
 
           <NewTRuckDocumentModal
             truckData={truckData}
-            isVisible={isNewDocumetModalVisible}
-            setIsVisible={setIsNewDocumetModalVisible}
+            isVisible={isNewDocumentModalVisible}
+            setIsVisible={setIsNewDocumentModalVisible}
           />
 
           <Header
@@ -133,7 +133,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
 
                 <span className="text-gray-400">
                   {truckData?.yearManufactured} - {truckData?.model} -{" "}
-                  {truckData?.type}
+                  {truckData?.type?.replaceAll("_", " ")}
                 </span>
 
                 <DetailsComponent truckData={truckInfo} />
@@ -146,7 +146,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
                   </span>
 
                   <CustomButton
-                    onClick={() => setIsNewDocumetModalVisible(true)}
+                    onClick={() => setIsNewDocumentModalVisible(true)}
                     type="secondary"
                     size="icon"
                     loading={false}

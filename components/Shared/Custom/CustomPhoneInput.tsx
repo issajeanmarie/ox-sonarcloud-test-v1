@@ -29,6 +29,9 @@ const CustomPhoneInput = ({
     {label && <Text className="heading2 mb-[8px]">{label}</Text>}
 
     <PhoneInput
+      international
+      countryCallingCodeEditable
+      defaultCountry="RW"
       className="my_input"
       width={width}
       placeholder="Choose country"
@@ -37,7 +40,9 @@ const CustomPhoneInput = ({
       name={name}
     />
     {validatePhone && !phoneNumber && (
-      <span style={{ color: "red" }}>Phone is required</span>
+      <span style={{ color: "red" }} className="text-sm">
+        Phone is required
+      </span>
     )}
   </Form.Item>
 );

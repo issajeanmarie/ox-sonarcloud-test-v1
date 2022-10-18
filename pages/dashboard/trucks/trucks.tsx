@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -10,16 +9,9 @@ import Dropdown from "antd/lib/dropdown";
 import CustomButton from "../../../components/Shared/Button/button";
 import { pagination } from "../../../config/pagination";
 import TrucksTable from "../../../components/Analytics/Trucks/TrucksTable";
-import { displayTrucks } from "../../../lib/redux/slices/trucksSlice";
 import { NewTruckModal } from "../../../components/Modals";
-import {
-  useFilterTrucksMutation,
-  useDownloadOOSReportMutation
-} from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import {
-  useLoadMoreTrucksMutation,
-  useLazyGetTrucksQuery
-} from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { useDownloadOOSReportMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { useLazyGetTrucksQuery } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import DropDownSelector from "../../../components/Shared/DropDownSelector";
@@ -30,34 +22,29 @@ import Input from "../../../components/Shared/Input";
 import Button from "../../../components/Shared/Button";
 import Content from "../../../components/Shared/Content";
 import { SEO } from "../../../components/Shared";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 interface Trucks {
-  displayTrucks: {
+  displayPaginatedData: {
     totalPages: number;
     content: [];
   };
 }
 
 type State = {
-  trucks: Trucks;
-};
-
-type BrowserState = {
-  status: string | string[];
-  search: string | string[];
-  sort: string | string[];
+  paginatedData: Trucks;
 };
 
 const Trucks = () => {
+  const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [currentPages, setCurrentPages] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState<any>({});
   const [selectedSort, setSelectedSort] = useState<any>({});
-  const [loadMoreTrucks, { isLoading: loadMoreLoading }] =
-    useLoadMoreTrucksMutation();
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+
   const [getTrucks, { isLoading: getTrucksLoading }] = useLazyGetTrucksQuery();
-  const [filterTrucks, { isLoading: filterTrucksLoading }] =
-    useFilterTrucksMutation();
   const [downloadOOSReport, { isLoading: isDownloadLoading }] =
     useDownloadOOSReportMutation();
 
@@ -71,125 +58,63 @@ const Trucks = () => {
 
   const dispatch = useDispatch();
   const trucksState: any = useSelector(
-    (state: State) => state.trucks.displayTrucks
+    (state: State) => state.paginatedData.displayPaginatedData
   );
-  const router = useRouter();
-  const { browserStatus, browserSort, browserSearch } = router.query;
 
-  const handleGetTrucksSuccess = (res: any) => {
-    res && dispatch(displayTrucks({ payload: res, onRender: true }));
+  const handleRenderSuccess = (res: any) => {
+    setFiltersBasedLoader(false);
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
   };
 
-  const handleLoadMoreTrucksSuccess = ({ payload }: any) => {
-    dispatch(displayTrucks({ payload, paginate: true }));
+  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreOrdersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const getTrucksAction = ({
+    request = getTrucks,
+    handleSuccess = handleRenderSuccess,
+    page,
+    size = pagination.trucks.size,
+    status = selectedFilter.value || "",
+    sort = selectedSort.value || "",
+    search = searchValue || "",
+    showSuccess = false
+  }: any) => {
+    handleAPIRequests({
+      handleSuccess,
+      size,
+      page,
+      status,
+      sort,
+      search,
+      showSuccess,
+      request
+    });
   };
 
   useEffect(() => {
-    dispatch(displayTrucks({}));
-    router.push({
-      query: {
-        browserSort: "",
-        browserStatus: "",
-        browserSearch: ""
-      }
-    });
+    setFiltersBasedLoader(true);
+    getTrucksAction({});
+    setCurrentPages(1);
+  }, [searchValue, selectedSort.value, selectedFilter.value]);
 
-    handleAPIRequests({
-      request: getTrucks,
-      handleSuccess: handleGetTrucksSuccess,
-      size: pagination.trucks,
-      page: 0,
-      showSuccess: false
-    });
-  }, [dispatch, getTrucks]);
+  const handleSearchTruck = (search: string) => {
+    setSearchValue(search);
+  };
 
   const handleLoadMore = () => {
     setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
 
-    handleAPIRequests({
-      request: loadMoreTrucks,
-      handleSuccess: handleLoadMoreTrucksSuccess,
-      size: pagination.trucks,
+    getTrucksAction({
       page: currentPages,
-      status: browserStatus,
-      sort: browserSort,
-      search: browserSearch,
-      showSuccess: false
-    });
-  };
-
-  const showPaginationBtn =
-    (trucksState?.totalPages > currentPages || loadMoreLoading) &&
-    !(filterTrucksLoading || getTrucksLoading);
-
-  const handleFilterTrucksSuccess = (res: any) => {
-    setCurrentPages(1);
-    dispatch(displayTrucks({ ...res, replace: true }));
-  };
-
-  const setBrowserStates = ({ search, sort, status }: BrowserState) => {
-    router.push({
-      query: {
-        browserSearch: search,
-        browserSort: sort,
-        browserStatus: status
-      }
-    });
-  };
-
-  useEffect(() => {
-    setBrowserStates({
-      search: browserSearch || "",
-      sort: browserSort || "",
-      status: selectedFilter.value || ""
-    });
-
-    handleAPIRequests({
-      request: filterTrucks,
-      handleSuccess: handleFilterTrucksSuccess,
-      size: pagination.trucks,
-      page: 0,
-      status: selectedFilter.value || "",
-      sort: browserSort,
-      search: browserSearch,
-      showSuccess: false
-    });
-  }, [selectedFilter]);
-
-  useEffect(() => {
-    setBrowserStates({
-      status: browserStatus || "",
-      sort: selectedSort.value || "",
-      search: browserSearch || ""
-    });
-
-    handleAPIRequests({
-      request: filterTrucks,
-      handleSuccess: handleFilterTrucksSuccess,
-      size: pagination.trucks,
-      page: 0,
-      status: browserStatus,
-      search: browserSearch,
-      sort: selectedSort.value || ""
-    });
-  }, [selectedSort]);
-
-  const handleSearchTruck = (search: string) => {
-    setBrowserStates({
-      status: browserStatus || "",
-      search,
-      sort: browserSort || ""
-    });
-
-    handleAPIRequests({
-      request: filterTrucks,
-      handleSuccess: handleFilterTrucksSuccess,
-      size: pagination.trucks,
-      page: 0,
-      status: browserStatus,
-      sort: browserSort,
-      search: search,
-      showSuccess: false
+      handleFailure: handleLoadMoreOrdersFailure,
+      handleSuccess: handleLoadMoreOrdersSuccess
     });
   };
 
@@ -201,6 +126,11 @@ const Trucks = () => {
       fileType: "XLS"
     });
   };
+
+  const showFiltersLoader = filtersBasedLoader && !isLoadMoreLoading;
+  const showPagination =
+    (trucksState?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
+    !showFiltersLoader;
 
   const downloadOOSdropdown = (
     <div className="radius4 p-3 py-6 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
@@ -214,7 +144,9 @@ const Trucks = () => {
     <Col className="flex items-center gap-4">
       <Row gutter={24} align="middle" wrap={false}>
         <Col>
-          <Heading1>{localeString(trucksState?.totalElements)} Trucks</Heading1>
+          <Heading1>
+            {localeString(trucksState?.payload?.totalElements)} Trucks
+          </Heading1>
         </Col>
 
         <Col>
@@ -296,14 +228,14 @@ const Trucks = () => {
         <Content navType="CENTER">
           <>
             <TrucksTable
-              data={trucksState?.content}
-              isLoading={getTrucksLoading || filterTrucksLoading}
+              data={trucksState?.payload?.content}
+              isLoading={getTrucksLoading || showFiltersLoader}
             />
 
-            {showPaginationBtn && (
+            {showPagination && (
               <div style={{ width: "12%", margin: "32px auto" }}>
                 <CustomButton
-                  loading={loadMoreLoading}
+                  loading={isLoadMoreLoading}
                   type="secondary"
                   onClick={handleLoadMore}
                 >

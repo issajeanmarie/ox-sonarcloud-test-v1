@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import Layout from "../../../components/Shared/Layout";
@@ -13,8 +14,7 @@ import StockTopNavigator from "../../../components/Warehouse/WarehouseHeaders/St
 import { StockTopContentWrapper } from "../../../components/Warehouse/Wrappers";
 import {
   useLazyStockQuery,
-  useStockCategoriesQuery,
-  useStockQuery
+  useStockCategoriesQuery
 } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import CardRowWrapper from "../../../components/Cards/CardRowWrapper";
 import {
@@ -26,15 +26,20 @@ import StockMediumCard from "../../../components/Cards/StockMediumCard";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import StockHistory from "../../../components/Warehouse/Stock/StockHistory";
 import StockHistoryTable from "../../../components/Tables/Warehouse/StockHistoryTable";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch, useSelector } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { pagination } from "../../../config/pagination";
 
 const Stock = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedSort, setSelectedSort] = useState<any>({});
   const [active, setActive] = useState<string>("STOCK");
-  const [pageSize, setPageSize] = useState(20);
-  const [moreStocks, setMoreStocks] = useState<any>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentPages, setCurrentPages] = useState(1);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+  const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
   const router = useRouter();
   const { query } = useRouter();
 
@@ -63,46 +68,83 @@ const Stock = () => {
     id === "SUPPLIERS" && changeRoute(`${routes.Suppliers.url}?wtb=SUPPLIERS`);
   };
 
-  const [stock, { isFetching: loadingMoreFetching }] = useLazyStockQuery();
+  const [getStocks, { data: apiData }] = useLazyStockQuery();
   const { data: stockCategories, isLoading: isStockCategoriesLoading } =
     useStockCategoriesQuery();
 
-  const {
-    data: AllStocks,
-    isLoading: isStocksLoading,
-    isFetching: isStocksFetching
-  } = useStockQuery({
-    page: "",
-    size: pageSize,
-    start: startDate,
-    end: endDate,
-    depot: "",
-    status: filter?.value || ""
-  });
+  const AllStocks = useSelector(
+    (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
+  );
+
+  const { depotId } = useSelector(
+    (state: { depots: any }) => state.depots.payload
+  );
+  const dispatch = useDispatch();
 
   //MODAL
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  const handleLoadMore = () => {
-    stock({
-      page: "",
-      size: pageSize,
-      start: startDate,
-      end: endDate,
-      depot: "",
-      status: filter?.value || ""
-    })
-      .unwrap()
-      .then((res) => {
-        setPageSize(pageSize + 20);
-        setMoreStocks(res?.payload);
-      })
-      .catch((error) => {
-        return error;
-      });
+  const handleRenderSuccess = (res: any) => {
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
+    setFiltersBasedLoader(false);
   };
+
+  const getStocksAction = ({
+    request = getStocks,
+    page,
+    size = pagination.stock.size,
+    start = startDate,
+    end = endDate,
+    depot = depotId,
+    sort = selectedSort?.value || "",
+    status = filter?.value || "",
+    handleSuccess = handleRenderSuccess
+  }: any) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      start,
+      end,
+      depot,
+      status,
+      sort,
+      handleSuccess
+    });
+  };
+
+  useEffect(() => {
+    getStocksAction({});
+    setCurrentPages(1);
+    setFiltersBasedLoader(true);
+  }, [startDate, endDate, filter, selectedSort, depotId]);
+
+  const handleLoadMoreStocksSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreStocksFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMore = () => {
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
+
+    getStocksAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreStocksFailure,
+      handleSuccess: handleLoadMoreStocksSuccess
+    });
+  };
+
+  const showFiltersLoader = filtersBasedLoader && !isLoadMoreLoading;
+  const showPagination =
+    (AllStocks?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
+    !showFiltersLoader;
 
   return (
     <Layout>
@@ -120,6 +162,7 @@ const Stock = () => {
           isModalVisible={isModalVisible}
           selectedSort={selectedSort}
           setSelectedSort={setSelectedSort}
+          stocksNumber={apiData?.payload?.totalElements}
         />
 
         <>
@@ -160,7 +203,7 @@ const Stock = () => {
 
           <Content navType="TRIPLE">
             <>
-              {isStocksLoading ? (
+              {showFiltersLoader ? (
                 <div className="mt-4">
                   {[...Array(20)].map((_, index) => (
                     <StockTableLoader key={index} />
@@ -168,28 +211,22 @@ const Stock = () => {
                 </div>
               ) : (
                 <StockHistoryTable
-                  Stocks={
-                    moreStocks?.length === 0
-                      ? AllStocks?.payload?.content
-                      : AllStocks?.payload?.content?.concat(moreStocks?.content)
-                  }
-                  isStocksFetching={isStocksFetching}
+                  Stocks={AllStocks}
+                  isStocksFetching={showFiltersLoader}
                 />
               )}
 
-              {pageSize > 19 &&
-                AllStocks?.payload?.totalElements &&
-                AllStocks?.payload?.totalElements >= pageSize && (
-                  <div style={{ width: "12%", margin: "32px auto" }}>
-                    <CustomButton
-                      loading={loadingMoreFetching}
-                      onClick={handleLoadMore}
-                      type="secondary"
-                    >
-                      Load more
-                    </CustomButton>
-                  </div>
-                )}
+              {showPagination && (
+                <div style={{ width: "12%", margin: "32px auto" }}>
+                  <CustomButton
+                    loading={isLoadMoreLoading}
+                    onClick={handleLoadMore}
+                    type="secondary"
+                  >
+                    Load more
+                  </CustomButton>
+                </div>
+              )}
             </>
           </Content>
         </>

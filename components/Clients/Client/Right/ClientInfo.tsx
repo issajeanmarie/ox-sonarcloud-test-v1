@@ -19,7 +19,7 @@ const ClientInfo: FC<ClientInfoTypes> = ({ client }) => {
   const showModal: any = () => {
     form.setFieldsValue(client);
     setIsModalVisible(true);
-    setPhoneNumber((client?.phone && `+${client?.phone}`) || "");
+    setPhoneNumber(client?.phone);
   };
 
   const [editClient, { isLoading: isEditingClient }] = useEditClientMutation();

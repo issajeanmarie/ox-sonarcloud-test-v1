@@ -32,7 +32,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
           DTO?.page || ""
         }&size=${DTO?.size || ""}&status=${DTO?.status || ""}&sort=${
           DTO?.sort || ""
-        }`,
+        }&search=${DTO.search || ""}`,
         method: "GET"
       })
     }),

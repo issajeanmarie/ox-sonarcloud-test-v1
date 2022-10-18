@@ -57,7 +57,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   };
 
   const handleGetTrucksSuccess = (res: any) => {
-    setAllTrucks(res);
+    setAllTrucks(res?.payload);
     setSelectedTruck(res);
   };
 
@@ -86,7 +86,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   }, [getTrucks]);
 
   const handleSearchTruck = (query: string) => {
-    const filteredTrucks = trucks?.filter(
+    const filteredTrucks = trucks?.payload?.filter(
       (truck: any) =>
         truck.plateNumber.toLowerCase().includes(query.toLowerCase()) ||
         truck.model.toLowerCase().includes(query.toLowerCase())

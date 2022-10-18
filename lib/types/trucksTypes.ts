@@ -49,6 +49,7 @@ export type CreateTruckRequest = {
   tireSize: string;
   trackingUnitSerialNumber: string;
   fuelCardAssigned: string;
+  content: any;
 };
 
 export type LoadMoreTrucksRequest = {

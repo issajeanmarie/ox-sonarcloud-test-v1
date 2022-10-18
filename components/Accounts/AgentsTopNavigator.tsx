@@ -11,6 +11,8 @@ import Button from "../Shared/Button";
 import Heading1 from "../Shared/Text/Heading1";
 import { localeString } from "../../utils/numberFormatter";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
 
 const AgentsTopNavigator: FC<AgentsTopNavigatorTypes> = ({
   isModalVisible,
@@ -22,10 +24,14 @@ const AgentsTopNavigator: FC<AgentsTopNavigatorTypes> = ({
   const [phoneNumber, setPhoneNumber] = useState("");
   const [postAgent, { isLoading }] = usePostAgentMutation();
 
-  const handleAddAgentSuccess = () => {
+  const dispatch = useDispatch();
+
+  const handleAddAgentSuccess = ({ payload }: any) => {
     setPhoneNumber("");
     form.resetFields();
     setIsModalVisible(false);
+
+    dispatch(displayPaginatedData({ payload }));
   };
 
   const onAddAgentFinish = (values: any) => {

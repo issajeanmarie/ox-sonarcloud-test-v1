@@ -22,6 +22,10 @@ const EditStock: FC<EditStockTypes> = ({
   isSuppliersLoading,
   suppliers
 }) => {
+  const filteredSuppliers = suppliers?.payload?.content?.filter(
+    (supplier: any) => supplier.enabled
+  );
+
   return (
     <Form
       form={form}
@@ -59,7 +63,7 @@ const EditStock: FC<EditStockTypes> = ({
             isGroupDropdown
             rules={requiredInput}
           >
-            {suppliers?.payload?.content?.map((item: any) => (
+            {filteredSuppliers?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
                 {item?.names}
               </Option>

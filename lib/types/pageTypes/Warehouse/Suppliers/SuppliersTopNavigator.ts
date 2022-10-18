@@ -6,5 +6,5 @@ export type SuppliersTopNavigatorTypes = {
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   sort: object;
   setSort: React.Dispatch<SetStateAction<object>>;
-  data: any;
+  totalElements: number | undefined;
 };

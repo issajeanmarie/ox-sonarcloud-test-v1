@@ -26,7 +26,7 @@ const adminsEndpoints = baseAPI.injectEndpoints({
     >({
       providesTags: ["Admins"],
       query: (DTO) => ({
-        url: `admins?page=${DTO?.page}&size=${DTO?.size}`,
+        url: `admins?page=${DTO?.page || ""}&size=${DTO?.size || ""}`,
         method: "GET"
       })
     }),

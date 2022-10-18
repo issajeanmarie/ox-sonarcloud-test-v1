@@ -16,6 +16,8 @@ import {
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditSupplier from "../../Forms/Warehouse/Edit/EditSupplier";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const { Text } = Typography;
 
@@ -53,9 +55,29 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
 
   const handleDeleteSupplierSuccess = () => {
     setIsModalVisible(false);
+
+    dispatch(
+      displayPaginatedData({ deleted: true, payload: { id: itemToDelete } })
+    );
   };
 
-  //DELTE
+  const dispatch = useDispatch();
+
+  const dispatchReplace = (newContent: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          payload: {
+            content: [...newContent],
+            totalPages: suppliers.payload.totalPages,
+            totalElements: suppliers.payload.totalElements
+          }
+        },
+        replace: true
+      })
+    );
+  };
+
   const handleDeleteSupplier = () => {
     handleAPIRequests({
       request: deleteSupplier,
@@ -65,28 +87,53 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
     });
   };
 
-  //TOGGLE
+  const handleToggleSupplierSuccess = ({ payload }: any) => {
+    const newSuppliersList: any = [];
+
+    suppliers?.payload?.content?.map((supplier: any) => {
+      if (supplier.id === payload.id) {
+        newSuppliersList.push(payload);
+      } else {
+        newSuppliersList.push(supplier);
+      }
+    });
+
+    dispatchReplace(newSuppliersList);
+  };
+
   const handleToggleSupplier = (id: number) => {
     setItemToToggle(id);
     handleAPIRequests({
       request: toggleSUpplier,
       id: id,
-      showSuccess: true
+      showSuccess: true,
+      handleSuccess: handleToggleSupplierSuccess
     });
   };
 
-  //edit
   const showEditModal = (record: any) => {
     setItemToEdit(record);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
-    setPhoneNumber((record?.phone && `+${record?.phone}`) || "");
+    setPhoneNumber(record?.phone);
   };
 
-  const handleEditSupplierSuccess = () => {
+  const handleEditSupplierSuccess = ({ payload }: any) => {
     form.resetFields();
     setIsEditModalVisible(false);
     setPhoneNumber("");
+
+    const newSuppliersList: any = [];
+
+    suppliers?.payload?.content?.map((supplier: any) => {
+      if (supplier.id === payload.id) {
+        newSuppliersList.push(payload);
+      } else {
+        newSuppliersList.push(supplier);
+      }
+    });
+
+    dispatchReplace(newSuppliersList);
   };
 
   const onEditSupplierFinish = (values: any) => {
@@ -140,7 +187,7 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
       render: (text: SuppliersTableTypes, record: SuppliersTableTypes) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
-            {record?.offices?.length !== 0 ? record?.offices[0]?.location : "-"}
+            {record?.offices?.length > 0 ? record?.offices[0]?.location : "-"}
           </Text>
         </RowsWrapper>
       )
@@ -243,7 +290,7 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
       <Table
         className="data_table light_white_header light_white_table@"
         columns={columns}
-        dataSource={suppliers}
+        dataSource={suppliers?.payload?.content}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}
