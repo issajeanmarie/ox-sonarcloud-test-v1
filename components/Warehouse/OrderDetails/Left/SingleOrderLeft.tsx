@@ -113,6 +113,13 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                   )} Rwf`}
                   isTransportOrder={false}
                 />
+                {sale?.transportOrder?.id && (
+                  <InfoWrapper
+                    title="Transport Ref"
+                    infoItem={sale?.transportOrder?.id}
+                    isTransportOrder={true}
+                  />
+                )}
               </div>
             ))}
 
