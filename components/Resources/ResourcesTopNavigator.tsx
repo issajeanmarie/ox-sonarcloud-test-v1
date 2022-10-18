@@ -6,13 +6,13 @@ import { ResourcesTopNavigatorTypes } from "../../lib/types/pageTypes/Resources/
 import ModalWrapper from "../Modals/ModalWrapper";
 import AddNewResource from "../Forms/Resources/AddNewResource";
 import { usePostResourceMutation } from "../../lib/api/endpoints/Resources/resourcesEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../lib/types/shared";
-import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 import Navbar from "../Shared/Content/Navbar";
 import Heading1 from "../Shared/Text/Heading1";
 import Button from "../Shared/Button";
 import { localeString } from "../../utils/numberFormatter";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
 
 const ResourcesTopNavigator: FC<ResourcesTopNavigatorTypes> = ({
   isModalVisible,
@@ -25,24 +25,23 @@ const ResourcesTopNavigator: FC<ResourcesTopNavigatorTypes> = ({
   const [form] = Form.useForm();
   const [postResource, { isLoading }] = usePostResourceMutation();
 
+  const dispatch = useDispatch();
+
+  const handleAddResourceSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsModalVisible(false);
+
+    dispatch(displayPaginatedData({ payload }));
+  };
+
   const onAddResourceFinish = (values: any) => {
-    postResource({
+    handleAPIRequests({
+      request: postResource,
       title: values?.title,
-      link: values?.link
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      link: values?.link,
+      showSuccess: true,
+      handleSuccess: handleAddResourceSuccess
+    });
   };
 
   const LeftSide = (

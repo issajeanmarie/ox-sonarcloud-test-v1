@@ -6,7 +6,7 @@ const TruckIcon = "ic-ecommerce-delivery.svg";
 const AccountsIcon = "ic-security-secured-profile.svg";
 const ClientsIcon = "ic-actions-user.svg";
 const SettingsIcon = "ic-actions-settings.svg";
-const ResourcesIcon = "ic-security-secured-profile.svg";
+const ResourcesIcon = "link-line.svg";
 const WarehouseIcon = "ic-ecommerce-house-white.svg";
 
 export const manageSidebarMenus = () => [

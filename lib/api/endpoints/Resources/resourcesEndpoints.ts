@@ -23,8 +23,10 @@ const resourcesApi = baseAPI.injectEndpoints({
       providesTags: ["Resources"],
       query: (DTO) => ({
         url: `/resources${DTO.noPagination ? "/no-pagination" : ""}?page=${
-          DTO?.page
-        }&size=${DTO?.size}&status=${DTO?.status}&sort=${DTO?.sort}`,
+          DTO?.page || ""
+        }&size=${DTO?.size || ""}&status=${DTO?.status || ""}&sort=${
+          DTO?.sort || ""
+        }`,
         method: "GET"
       })
     }),
