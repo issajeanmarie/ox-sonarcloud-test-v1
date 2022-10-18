@@ -3,10 +3,6 @@ import Image from "next/image";
 import { Col, Row, Skeleton, Spin, Space, Avatar, List } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
-// type SizeType = 'default' | 'small' | 'large';
-// type ButtonShapeType = 'circle' | 'square' | 'round' | 'default';
-// type AvatarShapeType = 'circle' | 'square';
-
 const loadingIcon = (
   <LoadingOutlined style={{ fontSize: 24, color: "#e7b522" }} spin />
 );
