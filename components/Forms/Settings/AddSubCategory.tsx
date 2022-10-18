@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Modal } from "antd";
+import ModalWrapper from "../../Modals/ModalWrapper";
 import React, { FC } from "react";
 import AddSubCategoryForm from "./AddSubCategoryForm";
 
@@ -9,28 +9,32 @@ type addSubCategoryTypes = {
   handleOk: () => void;
   handleCancel: () => void;
   isModalVisible: boolean;
+  setIsModalVisible: any;
+  isLoading: boolean;
 };
 
 const AddSubCategory: FC<addSubCategoryTypes> = ({
   isAddingCategory,
   onAddCategoryFinish,
-  handleOk,
   handleCancel,
-  isModalVisible
+  isModalVisible,
+  setIsModalVisible,
+  isLoading
 }) => {
   return (
-    <Modal
-      title="Add Sub category"
-      visible={isModalVisible}
-      onOk={handleOk}
+    <ModalWrapper
+      title="ADD SUB-CATEGORY"
+      isModalVisible={isModalVisible}
+      setIsModalVisible={setIsModalVisible}
       onCancel={handleCancel}
-      footer={false}
+      loading={isLoading}
+      destroyOnClose
     >
       <AddSubCategoryForm
         onAddCategoryFinish={onAddCategoryFinish}
         isAddingCategory={isAddingCategory}
       />
-    </Modal>
+    </ModalWrapper>
   );
 };
 

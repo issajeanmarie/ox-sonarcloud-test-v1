@@ -1,54 +1,37 @@
-import { Table } from "antd";
-import Typography from "antd/lib/typography";
-import { SettingsKPIsTableTypes } from "../../../lib/types/pageTypes/Settings/SettingsKPIsTableTypes";
-import RowsWrapper from "../RowsWrapper";
+import React, { FC, useState } from "react";
 import CustomInput from "../../Shared/Input";
-import { FC } from "react";
+import Input from "../../Shared/Input";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
 import { SettingsKPIsTableProps } from "../../../lib/types/pageTypes/Settings/SettingsKPIsTableProps";
 
-const { Text } = Typography;
+const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({ data: kpis }) => {
+  const [editedPerKMs, setEditedPerKMs] = useState<React.SetStateAction<any>>(
+    []
+  );
 
-const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({
-  data,
-  handlePostTargetPerDaykpi,
-  handlePostTargetPerKmykpi
-}) => {
-  const columns = [
-    {
-      title: (
-        <div className="flex gap-10">
-          <span>#</span>
-          <span>Depot</span>
-        </div>
-      ),
-      key: "name",
-      render: (
-        text: SettingsKPIsTableTypes,
-        record: SettingsKPIsTableTypes,
-        index: number
-      ) => (
-        <RowsWrapper>
-          <div className="flex gap-10">
-            <Text className="normalText opacity_56">{++index}</Text>
-            <Text className="normalText opacity_56" style={{ display: "none" }}>
-              {record.depotId}
-            </Text>
-            <Text className="normalText fowe700">{record.depotName}</Text>
-          </div>
-        </RowsWrapper>
-      )
-    },
-    {
-      title: "Revenue",
-      key: "Revenue",
-      render: (
-        text: SettingsKPIsTableTypes,
-        record: SettingsKPIsTableTypes
-      ) => (
-        <RowsWrapper>
+  const handleTargetPerDayChange = (value: any) => value;
+
+  const handleTargetPerKMChange = (value: any) => {
+    const filteredResult = editedPerKMs.filter(
+      (perKMs: { receivedValue: { id: number } }) =>
+        perKMs.receivedValue.id !== value.receivedValue.id
+    );
+    setEditedPerKMs([{ ...value }, ...filteredResult]);
+  };
+
+  return kpis?.map(
+    (
+      kpi: { targetPerDay: number; targetPerKm: number; depotId: number },
+      index: number
+    ) => (
+      <Row key={kpi.depotId} className="w-[100%] mb-4" gutter={32}>
+        <Col>{index + 1}</Col>
+
+        <Col>
           <CustomInput
-            onChange={handlePostTargetPerDaykpi}
-            defaultValue={record?.targetPerDay}
+            onChange={handleTargetPerDayChange}
+            defaultValue={kpi?.targetPerDay}
             type="text"
             inputType="number"
             placeholder="Type revenue..."
@@ -61,20 +44,16 @@ const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({
               </span>
             }
           />
-        </RowsWrapper>
-      )
-    },
-    {
-      title: "Revenue/km",
-      key: "Revenuekm",
-      render: (
-        text: SettingsKPIsTableTypes,
-        record: SettingsKPIsTableTypes
-      ) => (
-        <RowsWrapper>
-          <CustomInput
-            onChange={handlePostTargetPerKmykpi}
-            defaultValue={record?.targetPerKm}
+        </Col>
+
+        <Col>
+          <Input
+            selfHandleValue={{
+              id: kpi.depotId,
+              targetPerDay: kpi?.targetPerDay
+            }}
+            onChange={handleTargetPerKMChange}
+            defaultValue={kpi?.targetPerKm}
             type="text"
             inputType="number"
             placeholder="Type revenue/km..."
@@ -87,20 +66,9 @@ const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({
               </span>
             }
           />
-        </RowsWrapper>
-      )
-    }
-  ];
-  return (
-    <Table
-      className="bordered_table"
-      columns={columns}
-      dataSource={data}
-      rowKey={(record) => record.depotId}
-      pagination={false}
-      bordered={false}
-      scroll={{ x: 0 }}
-    />
+        </Col>
+      </Row>
+    )
   );
 };
 

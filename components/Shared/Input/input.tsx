@@ -59,10 +59,10 @@ const Entry = ({
   allowClear,
   onKeyUp,
   list,
-  disabledDate
+  disabledDate,
+  selfHandleValue
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
-
   const {
     ready,
     value,
@@ -138,8 +138,15 @@ const Entry = ({
           allowClear={allowClear}
           type={inputType}
           suffix={suffixIcon}
-          onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
-            onChange && onChange(target.value)
+          onChange={
+            selfHandleValue
+              ? ({ target }) =>
+                  onChange({
+                    receivedValue: selfHandleValue,
+                    value: target.value
+                  })
+              : ({ target }: ChangeEvent<HTMLInputElement>) =>
+                  onChange && onChange(target.value)
           }
         />
       </Form.Item>
