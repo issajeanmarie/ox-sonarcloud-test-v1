@@ -9,7 +9,7 @@ import {
   useAdminsQuery,
   useLazyAdminsQuery
 } from "../../../lib/api/endpoints/Accounts/adminsEndpoints";
-import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
+import { AccountsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import AllAccountsTopNavigator from "../../../components/Accounts/AllAccountsTopNavigator";
 import { AccountLinks } from "../../../components/Accounts/AccountLinks";
 import { changeRoute } from "../../../helpers/routesHandler";
@@ -102,7 +102,7 @@ const Admins = () => {
             {isAdminsLoading ? (
               <>
                 {[...Array(20)].map((_, index) => (
-                  <ColsTableLoader key={index} />
+                  <AccountsTableLoader key={index} />
                 ))}
               </>
             ) : (

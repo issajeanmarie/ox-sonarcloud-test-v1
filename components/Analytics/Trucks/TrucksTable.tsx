@@ -7,7 +7,7 @@ import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
 import CustomButton from "../../../components/Shared/Button/button";
-import Loader from "../../../components/Shared/Loader";
+import { TrucksTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import {
   useLazyGetSingleTruckQuery,
   useToggleTruckMutation
@@ -128,7 +128,11 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
       />
 
       {isLoading ? (
-        <Loader />
+        <>
+          {[...Array(20)].map((_, index) => (
+            <TrucksTableLoader key={index} />
+          ))}
+        </>
       ) : (
         <Table
           className="data_table"

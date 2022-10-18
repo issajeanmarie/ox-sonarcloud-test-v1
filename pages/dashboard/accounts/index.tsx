@@ -7,7 +7,7 @@ import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import CustomButton from "../../../components/Shared/Button";
 import { useLazyDriversQuery } from "../../../lib/api/endpoints/Accounts/driversEndpoints";
-import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
+import { AccountsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import AllAccountsTopNavigator from "../../../components/Accounts/AllAccountsTopNavigator";
 import { AccountLinks } from "../../../components/Accounts/AccountLinks";
 import { changeRoute } from "../../../helpers/routesHandler";
@@ -163,7 +163,7 @@ const Drivers = () => {
             {showFiltersLoader || isDriversLoading ? (
               <>
                 {[...Array(20)].map((_, index) => (
-                  <ColsTableLoader key={index} />
+                  <AccountsTableLoader key={index} />
                 ))}
               </>
             ) : (

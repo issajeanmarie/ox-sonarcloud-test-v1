@@ -13,7 +13,7 @@ import {
   useSuppliersQuery
 } from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
 import CustomButton from "../../../components/Shared/Button";
-import { ColsTableLoader } from "../../../components/Shared/Loaders/Loaders";
+import { AccountsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import SuppliersTopNavigator from "../../../components/Warehouse/WarehouseHeaders/SuppliersTopNavigator";
 import Content from "../../../components/Shared/Content";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
@@ -107,7 +107,7 @@ const SuppliersPage = () => {
             {isSuppliersLoading ? (
               <>
                 {[...Array(20)].map((_, index) => (
-                  <ColsTableLoader key={index} />
+                  <AccountsTableLoader key={index} />
                 ))}
               </>
             ) : (

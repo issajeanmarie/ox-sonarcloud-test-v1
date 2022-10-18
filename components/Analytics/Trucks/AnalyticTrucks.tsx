@@ -8,8 +8,8 @@ import TrucksUsageTable from "../../Tables/Analytics/TrucksUsageTable";
 import TrucksUsage from "./TrucksUsage";
 import { AnalyticTrucksTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticTrucksTypes";
 import {
-  AnalyticCardsLoader,
-  ColsTableLoader
+  StockCardsLoader,
+  AnalyticsTruckLoader
 } from "../../Shared/Loaders/Loaders";
 import { useUploadFuelReportMutation } from "../../../lib/api/endpoints/Trucks/truckEndpoints";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
@@ -80,7 +80,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
           <>
             <CardRowWrapper active={active}>
               {[...Array(5)].map((_, index) => (
-                <AnalyticCardsLoader key={index} />
+                <StockCardsLoader key={index} />
               ))}
             </CardRowWrapper>
           </>
@@ -148,7 +148,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
       {truckLoading ? (
         <>
           {[...Array(20)].map((_, index) => (
-            <ColsTableLoader key={index} />
+            <AnalyticsTruckLoader key={index} />
           ))}
         </>
       ) : (
