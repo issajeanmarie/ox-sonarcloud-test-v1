@@ -168,7 +168,6 @@ const AgentsTable: FC<AgentsTableProps> = ({
     });
   };
 
-  //reset
   const handleResetPWDAgent = (id: any) => {
     setAgentToReset(id);
     handleAPIRequests({

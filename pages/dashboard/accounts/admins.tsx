@@ -52,6 +52,8 @@ const Admins = () => {
     }
   }, [router.isReady, query, router, query?.tb]);
 
+  const dispatch = useDispatch();
+
   const toggleActiveHandler = (id: string) => {
     setActive(id);
     id === "DRIVERS" && changeRoute(`${routes.Accounts.url}?tb=DRIVERS`);
