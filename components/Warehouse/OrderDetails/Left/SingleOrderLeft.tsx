@@ -39,13 +39,18 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
             <span className="text-base font-light">Client details</span>
           </div>
 
-          <InfoWrapper title="Name" infoItem={sale?.client?.names} />
+          <InfoWrapper
+            title="Name"
+            infoItem={sale?.client?.names}
+            isTransportOrder={false}
+          />
           {sale?.client?.offices &&
             sale?.client?.offices?.map((item: any) => (
               <InfoWrapper
                 key={item?.id}
                 title={item?.type}
                 infoItem={item?.names}
+                isTransportOrder={false}
               />
             ))}
         </div>
@@ -60,19 +65,25 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                 <InfoWrapper
                   title="Item"
                   infoItem={item?.warehouseItem?.parentCategory?.name}
+                  isTransportOrder={false}
                 />
                 <InfoWrapper
                   title="Type"
                   infoItem={item?.warehouseItem?.category?.name}
+                  isTransportOrder={false}
                 />
                 <InfoWrapper
                   title="Weight"
-                  infoItem="400 KGs - 20Rwf/KG (dummy)"
+                  infoItem={`${item?.warehouseItem?.weight} KGs - ${item?.warehouseItem?.unitCost}Rwf/KG `}
+                  isTransportOrder={false}
                 />
-                <InfoWrapper
-                  title="Transport Ref"
-                  infoItem="123456789(dummy)"
-                />
+                {sale?.transportOrder?.id && (
+                  <InfoWrapper
+                    title="Transport Ref"
+                    infoItem={sale?.transportOrder?.id}
+                    isTransportOrder={true}
+                  />
+                )}
               </div>
             ))}
         </div>

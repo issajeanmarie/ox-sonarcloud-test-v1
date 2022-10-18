@@ -31,8 +31,11 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
   handleChangeWarehouse,
   warehouse,
   handleChangeWeight,
-  weight
+  weight,
+  isPostingSale
 }) => {
+  const colSize = transport === "none" ? 12 : 8;
+
   const { data: trucks, isLoading: isTrucksLoading } =
     useUnPaginatedTrucksQuery();
 
@@ -124,7 +127,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
             isGroupDropdown
           >
             {Stocks?.payload?.content?.map((item: any) => (
-              <Option key={item?.id} value={item?.id}>
+              <Option key={item?.id} value={JSON.stringify(item)}>
                 {item?.category?.name} - {item?.weight}KGs
               </Option>
             ))}
@@ -141,7 +144,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
           />
         </Col>
         <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-          {!weight || warehouse === "" ? (
+          {!weight || !warehouse ? (
             <Popover
               placement="left"
               content={
@@ -157,14 +160,14 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
             </Popover>
           ) : (
             <>
-              {weight > 30 ? (
+              {weight > warehouse?.weight ? (
                 <Popover
                   placement="left"
                   content={
                     <div className="flex flex-col">
                       <span className="font-light">Weight must be</span>
                       <span className="font-light">
-                        less than or equal to 30
+                        less than or equal to {warehouse?.weight}
                       </span>
                     </div>
                   }
@@ -195,7 +198,14 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
           </div>
         </Col>
 
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
+        <Col
+          xs={24}
+          sm={24}
+          md={colSize}
+          lg={colSize}
+          xl={colSize}
+          xxl={colSize}
+        >
           <Input
             onChange={onTransportChange}
             name="transport"
@@ -213,16 +223,25 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
             <Input
               name="localTransportCost"
               type="text"
+              inputType="number"
               label="Local"
               placeholder="00"
             />
           </Col>
         )}
 
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
+        <Col
+          xs={24}
+          sm={24}
+          md={colSize}
+          lg={colSize}
+          xl={colSize}
+          xxl={colSize}
+        >
           <Input
             name="marginCost"
             type="text"
+            inputType="number"
             label="Margin"
             placeholder="00"
           />
@@ -287,8 +306,8 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
       </Row>
 
       <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button type="primary" htmlType="submit">
+        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
+          <Button loading={isPostingSale} type="primary" htmlType="submit">
             CONFIRM ORDER
           </Button>
         </Col>

@@ -34,14 +34,15 @@ const WarehouseItemsTable: FC<WarehouseItemsTableProps> = ({
       key: "Item",
       render: (
         text: WarehouseItemsTableTypes,
-        record: WarehouseItemsTableTypes
+        record: WarehouseItemsTableTypes,
+        index: number
       ) => (
         <RowsWrapper>
           <div className="flex gap-10">
-            <Text className="normalText opacity_56">{record?.id}</Text>
+            <Text className="normalText opacity_56">{index + 1}</Text>
             <div className="flex flex-col">
               <Text className="normalText fowe900">
-                {record?.category && limitStringLengthSmall(record?.category)}
+                {limitStringLengthSmall(record?.parentCategory)}
               </Text>
             </div>
           </div>
@@ -57,7 +58,7 @@ const WarehouseItemsTable: FC<WarehouseItemsTableProps> = ({
       ) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
-            {record?.type && limitStringLengthSmall(record?.type)}
+            {limitStringLengthSmall(record?.category)}
           </Text>
         </RowsWrapper>
       )
