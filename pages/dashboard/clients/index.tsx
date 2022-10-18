@@ -123,7 +123,6 @@ const Clients = () => {
   };
 
   useEffect(() => {
-    dispatch(displayPaginatedData({ payload: {}, onRender: true }));
     setFiltersBasedLoader(true);
     getClientsAction({});
   }, [sortValue, searchQuery, selectedCategory]);

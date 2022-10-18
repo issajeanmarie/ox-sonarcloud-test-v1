@@ -13,12 +13,12 @@ import {
   useDeleteResourceMutation,
   useEditResourceMutation
 } from "../../../lib/api/endpoints/Resources/resourcesEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditResource from "../../Forms/Resources/EditResource";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { useDispatch } from "react-redux";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -46,16 +46,37 @@ const ResourcesTable: FC<ResourcesTableProps> = ({
   const [itemToEdit, setItemToEdit]: any = useState();
   const [editResource, { isLoading: isEditing }] = useEditResourceMutation();
 
-  const handleDeleteResource = () => {
-    deleteResource({
-      id: itemToDelete
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
+  const dispatch = useDispatch();
+
+  const dispatchReplace = (newContent: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          payload: {
+            content: [...newContent],
+            totalPages: resources.payload.totalPages,
+            totalElements: resources.payload.totalElements
+          }
+        },
+        replace: true
       })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    );
+  };
+
+  const handleDeleteResourceSuccess = () => {
+    setIsModalVisible(false);
+    dispatch(
+      displayPaginatedData({ deleted: true, payload: { id: itemToDelete } })
+    );
+  };
+
+  const handleDeleteResource = () => {
+    handleAPIRequests({
+      request: deleteResource,
+      id: itemToDelete,
+      showSuccess: true,
+      handleSuccess: handleDeleteResourceSuccess
+    });
   };
 
   const showEditModal = (record: any) => {
@@ -64,25 +85,32 @@ const ResourcesTable: FC<ResourcesTableProps> = ({
     form.setFieldsValue(record);
   };
 
+  const handleEditResourceSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsEditModalVisible(false);
+
+    const newResourcesList: any = [];
+
+    resources?.payload?.content?.map((resource: any) => {
+      if (resource.id === payload.id) {
+        newResourcesList.push(payload);
+      } else {
+        newResourcesList.push(resource);
+      }
+    });
+
+    dispatchReplace(newResourcesList);
+  };
+
   const onEditResourceFinish = (values: any) => {
-    editResource({
+    handleAPIRequests({
+      request: editResource,
       title: values?.title,
       link: values?.link,
-      id: itemToEdit?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsEditModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      id: itemToEdit?.id,
+      showSuccess: true,
+      handleSuccess: handleEditResourceSuccess
+    });
   };
 
   return (
@@ -92,7 +120,7 @@ const ResourcesTable: FC<ResourcesTableProps> = ({
       <Table
         className="data_table"
         rowClassName="rounded"
-        dataSource={resources}
+        dataSource={resources?.payload?.content}
         rowKey={(record: SingleResourceTypes) => {
           return record.id;
         }}

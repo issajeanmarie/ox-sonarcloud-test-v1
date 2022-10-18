@@ -95,7 +95,7 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
             </Col>
             <Col>
               <Text className="text-md font-bold">
-                {sale?.saleItems.length > 0 ? (
+                {sale?.saleItems && sale?.saleItems?.length > 0 ? (
                   <>{sale?.saleItems[0]?.warehouseItem?.parentCategory?.name}</>
                 ) : (
                   "Unkown Item"
