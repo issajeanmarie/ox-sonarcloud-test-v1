@@ -5,10 +5,7 @@ import AdminsTopNavigator from "../../../components/Accounts/AdminsTopNavigator"
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import CustomButton from "../../../components/Shared/Button";
-import {
-  useAdminsQuery,
-  useLazyAdminsQuery
-} from "../../../lib/api/endpoints/Accounts/adminsEndpoints";
+import { useLazyAdminsQuery } from "../../../lib/api/endpoints/Accounts/adminsEndpoints";
 import { AccountsTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import AllAccountsTopNavigator from "../../../components/Accounts/AllAccountsTopNavigator";
 import { AccountLinks } from "../../../components/Accounts/AccountLinks";
@@ -17,13 +14,17 @@ import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
 import { TableWrapper } from "../../../components/Accounts/Wrappers";
 import Content from "../../../components/Shared/Content";
+import { pagination } from "../../../config/pagination";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch, useSelector } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const Admins = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [active, setActive] = useState<string>("ADMINS");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
-  const [pageSize, setPageSize] = useState(20);
-  const [moreAdmins, setMoreAdmins] = useState<any>([]);
+  const [currentPages, setCurrentPages] = useState(1);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
 
   const router = useRouter();
   const { query } = useRouter();
@@ -37,6 +38,8 @@ const Admins = () => {
     }
   }, [router.isReady, query, router, query?.tb]);
 
+  const dispatch = useDispatch();
+
   const toggleActiveHandler = (id: string) => {
     setActive(id);
     id === "DRIVERS" && changeRoute(`${routes.Accounts.url}?tb=DRIVERS`);
@@ -44,41 +47,68 @@ const Admins = () => {
     id === "ADMINS" && changeRoute(`${routes.Admins.url}?tb=ADMINS`);
   };
 
-  const {
-    data: AllAdmins,
-    isLoading: isAdminsLoading,
-    isFetching: isAdminsFetching
-  } = useAdminsQuery({
-    page: "",
-    size: pageSize
-  });
+  const AllAdmins = useSelector(
+    (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
+  );
 
-  const [Admins, { isFetching: loadingMoreFetching }] = useLazyAdminsQuery();
+  const [getAdmins, { isLoading, isFetching, data: apiData }] =
+    useLazyAdminsQuery();
 
-  const handleLoadMore = () => {
-    Admins({
-      page: "",
-      size: pageSize
-    })
-      .unwrap()
-      .then((res) => {
-        setPageSize(pageSize + 20);
-        setMoreAdmins(res?.payload);
-      })
-      .catch((error) => {
-        return error;
-      });
+  const handleRenderSuccess = (payload: any) => {
+    dispatch(displayPaginatedData({ payload, onRender: true }));
   };
 
-  //MODAL
+  const getAdminsAction = ({
+    page,
+    size = pagination.admins.size,
+    request = getAdmins,
+    handleSuccess = handleRenderSuccess
+  }: any) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      handleSuccess
+    });
+  };
+
+  useEffect(() => {
+    setCurrentPages(1);
+    getAdminsAction({});
+  }, []);
+
+  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreOrdersFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMore = () => {
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
+
+    getAdminsAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreOrdersFailure,
+      handleSuccess: handleLoadMoreOrdersSuccess
+    });
+  };
+
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  //WARNING MODAL
   const showWarningModal = () => {
     setIsWarningModalVisible(true);
   };
+
+  const onRenderLoader = isLoading && !isLoadMoreLoading;
+  const showPagination =
+    (AllAdmins?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
+    !(isFetching && !isLoadMoreLoading);
 
   return (
     <Layout>
@@ -94,12 +124,12 @@ const Admins = () => {
           isModalVisible={isModalVisible}
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
-          Admins={AllAdmins?.payload}
+          Admins={apiData?.payload}
         />
 
         <Content navType="DOUBLE">
           <TableWrapper>
-            {isAdminsLoading ? (
+            {onRenderLoader ? (
               <>
                 {[...Array(20)].map((_, index) => (
                   <AccountsTableLoader key={index} />
@@ -110,28 +140,22 @@ const Admins = () => {
                 isModalVisible={isWarningModalVisible}
                 showModal={showWarningModal}
                 setIsModalVisible={setIsWarningModalVisible}
-                Admins={
-                  moreAdmins?.length === 0
-                    ? AllAdmins?.payload?.content
-                    : AllAdmins?.payload?.content?.concat(moreAdmins?.content)
-                }
-                isAdminsFetching={isAdminsFetching}
+                Admins={AllAdmins}
+                isAdminsFetching={onRenderLoader}
               />
             )}
 
-            {pageSize > 19 &&
-              AllAdmins?.payload?.totalElements &&
-              AllAdmins?.payload?.totalElements >= pageSize && (
-                <div style={{ width: "12%", margin: "32px auto" }}>
-                  <CustomButton
-                    loading={loadingMoreFetching}
-                    onClick={handleLoadMore}
-                    type="secondary"
-                  >
-                    Load more
-                  </CustomButton>
-                </div>
-              )}
+            {showPagination && (
+              <div style={{ width: "12%", margin: "32px auto" }}>
+                <CustomButton
+                  loading={isLoadMoreLoading}
+                  onClick={handleLoadMore}
+                  type="secondary"
+                >
+                  Load more
+                </CustomButton>
+              </div>
+            )}
           </TableWrapper>
         </Content>
       </div>

@@ -42,6 +42,7 @@ export type GetDrivers = {
   status?: string;
   sort?: string;
   noPagination?: boolean | any;
+  search?: string | undefined;
 };
 
 export type ToggleDriverRequest = {

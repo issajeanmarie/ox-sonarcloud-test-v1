@@ -19,6 +19,8 @@ import {
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditAgent from "../../Forms/Accounts/Agents/EditAgent";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const { Text } = Typography;
 
@@ -41,13 +43,18 @@ const AgentsTable: FC<AgentsTableProps> = ({
 
   const [deleteAgent, { isLoading }] = useDeleteAgentMutation();
   const [editAgent, { isLoading: isEditing }] = useEditAgentMutation();
-  const [toggleAgent, { isLoading: isTooglingAgent }] =
+  const [toggleAgent, { isLoading: isTogglingAgent }] =
     useToggleAgentMutation();
   const [sendResetPWDToAgent, { isLoading: isSending }] =
     useSendResetPWDToAgentMutation();
 
-  const handleDeleteAgentSuccess = () => {
+  const dispatch = useDispatch();
+
+  const handleDeleteAgentSuccess = ({ payload }: any) => {
     setIsModalVisible(false);
+    dispatch(
+      displayPaginatedData({ deleted: true, payload: { id: payload.id } })
+    );
   };
 
   const handleDeleteAgent = () => {
@@ -64,13 +71,40 @@ const AgentsTable: FC<AgentsTableProps> = ({
     setItemToEdit(record);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
-    setPhoneNumber((record?.phone && `+${record?.phone}`) || "");
+    setPhoneNumber(record?.phone || "");
   };
 
-  const handleEditAgentSuccess = () => {
+  const dispatchReplace = (newContent: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          payload: {
+            content: [...newContent],
+            totalPages: Agents.payload.totalPages,
+            totalElements: Agents.payload.totalElements
+          }
+        },
+        replace: true
+      })
+    );
+  };
+
+  const handleEditAgentSuccess = ({ payload }: any) => {
     setPhoneNumber("");
     form.resetFields();
     setIsEditModalVisible(false);
+
+    const newDriversList: any = [];
+
+    Agents?.payload?.content?.map((agent: any) => {
+      if (agent.id === payload.id) {
+        newDriversList.push(payload);
+      } else {
+        newDriversList.push(agent);
+      }
+    });
+
+    dispatchReplace(newDriversList);
   };
 
   const onEditAgentFinish = (values: any) => {
@@ -86,18 +120,44 @@ const AgentsTable: FC<AgentsTableProps> = ({
     });
   };
 
-  //toggle
+  const handleToggleAgentSuccess = (res: any) => {
+    const newResult: object[] = [];
+
+    Agents?.payload?.content?.forEach((agent: any) => {
+      if (agent?.id === res?.payload?.id) {
+        newResult.push(res?.payload);
+      } else {
+        newResult.push(agent);
+      }
+    });
+
+    const newPayload = {
+      payload: {
+        content: newResult,
+        totalPages: Agents?.payload?.totalPages,
+        totalElements: Agents?.payload?.totalElements
+      }
+    };
+
+    dispatch(
+      displayPaginatedData({
+        payload: newPayload,
+        replace: true
+      })
+    );
+  };
+
   const handleToggleAgent = (id: any) => {
     setAgentToToggle(id);
 
     handleAPIRequests({
       request: toggleAgent,
       id: id,
-      showSuccess: true
+      showSuccess: true,
+      handleSuccess: handleToggleAgentSuccess
     });
   };
 
-  //reset
   const handleResetPWDAgent = (id: any) => {
     setAgentToReset(id);
     handleAPIRequests({
@@ -156,7 +216,9 @@ const AgentsTable: FC<AgentsTableProps> = ({
       key: "Role",
       render: (text: AgentsTableTypes, record: AgentsTableTypes) => (
         <RowsWrapper>
-          <Text className="normalText fowe700">{record?.role}</Text>
+          <Text className="normalText fowe700">
+            {record?.role?.replaceAll("_", " ")}
+          </Text>
         </RowsWrapper>
       )
     },
@@ -167,9 +229,7 @@ const AgentsTable: FC<AgentsTableProps> = ({
         <RowsWrapper>
           {!record?.enabled ? (
             <Text className=" text-sm font-bold red">DEACTIVATED</Text>
-          ) : (
-            <Text className="normalText opacity_56">ACTIVE</Text>
-          )}
+          ) : null}
         </RowsWrapper>
       )
     },
@@ -221,7 +281,7 @@ const AgentsTable: FC<AgentsTableProps> = ({
                 type="normal"
                 size="icon"
                 className="bg_danger"
-                loading={record?.id === AgentToToggle && isTooglingAgent}
+                loading={record?.id === AgentToToggle && isTogglingAgent}
                 icon={
                   <Image
                     src={`/icons/ic-media-${
@@ -259,7 +319,7 @@ const AgentsTable: FC<AgentsTableProps> = ({
       <Table
         className="data_table light_white_header light_white_table"
         columns={columns}
-        dataSource={Agents}
+        dataSource={Agents?.payload?.content}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}

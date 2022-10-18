@@ -30,7 +30,7 @@ const CustomPhoneInput = ({
 
     <PhoneInput
       international
-      countryCallingCodeEditable={false}
+      countryCallingCodeEditable
       defaultCountry="RW"
       className="my_input"
       width={width}

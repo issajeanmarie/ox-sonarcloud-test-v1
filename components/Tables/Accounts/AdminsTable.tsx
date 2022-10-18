@@ -16,11 +16,11 @@ import {
   useToggleAdminMutation,
   useSendResetPWDToAdminMutation
 } from "../../../lib/api/endpoints/Accounts/adminsEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditAdmin from "../../Forms/Accounts/Admins/EditAdmin";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const { Text } = Typography;
 
@@ -41,6 +41,8 @@ const AdminsTable: FC<AdminsTableProps> = ({
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
 
+  const dispatch = useDispatch();
+
   const [deleteAdmin, { isLoading }] = useDeleteAdminMutation();
   const [editAdmin, { isLoading: isEditing }] = useEditAdminMutation();
   const [toggleAdmin, { isLoading: isTooglingAdmin }] =
@@ -48,19 +50,56 @@ const AdminsTable: FC<AdminsTableProps> = ({
   const [sendResetPWDToAdmin, { isLoading: isSending }] =
     useSendResetPWDToAdminMutation();
 
-  const handleDeleteAdmin = () => {
-    deleteAdmin({
-      id: itemToDelete
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+  const handleDeleteAdminSuccess = ({ payload }: any) => {
+    setIsModalVisible(false);
+    dispatch(
+      displayPaginatedData({ deleted: true, payload: { id: payload.id } })
+    );
+
+    setIsModalVisible(false);
   };
 
-  //edit
+  const handleDeleteAdmin = () => {
+    handleAPIRequests({
+      request: deleteAdmin,
+      id: itemToDelete,
+      showSuccess: true,
+      handleSuccess: handleDeleteAdminSuccess
+    });
+  };
+
+  const dispatchReplace = (newContent: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          payload: {
+            content: [...newContent],
+            totalPages: Admins.payload.totalPages,
+            totalElements: Admins.payload.totalElements
+          }
+        },
+        replace: true
+      })
+    );
+  };
+
+  const handleEditAdminsSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsEditModalVisible(false);
+
+    const newAdminsList: any = [];
+
+    Admins?.payload?.content?.map((agent: any) => {
+      if (agent.id === payload.id) {
+        newAdminsList.push(payload);
+      } else {
+        newAdminsList.push(agent);
+      }
+    });
+
+    dispatchReplace(newAdminsList);
+  };
+
   const showEditModal = (record: any) => {
     setItemToEdit(record);
     setIsEditModalVisible(true);
@@ -68,53 +107,52 @@ const AdminsTable: FC<AdminsTableProps> = ({
   };
 
   const onEditAdminFinish = (values: any) => {
-    editAdmin({
+    handleAPIRequests({
+      request: editAdmin,
       names: values?.names,
       email: values?.email,
       phone: values?.phone,
       isGuest: checkbox,
       isSuperAdmin: !checkbox,
-      id: itemToEdit?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsEditModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      id: itemToEdit?.id,
+      showSuccess: true,
+      handleSuccess: handleEditAdminsSuccess
+    });
+  };
+
+  const handleToggleAdminSuccess = ({ payload }: any) => {
+    const newAdminsList: any = [];
+
+    Admins?.payload?.content?.map((admin: any) => {
+      if (admin.id === payload.id) {
+        newAdminsList.push({ ...admin, enabled: payload.enabled });
+      } else {
+        newAdminsList.push(admin);
+      }
+    });
+
+    dispatchReplace(newAdminsList);
   };
 
   //toggle
-  const hangleToggleAdmin = (id: any) => {
+  const handleToggleAdmin = (id: any) => {
     setAdminToToggle(id);
-    toggleAdmin({
-      id: id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: toggleAdmin,
+      id,
+      showSuccess: true,
+      handleSuccess: handleToggleAdminSuccess
+    });
   };
 
   //reset
   const handleResetPWDAdmin = (id: any) => {
     setAdminToReset(id);
-    sendResetPWDToAdmin({
-      id: id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: sendResetPWDToAdmin,
+      id,
+      showSuccess: true
+    });
   };
 
   const columns: any = [
@@ -140,17 +178,6 @@ const AdminsTable: FC<AdminsTableProps> = ({
       )
     },
     {
-      title: "Phone number",
-      key: "phoneNumber",
-      render: (text: AdminsTableTypes, record: AdminsTableTypes) => (
-        <RowsWrapper>
-          <Text className="normalText opacity_56">
-            {record?.phone ? record?.phone : "---"}
-          </Text>
-        </RowsWrapper>
-      )
-    },
-    {
       title: "Email",
       key: "email",
       render: (text: AdminsTableTypes, record: AdminsTableTypes) => (
@@ -166,7 +193,9 @@ const AdminsTable: FC<AdminsTableProps> = ({
       key: "Role",
       render: (text: AdminsTableTypes, record: AdminsTableTypes) => (
         <RowsWrapper>
-          <Text className="normalText fowe700">{record?.role}</Text>
+          <Text className="normalText fowe700">
+            {record?.role?.replace("_", " ")}
+          </Text>
         </RowsWrapper>
       )
     },
@@ -177,9 +206,7 @@ const AdminsTable: FC<AdminsTableProps> = ({
         <RowsWrapper>
           {!record?.enabled ? (
             <Text className=" text-sm font-bold red">DEACTIVATED</Text>
-          ) : (
-            <Text className="normalText opacity_56">ACTIVE</Text>
-          )}
+          ) : null}
         </RowsWrapper>
       )
     },
@@ -227,7 +254,7 @@ const AdminsTable: FC<AdminsTableProps> = ({
             </div>
             <div className="h-1 flex items-center">
               <CustomButton
-                onClick={() => hangleToggleAdmin(record?.id)}
+                onClick={() => handleToggleAdmin(record?.id)}
                 type="normal"
                 size="icon"
                 className="bg_danger"
@@ -269,7 +296,7 @@ const AdminsTable: FC<AdminsTableProps> = ({
       <Table
         className="data_table light_white_header light_white_table"
         columns={columns}
-        dataSource={Admins}
+        dataSource={Admins?.payload?.content}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}

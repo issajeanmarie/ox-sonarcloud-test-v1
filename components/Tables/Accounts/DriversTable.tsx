@@ -78,7 +78,7 @@ const DriversTable: FC<DriversTableProps> = ({
     setItemToEdit(record);
     setIsEditModalVisible(true);
     form.setFieldsValue(record);
-    setPhoneNumber((record?.phone && `+${record?.phone}`) || "");
+    setPhoneNumber(record?.phone || "");
   };
 
   const dispatchReplace = (newContent: any) => {
@@ -293,9 +293,7 @@ const DriversTable: FC<DriversTableProps> = ({
         <RowsWrapper>
           {!record?.enabled ? (
             <Text className=" text-sm font-bold red">DEACTIVATED</Text>
-          ) : (
-            <Text className="normalText opacity_56">ACTIVE</Text>
-          )}
+          ) : null}
         </RowsWrapper>
       )
     },

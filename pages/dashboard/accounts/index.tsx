@@ -27,6 +27,7 @@ type RequestTypes = {
   status?: string | undefined;
   handleSuccess?: any;
   handleFailure?: any;
+  search?: string | undefined;
 };
 
 const Drivers = () => {
@@ -64,7 +65,8 @@ const Drivers = () => {
     id === "ADMINS" && changeRoute(`${routes.Admins.url}?tb=ADMINS`);
   };
 
-  const [Drivers, { isLoading: isDriversLoading }] = useLazyDriversQuery();
+  const [Drivers, { isLoading: isDriversLoading, data: apiData }] =
+    useLazyDriversQuery();
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
@@ -79,6 +81,7 @@ const Drivers = () => {
   const getDriversAction = ({
     page,
     size = pagination.drivers.size,
+    search = searchQuery,
     sort = sortValue?.value,
     status = selectedFilter?.value,
     handleSuccess = handleRenderSuccess,
@@ -90,6 +93,7 @@ const Drivers = () => {
       size,
       sort,
       status,
+      search,
       handleSuccess,
       handleFailure
     });
@@ -119,7 +123,7 @@ const Drivers = () => {
     setFiltersBasedLoader(true);
     getDriversAction({});
     setCurrentPages(1);
-  }, [sortValue, selectedFilter]);
+  }, [sortValue, selectedFilter, searchQuery]);
 
   //MODAL
   const showModal = () => {
@@ -150,7 +154,7 @@ const Drivers = () => {
           isModalVisible={isModalVisible}
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
-          Drivers={AllDrivers?.payload}
+          Drivers={apiData?.payload}
           handleSearch={handleSearch}
           selectedFilter={selectedFilter}
           setSelectedFilter={setSelectedFilter}
