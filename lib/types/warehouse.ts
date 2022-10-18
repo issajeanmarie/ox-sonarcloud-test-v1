@@ -35,7 +35,18 @@ export type AddWarehouseOrderTypes = {
   isPostingSale: boolean;
   handleChangeWeight: (value: number | null) => void;
   weight: number | null;
-  warehouse: string;
+  warehouse: {
+    id: number;
+    weight: number;
+    category: {
+      id: number;
+      name: string;
+      parentCategory: {
+        id: number;
+        name: string;
+      };
+    };
+  };
 };
 
 export type WarehouseItemsTableTypes = {
@@ -44,6 +55,7 @@ export type WarehouseItemsTableTypes = {
   type: string;
   stockItem: string;
   category: string;
+  parentCategory: string;
 };
 
 export type WarehouseItemsTableProps = {

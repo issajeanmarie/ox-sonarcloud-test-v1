@@ -34,16 +34,22 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
   const onTransportChange = (value: string) => {
     setTransport(value);
   };
+
   const createItems = () => {
     setItems([
       ...items,
       {
-        id: warehouse,
-        weight: weight
+        id: warehouse ? JSON.parse(warehouse)?.id : warehouse,
+        weight: weight,
+        parentCategory: warehouse
+          ? JSON.parse(warehouse)?.category?.parentCategory?.name
+          : "",
+        category: warehouse ? JSON.parse(warehouse)?.category?.name : ""
       }
     ]);
-    setWeight(null);
     setWarehouse("");
+    setWeight(null);
+    form.resetFields(["warehouseId", "weight"]);
   };
 
   const handleChangeWarehouse = (value: string) => {
@@ -63,9 +69,10 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       clientId: values?.clientId,
       items: items,
       marginCost: values?.marginCost,
-      localTransportCost: values?.localTransportCost,
-      truckId: values?.truckId,
-      driverId: values?.driverId,
+      localTransportCost:
+        transport !== "none" ? values?.localTransportCost : "",
+      truckId: transport !== "none" ? values?.truckId : "",
+      driverId: transport !== "none" ? values?.driverId : "",
       destination: {
         name: location ? location?.name : "",
         location: location ? location?.name : "",
@@ -77,6 +84,8 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
         SuccessMessage(res?.message);
         form.resetFields();
         setIsModalVisible(false);
+        setItems([]);
+        setLocation(undefined);
       })
       .catch((err: BackendErrorTypes) =>
         ErrorMessage(
@@ -111,12 +120,6 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
         )}
       </div>
 
-      <div className="flex items-center gap-6 w-[160px]">
-        <Button disabled={isSalesLoading} type="secondary">
-          DOWNLOAD REPORT
-        </Button>
-      </div>
-
       <div className="flex items-center gap-6 w-[120px]">
         <Button onClick={showModal} type="primary">
           NEW ORDER
@@ -131,7 +134,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="NEW WAREHOUSE ORDER"
-        loading={false}
+        loading={isPostingSale}
       >
         <AddWarehouseOrder
           createItems={createItems}
@@ -140,7 +143,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
           setLocation={setLocation}
           location={location}
           handleChangeWarehouse={handleChangeWarehouse}
-          warehouse={warehouse}
+          warehouse={warehouse ? JSON.parse(warehouse) : warehouse}
           handleChangeWeight={handleChangeWeight}
           weight={weight}
           onTransportChange={onTransportChange}

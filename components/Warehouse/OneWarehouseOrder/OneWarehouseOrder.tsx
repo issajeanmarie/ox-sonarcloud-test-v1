@@ -16,6 +16,7 @@ import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import moment from "moment";
+import Link from "next/link";
 
 const { Text } = Typography;
 
@@ -57,8 +58,11 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
             </Col>
             <Col>
               <Text className="text-md font-bold">
-                {sale?.saleItems &&
-                  sale?.saleItems[0]?.warehouseItem?.parentCategory?.name}
+                {sale?.saleItems.length !== 0 ? (
+                  <>{sale?.saleItems[0]?.warehouseItem?.parentCategory?.name}</>
+                ) : (
+                  "Unkown Item"
+                )}
               </Text>
             </Col>
             <Col>
@@ -94,9 +98,14 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
               {!sale?.transportOrder?.id ? (
                 <Text className="normalText opacity_56">None</Text>
               ) : (
-                <Text className="text-md font-bold underline">
-                  {sale?.transportOrder?.id}
-                </Text>
+                <Link
+                  passHref
+                  href={routes.viewOrder.url + sale?.transportOrder?.id}
+                >
+                  <Text className="text-md font-bold underline cursor-pointer">
+                    {sale?.transportOrder?.id}
+                  </Text>
+                </Link>
               )}
             </Col>
           </Row>
@@ -106,15 +115,18 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
           <Row gutter={32} align="middle">
             <Col>
               <Text className="text-md font-bold">
-                {sale?.transportOrder?.totalWeight &&
-                  numbersFormatter(sale?.transportOrder?.totalWeight)}{" "}
+                {sale?.saleItems &&
+                  numbersFormatter(sale?.saleItems[0]?.weight)}{" "}
                 KG
               </Text>
             </Col>
+
             <Col>
               <Text className="normalText opacity_56">
-                {sale?.transportOrder?.totalAmount &&
-                  numbersFormatter(sale?.transportOrder?.totalAmount)}{" "}
+                {sale?.saleItems &&
+                  numbersFormatter(
+                    sale?.saleItems[0]?.warehouseItem?.unitCost
+                  )}{" "}
                 Rwf / Kg
               </Text>
             </Col>
@@ -192,9 +204,11 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
                   </Text>
                 </Col>
                 <Col>
-                  <Text className="opacity_56  nowrap text-xs font-bold underline cursor-pointer italic">
-                    Edited by {sale?.lastEditedBy}
-                  </Text>
+                  <Link href={`${routes.Admins.url}?tb=ADMINS`} passHref>
+                    <Text className="opacity_56  nowrap text-xs font-bold underline cursor-pointer italic">
+                      Edited by {sale?.lastEditedBy}
+                    </Text>
+                  </Link>
                 </Col>
               </>
             )}

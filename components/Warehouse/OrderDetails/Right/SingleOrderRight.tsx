@@ -34,14 +34,11 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
           </div>
           <OrderSummaryInfoWrapper
             title="Price"
-            infoItem={`${
-              sale?.transportOrder?.totalAmount &&
-              numbersFormatter(sale?.transportOrder?.totalAmount)
-            } Rwf`}
+            infoItem={`${sale?.amount && numbersFormatter(sale?.amount)} Rwf`}
           />
           <OrderSummaryInfoWrapper
             title="Payment status"
-            infoItem={sale?.transportOrder?.paymentStatus}
+            infoItem={sale?.paymentStatus}
           />
         </div>
       </Row>
@@ -73,15 +70,13 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
           <PaymentStatusCard
             title="Paid"
             count={`${
-              sale?.transportOrder?.totalPaid &&
-              numbersFormatter(sale?.transportOrder?.totalPaid)
+              sale?.totalPaid && numbersFormatter(sale?.totalPaid)
             } RWF`}
           />
           <PaymentStatusCard
             title="Remaining"
             count={`${
-              sale?.transportOrder?.remainingAmount &&
-              numbersFormatter(sale?.transportOrder?.remainingAmount)
+              sale?.remainingAmount && numbersFormatter(sale?.remainingAmount)
             } Rwf`}
           />
         </Row>
