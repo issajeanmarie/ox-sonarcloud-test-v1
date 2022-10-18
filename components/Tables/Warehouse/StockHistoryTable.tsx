@@ -8,9 +8,6 @@ import { Form, Image } from "antd";
 import CustomButton from "../../Shared/Button";
 import moment from "moment";
 import { FC, useState } from "react";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { useEditStockMutation } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditStock from "../../Forms/Warehouse/Edit/EditStock";
@@ -20,6 +17,9 @@ import { useSuppliersQuery } from "../../../lib/api/endpoints/Warehouse/supplier
 import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
 import Link from "next/link";
 import { routes } from "../../../config/route-config";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 
 const { Text } = Typography;
 
@@ -61,7 +61,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
     sort: ""
   });
 
-  const { data: depots, isLoading: isDepotsLoadind } = useDepotsQuery();
+  const { data: depots, isLoading: isDepotsLoading } = useDepotsQuery();
   const showEditModal = (record: any) => {
     setItemToEdit(record);
     setIsEditModalVisible(true);
@@ -72,8 +72,43 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
     });
   };
 
+  const dispatch = useDispatch();
+
+  const dispatchReplace = (newContent: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          payload: {
+            content: [...newContent],
+            totalPages: Stocks.payload.totalPages,
+            totalElements: Stocks.payload.totalElements
+          }
+        },
+        replace: true
+      })
+    );
+  };
+
+  const handleEditStockSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsEditModalVisible(false);
+
+    const newStocksList: any = [];
+
+    Stocks?.payload?.content?.map((agent: any) => {
+      if (agent.id === payload.id) {
+        newStocksList.push(payload);
+      } else {
+        newStocksList.push(agent);
+      }
+    });
+
+    dispatchReplace(newStocksList);
+  };
+
   const onEditStockFinish = (values: any) => {
-    editStock({
+    handleAPIRequests({
+      request: editStock,
       inDate: values?.inDate,
       expiryDate: values?.expiryDate,
       supplierId: values?.supplierId,
@@ -82,21 +117,10 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       depotId: values?.depotId,
       categoryId: values?.SubCategory,
       lhsOrderId: values?.lhsOrderId,
-      id: itemToEdit?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsEditModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      id: itemToEdit?.id,
+      showSuccess: true,
+      handleSuccess: handleEditStockSuccess
+    });
   };
 
   const columns: any = [
@@ -277,7 +301,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       <Table
         className="data_table light_white_header light_white_table@"
         columns={columns}
-        dataSource={Stocks}
+        dataSource={Stocks?.payload?.content}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}
@@ -299,7 +323,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
           orders={orders?.payload?.content}
           isOrdersLoading={isOrdersLoading}
           depots={depots?.payload}
-          isDepotsLoading={isDepotsLoadind}
+          isDepotsLoading={isDepotsLoading}
           suppliers={suppliers}
           isSuppliersLoading={isSuppliersLoading}
         />

@@ -6,9 +6,6 @@ import Col from "antd/lib/col";
 import { localeString } from "../../../utils/numberFormatter";
 import Button from "../../Shared/Button";
 import ModalWrapper from "../../Modals/ModalWrapper";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { Form } from "antd";
 import { StockTopNavigatorTypes } from "../../../lib/types/pageTypes/Warehouse/Stock/StockTopNavigator";
 import DropDownSelector from "../../Shared/DropDownSelector";
@@ -18,13 +15,17 @@ import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/category
 import { useLhsOrdersQuery } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
 import { useSuppliersQuery } from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
   showModal,
   setIsModalVisible,
   isModalVisible,
   selectedSort,
-  setSelectedSort
+  setSelectedSort,
+  stocksNumber
 }) => {
   const [form] = Form.useForm();
 
@@ -40,11 +41,21 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
     sort: ""
   });
 
+  const dispatch = useDispatch();
+
   const { data: depots, isLoading: isDepotsLoadind } = useDepotsQuery();
   const [postStock, { isLoading: isAddingStock }] = usePostStockMutation();
 
+  const handleAddStockSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsModalVisible(false);
+
+    dispatch(displayPaginatedData({ payload }));
+  };
+
   const onAddStockFinish = (values: any) => {
-    postStock({
+    handleAPIRequests({
+      request: postStock,
       inDate: values?.inDate,
       expiryDate: values?.expiryDate,
       supplierId: values?.supplierId,
@@ -52,28 +63,17 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
       unitCost: values?.unitCost,
       depotId: values?.depotId,
       categoryId: values?.SubCategory,
-      lhsOrderId: values?.lhsOrderId
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      lhsOrderId: values?.lhsOrderId,
+      showSuccess: true,
+      handleSuccess: handleAddStockSuccess
+    });
   };
 
   const LeftSide = (
     <Col className="flex items-center gap-4">
       <Row gutter={24} align="middle" wrap={false}>
         <Col>
-          <Heading1>{localeString(89)} Items</Heading1>
+          <Heading1>{localeString(stocksNumber || 0)} Items</Heading1>
         </Col>
 
         <Col>

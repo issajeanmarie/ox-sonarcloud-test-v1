@@ -58,10 +58,11 @@ const AppSider = ({ collapsed }: any) => {
 
   const menus = manageSidebarMenus();
   const moreMenus = moreSidebarMenus();
+  const doesInclude = (route: string) => router.pathname.includes(route);
   const showDepots =
-    router.pathname.includes(routes.Analytics.url) ||
+    doesInclude(routes.Analytics.url) ||
     router.pathname === routes.Orders.url ||
-    router.pathname.includes(routes.viewOrder.url);
+    doesInclude(routes.Stock.url);
 
   escape(setIsDropdownVisible);
 

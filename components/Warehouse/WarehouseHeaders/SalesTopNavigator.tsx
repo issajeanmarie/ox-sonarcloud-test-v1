@@ -7,12 +7,12 @@ import Button from "../../Shared/Button";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import AddWarehouseOrder from "../../Forms/Warehouse/Add/AddWarehouseOrder";
 import { LatLng } from "use-places-autocomplete";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { Form } from "antd";
 import { usePostSaleMutation } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { useDispatch } from "react-redux";
 
 const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
   showModal,
@@ -30,6 +30,8 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
     name: string;
     coordinates: LatLng;
   }>();
+
+  const dispatch = useDispatch();
 
   const onTransportChange = (value: string) => {
     setTransport(value);
@@ -62,8 +64,16 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
 
   const [postSale, { isLoading: isPostingSale }] = usePostSaleMutation();
 
+  const handleAddSaleSuccess = ({ payload }: any) => {
+    form.resetFields();
+    setIsModalVisible(false);
+
+    dispatch(displayPaginatedData({ payload }));
+  };
+
   const onAddSaleFinish = (values: any) => {
-    postSale({
+    handleAPIRequests({
+      request: postSale,
       depotId: values?.depotId,
       date: values?.date,
       clientId: values?.clientId,
@@ -77,23 +87,10 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
         name: location ? location?.name : "",
         location: location ? location?.name : "",
         coordinates: location ? JSON.stringify(location?.coordinates) : ""
-      }
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        form.resetFields();
-        setIsModalVisible(false);
-        setItems([]);
-        setLocation(undefined);
-      })
-      .catch((err: BackendErrorTypes) =>
-        ErrorMessage(
-          err?.data?.payload
-            ? err?.data?.payload[0]?.messageError
-            : err?.data?.message
-        )
-      );
+      },
+      showSuccess: true,
+      handleSuccess: handleAddSaleSuccess
+    });
   };
 
   const LeftSide = (
