@@ -5,4 +5,5 @@ export type SalesTopNavigatorTypes = {
   showModal: () => void;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   totalElements: number;
+  isSalesLoading: boolean;
 };

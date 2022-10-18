@@ -8,12 +8,17 @@ import SingleOrderTop from "../../../components/Warehouse/OrderDetails/SingleOrd
 import { useSaleDetailsQuery } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
 import { useRouter } from "next/router";
 import PageNotFound from "../../../components/Shared/PageNotFound";
+import Loader from "../../../components/Shared/Loader";
 
 const OrderDetails = () => {
   const { query } = useRouter();
   const router = useRouter();
 
-  const { data: saleDetails, isLoading: isSaleLoading } = useSaleDetailsQuery({
+  const {
+    data: saleDetails,
+    isLoading: isSaleLoading,
+    isFetching: isSaleFetching
+  } = useSaleDetailsQuery({
     id: query?.sale
   });
 
@@ -23,11 +28,23 @@ const OrderDetails = () => {
         <PageNotFound />
       ) : (
         <div className="m-0 h-full overflow-hidden">
-          <SingleOrderTop sale={saleDetails?.payload} />
-          <Row className="p-5 flex justify-between gap-5">
-            <SingleOrderLeft sale={saleDetails?.payload} />
+          <SingleOrderTop
+            sale={saleDetails?.payload}
+            isSaleLoading={isSaleLoading}
+          />
+          <Row justify="space-between" gutter={[16, 16]} className="p-5">
+            {isSaleLoading ? (
+              <Loader />
+            ) : (
+              <>
+                <SingleOrderLeft sale={saleDetails?.payload} />
 
-            <SingleOrderRight sale={saleDetails?.payload} />
+                <SingleOrderRight
+                  sale={saleDetails?.payload}
+                  isFetching={isSaleFetching}
+                />
+              </>
+            )}
           </Row>
         </div>
       )}

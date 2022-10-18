@@ -33,7 +33,9 @@ export type AddWarehouseOrderTypes = {
   form: any;
   handleChangeWarehouse: (value: string) => void;
   isPostingSale: boolean;
-  handleChangeWeight: (value: string) => void;
+  handleChangeWeight: (value: number | null) => void;
+  weight: number | null;
+  warehouse: string;
 };
 
 export type WarehouseItemsTableTypes = {

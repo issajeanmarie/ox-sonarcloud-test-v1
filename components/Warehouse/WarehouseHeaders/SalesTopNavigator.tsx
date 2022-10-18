@@ -18,12 +18,13 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
   showModal,
   setIsModalVisible,
   isModalVisible,
-  totalElements
+  totalElements,
+  isSalesLoading
 }) => {
   const [form] = Form.useForm();
   const [items, setItems]: any = useState([]);
   const [warehouse, setWarehouse] = useState("");
-  const [weight, setWeight] = useState("");
+  const [weight, setWeight] = useState<number | null>(null);
   const [transport, setTransport] = useState("");
   const [location, setLocation] = useState<{
     name: string;
@@ -41,14 +42,15 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
         weight: weight
       }
     ]);
-    setLocation(undefined);
+    setWeight(null);
+    setWarehouse("");
   };
 
   const handleChangeWarehouse = (value: string) => {
     setWarehouse(value);
   };
 
-  const handleChangeWeight = (value: string) => {
+  const handleChangeWeight = (value: number | null) => {
     setWeight(value);
   };
 
@@ -87,24 +89,32 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
 
   const LeftSide = (
     <Heading1>
-      {totalElements && numbersFormatter(totalElements)} Orders
+      {isSalesLoading ? (
+        "..."
+      ) : (
+        <>{totalElements && numbersFormatter(totalElements)} Orders</>
+      )}
     </Heading1>
   );
 
   const RightSide = (
     <div className="flex items-center gap-5">
       <div className={` p-2 flex items-center justify-center`}>
-        <Image
-          width={16}
-          height={16}
-          src="/icons/filter.svg"
-          className="cursor-pointer"
-          alt="Filter icon"
-        />
+        {!isSalesLoading && (
+          <Image
+            width={16}
+            height={16}
+            src="/icons/filter.svg"
+            className="cursor-pointer"
+            alt="Filter icon"
+          />
+        )}
       </div>
 
       <div className="flex items-center gap-6 w-[160px]">
-        <Button type="secondary">DOWNLOAD REPORT</Button>
+        <Button disabled={isSalesLoading} type="secondary">
+          DOWNLOAD REPORT
+        </Button>
       </div>
 
       <div className="flex items-center gap-6 w-[120px]">
@@ -130,7 +140,9 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
           setLocation={setLocation}
           location={location}
           handleChangeWarehouse={handleChangeWarehouse}
+          warehouse={warehouse}
           handleChangeWeight={handleChangeWeight}
+          weight={weight}
           onTransportChange={onTransportChange}
           transport={transport}
           isPostingSale={isPostingSale}

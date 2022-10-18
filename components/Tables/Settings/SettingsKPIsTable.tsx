@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import CustomInput from "../../Shared/Input";
 import Input from "../../Shared/Input";
 import Row from "antd/lib/row";
@@ -9,12 +9,6 @@ const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({ data: kpis }) => {
   const [editedPerKMs, setEditedPerKMs] = useState<React.SetStateAction<any>>(
     []
   );
-  const [defaultValues, setDefaultValues] = useState([]);
-
-  useEffect(() => {
-    setDefaultValues(kpis);
-    defaultValues;
-  }, [kpis]);
 
   const handleTargetPerDayChange = (value: any) => value;
 
@@ -24,7 +18,6 @@ const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({ data: kpis }) => {
         perKMs.receivedValue.id !== value.receivedValue.id
     );
     setEditedPerKMs([{ ...value }, ...filteredResult]);
-    // console.log(editedPerKMs);
   };
 
   return kpis?.map(
