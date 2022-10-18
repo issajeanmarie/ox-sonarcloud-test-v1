@@ -101,12 +101,35 @@ const SalesPage = () => {
       getSalesAction({ depot: depotsState?.depotId });
   }, [depotsState]);
 
-  const { data: AllSales, isLoading: isSalesLoading } = useSalesQuery({
-    page: "",
-    size: pageSize
-  });
+  const AllSales = useSelector(
+    (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
+  );
 
-  const [sales, { isFetching: loadingMoreFetching }] = useLazySalesQuery();
+  const [getSales, { isLoading, isFetching, data: apiData }] =
+    useLazySalesQuery();
+
+  const handleRenderSuccess = (res: any) => {
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
+  };
+
+  const getSalesAction = ({
+    page,
+    size = pagination.sales.size,
+    request = getSales,
+    handleSuccess = handleRenderSuccess
+  }: any) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      handleSuccess
+    });
+  };
+
+  useEffect(() => {
+    getSalesAction({});
+    setCurrentPages(1);
+  }, []);
 
   useEffect(() => {
     if (router.isReady) {

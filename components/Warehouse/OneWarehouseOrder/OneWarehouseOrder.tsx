@@ -34,6 +34,7 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
   AllSales
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
   const [cancelSale, { isLoading: isCancelingSale }] = useCancelSaleMutation();
 
   const [cancelSale, { isLoading: isCancelingSale }] = useCancelSaleMutation();
