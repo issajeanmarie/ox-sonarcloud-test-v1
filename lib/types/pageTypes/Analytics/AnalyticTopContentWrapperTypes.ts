@@ -1,4 +1,4 @@
 export type AnalyticTopContentWrapperTypes = {
-  active: string;
+  active: string | string[] | undefined;
   children: React.ReactNode;
 };

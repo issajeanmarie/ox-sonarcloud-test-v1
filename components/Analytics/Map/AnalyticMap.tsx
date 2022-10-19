@@ -1,104 +1,90 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Checkbox, Col, Image, Row } from "antd";
-import React, { FC, Fragment, useState } from "react";
+import React, { FC } from "react";
 import {
-  GoogleMap,
-  InfoWindow,
-  Marker,
-  useJsApiLoader
-} from "@react-google-maps/api";
+  GoogleMap as GoogleMapComponent,
+  withScriptjs,
+  withGoogleMap
+} from "react-google-maps";
+import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
 import { AnalyticMapTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticMapTypes";
 import CustomInput from "../../Shared/Input";
 import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
-import { mapContainerStyle } from "./mapContainerStyle";
-// import { MapDataTypes } from "../../../lib/types/pageTypes/Analytics/MapData";
+import { mapStyles } from "../../../helpers/mapStyles";
+
+declare const google: any;
+
+type officeLocationType = {
+  office: {
+    coordinates: any;
+  };
+};
 
 const AnalyticMap: FC<AnalyticMapTypes> = ({
   active,
   isCategoriesLoading,
   categories,
-  onCategoryChange
-  // mapData,
-  // mapLoading,
-  // mapFetching
+  onCategoryChange,
+  mapData,
+  mapLoading,
+  mapFetching
 }) => {
-  const [activeMarker, setActiveMarker] = useState<number | null>(null);
-  // const [locationMarkers, setLocationMarkers] = useState([]);
+  const coordinates = mapData?.payload?.map(
+    (location: officeLocationType) => location?.office?.coordinates
+  );
 
-  // useEffect(() => {
-  //   mapData?.payload?.map((item: MapDataTypes) => {
-  //     const _locations = locationMarkers?.push({
-  //       id: item?.office?.id,
-  //       name: item?.office?.location,
-  //       position:
-  //         item?.office?.coordinates !== null ||
-  //         item?.office?.coordinates !== undefined ||
-  //         item?.office?.coordinates !== ""
-  //           ? JSON.parse(item?.office?.coordinates)
-  //           : null
-  //     });
-  //     setLocationMarkers([_locations]);
-  //   });
-  // }, [locationMarkers, mapData?.payload]);
+  let heatMapData: any = [];
 
-  const handleActiveMarker = (marker: number) => {
-    if (marker === activeMarker) {
-      return;
-    }
-    setActiveMarker(marker);
-  };
+  if (coordinates) {
+    coordinates.forEach((coordinate: any) => {
+      if (
+        coordinate &&
+        typeof coordinate === "string" &&
+        coordinate.includes(":")
+      ) {
+        const displayCoordinates = JSON.parse(coordinate);
+        if (
+          displayCoordinates &&
+          displayCoordinates.lat &&
+          displayCoordinates.lng
+        ) {
+          const otherCoordinate = new google.maps.LatLng(
+            displayCoordinates?.lat,
+            displayCoordinates?.lng
+          );
+          heatMapData = [...heatMapData, otherCoordinate];
+        }
+      }
+    });
+  }
 
-  const markers = [
-    {
-      id: 1,
-      name: "Nyamasheke, Rwanda",
-      position: { lat: -2.3909755, lng: 29.1855785 }
-    },
-    {
-      id: 2,
-      name: "Nyamasheke, Rwanda",
-      position: { lat: -2.3909755, lng: 29.1855785 }
-    }
-  ];
+  const Map = () => (
+    <GoogleMapComponent
+      defaultZoom={10}
+      defaultCenter={{ lat: -1.9440727, lng: 30.0618851 }}
+      defaultOptions={{ styles: mapStyles }}
+    >
+      {coordinates && <HeatmapLayer data={heatMapData} />}
+    </GoogleMapComponent>
+  );
 
-  const handleOnLoad = (map: any) => {
-    const bounds = new google.maps.LatLngBounds();
-    markers.forEach(({ position }) => bounds.extend(position));
-    map.fitBounds(bounds);
-  };
-
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`
-  });
+  const WrappedMap = withScriptjs(withGoogleMap(Map));
 
   return (
-    <div className={`${active === "map" && "h-screen relative"}`}>
-      {isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          center={markers[1]?.position}
-          zoom={10}
-          onLoad={handleOnLoad}
-          onClick={() => setActiveMarker(null)}
-        >
-          {markers.map(({ id, name, position }) => (
-            <Marker
-              key={id}
-              position={position}
-              onClick={() => handleActiveMarker(id)}
-            >
-              {activeMarker === id ? (
-                <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                  <div>{name}</div>
-                </InfoWindow>
-              ) : null}
-            </Marker>
-          ))}
-        </GoogleMap>
+    <div className={`${active === "MAP" && "h-screen relative"}`}>
+      {mapLoading || mapFetching ? (
+        <div className="flex justify-center items-center h-full">
+          <SmallSpinLoader />
+        </div>
       ) : (
-        <></>
+        <WrappedMap
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places,visualization&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+          loadingElement={<div style={{ height: "100%" }} />}
+          containerElement={<div style={{ height: "100%" }} />}
+          mapElement={<div style={{ height: "100%" }} />}
+        />
       )}
+
       <div
         style={{ minWidth: "25%" }}
         className="absolute top-4 right-4 bg-white rounded shadow-[0px_0px_19px_#00000008] p-[0_2.5rem_2.5rem_2.5rem] h-[83%] overflow_Y"
@@ -145,7 +131,9 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
                   <span className="text-xs font-bold">{item?.name}</span>
                 </Col>
                 <Col flex="none">
-                  <Checkbox.Group onChange={() => onCategoryChange}>
+                  <Checkbox.Group
+                    onChange={(e) => onCategoryChange(e, item?.id)}
+                  >
                     <Checkbox value={item?.id} />
                   </Checkbox.Group>
                 </Col>

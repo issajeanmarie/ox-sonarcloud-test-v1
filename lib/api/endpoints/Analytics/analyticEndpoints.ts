@@ -91,6 +91,7 @@ export const {
   useTruckAnalyticsQuery,
   useRevenueAnalyticsQuery,
   useMapAnalyticsQuery,
+  useLazyMapAnalyticsQuery,
   useKPIsAnalyticsQuery,
   useDownloadTruckAnalyticsQuery,
   useLazyDownloadTruckAnalyticsQuery,

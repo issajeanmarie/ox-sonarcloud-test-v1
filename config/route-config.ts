@@ -51,6 +51,18 @@ export const routes = {
     name: "Analytics",
     url: "/dashboard/analytics"
   },
+  RevenueAnalytics: {
+    name: "RevenueAnalytics",
+    url: "/dashboard/analytics/revenue"
+  },
+  MapAnalytics: {
+    name: "MapAnalytics",
+    url: "/dashboard/analytics/map"
+  },
+  KPIsAnalytics: {
+    name: "KPIsAnalytics",
+    url: "/dashboard/analytics/kpis"
+  },
   Resources: {
     name: "Resources",
     url: "/dashboard/resources"

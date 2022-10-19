@@ -3,15 +3,15 @@ import { Header_Links } from "../../lib/types/links";
 export const AnalyticLinks: Header_Links[] = [
   {
     label: "TRUCKS",
-    id: "trucks"
+    id: "TRUCKS"
   },
   {
     label: "REVENUE",
-    id: "revenue"
+    id: "REVENUE"
   },
   {
     label: "MAP",
-    id: "map"
+    id: "MAP"
   },
   {
     label: "KPIs",
