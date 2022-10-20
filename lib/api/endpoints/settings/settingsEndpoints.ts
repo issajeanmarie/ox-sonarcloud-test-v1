@@ -50,7 +50,7 @@ const settingsApi = baseAPI.injectEndpoints({
     }),
 
     /** KPIs Requests */
-    getKpis: builder.query<ApiResponseMetadata<KPIsResponse>, void>({
+    getKPIs: builder.query<ApiResponseMetadata<KPIsResponse>, void>({
       providesTags: ["Settings"],
       query: () => ({
         url: "/kpis/current",
@@ -108,7 +108,6 @@ const settingsApi = baseAPI.injectEndpoints({
         method: "PUT",
         body: {
           name: DTO?.name
-          // parentCategoryId: DTO?.parentCategoryId
         }
       })
     }),
@@ -129,7 +128,8 @@ export const {
   useSettingsQuery,
   usePersonalInfoMutation,
   useChangePasswordMutation,
-  useGetKpisQuery,
+  useGetKPIsQuery,
+  useLazyGetKPIsQuery,
   useAddKpiMutation,
   useGetCategoriesQuery,
   useAddCategoryMutation,

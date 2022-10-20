@@ -1,5 +1,7 @@
-import info from "antd/lib/message";
+import { ErrorMessage } from "../components/Shared/Messages/ErrorMessage";
+import { SuccessMessage } from "../components/Shared/Messages/SuccessMessage";
 import { errorCodes } from "../config/errorCodes";
+import { GenericResponse } from "../lib/types/shared";
 
 /**
  * This function handles all API requests,
@@ -12,6 +14,21 @@ import { errorCodes } from "../config/errorCodes";
  * @param {any} props - All of the other values you want to pass to the request function/enndpoint
  */
 
+type Types = {
+  showSuccess?: boolean;
+  showFailure?: boolean;
+  successMessage?: string | object | any;
+  request: (value: any) => any;
+  handleSuccess: (res: GenericResponse) => any;
+  handleFailure: (error: Errors) => any;
+};
+
+type Errors = {
+  message: string;
+  data: { message: string };
+  status: number;
+};
+
 export const handleAPIRequests = ({
   showSuccess = false,
   showFailure = true,
@@ -20,37 +37,37 @@ export const handleAPIRequests = ({
   handleSuccess = () => null,
   handleFailure = () => null,
   ...props
-}: any) => {
+}: Types | any) => {
   request({ ...props })
     .unwrap()
-    .then((res: any) => {
+    .then((res: GenericResponse) => {
       handleSuccess(res);
 
       if (showSuccess) {
-        info.success(res.message || successMessage || "Operation successful");
+        SuccessMessage(res.message || successMessage || "Operation successful");
       }
 
       return res;
     })
-    .catch((error: any) => {
+    .catch((error: Errors) => {
       handleFailure(error);
 
       if (showFailure) {
         if (error?.data?.message) {
-          info.warning(error?.data?.message);
+          ErrorMessage(error?.data?.message);
         } else if (error?.message) {
-          info.warning(error?.message);
+          ErrorMessage(error?.message);
         } else if (typeof error !== "object") {
-          info.warning(error);
+          ErrorMessage(error);
         } else {
           if (error.status === 403) {
-            info.warn("Please login to perform any action!");
+            SuccessMessage("Please login to perform any action!");
             window.location.href = "/";
           }
 
           errorCodes.filter(
             (errorCode) =>
-              errorCode.code === error.status && info.warning(errorCode.message)
+              errorCode.code === error.status && ErrorMessage(errorCode.message)
           );
         }
       }
