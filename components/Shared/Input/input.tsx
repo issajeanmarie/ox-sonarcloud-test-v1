@@ -60,7 +60,8 @@ const Entry = ({
   onKeyUp,
   list,
   disabledDate,
-  selfHandleValue
+  selfHandleValue,
+  notFoundContent
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
   const {
@@ -158,6 +159,7 @@ const Entry = ({
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
       <Form.Item name={name} rules={rules}>
         <Select
+          notFoundContent={notFoundContent}
           showSearch={showSearch || true}
           placeholder={placeholder}
           allowClear={allowClear}

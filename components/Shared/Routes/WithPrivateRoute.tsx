@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/display-name */
+import Script from "next/script";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../lib/redux/store";
@@ -36,7 +37,18 @@ const WithPrivateRoute = (Wrapped: any) => {
       router.replace(routes.login.url);
       return null;
     }
-    return <Wrapped {...props} />;
+    return (
+      <>
+        {router.pathname !== routes.MapAnalytics.url && (
+          <Script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHgwcB3X6WdORbT2I5Ra5spl1raTEDWG8&libraries=places"
+            defer
+          />
+        )}
+
+        <Wrapped {...props} />
+      </>
+    );
   };
 };
 

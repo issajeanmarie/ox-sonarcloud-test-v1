@@ -116,7 +116,7 @@ const AddSupplier: FC<AddSupplierTypes> = ({
       </Row>
 
       <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
+        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
           <Button loading={isLoading} type="primary" htmlType="submit">
             ADD SUPPLIER
           </Button>

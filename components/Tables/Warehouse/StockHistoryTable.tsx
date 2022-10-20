@@ -326,6 +326,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
           isDepotsLoading={isDepotsLoading}
           suppliers={suppliers}
           isSuppliersLoading={isSuppliersLoading}
+          itemToEdit={itemToEdit}
         />
       </ModalWrapper>
     </>
