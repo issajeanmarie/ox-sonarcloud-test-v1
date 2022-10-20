@@ -157,7 +157,7 @@ const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({ data: KPIs }) => {
       <div className="flex gap-10 mt-5">
         <div className="flex-1"></div>
 
-        <div className="w-[200px]">
+        <div className="w-[140px]">
           <Button
             type="primary"
             htmlType="submit"

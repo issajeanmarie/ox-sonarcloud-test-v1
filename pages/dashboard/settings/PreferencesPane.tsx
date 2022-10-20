@@ -12,6 +12,7 @@ import CategoriesSection from "./CategoriesSection";
 import SettingsKPIsTable from "../../../components/Tables/Settings/SettingsKPIsTable";
 import SettingsCardWrapper from "../../../components/Settings/SettingsCardWrapper";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import Loader from "../../../components/Shared/Loader";
 
 const { Text } = Typography;
 
@@ -122,7 +123,7 @@ const PreferencesPane = () => {
           <Text className="mediumText">KPIs (Daily target)</Text>
         </div>
         {isGetKPIsLoading ? (
-          "loading..."
+          <Loader />
         ) : (
           <SettingsKPIsTable data={KPIsList?.payload} />
         )}

@@ -657,3 +657,18 @@ body {
   min-width: 18px !important;
   border-radius: 50%;
 }
+
+.my_input.PhoneInput {
+  background: var(--color_input_white) !important;
+  padding-left: 12px;
+}
+
+.PhoneInputCountry {
+  background: var(--color_input_white) !important;
+}
+
+.PhoneInputCountrySelect {
+  font-family: Arial;
+  padding: 12px;
+  outline: none;
+}

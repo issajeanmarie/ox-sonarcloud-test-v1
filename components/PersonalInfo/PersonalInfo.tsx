@@ -153,6 +153,7 @@ const ProfileInfo = () => {
               <CustomPhoneInput
                 phoneNumber={phoneNumber}
                 setPhoneNumber={setPhoneNumber}
+                validatePhone={false}
               />
             </Col>
           </Row>

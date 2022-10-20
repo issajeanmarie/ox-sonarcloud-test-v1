@@ -24,28 +24,30 @@ const CustomPhoneInput = ({
   phoneNumber,
   setPhoneNumber,
   label = "Phone number"
-}: Types) => (
-  <Form.Item name={name}>
-    {label && <Text className="heading2 mb-[8px]">{label}</Text>}
+}: Types) => {
+  return (
+    <Form.Item name={name}>
+      {label && <Text className="heading2 mb-[8px]">{label}</Text>}
 
-    <PhoneInput
-      international
-      countryCallingCodeEditable
-      defaultCountry="RW"
-      className="my_input"
-      width={width}
-      placeholder="Choose country"
-      value={phoneNumber}
-      onChange={setPhoneNumber}
-      name={name}
-    />
-    {validatePhone && !phoneNumber && (
-      <span style={{ color: "red" }} className="text-sm">
-        Phone is required
-      </span>
-    )}
-  </Form.Item>
-);
+      <PhoneInput
+        international
+        countryCallingCodeEditable
+        defaultCountry="RW"
+        className="my_input"
+        width={width}
+        placeholder="Choose country"
+        value={phoneNumber}
+        onChange={setPhoneNumber}
+        name={name}
+      />
+      {validatePhone && !phoneNumber && (
+        <span style={{ color: "red" }} className="text-sm">
+          Phone is required
+        </span>
+      )}
+    </Form.Item>
+  );
+};
 
 CustomPhoneInput.propTypes = {
   width: PropTypes.string,
