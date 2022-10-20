@@ -7,7 +7,7 @@ import AnalyticKPIs from "../../../components/Analytics/KPIs/AnalyticKPIs";
 import { useKPIsAnalyticsQuery } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
 import DaysCalculator from "../../../helpers/daysCalculator";
 import Content from "../../../components/Shared/Content";
-import { daysList } from "./DTOs/daysList";
+import { daysList } from "../../../components/Analytics/DTOs/daysList";
 import { useRouter } from "next/router";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";

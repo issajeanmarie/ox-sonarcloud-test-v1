@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { CheckboxValueType } from "antd/lib/checkbox/Group";
 import { BackendErrorTypes } from "../../../lib/types/shared";
 import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
-import { daysList } from "./DTOs/daysList";
+import { daysList } from "../../../components/Analytics/DTOs/daysList";
 import AnalyticsTopNavigator from "../../../components/Analytics/AnalyticsTopNavigator";
 import { useRouter } from "next/router";
 import { changeRoute } from "../../../helpers/routesHandler";

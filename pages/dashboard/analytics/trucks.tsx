@@ -10,7 +10,7 @@ import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import Content from "../../../components/Shared/Content";
 import { useSelector } from "react-redux";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
-import { daysList } from "./DTOs/daysList";
+import { daysList } from "../../../components/Analytics/DTOs/daysList";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";

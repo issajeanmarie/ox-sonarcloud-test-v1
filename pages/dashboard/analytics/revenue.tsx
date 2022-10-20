@@ -8,7 +8,7 @@ import { useRevenueAnalyticsQuery } from "../../../lib/api/endpoints/Analytics/a
 import DaysCalculator from "../../../helpers/daysCalculator";
 import Content from "../../../components/Shared/Content";
 import { useSelector } from "react-redux";
-import { daysList } from "./DTOs/daysList";
+import { daysList } from "../../../components/Analytics/DTOs/daysList";
 import AnalyticsTopNavigator from "../../../components/Analytics/AnalyticsTopNavigator";
 import { useRouter } from "next/router";
 import { changeRoute } from "../../../helpers/routesHandler";
