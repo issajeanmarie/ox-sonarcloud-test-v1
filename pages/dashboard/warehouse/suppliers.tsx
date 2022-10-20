@@ -134,7 +134,7 @@ const SuppliersPage = () => {
           totalElements={apiData?.payload?.totalElements}
         />
 
-        <Content navType="DOUBLE">
+        <Content isOverflowHidden={false} navType="DOUBLE">
           <>
             {showFiltersLoader ? (
               <>

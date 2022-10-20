@@ -105,7 +105,7 @@ const Truck = () => {
           setSort={setSelectedSort}
         />
 
-        <Content navType="CENTER">
+        <Content isOverflowHidden={false} navType="CENTER">
           <>
             {showFiltersLoader ? (
               <>

@@ -129,8 +129,8 @@ const Analytics = () => {
             setSelectedDepot={setSelectedDepot}
           />
 
-          <Content navType="FULL">
-            <div className="mx-4 relative">
+          <Content isOverflowHidden={false} navType="FULL">
+            <div className="px-4 relative">
               <AnalyticTrucks
                 active={query?.currentTab}
                 sorter={sorter}

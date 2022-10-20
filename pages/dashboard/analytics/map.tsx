@@ -121,8 +121,8 @@ const Analytics = () => {
             setSelectedDepot={setSelectedDepot}
           />
 
-          <Content navType="FULL">
-            <div className="mx-4 relative">
+          <Content isOverflowHidden={true} navType="FULL">
+            <div className="relative">
               <AnalyticMap
                 active={query?.currentTab}
                 isCategoriesLoading={isCategoriesLoading}

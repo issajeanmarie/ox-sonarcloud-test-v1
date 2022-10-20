@@ -235,7 +235,11 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             type="danger"
           />
 
-          <Content navType="FULL" className="mx-4 relative">
+          <Content
+            isOverflowHidden={false}
+            navType="FULL"
+            className="mx-4 relative"
+          >
             <div className="flex flex-col xl:flex-row p-5 gap-6">
               <div className="flex-1 h-min bg-white shadow-[0px_0px_19px_#00000008] rounded p-14">
                 <div className="flex items-center justify-between mb-3">

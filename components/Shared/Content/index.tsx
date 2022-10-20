@@ -5,7 +5,8 @@ import { classes } from "../../../config/constants";
 const Content: FC<ContentTypes> = ({
   navType = "CENTER" || "FULL" || "DOUBLE" || "TRIPLE",
   children,
-  className
+  className,
+  isOverflowHidden
 }) => (
   <div
     style={{
@@ -18,7 +19,9 @@ const Content: FC<ContentTypes> = ({
           ? "46vh"
           : "86vh"
     }}
-    className={`${classes.content_section} ${className || ""}`}
+    className={`${classes.content_section} ${
+      isOverflowHidden && classes.overflowHidden
+    } ${className || ""}`}
   >
     {children}
   </div>

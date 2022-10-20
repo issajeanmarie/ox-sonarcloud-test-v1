@@ -9,7 +9,7 @@ import {
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
 import { AnalyticMapTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticMapTypes";
 import CustomInput from "../../Shared/Input";
-import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
+import { MediumSpinLoader } from "../../Shared/Loaders/Loaders";
 import { mapStyles } from "../../../helpers/mapStyles";
 import { LatLng } from "use-places-autocomplete";
 
@@ -71,15 +71,15 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
         typeof coordinate === "string" &&
         coordinate.includes(":")
       ) {
-        const displayCoordinates = JSON.parse(coordinate);
+        const parsedCoordinates = JSON.parse(coordinate);
         if (
-          displayCoordinates &&
-          displayCoordinates?.lat &&
-          displayCoordinates?.lng
+          parsedCoordinates &&
+          parsedCoordinates?.lat &&
+          parsedCoordinates?.lng
         ) {
           const otherCoordinate = new google.maps.LatLng(
-            displayCoordinates?.lat,
-            displayCoordinates?.lng
+            parsedCoordinates?.lat,
+            parsedCoordinates?.lng
           );
           heatMapData = [...heatMapData, otherCoordinate];
         }
@@ -102,8 +102,11 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
   return (
     <div className={`${active === "MAP" && "h-screen relative"}`}>
       {mapLoading || mapFetching ? (
-        <div className="flex justify-center items-center h-full">
-          <SmallSpinLoader />
+        <div className="flex justify-center items-center h-full w-4/5 flex-col">
+          <span className="font-light">Looking for locations...</span>
+          <div className="mt-4">
+            <MediumSpinLoader />
+          </div>
         </div>
       ) : (
         <WrappedMap
@@ -143,10 +146,10 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
         {isCategoriesLoading ? (
           <Row className="mb-3">
             <Col
-              style={{ height: "100%", width: "100%" }}
+              style={{ height: "80vh", width: "100%" }}
               className="flex justify-center items-center"
             >
-              <SmallSpinLoader />
+              <MediumSpinLoader />
             </Col>
           </Row>
         ) : (

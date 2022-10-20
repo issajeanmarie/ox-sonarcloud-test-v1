@@ -121,7 +121,7 @@ const SalesPage = () => {
           isSalesLoading={onRenderLoader}
         />
 
-        <Content navType="DOUBLE">
+        <Content isOverflowHidden={false} navType="DOUBLE">
           <>
             {onRenderLoader ? (
               <>

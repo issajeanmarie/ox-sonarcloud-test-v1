@@ -89,7 +89,7 @@ const SupportOrder: FC<SupportOrderProps> = ({ orderId, setSupport }) => {
         supportOrderLoading={isLoading}
       />
 
-      <Content navType="FULL">
+      <Content isOverflowHidden={false} navType="FULL">
         <div className="w-[800px] h-[100%] m-auto bg-white shadow-[0px_0px_19px_#00000008] mt-5 p-14">
           <Form onFinish={onFinish} form={form}>
             <div className="text-2xl font-bold text-ox-dark mb-10">

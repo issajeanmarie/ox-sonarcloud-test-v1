@@ -112,7 +112,7 @@ const Orders: FC = () => {
           setCurrentPages={setCurrentPages}
         />
 
-        <Content navType="CENTER">
+        <Content isOverflowHidden={false} navType="CENTER">
           <>
             {showFiltersLoader || depotBasedLoader ? (
               <>

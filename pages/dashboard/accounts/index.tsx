@@ -162,7 +162,7 @@ const Drivers = () => {
           setSelectedSort={setSort}
         />
 
-        <Content navType="DOUBLE">
+        <Content isOverflowHidden={false} navType="DOUBLE">
           <TableWrapper>
             {showFiltersLoader || isDriversLoading ? (
               <>

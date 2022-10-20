@@ -494,7 +494,7 @@ body {
 }
 
 .contents_container {
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   overflow-x: hidden;
   height: 93vh;
 }
@@ -657,6 +657,7 @@ body {
   min-width: 18px !important;
   border-radius: 50%;
 }
+<<<<<<< HEAD
 
 .my_input.PhoneInput {
   background: var(--color_input_white) !important;
@@ -672,3 +673,5 @@ body {
   padding: 12px;
   outline: none;
 }
+=======
+>>>>>>> 72f0bec (fix map styles)
