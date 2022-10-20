@@ -105,9 +105,9 @@ const ProfileInfo = () => {
         // <Loader />
         <SettingsProfileLoader />
       ) : (
-        <div className=" ">
-          <Row>
-            <Col span={6}>
+        <div>
+          <Row gutter={24} align="middle">
+            <Col className="w-[140px]">
               <ImageUploader
                 uploadLoading={uploadLoading}
                 setUploadLoading={setUploadLoading}
@@ -122,17 +122,14 @@ const ProfileInfo = () => {
               />
             </Col>
             {/* Personal Info TABLE */}
-            <Col span={4}>
-              <p>
-                <Text className="txt-title">{data?.payload?.names}</Text>
-              </p>
-              <p>
-                <Text className="txt-small">{data?.payload?.role}</Text>
+            <Col>
+              <p className="txt-title mb-6">{data?.payload?.names}</p>
+
+              <p className="txt-sm mb-2">
+                {data?.payload?.role?.replace("_", " ")}
               </p>
 
-              <p>
-                <Text className="txt-small">{data?.payload?.email}</Text>
-              </p>
+              <p className="txt-sm m-0">{data?.payload?.email}</p>
             </Col>
           </Row>
         </div>
