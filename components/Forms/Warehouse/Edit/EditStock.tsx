@@ -22,6 +22,14 @@ const EditStock: FC<EditStockTypes> = ({
     (item: any) => item.enabled
   );
 
+  const [parentCategoryChange, setParentCategory] = useState(
+    itemToEdit?.category?.parentCategory?.id
+  );
+
+  const onParentCategoryChange = (value: any) => {
+    setParentCategory(value);
+  };
+
   return (
     <Form
       form={form}
@@ -148,6 +156,7 @@ const EditStock: FC<EditStockTypes> = ({
             isLoading={isDepotsLoading}
             disabled={isDepotsLoading}
             isGroupDropdown
+            defaultValue={itemToEdit?.lhsOrder?.id}
           >
             {lhsOrders?.map((item: any) => (
               <Option key={item?.weight} value={item?.id}>
