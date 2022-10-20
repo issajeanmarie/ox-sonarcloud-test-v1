@@ -280,8 +280,8 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
           <Input
             name="depotId"
             type="select"
-            placeholder="Select depot"
-            label="Select depot"
+            placeholder="Select Depot"
+            label="Select Depot"
             isLoading={isDepotsLoading}
             disabled={isDepotsLoading}
             isGroupDropdown

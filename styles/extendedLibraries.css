@@ -78,7 +78,8 @@
   outline: none !important;
 }
 .ant-input::placeholder,
-.ant-picker-input > input::placeholder {
+.ant-picker-input > input::placeholder,
+.ant-select-selection-placeholder {
   color: #c0c0c0 !important;
   font-size: 0.875rem !important /* 14px */;
   line-height: 1.25rem !important /* 20px */;
@@ -140,11 +141,6 @@
   display: flex;
   align-items: center;
   font-size: 12px !important;
-}
-
-.ant-select-selection-placeholder {
-  font-weight: normal !important;
-  color: black !important;
 }
 
 .ant-select-show-search.ant-select:not(.ant-select-customize-input)

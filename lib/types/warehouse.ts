@@ -89,4 +89,20 @@ export type EditStockTypes = {
   isDepotsLoading: boolean;
   suppliers: any;
   isSuppliersLoading: boolean;
+  itemToEdit: {
+    category: {
+      id: number;
+      name: string;
+      parentCategory: {
+        id: number;
+        name: string;
+      };
+    };
+    lhsOrder: {
+      id: number;
+      depot: {
+        id: number;
+      };
+    };
+  };
 };

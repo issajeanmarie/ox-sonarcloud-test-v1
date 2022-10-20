@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Row, Select } from "antd";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
@@ -20,11 +20,20 @@ const EditStock: FC<EditStockTypes> = ({
   depots,
   isDepotsLoading,
   isSuppliersLoading,
-  suppliers
+  suppliers,
+  itemToEdit
 }) => {
   const filteredSuppliers = suppliers?.payload?.content?.filter(
     (supplier: any) => supplier.enabled
   );
+
+  const [parentCategoryChange, setParentCategory] = useState(
+    itemToEdit?.category?.parentCategory?.id
+  );
+
+  const onParentCategoryChange = (value: any) => {
+    setParentCategory(value);
+  };
 
   return (
     <Form
@@ -83,6 +92,7 @@ const EditStock: FC<EditStockTypes> = ({
             <span className="font-light">Item info</span>
           </div>
           <Input
+            onChange={onParentCategoryChange}
             name="categoryId"
             type="select"
             placeholder="Select category"
@@ -90,6 +100,7 @@ const EditStock: FC<EditStockTypes> = ({
             isLoading={isCategoriesLoading}
             disabled={isCategoriesLoading}
             isGroupDropdown
+            defaultValue={itemToEdit?.category?.parentCategory?.name}
           >
             {categories?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
@@ -100,6 +111,22 @@ const EditStock: FC<EditStockTypes> = ({
         </Col>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
+            notFoundContent={
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "20px 0"
+                }}
+              >
+                {parentCategoryChange ? (
+                  <span>No sub-categories found</span>
+                ) : (
+                  <span>Select category first</span>
+                )}
+              </div>
+            }
             name="SubCategory"
             type="select"
             placeholder="Select category"
@@ -107,16 +134,23 @@ const EditStock: FC<EditStockTypes> = ({
             isLoading={isCategoriesLoading}
             disabled={isCategoriesLoading}
             isGroupDropdown
+            defaultValue={itemToEdit?.category?.name}
           >
-            {categories?.map((item: any) => (
-              <>
-                {item?.subCategories?.map((sub: any) => (
-                  <Option key={sub?.id} value={sub?.id}>
-                    {sub?.name}
-                  </Option>
-                ))}
-              </>
-            ))}
+            {categories
+              ?.filter((item: any) => item.id === parentCategoryChange)
+              .map((subCategory: any) => (
+                <>
+                  {subCategory?.subCategories?.map((sub: any) => (
+                    <Option
+                      key={sub?.id}
+                      className="text10 dark_grey fowe400"
+                      value={sub?.id}
+                    >
+                      {sub?.name}
+                    </Option>
+                  ))}
+                </>
+              ))}
           </Input>
         </Col>
       </Row>
@@ -163,20 +197,21 @@ const EditStock: FC<EditStockTypes> = ({
         className="mt-4"
       >
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <div className="mb-4">
+          <div className="my-2">
             <span className="font-light">Transport</span>
           </div>
         </Col>
 
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             name="depotId"
             type="select"
-            placeholder="Select depot"
-            label="Select depot"
+            placeholder="Select Depot"
+            label="Select Depot"
             isLoading={isDepotsLoading}
             disabled={isDepotsLoading}
             isGroupDropdown
+            defaultValue={itemToEdit?.lhsOrder?.depot?.id}
           >
             {depots?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
@@ -186,7 +221,7 @@ const EditStock: FC<EditStockTypes> = ({
           </Input>
         </Col>
 
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             name="lhsOrderId"
             type="select"
@@ -195,6 +230,7 @@ const EditStock: FC<EditStockTypes> = ({
             isLoading={isOrdersLoading}
             disabled={isOrdersLoading}
             isGroupDropdown
+            defaultValue={itemToEdit?.lhsOrder?.id}
           >
             {orders?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
@@ -206,7 +242,7 @@ const EditStock: FC<EditStockTypes> = ({
       </Row>
 
       <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
+        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
           <Button loading={isEditingStock} type="primary" htmlType="submit">
             SAVE CHANGES
           </Button>
