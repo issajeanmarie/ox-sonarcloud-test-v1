@@ -3,7 +3,6 @@ import { Header_Links } from "../../links";
 export type AnalyticsTopNavigatorProps = {
   headerLinks: Header_Links[];
   setActive: (menu: string) => void;
-  active: string;
   toggleActiveHandler: (menuID: string) => void;
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;

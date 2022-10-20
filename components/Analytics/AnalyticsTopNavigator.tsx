@@ -12,7 +12,6 @@ const { Text } = Typography;
 const AnalyticsTopNavigator: FC<AnalyticsTopNavigatorProps> = ({
   headerLinks,
   setActive,
-  active,
   toggleActiveHandler,
   onStartDateChange,
   onEndDateChange,
@@ -56,7 +55,7 @@ const AnalyticsTopNavigator: FC<AnalyticsTopNavigatorProps> = ({
 
   const RightSide = (
     <>
-      {active === "REVENUE" && (
+      {query?.currentTab === "REVENUE" && (
         <TopNavigatorRightSideWrapper>
           <RightSideRevenue
             onStartDateChange={onStartDateChange}
@@ -69,7 +68,7 @@ const AnalyticsTopNavigator: FC<AnalyticsTopNavigatorProps> = ({
           />
         </TopNavigatorRightSideWrapper>
       )}
-      {active === "KPIs" && (
+      {query?.currentTab === "KPIs" && (
         <TopNavigatorRightSideWrapper>
           <RightSideKPIs
             onStartDateChange={onStartDateChange}

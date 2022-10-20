@@ -54,5 +54,5 @@ export interface KPIsAnalyticsRequest {
 
 export interface MapAnalyticsRequest {
   depot: number | "" | undefined;
-  category: number;
+  categories: number[];
 }

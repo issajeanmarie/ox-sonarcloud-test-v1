@@ -23,11 +23,11 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
       render: (
         text: TrucksUsageTableTypes,
         record: TrucksUsageTableTypes,
-        index: TrucksUsageTableTypes
+        index: number
       ) => (
         <RowsWrapper>
           <div className="flex gap-10">
-            <Text className="normalText opacity_56">{index && index}</Text>
+            <Text className="normalText opacity_56">{index + 1}</Text>
             <Text className="normalText fowe700">{record?.plateNumber}</Text>
           </div>
         </RowsWrapper>

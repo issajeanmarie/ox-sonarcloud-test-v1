@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Checkbox, Col, Image, Row } from "antd";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   GoogleMap as GoogleMapComponent,
   withScriptjs,
@@ -11,6 +11,7 @@ import { AnalyticMapTypes } from "../../../lib/types/pageTypes/Analytics/Analyti
 import CustomInput from "../../Shared/Input";
 import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
 import { mapStyles } from "../../../helpers/mapStyles";
+import { LatLng } from "use-places-autocomplete";
 
 declare const google: any;
 
@@ -29,6 +30,29 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
   mapLoading,
   mapFetching
 }) => {
+  //HANDLE SEARCH
+  const [filtered, setFiltered] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  useEffect(() => {
+    if (categories) {
+      setFiltered(categories?.payload);
+    }
+  }, [categories]);
+
+  const handleCategorySearch = (value: string) => {
+    setSearchQuery(value);
+    const filteredData = categories?.payload.filter(
+      (entry: { [s: string]: unknown } | ArrayLike<unknown>) =>
+        Object.values(entry).some(
+          (val) =>
+            typeof val === "string" &&
+            val.toLowerCase().includes(value.toLowerCase())
+        )
+    );
+
+    setFiltered(filteredData);
+  };
+
   const coordinates = mapData?.payload?.map(
     (location: officeLocationType) => location?.office?.coordinates
   );
@@ -36,7 +60,12 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
   let heatMapData: any = [];
 
   if (coordinates) {
-    coordinates.forEach((coordinate: any) => {
+    //REMOVE UNDEFINEDs AND NULLs
+    const filteredCoordinates = coordinates?.filter(
+      (item: LatLng) => item && item
+    );
+
+    filteredCoordinates?.forEach((coordinate: any) => {
       if (
         coordinate &&
         typeof coordinate === "string" &&
@@ -45,8 +74,8 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
         const displayCoordinates = JSON.parse(coordinate);
         if (
           displayCoordinates &&
-          displayCoordinates.lat &&
-          displayCoordinates.lng
+          displayCoordinates?.lat &&
+          displayCoordinates?.lng
         ) {
           const otherCoordinate = new google.maps.LatLng(
             displayCoordinates?.lat,
@@ -94,6 +123,7 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
             <span className="opacity-80 font-light">Show</span>
             <div className="my-5">
               <CustomInput
+                onChange={handleCategorySearch}
                 type="text"
                 placeholder="Search category"
                 name="searchTruckUsage"
@@ -121,24 +151,71 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
           </Row>
         ) : (
           <>
-            {categories?.payload?.map((item: any) => (
-              <Row key={item?.id} className="mb-3">
-                <Col
-                  flex="auto"
-                  className="flex items-center gap-4 flex-nowrap"
-                >
-                  <span className="text-xs font-light">{item?.id}</span>
-                  <span className="text-xs font-bold">{item?.name}</span>
-                </Col>
-                <Col flex="none">
-                  <Checkbox.Group
-                    onChange={(e) => onCategoryChange(e, item?.id)}
-                  >
-                    <Checkbox value={item?.id} />
-                  </Checkbox.Group>
-                </Col>
-              </Row>
-            ))}
+            {filtered?.length !== 0 ? (
+              <>
+                {filtered?.map((item: any, index: number) => (
+                  <Row key={item?.id} className="mb-3">
+                    <Col
+                      flex="auto"
+                      className="flex items-center gap-4 flex-nowrap"
+                    >
+                      <span className="text-xs font-light">{index + 1}</span>
+                      <span className="text-xs font-bold">{item?.name}</span>
+                    </Col>
+                    <Col flex="none">
+                      <Checkbox.Group
+                        onChange={(e) => onCategoryChange(e, item?.id)}
+                      >
+                        <Checkbox value={item?.id} />
+                      </Checkbox.Group>
+                    </Col>
+                  </Row>
+                ))}
+              </>
+            ) : (
+              <>
+                {searchQuery && filtered?.length === 0 ? (
+                  <div className="flex flex-col gap-5 items-center justify-center mt-12">
+                    <Image
+                      src="/icons/transaction.svg"
+                      width={80}
+                      height={80}
+                      alt=""
+                      preview={false}
+                    />
+                    <div className="font-extralight text-md w-[170px] text-center">
+                      No results for{" "}
+                      <span className="font-bold">{searchQuery}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {categories?.payload?.map((item: any, index: number) => (
+                      <Row key={item?.id} className="mb-3">
+                        <Col
+                          flex="auto"
+                          className="flex items-center gap-4 flex-nowrap"
+                        >
+                          <span className="text-xs font-light">
+                            {index + 1}
+                          </span>
+                          <span className="text-xs font-bold">
+                            {item?.name}
+                          </span>
+                        </Col>
+                        <Col flex="none">
+                          <Checkbox.Group
+                            onChange={(e) => onCategoryChange(e, item?.id)}
+                          >
+                            <Checkbox value={item?.id} />
+                          </Checkbox.Group>
+                        </Col>
+                      </Row>
+                    ))}
+                  </>
+                )}
+              </>
+            )}
           </>
         )}
       </div>

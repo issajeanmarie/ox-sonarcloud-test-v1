@@ -13,6 +13,7 @@ import AnalyticsTopNavigator from "../../../components/Analytics/AnalyticsTopNav
 import { useRouter } from "next/router";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
+import PageNotFound from "../../../components/Shared/PageNotFound";
 
 type DepotTypes = {
   depotName: string | undefined;
@@ -25,7 +26,7 @@ const Analytics = () => {
 
   const [selectedDay, setSelectedDay] = useState<any>(daysList[0]);
   const [isDateCustom, setIsDateCustom] = useState(false);
-  const [active, setActive] = useState<string>("TRUCKS");
+  const [, setActive] = useState<string>("TRUCKS");
   const [selectedDepot, setSelectedDepot] = useState<any>({
     id: 0,
     name: "All depots"
@@ -86,34 +87,39 @@ const Analytics = () => {
 
   return (
     <Layout>
-      <AnalyticsTopNavigator
-        headerLinks={AnalyticLinks}
-        setActive={setActive}
-        active={active}
-        toggleActiveHandler={toggleActiveHandler}
-        onStartDateChange={onStartDateChange}
-        onEndDateChange={onEndDateChange}
-        selectedDay={selectedDay}
-        setSelectedDay={setSelectedDay}
-        isDateCustom={isDateCustom}
-        setIsDateCustom={setIsDateCustom}
-        daysList={daysList}
-        selectedDepot={selectedDepot}
-        setSelectedDepot={setSelectedDepot}
-      />
-
-      <Content navType="FULL">
-        <div className="mx-4 relative">
-          <AnalyticRevenues
-            active={query?.currentTab}
-            revenueData={revenueData?.payload}
-            revenueLoading={revenueLoading}
-            revenueFetching={revenueFetching}
-            start={startDate || start || ""}
-            end={endDate || end || ""}
+      {router.isReady && !revenueLoading && query?.currentTab !== "REVENUE" ? (
+        <PageNotFound />
+      ) : (
+        <>
+          <AnalyticsTopNavigator
+            headerLinks={AnalyticLinks}
+            setActive={setActive}
+            toggleActiveHandler={toggleActiveHandler}
+            onStartDateChange={onStartDateChange}
+            onEndDateChange={onEndDateChange}
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+            isDateCustom={isDateCustom}
+            setIsDateCustom={setIsDateCustom}
+            daysList={daysList}
+            selectedDepot={selectedDepot}
+            setSelectedDepot={setSelectedDepot}
           />
-        </div>
-      </Content>
+
+          <Content navType="FULL">
+            <div className="mx-4 relative">
+              <AnalyticRevenues
+                active={query?.currentTab}
+                revenueData={revenueData?.payload}
+                revenueLoading={revenueLoading}
+                revenueFetching={revenueFetching}
+                start={startDate || start || ""}
+                end={endDate || end || ""}
+              />
+            </div>
+          </Content>
+        </>
+      )}
     </Layout>
   );
 };

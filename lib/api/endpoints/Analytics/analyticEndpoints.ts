@@ -69,9 +69,9 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
     mapAnalytics: builder.query<AnalyticsResponse, MapAnalyticsRequest>({
       providesTags: ["Analytics", "Depot"],
       query: (DTO) => ({
-        url: `/analytics/client-locations?depot=${DTO?.depot || ""}&category=${
-          DTO?.category || ""
-        }`,
+        url: `/analytics/client-locations?depot=${
+          DTO?.depot || ""
+        }&categories=${DTO?.categories || ""}`,
         method: "GET"
       })
     }),

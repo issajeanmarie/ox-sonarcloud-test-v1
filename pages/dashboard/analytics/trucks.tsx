@@ -15,6 +15,7 @@ import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
 import AnalyticsTopNavigator from "../../../components/Analytics/AnalyticsTopNavigator";
+import PageNotFound from "../../../components/Shared/PageNotFound";
 
 type DepotTypes = {
   depotName: string | undefined;
@@ -27,7 +28,7 @@ const Analytics = () => {
 
   const [selectedDay, setSelectedDay] = useState<any>(daysList[0]);
   const [isDateCustom, setIsDateCustom] = useState(false);
-  const [active, setActive] = useState<string>("TRUCKS");
+  const [, setActive] = useState<string>("TRUCKS");
   const [sorter, setSorter] = useState<any>({});
   const [selectedDepot, setSelectedDepot] = useState<any>({
     id: 0,
@@ -109,41 +110,46 @@ const Analytics = () => {
 
   return (
     <Layout>
-      <AnalyticsTopNavigator
-        headerLinks={AnalyticLinks}
-        setActive={setActive}
-        active={active}
-        toggleActiveHandler={toggleActiveHandler}
-        onStartDateChange={onStartDateChange}
-        onEndDateChange={onEndDateChange}
-        selectedDay={selectedDay}
-        setSelectedDay={setSelectedDay}
-        isDateCustom={isDateCustom}
-        setIsDateCustom={setIsDateCustom}
-        daysList={daysList}
-        selectedDepot={selectedDepot}
-        setSelectedDepot={setSelectedDepot}
-      />
-
-      <Content navType="FULL">
-        <div className="mx-4 relative">
-          <AnalyticTrucks
-            active={query?.currentTab}
-            sorter={sorter}
+      {router.isReady && query?.currentTab !== "TRUCKS" ? (
+        <PageNotFound />
+      ) : (
+        <>
+          <AnalyticsTopNavigator
+            headerLinks={AnalyticLinks}
+            setActive={setActive}
+            toggleActiveHandler={toggleActiveHandler}
             onStartDateChange={onStartDateChange}
             onEndDateChange={onEndDateChange}
-            handleSearch={handleSearch}
-            handleDownloadClients={handleDownloadClients}
-            isDownloadingTruckReport={isDownloadingTruckReport}
-            isDownloadFetching={isDownloadFetching}
-            selectedSort={sorter}
-            setSelectedSort={setSorter}
-            depotsState={depotsState}
-            startDate={startDate}
-            endDate={endDate}
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+            isDateCustom={isDateCustom}
+            setIsDateCustom={setIsDateCustom}
+            daysList={daysList}
+            selectedDepot={selectedDepot}
+            setSelectedDepot={setSelectedDepot}
           />
-        </div>
-      </Content>
+
+          <Content navType="FULL">
+            <div className="mx-4 relative">
+              <AnalyticTrucks
+                active={query?.currentTab}
+                sorter={sorter}
+                onStartDateChange={onStartDateChange}
+                onEndDateChange={onEndDateChange}
+                handleSearch={handleSearch}
+                handleDownloadClients={handleDownloadClients}
+                isDownloadingTruckReport={isDownloadingTruckReport}
+                isDownloadFetching={isDownloadFetching}
+                selectedSort={sorter}
+                setSelectedSort={setSorter}
+                depotsState={depotsState}
+                startDate={startDate}
+                endDate={endDate}
+              />
+            </div>
+          </Content>
+        </>
+      )}
     </Layout>
   );
 };

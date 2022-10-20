@@ -4,10 +4,7 @@ import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import { AnalyticLinks } from "../../../components/Analytics/AnalyticLinks";
 import AnalyticMap from "../../../components/Analytics/Map/AnalyticMap";
-import {
-  useMapAnalyticsQuery,
-  useLazyMapAnalyticsQuery
-} from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
+import { useLazyMapAnalyticsQuery } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
 import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/categoryEndpoints";
 import Content from "../../../components/Shared/Content";
 import { useSelector } from "react-redux";
@@ -19,6 +16,7 @@ import AnalyticsTopNavigator from "../../../components/Analytics/AnalyticsTopNav
 import { useRouter } from "next/router";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
+import PageNotFound from "../../../components/Shared/PageNotFound";
 
 type DepotTypes = {
   depotName: string | undefined;
@@ -31,7 +29,7 @@ const Analytics = () => {
 
   const [selectedDay, setSelectedDay] = useState<any>(daysList[0]);
   const [isDateCustom, setIsDateCustom] = useState(false);
-  const [active, setActive] = useState<string>("TRUCKS");
+  const [, setActive] = useState<string>("TRUCKS");
   const [selectedDepot, setSelectedDepot] = useState<any>({
     id: 0,
     name: "All depots"
@@ -50,22 +48,15 @@ const Analytics = () => {
     useCategoriesQuery();
 
   const [selectedCategories, setSelectedCategories]: any = useState([]);
-  const [selectedCategory, setSelectedCategory]: any = useState();
 
   const depotsState = useSelector(
     (state: { depots: { payload: DepotTypes } }) => state.depots.payload
   );
 
-  const {
-    data: mapData,
-    isLoading: mapLoading,
-    isFetching: mapFetching
-  } = useMapAnalyticsQuery({
-    depot: depotsState?.depotId,
-    category: selectedCategory ? selectedCategory : ""
-  });
-
-  const [mapAnalytics] = useLazyMapAnalyticsQuery();
+  const [
+    mapAnalytics,
+    { isLoading: mapLoading, data: mapData, isFetching: mapFetching }
+  ] = useLazyMapAnalyticsQuery();
 
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
@@ -82,10 +73,9 @@ const Analytics = () => {
 
   const onCategoryChange = (e: CheckboxValueType[], id: number) => {
     setSelectedCategories([...selectedCategories, id]);
-    setSelectedCategory(id);
     mapAnalytics({
       depot: depotsState?.depotId,
-      category: id
+      categories: selectedCategories?.length !== 0 ? selectedCategories : ""
     })
       .unwrap()
       .then()
@@ -112,35 +102,40 @@ const Analytics = () => {
 
   return (
     <Layout>
-      <AnalyticsTopNavigator
-        headerLinks={AnalyticLinks}
-        setActive={setActive}
-        active={active}
-        toggleActiveHandler={toggleActiveHandler}
-        onStartDateChange={onStartDateChange}
-        onEndDateChange={onEndDateChange}
-        selectedDay={selectedDay}
-        setSelectedDay={setSelectedDay}
-        isDateCustom={isDateCustom}
-        setIsDateCustom={setIsDateCustom}
-        daysList={daysList}
-        selectedDepot={selectedDepot}
-        setSelectedDepot={setSelectedDepot}
-      />
-
-      <Content navType="FULL">
-        <div className="mx-4 relative">
-          <AnalyticMap
-            active={query?.currentTab}
-            isCategoriesLoading={isCategoriesLoading}
-            categories={categories}
-            onCategoryChange={onCategoryChange}
-            mapData={mapData}
-            mapLoading={mapLoading}
-            mapFetching={mapFetching}
+      {router.isReady && !mapLoading && query?.currentTab !== "MAP" ? (
+        <PageNotFound />
+      ) : (
+        <>
+          <AnalyticsTopNavigator
+            headerLinks={AnalyticLinks}
+            setActive={setActive}
+            toggleActiveHandler={toggleActiveHandler}
+            onStartDateChange={onStartDateChange}
+            onEndDateChange={onEndDateChange}
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+            isDateCustom={isDateCustom}
+            setIsDateCustom={setIsDateCustom}
+            daysList={daysList}
+            selectedDepot={selectedDepot}
+            setSelectedDepot={setSelectedDepot}
           />
-        </div>
-      </Content>
+
+          <Content navType="FULL">
+            <div className="mx-4 relative">
+              <AnalyticMap
+                active={query?.currentTab}
+                isCategoriesLoading={isCategoriesLoading}
+                categories={categories}
+                onCategoryChange={onCategoryChange}
+                mapData={mapData}
+                mapLoading={mapLoading}
+                mapFetching={mapFetching}
+              />
+            </div>
+          </Content>
+        </>
+      )}
     </Layout>
   );
 };

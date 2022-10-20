@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
-import TopNavigator from "../../../components/Shared/TopNavigator";
 import { AnalyticLinks } from "../../../components/Analytics/AnalyticLinks";
 import AnalyticKPIs from "../../../components/Analytics/KPIs/AnalyticKPIs";
 import { useKPIsAnalyticsQuery } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
@@ -12,6 +11,8 @@ import { daysList } from "./DTOs/daysList";
 import { useRouter } from "next/router";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
+import AnalyticsTopNavigator from "../../../components/Analytics/AnalyticsTopNavigator";
+import PageNotFound from "../../../components/Shared/PageNotFound";
 
 const Analytics = () => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const Analytics = () => {
 
   const [selectedDay, setSelectedDay] = useState<any>(daysList[0]);
   const [isDateCustom, setIsDateCustom] = useState(false);
-  const [active, setActive] = useState<string>("TRUCKS");
+  const [, setActive] = useState<string>("TRUCKS");
   const [selectedDepot, setSelectedDepot] = useState<any>({
     id: 0,
     name: "All depots"
@@ -75,32 +76,37 @@ const Analytics = () => {
 
   return (
     <Layout>
-      <TopNavigator
-        headerLinks={AnalyticLinks}
-        setActive={setActive}
-        active={active}
-        toggleActiveHandler={toggleActiveHandler}
-        onStartDateChange={onStartDateChange}
-        onEndDateChange={onEndDateChange}
-        selectedDay={selectedDay}
-        setSelectedDay={setSelectedDay}
-        isDateCustom={isDateCustom}
-        setIsDateCustom={setIsDateCustom}
-        daysList={daysList}
-        selectedDepot={selectedDepot}
-        setSelectedDepot={setSelectedDepot}
-      />
-
-      <Content navType="FULL">
-        <div className="mx-4 relative">
-          <AnalyticKPIs
-            active={query?.currentTab}
-            KPIsData={KPIsData?.payload}
-            KPIsLoading={KPIsLoading}
-            KPIsFetching={KPIsFetching}
+      {router.isReady && !KPIsLoading && query?.currentTab !== "KPIs" ? (
+        <PageNotFound />
+      ) : (
+        <>
+          <AnalyticsTopNavigator
+            headerLinks={AnalyticLinks}
+            setActive={setActive}
+            toggleActiveHandler={toggleActiveHandler}
+            onStartDateChange={onStartDateChange}
+            onEndDateChange={onEndDateChange}
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+            isDateCustom={isDateCustom}
+            setIsDateCustom={setIsDateCustom}
+            daysList={daysList}
+            selectedDepot={selectedDepot}
+            setSelectedDepot={setSelectedDepot}
           />
-        </div>
-      </Content>
+
+          <Content navType="FULL">
+            <div className="mx-4 relative">
+              <AnalyticKPIs
+                active={query?.currentTab}
+                KPIsData={KPIsData?.payload}
+                KPIsLoading={KPIsLoading}
+                KPIsFetching={KPIsFetching}
+              />
+            </div>
+          </Content>
+        </>
+      )}
     </Layout>
   );
 };

@@ -12,7 +12,7 @@ export const mapStyles = [
   {
     featureType: "all",
     elementType: "labels.icon",
-    stylers: [{ visibility: "off" }]
+    stylers: [{ visibility: "on" }]
   },
   {
     featureType: "administrative",
@@ -27,12 +27,12 @@ export const mapStyles = [
   {
     featureType: "landscape",
     elementType: "geometry",
-    stylers: [{ color: "#f5f5f5" }, { lightness: 20 }]
+    stylers: [{ color: "#e8eaed" }, { lightness: 20 }]
   },
   {
     featureType: "poi",
     elementType: "geometry",
-    stylers: [{ color: "#f5f5f5" }, { lightness: 21 }]
+    stylers: [{ color: "#e8eaed" }, { lightness: 21 }]
   },
   {
     featureType: "poi.park",
@@ -42,12 +42,12 @@ export const mapStyles = [
   {
     featureType: "road.highway",
     elementType: "geometry.fill",
-    stylers: [{ color: "#ffffff" }, { lightness: 17 }]
+    stylers: [{ color: "#E3B221" }, { lightness: 17 }]
   },
   {
     featureType: "road.highway",
     elementType: "geometry.stroke",
-    stylers: [{ color: "#ffffff" }, { lightness: 29 }, { weight: 0.2 }]
+    stylers: [{ color: "#E3B221" }, { lightness: 29 }, { weight: 0.2 }]
   },
   {
     featureType: "road.arterial",
