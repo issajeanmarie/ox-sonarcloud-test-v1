@@ -60,5 +60,5 @@ export interface MapAnalyticsRequest {
 
 export interface MapAnalyticsRequest {
   depot: number | "" | undefined;
-  category: number;
+  categories: number[];
 }
