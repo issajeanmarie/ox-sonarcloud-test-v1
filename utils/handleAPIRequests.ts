@@ -40,6 +40,21 @@ type Errors = {
  * @param {any} props - All of the other values you want to pass to the request function/enndpoint
  */
 
+type Types = {
+  showSuccess?: boolean;
+  showFailure?: boolean;
+  successMessage?: string | object | any;
+  request: (value: any) => any;
+  handleSuccess: (res: GenericResponse) => any;
+  handleFailure: (error: Errors) => any;
+};
+
+type Errors = {
+  message: string;
+  data: { message: string };
+  status: number;
+};
+
 export const handleAPIRequests = ({
   showSuccess = false,
   showFailure = true,
