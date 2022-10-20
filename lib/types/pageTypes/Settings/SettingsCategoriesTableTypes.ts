@@ -1,6 +1,7 @@
 export type SettingsCategoriesTableTypes = {
   totalOrders: number;
   parentCategory: null;
+  children: any[];
   subCategories: [
     {
       name: string;

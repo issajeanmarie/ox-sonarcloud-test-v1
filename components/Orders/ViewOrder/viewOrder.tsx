@@ -227,7 +227,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
           <ActionModal
             action={deleteStopAction}
             actionLabel="DELETE ANYWAY"
-            description="This action is not reversable, please make sure you really want to procceed with this action!"
+            description="This action is not reversible, please make sure you really want to proceed with this action!"
             isModalVisible={isDeleteStopModal}
             setIsModalVisible={setIsDeleteStopModal}
             title={`Deleting ${chosenStopId?.name.split(",")[0]}`}

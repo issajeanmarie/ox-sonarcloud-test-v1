@@ -8,7 +8,7 @@ export type SettingsCategoriesTableProps = {
   handleCancel: () => void;
   isModalVisible: boolean;
   handleDeleteCategory: (id: number) => void;
-  isDeletinCategory: boolean;
+  isDeletingCategory: boolean;
   isUpdatingCategory: boolean;
   onUpdateCategoryFinish: (values: any) => void;
   showEditModal: (cateory: any) => void;
@@ -19,8 +19,8 @@ export type SettingsCategoriesTableProps = {
   categoriesFetching: boolean;
   isParentingCategory: boolean;
   handleMakeCategoryParent: (id: number) => void;
-  pageSize: number;
   setIsModalVisible: any;
   isLoading: boolean;
   isId: any;
+  setIsEditModalVisible: any;
 };

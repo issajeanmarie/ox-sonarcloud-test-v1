@@ -20,16 +20,16 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
   handleCancel,
   isModalVisible,
   handleDeleteCategory,
-  isDeletinCategory,
+  isDeletingCategory,
   onUpdateCategoryFinish,
   isUpdatingCategory,
   showEditModal,
   isEditModalVisible,
+  setIsEditModalVisible,
   form,
   categoriesFetching,
   handleMakeCategoryParent,
   isParentingCategory,
-  pageSize,
   isLoading,
   setIsModalVisible,
   isId
@@ -37,12 +37,10 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
   //Change the subcategory keyname to children keyname
   const _data =
     data &&
-    data
-      ?.slice(0, pageSize)
-      .map(({ subCategories: children, ...rest }: any) => ({
-        children,
-        ...rest
-      }));
+    data?.slice(0).map(({ subCategories: children, ...rest }: any) => ({
+      children,
+      ...rest
+    }));
 
   const columns = [
     {
@@ -68,70 +66,78 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
       render: (
         text: SettingsCategoriesTableTypes,
         record: SettingsCategoriesTableTypes
-      ) => (
-        <div className="flex items-center gap-3 justify-end">
-          <CustomButton
-            className="add_category"
-            onClick={() => showModal(record?.id)}
-            type="secondary"
-            size="icon"
-            icon={
-              <Image
-                src="/icons/ic-actions-add-simple.svg"
-                alt="OX Delivery Logo"
-                width={12}
-                preview={false}
+      ) => {
+        return (
+          <div className="flex items-center gap-3 justify-end">
+            {record?.children && (
+              <CustomButton
+                className="add_category"
+                onClick={() => showModal(record?.id)}
+                type="secondary"
+                size="icon"
+                icon={
+                  <Image
+                    src="/icons/ic-actions-add-simple.svg"
+                    alt="OX Delivery Logo"
+                    width={12}
+                    preview={false}
+                  />
+                }
               />
-            }
-          />
-          <CustomButton
-            className="make_parent_category"
-            onClick={() => handleMakeCategoryParent(record?.id)}
-            type="normal"
-            size="icon"
-            loading={isParentingCategory && record.id == isId}
-            icon={
-              <Image
-                src="/icons/movement.svg"
-                alt="OX Delivery Logo"
-                width={18}
-                preview={false}
-              />
-            }
-          ></CustomButton>
+            )}
 
-          <CustomButton
-            onClick={() => showEditModal(record)}
-            type="normal"
-            size="icon"
-            icon={
-              <Image
-                src="/icons/ic-contact-edit.svg"
-                alt="OX Delivery Logo"
-                width={12}
-                preview={false}
+            {!record.children && (
+              <CustomButton
+                className="make_parent_category"
+                onClick={() => handleMakeCategoryParent(record?.id)}
+                type="normal"
+                size="icon"
+                loading={isParentingCategory && record.id == isId}
+                icon={
+                  <Image
+                    src="/icons/movement.svg"
+                    alt="OX Delivery Logo"
+                    width={18}
+                    preview={false}
+                  />
+                }
               />
-            }
-          />
+            )}
 
-          <CustomButton
-            onClick={() => handleDeleteCategory(record?.id)}
-            loading={isDeletinCategory && record.id == isId}
-            type="danger"
-            size="icon"
-            icon={
-              <Image
-                src="/icons/ic-actions-remove.svg"
-                alt="OX Delivery Logo"
-                width={12}
-                preview={false}
-              />
-            }
-          />
-        </div>
-      )
+            <CustomButton
+              onClick={() => showEditModal(record)}
+              type="normal"
+              size="icon"
+              icon={
+                <Image
+                  src="/icons/ic-contact-edit.svg"
+                  alt="OX Delivery Logo"
+                  width={12}
+                  preview={false}
+                />
+              }
+            />
+
+            <CustomButton
+              onClick={() => handleDeleteCategory(record?.id)}
+              loading={isDeletingCategory && record.id == isId}
+              type="danger"
+              size="icon"
+              icon={
+                <Image
+                  src="/icons/ic-actions-remove.svg"
+                  alt="OX Delivery Logo"
+                  width={12}
+                  preview={false}
+                />
+              }
+            />
+          </div>
+        );
+      }
     }
   ];
+
   return (
     <>
       <Table
@@ -147,19 +153,20 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
         dataSource={_data}
         loading={TableOnActionLoading(categoriesFetching)}
       />
+
       <AddSubCategory
         onAddCategoryFinish={onAddCategoryFinish}
         isAddingCategory={isAddingCategory}
         handleOk={handleOk}
         handleCancel={handleCancel}
         isModalVisible={isModalVisible}
-        setIsModalVisible={undefined}
+        setIsModalVisible={setIsModalVisible}
         isLoading={false}
       />
       <ModalWrapper
         title="Edit category"
         isModalVisible={isEditModalVisible}
-        setIsModalVisible={setIsModalVisible}
+        setIsModalVisible={setIsEditModalVisible}
         onCancel={handleCancel}
         loading={isLoading}
         destroyOnClose

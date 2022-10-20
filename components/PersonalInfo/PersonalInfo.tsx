@@ -144,7 +144,7 @@ const ProfileInfo = () => {
       >
         <div className=" items-center mato32">
           <Text className="mediumText">Edit Personal Information</Text>
-          <Row gutter={24} align="bottom" className="mato32">
+          <Row gutter={24} align="top" className="mato32">
             <Col sm={{ span: 24 }} xl={{ span: 12 }}>
               <CustomInput type="text" name="names" label="Full name" />
             </Col>
