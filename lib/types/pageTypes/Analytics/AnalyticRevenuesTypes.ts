@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type AnalyticRevenuesTypes = {
-  active: string;
+  active: string | string[] | undefined;
   revenueData: any;
   revenueLoading: boolean;
   revenueFetching: boolean;

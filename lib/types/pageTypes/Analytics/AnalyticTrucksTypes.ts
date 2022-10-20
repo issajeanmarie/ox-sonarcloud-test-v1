@@ -2,7 +2,7 @@ import { SearchType } from "./Inputs";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type AnalyticTrucksTypes = {
-  active: string;
+  active: string | string[] | undefined;
   sorter: { value: string };
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;

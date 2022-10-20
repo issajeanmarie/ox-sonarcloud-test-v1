@@ -201,7 +201,7 @@ const Stock = () => {
             />
           </StockTopContentWrapper>
 
-          <Content navType="TRIPLE">
+          <Content isOverflowHidden={false} navType="TRIPLE">
             <>
               {showFiltersLoader ? (
                 <div className="mt-4">

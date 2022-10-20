@@ -225,7 +225,7 @@ const Trucks = () => {
 
         <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
 
-        <Content navType="CENTER">
+        <Content isOverflowHidden={false} navType="CENTER">
           <>
             <TrucksTable
               data={trucksState?.payload?.content}

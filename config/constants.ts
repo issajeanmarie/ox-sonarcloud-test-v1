@@ -45,5 +45,6 @@ export const classes = {
     text_light: "font-extralight text-[17px]"
   },
 
-  content_section: "overflow-auto"
+  content_section: "overflow-auto",
+  overflowHidden: "overflow-hidden"
 };

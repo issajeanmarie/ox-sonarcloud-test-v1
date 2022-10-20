@@ -133,7 +133,7 @@ const ViewClient: FC<ViewClientTypes> = ({ clientId }) => {
       <SingleClientTop client={client?.payload} router={router} />
 
       <div className="mx-4 relative">
-        <Content navType="FULL">
+        <Content isOverflowHidden={false} navType="FULL">
           <Row className="p-5 justify-between gap-5">
             <SingleClientLeft
               isClientLoading={isClientLoading}

@@ -39,7 +39,7 @@ const AddOrder: FC = () => {
         closeModal={closeModal}
       />
 
-      <Content navType="FULL">
+      <Content isOverflowHidden={false} navType="FULL">
         <div className="w-[800px] m-auto bg-white shadow-[0px_0px_19px_#00000008] mt-5 p-14">
           <AddOrderForm
             mode="edit"

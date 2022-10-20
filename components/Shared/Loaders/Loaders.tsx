@@ -6,6 +6,9 @@ import { LoadingOutlined } from "@ant-design/icons";
 const loadingIcon = (
   <LoadingOutlined style={{ fontSize: 24, color: "#e7b522" }} spin />
 );
+const mediumLoadingIcon = (
+  <LoadingOutlined style={{ fontSize: 20, color: "#e7b522" }} spin />
+);
 const smallLoadingIcon = (
   <LoadingOutlined style={{ fontSize: 13, color: "#e7b522" }} spin />
 );
@@ -59,6 +62,10 @@ export const ComponentLoadingLoader = () => {
 
 export const SmallSpinLoader = () => {
   return <Spin indicator={smallLoadingIcon} />;
+};
+
+export const MediumSpinLoader = () => {
+  return <Spin indicator={mediumLoadingIcon} />;
 };
 
 export const ExtraSmallSpinLoader = () => {

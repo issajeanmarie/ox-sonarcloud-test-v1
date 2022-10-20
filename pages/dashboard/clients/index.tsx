@@ -161,7 +161,7 @@ const Clients = () => {
           setCurrentPages={setCurrentPages}
         />
 
-        <Content navType="CENTER">
+        <Content isOverflowHidden={false} navType="CENTER">
           <>
             {isClientsLoading || showFiltersLoader ? (
               <>

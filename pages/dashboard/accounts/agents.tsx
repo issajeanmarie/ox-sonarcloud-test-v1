@@ -126,7 +126,7 @@ const Agents = () => {
           Agents={apiData?.payload}
         />
 
-        <Content navType="DOUBLE">
+        <Content isOverflowHidden={false} navType="DOUBLE">
           <TableWrapper>
             {onRenderLoader ? (
               <>

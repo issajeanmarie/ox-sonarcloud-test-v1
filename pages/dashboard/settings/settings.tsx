@@ -27,7 +27,7 @@ const Settings = () => {
         toggleActiveHandler={toggleActiveHandler}
       />
 
-      <Content navType="FULL">
+      <Content isOverflowHidden={false} navType="FULL">
         <Row className="p-5  w-full" gutter={18}>
           <Col span={14} className="h-[82vh] overflow-y-scroll pb-12">
             {active === "preferences" ? (

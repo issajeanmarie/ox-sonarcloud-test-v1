@@ -74,7 +74,7 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                 />
                 <InfoWrapper
                   title="Weight"
-                  infoItem={`${item?.warehouseItem?.weight} KGs - ${item?.warehouseItem?.unitCost}Rwf/KG `}
+                  infoItem={`${item?.weight} KGs - ${item?.warehouseItem?.unitCost}Rwf/KG `}
                   isTransportOrder={false}
                 />
                 {sale?.transportOrder?.id && (

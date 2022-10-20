@@ -1,17 +1,17 @@
 import { FC, useEffect } from "react";
 import { Typography } from "antd";
-import TopNavigatorRightSideWrapper from "./RightSide/TopNavigatorRightSideWrapper";
-import RightSideRevenue from "./RightSide/Analytics/RightSideRevenue";
-import RightSideKPIs from "./RightSide/Analytics/RightSideKPIs";
-import { TopNavigatorProps } from "../../../lib/types/components/TopNavigatorProps";
-import Navbar from "../Content/Navbar";
+import { AnalyticsTopNavigatorProps } from "../../lib/types/pageTypes/Analytics/AnalyticsTopNavigatorProps";
+import TopNavigatorRightSideWrapper from "../Shared/TopNavigator/RightSide/TopNavigatorRightSideWrapper";
+import RightSideRevenue from "../Shared/TopNavigator/RightSide/Analytics/RightSideRevenue";
+import RightSideKPIs from "../Shared/TopNavigator/RightSide/Analytics/RightSideKPIs";
+import Navbar from "../Shared/Content/Navbar";
+import { useRouter } from "next/router";
 
 const { Text } = Typography;
 
-const TopNavigator: FC<TopNavigatorProps> = ({
+const AnalyticsTopNavigator: FC<AnalyticsTopNavigatorProps> = ({
   headerLinks,
   setActive,
-  active,
   toggleActiveHandler,
   onStartDateChange,
   onEndDateChange,
@@ -27,6 +27,8 @@ const TopNavigator: FC<TopNavigatorProps> = ({
     headerLinks && setActive && setActive(headerLinks[0].id);
   }, [headerLinks, setActive]);
 
+  const { query } = useRouter();
+
   const LeftSide = (
     <div className="flex items-center justify-between gap-10">
       {headerLinks.map((link, index) => {
@@ -34,11 +36,15 @@ const TopNavigator: FC<TopNavigatorProps> = ({
           <button
             key={index}
             className={`py-4 cursor-pointer text-sm ${
-              active === link.id && "active_submenu relative"
+              query?.currentTab === link.id && "active_submenu relative"
             }`}
             onClick={() => toggleActiveHandler(link.id)}
           >
-            <Text className={`${active === link.id && "font-bold"} animate`}>
+            <Text
+              className={`${
+                query?.currentTab === link.id && "font-bold"
+              } animate`}
+            >
               {link.label}
             </Text>
           </button>
@@ -49,7 +55,7 @@ const TopNavigator: FC<TopNavigatorProps> = ({
 
   const RightSide = (
     <>
-      {active === "REVENUE" && (
+      {query?.currentTab === "REVENUE" && (
         <TopNavigatorRightSideWrapper>
           <RightSideRevenue
             onStartDateChange={onStartDateChange}
@@ -62,7 +68,7 @@ const TopNavigator: FC<TopNavigatorProps> = ({
           />
         </TopNavigatorRightSideWrapper>
       )}
-      {active === "KPIs" && (
+      {query?.currentTab === "KPIs" && (
         <TopNavigatorRightSideWrapper>
           <RightSideKPIs
             onStartDateChange={onStartDateChange}
@@ -87,4 +93,4 @@ const TopNavigator: FC<TopNavigatorProps> = ({
   );
 };
 
-export default TopNavigator;
+export default AnalyticsTopNavigator;
