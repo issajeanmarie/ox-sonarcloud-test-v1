@@ -102,7 +102,6 @@ const ProfileInfo = () => {
       headStyle={{ border: "none", marginBottom: "0" }}
     >
       {isLoading && isFetching ? (
-        // <Loader />
         <SettingsProfileLoader />
       ) : (
         <div>
