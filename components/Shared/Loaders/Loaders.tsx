@@ -248,6 +248,44 @@ export const SettingsProfileLoader = () => {
   );
 };
 
+export const SettingsKPILoader = () => {
+  return (
+    <div className="mabo24">
+      <Row
+        gutter={20}
+        style={{
+          background: "#fff",
+          padding: "18px",
+          paddingTop: "12px",
+          borderBottom: "2px solid #f4f1f1"
+        }}
+      >
+        <Col md={10}>
+          <Space>
+            <Col>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col>
+              <Skeleton.Input active size="small" />
+            </Col>
+          </Space>
+        </Col>
+        <Col span={3}></Col>
+        <Col span={8}>
+          <Space>
+            <Col>
+              <Skeleton.Input active size="default" />
+            </Col>
+            <Col>
+              <Skeleton.Input active size="default" />
+            </Col>
+          </Space>
+        </Col>
+      </Row>
+    </div>
+  );
+};
+
 export const ChartSmallLoader = (title: string) => {
   return (
     <div className="h-full w-full flex justify-center items-center flex-col gap-4">
