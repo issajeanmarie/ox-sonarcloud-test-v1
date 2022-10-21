@@ -98,7 +98,8 @@ const SalesPage = () => {
     });
   };
 
-  const onRenderLoader = isLoading && !isLoadMoreLoading;
+  const onRenderLoader = isLoading || (isFetching && !isLoadMoreLoading);
+
   const showPagination =
     (AllSales?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
     !(isFetching && !isLoadMoreLoading);
