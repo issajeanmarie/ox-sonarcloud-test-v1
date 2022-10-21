@@ -110,7 +110,7 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
         </div>
       ) : (
         <WrappedMap
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places,visualization&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`}
+          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places,visualization&key=AIzaSyBHgwcB3X6WdORbT2I5Ra5spl1raTEDWG8"
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
           mapElement={<div style={{ height: "100%" }} />}
