@@ -9,8 +9,6 @@ import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/category
 import Content from "../../../components/Shared/Content";
 import { useSelector } from "react-redux";
 import { CheckboxValueType } from "antd/lib/checkbox/Group";
-import { BackendErrorTypes } from "../../../lib/types/shared";
-import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
 import { daysList } from "../../../components/Analytics/DTOs/daysList";
 import AnalyticsTopNavigator from "../../../components/Analytics/AnalyticsTopNavigator";
 import { useRouter } from "next/router";
@@ -79,7 +77,7 @@ const Analytics = () => {
     })
       .unwrap()
       .then()
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      .catch();
   };
 
   useEffect(() => {
