@@ -145,6 +145,7 @@ const Analytics = () => {
                 depotsState={depotsState}
                 startDate={startDate}
                 endDate={endDate}
+                searchQuery={searchQuery}
               />
             </div>
           </Content>

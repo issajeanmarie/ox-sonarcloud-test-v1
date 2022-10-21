@@ -80,6 +80,7 @@ const SuppliersPage = () => {
     getSuppliersAction({});
     setCurrentPages(1);
     setFiltersBasedLoader(true);
+    dispatch(displayPaginatedData({}));
   }, [selectedSort]);
 
   const showModal = () => {
