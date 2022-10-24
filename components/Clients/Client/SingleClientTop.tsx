@@ -80,7 +80,7 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({ client, router }) => {
         <AntDImage
           onClick={() => handleDownloadClientInvoice()}
           className="pointer"
-          src="/icons/receipt.png"
+          src="/icons/receipt.svg"
           alt="Backspace icon"
           width={18}
           height={18}

@@ -130,3 +130,8 @@ export interface ToogleTruckIssueResponse {
 export interface EditTruckRequest extends CreateTruckRequest {
   id: number;
 }
+
+export interface DeleteTruckRepairLogRequest {
+  repairId: number;
+  id: number;
+}

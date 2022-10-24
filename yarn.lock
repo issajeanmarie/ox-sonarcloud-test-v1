@@ -572,6 +572,11 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
+"@stomp/stompjs@^6.1.2":
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@stomp/stompjs/-/stompjs-6.1.2.tgz#4ac3c380e8d1de1da94a3623d404e67de69dd01e"
+  integrity sha512-FHDTrIFM5Ospi4L3Xhj6v2+NzCVAeNDcBe95YjUWhWiRMrBF6uN3I7AUOlRgT6jU/2WQvvYK8ZaIxFfxFp+uHQ==
+
 "@types/google.maps@3.49.2":
   version "3.49.2"
   resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.49.2.tgz#9640491ec3aa96c9de1466894117ce81c02588df"

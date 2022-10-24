@@ -329,7 +329,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                   size="icon"
                   icon={
                     <Image
-                      src="/icons/receipt.png"
+                      src="/icons/receipt.svg"
                       alt="OX Delivery Logo"
                       width={12}
                       preview={false}

@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+// import { Client } from "@stomp/stompjs";
 import { Form, Modal } from "antd";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
@@ -8,6 +9,9 @@ import { MobilePaymentProps } from "../../../../lib/types/components/MobilePayme
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
 import { useForm } from "antd/es/form/Form";
+// import { BASE_API_WS_URL } from "../../../../config/constants";
+
+// const SOCKET_URL = `${BASE_API_WS_URL}/ws-momo-pay`;
 
 const MobilePayment: FC<MobilePaymentProps> = ({
   isModalVisible,
@@ -38,6 +42,33 @@ const MobilePayment: FC<MobilePaymentProps> = ({
 
   const handleSubmit = (values: { amount: number; phone: string }) => {
     if (order) {
+      // const onConnected = () => {
+      //   console.log("Connected!!");
+      //   client.subscribe("/topic/momo-pay", function (msg) {
+      //     if (msg.body) {
+      //       const jsonBody = JSON.parse(msg.body);
+      //       if (jsonBody) {
+      //         console.log({ jsonBody });
+      //       }
+      //     }
+      //   });
+      // };
+
+      // const onDisconnected = () => {
+      //   console.log("Disconnected!!");
+      // };
+
+      // const client = new Client({
+      //   brokerURL: SOCKET_URL,
+      //   reconnectDelay: 5000,
+      //   heartbeatIncoming: 4000,
+      //   heartbeatOutgoing: 4000,
+      //   onConnect: onConnected,
+      //   onDisconnect: onDisconnected
+      // });
+
+      // client.activate();
+
       handleAPIRequests({
         request: initiatePayment,
         orderId: order.id,
