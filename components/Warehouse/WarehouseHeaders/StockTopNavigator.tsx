@@ -96,7 +96,7 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
   const RightSide = (
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
-        <Button onClick={showModal} type="primary">
+        <Button form="" onClick={showModal} type="primary">
           NEW STOCK
         </Button>
       </div>
@@ -106,10 +106,20 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
   return (
     <>
       <ModalWrapper
+        footerContent={
+          <Button
+            form="AddStock"
+            loading={isAddingStock}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD STOCK ITEM
+          </Button>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="NEW WAREHOUSE ITEM"
-        loading={false}
+        loading={isAddingStock}
       >
         <AddStock
           onAddStockFinish={onAddStockFinish}

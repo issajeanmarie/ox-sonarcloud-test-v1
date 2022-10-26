@@ -56,6 +56,7 @@ const ResetPasswordForm = () => {
             type="primary"
             className="mt-5"
             htmlType="submit"
+            form=""
           >
             Reset
           </Button>

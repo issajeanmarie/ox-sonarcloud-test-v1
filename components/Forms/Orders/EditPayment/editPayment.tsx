@@ -53,40 +53,40 @@ const EditPayment: FC<EditPaymentProps> = ({
 
   return (
     <ModalWrapper
+      footerContent={
+        <Button
+          form="EditPaymentStatusOnOrder"
+          type="primary"
+          htmlType="submit"
+          loading={isLoading}
+        >
+          UPDATE
+        </Button>
+      }
       title="PAYMENT STATUS"
       isModalVisible={isEditPayment}
       setIsModalVisible={setIsEditPayment}
       loading={isLoading}
     >
-      <Form form={form} onFinish={onFinish}>
-        <div className="my-10">
-          <div className="mb-5">
-            <Input
-              name="amount"
-              type="text"
-              inputType="number"
-              label="Amount"
-              placeholder="Enter amount"
-              rules={[{ required: true, message: "Amount is required" }]}
-            />
-          </div>
-          <div className="flex-1">
-            <Input
-              name="momoRefCode"
-              type="text"
-              label="MoMo ref code"
-              placeholder="Enter momo ref code"
-              rules={requiredField("MoMo ref code")}
-            />
-          </div>
-
-          <div className="mt-8 flex justify-end">
-            <div className="w-[150px]">
-              <Button type="primary" htmlType="submit" loading={isLoading}>
-                UPDATE
-              </Button>
-            </div>
-          </div>
+      <Form id="EditPaymentStatusOnOrder" form={form} onFinish={onFinish}>
+        <div className="mb-5">
+          <Input
+            name="amount"
+            type="text"
+            inputType="number"
+            label="Amount"
+            placeholder="Enter amount"
+            rules={[{ required: true, message: "Amount is required" }]}
+          />
+        </div>
+        <div className="flex-1">
+          <Input
+            name="momoRefCode"
+            type="text"
+            label="MoMo ref code"
+            placeholder="Enter momo ref code"
+            rules={requiredField("MoMo ref code")}
+          />
         </div>
       </Form>
     </ModalWrapper>

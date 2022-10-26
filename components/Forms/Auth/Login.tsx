@@ -69,6 +69,7 @@ const Login = () => {
             type="primary"
             className="mt-5"
             htmlType="submit"
+            form=""
           >
             LOGIN
           </Button>

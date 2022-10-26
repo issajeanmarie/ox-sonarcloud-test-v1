@@ -59,7 +59,7 @@ const AdminsTopNavigator: FC<AdminsTopNavigatorTypes> = ({
   const RightSide = (
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
-        <Button type="primary" onClick={showModal}>
+        <Button form="" type="primary" onClick={showModal}>
           NEW ADMIN
         </Button>
       </div>
@@ -69,6 +69,16 @@ const AdminsTopNavigator: FC<AdminsTopNavigatorTypes> = ({
   return (
     <>
       <ModalWrapper
+        footerContent={
+          <Button
+            form="AddNewAdmin"
+            loading={isLoading}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD ADMIN
+          </Button>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="NEW OX ADMIN"

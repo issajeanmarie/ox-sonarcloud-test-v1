@@ -74,7 +74,7 @@ const ResourcesTopNavigator: FC<ResourcesTopNavigatorTypes> = ({
   const RightSide = (
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
-        <Button type="primary" onClick={showModal}>
+        <Button form="" type="primary" onClick={showModal}>
           ADD RESOURCE
         </Button>
       </div>
@@ -84,6 +84,16 @@ const ResourcesTopNavigator: FC<ResourcesTopNavigatorTypes> = ({
   return (
     <>
       <ModalWrapper
+        footerContent={
+          <Button
+            form="AddNewResource"
+            type="primary"
+            htmlType="submit"
+            loading={isLoading}
+          >
+            ADD RESOURCE
+          </Button>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="NEW RESOURCE"

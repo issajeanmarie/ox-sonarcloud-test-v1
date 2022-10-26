@@ -16,6 +16,7 @@ interface ButtonProps {
   className?: string;
   htmlType?: "button" | "submit" | "reset";
   onClick?: (value: any) => any;
+  form: string;
 }
 
 const CustomButton: FC<ButtonProps> = ({
@@ -27,12 +28,14 @@ const CustomButton: FC<ButtonProps> = ({
   className,
   htmlType,
   children,
-  onClick
+  onClick,
+  form
 }) => {
   switch (type) {
     case "primary":
       return (
         <Button
+          form={form}
           className={`my_button ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           } bg_yellow ${className}`}
@@ -49,6 +52,7 @@ const CustomButton: FC<ButtonProps> = ({
     case "secondary":
       return (
         <Button
+          form={form}
           className={`my_button ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           }  bg_white_yellow yellow ${className}`}
@@ -65,6 +69,7 @@ const CustomButton: FC<ButtonProps> = ({
     case "view":
       return (
         <Button
+          form={form}
           className={`my_button ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           }  bg_yellow_view_btn yellow ${className}`}
@@ -81,6 +86,7 @@ const CustomButton: FC<ButtonProps> = ({
     case "danger":
       return (
         <Button
+          form={form}
           className={`my_button ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           }  bg_danger yellow ${className}`}
@@ -97,6 +103,7 @@ const CustomButton: FC<ButtonProps> = ({
     case "danger_filled":
       return (
         <Button
+          form={form}
           className={`my_button ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           }  bg_danger_filled white ${className}`}
@@ -113,6 +120,7 @@ const CustomButton: FC<ButtonProps> = ({
     case "normal":
       return (
         <Button
+          form={form}
           className={`my_button ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           }  bg_white_edit_btn black ${className}`}

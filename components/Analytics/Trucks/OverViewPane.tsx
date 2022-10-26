@@ -210,6 +210,7 @@ const OvervieWPane = () => {
 
         <Col className="flex items-center gap-4">
           <CustomButton
+            form=""
             type="secondary"
             onClick={handleDownloadShift}
             loading={isDownloadLoading}

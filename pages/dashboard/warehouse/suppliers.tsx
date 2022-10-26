@@ -156,6 +156,7 @@ const SuppliersPage = () => {
             {showPagination && (
               <div style={{ width: "12%", margin: "32px auto" }}>
                 <CustomButton
+                  form=""
                   loading={loadingMoreFetching}
                   onClick={handleLoadMore}
                   type="secondary"

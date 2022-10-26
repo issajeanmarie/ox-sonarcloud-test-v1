@@ -5,14 +5,12 @@ import {
   requiredInput
 } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
-import Button from "../../Shared/Button";
 import { EditClientTypes } from "../../../lib/types/pageTypes/Clients/EditClientTypes";
 import { ECONOMIC_STATUS } from "../../../config/constants";
 import CustomPhoneInput from "../../Shared/Custom/CustomPhoneInput";
 
 const EditClient: FC<EditClientTypes> = ({
   onEditClientFinish,
-  isLoading,
   form,
   phoneNumber,
   setPhoneNumber
@@ -24,6 +22,7 @@ const EditClient: FC<EditClientTypes> = ({
       name="EditClient"
       layout="vertical"
       title=""
+      id="EditClient"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
@@ -97,14 +96,6 @@ const EditClient: FC<EditClientTypes> = ({
               />
             }
           />
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            SAVE CHANGES
-          </Button>
         </Col>
       </Row>
     </Form>

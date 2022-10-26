@@ -115,7 +115,7 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
 
             <Row className="flex justify-end gap-8">
               <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-                <Button type="primary" htmlType="submit">
+                <Button form="" type="primary" htmlType="submit">
                   ADD COMMENT
                 </Button>
               </Col>

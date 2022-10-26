@@ -5,13 +5,11 @@ import {
   requiredInput
 } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
-import Button from "../../../Shared/Button";
 import { EditAdminTypes } from "../../../../lib/types/pageTypes/Accounts/Admins/EditAdminTypes";
 import CircleCheckbox from "../../../Shared/Custom/CircleCheckbox";
 
 const EditAdmin: FC<EditAdminTypes> = ({
   onEditAdminFinish,
-  isLoading,
   form,
   setCheckbox,
   checkbox
@@ -23,6 +21,7 @@ const EditAdmin: FC<EditAdminTypes> = ({
       name="EditAdmin"
       layout="vertical"
       title=""
+      id="EditAdmin"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
@@ -57,11 +56,6 @@ const EditAdmin: FC<EditAdminTypes> = ({
               state={checkbox}
             />
           </div>
-        </Col>
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            SAVE CHANGES
-          </Button>
         </Col>
       </Row>
     </Form>

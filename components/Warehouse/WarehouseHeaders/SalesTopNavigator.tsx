@@ -118,7 +118,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       </div>
 
       <div className="flex items-center gap-6 w-[120px]">
-        <Button onClick={showModal} type="primary">
+        <Button form="" onClick={showModal} type="primary">
           NEW ORDER
         </Button>
       </div>
@@ -132,6 +132,16 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
         isModalVisible={isModalVisible}
         title="NEW WAREHOUSE ORDER"
         loading={isPostingSale}
+        footerContent={
+          <Button
+            form="AddWarehouseOrder"
+            loading={isPostingSale}
+            type="primary"
+            htmlType="submit"
+          >
+            CONFIRM ORDER
+          </Button>
+        }
       >
         <AddWarehouseOrder
           createItems={createItems}

@@ -89,7 +89,7 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
   const RightSide = (
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
-        <Button onClick={showModal} type="primary">
+        <Button form="" onClick={showModal} type="primary">
           NEW SUPPLIER
         </Button>
       </div>
@@ -103,6 +103,16 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
         isModalVisible={isModalVisible}
         title="NEW OX SUPPLIER"
         loading={false}
+        footerContent={
+          <Button
+            form="AddSupplier"
+            loading={isAddingSupplier}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD SUPPLIER
+          </Button>
+        }
       >
         <AddSupplier
           onAddSupplierFinish={onAddSupplierFinish}

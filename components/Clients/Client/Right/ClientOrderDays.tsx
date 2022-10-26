@@ -16,6 +16,7 @@ const ClientOrderDays: FC<ClientOrderDaysTypes> = ({ orderDays }) => {
 
         <Col flex="none">
           <CustomButton
+            form=""
             type="secondary"
             size="icon"
             icon={

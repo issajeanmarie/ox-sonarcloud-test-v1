@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, Form, Image, Row } from "antd";
+import { Col, Form, Image, Popover, Row } from "antd";
 import React, { useState } from "react";
 import Input from "../Shared/Input";
 import { FC } from "react";
@@ -156,6 +156,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
         <Button
+          form=""
           onClick={handleDownloadClients}
           loading={isDownloadingClientsLoading}
           type="secondary"
@@ -165,7 +166,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       </div>
 
       <div className="flex items-center gap-6 w-[120px]">
-        <Button type="primary" onClick={showModal}>
+        <Button form="" type="primary" onClick={showModal}>
           NEW CLIENT
         </Button>
       </div>
@@ -179,6 +180,35 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         isModalVisible={isModalVisible}
         title="NEW CLIENT"
         loading={isLoading}
+        footerContent={
+          <>
+            {!mainLocation ? (
+              <Popover
+                placement="left"
+                content={
+                  <div className="flex flex-col">
+                    <span className="font-light"> Add main location</span>
+                  </div>
+                }
+                title={false}
+                trigger="click"
+              >
+                <Button form="AddNewClient" type="primary">
+                  ADD CLIENT
+                </Button>
+              </Popover>
+            ) : (
+              <Button
+                form="AddNewClient"
+                loading={isLoading}
+                type="primary"
+                htmlType="submit"
+              >
+                ADD CLIENT
+              </Button>
+            )}
+          </>
+        }
       >
         <AddNewClient
           onAddClientFinish={onAddClientFinish}

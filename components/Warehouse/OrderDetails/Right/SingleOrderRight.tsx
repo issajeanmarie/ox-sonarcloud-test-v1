@@ -51,6 +51,7 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
           {sale?.status !== "CANCELLED" && (
             <Col>
               <CustomButton
+                form=""
                 disabled={isFetching}
                 onClick={() => setIsEditPaymentStatus(true)}
                 type="secondary"

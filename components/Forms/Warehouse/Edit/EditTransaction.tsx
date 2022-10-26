@@ -2,21 +2,15 @@
 import { Form } from "antd";
 import React, { FC } from "react";
 import Input from "../../../Shared/Input";
-import Button from "../../../Shared/Button";
 
 type EditTransactionProps = {
   form: any;
   handleFinish: (value: any) => void;
-  isLoading: boolean;
 };
 
-const EditTransaction: FC<EditTransactionProps> = ({
-  form,
-  handleFinish,
-  isLoading
-}) => {
+const EditTransaction: FC<EditTransactionProps> = ({ form, handleFinish }) => {
   return (
-    <Form onFinish={handleFinish} form={form}>
+    <Form id="EditTransaction" onFinish={handleFinish} form={form}>
       <div className="mb-10">
         <div className="my-5">
           <div className="mb-5">
@@ -37,14 +31,6 @@ const EditTransaction: FC<EditTransactionProps> = ({
               placeholder="Enter momo ref code"
               rules={[{ required: true, message: "Momo ref code is required" }]}
             />
-          </div>
-        </div>
-
-        <div className="mt-8 flex justify-end">
-          <div className="w-[150px]">
-            <Button type="primary" htmlType="submit" loading={isLoading}>
-              SAVE CHANGES
-            </Button>
           </div>
         </div>
       </div>

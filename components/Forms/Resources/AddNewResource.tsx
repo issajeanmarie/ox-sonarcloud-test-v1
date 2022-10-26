@@ -1,7 +1,6 @@
 import React, { FC, useState } from "react";
 import Form from "antd/lib/form";
 import Input from "../../Shared/Input";
-import Button from "../../Shared/Button";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
 import { Row, Col } from "antd";
@@ -12,8 +11,7 @@ const { Text } = Typography;
 
 const AddNewResource: FC<AddResourceTypes> = ({
   onAddResourceFinish,
-  form,
-  isLoading
+  form
 }) => {
   const [val, setVal] = useState("");
   const [pasted, setPasted] = useState(false);
@@ -36,6 +34,7 @@ const AddNewResource: FC<AddResourceTypes> = ({
       layout="vertical"
       form={form}
       title=""
+      id="AddNewResource"
     >
       <div className="gap-10 mb-5">
         <div className="flex-1">
@@ -83,16 +82,6 @@ const AddNewResource: FC<AddResourceTypes> = ({
               />
             </Row>
           </a>
-        </Col>
-        <Col className="gutter-row" span={6}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="small"
-            loading={isLoading}
-          >
-            ADD RESOURCE
-          </Button>
         </Col>
       </Row>
     </Form>

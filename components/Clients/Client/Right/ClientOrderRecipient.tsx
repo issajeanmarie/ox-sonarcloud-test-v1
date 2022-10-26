@@ -8,6 +8,7 @@ import AddClientRecipient from "../../../Forms/Clients/AddClientRecipient";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import CustomButton from "../../../Shared/Button/button";
 import ClientOrderRecipientTable from "../../../Tables/Clients/ClientOrderRecipientTable";
+import Button from "../../../Shared/Button";
 
 const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
   client,
@@ -49,6 +50,7 @@ const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
 
         <Col flex="none">
           <CustomButton
+            form=""
             onClick={showModal}
             type="secondary"
             size="icon"
@@ -78,6 +80,16 @@ const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
         )}
       </div>
       <ModalWrapper
+        footerContent={
+          <Button
+            form="AddClientRecipient"
+            loading={isPostingRecipient}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD RECIPIENT
+          </Button>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="ADD ORDER RECIPIENT"

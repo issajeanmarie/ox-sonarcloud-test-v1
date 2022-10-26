@@ -60,7 +60,7 @@ const AgentsTopNavigator: FC<AgentsTopNavigatorTypes> = ({
   const RightSide = (
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
-        <Button type="primary" onClick={showModal}>
+        <Button form="" type="primary" onClick={showModal}>
           NEW AGENT
         </Button>
       </div>
@@ -74,6 +74,16 @@ const AgentsTopNavigator: FC<AgentsTopNavigatorTypes> = ({
         isModalVisible={isModalVisible}
         title="NEW AGENT"
         loading={isLoading}
+        footerContent={
+          <Button
+            form="AddNewAgent"
+            loading={isLoading}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD AGENT
+          </Button>
+        }
       >
         <AddNewAgent
           onAddAgentFinish={onAddAgentFinish}

@@ -83,12 +83,22 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
 
   return (
     <ModalWrapper
+      footerContent={
+        <Button
+          form="updatePaymentStatus"
+          type="primary"
+          htmlType="submit"
+          loading={isSaleOrder ? isPostingSalePayment : isLoading}
+        >
+          UPDATE
+        </Button>
+      }
       title="PAYMENT STATUS"
       isModalVisible={isEditPaymentStatus}
       setIsModalVisible={setIsEditPaymentStatus}
       loading={isSaleOrder ? isPostingSalePayment : isLoading}
     >
-      <Form onFinish={handleFinish} form={form}>
+      <Form id="updatePaymentStatus" onFinish={handleFinish} form={form}>
         <div className="mb-10">
           <div className="flex items-center gap-4 my-5">
             <div className="flex-1">
@@ -133,17 +143,6 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
                 setState={setChecked}
                 state={checked}
               />
-            </div>
-          </div>
-          <div className="mt-8 flex justify-end">
-            <div className="w-[150px]">
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={isSaleOrder ? isPostingSalePayment : isLoading}
-              >
-                UPDATE
-              </Button>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
 import { ClientOrderRecipientTableTypes } from "../../../lib/types/pageTypes/Clients/ClientOrderRecipientTypes";
 import RowsWrapper from "../RowsWrapper";
-import { Button, Form } from "antd";
+import { Button as AntDButton, Form } from "antd";
 import { FC, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
 import {
@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/router";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import Image from "next/image";
+import Button from "../../Shared/Button";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditClientRecipient from "../../Forms/Clients/EditClientRecipient";
 import { RemoveCircleOutlineIcon } from "../../Icons";
@@ -122,7 +123,7 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
       ) => (
         <RowsWrapper>
           <div className="flex justify-end items-center gap-8">
-            <Button
+            <AntDButton
               onClick={() => showEditModal(record)}
               style={{ margin: 0, padding: 0 }}
               type="text"
@@ -134,14 +135,14 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
                 width={18}
                 height={18}
               />
-            </Button>
-            <Button
+            </AntDButton>
+            <AntDButton
               onClick={() => showModal(record)}
               style={{ margin: 0, padding: 0 }}
               type="text"
             >
               {RemoveCircleOutlineIcon}
-            </Button>
+            </AntDButton>
           </div>
         </RowsWrapper>
       )
@@ -175,6 +176,16 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
         isModalVisible={isEditModalVisible}
         title="EDIT RECIPIENT"
         loading={isEditing}
+        footerContent={
+          <Button
+            form="EditClientRecipient"
+            loading={isEditing}
+            type="primary"
+            htmlType="submit"
+          >
+            SAVE CHANGES
+          </Button>
+        }
       >
         <EditClientRecipient
           onEditClientRecipientFinish={onEditClientRecipientFinish}

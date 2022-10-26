@@ -131,6 +131,7 @@ const ClientsTable: FC<ClientsTableProps> = ({
         <Row align="middle" gutter={16} wrap={false}>
           <Col className="my-[-12px]">
             <CustomButton
+              form=""
               onClick={() => showModal(setItemToDelete(record?.id))}
               type="danger"
               size="icon"
@@ -147,6 +148,7 @@ const ClientsTable: FC<ClientsTableProps> = ({
 
           <Col className="my-[-12px]">
             <CustomButton
+              form=""
               onClick={() => router.push(`${routes.Clients.url}/${record.id}`)}
               type="view"
               size="small"

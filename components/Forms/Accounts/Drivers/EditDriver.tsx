@@ -5,13 +5,11 @@ import {
   requiredInput
 } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
-import Button from "../../../Shared/Button";
 import { EditDriverTypes } from "../../../../lib/types/pageTypes/Accounts/Drivers/EditDriverTypes";
 import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
 
 const EditDriver: FC<EditDriverTypes> = ({
   onEditDriverFinish,
-  isLoading,
   form,
   phoneNumber,
   setPhoneNumber
@@ -21,6 +19,7 @@ const EditDriver: FC<EditDriverTypes> = ({
       onFinish={onEditDriverFinish}
       form={form}
       name="EditDriver"
+      id="EditDriver"
       layout="vertical"
       title=""
     >
@@ -72,14 +71,6 @@ const EditDriver: FC<EditDriverTypes> = ({
               />
             }
           />
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            SAVE CHANGES
-          </Button>
         </Col>
       </Row>
     </Form>

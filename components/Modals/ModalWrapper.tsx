@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, SetStateAction } from "react";
-import { Button, Modal } from "antd";
+import { Button, Col, Modal, Row } from "antd";
 import { CloseIcon } from "../Icons";
 
 interface ModalProps {
@@ -10,6 +10,7 @@ interface ModalProps {
   loading: boolean;
   onCancel?: () => void;
   destroyOnClose?: boolean;
+  footerContent: React.ReactNode;
 }
 
 const ModalWrapper: FC<ModalProps> = ({
@@ -19,7 +20,8 @@ const ModalWrapper: FC<ModalProps> = ({
   title,
   loading,
   onCancel,
-  destroyOnClose
+  destroyOnClose,
+  footerContent
 }) => {
   const handleOk = () => {
     setIsModalVisible(false);
@@ -46,8 +48,14 @@ const ModalWrapper: FC<ModalProps> = ({
           )}
         </div>
       }
-      width={500}
-      footer={false}
+      width={550}
+      footer={
+        <Row justify="end">
+          <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
+            {footerContent}
+          </Col>
+        </Row>
+      }
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={onCancel || handleCancel}

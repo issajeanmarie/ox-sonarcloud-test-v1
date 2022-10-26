@@ -6,6 +6,7 @@ import { DriversTableTypes } from "../../../lib/types/pageTypes/Accounts/Drivers
 import { DriversTableProps } from "../../../lib/types/pageTypes/Accounts/Drivers/DriversTableProps";
 import RowsWrapper from "../RowsWrapper";
 import CustomButton from "../../Shared/Button";
+import Button from "../../Shared/Button";
 import { Image } from "antd";
 import { FC, SetStateAction, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
@@ -310,6 +311,7 @@ const DriversTable: FC<DriversTableProps> = ({
           <div className="flex justify-start items-center gap-4">
             <div className="h-1 flex items-center">
               <CustomButton
+                form=""
                 onClick={() => showEditModal(record)}
                 type="normal"
                 size="icon"
@@ -325,6 +327,7 @@ const DriversTable: FC<DriversTableProps> = ({
             </div>
             <div className="h-1 flex items-center">
               <CustomButton
+                form=""
                 onClick={() => handleToggleDriver(record?.id)}
                 type="normal"
                 size="icon"
@@ -344,6 +347,7 @@ const DriversTable: FC<DriversTableProps> = ({
             </div>
             <div className="h-1 flex items-center">
               <CustomButton
+                form=""
                 onClick={() => showModal(setItemToDelete(record?.id))}
                 type="danger"
                 size="icon"
@@ -387,6 +391,16 @@ const DriversTable: FC<DriversTableProps> = ({
       />
 
       <ModalWrapper
+        footerContent={
+          <Button
+            form="EditDriver"
+            loading={isEditing}
+            type="primary"
+            htmlType="submit"
+          >
+            SAVE CHANGES
+          </Button>
+        }
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
         title={`EDIT ${itemToEdit?.names && itemToEdit?.names?.split(" ")[0]}`}

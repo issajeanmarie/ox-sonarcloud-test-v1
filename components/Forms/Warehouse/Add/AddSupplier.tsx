@@ -3,7 +3,6 @@ import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
 import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
-import Button from "../../../Shared/Button";
 import { LatLng } from "use-places-autocomplete";
 import { ECONOMIC_STATUS } from "../../../../config/constants";
 import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
@@ -33,7 +32,7 @@ type AddSupplierTypes = {
 
 const AddSupplier: FC<AddSupplierTypes> = ({
   onAddSupplierFinish,
-  isLoading,
+
   form,
   setLocation,
   location,
@@ -47,6 +46,7 @@ const AddSupplier: FC<AddSupplierTypes> = ({
       name="AddSupplier"
       layout="vertical"
       title=""
+      id="AddSupplier"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
@@ -112,14 +112,6 @@ const AddSupplier: FC<AddSupplierTypes> = ({
             setLocation={setLocation}
             location={location}
           />
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            ADD SUPPLIER
-          </Button>
         </Col>
       </Row>
     </Form>

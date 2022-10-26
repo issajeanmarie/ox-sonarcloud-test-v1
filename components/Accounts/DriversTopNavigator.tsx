@@ -112,7 +112,7 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
   const RightSide = (
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
-        <Button type="primary" onClick={showModal}>
+        <Button form="" type="primary" onClick={showModal}>
           NEW DRIVER
         </Button>
       </div>
@@ -126,6 +126,16 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
         isModalVisible={isModalVisible}
         title="NEW DRIVER"
         loading={isLoading}
+        footerContent={
+          <Button
+            form="AddNewDriver"
+            loading={isLoading}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD DRIVER
+          </Button>
+        }
       >
         <AddNewDriver
           onAddDriverFinish={onAddDriverFinish}

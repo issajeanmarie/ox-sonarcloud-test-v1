@@ -496,7 +496,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
               />
             </div>
             <div className="w-[142px] h-[65px] flex items-end">
-              <Button type="secondary" htmlType="submit">
+              <Button form="" type="secondary" htmlType="submit">
                 ADD STOP
               </Button>
             </div>

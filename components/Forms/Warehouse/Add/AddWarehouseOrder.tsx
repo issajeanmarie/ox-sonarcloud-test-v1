@@ -31,8 +31,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
   handleChangeWarehouse,
   warehouse,
   handleChangeWeight,
-  weight,
-  isPostingSale
+  weight
 }) => {
   const colSize = transport === "none" ? 12 : 8;
 
@@ -58,6 +57,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
       name="AddWarehouseOrder"
       layout="vertical"
       title=""
+      id="AddWarehouseOrder"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
@@ -157,7 +157,9 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
               title={false}
               trigger="click"
             >
-              <Button type="secondary">{YellowCheckIcon}</Button>
+              <Button form="" type="secondary">
+                {YellowCheckIcon}
+              </Button>
             </Popover>
           ) : (
             <>
@@ -175,10 +177,12 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
                   title={false}
                   trigger="click"
                 >
-                  <Button type="secondary">{YellowCheckIcon}</Button>
+                  <Button form="" type="secondary">
+                    {YellowCheckIcon}
+                  </Button>
                 </Popover>
               ) : (
-                <Button onClick={() => createItems()} type="secondary">
+                <Button form="" onClick={() => createItems()} type="secondary">
                   {YellowCheckIcon}
                 </Button>
               )}
@@ -303,14 +307,6 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
             setLocation={setLocation}
             location={location}
           />
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
-          <Button loading={isPostingSale} type="primary" htmlType="submit">
-            CONFIRM ORDER
-          </Button>
         </Col>
       </Row>
     </Form>

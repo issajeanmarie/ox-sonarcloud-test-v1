@@ -75,7 +75,9 @@ const StockHistory: FC<StockHistoryTyes> = ({
   const RightSide = (
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
-        <Button type="secondary">DOWNLOAD</Button>
+        <Button form="" type="secondary">
+          DOWNLOAD
+        </Button>
       </div>
     </div>
   );

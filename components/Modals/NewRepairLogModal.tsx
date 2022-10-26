@@ -69,6 +69,17 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
       setIsModalVisible={setIsVisible}
       loading={isLoading || uploadLoading}
       onCancel={handleCancel}
+      footerContent={
+        <Button
+          form="createLogRepair"
+          loading={isLoading}
+          type="primary"
+          htmlType="submit"
+          disabled={uploadLoading}
+        >
+          Save
+        </Button>
+      }
     >
       <Form
         name="createLogRepair"
@@ -76,6 +87,7 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
         layout="vertical"
         form={form}
         title="Plate number"
+        id="createLogRepair"
       >
         <div className="flex gap-10 my-5">
           <div className="flex-1">
@@ -204,21 +216,6 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
                 setAllIMGs={setAllIMGs}
               />
             </div>
-          </div>
-        </div>
-
-        <div className="flex gap-10 my-5">
-          <div className="flex-1"></div>
-
-          <div className="flex-1">
-            <Button
-              loading={isLoading}
-              type="primary"
-              htmlType="submit"
-              disabled={uploadLoading}
-            >
-              Save
-            </Button>
           </div>
         </div>
       </Form>

@@ -16,6 +16,7 @@ import ModalWrapper from "../../../Modals/ModalWrapper";
 import CustomButton from "../../../Shared/Button/button";
 import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
 import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
+import Button from "../../../Shared/Button";
 
 type clientTags = {
   name: string | undefined;
@@ -78,6 +79,7 @@ const ClientTages: FC<ClientTagesTypes> = ({ client }) => {
 
         <Col flex="none">
           <CustomButton
+            form=""
             onClick={showModal}
             type="secondary"
             size="icon"
@@ -111,6 +113,16 @@ const ClientTages: FC<ClientTagesTypes> = ({ client }) => {
       </div>
 
       <ModalWrapper
+        footerContent={
+          <Button
+            form="AddClientTag"
+            loading={isPostingTag}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD TAG
+          </Button>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="ADD TAG"

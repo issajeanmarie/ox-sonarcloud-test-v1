@@ -5,13 +5,11 @@ import {
   requiredInput
 } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
-import Button from "../../../Shared/Button";
 import { AddAgentTypes } from "../../../../lib/types/pageTypes/Accounts/Agents/AddAgentTypes";
 import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
 
 const AddNewAgent: FC<AddAgentTypes> = ({
   onAddAgentFinish,
-  isLoading,
   form,
   phoneNumber,
   setPhoneNumber
@@ -23,6 +21,7 @@ const AddNewAgent: FC<AddAgentTypes> = ({
       name="AddNewAgent"
       layout="vertical"
       title=""
+      id="AddNewAgent"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
@@ -72,14 +71,6 @@ const AddNewAgent: FC<AddAgentTypes> = ({
             placeholder="example@domain.rw"
             rules={emailValidation}
           />
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            ADD AGENT
-          </Button>
         </Col>
       </Row>
     </Form>

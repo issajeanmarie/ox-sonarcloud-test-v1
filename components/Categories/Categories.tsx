@@ -79,7 +79,9 @@ const CategoriesTable = () => (
             />
           </Col>
           <Col sm={{ span: 24 }} xl={{ span: 10 }}>
-            <CustomButton type="primary">ADD CATEGORY</CustomButton>
+            <CustomButton form="" type="primary">
+              ADD CATEGORY
+            </CustomButton>
           </Col>
         </div>
       </Row>
@@ -153,6 +155,7 @@ const CategoriesTable = () => (
           const child = (
             <div className="flex items-center gap-3 justify-end">
               <CustomButton
+                form=""
                 type="secondary"
                 size="icon"
                 icon={
@@ -166,6 +169,7 @@ const CategoriesTable = () => (
               />
 
               <CustomButton
+                form=""
                 type="normal"
                 size="icon"
                 icon={
@@ -179,6 +183,7 @@ const CategoriesTable = () => (
               />
 
               <CustomButton
+                form=""
                 type="danger"
                 size="icon"
                 icon={

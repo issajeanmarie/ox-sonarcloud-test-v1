@@ -54,6 +54,16 @@ const TruckNewIssueModal: FC<TruckNewIssueProps> = ({
       setIsModalVisible={setIsVisible}
       loading={isLoading}
       onCancel={handleCancel}
+      footerContent={
+        <Button
+          form="CreateTruckIssue"
+          type="primary"
+          htmlType="submit"
+          loading={isLoading}
+        >
+          SAVE
+        </Button>
+      }
     >
       <Form
         name="CreateTruckIssue"
@@ -61,6 +71,7 @@ const TruckNewIssueModal: FC<TruckNewIssueProps> = ({
         layout="vertical"
         form={form}
         title="Issue"
+        id="CreateTruckIssue"
       >
         <div className="flex gap-10 mb-5">
           <div className="flex-1">
@@ -74,16 +85,6 @@ const TruckNewIssueModal: FC<TruckNewIssueProps> = ({
                 rules={requiredField("Describtion")}
               />
             </div>
-          </div>
-        </div>
-
-        <div className="flex gap-10 mb-5">
-          <div className="flex-1"></div>
-
-          <div className="flex-1">
-            <Button type="primary" htmlType="submit" loading={isLoading}>
-              SAVE
-            </Button>
           </div>
         </div>
       </Form>

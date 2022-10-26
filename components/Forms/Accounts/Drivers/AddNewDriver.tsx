@@ -5,13 +5,11 @@ import {
   requiredInput
 } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
-import Button from "../../../Shared/Button";
 import { AddDriverTypes } from "../../../../lib/types/pageTypes/Accounts/Drivers/AddDriverTypes";
 import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
 
 const AddNewDriver: FC<AddDriverTypes> = ({
   onAddDriverFinish,
-  isLoading,
   form,
   phoneNumber,
   setPhoneNumber
@@ -23,6 +21,7 @@ const AddNewDriver: FC<AddDriverTypes> = ({
       name="AddNewDriver"
       layout="vertical"
       title=""
+      id="AddNewDriver"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
@@ -72,14 +71,6 @@ const AddNewDriver: FC<AddDriverTypes> = ({
             placeholder="example@domain.rw"
             rules={emailValidationNotRequired}
           />
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            ADD DRIVER
-          </Button>
         </Col>
       </Row>
     </Form>

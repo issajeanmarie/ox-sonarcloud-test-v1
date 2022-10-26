@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import Form from "antd/lib/form";
 import Input from "../../Shared/Input";
-import Button from "../../Shared/Button";
 import Typography from "antd/lib/typography";
 import { Row, Col } from "antd";
 import { EditResourceTypes } from "../../../lib/types/pageTypes/Resources/EditResourceTypes";
@@ -11,8 +10,7 @@ const { Text } = Typography;
 
 const EditResource: FC<EditResourceTypes> = ({
   onEditResourceFinish,
-  form,
-  isLoading
+  form
 }) => {
   const [val, setVal] = React.useState("");
   const [pasted, setPasted] = React.useState(false);
@@ -30,11 +28,12 @@ const EditResource: FC<EditResourceTypes> = ({
 
   return (
     <Form
-      name="AddNewResource"
+      name="EditResource"
       onFinish={onEditResourceFinish}
       layout="vertical"
       form={form}
       title=""
+      id="EditResource"
     >
       <div className="gap-10 mb-5">
         <div className="flex-1">
@@ -68,16 +67,6 @@ const EditResource: FC<EditResourceTypes> = ({
           <a href={val} target="_blank" rel="noopener noreferrer">
             <Text className="heading2 mato8">Test the pasted link</Text>
           </a>
-        </Col>
-        <Col className="gutter-row" span={6}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="small"
-            loading={isLoading}
-          >
-            SAVE CHANGES
-          </Button>
         </Col>
       </Row>
     </Form>

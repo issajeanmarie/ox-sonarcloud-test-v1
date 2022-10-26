@@ -181,6 +181,20 @@ const NewTRuckDocumentModal = ({
       setIsModalVisible={setIsVisible}
       loading={areRequestsLoading}
       onCancel={handleCancel}
+      footerContent={
+        <Button
+          form="EditTruckDocs"
+          loading={uploadLoading || isLoading || editDocumentLoading}
+          type="primary"
+          htmlType="submit"
+        >
+          {uploadLoading
+            ? "Uploading"
+            : editDocumentLoading
+            ? "Saving"
+            : "Save"}
+        </Button>
+      }
     >
       <Form
         name="CreateTruck"
@@ -188,6 +202,7 @@ const NewTRuckDocumentModal = ({
         layout="vertical"
         form={form}
         title="Plate number"
+        id="EditTruckDocs"
       >
         <div className="flex gap-10 mb-5">
           <div className="flex-1">
@@ -273,24 +288,6 @@ const NewTRuckDocumentModal = ({
               </div>
             </div>
           )}
-        </div>
-
-        <div className="flex gap-10 my-5">
-          <div className="flex-1"></div>
-
-          <div className="flex-1">
-            <Button
-              loading={uploadLoading || isLoading || editDocumentLoading}
-              type="primary"
-              htmlType="submit"
-            >
-              {uploadLoading
-                ? "Uploading"
-                : editDocumentLoading
-                ? "Saving"
-                : "Save"}
-            </Button>
-          </div>
         </div>
       </Form>
     </ModalWrapper>

@@ -160,7 +160,7 @@
 
 /* MODAL */
 .ox-modal .ant-modal-header {
-  padding: 40px 40px 0 40px !important;
+  padding: 40px 40px 20px 40px !important;
 }
 .ox-modal .ant-modal-header {
   border-bottom-width: 0 !important;
@@ -172,6 +172,10 @@
 .ox-modal .ant-modal-content,
 .ox-modal .ant-modal-header {
   border-radius: 4px !important;
+}
+
+.ox-modal .ant-modal-footer {
+  padding: 15px 40px !important;
 }
 
 .noborder .ant-table-tbody > tr > td,
@@ -224,16 +228,15 @@
 
 .ox_medium_modal .ant-modal-body::-webkit-scrollbar-track {
   background-color: inherit !important;
-  border-bottom-right-radius: 6px !important;
   margin-bottom: 0px !important;
 }
 
 .ox_medium_modal .ant-modal-body::-webkit-scrollbar-thumb {
-  border-bottom-right-radius: 6px !important;
+  background: #b0bcc5 !important;
 }
 
 .ox_medium_modal .ant-modal-body {
-  max-height: 600px !important;
+  max-height: 500px !important;
   overflow: auto !important;
   padding-bottom: 40px !important;
 }

@@ -39,7 +39,9 @@ const OxApp = () => {
             </p>
           </Col>
           <Col span={5}>
-            <CustomButton type="secondary">DOWNLOAD APK</CustomButton>
+            <CustomButton form="" type="secondary">
+              DOWNLOAD APK
+            </CustomButton>
           </Col>
         </Row>
       </div>

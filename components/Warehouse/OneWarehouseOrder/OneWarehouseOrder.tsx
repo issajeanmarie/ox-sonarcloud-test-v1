@@ -196,6 +196,7 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
               {sale?.status !== "CANCELLED" ? (
                 <Col className="my-[-12px]">
                   <CustomButton
+                    form=""
                     onClick={showModal}
                     type="danger"
                     size="icon"
@@ -215,6 +216,7 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
 
               <Col className="my-[-12px]">
                 <CustomButton
+                  form=""
                   onClick={() =>
                     changeRoute(
                       `${routes.SaleOrderDetails.url}?sale=${sale?.id}`
