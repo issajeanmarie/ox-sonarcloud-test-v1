@@ -4,7 +4,7 @@ import "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
-import { Image } from "antd";
+import { Image, Tooltip } from "antd";
 import CustomButton from "../../Shared/Button";
 import { FC, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
@@ -17,6 +17,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import Link from "next/link";
+import { limitStringLengthSmall } from "../../../helpers/limitStringLength";
 
 const { Text } = Typography;
 
@@ -93,20 +94,35 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
             <Col className="heading2 w-[32px]">
               <span className="font-bold text-lg">{itemNumber}.</span>
             </Col>
-            <Col>
+            <Col className="flex gap-2 items-center">
               <Text className="text-md font-bold">
                 {sale?.saleItems && sale?.saleItems?.length > 0 ? (
-                  <>{sale?.saleItems[0]?.warehouseItem?.parentCategory?.name}</>
+                  <Tooltip
+                    title={
+                      sale?.saleItems[0]?.warehouseItem?.parentCategory?.name
+                    }
+                  >
+                    {limitStringLengthSmall(
+                      sale?.saleItems[0]?.warehouseItem?.parentCategory?.name
+                    )}
+                  </Tooltip>
                 ) : (
                   "Unkown Item"
                 )}
               </Text>
-            </Col>
-            <Col>
-              <Text className="normalText opacity_56">
-                {sale?.saleItems &&
-                  sale?.saleItems[0]?.warehouseItem?.category?.name}
-              </Text>
+              {sale?.saleItems && sale?.saleItems?.length > 1 && (
+                <Text
+                  onClick={() =>
+                    changeRoute(
+                      `${routes.SaleOrderDetails.url}?sale=${sale?.id}`
+                    )
+                  }
+                  className="normalText opacity_56 cursor-pointer"
+                >
+                  <span className="font-bold">+</span>{" "}
+                  {sale?.saleItems && sale?.saleItems?.length} more
+                </Text>
+              )}
             </Col>
           </Row>
         </div>

@@ -225,7 +225,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
               name="localTransportCost"
               type="text"
               inputType="number"
-              label="Local"
+              label="Local price"
               placeholder="00"
             />
           </Col>

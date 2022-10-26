@@ -61,7 +61,7 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
           </div>
           {sale?.saleItems &&
             sale?.saleItems?.map((item: any) => (
-              <div key={item?.id} className="mb-4">
+              <div key={item?.id} className="mb-10">
                 <InfoWrapper
                   title="Item"
                   infoItem={item?.warehouseItem?.parentCategory?.name}
@@ -77,15 +77,16 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                   infoItem={`${item?.weight} KGs - ${item?.warehouseItem?.unitCost}Rwf/KG `}
                   isTransportOrder={false}
                 />
-                {sale?.transportOrder?.id && (
-                  <InfoWrapper
-                    title="Transport Ref"
-                    infoItem={sale?.transportOrder?.id}
-                    isTransportOrder={true}
-                  />
-                )}
               </div>
             ))}
+
+          {sale?.transportOrder?.id && (
+            <InfoWrapper
+              title="Transport Ref"
+              infoItem={sale?.transportOrder?.id}
+              isTransportOrder={true}
+            />
+          )}
         </div>
 
         <div className="w-full mt-9">
