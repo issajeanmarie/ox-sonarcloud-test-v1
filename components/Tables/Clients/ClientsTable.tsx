@@ -174,9 +174,6 @@ const ClientsTable: FC<ClientsTableProps> = ({
       <ActionModal
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
-        title="WARNING!"
-        description="This action is not reversible, please make sure you really want to proceed with this action!"
-        actionLabel="PROCEED"
         type="danger"
         action={() => handleDeleteClient()}
         loading={isLoading}

@@ -139,24 +139,41 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   }, [data]);
 
   const TruckDetails = ({ details }: any) => {
+    const trucksList: any = [];
+
+    details.stops?.forEach((stop: any) => {
+      const found = trucksList.find(
+        (el: any) => el.truck.plateNumber === stop.truck.plateNumber
+      );
+
+      if (found) {
+        const index = trucksList.indexOf(found);
+        const foundTruck = trucksList[index];
+        trucksList[index] = {
+          ...found,
+          weight: stop.weight + foundTruck.weight
+        };
+      } else {
+        trucksList.push(stop);
+      }
+    });
+
     return (
       <div className="my-16">
         <TextLight className="mb-6">Truck details</TextLight>
 
-        {details?.stops?.map((stop: any, index: number) => {
+        {trucksList?.map((stop: any, index: number) => {
           return (
-            stop.position !== 1 && (
-              <div key={stop.id} className="flex items-center mb-5">
-                <div className="flex-1 flex items-center gap-8">
-                  <span className="text-gray-400 font-light">{index + 1}</span>
-                  <span className="heading2">{stop.truck?.plateNumber}</span>
-                </div>
-                <div className="flex-1 normalText">{stop?.weight} KGs</div>
-                <div className="flex-1 text-gray-400 font-light">
-                  {stop?.driver?.names}
-                </div>
+            <div key={stop.id} className="flex items-center mb-5">
+              <div className="flex-1 flex items-center gap-8">
+                <span className="text-gray-400 font-light">{index + 1}</span>
+                <span className="heading2">{stop.truck?.plateNumber}</span>
               </div>
-            )
+              <div className="flex-1 normalText">{stop?.weight} KGs</div>
+              <div className="flex-1 text-gray-400 font-light">
+                {stop?.driver?.names}
+              </div>
+            </div>
           );
         })}
       </div>

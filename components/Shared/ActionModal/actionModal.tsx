@@ -6,9 +6,9 @@ interface ActionModalProps {
   isModalVisible: boolean;
   setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
   type: "danger" | "normal";
-  title: string;
-  description: string;
-  actionLabel: string;
+  title?: string;
+  description?: string;
+  actionLabel?: string;
   action: () => void;
   loading: boolean;
 }
@@ -16,10 +16,10 @@ interface ActionModalProps {
 const ActionModal: FC<ActionModalProps> = ({
   isModalVisible,
   setIsModalVisible,
-  title,
+  title = "WARNING!",
   type,
-  description,
-  actionLabel,
+  description = "This action is not reversible, please make sure you really want to proceed with this action!",
+  actionLabel = "PROCEED",
   loading,
   action
 }) => {

@@ -96,6 +96,7 @@ export type SingleTruckIssueTypes = {
 export interface TruckDataTypes extends CreateTruckRequest {
   truck: any;
   documents: any;
+  id: number;
 }
 
 export interface CreateTruckIssueRequest {

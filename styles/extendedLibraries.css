@@ -49,6 +49,7 @@
 
 .ant-menu-item.ant-menu-item-selected.active-link .ant-menu-title-content text {
   color: var(--color_yellow) !important;
+  font-weight: bold;
 }
 
 .ant-menu-item.not_collapsed {

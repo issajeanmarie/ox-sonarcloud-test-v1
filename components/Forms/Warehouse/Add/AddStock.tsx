@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Row, Select } from "antd";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Image from "next/image";
 import { AddStockTypes } from "../../../../lib/types/warehouse";
-// import { localeString } from "../../../../utils/numberFormatter";
+import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
@@ -31,6 +31,17 @@ const AddStock: FC<AddStockTypes> = ({
     setParentCategory(value);
     form.setFieldsValue({ SubCategory: "" });
   };
+
+  const depotsState = useSelector(
+    (state: { depots: { payload: { depotId: number } } }) =>
+      state.depots.payload
+  );
+
+  useEffect(() => {
+    form.setFieldsValue({
+      depotId: depotsState.depotId || ""
+    });
+  }, [form]);
 
   return (
     <Form
@@ -70,7 +81,7 @@ const AddStock: FC<AddStockTypes> = ({
             isGroupDropdown
             rules={requiredInput}
           >
-            {filteredResult.map((item: any) => (
+            {filteredResult?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
                 {item?.names}
               </Option>
