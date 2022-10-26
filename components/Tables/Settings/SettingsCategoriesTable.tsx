@@ -72,7 +72,6 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
           <div className="flex items-center gap-3 justify-end">
             {record?.children && (
               <CustomButton
-                form=""
                 className="add_category"
                 onClick={() => showModal(record?.id)}
                 type="secondary"
@@ -90,7 +89,6 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
 
             {!record.children && (
               <CustomButton
-                form=""
                 className="make_parent_category"
                 onClick={() => handleMakeCategoryParent(record?.id)}
                 type="normal"
@@ -108,7 +106,6 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
             )}
 
             <CustomButton
-              form=""
               onClick={() => showEditModal(record)}
               type="normal"
               size="icon"
@@ -123,7 +120,6 @@ const SettingsCategoriesTable: FC<SettingsCategoriesTableProps> = ({
             />
 
             <CustomButton
-              form=""
               onClick={() => handleDeleteCategory(record?.id)}
               loading={isDeletingCategory && record.id == isId}
               type="danger"

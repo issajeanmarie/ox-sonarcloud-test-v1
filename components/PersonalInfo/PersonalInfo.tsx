@@ -161,7 +161,6 @@ const ProfileInfo = () => {
           <Row align="bottom" className="my-5 justify-end">
             <Col sm={{ span: 12 }} xl={{ span: 12 }} xxl={{ span: 8 }}>
               <Button
-                form=""
                 loading={personalLoading}
                 type="primary"
                 htmlType="submit"
@@ -204,12 +203,7 @@ const ProfileInfo = () => {
           {/* BUTTONS  */}
           <Row align="bottom" className="my-5 justify-end">
             <Col sm={{ span: 12 }} xl={{ span: 12 }} xxl={{ span: 8 }}>
-              <Button
-                form=""
-                loading={isLoading}
-                type="primary"
-                htmlType="submit"
-              >
+              <Button loading={isLoading} type="primary" htmlType="submit">
                 SAVE CHANGES
               </Button>
             </Col>

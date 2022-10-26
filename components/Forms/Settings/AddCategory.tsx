@@ -32,12 +32,7 @@ const AddCategory: FC<AddCategoryTypes> = ({
           />
         </Col>
         <Col>
-          <Button
-            form=""
-            loading={isAddingCategory}
-            type="primary"
-            htmlType="submit"
-          >
+          <Button loading={isAddingCategory} type="primary" htmlType="submit">
             ADD CATEGORY
           </Button>
         </Col>

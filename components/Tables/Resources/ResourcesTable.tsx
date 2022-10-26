@@ -190,7 +190,6 @@ const ResourcesTable: FC<ResourcesTableProps> = ({
                   onClick={() => showEditModal(record)}
                 >
                   <CustomButton
-                    form=""
                     type="normal"
                     size="icon"
                     icon={
@@ -206,7 +205,6 @@ const ResourcesTable: FC<ResourcesTableProps> = ({
 
                 <Col className="my-[-12px]">
                   <CustomButton
-                    form=""
                     type="danger"
                     size="icon"
                     className="bg_danger"
@@ -228,7 +226,7 @@ const ResourcesTable: FC<ResourcesTableProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <CustomButton form="" type="view" size="small">
+                    <CustomButton type="view" size="small">
                       Open Link
                     </CustomButton>
                   </a>

@@ -1,10 +1,10 @@
 import { notification } from "antd";
 
-export const ErrorMessage = (text: string | undefined) => {
+export const WarningMessage = (text: string | undefined) => {
   return (
     <>
-      {notification["error"]({
-        message: "Error",
+      {notification["warning"]({
+        message: "Warning!",
         description: text ? text : "Something is wrong. Pls report this error",
         placement: "bottomRight",
         duration: 10

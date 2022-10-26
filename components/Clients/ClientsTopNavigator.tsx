@@ -156,7 +156,6 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
         <Button
-          form=""
           onClick={handleDownloadClients}
           loading={isDownloadingClientsLoading}
           type="secondary"
@@ -166,7 +165,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
       </div>
 
       <div className="flex items-center gap-6 w-[120px]">
-        <Button form="" type="primary" onClick={showModal}>
+        <Button type="primary" onClick={showModal}>
           NEW CLIENT
         </Button>
       </div>

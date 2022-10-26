@@ -1,9 +1,9 @@
 import { notification } from "antd";
 
-export const SuccessMessage = (text: string | undefined) => {
+export const InfoMessage = (text: string | undefined) => {
   return (
     <>
-      {notification["success"]({
+      {notification["info"]({
         message: "Notification",
         description: text ? text : "Something is wrong. Pls report this error",
         placement: "bottomRight"

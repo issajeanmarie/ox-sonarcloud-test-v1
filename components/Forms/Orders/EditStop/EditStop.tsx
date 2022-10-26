@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Form, message } from "antd";
+import { Form } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import moment from "moment";
 import { FC, useEffect } from "react";
@@ -9,6 +9,8 @@ import { requiredField } from "../../../../lib/validation/InputValidations";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
+import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
+import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 
 interface EditStopProps {
   order: Order;
@@ -47,12 +49,12 @@ const EditStop: FC<EditStopProps> = ({
       editStop({ orderId: order.id, stopId: stop?.id, data })
         .unwrap()
         .then((res) => {
-          message.success(res.message);
+          SuccessMessage(res.message);
           form.resetFields();
           closeModal();
         })
         .catch((e) => {
-          message.error(e.data?.message || "Something went wrong");
+          ErrorMessage(e.data?.message || "Something went wrong");
         });
     }
   };

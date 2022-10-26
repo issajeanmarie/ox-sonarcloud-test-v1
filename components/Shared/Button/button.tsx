@@ -16,7 +16,7 @@ interface ButtonProps {
   className?: string;
   htmlType?: "button" | "submit" | "reset";
   onClick?: (value: any) => any;
-  form: string;
+  form?: string;
 }
 
 const CustomButton: FC<ButtonProps> = ({

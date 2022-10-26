@@ -132,7 +132,6 @@ const PaymentHistoryTable: FC<PaymentHistoryTableProps> = ({
             <div className="flex justify-end items-center">
               <div className="h-1 flex items-center">
                 <CustomButton
-                  form=""
                   onClick={() => showModal(record)}
                   type="normal"
                   size="icon"

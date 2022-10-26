@@ -157,9 +157,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
               title={false}
               trigger="click"
             >
-              <Button form="" type="secondary">
-                {YellowCheckIcon}
-              </Button>
+              <Button type="secondary">{YellowCheckIcon}</Button>
             </Popover>
           ) : (
             <>
@@ -177,12 +175,10 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
                   title={false}
                   trigger="click"
                 >
-                  <Button form="" type="secondary">
-                    {YellowCheckIcon}
-                  </Button>
+                  <Button type="secondary">{YellowCheckIcon}</Button>
                 </Popover>
               ) : (
-                <Button form="" onClick={() => createItems()} type="secondary">
+                <Button onClick={() => createItems()} type="secondary">
                   {YellowCheckIcon}
                 </Button>
               )}

@@ -57,7 +57,6 @@ const ActionModal: FC<ActionModalProps> = ({
 
           <div className="w-[160px]">
             <Button
-              form=""
               onClick={action}
               loading={loading}
               type={type === "danger" ? "danger_filled" : "primary"}

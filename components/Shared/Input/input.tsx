@@ -21,11 +21,11 @@ import usePlacesAutocomplete, {
   getLatLng
 } from "use-places-autocomplete";
 import useOnClickOutside from "../../../utils/hooks/useOutsideClick";
-import { message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { FileUploader } from "./fileUploader";
 import moment from "moment";
+import { WarningMessage } from "../Messages/WarningMessage";
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -97,7 +97,7 @@ const Entry = ({
       })
       .catch((error) => {
         setCoordinatesLoading(false);
-        message.warning(error);
+        WarningMessage(error);
       });
   };
 

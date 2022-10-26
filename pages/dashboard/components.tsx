@@ -217,7 +217,6 @@ const Comopnents = () => {
             </Form.Item>
 
             <CustomButton
-              form=""
               type="secondary"
               size="icon"
               loading={false}
@@ -243,13 +242,11 @@ const Comopnents = () => {
           {/* BUTTONS  */}
           <Row align="bottom" gutter={24} className="my-5">
             <Col sm={{ span: 16 }} xl={{ span: 16 }} xxl={{ span: 12 }}>
-              <CustomButton form="" type="primary">
-                BUTTON
-              </CustomButton>
+              <CustomButton type="primary">BUTTON</CustomButton>
             </Col>
 
             <Col sm={{ span: 8 }} xl={{ span: 8 }} xxl={{ span: 6 }}>
-              <CustomButton form="" type="primary" size="small">
+              <CustomButton type="primary" size="small">
                 BUTTON
               </CustomButton>
             </Col>
@@ -257,13 +254,11 @@ const Comopnents = () => {
 
           <Row align="bottom" gutter={24} className="my-5">
             <Col sm={{ span: 16 }} xl={{ span: 16 }} xxl={{ span: 12 }}>
-              <CustomButton form="" type="secondary">
-                BUTTON
-              </CustomButton>
+              <CustomButton type="secondary">BUTTON</CustomButton>
             </Col>
 
             <Col sm={{ span: 8 }} xl={{ span: 8 }} xxl={{ span: 6 }}>
-              <CustomButton form="" type="secondary" size="small">
+              <CustomButton type="secondary" size="small">
                 BUTTON
               </CustomButton>
             </Col>
@@ -338,9 +333,7 @@ const Comopnents = () => {
 
         {/* LEFT SIDE */}
         <Col span={3}>
-          <CustomButton form="" type="primary">
-            ACTION
-          </CustomButton>
+          <CustomButton type="primary">ACTION</CustomButton>
         </Col>
       </Row>
 
@@ -348,9 +341,7 @@ const Comopnents = () => {
       <DriversTable />
 
       <div style={{ width: "12%", margin: "32px auto" }}>
-        <CustomButton form="" type="secondary">
-          Load more
-        </CustomButton>
+        <CustomButton type="secondary">Load more</CustomButton>
       </div>
 
       {/*
@@ -410,11 +401,11 @@ const Comopnents = () => {
             }
           />
 
-          <CustomButton form="" type="secondary" size="small">
+          <CustomButton type="secondary" size="small">
             DOWNLOAD REPORT
           </CustomButton>
 
-          <CustomButton form="" type="primary" size="small">
+          <CustomButton type="primary" size="small">
             NEW ORDER
           </CustomButton>
         </div>

@@ -149,7 +149,6 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
       {!isOrderDisabled && (
         <div className="flex items-center gap-6 w-[400px]">
           <Button
-            form=""
             type="secondary"
             disabled={isOrderDisabled}
             onClick={() => setSupport(true)}
@@ -157,7 +156,6 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             SUPPORT
           </Button>
           <Button
-            form=""
             type="primary"
             disabled={isOrderDisabled}
             onClick={() => setIsConfirmCompleteOrder(true)}

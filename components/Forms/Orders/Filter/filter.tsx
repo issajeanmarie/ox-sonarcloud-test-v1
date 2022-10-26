@@ -194,18 +194,12 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
           </div>
           <div className="flex justify-end gap-5">
             <div className="min-w-[150px]">
-              <Button
-                form=""
-                onClick={clearFilter}
-                type="secondary"
-                className="mt-5"
-              >
+              <Button onClick={clearFilter} type="secondary" className="mt-5">
                 CLEAR FILTER
               </Button>
             </div>
             <div className="min-w-[150px]">
               <Button
-                form=""
                 type="primary"
                 className="mt-5"
                 htmlType="submit"

@@ -202,14 +202,14 @@ const Trucks = () => {
     <div className="flex items-center gap-5">
       <Dropdown overlay={downloadOOSdropdown} placement="bottomLeft">
         <div className="flex items-center gap-6 w-[120px]">
-          <Button form="" loading={isDownloadLoading} type="secondary">
+          <Button loading={isDownloadLoading} type="secondary">
             DOWNLOAD LIST
           </Button>
         </div>
       </Dropdown>
 
       <div className="flex items-center gap-6 w-[120px]">
-        <Button form="" type="primary" onClick={() => setIsVisible(true)}>
+        <Button type="primary" onClick={() => setIsVisible(true)}>
           NEW TRUCK
         </Button>
       </div>
@@ -235,7 +235,6 @@ const Trucks = () => {
             {showPagination && (
               <div style={{ width: "12%", margin: "32px auto" }}>
                 <CustomButton
-                  form=""
                   loading={isLoadMoreLoading}
                   type="secondary"
                   onClick={handleLoadMore}

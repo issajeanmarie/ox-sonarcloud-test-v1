@@ -50,7 +50,6 @@ const ClientOrderRecipient: FC<ClientOrderRecipientTypes> = ({
 
         <Col flex="none">
           <CustomButton
-            form=""
             onClick={showModal}
             type="secondary"
             size="icon"

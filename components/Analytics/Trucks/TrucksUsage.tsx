@@ -108,7 +108,6 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
           }
         />
         <CustomButton
-          form=""
           onClick={handleDownloadClients}
           disabled={isDownloadingTruckReport || isDownloadFetching}
           type="secondary"
@@ -123,7 +122,7 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
           </span>
         </CustomButton>
         <Upload {...uploadFileProps}>
-          <CustomButton form="" loading={uploadingFuelReport} type="primary">
+          <CustomButton loading={uploadingFuelReport} type="primary">
             <span className="text-sm">UPLOAD FUEL REPORT</span>
           </CustomButton>
         </Upload>

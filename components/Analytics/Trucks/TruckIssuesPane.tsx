@@ -117,7 +117,7 @@ const TruckIssuesPane = () => {
             </Col>
 
             <Col className="flex items-center gap-4">
-              <CustomButton form="" type="primary" onClick={handleLogNewIssue}>
+              <CustomButton type="primary" onClick={handleLogNewIssue}>
                 <span className="text-sm">LOG ISSUE</span>
               </CustomButton>
             </Col>

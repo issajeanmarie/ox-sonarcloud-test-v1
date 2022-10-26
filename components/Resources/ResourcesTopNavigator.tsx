@@ -74,7 +74,7 @@ const ResourcesTopNavigator: FC<ResourcesTopNavigatorTypes> = ({
   const RightSide = (
     <div className="flex items-center gap-5">
       <div className="flex items-center gap-6 w-[120px]">
-        <Button form="" type="primary" onClick={showModal}>
+        <Button type="primary" onClick={showModal}>
           ADD RESOURCE
         </Button>
       </div>

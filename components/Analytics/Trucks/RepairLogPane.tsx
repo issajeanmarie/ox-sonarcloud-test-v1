@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import Row from "antd/lib/row";
-import info from "antd/lib/message";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Divider from "antd/lib/divider";
@@ -18,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { displayRepairLogs } from "../../../lib/redux/slices/trucksSlice";
 import { TruckRepairLogs } from "../../../lib/types/pageTypes/Trucks/DisplayTrucksTypes";
 import NewRepairLogModal from "../../Modals/NewRepairLogModal";
+import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 
 const { Panel } = Collapse;
 
@@ -53,7 +53,7 @@ const RepairLogPane = () => {
       })
       .catch((err) => {
         setIsPageLoading(false);
-        info.error(err?.data?.message || "Something is wrong");
+        ErrorMessage(err?.data?.message || "Something is wrong");
       });
   };
 
@@ -119,11 +119,7 @@ const RepairLogPane = () => {
         </Col>
 
         <Col className="flex items-center gap-4">
-          <CustomButton
-            form=""
-            type="primary"
-            onClick={() => setIsVisible(true)}
-          >
+          <CustomButton type="primary" onClick={() => setIsVisible(true)}>
             <span className="text-sm">LOG REPAIR</span>
           </CustomButton>
         </Col>
