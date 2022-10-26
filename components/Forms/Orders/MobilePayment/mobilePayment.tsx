@@ -73,8 +73,21 @@ const MobilePayment: FC<MobilePaymentProps> = ({
     setIsModalVisible(false);
   };
 
-  const handleInitiatePaymentSuccess = () => {
-    setIsPaymentSuccessful(true);
+  usePaymentPageMoMoPaymentListener({
+    setPaymentProgress,
+    paymentProgress,
+    setIsModalVisible
+  });
+
+  const handlePaymentFinish = () => {
+    setPaymentProgress({
+      initiated: false,
+      payload: null,
+      success: false,
+      disconnected: false
+    });
+
+    setIsModalVisible(false);
   };
 
   const handleSubmit = (values: { amount: number; phone: string }) => {
@@ -204,6 +217,29 @@ const MobilePayment: FC<MobilePaymentProps> = ({
           </button>
         </div>
       )}
+      {/* {isPaymentSuccessful ? (
+        <div className="flex flex-col items-center justify-center h-[300px]">
+          <div>
+            <CheckCircleTwoTone className="text-8xl" twoToneColor="#E7B522" />
+          </div>
+          <div className="mt-5 text-lg capitalize mb-3">
+            Payment successful !
+          </div>
+          <div className="w-[150px] mt-7">
+            <Button
+              type="primary"
+              onClick={() => {
+                setIsPaymentSuccessful(false);
+                handleOk();
+              }}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      ) : (
+        
+      )} */}
     </Modal>
   );
 };
