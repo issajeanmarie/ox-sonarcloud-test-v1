@@ -27,11 +27,12 @@ const { Text } = Typography;
 type StockHistoryTableProps = {
   Stocks: any;
   isStocksFetching: boolean;
+  isStockCategoriesFetching: boolean;
 };
 
 const StockHistoryTable: FC<StockHistoryTableProps> = ({
   Stocks,
-  isStocksFetching
+  isStockCategoriesFetching
 }) => {
   const [form] = Form.useForm();
 
@@ -307,7 +308,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
         pagination={false}
         bordered={false}
         scroll={{ x: 0 }}
-        loading={TableOnActionLoading(isStocksFetching)}
+        loading={TableOnActionLoading(isStockCategoriesFetching)}
       />
       <ModalWrapper
         footerContent={

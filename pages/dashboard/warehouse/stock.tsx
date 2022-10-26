@@ -69,8 +69,11 @@ const Stock = () => {
   };
 
   const [getStocks, { data: apiData }] = useLazyStockQuery();
-  const { data: stockCategories, isLoading: isStockCategoriesLoading } =
-    useStockCategoriesQuery();
+  const {
+    data: stockCategories,
+    isLoading: isStockCategoriesLoading,
+    isFetching: isStockCategoriesFetching
+  } = useStockCategoriesQuery();
 
   const AllStocks = useSelector(
     (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
@@ -186,7 +189,7 @@ const Stock = () => {
                         numbersFormatter(item?.averageUnitCost)
                       } Rwf / Kg`}
                       count={item?.totalWeight}
-                      isFetching={false}
+                      isFetching={isStockCategoriesFetching}
                     />
                   </CardColWrapper>
                 ))}
@@ -213,6 +216,7 @@ const Stock = () => {
                 <StockHistoryTable
                   Stocks={AllStocks}
                   isStocksFetching={showFiltersLoader}
+                  isStockCategoriesFetching={isStockCategoriesFetching}
                 />
               )}
 
