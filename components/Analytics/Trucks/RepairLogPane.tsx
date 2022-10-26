@@ -158,11 +158,7 @@ const RepairLogPane = () => {
         </Col>
 
         <Col className="flex items-center gap-4">
-          <CustomButton
-            form=""
-            type="primary"
-            onClick={() => setIsVisible(true)}
-          >
+          <CustomButton type="primary" onClick={() => setIsVisible(true)}>
             <span className="text-sm">LOG REPAIR</span>
           </CustomButton>
         </Col>

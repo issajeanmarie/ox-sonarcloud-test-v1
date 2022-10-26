@@ -159,7 +159,6 @@ const SettingsKPIsTable: FC<SettingsKPIsTableProps> = ({ data: KPIs }) => {
 
         <div className="w-[140px]">
           <Button
-            form=""
             type="primary"
             htmlType="submit"
             loading={isAddingKPIs}

@@ -63,12 +63,7 @@ const ClientInfo: FC<ClientInfoTypes> = ({ client }) => {
           </Col>
 
           <Col flex="none">
-            <CustomButton
-              form=""
-              onClick={showModal}
-              type="secondary"
-              size="small"
-            >
+            <CustomButton onClick={showModal} type="secondary" size="small">
               <span className="text-sm">{YellowEditIcon}</span>
             </CustomButton>
           </Col>

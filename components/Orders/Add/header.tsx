@@ -52,7 +52,6 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
     <div className="flex items-center flex-1 justify-end gap-6">
       <div className="flex items-center gap-6 w-[120px]">
         <Button
-          form=""
           onClick={() => form.submit()}
           loading={createOrderLoading}
           type="primary"
@@ -83,7 +82,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             Would you like to add another client?
           </div>
           <div className="mt-9 w-[250px]">
-            <Button form="" type="primary" onClick={addAnotherClient}>
+            <Button type="primary" onClick={addAnotherClient}>
               ADD ANOTHER CLIENT
             </Button>
           </div>

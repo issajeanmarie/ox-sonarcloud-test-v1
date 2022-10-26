@@ -152,7 +152,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       </div>
 
       <div className="flex items-center gap-6 w-[120px]">
-        <Button form="" onClick={showModal} type="primary">
+        <Button onClick={showModal} type="primary">
           NEW ORDER
         </Button>
       </div>

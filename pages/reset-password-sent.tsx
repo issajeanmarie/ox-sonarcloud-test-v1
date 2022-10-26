@@ -18,7 +18,7 @@ const ResetPasswordSent = () => {
           </span>
 
           <a href="https://gmail.com/" target="_blank" rel="noreferrer">
-            <Button form="" type="primary" className="mt-5" htmlType="submit">
+            <Button type="primary" className="mt-5" htmlType="submit">
               Open Gmail
             </Button>
           </a>

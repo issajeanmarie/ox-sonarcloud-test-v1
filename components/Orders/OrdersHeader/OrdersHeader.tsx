@@ -71,11 +71,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
       </div>
 
       <div className="flex items-center gap-6 w-[200px]">
-        <Button
-          form=""
-          onClick={() => router.push(routes.newOrder.url)}
-          type="primary"
-        >
+        <Button onClick={() => router.push(routes.newOrder.url)} type="primary">
           NEW ORDER
         </Button>
       </div>

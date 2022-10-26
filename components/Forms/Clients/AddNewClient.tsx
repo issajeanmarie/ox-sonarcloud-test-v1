@@ -174,12 +174,10 @@ const AddNewClient: FC<AddClientTypes> = ({
               title={false}
               trigger="click"
             >
-              <Button form="" type="secondary">
-                {YellowCheckIcon}
-              </Button>
+              <Button type="secondary">{YellowCheckIcon}</Button>
             </Popover>
           ) : (
-            <Button form="" onClick={() => createOffices()} type="secondary">
+            <Button onClick={() => createOffices()} type="secondary">
               {YellowCheckIcon}
             </Button>
           )}

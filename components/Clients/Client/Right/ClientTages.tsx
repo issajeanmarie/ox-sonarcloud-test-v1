@@ -79,7 +79,6 @@ const ClientTages: FC<ClientTagesTypes> = ({ client }) => {
 
         <Col flex="none">
           <CustomButton
-            form=""
             onClick={showModal}
             type="secondary"
             size="icon"

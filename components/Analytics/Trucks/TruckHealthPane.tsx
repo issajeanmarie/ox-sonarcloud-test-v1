@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
-import info from "antd/lib/message";
 import Divider from "antd/lib/divider";
 import Collapse from "antd/lib/collapse";
 import moment from "moment";
@@ -114,7 +113,7 @@ const TruckHealthPane = () => {
         handleDownloadFile(res);
       })
       .catch((err) => {
-        info.error(err?.data?.message || "Something is wrong");
+        ErrorMessage(err?.data?.message || "Something is wrong");
       });
   };
 
@@ -157,7 +156,6 @@ const TruckHealthPane = () => {
 
         <Col className="flex items-center gap-4">
           <CustomButton
-            form=""
             type="secondary"
             onClick={handleDownloadReport}
             loading={isLoading}

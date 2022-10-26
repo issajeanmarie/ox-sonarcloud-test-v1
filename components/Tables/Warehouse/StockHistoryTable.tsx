@@ -365,7 +365,6 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
           <div className="flex justify-start items-center gap-4">
             <div className="h-1 flex items-center">
               <CustomButton
-                form=""
                 onClick={() => showEditModal(record)}
                 type="normal"
                 size="icon"

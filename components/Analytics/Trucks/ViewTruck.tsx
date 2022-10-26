@@ -181,7 +181,6 @@ const ViewTruck: FC<ViewTruckProps> = ({
                   </span>
 
                   <CustomButton
-                    form=""
                     onClick={() => setIsNewDocumentModalVisible(true)}
                     type="secondary"
                     size="icon"
