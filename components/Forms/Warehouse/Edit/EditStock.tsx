@@ -28,6 +28,7 @@ const EditStock: FC<EditStockTypes> = ({
 
   const onParentCategoryChange = (value: any) => {
     setParentCategory(value);
+    form.setFieldsValue({ SubCategory: "" });
   };
 
   return (
@@ -167,7 +168,7 @@ const EditStock: FC<EditStockTypes> = ({
                   {moment(item.stateDateTime).format("ddd/MM/YYYY")}
                 </span>
               </Option>
-            ))}
+            ))} */}
           </Input>
         </Col>
       </Row>

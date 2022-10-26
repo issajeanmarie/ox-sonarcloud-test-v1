@@ -282,7 +282,7 @@ const AddStock: FC<AddStockTypes> = ({
                   {moment(item.startDateTime).format("YYYY/MM/DD")}
                 </span>
               </Option>
-            ))}
+            ))} */}
           </Input>
         </Col>
       </Row>
