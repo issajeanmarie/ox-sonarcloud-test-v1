@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import Row from "antd/lib/row";
-import info from "antd/lib/message";
 import moment from "moment";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
@@ -14,6 +13,7 @@ import { displayFuelRecords } from "../../../lib/redux/slices/trucksSlice";
 import Loader from "../../Shared/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { FuelRecordsTypes } from "../../../lib/types/pageTypes/Trucks/DisplayTrucksTypes";
+import { InfoMessage } from "../../Shared/Messages/InfoMessage";
 
 const FuelRecordsPane = () => {
   const componentDidMount = useRef(false);
@@ -53,7 +53,7 @@ const FuelRecordsPane = () => {
       })
       .catch((err) => {
         setIsPageLoading(false);
-        info.error(err?.data?.message || "Something is wrong");
+        InfoMessage(err?.data?.message || "Something is wrong");
       });
   };
 

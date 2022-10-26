@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import React, { FC, useEffect, useState } from "react";
-import { message, Steps, Form, Tooltip } from "antd";
+import { Steps, Form, Tooltip } from "antd";
 import { Query } from "../../../lib/types/shared";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Header from "./header";
@@ -35,6 +35,7 @@ import StepDescription from "./StepDescription";
 import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
 import { requiredField } from "../../../lib/validation/InputValidations";
 import { useForm } from "antd/lib/form/Form";
+import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 
 const { Step } = Steps;
 
@@ -118,7 +119,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const handleCopyID = () => {
     navigator.clipboard
       .writeText(orderId?.toString() || "")
-      .then(() => message.success("Order ID added to clipboard"));
+      .then(() => SuccessMessage("Order ID added to clipboard"));
   };
 
   const handleCommentChange = (value: string) => {

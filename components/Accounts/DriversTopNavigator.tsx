@@ -126,6 +126,16 @@ const DriversTopNavigator: FC<DriversTopNavigatorTypes> = ({
         isModalVisible={isModalVisible}
         title="NEW DRIVER"
         loading={isLoading}
+        footerContent={
+          <Button
+            form="AddNewDriver"
+            loading={isLoading}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD DRIVER
+          </Button>
+        }
       >
         <AddNewDriver
           onAddDriverFinish={onAddDriverFinish}

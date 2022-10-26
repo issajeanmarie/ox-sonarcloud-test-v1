@@ -6,6 +6,7 @@ import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import { StockHistoryTableTypes } from "../../../lib/types/pageTypes/Warehouse/Stock/StockHistoryTableTypes";
 import { Form, Image } from "antd";
 import CustomButton from "../../Shared/Button";
+import Button from "../../Shared/Button";
 import moment from "moment";
 import { FC, useState } from "react";
 import { useEditStockMutation } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
@@ -309,6 +310,16 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
         loading={TableOnActionLoading(isStocksFetching)}
       />
       <ModalWrapper
+        footerContent={
+          <Button
+            form="EditStock"
+            loading={isEditing}
+            type="primary"
+            htmlType="submit"
+          >
+            SAVE CHANGES
+          </Button>
+        }
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
         title="EDIT STOCK"
@@ -316,7 +327,6 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       >
         <EditStock
           onEditStockFinish={onEditStockFinish}
-          isEditingStock={isEditing}
           form={form}
           categories={categories?.payload}
           isCategoriesLoading={isCategoriesLoading}

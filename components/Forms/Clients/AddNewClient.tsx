@@ -16,7 +16,6 @@ const AddNewClient: FC<AddClientTypes> = ({
   createOffices,
   offices,
   setOffices,
-  isLoading,
   setLocation,
   location,
   handleChangeOfficeName,
@@ -33,6 +32,7 @@ const AddNewClient: FC<AddClientTypes> = ({
       name="AddNewClient"
       layout="vertical"
       title=""
+      id="AddNewClient"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
@@ -179,29 +179,6 @@ const AddNewClient: FC<AddClientTypes> = ({
           ) : (
             <Button onClick={() => createOffices()} type="secondary">
               {YellowCheckIcon}
-            </Button>
-          )}
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          {!mainLocation ? (
-            <Popover
-              placement="left"
-              content={
-                <div className="flex flex-col">
-                  <span className="font-light"> Add main location</span>
-                </div>
-              }
-              title={false}
-              trigger="click"
-            >
-              <Button type="primary">ADD CLIENT</Button>
-            </Popover>
-          ) : (
-            <Button loading={isLoading} type="primary" htmlType="submit">
-              ADD CLIENT
             </Button>
           )}
         </Col>

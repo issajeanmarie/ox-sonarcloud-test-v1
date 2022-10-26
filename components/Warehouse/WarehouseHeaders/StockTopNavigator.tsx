@@ -106,10 +106,20 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
   return (
     <>
       <ModalWrapper
+        footerContent={
+          <Button
+            form="AddStock"
+            loading={isAddingStock}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD STOCK ITEM
+          </Button>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="NEW WAREHOUSE ITEM"
-        loading={false}
+        loading={isAddingStock}
       >
         <AddStock
           onAddStockFinish={onAddStockFinish}

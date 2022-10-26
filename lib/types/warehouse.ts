@@ -79,7 +79,6 @@ export type AddStockTypes = {
 
 export type EditStockTypes = {
   onEditStockFinish: (values: any) => void;
-  isEditingStock: boolean;
   form: any;
   categories: any;
   isCategoriesLoading: boolean;

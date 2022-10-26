@@ -69,6 +69,16 @@ const AdminsTopNavigator: FC<AdminsTopNavigatorTypes> = ({
   return (
     <>
       <ModalWrapper
+        footerContent={
+          <Button
+            form="AddNewAdmin"
+            loading={isLoading}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD ADMIN
+          </Button>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="NEW OX ADMIN"

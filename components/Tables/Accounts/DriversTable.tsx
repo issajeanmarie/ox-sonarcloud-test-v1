@@ -6,6 +6,7 @@ import { DriversTableTypes } from "../../../lib/types/pageTypes/Accounts/Drivers
 import { DriversTableProps } from "../../../lib/types/pageTypes/Accounts/Drivers/DriversTableProps";
 import RowsWrapper from "../RowsWrapper";
 import CustomButton from "../../Shared/Button";
+import Button from "../../Shared/Button";
 import { Image } from "antd";
 import { FC, SetStateAction, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
@@ -387,6 +388,16 @@ const DriversTable: FC<DriversTableProps> = ({
       />
 
       <ModalWrapper
+        footerContent={
+          <Button
+            form="EditDriver"
+            loading={isEditing}
+            type="primary"
+            htmlType="submit"
+          >
+            SAVE CHANGES
+          </Button>
+        }
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
         title={`EDIT ${itemToEdit?.names && itemToEdit?.names?.split(" ")[0]}`}

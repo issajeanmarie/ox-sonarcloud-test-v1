@@ -22,9 +22,9 @@ import { percentageCalculator } from "../../../helpers/pacentageCalculators";
 import TruckActivityBreakdownChart from "../Charts/TruckActivityBreakdownChart";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { TruckRevenueBreakdownChart } from "../Charts/TruckRevenueBreakdownChart";
-import info from "antd/lib/message";
 import DropDownSelector from "../../Shared/DropDownSelector";
 import DaysCalculator from "../../../helpers/daysCalculator";
+import { InfoMessage } from "../../Shared/Messages/InfoMessage";
 
 const daysList = [
   { id: 0, name: "Last 7 days", value: 7 },
@@ -131,7 +131,7 @@ const OvervieWPane = () => {
   };
 
   const handleDownloadFileFailure = () => {
-    info.error("No data to download");
+    InfoMessage("No data to download");
   };
 
   const handleDownloadShift = () => {

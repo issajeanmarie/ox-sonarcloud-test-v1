@@ -46,24 +46,28 @@ const EditOrderClient: FC<EditOrderClientProps> = ({
 
   return (
     <ModalWrapper
+      footerContent={
+        <Button
+          form="EditOrderClient"
+          type="primary"
+          htmlType="submit"
+          loading={isLoading}
+        >
+          Save
+        </Button>
+      }
       title="EDIT ORDER CLIENT"
       loading={isLoading}
       isModalVisible={isEditClientModal}
       setIsModalVisible={setIsEditClientModal}
     >
-      <Form form={form} onFinish={handleOnFinish}>
+      <Form id="EditOrderClient" form={form} onFinish={handleOnFinish}>
         <ClientSearch
           label="Clients"
           rules={requiredField("Client")}
           name="clientId"
           existingValue={existingClient}
         />
-
-        <div className="my-10">
-          <Button type="primary" htmlType="submit" loading={isLoading}>
-            Save
-          </Button>
-        </div>
       </Form>
     </ModalWrapper>
   );

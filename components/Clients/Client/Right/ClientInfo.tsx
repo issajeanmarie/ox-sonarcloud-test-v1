@@ -11,6 +11,7 @@ import { YellowEditIcon } from "../../../Icons";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import CustomButton from "../../../Shared/Button/button";
 import ClientInfoWrapper from "./ClientInfoWrapper";
+import Button from "../../../Shared/Button";
 
 const ClientInfo: FC<ClientInfoTypes> = ({ client }) => {
   const [form] = Form.useForm();
@@ -90,6 +91,16 @@ const ClientInfo: FC<ClientInfoTypes> = ({ client }) => {
         isModalVisible={isModalVisible}
         title={`Edit ${client?.names && client?.names.split(" ")[0]}`}
         loading={isEditingClient}
+        footerContent={
+          <Button
+            form="EditClient"
+            loading={isEditingClient}
+            type="primary"
+            htmlType="submit"
+          >
+            SAVE CHANGES
+          </Button>
+        }
       >
         <EditNewClient
           onEditClientFinish={onEditClientFinish}

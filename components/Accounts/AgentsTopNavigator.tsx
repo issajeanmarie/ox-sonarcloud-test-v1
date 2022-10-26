@@ -74,6 +74,16 @@ const AgentsTopNavigator: FC<AgentsTopNavigatorTypes> = ({
         isModalVisible={isModalVisible}
         title="NEW AGENT"
         loading={isLoading}
+        footerContent={
+          <Button
+            form="AddNewAgent"
+            loading={isLoading}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD AGENT
+          </Button>
+        }
       >
         <AddNewAgent
           onAddAgentFinish={onAddAgentFinish}

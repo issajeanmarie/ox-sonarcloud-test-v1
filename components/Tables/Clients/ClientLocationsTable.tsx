@@ -4,12 +4,14 @@ import Typography from "antd/lib/typography";
 import { ClientLocationsTableTypes } from "../../../lib/types/pageTypes/Clients/ClientLocationsTableTypes";
 import RowsWrapper from "../RowsWrapper";
 import { FC, useState } from "react";
-import { Button, Form } from "antd";
+import { Form, Popover } from "antd";
+import { Button as AntDButton } from "antd";
 import {
   useDeleteClientLocationMutation,
   useEditClientLocationMutation
 } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import ActionModal from "../../Shared/ActionModal";
+import Button from "../../Shared/Button";
 import { useRouter } from "next/router";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditClientLocation from "../../Forms/Clients/EditClientLocation";
@@ -134,7 +136,7 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
       ) => (
         <RowsWrapper>
           <div className="flex justify-end items-center gap-8">
-            <Button
+            <AntDButton
               onClick={() => showEditModal(record)}
               style={{ margin: 0, padding: 0 }}
               type="text"
@@ -146,14 +148,14 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
                 width={18}
                 height={18}
               />
-            </Button>
-            <Button
+            </AntDButton>
+            <AntDButton
               onClick={() => showModal(record)}
               style={{ margin: 0, padding: 0 }}
               type="text"
             >
               {RemoveCircleOutlineIcon}
-            </Button>
+            </AntDButton>
           </div>
         </RowsWrapper>
       )
@@ -185,6 +187,40 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
       />
 
       <ModalWrapper
+        footerContent={
+          <>
+            {!location ? (
+              <Popover
+                placement="left"
+                content={
+                  <div className="flex flex-col">
+                    <span className="font-light">Select location </span>
+                    <span className="font-light">and names</span>
+                  </div>
+                }
+                title={false}
+                trigger="click"
+              >
+                <Button
+                  form="EditClientLocation"
+                  type="primary"
+                  htmlType="submit"
+                >
+                  SAVE CHANGES
+                </Button>
+              </Popover>
+            ) : (
+              <Button
+                form="EditClientLocation"
+                loading={isEditing}
+                type="primary"
+                htmlType="submit"
+              >
+                SAVE CHANGES
+              </Button>
+            )}
+          </>
+        }
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
         title="EDIT CLIENT LOCATION"

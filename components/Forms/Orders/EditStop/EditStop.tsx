@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Form, message } from "antd";
+import { Form } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import moment from "moment";
 import { FC, useEffect } from "react";
@@ -9,6 +9,8 @@ import { requiredField } from "../../../../lib/validation/InputValidations";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
+import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
+import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 
 interface EditStopProps {
   order: Order;
@@ -47,12 +49,12 @@ const EditStop: FC<EditStopProps> = ({
       editStop({ orderId: order.id, stopId: stop?.id, data })
         .unwrap()
         .then((res) => {
-          message.success(res.message);
+          SuccessMessage(res.message);
           form.resetFields();
           closeModal();
         })
         .catch((e) => {
-          message.error(e.data?.message || "Something went wrong");
+          ErrorMessage(e.data?.message || "Something went wrong");
         });
     }
   };
@@ -74,62 +76,65 @@ const EditStop: FC<EditStopProps> = ({
 
   return (
     <ModalWrapper
+      footerContent={
+        <Button
+          form="EditStopOnOrder"
+          type="primary"
+          htmlType="submit"
+          loading={isLoading}
+        >
+          SAVE
+        </Button>
+      }
       title={`Edit ${stop?.name?.split(",")[0]} stop`}
       loading={isLoading}
       isModalVisible={isEditStopModal}
       setIsModalVisible={setIsEditStopModal}
     >
-      <Form form={form} onFinish={handleOnFinish}>
-        <div className="mb-10">
-          <div className="flex items-center gap-4 my-5">
-            <div className="flex-1">
-              <Input
-                name="arrivalDateTime"
-                type="date"
-                label="Arrival time"
-                showTime
-                dateFormat="YYYY-MM-DD HH:mm a"
-                placeholder="Start time"
-                rules={requiredField("Arrival time")}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                name="departureDateTime"
-                type="date"
-                label="End time"
-                showTime
-                dateFormat="YYYY-MM-DDTHH:mm a"
-                placeholder="End time"
-                rules={requiredField("End time")}
-              />
-            </div>
+      <Form id="EditStopOnOrder" form={form} onFinish={handleOnFinish}>
+        <div className="flex items-center gap-4 my-5">
+          <div className="flex-1">
+            <Input
+              name="arrivalDateTime"
+              type="date"
+              label="Arrival time"
+              showTime
+              dateFormat="YYYY-MM-DD HH:mm a"
+              placeholder="Start time"
+              rules={requiredField("Arrival time")}
+            />
           </div>
-          <div className="flex items-center gap-4 my-5">
-            <div className="flex-1">
-              <Input
-                name="weight"
-                type="text"
-                inputType="number"
-                label="Weight"
-                suffixIcon="KGs"
-                placeholder="Enter weight"
-                rules={requiredField("Weight")}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                name="odometer"
-                type="text"
-                label="Odometer"
-                placeholder="Enter odometer"
-              />
-            </div>
+          <div className="flex-1">
+            <Input
+              name="departureDateTime"
+              type="date"
+              label="End time"
+              showTime
+              dateFormat="YYYY-MM-DDTHH:mm a"
+              placeholder="End time"
+              rules={requiredField("End time")}
+            />
           </div>
-          <div className="mt-14">
-            <Button type="primary" htmlType="submit" loading={isLoading}>
-              SAVE
-            </Button>
+        </div>
+        <div className="flex items-center gap-4 my-5">
+          <div className="flex-1">
+            <Input
+              name="weight"
+              type="text"
+              inputType="number"
+              label="Weight"
+              suffixIcon="KGs"
+              placeholder="Enter weight"
+              rules={requiredField("Weight")}
+            />
+          </div>
+          <div className="flex-1">
+            <Input
+              name="odometer"
+              type="text"
+              label="Odometer"
+              placeholder="Enter odometer"
+            />
           </div>
         </div>
       </Form>

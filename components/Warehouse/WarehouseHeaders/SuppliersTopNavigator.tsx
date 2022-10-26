@@ -103,6 +103,16 @@ const SuppliersTopNavigator: FC<SuppliersTopNavigatorTypes> = ({
         isModalVisible={isModalVisible}
         title="NEW OX SUPPLIER"
         loading={false}
+        footerContent={
+          <Button
+            form="AddSupplier"
+            loading={isAddingSupplier}
+            type="primary"
+            htmlType="submit"
+          >
+            ADD SUPPLIER
+          </Button>
+        }
       >
         <AddSupplier
           onAddSupplierFinish={onAddSupplierFinish}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Form from "antd/lib/form";
 import Image from "antd/lib/image";
-import info from "antd/lib/message";
 import Button from "../Shared/Button";
 import Input from "../Shared/Input";
 import { requiredField } from "../../lib/validation/InputValidations";
@@ -11,6 +10,7 @@ import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import { displayRepairLogs } from "../../lib/redux/slices/trucksSlice";
 import ModalWrapper from "./ModalWrapper";
+import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
 
 const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -42,7 +42,7 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
   const handleCreateRepairLogSuccess = (res: any) => {
     dispatch(displayRepairLogs({ payload: res, add: true }));
 
-    info.success(res.message);
+    SuccessMessage(res.message);
     form.resetFields();
     handleCancel();
   };
@@ -69,6 +69,17 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
       setIsModalVisible={setIsVisible}
       loading={isLoading || uploadLoading}
       onCancel={handleCancel}
+      footerContent={
+        <Button
+          form="createLogRepair"
+          loading={isLoading}
+          type="primary"
+          htmlType="submit"
+          disabled={uploadLoading}
+        >
+          Save
+        </Button>
+      }
     >
       <Form
         name="createLogRepair"
@@ -76,6 +87,7 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
         layout="vertical"
         form={form}
         title="Plate number"
+        id="createLogRepair"
       >
         <div className="flex gap-10 my-5">
           <div className="flex-1">
@@ -204,21 +216,6 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
                 setAllIMGs={setAllIMGs}
               />
             </div>
-          </div>
-        </div>
-
-        <div className="flex gap-10 my-5">
-          <div className="flex-1"></div>
-
-          <div className="flex-1">
-            <Button
-              loading={isLoading}
-              type="primary"
-              htmlType="submit"
-              disabled={uploadLoading}
-            >
-              Save
-            </Button>
           </div>
         </div>
       </Form>

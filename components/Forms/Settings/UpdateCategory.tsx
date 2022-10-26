@@ -2,7 +2,7 @@
 import { Col, Form, Row } from "antd";
 import React from "react";
 import { FC } from "react";
-import Button from "../../Shared/Button";
+import { requiredInput } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
 
 type AddCategoryTypes = {
@@ -13,7 +13,6 @@ type AddCategoryTypes = {
 
 const UpdateCategory: FC<AddCategoryTypes> = ({
   onUpdateCategoryFinish,
-  isUpdatingCategory,
   form
 }) => {
   return (
@@ -23,15 +22,16 @@ const UpdateCategory: FC<AddCategoryTypes> = ({
       layout="vertical"
       title="UpdateCategory"
       form={form}
+      id="UpdateCategory"
     >
       <Row className="flex items-center gap-4">
         <Col flex="auto">
-          <Input type="text" name="name" placeholder="Enter category name" />
-        </Col>
-        <Col flex="none">
-          <Button loading={isUpdatingCategory} type="primary" htmlType="submit">
-            UPDATE CATEGORY
-          </Button>
+          <Input
+            rules={requiredInput}
+            type="text"
+            name="name"
+            placeholder="Enter category name"
+          />
         </Col>
       </Row>
     </Form>

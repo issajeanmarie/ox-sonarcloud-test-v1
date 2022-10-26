@@ -15,6 +15,7 @@ import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { userType } from "../../../helpers/getLoggedInUser";
+import Button from "../../Shared/Button";
 
 const { Text } = Typography;
 
@@ -164,16 +165,22 @@ const PaymentHistoryTable: FC<PaymentHistoryTableProps> = ({
         loading={TableOnActionLoading(isFetching)}
       />
       <ModalWrapper
+        footerContent={
+          <Button
+            form="EditTransaction"
+            type="primary"
+            htmlType="submit"
+            loading={isEditingTransaction}
+          >
+            SAVE CHANGES
+          </Button>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="Edit payment history"
         loading={isEditingTransaction}
       >
-        <EditTransaction
-          form={form}
-          isLoading={isEditingTransaction}
-          handleFinish={handleFinish}
-        />
+        <EditTransaction form={form} handleFinish={handleFinish} />
       </ModalWrapper>
     </>
   );

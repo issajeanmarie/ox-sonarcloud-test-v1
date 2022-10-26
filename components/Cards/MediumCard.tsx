@@ -3,7 +3,6 @@ import React, { FC, useState } from "react";
 import Dropdown from "antd/lib/dropdown";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import info from "antd/lib/message";
 import LoadingOutlined from "@ant-design/icons/LoadingOutlined";
 import moment from "moment";
 import { numbersFormatter } from "../../helpers/numbersFormatter";
@@ -12,6 +11,7 @@ import { SmallSpinLoader } from "../Shared/Loaders/Loaders";
 import { useDownloadAnalyticsReportMutation } from "../../lib/api/endpoints/Analytics/analyticEndpoints";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import fileDownload from "js-file-download";
+import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 
 const { Text } = Typography;
 
@@ -43,7 +43,7 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
     };
 
     const handleDownloadFileFailure = () => {
-      info.error("No data to download");
+      ErrorMessage("No data to download");
     };
 
     handleAPIRequests({

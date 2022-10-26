@@ -2,6 +2,7 @@
 import ModalWrapper from "../../Modals/ModalWrapper";
 import React, { FC } from "react";
 import AddSubCategoryForm from "./AddSubCategoryForm";
+import Button from "../../Shared/Button";
 
 type addSubCategoryTypes = {
   isAddingCategory: boolean;
@@ -29,6 +30,16 @@ const AddSubCategory: FC<addSubCategoryTypes> = ({
       onCancel={handleCancel}
       loading={isLoading}
       destroyOnClose
+      footerContent={
+        <Button
+          form="AddSubCategoryForm"
+          loading={isAddingCategory}
+          type="primary"
+          htmlType="submit"
+        >
+          ADD SUB CATEGORY
+        </Button>
+      }
     >
       <AddSubCategoryForm
         onAddCategoryFinish={onAddCategoryFinish}

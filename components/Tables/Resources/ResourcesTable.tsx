@@ -6,6 +6,7 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { Form } from "antd";
 import CustomButton from "../../../components/Shared/Button/button";
+import Button from "../../Shared/Button";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import { ResourcesTableProps } from "../../../lib/types/pageTypes/Resources/ResourcesTableProps";
 import ActionModal from "../../Shared/ActionModal";
@@ -251,6 +252,16 @@ const ResourcesTable: FC<ResourcesTableProps> = ({
 
       {/* Edit Admin Modal */}
       <ModalWrapper
+        footerContent={
+          <Button
+            form="EditResource"
+            type="primary"
+            htmlType="submit"
+            loading={isEditing}
+          >
+            SAVE CHANGES
+          </Button>
+        }
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
         title="EDIT RESOURCE"

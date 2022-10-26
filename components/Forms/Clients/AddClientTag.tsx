@@ -2,7 +2,6 @@ import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
 import { requiredInput } from "../../../lib/validation/InputValidations";
 import Input from "../../Shared/Input";
-import Button from "../../Shared/Button";
 import { AddClientTagTypes } from "../../../lib/types/pageTypes/Clients/AddClientTagTypes";
 
 type TagSchema = {
@@ -12,7 +11,6 @@ type TagSchema = {
 
 const AddClientTag: FC<AddClientTagTypes> = ({
   onAddClientTagFinish,
-  isLoading,
   tags,
   isTagsLoading,
   form
@@ -24,6 +22,7 @@ const AddClientTag: FC<AddClientTagTypes> = ({
       name="AddClientTag"
       layout="vertical"
       title=""
+      id="AddClientTag"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
@@ -52,14 +51,6 @@ const AddClientTag: FC<AddClientTagTypes> = ({
               return <option key={tag.id} value={tag.name} />;
             })}
           </datalist>
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            ADD TAG
-          </Button>
         </Col>
       </Row>
     </Form>

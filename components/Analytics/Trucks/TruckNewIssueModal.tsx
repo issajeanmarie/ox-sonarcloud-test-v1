@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import React, { FC } from "react";
 import Form from "antd/lib/form";
-import message from "antd/lib/message";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import { requiredField } from "../../../lib/validation/InputValidations";
@@ -14,6 +13,7 @@ import {
 import { displayTruckIssues } from "../../../lib/redux/slices/trucksSlice";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
 
 const TruckNewIssueModal: FC<TruckNewIssueProps> = ({
   isVisible,
@@ -33,7 +33,7 @@ const TruckNewIssueModal: FC<TruckNewIssueProps> = ({
 
   const handleCreateIssueSuccess = (payload: CreateTruckResponse) => {
     dispatch(displayTruckIssues({ payload, replace: false }));
-    message.success(payload?.message || "Issue registered successfull");
+    SuccessMessage(payload?.message || "Issue registered successfull");
     handleCancel();
     form.resetFields();
   };
@@ -54,6 +54,16 @@ const TruckNewIssueModal: FC<TruckNewIssueProps> = ({
       setIsModalVisible={setIsVisible}
       loading={isLoading}
       onCancel={handleCancel}
+      footerContent={
+        <Button
+          form="CreateTruckIssue"
+          type="primary"
+          htmlType="submit"
+          loading={isLoading}
+        >
+          SAVE
+        </Button>
+      }
     >
       <Form
         name="CreateTruckIssue"
@@ -61,6 +71,7 @@ const TruckNewIssueModal: FC<TruckNewIssueProps> = ({
         layout="vertical"
         form={form}
         title="Issue"
+        id="CreateTruckIssue"
       >
         <div className="flex gap-10 mb-5">
           <div className="flex-1">
@@ -74,16 +85,6 @@ const TruckNewIssueModal: FC<TruckNewIssueProps> = ({
                 rules={requiredField("Describtion")}
               />
             </div>
-          </div>
-        </div>
-
-        <div className="flex gap-10 mb-5">
-          <div className="flex-1"></div>
-
-          <div className="flex-1">
-            <Button type="primary" htmlType="submit" loading={isLoading}>
-              SAVE
-            </Button>
           </div>
         </div>
       </Form>

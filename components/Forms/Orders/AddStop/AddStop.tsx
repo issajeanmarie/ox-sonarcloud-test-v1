@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Form, message, Select } from "antd";
+import { Form, Select } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { FC, useEffect, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
@@ -13,6 +13,8 @@ import ModalWrapper from "../../../Modals/ModalWrapper";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
+import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
+import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 
 const { Option } = Select;
 
@@ -49,13 +51,13 @@ const AddStop: FC<AddStopProps> = ({
     addStop({ orderId: order.id, data })
       .unwrap()
       .then((res) => {
-        message.success(res.message);
+        SuccessMessage(res.message);
         form.resetFields();
         setLocation(undefined);
         closeModal();
       })
       .catch((e) => {
-        message.error(e.data?.message || "Something went wrong");
+        ErrorMessage(e.data?.message || "Something went wrong");
       });
   };
 
@@ -79,12 +81,22 @@ const AddStop: FC<AddStopProps> = ({
 
   return (
     <ModalWrapper
+      footerContent={
+        <Button
+          form="AddStopOnOrder"
+          type="primary"
+          htmlType="submit"
+          loading={isLoading}
+        >
+          Add
+        </Button>
+      }
       title="ADD A STOP"
       loading={isLoading}
       isModalVisible={isAddStopModal}
       setIsModalVisible={setIsAddStopModal}
     >
-      <Form form={form} onFinish={handleOnFinish}>
+      <Form id="AddStopOnOrder" form={form} onFinish={handleOnFinish}>
         <div className="mb-10">
           <div>
             <Input
@@ -137,9 +149,6 @@ const AddStop: FC<AddStopProps> = ({
               rules={[{ required: true, message: "Weight is required" }]}
             />
           </div>
-          <Button type="primary" htmlType="submit" loading={isLoading}>
-            Add
-          </Button>
         </div>
       </Form>
     </ModalWrapper>

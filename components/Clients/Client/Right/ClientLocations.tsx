@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Col, Divider, Form, Image, Row } from "antd";
+import { Col, Divider, Form, Image, Popover, Row } from "antd";
 import React, { FC, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
 import { usePostClientLocationMutation } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
@@ -8,6 +8,7 @@ import {
   BackendErrorTypes,
   GenericResponse
 } from "../../../../lib/types/shared";
+import Button from "../../../Shared/Button";
 import AddClientLocation from "../../../Forms/Clients/AddClientLocation";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import CustomButton from "../../../Shared/Button/button";
@@ -96,6 +97,40 @@ const ClientLocations: FC<ClientLocationsTypes> = ({
         )}
       </div>
       <ModalWrapper
+        footerContent={
+          <>
+            {!location ? (
+              <Popover
+                placement="left"
+                content={
+                  <div className="flex flex-col">
+                    <span className="font-light">Select location </span>
+                    <span className="font-light">and names</span>
+                  </div>
+                }
+                title={false}
+                trigger="click"
+              >
+                <Button
+                  form="AddClientLocation"
+                  type="primary"
+                  htmlType="submit"
+                >
+                  ADD LOCATION
+                </Button>
+              </Popover>
+            ) : (
+              <Button
+                form="AddClientLocation"
+                loading={isPostingLocation}
+                type="primary"
+                htmlType="submit"
+              >
+                ADD LOCATION
+              </Button>
+            )}
+          </>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="CLIENT LOCATION"

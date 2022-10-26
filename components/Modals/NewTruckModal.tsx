@@ -144,6 +144,16 @@ const NewTruckModal = ({
 
   return (
     <ModalWrapper
+      footerContent={
+        <Button
+          form="CreateOrEditTruck"
+          type="primary"
+          htmlType="submit"
+          loading={isLoading || isEditTruckLoading}
+        >
+          {isUserEditing ? "EDIT" : "ADD"} TRUCK
+        </Button>
+      }
       title={
         isUserEditing
           ? `EDIT TRUCK - ${editTruckData?.plateNumber || "Unknown"}`
@@ -156,6 +166,7 @@ const NewTruckModal = ({
       destroyOnClose
     >
       <Form
+        id="CreateOrEditTruck"
         name="CreateTruck"
         onFinish={onFinish}
         layout="vertical"
@@ -324,7 +335,7 @@ const NewTruckModal = ({
           </div>
         </div>
 
-        <div className="flex gap-10 mb-5">
+        <div className="flex gap-10">
           <div className="flex-1">
             <div>
               <Input
@@ -348,20 +359,6 @@ const NewTruckModal = ({
               options={depots}
               rules={requiredField("Depot")}
             />
-          </div>
-        </div>
-
-        <div className="flex gap-10 mb-5">
-          <div className="flex-1"></div>
-
-          <div className="flex-1">
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={isLoading || isEditTruckLoading}
-            >
-              {isUserEditing ? "EDIT" : "ADD"} TRUCK
-            </Button>
           </div>
         </div>
       </Form>

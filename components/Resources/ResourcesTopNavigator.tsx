@@ -84,6 +84,16 @@ const ResourcesTopNavigator: FC<ResourcesTopNavigatorTypes> = ({
   return (
     <>
       <ModalWrapper
+        footerContent={
+          <Button
+            form="AddNewResource"
+            type="primary"
+            htmlType="submit"
+            loading={isLoading}
+          >
+            ADD RESOURCE
+          </Button>
+        }
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="NEW RESOURCE"

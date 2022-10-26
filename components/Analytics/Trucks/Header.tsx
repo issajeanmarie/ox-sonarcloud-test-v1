@@ -3,7 +3,6 @@ import { FC, useEffect, useState } from "react";
 import Image from "antd/lib/image";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import info from "antd/lib/message";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import Dropdown from "antd/lib/dropdown";
@@ -20,6 +19,7 @@ import { userType } from "../../../helpers/getLoggedInUser";
 import { routes } from "../../../config/route-config";
 import Navbar from "../../Shared/Content/Navbar";
 import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
+import { InfoMessage } from "../../Shared/Messages/InfoMessage";
 
 type TrucksHoverTypes = {
   plateNumber: string;
@@ -45,8 +45,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   const dispatch = useDispatch();
 
   const handleToggleTruckSuccess = (res: any) => {
-    info.success(res.message);
-
+    InfoMessage(res.message);
     dispatch(
       displaySingleTruck({ ...truckData, active: res?.payload?.active })
     );

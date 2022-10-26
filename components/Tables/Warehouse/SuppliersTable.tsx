@@ -5,6 +5,7 @@ import RowsWrapper from "../RowsWrapper";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import { Form, Image } from "antd";
 import CustomButton from "../../Shared/Button";
+import Button from "../../Shared/Button";
 import { SuppliersTableTypes } from "../../../lib/types/pageTypes/Warehouse/Suppliers/SuppliersTableTypes";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
@@ -309,6 +310,16 @@ const SuppliersTable: FC<SuppliersTableProps> = ({
       />
 
       <ModalWrapper
+        footerContent={
+          <Button
+            form="EditSupplier"
+            loading={isEditing}
+            type="primary"
+            htmlType="submit"
+          >
+            SAVE CHANGES
+          </Button>
+        }
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
         title={`EDIT ${itemToEdit?.names && itemToEdit?.names.split(" ")[0]}`}

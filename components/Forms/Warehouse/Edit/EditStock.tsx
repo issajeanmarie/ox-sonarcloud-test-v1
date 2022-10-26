@@ -3,7 +3,6 @@ import { Col, Form, Row, Select } from "antd";
 import React, { FC, useState } from "react";
 import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
-import Button from "../../../Shared/Button";
 import Image from "next/image";
 import { EditStockTypes } from "../../../../lib/types/warehouse";
 
@@ -12,7 +11,6 @@ const { Option } = Select;
 const EditStock: FC<EditStockTypes> = ({
   onEditStockFinish,
   form,
-  isEditingStock,
   categories,
   isCategoriesLoading,
   orders,
@@ -40,6 +38,7 @@ const EditStock: FC<EditStockTypes> = ({
       form={form}
       onFinish={onEditStockFinish}
       name="EditStock"
+      id="EditStock"
       layout="vertical"
       title=""
     >
@@ -238,14 +237,6 @@ const EditStock: FC<EditStockTypes> = ({
               </Option>
             ))}
           </Input>
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
-          <Button loading={isEditingStock} type="primary" htmlType="submit">
-            SAVE CHANGES
-          </Button>
         </Col>
       </Row>
     </Form>

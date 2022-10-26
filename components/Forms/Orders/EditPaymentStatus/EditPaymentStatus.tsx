@@ -1,5 +1,5 @@
 import { useState, FC } from "react";
-import { Form, message } from "antd";
+import { Form } from "antd";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
 import CircleCheckbox from "../../../Shared/Custom/CircleCheckbox";
@@ -9,6 +9,9 @@ import moment from "moment";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import { futureDateDisabler } from "../../../../helpers/datesValidator";
 import { usePostSalePaymentMutation } from "../../../../lib/api/endpoints/Warehouse/salesEndpoints";
+import { WarningMessage } from "../../../Shared/Messages/WarningMessage";
+import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
+import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
 
 interface PaymentStatusProps {
   order: Order;
@@ -38,7 +41,7 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
       !checked &&
       order?.remainingAmount
     ) {
-      message.warning("Amount can't exceed the remaining");
+      WarningMessage("Amount can't exceed the remaining");
     } else {
       if (isSaleOrder) {
         postSalePayment({
@@ -52,12 +55,12 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
         })
           .unwrap()
           .then((res) => {
-            message.success(res.message);
+            SuccessMessage(res.message);
             closeModal();
             form.resetFields();
           })
           .catch((e) => {
-            message.error(e.data?.message || "Something went wrong");
+            ErrorMessage(e.data?.message || "Something went wrong");
           });
       } else {
         editPaymentStatus({
@@ -71,11 +74,11 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
         })
           .unwrap()
           .then((res) => {
-            message.success(res.message);
+            SuccessMessage(res.message);
             closeModal();
           })
           .catch((e) => {
-            message.error(e.data?.message || "Something went wrong");
+            ErrorMessage(e.data?.message || "Something went wrong");
           });
       }
     }
@@ -83,12 +86,22 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
 
   return (
     <ModalWrapper
+      footerContent={
+        <Button
+          form="updatePaymentStatus"
+          type="primary"
+          htmlType="submit"
+          loading={isSaleOrder ? isPostingSalePayment : isLoading}
+        >
+          UPDATE
+        </Button>
+      }
       title="PAYMENT STATUS"
       isModalVisible={isEditPaymentStatus}
       setIsModalVisible={setIsEditPaymentStatus}
       loading={isSaleOrder ? isPostingSalePayment : isLoading}
     >
-      <Form onFinish={handleFinish} form={form}>
+      <Form id="updatePaymentStatus" onFinish={handleFinish} form={form}>
         <div className="mb-10">
           <div className="flex items-center gap-4 my-5">
             <div className="flex-1">
@@ -133,17 +146,6 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
                 setState={setChecked}
                 state={checked}
               />
-            </div>
-          </div>
-          <div className="mt-8 flex justify-end">
-            <div className="w-[150px]">
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={isSaleOrder ? isPostingSalePayment : isLoading}
-              >
-                UPDATE
-              </Button>
             </div>
           </div>
         </div>

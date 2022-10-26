@@ -3,7 +3,6 @@ import { Col, Form, Row, Select } from "antd";
 import React, { FC, useState } from "react";
 import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
-import Button from "../../../Shared/Button";
 import Image from "next/image";
 import { AddStockTypes } from "../../../../lib/types/warehouse";
 import { localeString } from "../../../../utils/numberFormatter";
@@ -13,7 +12,6 @@ const { Option } = Select;
 const AddStock: FC<AddStockTypes> = ({
   onAddStockFinish,
   form,
-  isAddingStock,
   categories,
   isCategoriesLoading,
   orders,
@@ -40,6 +38,7 @@ const AddStock: FC<AddStockTypes> = ({
       name="AddStock"
       layout="vertical"
       title=""
+      id="AddStock"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
@@ -238,14 +237,6 @@ const AddStock: FC<AddStockTypes> = ({
               </Option>
             ))}
           </Input>
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
-          <Button loading={isAddingStock} type="primary" htmlType="submit">
-            ADD STOCK ITEM
-          </Button>
         </Col>
       </Row>
     </Form>

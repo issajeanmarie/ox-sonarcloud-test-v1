@@ -64,13 +64,23 @@ const EditOrderPrice: FC<EditOrderPriceProps> = ({
 
   return (
     <ModalWrapper
+      footerContent={
+        <Button
+          form="EditOrderPrice"
+          type="primary"
+          htmlType="submit"
+          loading={isLoading}
+        >
+          Save
+        </Button>
+      }
       title="EDIT ORDER'S PRICE"
       loading={isLoading}
       isModalVisible={isVisible}
       setIsModalVisible={setIsVisible}
       destroyOnClose={true}
     >
-      <Form form={form} onFinish={handleOnFinish}>
+      <Form id="EditOrderPrice" form={form} onFinish={handleOnFinish}>
         <div className="mb-4">
           <Input
             name="amount"
@@ -93,11 +103,6 @@ const EditOrderPrice: FC<EditOrderPriceProps> = ({
             <Option value="PAY_BY_KG">Pay by KG</Option>
             <Option value="PAY_BY_JOB">Pay by job</Option>
           </Input>
-        </div>
-        <div className="my-10">
-          <Button type="primary" htmlType="submit" loading={isLoading}>
-            Save
-          </Button>
         </div>
       </Form>
     </ModalWrapper>

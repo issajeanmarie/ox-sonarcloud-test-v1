@@ -6,6 +6,7 @@ import { AdminsTableTypes } from "../../../lib/types/pageTypes/Accounts/Admins/A
 import { AdminsTableProps } from "../../../lib/types/pageTypes/Accounts/Admins/AdminsTableProps";
 import RowsWrapper from "../RowsWrapper";
 import CustomButton from "../../Shared/Button";
+import Button from "../../Shared/Button";
 import { Image } from "antd";
 import { FC, SetStateAction, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
@@ -320,6 +321,16 @@ const AdminsTable: FC<AdminsTableProps> = ({
         isModalVisible={isEditModalVisible}
         title="EDIT ADMIN"
         loading={isEditing}
+        footerContent={
+          <Button
+            form="EditAdmin"
+            loading={isEditing}
+            type="primary"
+            htmlType="submit"
+          >
+            SAVE CHANGES
+          </Button>
+        }
       >
         <EditAdmin
           onEditAdminFinish={onEditAdminFinish}

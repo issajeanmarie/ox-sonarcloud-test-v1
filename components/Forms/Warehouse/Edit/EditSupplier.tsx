@@ -3,7 +3,6 @@ import { Col, Form, Image, Row } from "antd";
 import React, { FC } from "react";
 import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
-import Button from "../../../Shared/Button";
 import { ECONOMIC_STATUS } from "../../../../config/constants";
 import CustomPhoneInput from "../../../Shared/Custom/CustomPhoneInput";
 
@@ -17,7 +16,6 @@ type EditSupplierTypes = {
 
 const EditSupplier: FC<EditSupplierTypes> = ({
   onEditSupplierFinish,
-  isLoading,
   form,
   phoneNumber,
   setPhoneNumber
@@ -29,6 +27,7 @@ const EditSupplier: FC<EditSupplierTypes> = ({
       name="EditSupplier"
       layout="vertical"
       title=""
+      id="EditSupplier"
     >
       <Row justify="space-between" gutter={[16, 16]}>
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
@@ -83,14 +82,6 @@ const EditSupplier: FC<EditSupplierTypes> = ({
             label="TIN"
             placeholder="Enter your TIN"
           />
-        </Col>
-      </Row>
-
-      <Row justify="end" className="mt-7">
-        <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-          <Button loading={isLoading} type="primary" htmlType="submit">
-            SAVE CHANGES
-          </Button>
         </Col>
       </Row>
     </Form>

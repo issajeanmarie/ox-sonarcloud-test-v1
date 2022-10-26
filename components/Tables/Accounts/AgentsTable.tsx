@@ -6,6 +6,7 @@ import { AgentsTableTypes } from "../../../lib/types/pageTypes/Accounts/Agents/A
 import { AgentsTableProps } from "../../../lib/types/pageTypes/Accounts/Agents/AgentsTableProps";
 import RowsWrapper from "../RowsWrapper";
 import CustomButton from "../../Shared/Button";
+import Button from "../../Shared/Button";
 import { Image } from "antd";
 import { FC, SetStateAction, useState } from "react";
 import ActionModal from "../../Shared/ActionModal";
@@ -343,6 +344,16 @@ const AgentsTable: FC<AgentsTableProps> = ({
         isModalVisible={isEditModalVisible}
         title="EDIT AGENT"
         loading={isEditing}
+        footerContent={
+          <Button
+            form="EditAgent"
+            loading={isEditing}
+            type="primary"
+            htmlType="submit"
+          >
+            SAVE CHANGES
+          </Button>
+        }
       >
         <EditAgent
           onEditAgentFinish={onEditAgentFinish}

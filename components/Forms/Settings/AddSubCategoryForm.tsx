@@ -3,7 +3,6 @@ import { Col, Form, Row } from "antd";
 import React from "react";
 import { FC } from "react";
 import { requiredInput } from "../../../lib/validation/InputValidations";
-import Button from "../../Shared/Button";
 import Input from "../../Shared/Input";
 
 type AddCategoryTypes = {
@@ -11,16 +10,14 @@ type AddCategoryTypes = {
   isAddingCategory: boolean;
 };
 
-const AddSubCategoryForm: FC<AddCategoryTypes> = ({
-  onAddCategoryFinish,
-  isAddingCategory
-}) => {
+const AddSubCategoryForm: FC<AddCategoryTypes> = ({ onAddCategoryFinish }) => {
   return (
     <Form
       name="AddSubCategoryForm"
       onFinish={onAddCategoryFinish}
       layout="vertical"
       title="AddSubCategory"
+      id="AddSubCategoryForm"
     >
       <Row className="flex items-center gap-4">
         <Col flex="auto">
@@ -30,11 +27,6 @@ const AddSubCategoryForm: FC<AddCategoryTypes> = ({
             placeholder="Enter category name"
             rules={requiredInput}
           />
-        </Col>
-        <Col flex="none">
-          <Button loading={isAddingCategory} type="primary" htmlType="submit">
-            ADD SUB CATEGORY
-          </Button>
         </Col>
       </Row>
     </Form>

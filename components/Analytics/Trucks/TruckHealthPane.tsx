@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
-import info from "antd/lib/message";
 import Divider from "antd/lib/divider";
 import Collapse from "antd/lib/collapse";
 import moment from "moment";
@@ -15,6 +14,7 @@ import Loader from "../../Shared/Loader";
 import Input from "../../Shared/Input";
 import { useRouter } from "next/router";
 import fileDownload from "js-file-download";
+import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 
 const { Panel } = Collapse;
 
@@ -45,7 +45,7 @@ const TruckHelthPane = () => {
       })
       .catch((err) => {
         setIsPageLoading(false);
-        info.error(err?.data?.message || "Something is wrong");
+        ErrorMessage(err?.data?.message || "Something is wrong");
       });
   }, [startDate, endDate, truckId, getTruckDailyInspection]);
 
@@ -81,7 +81,7 @@ const TruckHelthPane = () => {
         handleDownloadFile(res);
       })
       .catch((err) => {
-        info.error(err?.data?.message || "Something is wrong");
+        ErrorMessage(err?.data?.message || "Something is wrong");
       });
   };
 

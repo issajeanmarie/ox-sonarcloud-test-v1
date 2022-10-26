@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Form from "antd/lib/form";
 import Input from "../Shared/Input";
-import info from "antd/lib/message";
 import { requiredField } from "../../lib/validation/InputValidations";
 import Button from "../Shared/Button";
 import CircleCheckbox from "../Shared/Custom/CircleCheckbox";
@@ -18,6 +17,8 @@ import { useDispatch } from "react-redux";
 import { displaySingleTruck } from "../../lib/redux/slices/trucksSlice";
 import moment from "moment";
 import ModalWrapper from "./ModalWrapper";
+import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
+import { WarningMessage } from "../Shared/Messages/WarningMessage";
 
 type RequestTypes = {
   title: string;
@@ -69,7 +70,7 @@ const NewTRuckDocumentModal = ({
   };
 
   const handleDocumentSuccess = (res: any) => {
-    info.success(res.message);
+    SuccessMessage(res.message);
     form.resetFields();
     handleCancel();
 
@@ -102,7 +103,7 @@ const NewTRuckDocumentModal = ({
 
   const onFinish = ({ title, validFrom, validTo }: RequestTypes) => {
     if (photoData?.length <= 0 && !editTruckData?.url) {
-      info.warn("Document is required!");
+      WarningMessage("Document is required!");
       return;
     }
 
@@ -181,6 +182,20 @@ const NewTRuckDocumentModal = ({
       setIsModalVisible={setIsVisible}
       loading={areRequestsLoading}
       onCancel={handleCancel}
+      footerContent={
+        <Button
+          form="EditTruckDocs"
+          loading={uploadLoading || isLoading || editDocumentLoading}
+          type="primary"
+          htmlType="submit"
+        >
+          {uploadLoading
+            ? "Uploading"
+            : editDocumentLoading
+            ? "Saving"
+            : "Save"}
+        </Button>
+      }
     >
       <Form
         name="CreateTruck"
@@ -188,6 +203,7 @@ const NewTRuckDocumentModal = ({
         layout="vertical"
         form={form}
         title="Plate number"
+        id="EditTruckDocs"
       >
         <div className="flex gap-10 mb-5">
           <div className="flex-1">
@@ -273,24 +289,6 @@ const NewTRuckDocumentModal = ({
               </div>
             </div>
           )}
-        </div>
-
-        <div className="flex gap-10 my-5">
-          <div className="flex-1"></div>
-
-          <div className="flex-1">
-            <Button
-              loading={uploadLoading || isLoading || editDocumentLoading}
-              type="primary"
-              htmlType="submit"
-            >
-              {uploadLoading
-                ? "Uploading"
-                : editDocumentLoading
-                ? "Saving"
-                : "Save"}
-            </Button>
-          </div>
         </div>
       </Form>
     </ModalWrapper>
