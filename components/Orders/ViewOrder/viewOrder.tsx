@@ -453,6 +453,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                       {(user.isAdmin || user.isSuperAdmin) && (
                         <div className="w-[150px]">
                           <Button
+                            form=""
                             onClick={() => setIsEditPaymentStatus(true)}
                             type="secondary"
                           >
@@ -521,6 +522,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                             <div className="ml-3">
                               {user.isSuperAdmin && (
                                 <Button
+                                  form=""
                                   onClick={() => {
                                     setChosenTransaction(tx);
                                     setIsEditPayment(true);
@@ -605,6 +607,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                       <div className="flex justify-end mt-3">
                         <div className="w-[150px]">
                           <Button
+                            form=""
                             type="primary"
                             htmlType="submit"
                             loading={writeOffLoading}

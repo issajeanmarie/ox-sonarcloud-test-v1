@@ -190,6 +190,7 @@ const MobilePayment: FC<MobilePaymentProps> = ({
             </div>
             <div className="mb-7">
               <Button
+                form=""
                 type="primary"
                 htmlType="submit"
                 loading={paymentInitLoading}

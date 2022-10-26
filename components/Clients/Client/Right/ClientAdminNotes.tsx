@@ -62,7 +62,12 @@ const ClientAdminNotes: FC<ClientAdminNotesTypes> = ({ client }) => {
               />
             </Col>
             <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-              <Button loading={isPostingNote} type="primary" htmlType="submit">
+              <Button
+                form=""
+                loading={isPostingNote}
+                type="primary"
+                htmlType="submit"
+              >
                 SAVE NOTE
               </Button>
             </Col>

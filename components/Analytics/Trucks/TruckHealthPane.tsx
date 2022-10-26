@@ -157,6 +157,7 @@ const TruckHealthPane = () => {
 
         <Col className="flex items-center gap-4">
           <CustomButton
+            form=""
             type="secondary"
             onClick={handleDownloadReport}
             loading={isLoading}

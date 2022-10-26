@@ -1,4 +1,4 @@
-import { Col, Form, Popover, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import React, { FC } from "react";
 import Input from "../../Shared/Input";
 import { EditClientLocationTypes } from "../../../lib/types/pageTypes/Clients/EditClientLocationTypes";

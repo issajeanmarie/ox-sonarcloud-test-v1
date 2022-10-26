@@ -24,7 +24,11 @@ const ReceipientCode: FC<ReceipientCodeProps> = ({
         </div>
         <div className="text-center my-8 text-2xl font-bold">{code}</div>
         <div className="text-center w-1/2 m-auto">
-          <Button type="primary" onClick={() => setIsModalVisible(false)}>
+          <Button
+            form=""
+            type="primary"
+            onClick={() => setIsModalVisible(false)}
+          >
             OK
           </Button>
         </div>

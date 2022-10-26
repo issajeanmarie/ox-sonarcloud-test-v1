@@ -234,6 +234,7 @@ const AdminsTable: FC<AdminsTableProps> = ({
           <div className="flex justify-start items-center gap-4">
             <div className="h-1 flex items-center">
               <CustomButton
+                form=""
                 onClick={() => handleResetPWDAdmin(record?.id)}
                 loading={adminToReset === record?.id && isSending}
                 type="normal"
@@ -250,6 +251,7 @@ const AdminsTable: FC<AdminsTableProps> = ({
             </div>
             <div className="h-1 flex items-center">
               <CustomButton
+                form=""
                 onClick={() => showEditModal(record)}
                 type="normal"
                 size="icon"
@@ -265,6 +267,7 @@ const AdminsTable: FC<AdminsTableProps> = ({
             </div>
             <div className="h-1 flex items-center">
               <CustomButton
+                form=""
                 onClick={() => handleToggleAdmin(record?.id)}
                 type="normal"
                 size="icon"
@@ -284,6 +287,7 @@ const AdminsTable: FC<AdminsTableProps> = ({
             </div>
             <div className="h-1 flex items-center">
               <CustomButton
+                form=""
                 onClick={() => showModal(setItemToDelete(record?.id))}
                 type="danger"
                 size="icon"

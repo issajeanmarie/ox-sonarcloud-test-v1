@@ -266,6 +266,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                     onClick={() => handleEditTruckModal(record)}
                   >
                     <CustomButton
+                      form=""
                       type="normal"
                       size="icon"
                       loading={record?.id === isGetSingleTruckLoading}
@@ -285,6 +286,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                     onClick={() => handleToggleTruck(record?.id)}
                   >
                     <CustomButton
+                      form=""
                       type="normal"
                       size="icon"
                       className="bg_danger"
@@ -308,7 +310,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                       router.push(`${routes.Trucks.url}/${record?.id}`)
                     }
                   >
-                    <CustomButton type="view" size="small">
+                    <CustomButton form="" type="view" size="small">
                       View
                     </CustomButton>
                   </Col>

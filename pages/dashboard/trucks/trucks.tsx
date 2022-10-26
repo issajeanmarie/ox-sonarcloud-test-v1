@@ -296,6 +296,7 @@ const Trucks = () => {
             {showPagination && (
               <div style={{ width: "12%", margin: "32px auto" }}>
                 <CustomButton
+                  form=""
                   loading={isLoadMoreLoading}
                   type="secondary"
                   onClick={handleLoadMore}

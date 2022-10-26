@@ -228,6 +228,7 @@ const SalesPage = () => {
             {showPagination && (
               <div style={{ width: "12%", margin: "32px auto" }}>
                 <CustomButton
+                  form=""
                   loading={isLoadMoreLoading}
                   onClick={handleLoadMore}
                   type="secondary"

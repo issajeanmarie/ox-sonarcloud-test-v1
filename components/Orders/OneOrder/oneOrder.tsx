@@ -341,6 +341,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
             const child = (
               <div className="flex items-center gap-3 justify-end">
                 <CustomButton
+                  form=""
                   type="normal"
                   onClick={downloadOrderInvoice}
                   loading={invoiceLoading}
@@ -356,6 +357,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                 />
 
                 <CustomButton
+                  form=""
                   disabled={!canUserDelete}
                   type="danger"
                   size="icon"
@@ -370,6 +372,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                   }
                 />
                 <CustomButton
+                  form=""
                   type="view"
                   size="small"
                   onClick={() =>
