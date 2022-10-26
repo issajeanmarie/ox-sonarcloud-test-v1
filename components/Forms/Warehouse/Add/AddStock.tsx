@@ -29,6 +29,7 @@ const AddStock: FC<AddStockTypes> = ({
 
   const onParentCategoryChange = (value: any) => {
     setParentCategory(value);
+    form.setFieldsValue({ SubCategory: "" });
   };
 
   return (
