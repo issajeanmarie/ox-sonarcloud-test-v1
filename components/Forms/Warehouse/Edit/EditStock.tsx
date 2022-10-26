@@ -13,8 +13,8 @@ const EditStock: FC<EditStockTypes> = ({
   form,
   categories,
   isCategoriesLoading,
-  orders,
-  isOrdersLoading,
+  // orders,
+  // isOrdersLoading,
   depots,
   isDepotsLoading,
   isSuppliersLoading,
@@ -31,6 +31,7 @@ const EditStock: FC<EditStockTypes> = ({
 
   const onParentCategoryChange = (value: any) => {
     setParentCategory(value);
+    form.setFieldsValue({ SubCategory: "" });
   };
 
   return (
@@ -223,19 +224,19 @@ const EditStock: FC<EditStockTypes> = ({
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             name="lhsOrderId"
-            type="select"
-            placeholder="Select LHS order"
-            label="Select LHS order"
-            isLoading={isOrdersLoading}
-            disabled={isOrdersLoading}
-            isGroupDropdown
+            type="text"
+            placeholder="Paste here..."
+            label="Paste LHS order"
+            // isLoading={isOrdersLoading}
+            // disabled={isOrdersLoading}
+            // isGroupDropdown
             defaultValue={itemToEdit?.lhsOrder?.id}
           >
-            {orders?.map((item: any) => (
+            {/* {orders?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
                 {item?.id}
               </Option>
-            ))}
+            ))} */}
           </Input>
         </Col>
       </Row>

@@ -5,7 +5,7 @@ import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Image from "next/image";
 import { AddStockTypes } from "../../../../lib/types/warehouse";
-import { localeString } from "../../../../utils/numberFormatter";
+// import { localeString } from "../../../../utils/numberFormatter";
 
 const { Option } = Select;
 
@@ -14,8 +14,8 @@ const AddStock: FC<AddStockTypes> = ({
   form,
   categories,
   isCategoriesLoading,
-  orders,
-  isOrdersLoading,
+  // orders,
+  // isOrdersLoading,
   depots,
   isDepotsLoading,
   isSuppliersLoading,
@@ -224,19 +224,19 @@ const AddStock: FC<AddStockTypes> = ({
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             name="lhsOrderId"
-            type="select"
-            placeholder="Select LHS order"
-            label="Select LHS order"
-            isLoading={isOrdersLoading}
-            disabled={isOrdersLoading}
-            isGroupDropdown
+            type="text"
+            placeholder="Paste here..."
+            label="Paste LHS order"
+            // isLoading={isOrdersLoading}
+            // disabled={isOrdersLoading}
+            // isGroupDropdown
           >
-            {orders?.map((item: any) => (
+            {/* {orders?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
                 {localeString(item?.weight)} KGs -{" "}
                 {localeString(item.totalAmount)} Rwf
               </Option>
-            ))}
+            ))} */}
           </Input>
         </Col>
       </Row>
