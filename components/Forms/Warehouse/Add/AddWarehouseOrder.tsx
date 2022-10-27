@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Popover, Row, Select } from "antd";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { requiredField } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
@@ -15,6 +15,7 @@ import DriverSearch from "../../../Shared/Input/DriverSearch";
 import ClientSearch from "../../../Shared/Input/ClientSearch";
 import Link from "next/link";
 import { routes } from "../../../../config/route-config";
+import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
@@ -49,6 +50,17 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
     status: "",
     sort: ""
   });
+
+  const depotsState = useSelector(
+    (state: { depots: { payload: { depotId: number } } }) =>
+      state.depots.payload
+  );
+
+  useEffect(() => {
+    form.setFieldsValue({
+      depotId: depotsState.depotId || ""
+    });
+  }, [form]);
 
   return (
     <Form

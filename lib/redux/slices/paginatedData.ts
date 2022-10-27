@@ -44,7 +44,7 @@ const slice = createSlice({
         // THIS SLICE HAS TO RECEIVE ID AS A PROP TO BASE ON REMOVING IT FROM THE LIST
         if (payload.deleted) {
           const newPaginatedDataList =
-            state.displayPaginatedData.payload.content.filter(
+            state?.displayPaginatedData?.payload?.content?.filter(
               (data: { id: number }) => data.id !== payload?.payload?.id
             );
 

@@ -12,7 +12,6 @@ import {
   useLazyGetSingleTruckQuery,
   useToggleTruckMutation
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
-import { displaySingleTruck } from "../../../lib/redux/slices/trucksSlice";
 import { NewTruckModal } from "../../../components/Modals";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
@@ -105,7 +104,6 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
   };
 
   const handleGetSingleTruckSuccess = (res: any) => {
-    dispatch(displaySingleTruck(res));
     setIsGetSingleTruckLoading(null);
 
     setEditTruckData(res);
@@ -119,8 +117,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
     handleAPIRequests({
       request: getSingleTruck,
       id: record?.id,
-      handleSuccess: handleGetSingleTruckSuccess,
-      showSuccess: true
+      handleSuccess: handleGetSingleTruckSuccess
     });
   };
 

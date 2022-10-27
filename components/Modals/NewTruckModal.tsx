@@ -56,6 +56,11 @@ const NewTruckModal = ({
   const [editTruck, { isLoading: isEditTruckLoading }] = useEditTruckMutation();
   const dispatch = useDispatch();
 
+  const depotsState = useSelector(
+    (state: { depots: { payload: { depotId: number } } }) =>
+      state.depots.payload
+  );
+
   const depots = data?.payload?.map((depot) => ({
     label: `${depot.name}`,
     value: depot.id
@@ -138,9 +143,9 @@ const NewTruckModal = ({
       tireSize: editTruckData?.tireSize || "",
       tireBrand: editTruckData?.tireBrand || "",
       trackingUnitSerialNumber: editTruckData?.trackingUnitSerialNumber || "",
-      depotId: editTruckData?.depot?.id || ""
+      depotId: editTruckData?.depot?.id || depotsState?.depotId || ""
     });
-  }, [editTruckData, form]);
+  }, [depotsState?.depotId, editTruckData, form]);
 
   return (
     <ModalWrapper

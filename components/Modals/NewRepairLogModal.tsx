@@ -8,9 +8,8 @@ import ImageUploader from "../Shared/Input/imageUploader";
 import { useCreateTruckRepairLogMutation } from "../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
-import { displayRepairLogs } from "../../lib/redux/slices/trucksSlice";
 import ModalWrapper from "./ModalWrapper";
-import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
+import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
 
 const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -39,10 +38,8 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
 
   const [form] = Form.useForm();
 
-  const handleCreateRepairLogSuccess = (res: any) => {
-    dispatch(displayRepairLogs({ payload: res, add: true }));
-
-    SuccessMessage(res.message);
+  const handleCreateRepairLogSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload }));
     form.resetFields();
     handleCancel();
   };
@@ -58,6 +55,7 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
       request: createTruckRepairLog,
       id: truckId,
       ...data,
+      showSuccess: true,
       handleSuccess: handleCreateRepairLogSuccess
     });
   };

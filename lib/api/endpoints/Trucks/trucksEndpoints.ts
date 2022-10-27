@@ -7,7 +7,8 @@ import {
   ToggleTruckRequest,
   ToggleTruckResponse,
   ToggleTruckIssueRequest,
-  EditTruckRequest
+  EditTruckRequest,
+  DeleteTruckRepairLogRequest
 } from "../../../types/trucksTypes";
 import { baseAPI } from "../../api";
 
@@ -98,8 +99,7 @@ const trucksApi = baseAPI.injectEndpoints({
         }`,
         method: "GET"
       }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) => response
     }),
 
     getTruckIssues: builder.query({
@@ -245,6 +245,19 @@ const trucksApi = baseAPI.injectEndpoints({
       }
     }),
 
+    deleteTruckRepairLog: builder.mutation<
+      CreateTruckResponse,
+      DeleteTruckRepairLogRequest
+    >({
+      invalidatesTags: ["Trucks"],
+      query: ({ id, repairId }) => {
+        return {
+          url: `/trucks/${id}/repairs/${repairId}`,
+          method: "DELETE"
+        };
+      }
+    }),
+
     getTruckShiftsAnalytics: builder.query({
       providesTags: ["Trucks"],
       query: ({ id, start, end }) => ({
@@ -291,5 +304,6 @@ export const {
   useEditTruckDocumentMutation,
   useCreateTruckRepairLogMutation,
   useLazyGetTruckShiftsAnalyticsQuery,
-  useLazyGetTruckRevenueAnalyticsQuery
+  useLazyGetTruckRevenueAnalyticsQuery,
+  useDeleteTruckRepairLogMutation
 } = trucksApi;

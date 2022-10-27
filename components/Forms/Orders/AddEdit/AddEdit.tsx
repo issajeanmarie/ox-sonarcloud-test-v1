@@ -30,6 +30,7 @@ import {
 } from "../../../../helpers/handleLocalStorage";
 import { OX_NEW_ORDER_VALUES } from "../../../../config/constants";
 import { useDriverQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
+import { useSelector } from "react-redux";
 
 const { Option, OptGroup } = Select;
 
@@ -38,6 +39,11 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     useCategoriesQuery();
 
   const router = useRouter();
+
+  const depotsState = useSelector(
+    (state: { depots: { payload: { depotId: number } } }) =>
+      state.depots.payload
+  );
 
   const [getTrucks, { data, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
@@ -173,7 +179,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
       categoryId: values?.categoryId,
       weight: values?.weight,
       driverId: values?.driverId,
-      depotId: values?.depotId,
+      depotId: depotsState?.depotId || values?.depotId,
       amount: values?.amount,
       truckId: values?.truckId,
       stop1: values?.stop1

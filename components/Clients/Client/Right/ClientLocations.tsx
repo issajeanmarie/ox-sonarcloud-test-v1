@@ -70,7 +70,7 @@ const ClientLocations: FC<ClientLocationsTypes> = ({
             icon={
               <Image
                 src="/icons/ic-actions-add-simple.svg"
-                alt="OX Delivery Logo"
+                alt=""
                 width={12}
                 preview={false}
               />

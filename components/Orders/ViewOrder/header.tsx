@@ -112,7 +112,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             className={
               canUserDelete ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
             }
-            src="/icons/receipt.png"
+            src="/icons/receipt.svg"
             alt="Backspace icon"
             onClick={() => canUserDelete && downloadOrderInvoice()}
             width={18}

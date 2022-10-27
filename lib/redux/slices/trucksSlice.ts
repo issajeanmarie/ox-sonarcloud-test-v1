@@ -43,27 +43,12 @@ const slice = createSlice({
       }
     },
 
-    displayRepairLogs: (state, { payload }) => {
-      if (payload.add) {
-        state.displayTrucksRepairLogs.content = [
-          payload.payload.payload,
-          ...state.displayTrucksRepairLogs.content
-        ];
-        return;
-      }
-      state.displayTrucksRepairLogs = { ...payload };
-    },
-
     displaySingleTruck: (state, { payload }) => {
       state.displaySingleTruck = { ...payload };
     }
   }
 });
 
-export const {
-  displayFuelRecords,
-  displayTruckIssues,
-  displayRepairLogs,
-  displaySingleTruck
-} = slice.actions;
+export const { displayFuelRecords, displayTruckIssues, displaySingleTruck } =
+  slice.actions;
 export default slice.reducer;

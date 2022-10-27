@@ -10,7 +10,6 @@ import CustomInput from "../../Shared/Input";
 import { ViewTruckHeaderTypes } from "../../../lib/types/pageTypes/Trucks/ViewTruckHeaderTypes";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import {
-  useDeleteTruckMutation,
   useLazyGetTrucksQuery,
   useToggleTruckMutation
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
@@ -19,7 +18,6 @@ import { userType } from "../../../helpers/getLoggedInUser";
 import { routes } from "../../../config/route-config";
 import Navbar from "../../Shared/Content/Navbar";
 import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
-import { InfoMessage } from "../../Shared/Messages/InfoMessage";
 
 type TrucksHoverTypes = {
   plateNumber: string;
@@ -29,7 +27,8 @@ type TrucksHoverTypes = {
 
 const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   truckData,
-  isPageLoading
+  isPageLoading,
+  setIsVisible
 }) => {
   const router = useRouter();
   const user = userType();
@@ -40,19 +39,12 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
 
   const [getTrucks, { data: trucks, isLoading: isGetTrucksLoading }] =
     useLazyGetTrucksQuery();
-  const [deleteTruck, { isLoading: isDeleteLoading }] =
-    useDeleteTruckMutation();
   const dispatch = useDispatch();
 
   const handleToggleTruckSuccess = (res: any) => {
-    InfoMessage(res.message);
     dispatch(
       displaySingleTruck({ ...truckData, active: res?.payload?.active })
     );
-  };
-
-  const handleDeleteTruckSuccess = () => {
-    router.push(routes.Trucks.url);
   };
 
   const handleGetTrucksSuccess = (res: any) => {
@@ -64,15 +56,8 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
     handleAPIRequests({
       request: toggleTruck,
       id: truckData?.id,
-      handleSuccess: handleToggleTruckSuccess
-    });
-  };
-
-  const handleDeletTruck = () => {
-    handleAPIRequests({
-      request: deleteTruck,
-      id: truckData?.id,
-      handleSuccess: handleDeleteTruckSuccess
+      handleSuccess: handleToggleTruckSuccess,
+      showSuccess: true
     });
   };
 
@@ -207,20 +192,17 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
         />
       )}
 
-      {user.isSuperAdmin &&
-        (isDeleteLoading ? (
-          <SmallSpinLoader />
-        ) : (
-          <Image
-            className="pointer"
-            onClick={handleDeletTruck}
-            src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
-            alt=""
-            width={22}
-            height={22}
-            preview={false}
-          />
-        ))}
+      {user.isSuperAdmin && (
+        <Image
+          className="pointer"
+          onClick={() => setIsVisible(true)}
+          src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
+          alt=""
+          width={22}
+          height={22}
+          preview={false}
+        />
+      )}
     </Col>
   );
 

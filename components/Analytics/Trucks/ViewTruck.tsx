@@ -13,6 +13,11 @@ import TruckTabs from "./TruckTabs";
 import { TruckDataTypes } from "../../../lib/types/trucksTypes";
 import { NewTruckModal } from "../../Modals";
 import NewTRuckDocumentModal from "../../Modals/NewTruckDocumentModal";
+import ActionModal from "../../Shared/ActionModal";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useDeleteTruckMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { routes } from "../../../config/route-config";
+import { useRouter } from "next/router";
 
 interface ViewTruckProps {
   truckId: Query;
@@ -49,6 +54,12 @@ const ViewTruck: FC<ViewTruckProps> = ({
   const [isNewDocumentModalVisible, setIsNewDocumentModalVisible] =
     useState(false);
   const [isUserEditing, setIsUserEditing] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+  const [deleteTruck, { isLoading: isDeleteLoading }] =
+    useDeleteTruckMutation();
+
+  const router = useRouter();
 
   const truckInfo = [
     { name: "CHASSIS NUMBER", value: truckData?.chassisNumber || 0 },
@@ -78,6 +89,20 @@ const ViewTruck: FC<ViewTruckProps> = ({
     setIsUserEditing(true);
   };
 
+  const handleDeleteTruckSuccess = () => {
+    setIsDeleteModalVisible(false);
+    router.push(routes.Trucks.url);
+  };
+
+  const handleDeleteTruck = () => {
+    handleAPIRequests({
+      request: deleteTruck,
+      id: truckData?.id,
+      showSuccess: true,
+      handleSuccess: handleDeleteTruckSuccess
+    });
+  };
+
   return (
     <div className="overflow-hidden">
       {isLoading ? (
@@ -99,10 +124,19 @@ const ViewTruck: FC<ViewTruckProps> = ({
             setIsVisible={setIsNewDocumentModalVisible}
           />
 
+          <ActionModal
+            isModalVisible={isDeleteModalVisible}
+            setIsModalVisible={setIsDeleteModalVisible}
+            type="danger"
+            action={() => handleDeleteTruck()}
+            loading={isDeleteLoading}
+          />
+
           <Header
             truckId={truckId}
             truckData={truckData}
             isPageLoading={isPageLoading}
+            setIsVisible={setIsDeleteModalVisible}
           />
 
           <Row align="middle" gutter={0} justify="space-between">
