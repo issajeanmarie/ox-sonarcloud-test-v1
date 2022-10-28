@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Row, Select } from "antd";
 import React, { FC, useState } from "react";
-import { requiredInput } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Image from "next/image";
 import { EditStockTypes } from "../../../../lib/types/warehouse";
@@ -63,6 +62,7 @@ const EditStock: FC<EditStockTypes> = ({
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
+            defaultValue={itemToEdit?.supplierName}
             name="supplierId"
             type="select"
             placeholder="Select supplier name"
@@ -70,7 +70,6 @@ const EditStock: FC<EditStockTypes> = ({
             isLoading={isSuppliersLoading}
             disabled={isSuppliersLoading}
             isGroupDropdown
-            rules={requiredInput}
           >
             {filteredSuppliers?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
