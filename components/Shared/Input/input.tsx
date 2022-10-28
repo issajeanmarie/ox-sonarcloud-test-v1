@@ -107,7 +107,7 @@ const Entry = ({
     } else {
       setValue("");
     }
-  }, [location]);
+  }, []);
 
   useOnClickOutside(placeSuggestionsRef, () => clearSuggestions());
 
