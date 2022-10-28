@@ -13,9 +13,11 @@ import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoi
 import { useStockQuery } from "../../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
 import ClientSearch from "../../../Shared/Input/ClientSearch";
-import Link from "next/link";
-import { routes } from "../../../../config/route-config";
 import { useSelector } from "react-redux";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { useClientQuery } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
+import moment from "moment";
+import { useDriverQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 
 const { Option } = Select;
 
@@ -27,17 +29,29 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
   createItems,
   onTransportChange,
   transport,
+  onEditSaleFinish,
   onAddSaleFinish,
   form,
   handleChangeWarehouse,
   warehouse,
   handleChangeWeight,
-  weight
+  weight,
+  sale
 }) => {
   const colSize = transport === "none" ? 12 : 8;
 
   const { data: trucks, isLoading: isTrucksLoading } =
     useUnPaginatedTrucksQuery();
+
+  const { data: chosenClientInfo, isFetching: isInitialFetching } =
+    useClientQuery(sale?.client?.id ? { id: sale?.client?.id } : skipToken);
+
+  const { data: chosenDriverInfo, isFetching: isDriverInitialFetching } =
+    useDriverQuery(
+      sale?.transportOrder?.stops[0]?.driver?.id
+        ? { id: sale?.transportOrder?.stops[0]?.driver?.id }
+        : skipToken
+    );
 
   const { data: depots, isLoading: isDepotsLoading } = useDepotsQuery();
 
@@ -58,13 +72,31 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
 
   useEffect(() => {
     form.setFieldsValue({
-      depotId: depotsState.depotId || ""
+      depotId: sale?.depot?.id || depotsState.depotId || "",
+      clientId: sale?.client?.id || "",
+      date: moment(sale?.saleDate),
+      driverId: sale?.transportOrder?.stops[0]?.driver?.id,
+      truckId: sale?.transportOrder?.stops[0]?.truck?.id,
+      Destination:
+        sale?.transportOrder?.stops[sale?.transportOrder?.stops?.length - 1]
+          ?.location
     });
-  }, [form]);
+  }, [
+    depotsState.depotId,
+    form,
+    sale?.client?.id,
+    sale?.depot?.id,
+    sale?.saleDate,
+    sale?.transportOrder?.stops
+  ]);
+
+  const showTruckOnEdit =
+    (sale && sale?.transportOrder && transport !== "none") ||
+    (!sale && transport !== "none");
 
   return (
     <Form
-      onFinish={onAddSaleFinish}
+      onFinish={onEditSaleFinish || onAddSaleFinish}
       form={form}
       name="AddWarehouseOrder"
       layout="vertical"
@@ -90,18 +122,11 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
         </Col>
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <ClientSearch
+            label="Client"
+            isInitialFetching={isInitialFetching}
             name="clientId"
             rules={requiredField("Client")}
-            label={
-              <div className="flex justify-between items-center">
-                <span className="font-bold">Client name</span>
-                <Link href={routes.Clients.url} passHref>
-                  <span className="font-bold underline cursor-pointer">
-                    New client
-                  </span>
-                </Link>
-              </div>
-            }
+            existingValue={chosenClientInfo?.payload}
           />
         </Col>
       </Row>
@@ -283,8 +308,14 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          {transport !== "none" && (
-            <DriverSearch name="driverId" label="Driver" />
+          {showTruckOnEdit && (
+            <DriverSearch
+              isDriverInitialFetching={isDriverInitialFetching}
+              name="driverId"
+              label="Driver"
+              rules={requiredField("Driver")}
+              existingValue={chosenDriverInfo?.payload}
+            />
           )}
         </Col>
 

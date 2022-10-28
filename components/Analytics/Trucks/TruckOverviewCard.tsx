@@ -7,10 +7,9 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDownloadOOSReportMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 
-const TruckOverviewCard = ({ data }: any) => {
+const TruckOverviewCard = ({ data, truckId }: any) => {
   const [downloadOOSReport, { isLoading: isDownloadLoading }] =
     useDownloadOOSReportMutation();
-
   const handleDownloadSuccess = (file: File) => {
     handleDownloadFile({
       file,
@@ -24,7 +23,8 @@ const TruckOverviewCard = ({ data }: any) => {
       request: downloadOOSReport,
       successMessage: "File downloaded successfully!",
       handleSuccess: handleDownloadSuccess,
-      fileType: "XLS"
+      fileType: "XLS",
+      truckId
     });
   };
 

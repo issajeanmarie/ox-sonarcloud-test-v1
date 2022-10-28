@@ -4,7 +4,7 @@
  * @since Aug 19 2022
  */
 
-export const truckPacentageCalculator = (current: number, prev: number) => {
+export const truckPercentageCalculator = (current: number, prev: number) => {
   try {
     if (prev === 0) {
       return ((current - prev) / current) * 100;
@@ -20,7 +20,7 @@ export const truckPacentageCalculator = (current: number, prev: number) => {
  * @since Aug 22 2022
  */
 
-export const KPIsPacentageCalculator = (
+export const KPIsPercentageCalculator = (
   actualAmount: number,
   TargetAmount: number
 ) => {
@@ -38,12 +38,12 @@ export const KPIsPacentageCalculator = (
  * @since Aug 23 2022
  */
 
-export const revenuePacentageCalculator = (
-  allRevenue: number,
-  perKG: number
+export const revenuePercentageCalculator = (
+  totalSales: number,
+  allRevenue: number
 ) => {
   try {
-    const percentage = (allRevenue / perKG) * 100;
+    const percentage = (totalSales / allRevenue) * 100;
     return percentage.toFixed(1);
   } catch (error) {
     return error;

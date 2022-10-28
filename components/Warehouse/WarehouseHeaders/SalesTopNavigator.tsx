@@ -130,7 +130,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
-        title="NEW WAREHOUSE ORDER"
+        title="New WAREHOUSE ORDER"
         loading={isPostingSale}
         footerContent={
           <Button

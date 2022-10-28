@@ -11,7 +11,8 @@ const ClientSearch: FC<ClientSearchTypes> = ({
   name = "clientId",
   label,
   rules,
-  existingValue
+  existingValue,
+  isInitialFetching
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [clients, { data: clientsList }] = useLazyClientsQuery();
@@ -43,7 +44,8 @@ const ClientSearch: FC<ClientSearchTypes> = ({
       placeholder="Select Client"
       onKeyUp={handleClientLiveSearch}
       isGroupDropdown
-      isLoading={isLoading}
+      disabled={isInitialFetching}
+      isLoading={isLoading || isInitialFetching}
       allowClear
       rules={rules}
     >

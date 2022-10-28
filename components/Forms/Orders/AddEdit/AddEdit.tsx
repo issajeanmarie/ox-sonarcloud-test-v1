@@ -66,9 +66,8 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     isLoading: chosenClientLoading,
     isFetching
   } = useClientQuery(chosenClientId ? { id: chosenClientId } : skipToken);
-  const { data: chosenDriverInfo } = useDriverQuery(
-    chosenDriverId ? { id: chosenDriverId } : skipToken
-  );
+  const { data: chosenDriverInfo, isFetching: isDriverInitialFetching } =
+    useDriverQuery(chosenDriverId ? { id: chosenDriverId } : skipToken);
 
   const handleCreateOrder = (values: OrderRequestBody) => {
     const stopsWithTrucksAndDrivers: Stop_Request[] = [];
@@ -213,6 +212,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
 
               <div>
                 <ClientSearch
+                  isInitialFetching={chosenClientLoading}
                   name="clientId"
                   rules={requiredField("Client")}
                   existingValue={chosenClientInfo?.payload}
@@ -421,6 +421,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                 </div>
                 <div>
                   <DriverSearch
+                    isDriverInitialFetching={isDriverInitialFetching}
                     name="driverId"
                     label=""
                     rules={requiredField("Driver")}

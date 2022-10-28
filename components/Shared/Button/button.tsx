@@ -36,7 +36,7 @@ const CustomButton: FC<ButtonProps> = ({
       return (
         <Button
           form={form}
-          className={`my_button ${size === "icon" && "icon"} ${
+          className={`my_button uppercase ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           } bg_yellow ${className}`}
           loading={loading}
@@ -53,7 +53,7 @@ const CustomButton: FC<ButtonProps> = ({
       return (
         <Button
           form={form}
-          className={`my_button ${size === "icon" && "icon"} ${
+          className={`my_button uppercase ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           }  bg_white_yellow yellow ${className}`}
           loading={loading}
@@ -70,7 +70,7 @@ const CustomButton: FC<ButtonProps> = ({
       return (
         <Button
           form={form}
-          className={`my_button ${size === "icon" && "icon"} ${
+          className={`my_button uppercase ${size === "icon" && "icon"} ${
             size === "small" && "sm"
           }  bg_yellow_view_btn yellow ${className}`}
           loading={loading}

@@ -36,7 +36,7 @@ const ModalWrapper: FC<ModalProps> = ({
       className="ox-modal ox_medium_modal"
       title={
         <div className="flex justify-between items-center">
-          <span className="font-bold text-2xl">{title}</span>
+          <span className="font-bold text-2xl uppercase">{title}</span>
           {!loading && (
             <Button
               onClick={onCancel || handleCancel}
