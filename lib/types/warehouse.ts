@@ -103,5 +103,6 @@ export type EditStockTypes = {
         id: number;
       };
     };
+    supplierName: string;
   };
 };

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
@@ -16,12 +18,17 @@ import {
   useLazyStockQuery,
   useStockCategoriesQuery
 } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
-import CardRowWrapper from "../../../components/Cards/CardRowWrapper";
+import CardRowWrapper, {
+  CardMoreStockRowWrapper
+} from "../../../components/Cards/CardRowWrapper";
 import {
+  MediumSpinLoader,
   StockCardsLoader,
   StockTableLoader
 } from "../../../components/Shared/Loaders/Loaders";
-import CardColWrapper from "../../../components/Cards/CardColWrapper";
+import CardColWrapper, {
+  CardMoreStockColWrapper
+} from "../../../components/Cards/CardColWrapper";
 import StockMediumCard from "../../../components/Cards/StockMediumCard";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import StockHistory from "../../../components/Warehouse/Stock/StockHistory";
@@ -30,6 +37,8 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { pagination } from "../../../config/pagination";
+import Image from "next/image";
+import MoreStockCard from "../../../components/Cards/MoreStockCard";
 
 const Stock = () => {
   const [startDate, setStartDate] = useState("");
@@ -169,70 +178,113 @@ const Stock = () => {
         />
 
         <>
-          <StockTopContentWrapper>
-            {isStockCategoriesLoading ? (
-              <>
-                <CardRowWrapper active={active}>
-                  {[...Array(5)].map((_, index) => (
-                    <StockCardsLoader key={index} />
-                  ))}
-                </CardRowWrapper>
-              </>
-            ) : (
-              <CardRowWrapper active="STOCK">
-                {stockCategories?.payload?.slice(0, 6)?.map((item: any) => (
-                  <CardColWrapper key={item?.name} active="STOCK">
-                    <StockMediumCard
-                      title={item?.name}
-                      subTitle={`${
-                        item?.averageUnitCost &&
-                        numbersFormatter(item?.averageUnitCost)
-                      } Rwf / Kg`}
-                      count={item?.totalWeight}
-                      isFetching={isStockCategoriesFetching}
-                    />
-                  </CardColWrapper>
-                ))}
-              </CardRowWrapper>
-            )}
-
-            <StockHistory
-              setFilter={setFilter}
-              filter={filter}
-              onStartDateChange={onStartDateChange}
-              onEndDateChange={onEndDateChange}
-            />
-          </StockTopContentWrapper>
-
-          <Content isOverflowHidden={false} navType="TRIPLE">
-            <>
-              {showFiltersLoader ? (
-                <div className="mt-4">
-                  {[...Array(20)].map((_, index) => (
-                    <StockTableLoader key={index} />
-                  ))}
+          {query?.page === "more" ? (
+            <Content isOverflowHidden={false} navType="DOUBLE">
+              {isStockCategoriesLoading ? (
+                <div className="w-full h-full flex justify-center items-center">
+                  <MediumSpinLoader />
                 </div>
               ) : (
-                <StockHistoryTable
-                  Stocks={AllStocks}
-                  isStocksFetching={showFiltersLoader}
-                  isStockCategoriesFetching={isStockCategoriesFetching}
-                />
+                <CardMoreStockRowWrapper>
+                  {stockCategories?.payload?.slice(0, 5)?.map((item: any) => (
+                    <CardMoreStockColWrapper key={item?.name}>
+                      <MoreStockCard
+                        title={item?.name}
+                        subTitle={`${
+                          item?.averageUnitCost &&
+                          numbersFormatter(item?.averageUnitCost)
+                        } Rwf / Kg`}
+                        count={item?.totalWeight}
+                        isFetching={isStockCategoriesFetching}
+                      />
+                    </CardMoreStockColWrapper>
+                  ))}
+                </CardMoreStockRowWrapper>
               )}
+            </Content>
+          ) : (
+            <>
+              <StockTopContentWrapper>
+                {isStockCategoriesLoading ? (
+                  <>
+                    <CardRowWrapper active={active}>
+                      {[...Array(5)].map((_, index) => (
+                        <StockCardsLoader key={index} />
+                      ))}
+                    </CardRowWrapper>
+                  </>
+                ) : (
+                  <CardRowWrapper active="STOCK">
+                    {stockCategories?.payload?.slice(0, 5)?.map((item: any) => (
+                      <CardColWrapper key={item?.name} active="STOCK">
+                        <StockMediumCard
+                          title={item?.name}
+                          subTitle={`${
+                            item?.averageUnitCost &&
+                            numbersFormatter(item?.averageUnitCost)
+                          } Rwf / Kg`}
+                          count={item?.totalWeight}
+                          isFetching={isStockCategoriesFetching}
+                        />
+                      </CardColWrapper>
+                    ))}
+                    {stockCategories?.payload?.length > 5 && (
+                      <div
+                        onClick={() =>
+                          changeRoute(`${routes.Stock.url}?wtb=STOCK&page=more`)
+                        }
+                        className="bg-[#FBF3DB] w-[123px] flex justify-center items-center cursor-pointer"
+                      >
+                        <Image
+                          src="/icons/arrow-right.svg"
+                          width="34px"
+                          height="19px"
+                          alt=""
+                        />
+                      </div>
+                    )}
+                  </CardRowWrapper>
+                )}
 
-              {showPagination && (
-                <div style={{ width: "12%", margin: "32px auto" }}>
-                  <CustomButton
-                    loading={isLoadMoreLoading}
-                    onClick={handleLoadMore}
-                    type="secondary"
-                  >
-                    Load more
-                  </CustomButton>
-                </div>
-              )}
+                <StockHistory
+                  setFilter={setFilter}
+                  filter={filter}
+                  onStartDateChange={onStartDateChange}
+                  onEndDateChange={onEndDateChange}
+                />
+              </StockTopContentWrapper>
+
+              <Content isOverflowHidden={false} navType="TRIPLE">
+                <>
+                  {showFiltersLoader ? (
+                    <div className="mt-4">
+                      {[...Array(20)].map((_, index) => (
+                        <StockTableLoader key={index} />
+                      ))}
+                    </div>
+                  ) : (
+                    <StockHistoryTable
+                      Stocks={AllStocks}
+                      isStocksFetching={showFiltersLoader}
+                      isStockCategoriesFetching={isStockCategoriesFetching}
+                    />
+                  )}
+
+                  {showPagination && (
+                    <div style={{ width: "12%", margin: "32px auto" }}>
+                      <CustomButton
+                        loading={isLoadMoreLoading}
+                        onClick={handleLoadMore}
+                        type="secondary"
+                      >
+                        Load more
+                      </CustomButton>
+                    </div>
+                  )}
+                </>
+              </Content>
             </>
-          </Content>
+          )}
         </>
       </div>
     </Layout>
