@@ -21,10 +21,11 @@ const MobilePayment: FC<MobilePaymentProps> = ({
     initiated: false,
     payload: null,
     success: false,
-    disconnected: false
+    disconnected: false,
+    failure: false
   });
 
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(order?.clientPhone);
 
   const handleOk = () => {
     setIsModalVisible(false);
@@ -32,6 +33,7 @@ const MobilePayment: FC<MobilePaymentProps> = ({
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setPhoneNumber(order?.clientPhone);
   };
 
   usePaymentPageMoMoPaymentListener({
@@ -45,7 +47,8 @@ const MobilePayment: FC<MobilePaymentProps> = ({
       initiated: false,
       payload: null,
       success: false,
-      disconnected: false
+      disconnected: false,
+      failure: false
     });
 
     setIsModalVisible(false);
@@ -67,9 +70,7 @@ const MobilePayment: FC<MobilePaymentProps> = ({
     form.setFieldsValue({
       amount: order?.remainingAmount
     });
-
-    setPhoneNumber(order?.clientPhone);
-  }, [order]);
+  }, [form, order]);
 
   return (
     <Modal
@@ -175,29 +176,6 @@ const MobilePayment: FC<MobilePaymentProps> = ({
           </button>
         </div>
       )}
-      {/* {isPaymentSuccessful ? (
-        <div className="flex flex-col items-center justify-center h-[300px]">
-          <div>
-            <CheckCircleTwoTone className="text-8xl" twoToneColor="#E7B522" />
-          </div>
-          <div className="mt-5 text-lg capitalize mb-3">
-            Payment successful !
-          </div>
-          <div className="w-[150px] mt-7">
-            <Button
-              type="primary"
-              onClick={() => {
-                setIsPaymentSuccessful(false);
-                handleOk();
-              }}
-            >
-              OK
-            </Button>
-          </div>
-        </div>
-      ) : (
-        
-      )} */}
     </Modal>
   );
 };

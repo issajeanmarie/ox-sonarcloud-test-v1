@@ -12,11 +12,13 @@ export const useGlobalMoMoPaymentListener = ({
         if (msg.body) {
           const jsonBody = JSON.parse(msg.body);
           if (jsonBody) {
-            jsonBody?.payload && setIsNotifyEnabled(true);
-            setNotificationMessage({
-              message: jsonBody?.message,
-              amount: jsonBody?.amount
-            });
+            if (jsonBody.payload && jsonBody?.payload?.status !== "FAILED") {
+              setNotificationMessage({
+                message: jsonBody?.message,
+                amount: jsonBody?.payload?.amount
+              });
+              jsonBody?.payload && setIsNotifyEnabled(true);
+            }
           }
         }
       });
@@ -59,7 +61,8 @@ export const usePaymentPageMoMoPaymentListener = ({
               ...paymentProgress,
               initiated: !jsonBody?.payload && true,
               payload: jsonBody?.payload,
-              success: !!jsonBody?.payload
+              success:
+                jsonBody?.payload && jsonBody?.payload?.status !== "FAILED"
             });
           }
         }

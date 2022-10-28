@@ -8,4 +8,5 @@ export type SearchDriverTypes = {
   label?: string | undefined;
   rules?: any;
   existingValue?: any;
+  isDriverInitialFetching?: boolean;
 };

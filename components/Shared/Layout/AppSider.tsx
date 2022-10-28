@@ -150,10 +150,8 @@ const AppSider = ({ collapsed }: any) => {
     <>
       <Notification
         notify={isNotifyEnabled}
-        textMessage={
-          notificationMessage.message || "Payment successfully completed!"
-        }
-        caption={`MoMo payment of ${
+        textMessage={notificationMessage.message}
+        description={`MoMo payment of ${
           notificationMessage.amount || 0
         } Rwf successful!`}
         endNotification={setNotificationMessage}

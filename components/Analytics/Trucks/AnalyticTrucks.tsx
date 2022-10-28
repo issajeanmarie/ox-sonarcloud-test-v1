@@ -23,7 +23,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
   onStartDateChange,
   onEndDateChange,
   handleSearch,
-  handleDownloadClients,
+  handleDownloadTruckUsage,
   isDownloadingTruckReport,
   isDownloadFetching,
   selectedSort,
@@ -31,7 +31,8 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
   depotsState,
   startDate,
   endDate,
-  searchQuery
+  searchQuery,
+  handleDownloadTruckMonthlyReport
 }) => {
   const formData = new FormData();
   const [uploadResponse, setUploadResponse] = useState("");
@@ -136,7 +137,8 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
             uploadingFuelReport={uploadingFuelReport}
             uploadFileProps={uploadFileProps}
             handleSearch={handleSearch}
-            handleDownloadClients={handleDownloadClients}
+            handleDownloadTruckUsage={handleDownloadTruckUsage}
+            handleDownloadTruckMonthlyReport={handleDownloadTruckMonthlyReport}
             isDownloadingTruckReport={isDownloadingTruckReport}
             isDownloadFetching={isDownloadFetching}
             selectedSort={selectedSort}

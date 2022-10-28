@@ -286,6 +286,7 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
           </Text>
         </Col>
       </Row>
+
       <ActionModal
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}

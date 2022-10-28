@@ -44,7 +44,7 @@ const OvervieWPane = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isPageLoading, setIsPageLoading] = useState(false);
-  const [selectedDay, setselectedDay] = useState<any>(daysList[0]);
+  const [selectedDay, setSelectedDay] = useState<any>(daysList[0]);
   const [isDateCustom, setIsDateCustom] = useState(false);
 
   const router = useRouter();
@@ -157,7 +157,7 @@ const OvervieWPane = () => {
               label="Show"
               dropDownContent={daysList}
               defaultSelected={selectedDay}
-              setDefaultSelected={setselectedDay}
+              setDefaultSelected={setSelectedDay}
             />
           ) : (
             <Row align="middle" gutter={12}>
@@ -166,7 +166,7 @@ const OvervieWPane = () => {
                 <Image
                   onClick={() => {
                     setIsDateCustom(false);
-                    setselectedDay(daysList[0]);
+                    setSelectedDay(daysList[0]);
                   }}
                   preview={false}
                   src="/icons/close_black_24dp.svg"
@@ -236,7 +236,7 @@ const OvervieWPane = () => {
                 key={data?.name}
                 className="mb-8"
               >
-                <TruckOverviewCard data={data} />
+                <TruckOverviewCard data={data} truckId={truckId} />
               </Col>
             ))}
           </Row>

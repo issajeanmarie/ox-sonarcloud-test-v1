@@ -2,6 +2,7 @@
 import { LatLng } from "use-places-autocomplete";
 
 export type AddWarehouseOrderTypes = {
+  sale?: any;
   setLocation: React.Dispatch<
     React.SetStateAction<
       | {
@@ -29,7 +30,8 @@ export type AddWarehouseOrderTypes = {
   ];
   onTransportChange: any;
   transport: any;
-  onAddSaleFinish: any;
+  onAddSaleFinish?: any;
+  onEditSaleFinish?: any;
   form: any;
   handleChangeWarehouse: (value: string) => void;
   isPostingSale: boolean;

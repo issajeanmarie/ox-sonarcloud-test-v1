@@ -148,4 +148,5 @@ export type ClientSearchTypes = {
   label?: string | undefined | ReactNode;
   rules?: any;
   existingValue?: any;
+  isInitialFetching?: boolean;
 };

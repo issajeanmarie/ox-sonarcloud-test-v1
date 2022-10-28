@@ -8,13 +8,13 @@ const Context = React.createContext({ name: "Default" });
 type Types = {
   notify: boolean;
   textMessage: string;
-  caption: string;
+  description: string;
   endNotification: any;
 };
 
 const Notification: React.FC<Types> = ({
   notify,
-  caption,
+  description,
   textMessage,
   endNotification
 }) => {
@@ -23,12 +23,12 @@ const Notification: React.FC<Types> = ({
   const openNotification = (placement: NotificationPlacement) => {
     api.info({
       message: (
-        <span className="font-bold">
-          {textMessage || "Action successfully completed!"}
-        </span>
+        <span className="font-bold">{textMessage || "Notification!"}</span>
       ),
       description: (
-        <span className="text-sm font-normal opacity-50 italic">{caption}</span>
+        <span className="text-sm font-normal opacity-50 italic">
+          {description}
+        </span>
       ),
       placement,
       icon: (

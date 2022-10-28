@@ -4,17 +4,34 @@ import React, { FC, useState } from "react";
 import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { useCancelSaleMutation } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
-import { BackendErrorTypes, GenericResponse } from "../../../lib/types/shared";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import AddWarehouseOrder from "../../Forms/Warehouse/Add/AddWarehouseOrder";
+import ModalWrapper from "../../Modals/ModalWrapper";
 import ActionModal from "../../Shared/ActionModal";
-import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
-import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
+import Button from "../../Shared/Button";
 
-type SingleOrderTopTypes = {
-  sale: any;
-  isSaleLoading: boolean;
-};
-
-const SingleOrderTop: FC<SingleOrderTopTypes> = ({ sale, isSaleLoading }) => {
+const SingleOrderTop: FC<any> = ({
+  sale,
+  isSaleLoading,
+  createItems,
+  setItems,
+  items,
+  setLocation,
+  location,
+  handleChangeWarehouse,
+  warehouse,
+  handleChangeWeight,
+  weight,
+  onTransportChange,
+  transport,
+  isPostingSale,
+  onAddSaleFinish,
+  onEditSaleFinish,
+  setIsEditModalVisible,
+  isEditModalVisible,
+  isEditSaleLoading,
+  form
+}) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [cancelSale, { isLoading: isCancelingSale }] = useCancelSaleMutation();
 
@@ -22,16 +39,17 @@ const SingleOrderTop: FC<SingleOrderTopTypes> = ({ sale, isSaleLoading }) => {
     setIsModalVisible(true);
   };
 
+  const handleCancelSaleSuccess = () => {
+    setIsModalVisible(false);
+  };
+
   const handleCancelSale = () => {
-    cancelSale({
-      id: sale?.id
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+    handleAPIRequests({
+      request: cancelSale,
+      id: sale?.id,
+      showSuccess: true,
+      handleSuccess: handleCancelSaleSuccess
+    });
   };
 
   return (
@@ -69,6 +87,7 @@ const SingleOrderTop: FC<SingleOrderTopTypes> = ({ sale, isSaleLoading }) => {
         ) : (
           <>
             <AntDImage
+              onClick={() => setIsEditModalVisible(true)}
               className="pointer"
               src="/icons/ic-contact-edit.svg"
               alt="Backspace icon"
@@ -76,7 +95,7 @@ const SingleOrderTop: FC<SingleOrderTopTypes> = ({ sale, isSaleLoading }) => {
               height={18}
               preview={false}
             />
-            {sale?.status !== "CANCELLED" && (
+            {sale?.status !== "CANCELLED" ? (
               <AntDImage
                 className="pointer"
                 onClick={() => showModal()}
@@ -86,10 +105,49 @@ const SingleOrderTop: FC<SingleOrderTopTypes> = ({ sale, isSaleLoading }) => {
                 height={22}
                 preview={false}
               />
+            ) : (
+              <span className="font-bold nowrap text-ox-red">CANCELLED</span>
             )}
           </>
         )}
       </Col>
+
+      <ModalWrapper
+        setIsModalVisible={setIsEditModalVisible}
+        isModalVisible={isEditModalVisible}
+        title="EDIT WAREHOUSE ORDER"
+        loading={isPostingSale || isEditSaleLoading}
+        footerContent={
+          <Button
+            form="AddWarehouseOrder"
+            loading={isPostingSale || isEditSaleLoading}
+            type="primary"
+            htmlType="submit"
+          >
+            {sale ? "SAVE" : "CONFIRM ORDER"}
+          </Button>
+        }
+      >
+        <AddWarehouseOrder
+          sale={sale}
+          createItems={createItems}
+          setItems={setItems}
+          items={items}
+          setLocation={setLocation}
+          location={location}
+          handleChangeWarehouse={handleChangeWarehouse}
+          warehouse={warehouse ? JSON.parse(warehouse) : warehouse}
+          handleChangeWeight={handleChangeWeight}
+          weight={weight}
+          onTransportChange={onTransportChange}
+          transport={transport}
+          isPostingSale={isPostingSale}
+          onAddSaleFinish={onAddSaleFinish}
+          onEditSaleFinish={onEditSaleFinish}
+          form={form}
+        />
+      </ModalWrapper>
+
       <ActionModal
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}

@@ -176,8 +176,10 @@ const trucksApi = baseAPI.injectEndpoints({
     }),
 
     downloadOOSReport: builder.mutation({
-      query: ({ fileType }) => ({
-        url: `/trucks/repairs/download?file_type=${fileType || ""}`,
+      query: ({ fileType, truckId }) => ({
+        url: `/trucks/${
+          truckId ? `${truckId}/` : ""
+        }repairs/download?file_type=${fileType || ""}`,
         method: "GET",
         headers: {
           "content-type": "application/octet-stream"

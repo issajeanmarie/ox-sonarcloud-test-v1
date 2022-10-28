@@ -5,7 +5,10 @@ import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute
 import { AnalyticLinks } from "../../../components/Analytics/AnalyticLinks";
 import AnalyticTrucks from "../../../components/Analytics/Trucks/AnalyticTrucks";
 
-import { useLazyDownloadTruckAnalyticsQuery } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
+import {
+  useLazyDownloadTruckMonthlyReportQuery,
+  useLazyDownloadTruckAnalyticsQuery
+} from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import Content from "../../../components/Shared/Content";
 import { useSelector } from "react-redux";
@@ -53,6 +56,14 @@ const Analytics = () => {
     { isLoading: isDownloadingTruckReport, isFetching: isDownloadFetching }
   ] = useLazyDownloadTruckAnalyticsQuery();
 
+  const [
+    downloadTruckMonthlyReport,
+    {
+      isLoading: isDownloadingTruckMonthlyReport,
+      isFetching: isDownloadTruckMonthlyReportFetching
+    }
+  ] = useLazyDownloadTruckMonthlyReportQuery();
+
   const handleDownloadAnalyticsSuccess = (file: File) => {
     handleDownloadFile({
       file,
@@ -61,7 +72,15 @@ const Analytics = () => {
     });
   };
 
-  const handleDownloadClients = () => {
+  const handleDownloadTruckMonthlyReportSuccess = (file: File) => {
+    handleDownloadFile({
+      file,
+      name: "Truck-Monthly-Report",
+      fileFormat: "xlsx"
+    });
+  };
+
+  const handleDownloadTruckUsage = () => {
     handleAPIRequests({
       request: downloadTruckAnalytics,
       file_type: "PDF",
@@ -71,7 +90,19 @@ const Analytics = () => {
       sortBy: sorter?.value || "",
       direction: "",
       search: searchQuery,
+      showSuccess: true,
       handleSuccess: handleDownloadAnalyticsSuccess
+    });
+  };
+
+  const handleDownloadTruckMonthlyReport = () => {
+    handleAPIRequests({
+      request: downloadTruckMonthlyReport,
+      file_type: "xlsx",
+      start: startDate,
+      end: endDate,
+      showSuccess: true,
+      handleSuccess: handleDownloadTruckMonthlyReportSuccess
     });
   };
 
@@ -137,9 +168,16 @@ const Analytics = () => {
                 onStartDateChange={onStartDateChange}
                 onEndDateChange={onEndDateChange}
                 handleSearch={handleSearch}
-                handleDownloadClients={handleDownloadClients}
-                isDownloadingTruckReport={isDownloadingTruckReport}
-                isDownloadFetching={isDownloadFetching}
+                handleDownloadTruckUsage={handleDownloadTruckUsage}
+                handleDownloadTruckMonthlyReport={
+                  handleDownloadTruckMonthlyReport
+                }
+                isDownloadingTruckReport={
+                  isDownloadingTruckReport || isDownloadingTruckMonthlyReport
+                }
+                isDownloadFetching={
+                  isDownloadFetching || isDownloadTruckMonthlyReportFetching
+                }
                 selectedSort={sorter}
                 setSelectedSort={setSorter}
                 depotsState={depotsState}

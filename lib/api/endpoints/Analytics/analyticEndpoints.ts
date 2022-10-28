@@ -42,6 +42,23 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
       })
     }),
 
+    downloadTruckMonthlyReport: builder.query<
+      AnalyticsResponse,
+      DownloadTruckAnalyticsRequest
+    >({
+      providesTags: ["Analytics", "Depot"],
+      query: (DTO) => ({
+        url: `/trucks/monthly-report/download?start=${DTO.start || ""}&end=${
+          DTO.end || ""
+        }`,
+        method: "GET",
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
+      })
+    }),
+
     downloadAnalyticsReport: builder.mutation({
       query: (DTO) => ({
         url: `/reports?startDate=${DTO.start}&endDate=${DTO.end}&scope=${
@@ -95,5 +112,6 @@ export const {
   useKPIsAnalyticsQuery,
   useDownloadTruckAnalyticsQuery,
   useLazyDownloadTruckAnalyticsQuery,
-  useDownloadAnalyticsReportMutation
+  useDownloadAnalyticsReportMutation,
+  useLazyDownloadTruckMonthlyReportQuery
 } = analyticsEndpoints;

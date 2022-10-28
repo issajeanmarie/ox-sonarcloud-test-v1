@@ -6,7 +6,7 @@ import RowsWrapper from "../RowsWrapper";
 import { truckTableTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticTrucksTypes";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
-import { truckPacentageCalculator } from "../../../helpers/pacentageCalculators";
+import { truckPercentageCalculator } from "../../../helpers/pacentageCalculators";
 
 const { Text } = Typography;
 
@@ -54,7 +54,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
             </Text>
             <Text className="text-xs fowe700 italic">
               {record?.previousTotalRevenue &&
-                truckPacentageCalculator(
+                truckPercentageCalculator(
                   record?.totalRevenue,
                   record?.previousTotalRevenue
                 )}
@@ -75,7 +75,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
             </Text>
             <Text className="text-xs fowe700 red">
               {record.totalPaid &&
-                truckPacentageCalculator(
+                truckPercentageCalculator(
                   record?.totalPaid,
                   record?.previousTotalPaid
                 )}
@@ -97,7 +97,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
             </Text>
             <Text className="text-xs fowe700 red">
               {record.totalDistance &&
-                truckPacentageCalculator(
+                truckPercentageCalculator(
                   record?.totalDistance,
                   record?.previousTotalDistance
                 )}
@@ -131,7 +131,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
             </Text>
             <Text className="text-xs fowe700 yellow">
               {record.totalWeight &&
-                truckPacentageCalculator(
+                truckPercentageCalculator(
                   record?.totalWeight,
                   record?.previousTotalWeight
                 )}
@@ -152,7 +152,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
             </Text>
             <Text className="text-xs fowe700 red">
               {record.totalHours &&
-                truckPacentageCalculator(
+                truckPercentageCalculator(
                   record?.totalHours,
                   record?.previousTotalHours
                 )}
@@ -173,7 +173,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
             </Text>
             <Text className="text-xs fowe700 red">
               {record.totalFuel &&
-                truckPacentageCalculator(
+                truckPercentageCalculator(
                   record?.totalFuel,
                   record?.previousTotalFuel
                 )}

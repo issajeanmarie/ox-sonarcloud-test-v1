@@ -30,7 +30,7 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
             ORDER {sale?.transportOrder?.id}
           </span>
           <span className="text-sm">
-            {sale?.createdAt && moment(sale?.createdAt).format("ll")}
+            {sale?.createdAt && moment(sale?.saleDate).format("ll")}
           </span>
         </div>
 

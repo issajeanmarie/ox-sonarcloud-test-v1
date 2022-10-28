@@ -7,7 +7,8 @@ export type AnalyticTrucksTypes = {
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
   handleSearch: (e: SearchType) => void;
-  handleDownloadClients: () => void;
+  handleDownloadTruckUsage: () => void;
+  handleDownloadTruckMonthlyReport: () => void;
   isDownloadingTruckReport: boolean;
   isDownloadFetching: boolean;
   selectedSort: any;

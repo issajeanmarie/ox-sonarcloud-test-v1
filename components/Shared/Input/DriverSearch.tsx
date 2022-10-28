@@ -11,7 +11,8 @@ const DriverSearch: FC<SearchDriverTypes> = ({
   name = "driver",
   label,
   rules,
-  existingValue
+  existingValue,
+  isDriverInitialFetching
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchDriver, { data: drivers }] = useLazySearchDriverQuery();
@@ -41,9 +42,10 @@ const DriverSearch: FC<SearchDriverTypes> = ({
       type="select"
       label={label}
       placeholder="Type to search"
+      disabled={isDriverInitialFetching}
       onKeyUp={handleDriverLiveSearch}
       isGroupDropdown
-      isLoading={isLoading}
+      isLoading={isLoading || isDriverInitialFetching}
       allowClear
       rules={rules}
     >

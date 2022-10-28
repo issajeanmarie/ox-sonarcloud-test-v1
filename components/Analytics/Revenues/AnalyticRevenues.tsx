@@ -16,7 +16,7 @@ import {
   SmallSpinLoader
 } from "../../Shared/Loaders/Loaders";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
-import { revenuePacentageCalculator } from "../../../helpers/pacentageCalculators";
+import { revenuePercentageCalculator } from "../../../helpers/pacentageCalculators";
 import WeightPerCategoriesChart from "../Charts/WeightPerCategoriesChart";
 import RevenuePerCategoriesChart from "../Charts/RevenuePerCategoriesChart";
 
@@ -63,13 +63,17 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 end={end}
                 title="Revenue made in Rwf"
                 subTitle={`${
-                  revenueData?.totalRevenueByJobPaidByKg &&
-                  numbersFormatter(revenueData?.totalRevenueByJobPaidByKg)
-                } Rwf (${revenuePacentageCalculator(
-                  revenueData?.totalRevenueByJobPaidByKg,
-                  revenueData?.totalRevenueByJob
-                )}%) paid per KG`}
-                count={revenueData?.totalRevenueByJob}
+                  revenueData?.totalSalesRevenue &&
+                  numbersFormatter(revenueData?.totalSalesRevenue)
+                } Rwf (${revenuePercentageCalculator(
+                  revenueData?.totalSalesRevenue,
+                  revenueData?.totalRevenueByJob +
+                    revenueData?.totalSalesRevenue
+                )}%) warehouse sales`}
+                count={
+                  revenueData?.totalRevenueByJob +
+                  revenueData?.totalSalesRevenue
+                }
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
@@ -80,7 +84,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 subTitle={`${
                   revenueData?.totalCollectedAmountPaidByKg &&
                   numbersFormatter(revenueData?.totalCollectedAmountPaidByKg)
-                } Rwf (${revenuePacentageCalculator(
+                } Rwf (${revenuePercentageCalculator(
                   revenueData?.totalCollectedAmountPaidByKg,
                   revenueData?.totalCollectedAmount
                 )}%) paid per KG`}
@@ -97,7 +101,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 subTitle={`${
                   revenueData?.totalDistanceByJobs &&
                   numbersFormatter(revenueData?.totalDistanceByJobs)
-                } Hrs (${revenuePacentageCalculator(
+                } Hrs (${revenuePercentageCalculator(
                   revenueData?.totalDistance,
                   revenueData?.totalDistanceByJobs
                 )}%) with cargo`}
@@ -115,7 +119,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 subTitle={`${
                   revenueData?.totalHoursByJobs &&
                   numbersFormatter(revenueData?.totalHoursByJobs)
-                } Hrs (${revenuePacentageCalculator(
+                } Hrs (${revenuePercentageCalculator(
                   revenueData?.totalHoursByJobs,
                   revenueData?.totalHours
                 )}%) with cargo`}

@@ -203,14 +203,14 @@ const Trucks = () => {
       <Dropdown overlay={downloadOOSdropdown} placement="bottomLeft">
         <div className="flex items-center gap-6 w-[120px]">
           <Button loading={isDownloadLoading} type="secondary">
-            DOWNLOAD LIST
+            Download
           </Button>
         </div>
       </Dropdown>
 
       <div className="flex items-center gap-6 w-[120px]">
         <Button type="primary" onClick={() => setIsVisible(true)}>
-          NEW TRUCK
+          New Truck
         </Button>
       </div>
     </div>

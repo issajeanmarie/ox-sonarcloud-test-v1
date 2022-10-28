@@ -10,7 +10,7 @@ import { AnalyticKPIsTypes } from "../../../lib/types/pageTypes/Analytics/Analyt
 import LargeCard from "../../Cards/LargeCard";
 import { AnalyticCardsLoader } from "../../Shared/Loaders/Loaders";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
-import { KPIsPacentageCalculator } from "../../../helpers/pacentageCalculators";
+import { KPIsPercentageCalculator } from "../../../helpers/pacentageCalculators";
 
 const AnalyticKPIs: FC<AnalyticKPIsTypes> = ({
   active,
@@ -38,7 +38,7 @@ const AnalyticKPIs: FC<AnalyticKPIsTypes> = ({
                 amount2={KPIsData?.averageTargetPerDay}
                 percentage={
                   KPIsData?.averageActualPerDay &&
-                  KPIsPacentageCalculator(
+                  KPIsPercentageCalculator(
                     KPIsData?.averageActualPerDay,
                     KPIsData?.averageTargetPerDay
                   )
@@ -54,7 +54,7 @@ const AnalyticKPIs: FC<AnalyticKPIsTypes> = ({
                 amount2={KPIsData?.averageTargetPerKm}
                 percentage={
                   KPIsData?.averageActualPerKm &&
-                  KPIsPacentageCalculator(
+                  KPIsPercentageCalculator(
                     KPIsData?.averageActualPerKm,
                     KPIsData?.averageTargetPerKm
                   )

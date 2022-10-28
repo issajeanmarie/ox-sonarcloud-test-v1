@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Form from "antd/lib/form";
 import Select from "antd/lib/select";
 import Input from "../../../Shared/Input";
@@ -20,6 +20,9 @@ import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
 import { displayOrders } from "../../../../lib/redux/slices/ordersSlice";
 import { useDispatch } from "react-redux";
+import { useDriverQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
+import { requiredField } from "../../../../lib/validation/InputValidations";
 
 const { Option } = Select;
 
@@ -36,9 +39,13 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   loading,
   setCurrentPages
 }) => {
+  const [chosenDriverId, setChosenDriverId] = useState<number>();
   const dispatch = useDispatch();
   const [getTrucks, { data: trucks, isLoading: trucksLoading }] =
     useLazyGetTrucksQuery();
+  const { data: chosenDriverInfo } = useDriverQuery(
+    chosenDriverId ? { id: chosenDriverId } : skipToken
+  );
 
   const handleOnFinish = (values: Order_Filter) => {
     setIsFiltered(true);
@@ -115,23 +122,26 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
 
   const savedFilters = getFromLocal(OX_ORDERS_FILTERS);
 
-  const initialValues = {
-    start: savedFilters?.start
-      ? moment(savedFilters?.start, yearDateFormat)
-      : "",
-    end: savedFilters?.end ? moment(savedFilters?.end, yearDateFormat) : "",
-    momoRefCode: savedFilters?.momoRefCode || "",
-    filter: savedFilters?.filter || "",
-    driver: savedFilters?.driver || "",
-    truck: savedFilters?.truck || ""
-  };
+  useEffect(() => {
+    setChosenDriverId(savedFilters?.driver);
+
+    form.setFieldsValue({
+      start: savedFilters?.start
+        ? moment(savedFilters?.start, yearDateFormat)
+        : "",
+      end: savedFilters?.end ? moment(savedFilters?.end, yearDateFormat) : "",
+      momoRefCode: savedFilters?.momoRefCode || "",
+      filter: savedFilters?.filter || "",
+      driver: savedFilters?.driver || "",
+      truck: savedFilters?.truck || ""
+    });
+  }, [form]);
 
   return (
     <div>
       <Form
         name="Filter orders"
         form={form}
-        initialValues={initialValues}
         layout="vertical"
         title="FILTER ORDERS"
         onFinish={handleOnFinish}
@@ -181,7 +191,12 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
               </Input>
             </div>
             <div className="flex-1">
-              <DriverSearch label="Driver" />
+              <DriverSearch
+                name="driver"
+                label="Driver"
+                rules={requiredField("Driver")}
+                existingValue={chosenDriverInfo?.payload}
+              />
             </div>
           </div>
           <div className="flex items-center gap-4 ">

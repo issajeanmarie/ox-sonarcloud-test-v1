@@ -1,4 +1,4 @@
-import { Col, Image, Row, Typography, Upload } from "antd";
+import { Col, Dropdown, Image, Row, Typography, Upload } from "antd";
 import React, { FC } from "react";
 import Input from "../../Shared/Input";
 import CustomButton from "../../Shared/Button/button";
@@ -15,12 +15,31 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
   uploadingFuelReport,
   uploadFileProps,
   handleSearch,
-  handleDownloadClients,
+  handleDownloadTruckUsage,
   isDownloadingTruckReport,
   isDownloadFetching,
   selectedSort,
-  setSelectedSort
+  setSelectedSort,
+  handleDownloadTruckMonthlyReport
 }) => {
+  const downloadButtonDropdown = (
+    <div className="radius4  p-6 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
+      <Row
+        onClick={handleDownloadTruckUsage}
+        className="hover:bg-gray-50 hover:p-2  cursor-pointer my-4 rounded transition-all duration-300"
+      >
+        <Col>Download Truck Usage Report</Col>
+      </Row>
+
+      <Row
+        onClick={handleDownloadTruckMonthlyReport}
+        className="hover:bg-gray-50 hover:p-2  cursor-pointer mb-4 rounded transition-all duration-300"
+      >
+        <Col>Download Operations Report</Col>
+      </Row>
+    </div>
+  );
+
   return (
     <Row
       justify="space-between"
@@ -107,20 +126,25 @@ const TrucksUsage: FC<TrucksUsageTypes> = ({
             />
           }
         />
-        <CustomButton
-          onClick={handleDownloadClients}
-          disabled={isDownloadingTruckReport || isDownloadFetching}
-          type="secondary"
-          size="small"
-        >
-          <span className="text-sm">
-            {isDownloadingTruckReport || isDownloadFetching ? (
-              <SmallSpinLoader />
-            ) : (
-              YellowDownloadIcon
-            )}
-          </span>
-        </CustomButton>
+
+        <Dropdown overlay={downloadButtonDropdown} placement="bottomRight">
+          <div className="flex items-center gap-6 w-[120px]">
+            <CustomButton
+              disabled={isDownloadingTruckReport || isDownloadFetching}
+              type="secondary"
+              size="small"
+            >
+              <span className="text-sm">
+                {isDownloadingTruckReport || isDownloadFetching ? (
+                  <SmallSpinLoader />
+                ) : (
+                  YellowDownloadIcon
+                )}
+              </span>
+            </CustomButton>
+          </div>
+        </Dropdown>
+
         <Upload {...uploadFileProps}>
           <CustomButton loading={uploadingFuelReport} type="primary">
             <span className="text-sm">UPLOAD FUEL REPORT</span>
