@@ -6,7 +6,7 @@ import Col from "antd/lib/col";
 import { localeString } from "../../../utils/numberFormatter";
 import Button from "../../Shared/Button";
 import ModalWrapper from "../../Modals/ModalWrapper";
-import { Form } from "antd";
+import { Form, Image as AntdImage } from "antd";
 import { StockTopNavigatorTypes } from "../../../lib/types/pageTypes/Warehouse/Stock/StockTopNavigator";
 import DropDownSelector from "../../Shared/DropDownSelector";
 import AddStock from "../../Forms/Warehouse/Add/AddStock";
@@ -22,6 +22,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
+import Input from "../../Shared/Input";
 
 const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
   showModal,
@@ -104,6 +105,25 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
             ]}
           />
         </Col>
+        {query?.page === "more" && (
+          <Col>
+            <Input
+              // onChange={handleSearch}
+              type="text"
+              placeholder="Search item"
+              name="searchClient"
+              allowClear
+              suffixIcon={
+                <AntdImage
+                  width={10}
+                  src="/icons/ic-actions-search-DESKTOP-JLD6GCT.svg"
+                  preview={false}
+                  alt=""
+                />
+              }
+            />
+          </Col>
+        )}
       </Row>
     </Col>
   );
