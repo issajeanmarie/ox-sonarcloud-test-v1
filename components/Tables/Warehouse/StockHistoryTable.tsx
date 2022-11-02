@@ -9,7 +9,10 @@ import CustomButton from "../../Shared/Button";
 import Button from "../../Shared/Button";
 import moment from "moment";
 import { FC, useState } from "react";
-import { useEditStockMutation } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
+import {
+  useDeleteStockMutation,
+  useEditStockMutation
+} from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditStock from "../../Forms/Warehouse/Edit/EditStock";
 import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/categoryEndpoints";
@@ -21,6 +24,8 @@ import { routes } from "../../../config/route-config";
 import { useDispatch } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import ActionModal from "../../Shared/ActionModal";
+import { userType } from "../../../helpers/getLoggedInUser";
 
 const { Text } = Typography;
 
@@ -28,18 +33,29 @@ type StockHistoryTableProps = {
   Stocks: any;
   isStocksFetching: boolean;
   isStockCategoriesFetching: boolean;
+  tableType?: string;
 };
 
 const StockHistoryTable: FC<StockHistoryTableProps> = ({
   Stocks,
-  isStockCategoriesFetching
+  isStockCategoriesFetching,
+  tableType
 }) => {
   const [form] = Form.useForm();
 
+  const [itemToDelete, setItemToDelete] = useState<
+    string | number | undefined
+  >();
+  const [isDeleteModalVisible, setIsDeleteModalVisible] =
+    useState<boolean>(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
 
   const [editStock, { isLoading: isEditing }] = useEditStockMutation();
+  const [deleteStock, { isLoading: isDeleteStockLoading }] =
+    useDeleteStockMutation();
+
+  const user = userType();
 
   //edit
 
@@ -125,12 +141,32 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
     });
   };
 
+  const showDeleteModal = (stockId: number | string) => {
+    setItemToDelete(stockId);
+    setIsDeleteModalVisible(true);
+  };
+
+  const handleDeleteStockSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
+
+    setIsDeleteModalVisible(false);
+  };
+
+  const handleDeleteStock = () => {
+    handleAPIRequests({
+      request: deleteStock,
+      id: itemToDelete,
+      showSuccess: true,
+      handleSuccess: handleDeleteStockSuccess
+    });
+  };
+
   const columns: any = [
     {
       title: (
         <div className="flex gap-10">
           <span>#</span>
-          <span>Category</span>
+          {tableType === "STOCK_HISTORY" && <span>Category</span>}
         </div>
       ),
       key: "Category",
@@ -142,30 +178,30 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
         <RowsWrapper>
           <div className="flex gap-10">
             <Text className="normalText opacity_56">{index + 1}</Text>
-            <Text
-              className={`normalText ${
-                record?.enabled ? "fowe700" : "opacity_56"
-              }`}
-            >
-              {record?.category?.parentCategory?.name}
-            </Text>
+            {tableType === "STOCK_HISTORY" && (
+              <Text
+                className={`normalText ${
+                  record?.enabled ? "fowe700" : "opacity_56"
+                }`}
+              >
+                {record?.parentCategoryName}
+              </Text>
+            )}
           </div>
         </RowsWrapper>
       )
     },
     {
-      title: "Sub-Category",
+      title: tableType === "STOCK_HISTORY" && "Sub-Category",
       key: "Sub-Category",
-      render: (
-        text: StockHistoryTableTypes,
-        record: StockHistoryTableTypes
-      ) => (
-        <RowsWrapper>
-          <Text className="normalText opacity_56">
-            {record?.category?.name}
-          </Text>
-        </RowsWrapper>
-      )
+      render: (text: StockHistoryTableTypes, record: StockHistoryTableTypes) =>
+        tableType === "STOCK_HISTORY" && (
+          <RowsWrapper>
+            <Text className="normalText opacity_56">
+              {record?.categoryName}
+            </Text>
+          </RowsWrapper>
+        )
     },
     {
       title: "Date",
@@ -176,7 +212,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       ) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
-            {record?.inDate && moment(record?.inDate).format("ll")}
+            {record?.expiryDate && moment(record?.expiryDate).format("ll")}
           </Text>
         </RowsWrapper>
       )
@@ -201,19 +237,43 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
         record: StockHistoryTableTypes
       ) => (
         <RowsWrapper>
-          <Text
-            className={`normalText  ${
-              record?.enabled ? "fowe700" : "opacity_56"
-            } ${record?.weight < 1 && "red"} `}
-          >
-            {record?.weight}
+          <Text className="normalText fowe700">{record?.weight}</Text>
+        </RowsWrapper>
+      )
+    },
+
+    {
+      title: <span className="nowrap">Buying price</span>,
+      key: "Buying price",
+      render: (
+        text: StockHistoryTableTypes,
+        record: StockHistoryTableTypes
+      ) => (
+        <RowsWrapper>
+          <Text className="normalText opacity_56">
+            {record?.unitSellingPrice}
           </Text>
         </RowsWrapper>
       )
     },
 
     {
-      title: "Exp. Date",
+      title: <span className="nowrap">Selling price</span>,
+      key: "Selling price",
+      render: (
+        text: StockHistoryTableTypes,
+        record: StockHistoryTableTypes
+      ) => (
+        <RowsWrapper>
+          <Text className="normalText opacity_56">
+            {record?.unitSellingPrice}
+          </Text>
+        </RowsWrapper>
+      )
+    },
+
+    {
+      title: <span className="nowrap">Exp. Date</span>,
       key: "ExpDate",
       render: (
         text: StockHistoryTableTypes,
@@ -227,7 +287,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       )
     },
     {
-      title: "Transport",
+      title: <span className="nowrap">LHS order</span>,
       key: "Transport",
       render: (
         text: StockHistoryTableTypes,
@@ -237,7 +297,9 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
           <Link passHref href={routes.viewOrder.url + record?.lhsOrder?.id}>
             <Text className="normalText fowe700 cursor-pointer">
               {record?.lhsOrder ? (
-                <span className="underline">{record?.lhsOrder?.id}</span>
+                <span className="underline nowrap">
+                  #{record?.lhsOrder?.id}
+                </span>
               ) : (
                 "-"
               )}
@@ -255,8 +317,8 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       ) => (
         <RowsWrapper>
           <Text
-            className={`normalText  ${
-              record?.expired ? "opacity_56" : "fowe700"
+            className={`normalText nowrap fowe700  ${
+              record?.expired ? "opacity_56" : ""
             }`}
           >
             {record?.expired ? "EXPIRED" : "NOT EXPIRED"}
@@ -293,6 +355,24 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
                 }
               />
             </div>
+
+            {user.isSuperAdmin && (
+              <div className="h-1 flex items-center">
+                <CustomButton
+                  onClick={() => showDeleteModal(record?.id)}
+                  type="normal"
+                  size="icon"
+                  icon={
+                    <Image
+                      src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
+                      alt=""
+                      width={16}
+                      preview={false}
+                    />
+                  }
+                />
+              </div>
+            )}
           </div>
         </RowsWrapper>
       )
@@ -310,6 +390,15 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
         scroll={{ x: 0 }}
         loading={TableOnActionLoading(isStockCategoriesFetching)}
       />
+
+      <ActionModal
+        isModalVisible={isDeleteModalVisible}
+        setIsModalVisible={setIsDeleteModalVisible}
+        type="danger"
+        action={() => handleDeleteStock()}
+        loading={isDeleteStockLoading}
+      />
+
       <ModalWrapper
         footerContent={
           <Button

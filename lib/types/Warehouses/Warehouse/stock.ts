@@ -165,4 +165,5 @@ export type GetStock = {
   depot: number | string;
   status: string;
   sort: string;
+  id?: number;
 };

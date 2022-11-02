@@ -4,9 +4,12 @@ export type StockHistoryTableTypes = {
   enabled: boolean;
   category: any;
   inDate: string;
-  supplierName: string;
+  parentCategoryName: string;
+  categoryName: string;
   weight: number;
   expiryDate: string;
   lhsOrder: any;
   expired: boolean;
+  supplierName: string;
+  unitSellingPrice: number | string;
 };

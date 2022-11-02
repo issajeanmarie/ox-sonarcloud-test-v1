@@ -1,4 +1,4 @@
-import { Card, Image, Typography } from "antd";
+import { Card, Col, Image, Row, Typography } from "antd";
 import React, { FC } from "react";
 import { numbersFormatter } from "../../helpers/numbersFormatter";
 import { SmallSpinLoader } from "../Shared/Loaders/Loaders";
@@ -10,41 +10,70 @@ type StockMediumCardTypes = {
   subTitle: string;
   count: number;
   isFetching: boolean;
+  categoryInfo: { id: number };
+  showBatchesModal: (info: any) => void;
 };
 
 const StockMediumCard: FC<StockMediumCardTypes> = ({
   title,
   subTitle,
   count,
-  isFetching
+  isFetching,
+  categoryInfo,
+  showBatchesModal
 }) => {
   return (
-    <Card
-      className="radius4 shadow-[0px_0px_19px_#00000008]"
-      headStyle={{ border: "none", marginBottom: "0" }}
-      bodyStyle={{ padding: "0 24px 24px 24px" }}
-      style={{ width: "auto", border: "1px solid #EAEFF2" }}
-      title={<Text className="text-base font-light">{title}</Text>}
-      extra={
-        <Image
-          width={18}
-          src="/icons/more_vert_FILL0_wght400_GRAD0_opsz48.svg"
-          preview={false}
-          alt=""
-        />
-      }
-    >
-      <Text className="text-2xl font-semibold block yellow mb-3">
-        {isFetching ? (
-          <SmallSpinLoader />
-        ) : (
-          <>{count !== null ? <>{numbersFormatter(count)} KGS</> : "None"}</>
-        )}
-      </Text>
-      <Text className="captionText">
-        {isFetching ? `Hold on, getting you ${title}...` : subTitle}
-      </Text>
-    </Card>
+    <>
+      <Card
+        className="radius4 shadow-[0px_0px_19px_#00000008]"
+        headStyle={{ border: "none", marginBottom: "0" }}
+        bodyStyle={{ padding: "0", overflow: "hidden" }}
+        style={{ width: "auto", border: "1px solid #EAEFF2" }}
+        title={<Text className="text-base font-light">{title}</Text>}
+        extra={
+          <Image
+            width={18}
+            src="/icons/more_vert_FILL0_wght400_GRAD0_opsz48.svg"
+            preview={false}
+            alt=""
+          />
+        }
+      >
+        <div className="px-[24px] mb-4">
+          <Text className="text-2xl font-semibold block yellow mb-3">
+            {isFetching ? (
+              <SmallSpinLoader />
+            ) : (
+              <>
+                {count !== null ? <>{numbersFormatter(count)} KGS</> : "None"}
+              </>
+            )}
+          </Text>
+          <Text className="captionText">
+            {isFetching ? `Hold on, getting you ${title}...` : subTitle}
+          </Text>
+        </div>
+
+        <Row
+          onClick={() => showBatchesModal(categoryInfo)}
+          justify="space-between"
+          gutter={12}
+          align="middle"
+          className="bg-[#FEFBF3] py-4 px-6 pointer"
+        >
+          <Col className="text-base font-light">See batches</Col>
+
+          <Col>
+            <Image
+              width={18}
+              src="/icons/keyboard_forwad_black.svg"
+              preview={false}
+              alt=""
+            />
+          </Col>
+        </Row>
+      </Card>
+    </>
   );
 };
 

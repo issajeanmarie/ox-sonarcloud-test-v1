@@ -71,12 +71,14 @@ export type AddStockTypes = {
   form: any;
   categories: any;
   isCategoriesLoading: boolean;
-  orders: any;
+  lhsOrders: any;
   isOrdersLoading: boolean;
   depots: any;
   isDepotsLoading: boolean;
   suppliers: any;
   isSuppliersLoading: boolean;
+  checkbox: boolean;
+  setCheckbox: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export type EditStockTypes = {
@@ -107,4 +109,16 @@ export type EditStockTypes = {
     };
     supplierName: string;
   };
+};
+
+export type BatchesModalTypes = {
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+  categoryInfo: any;
+  batches: any;
+  setStartDate: React.Dispatch<React.SetStateAction<any>>;
+  setEndDate: React.Dispatch<React.SetStateAction<any>>;
+  filter: any;
+  setFilter: React.Dispatch<React.SetStateAction<any>>;
 };

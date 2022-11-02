@@ -22,9 +22,24 @@ const stockEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<{ content: StockResponse }>,
       GetStock
     >({
-      providesTags: ["Stock"],
+      providesTags: [],
       query: (DTO) => ({
-        url: `/warehouse-items?page=${DTO?.page || ""}&size=${
+        url: `/warehouse-items/batches?page=${DTO?.page || ""}&size=${
+          DTO?.size || ""
+        }&start=${DTO?.start || ""}&end=${DTO?.end || ""}&depot=${
+          DTO?.depot || ""
+        }&status=${DTO?.status || ""}&sort=${DTO?.sort || ""}`,
+        method: "GET"
+      })
+    }),
+
+    warehouseItemBatches: builder.query<
+      ApiResponseMetadata<{ content: StockResponse }>,
+      GetStock
+    >({
+      providesTags: [],
+      query: (DTO) => ({
+        url: `/warehouse-items/${DTO.id}/batches?page=${DTO?.page || ""}&size=${
           DTO?.size || ""
         }&start=${DTO?.start || ""}&end=${DTO?.end || ""}&depot=${
           DTO?.depot || ""
@@ -36,14 +51,14 @@ const stockEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<{ content: StockResponse }>,
       void
     >({
-      providesTags: ["Stock"],
+      providesTags: ["CreateStock"],
       query: () => ({
-        url: "/warehouse-items/categories",
+        url: "/warehouse-items",
         method: "GET"
       })
     }),
     postStock: builder.mutation<ApiResponseMetadata<Stock>, PostStockRequest>({
-      invalidatesTags: ["Stock"],
+      invalidatesTags: ["CreateStock"],
       query: (DTO) => ({
         url: `/warehouse-items`,
         method: "POST",
@@ -81,5 +96,6 @@ export const {
   useDeleteStockMutation,
   useEditStockMutation,
   useLazyStockQuery,
-  useStockCategoriesQuery
+  useStockCategoriesQuery,
+  useLazyWarehouseItemBatchesQuery
 } = stockEndpoints;

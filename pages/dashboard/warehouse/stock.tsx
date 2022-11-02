@@ -16,6 +16,7 @@ import StockTopNavigator from "../../../components/Warehouse/WarehouseHeaders/St
 import { StockTopContentWrapper } from "../../../components/Warehouse/Wrappers";
 import {
   useLazyStockQuery,
+  useLazyWarehouseItemBatchesQuery,
   useStockCategoriesQuery
 } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import CardRowWrapper, {
@@ -39,10 +40,19 @@ import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { pagination } from "../../../config/pagination";
 import Image from "next/image";
 import MoreStockCard from "../../../components/Cards/MoreStockCard";
+import BatchesModal from "../../../components/Modals/BatchesModal";
 
 const Stock = () => {
+  const [isBatchesModalVisible, setIsBatchesModalVisible] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  const [batchesStartDate, setBatchesStartDate] = useState("");
+  const [batchesEndDate, setBatchesEndDate] = useState("");
+  const [categoryInfo, setCategoryInfo] = useState<
+    { id: number } | undefined
+  >();
+
   const [selectedSort, setSelectedSort] = useState<any>({});
   const [active, setActive] = useState<string>("STOCK");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -53,6 +63,7 @@ const Stock = () => {
   const { query } = useRouter();
 
   const [filter, setFilter] = useState<any>({});
+  const [batchesFilter, setBatchesFilter] = useState<any>({});
 
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
@@ -153,6 +164,40 @@ const Stock = () => {
     });
   };
 
+  const [getBatches, { isFetching: isBatchesFetching, data: batches }] =
+    useLazyWarehouseItemBatchesQuery();
+
+  const getBatchesAction = ({
+    request = getBatches,
+    id = categoryInfo?.id,
+    page,
+    size = pagination.stock.size,
+    start = batchesStartDate,
+    end = batchesEndDate,
+    status = batchesFilter?.value || ""
+  }: any) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      start,
+      end,
+      status,
+      id
+    });
+  };
+
+  useEffect(() => {
+    if (categoryInfo) {
+      getBatchesAction({});
+    }
+  }, [batchesStartDate, batchesEndDate, batchesFilter, categoryInfo]);
+
+  const showBatchesModal = (category: any) => {
+    setIsBatchesModalVisible(true);
+    setCategoryInfo(category);
+  };
+
   const showFiltersLoader = filtersBasedLoader && !isLoadMoreLoading;
   const showPagination =
     (AllStocks?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
@@ -165,6 +210,18 @@ const Stock = () => {
         setActive={setActive}
         active={active}
         toggleActiveHandler={toggleActiveHandler}
+      />
+
+      <BatchesModal
+        isVisible={isBatchesModalVisible}
+        setIsVisible={setIsBatchesModalVisible}
+        isLoading={isBatchesFetching}
+        setStartDate={setBatchesStartDate}
+        setEndDate={setBatchesEndDate}
+        filter={batchesFilter}
+        setFilter={setBatchesFilter}
+        batches={batches}
+        categoryInfo={categoryInfo}
       />
 
       <div className="mx-4 relative">
@@ -186,19 +243,21 @@ const Stock = () => {
                 </div>
               ) : (
                 <CardMoreStockRowWrapper>
-                  {stockCategories?.payload?.slice(0, 5)?.map((item: any) => (
-                    <CardMoreStockColWrapper key={item?.name}>
-                      <MoreStockCard
-                        title={item?.name}
-                        subTitle={`${
-                          item?.averageUnitCost &&
-                          numbersFormatter(item?.averageUnitCost)
-                        } Rwf / Kg`}
-                        count={item?.totalWeight}
-                        isFetching={isStockCategoriesFetching}
-                      />
-                    </CardMoreStockColWrapper>
-                  ))}
+                  {stockCategories?.payload?.content
+                    ?.slice(0, 5)
+                    ?.map((item: any) => (
+                      <CardMoreStockColWrapper key={item?.name}>
+                        <MoreStockCard
+                          title={item?.name}
+                          subTitle={`${
+                            item?.averageUnitCost &&
+                            numbersFormatter(item?.averageUnitCost)
+                          } Rwf / Kg`}
+                          count={item?.totalWeight}
+                          isFetching={isStockCategoriesFetching}
+                        />
+                      </CardMoreStockColWrapper>
+                    ))}
                 </CardMoreStockRowWrapper>
               )}
             </Content>
@@ -215,20 +274,23 @@ const Stock = () => {
                   </>
                 ) : (
                   <CardRowWrapper active="STOCK">
-                    {stockCategories?.payload?.slice(0, 5)?.map((item: any) => (
-                      <CardColWrapper key={item?.name} active="STOCK">
-                        <StockMediumCard
-                          title={item?.name}
-                          subTitle={`${
-                            item?.averageUnitCost &&
-                            numbersFormatter(item?.averageUnitCost)
-                          } Rwf / Kg`}
-                          count={item?.totalWeight}
-                          isFetching={isStockCategoriesFetching}
-                        />
-                      </CardColWrapper>
-                    ))}
-                    {stockCategories?.payload?.length > 5 && (
+                    {stockCategories?.payload?.content
+                      ?.slice(0, 5)
+                      ?.map((item: any) => (
+                        <CardColWrapper key={item?.name} active="STOCK">
+                          <StockMediumCard
+                            showBatchesModal={showBatchesModal}
+                            title={item?.categoryName}
+                            subTitle={`${numbersFormatter(
+                              item?.unitSellingPrice || 0
+                            )} Rwf / Kg`}
+                            count={item?.weight}
+                            isFetching={isStockCategoriesFetching}
+                            categoryInfo={item}
+                          />
+                        </CardColWrapper>
+                      ))}
+                    {stockCategories?.payload?.content?.length > 5 && (
                       <div
                         onClick={() =>
                           changeRoute(`${routes.Stock.url}?wtb=STOCK&page=more`)
@@ -267,6 +329,7 @@ const Stock = () => {
                       Stocks={AllStocks}
                       isStocksFetching={showFiltersLoader}
                       isStockCategoriesFetching={isStockCategoriesFetching}
+                      tableType="STOCK_HISTORY"
                     />
                   )}
 

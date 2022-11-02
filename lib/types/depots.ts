@@ -17,3 +17,9 @@ export type depotTypes = {
   location?: string;
   coordinates?: string | null;
 };
+
+export type CreateDepotRequest = {
+  name: string;
+  location: string;
+  coordinates: string;
+};

@@ -1,6 +1,6 @@
 import { SetStateAction } from "react";
 
-export type StockHistoryTyes = {
+export type StockHistoryTypes = {
   filter: object;
   setFilter: React.Dispatch<SetStateAction<object>>;
   onStartDateChange: (_: string, date: string) => void;

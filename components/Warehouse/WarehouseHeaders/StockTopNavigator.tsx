@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Navbar from "../../Shared/Content/Navbar";
 import Heading1 from "../../Shared/Text/Heading1";
 import Row from "antd/lib/row";
@@ -32,6 +32,7 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
   setSelectedSort,
   stocksNumber
 }) => {
+  const [addAnotherItem, setAddAnotherItem] = useState<boolean>(false);
   const [form] = Form.useForm();
   const { query } = useRouter();
 
@@ -49,27 +50,45 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
 
   const dispatch = useDispatch();
 
-  const { data: depots, isLoading: isDepotsLoadind } = useDepotsQuery();
+  const { data: depots, isLoading: isDepotsLoading } = useDepotsQuery();
   const [postStock, { isLoading: isAddingStock }] = usePostStockMutation();
 
   const handleAddStockSuccess = ({ payload }: any) => {
     form.resetFields();
-    setIsModalVisible(false);
+    const latestBatch = payload?.batches[payload?.batches?.length - 1];
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          ...latestBatch,
+          parentCategoryName: payload?.parentCategory?.name,
+          categoryName: payload?.category?.name
+        }
+      })
+    );
 
-    dispatch(displayPaginatedData({ payload }));
+    if (!addAnotherItem) {
+      setIsModalVisible(false);
+    }
   };
 
   const onAddStockFinish = (values: any) => {
+    const batches = [
+      {
+        inDate: values?.inDate,
+        expiryDate: values?.expiryDate,
+        supplierId: values?.supplierId,
+        weight: values?.weight,
+        lhsOrderId: values?.lhsOrderId,
+        unitBuyingPrice: values?.unitBuyingPrice,
+        unitSellingPrice: values?.unitSellingPrice
+      }
+    ];
+
     handleAPIRequests({
       request: postStock,
-      inDate: values?.inDate,
-      expiryDate: values?.expiryDate,
-      supplierId: values?.supplierId,
-      weight: values?.weight,
-      unitCost: values?.unitCost,
       depotId: values?.depotId,
       categoryId: values?.SubCategory,
-      lhsOrderId: values?.lhsOrderId,
+      batches,
       showSuccess: true,
       handleSuccess: handleAddStockSuccess
     });
@@ -157,15 +176,17 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
         loading={isAddingStock}
       >
         <AddStock
+          checkbox={addAnotherItem}
+          setCheckbox={setAddAnotherItem}
           onAddStockFinish={onAddStockFinish}
           isAddingStock={isAddingStock}
           form={form}
           categories={categories?.payload}
           isCategoriesLoading={isCategoriesLoading}
-          orders={lhsOrders?.payload?.content}
+          lhsOrders={lhsOrders?.payload?.content}
           isOrdersLoading={isLhsOrdersLoading}
           depots={depots?.payload}
-          isDepotsLoading={isDepotsLoadind}
+          isDepotsLoading={isDepotsLoading}
           suppliers={suppliers}
           isSuppliersLoading={isSuppliersLoading}
         />

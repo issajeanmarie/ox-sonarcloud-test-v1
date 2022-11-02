@@ -16,9 +16,10 @@ export type TrucksUsageTableTypes = {
   previousTotalRevenue: number;
   totalPaid: number;
   previousTotalPaid: number;
-  kilogramKilometre: number;
+  kilogramKilometer: number;
   totalFuel: number;
   previousTotalFuel: number;
+  actualKilogramKilometer: number;
 };
 
 export type TrucksUsageTableColumnsTypes = {

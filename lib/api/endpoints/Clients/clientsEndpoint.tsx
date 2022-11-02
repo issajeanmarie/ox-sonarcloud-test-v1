@@ -115,7 +115,7 @@ const clientsApi = baseAPI.injectEndpoints({
       ApiResponseMetadata<Client>,
       PostClientRequest
     >({
-      invalidatesTags: ["Clients"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/clients`,
         method: "POST",
@@ -170,7 +170,7 @@ const clientsApi = baseAPI.injectEndpoints({
       ApiResponseMetadata<Client>,
       DeleteClientRequest
     >({
-      invalidatesTags: ["Clients"],
+      invalidatesTags: ["DeleteClient"],
       query: (DTO) => ({
         url: `/clients/${DTO?.id || ""}`,
         method: "DELETE"

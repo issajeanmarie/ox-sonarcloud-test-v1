@@ -10,7 +10,8 @@ interface ModalProps {
   loading: boolean;
   onCancel?: () => void;
   destroyOnClose?: boolean;
-  footerContent: React.ReactNode;
+  footerContent?: React.ReactNode;
+  width?: number;
 }
 
 const ModalWrapper: FC<ModalProps> = ({
@@ -21,7 +22,8 @@ const ModalWrapper: FC<ModalProps> = ({
   loading,
   onCancel,
   destroyOnClose,
-  footerContent
+  footerContent,
+  width = 550
 }) => {
   const handleOk = () => {
     setIsModalVisible(false);
@@ -48,13 +50,17 @@ const ModalWrapper: FC<ModalProps> = ({
           )}
         </div>
       }
-      width={550}
+      width={width}
       footer={
-        <Row justify="end">
-          <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
-            {footerContent}
-          </Col>
-        </Row>
+        footerContent ? (
+          <Row justify="end">
+            <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
+              {footerContent}
+            </Col>
+          </Row>
+        ) : (
+          false
+        )
       }
       visible={isModalVisible}
       onOk={handleOk}
