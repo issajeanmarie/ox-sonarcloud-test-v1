@@ -52,7 +52,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       ...items,
       {
         id: warehouse ? JSON.parse(warehouse)?.id : warehouse,
-        weight: weight,
+        weight: warehouse && JSON.parse(warehouse)?.weight,
         parentCategory: warehouse
           ? JSON.parse(warehouse)?.category?.parentCategory
           : "",
