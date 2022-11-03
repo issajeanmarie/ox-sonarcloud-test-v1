@@ -42,11 +42,11 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       ...items,
       {
         id: warehouse ? JSON.parse(warehouse)?.id : warehouse,
-        weight: weight,
+        weight: warehouse && JSON.parse(warehouse)?.weight,
         parentCategory: warehouse
-          ? JSON.parse(warehouse)?.category?.parentCategory?.name
+          ? JSON.parse(warehouse)?.category?.parentCategory
           : "",
-        category: warehouse ? JSON.parse(warehouse)?.category?.name : ""
+        category: warehouse ? JSON.parse(warehouse)?.categoryName : ""
       }
     ]);
     setWarehouse("");
@@ -77,7 +77,10 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       depotId: values?.depotId,
       date: values?.date,
       clientId: values?.clientId,
-      items: items,
+      items: items?.map(({ id, weight }: { id: number; weight: number }) => ({
+        id,
+        weight
+      })),
       marginCost: values?.marginCost,
       localTransportCost:
         transport !== "none" ? values?.localTransportCost : "",

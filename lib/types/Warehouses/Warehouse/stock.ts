@@ -141,8 +141,9 @@ export type PostStockRequest = {
   lhsOrderId: number;
 };
 
-export type DeleteStockRequest = {
-  id: any;
+export type DeleteBatchRequest = {
+  id: number;
+  batchId: number;
 };
 
 export type EditStockLocationRequest = {
@@ -155,6 +156,7 @@ export type EditStockLocationRequest = {
   categoryId: number;
   lhsOrderId: number;
   id: number;
+  batchId: number;
 };
 
 export type GetStock = {
@@ -165,4 +167,6 @@ export type GetStock = {
   depot: number | string;
   status: string;
   sort: string;
+  id?: number;
+  search?: string;
 };

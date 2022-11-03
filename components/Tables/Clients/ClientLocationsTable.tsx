@@ -135,20 +135,16 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
         record: ClientLocationsTableTypes
       ) => (
         <RowsWrapper>
-          <div className="flex justify-end items-center gap-8">
-            <AntDButton
+          <div className="flex justify-end items-center gap-6">
+            <Image
               onClick={() => showEditModal(record)}
-              style={{ margin: 0, padding: 0 }}
-              type="text"
-            >
-              <Image
-                className="pointer"
-                src="/icons/ic-contact-edit.svg"
-                alt="Backspace icon"
-                width={18}
-                height={18}
-              />
-            </AntDButton>
+              className="pointer"
+              src="/icons/ic-contact-edit.svg"
+              alt="Backspace icon"
+              width={16}
+              height={16}
+            />
+
             <AntDButton
               onClick={() => showModal(record)}
               style={{ margin: 0, padding: 0 }}

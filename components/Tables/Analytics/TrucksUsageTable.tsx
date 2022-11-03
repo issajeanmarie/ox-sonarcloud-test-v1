@@ -108,14 +108,13 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
       )
     },
     {
-      title: "KG/KM",
-      key: "KG/KM",
+      title: "KGKM (Pot-Act)",
+      key: "KGKM",
       render: (text: TrucksUsageTableTypes, record: TrucksUsageTableTypes) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
-            {record?.kilogramKilometre &&
-              numbersFormatter(record?.kilogramKilometre)}{" "}
-            KGs
+            {numbersFormatter(record?.kilogramKilometer)} -{" "}
+            {numbersFormatter(record?.actualKilogramKilometer)}
           </Text>
         </RowsWrapper>
       )

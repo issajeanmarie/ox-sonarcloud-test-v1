@@ -1,13 +1,12 @@
 import { Col, Image, Row } from "antd";
 import React, { FC } from "react";
 import Input from "../../Shared/Input";
-import { StockHistoryTyes } from "../../../lib/types/pageTypes/Warehouse/Stock/StockHistoryTyes";
+import { StockHistoryTypes as StockHistoryTypes } from "../../../lib/types/pageTypes/Warehouse/Stock/StockHistoryTyes";
 import DropDownSelector from "../../Shared/DropDownSelector";
 import Navbar from "../../Shared/Content/Navbar";
 import Heading1 from "../../Shared/Text/Heading1";
-import Button from "../../Shared/Button";
 
-const StockHistory: FC<StockHistoryTyes> = ({
+const StockHistory: FC<StockHistoryTypes> = ({
   filter,
   setFilter,
   onStartDateChange,
@@ -72,17 +71,9 @@ const StockHistory: FC<StockHistoryTyes> = ({
     </Col>
   );
 
-  const RightSide = (
-    <div className="flex items-center gap-5">
-      <div className="flex items-center gap-6 w-[120px]">
-        <Button type="secondary">DOWNLOAD</Button>
-      </div>
-    </div>
-  );
-
   return (
     <>
-      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
+      <Navbar LeftSide={LeftSide} type="CENTER" />
     </>
   );
 };

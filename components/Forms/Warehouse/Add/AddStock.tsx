@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Form, Row, Select } from "antd";
 import React, { FC, useEffect, useState } from "react";
-import { requiredInput } from "../../../../lib/validation/InputValidations";
+import {
+  requiredField,
+  requiredInput
+} from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Image from "next/image";
 import { AddStockTypes } from "../../../../lib/types/warehouse";
 import { useSelector } from "react-redux";
+import CircleCheckbox from "../../../Shared/Custom";
+import moment from "moment";
 
 const { Option } = Select;
 
@@ -14,15 +19,20 @@ const AddStock: FC<AddStockTypes> = ({
   form,
   categories,
   isCategoriesLoading,
-  // orders,
-  // isOrdersLoading,
   depots,
   isDepotsLoading,
   isSuppliersLoading,
-  suppliers
+  suppliers,
+  checkbox,
+  setCheckbox,
+  lhsOrders
 }) => {
   const filteredResult = suppliers?.payload?.content?.filter(
     (item: any) => item.enabled
+  );
+
+  const filteredCategories = categories?.filter(
+    (category: { subCategories: [] }) => category.subCategories.length > 0
   );
 
   const [parentCategoryChange, setParentCategory] = useState();
@@ -41,7 +51,7 @@ const AddStock: FC<AddStockTypes> = ({
     form.setFieldsValue({
       depotId: depotsState.depotId || ""
     });
-  }, [form]);
+  }, [depotsState.depotId, form]);
 
   return (
     <Form
@@ -110,13 +120,14 @@ const AddStock: FC<AddStockTypes> = ({
             disabled={isCategoriesLoading}
             isGroupDropdown
           >
-            {categories?.map((item: any) => (
+            {filteredCategories?.map((item: any) => (
               <Option key={item?.id} value={item?.id}>
                 {item?.name}
               </Option>
             ))}
           </Input>
         </Col>
+
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             notFoundContent={
@@ -141,6 +152,7 @@ const AddStock: FC<AddStockTypes> = ({
             label="Sub-Category"
             isLoading={isCategoriesLoading}
             disabled={isCategoriesLoading}
+            rules={requiredField("Sub-Category")}
             isGroupDropdown
           >
             {categories
@@ -168,7 +180,7 @@ const AddStock: FC<AddStockTypes> = ({
         align="bottom"
         className="mt-4"
       >
-        <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             name="weight"
             type="text"
@@ -176,14 +188,7 @@ const AddStock: FC<AddStockTypes> = ({
             placeholder="Enter the KGs"
           />
         </Col>
-        <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}>
-          <Input
-            name="unitCost"
-            type="text"
-            label="Unit cost"
-            placeholder="Amount"
-          />
-        </Col>
+
         <Col flex="auto">
           <Input
             name="expiryDate"
@@ -208,13 +213,38 @@ const AddStock: FC<AddStockTypes> = ({
         align="bottom"
         className="mt-6"
       >
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Input
+            name="unitBuyingPrice"
+            type="text"
+            label="Unit buying price"
+            placeholder="Amount"
+          />
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Input
+            name="unitSellingPrice"
+            type="text"
+            label="Unit selling price"
+            placeholder="Amount"
+          />
+        </Col>
+      </Row>
+
+      <Row
+        justify="space-between"
+        gutter={[16, 16]}
+        align="bottom"
+        className="mt-6"
+      >
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <div className="mb-2">
             <span className="font-light">Transport</span>
           </div>
         </Col>
 
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <Input
             name="depotId"
             type="select"
@@ -232,23 +262,39 @@ const AddStock: FC<AddStockTypes> = ({
           </Input>
         </Col>
 
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           <Input
             name="lhsOrderId"
-            type="text"
-            placeholder="Paste here..."
-            label="Paste LHS order"
-            // isLoading={isOrdersLoading}
-            // disabled={isOrdersLoading}
-            // isGroupDropdown
+            type="select"
+            placeholder="Select LHS order"
+            label="Select LHS order"
+            isLoading={isDepotsLoading}
+            disabled={isDepotsLoading}
+            isGroupDropdown
           >
-            {/* {orders?.map((item: any) => (
-              <Option key={item?.id} value={item?.id}>
-                {localeString(item?.weight)} KGs -{" "}
-                {localeString(item.totalAmount)} Rwf
+            {lhsOrders?.map((item: any) => (
+              <Option key={item?.weight} value={item?.id}>
+                {`${item.weight} KGs - ${item.totalAmount} Rwf - `}{" "}
+                <span className="captionText italic">
+                  {moment(item.stateDateTime).format("ddd/MM/YYYY")}
+                </span>
               </Option>
-            ))} */}
+            ))}
           </Input>
+        </Col>
+      </Row>
+
+      <Row align="middle" className="mt-10">
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <div className="flex items-center gap-4">
+            <span className="font-bold underline">Add another item</span>
+            <CircleCheckbox
+              defaultValue={checkbox}
+              checked={checkbox}
+              setState={setCheckbox}
+              state={checkbox}
+            />
+          </div>
         </Col>
       </Row>
     </Form>

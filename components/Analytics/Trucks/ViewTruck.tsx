@@ -31,7 +31,7 @@ const DetailsComponent = ({ truckData }: any) => {
     <div className="my-12">
       {truckData?.map((data: { name: string; value: number | any }) => (
         <Row key={data.name} gutter={12} align="middle" className="mb-4">
-          <Col span={12} className="font-bold">
+          <Col span={12} className="font-bold text-sm">
             {data.name}
           </Col>
 

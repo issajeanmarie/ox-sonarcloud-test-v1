@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Navbar from "../../Shared/Content/Navbar";
 import Heading1 from "../../Shared/Text/Heading1";
 import Row from "antd/lib/row";
@@ -30,8 +30,10 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
   isModalVisible,
   selectedSort,
   setSelectedSort,
-  stocksNumber
+  stocksNumber,
+  handleSearch
 }) => {
+  const [addAnotherItem, setAddAnotherItem] = useState<boolean>(false);
   const [form] = Form.useForm();
   const { query } = useRouter();
 
@@ -49,31 +51,56 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
 
   const dispatch = useDispatch();
 
-  const { data: depots, isLoading: isDepotsLoadind } = useDepotsQuery();
+  const { data: depots, isLoading: isDepotsLoading } = useDepotsQuery();
   const [postStock, { isLoading: isAddingStock }] = usePostStockMutation();
 
   const handleAddStockSuccess = ({ payload }: any) => {
     form.resetFields();
-    setIsModalVisible(false);
+    const latestBatch = payload?.batches[payload?.batches?.length - 1];
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          ...latestBatch,
+          parentCategoryName: payload?.parentCategory?.name,
+          categoryName: payload?.category?.name
+        }
+      })
+    );
 
-    dispatch(displayPaginatedData({ payload }));
+    if (!addAnotherItem) {
+      setIsModalVisible(false);
+    }
   };
 
   const onAddStockFinish = (values: any) => {
+    const batches = [
+      {
+        inDate: values?.inDate,
+        expiryDate: values?.expiryDate,
+        supplierId: values?.supplierId,
+        weight: values?.weight,
+        lhsOrderId: values?.lhsOrderId,
+        unitBuyingPrice: values?.unitBuyingPrice,
+        unitSellingPrice: values?.unitSellingPrice
+      }
+    ];
+
     handleAPIRequests({
       request: postStock,
-      inDate: values?.inDate,
-      expiryDate: values?.expiryDate,
-      supplierId: values?.supplierId,
-      weight: values?.weight,
-      unitCost: values?.unitCost,
       depotId: values?.depotId,
       categoryId: values?.SubCategory,
-      lhsOrderId: values?.lhsOrderId,
+      batches,
       showSuccess: true,
       handleSuccess: handleAddStockSuccess
     });
   };
+
+  const sortOptions = [
+    { id: 0, name: "Z-A (Names)", value: "NAMES_DESC" },
+    { id: 1, name: "A-Z (Names)", value: "NAMES_ASC" },
+    { id: 2, name: "Z-A (Date)", value: "DATE_DESC" },
+    { id: 3, name: "A-Z (Date)", value: "DATE_ASC" }
+  ];
 
   const LeftSide = (
     <Col className="flex items-center gap-4">
@@ -97,18 +124,15 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
             label="Sort"
             setDefaultSelected={setSelectedSort}
             defaultSelected={selectedSort}
-            dropDownContent={[
-              { id: 0, name: "Z-A (Names)", value: "NAMES_DESC" },
-              { id: 1, name: "A-Z (Names)", value: "NAMES_ASC" },
-              { id: 2, name: "Z-A (Date)", value: "DATE_DESC" },
-              { id: 3, name: "A-Z (Date)", value: "DATE_ASC" }
-            ]}
+            dropDownContent={
+              !query.page ? sortOptions : sortOptions.slice(2, 4)
+            }
           />
         </Col>
         {query?.page === "more" && (
           <Col>
             <Input
-              // onChange={handleSearch}
+              onChange={handleSearch}
               type="text"
               placeholder="Search item"
               name="searchClient"
@@ -157,15 +181,17 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
         loading={isAddingStock}
       >
         <AddStock
+          checkbox={addAnotherItem}
+          setCheckbox={setAddAnotherItem}
           onAddStockFinish={onAddStockFinish}
           isAddingStock={isAddingStock}
           form={form}
           categories={categories?.payload}
           isCategoriesLoading={isCategoriesLoading}
-          orders={lhsOrders?.payload?.content}
+          lhsOrders={lhsOrders?.payload?.content}
           isOrdersLoading={isLhsOrdersLoading}
           depots={depots?.payload}
-          isDepotsLoading={isDepotsLoadind}
+          isDepotsLoading={isDepotsLoading}
           suppliers={suppliers}
           isSuppliersLoading={isSuppliersLoading}
         />

@@ -4,18 +4,13 @@ import React, { FC, useState } from "react";
 import { LatLng } from "use-places-autocomplete";
 import { usePostClientLocationMutation } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { ClientLocationsTypes } from "../../../../lib/types/pageTypes/Clients/ClientLocationsTypes";
-import {
-  BackendErrorTypes,
-  GenericResponse
-} from "../../../../lib/types/shared";
 import Button from "../../../Shared/Button";
 import AddClientLocation from "../../../Forms/Clients/AddClientLocation";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import CustomButton from "../../../Shared/Button/button";
 import { SmallSpinLoader } from "../../../Shared/Loaders/Loaders";
-import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
-import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 import ClientLocationsTable from "../../../Tables/Clients/ClientLocationsTable";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 
 const ClientLocations: FC<ClientLocationsTypes> = ({
   client,
@@ -35,22 +30,23 @@ const ClientLocations: FC<ClientLocationsTypes> = ({
   const [postClientLocation, { isLoading: isPostingLocation }] =
     usePostClientLocationMutation();
 
+  const handleAddClientLocationSuccess = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+    setLocation(undefined);
+  };
+
   const onAddClientLocationFinish = (value: any) => {
-    postClientLocation({
+    handleAPIRequests({
+      request: postClientLocation,
       id: client?.id,
       location: location ? location?.name : "",
       coordinates: location ? JSON.stringify(location?.coordinates) : "",
       names: value?.names,
-      type: "BRANCH"
-    })
-      .unwrap()
-      .then((res: GenericResponse) => {
-        SuccessMessage(res?.message);
-        setIsModalVisible(false);
-        form.resetFields();
-        setLocation(undefined);
-      })
-      .catch((err: BackendErrorTypes) => ErrorMessage(err?.data?.message));
+      type: "BRANCH",
+      showSuccess: true,
+      handleSuccess: handleAddClientLocationSuccess
+    });
   };
 
   return (

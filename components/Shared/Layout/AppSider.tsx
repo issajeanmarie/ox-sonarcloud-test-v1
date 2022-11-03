@@ -21,6 +21,7 @@ import { getDepots } from "../../../lib/redux/slices/depotsSlice";
 import { escape } from "../../../utils/keyBinders";
 import Notification from "../Notification";
 import { useGlobalMoMoPaymentListener } from "../../../lib/useEffects/useHandleMoMoPaymentListener";
+import NewDepotModal from "../../Modals/NewDepotModal";
 const { Sider } = Layout;
 const { Text } = Typography;
 
@@ -30,6 +31,7 @@ type DepotTypes = {
 };
 
 const AppSider = ({ collapsed }: any) => {
+  const [isNewDepotModalVisible, setIsNewDepotModalVisible] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -94,7 +96,13 @@ const AppSider = ({ collapsed }: any) => {
               />
             </Col>
 
-            <Col className="p-4 text-black font-bold pointer text_ellipsis">
+            <Col
+              onClick={() => {
+                setIsDropdownVisible(false);
+                setIsNewDepotModalVisible(true);
+              }}
+              className="p-4 text-black font-bold pointer text_ellipsis"
+            >
               Add new depot
             </Col>
           </Row>
@@ -117,7 +125,7 @@ const AppSider = ({ collapsed }: any) => {
             />
           </Col>
           <Col>
-            <Text className="white">All depots</Text>
+            <Text className="white text_ellipsis">All depots</Text>
           </Col>
         </Row>
 
@@ -128,6 +136,7 @@ const AppSider = ({ collapsed }: any) => {
             gutter={12}
             align="middle"
             key={depot?.id}
+            wrap={false}
           >
             <Col>
               <Image
@@ -138,7 +147,7 @@ const AppSider = ({ collapsed }: any) => {
               />
             </Col>
             <Col>
-              <Text className="white">{depot?.name}</Text>
+              <Text className="white text_ellipsis">{depot?.name}</Text>
             </Col>
           </Row>
         ))}
@@ -148,6 +157,11 @@ const AppSider = ({ collapsed }: any) => {
 
   return (
     <>
+      <NewDepotModal
+        isVisible={isNewDepotModalVisible}
+        setIsVisible={setIsNewDepotModalVisible}
+      />
+
       <Notification
         notify={isNotifyEnabled}
         textMessage={notificationMessage.message}
