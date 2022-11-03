@@ -205,19 +205,19 @@ const RepairLogPane = () => {
                         justify="space-between"
                         className="w-[100%]"
                       >
-                        <Col span={12}>
-                          <Row align="middle" gutter={32} wrap={false}>
-                            <Col md={2} lg={2}>
+                        <Col flex="auto">
+                          <Row align="middle" gutter={16} wrap={false}>
+                            <Col span={2}>
                               <span className="text-gray-400">{index + 1}</span>
                             </Col>
 
-                            <Col md={14} lg={14} xl={14} xxl={12}>
+                            <Col md={2} lg={9} className="text_ellipsis">
                               <span className="text font-bold text-ox-dark">
                                 {data.serviceDone}
                               </span>
                             </Col>
 
-                            <Col md={6} lg={6} xl={24} xxl={24}>
+                            <Col className="text_ellipsis">
                               <span className="text-gray-400">
                                 {data.inDate &&
                                   moment(data.inDate).format(
@@ -232,7 +232,7 @@ const RepairLogPane = () => {
                         </Col>
 
                         <Col style={{ marginRight: "-24px" }}>
-                          <Row align="middle" justify="end" gutter={32}>
+                          <Row align="middle" justify="end" gutter={12}>
                             <Col>
                               <span>{numbersFormatter(data.cost)} Rwf</span>
                             </Col>

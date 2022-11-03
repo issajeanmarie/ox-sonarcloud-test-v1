@@ -29,8 +29,8 @@ import { InfoMessage } from "../../Shared/Messages/InfoMessage";
 const daysList = [
   { id: 0, name: "Last 7 days", value: 7 },
   { id: 1, name: "Last 15 days", value: 15 },
-  { id: 2, name: "Last month", value: 30 },
-  { id: 3, name: "Last 2 months", value: 60 }
+  { id: 2, name: "Last 30 days", value: 30 },
+  { id: 3, name: "Last 60 days", value: 60 }
 ];
 
 const OvervieWPane = () => {
@@ -149,9 +149,9 @@ const OvervieWPane = () => {
     <>
       <Row
         justify="space-between"
-        className="bg-white my-4 mb-12 rounded shadow-[0px_0px_19px_#2A354808]"
+        className="bg-white my-4 mb-4 rounded shadow-[0px_0px_19px_#2A354808]"
       >
-        <Col className="flex items-center gap-4 pl-2">
+        <Col className="flex items-center gap-4 pl-2 mb-4">
           {!isDateCustom ? (
             <DropDownSelector
               label="Show"
@@ -179,6 +179,7 @@ const OvervieWPane = () => {
           )}
 
           <Input
+            className="mb-4"
             onDateChange={onStartDateChange}
             type="date"
             name="Start"
@@ -192,6 +193,7 @@ const OvervieWPane = () => {
               />
             }
           />
+
           <Input
             onDateChange={onEndDateChange}
             type="date"
@@ -208,7 +210,7 @@ const OvervieWPane = () => {
           />
         </Col>
 
-        <Col className="flex items-center gap-4">
+        <Col className="flex items-center gap-4 mb-4">
           <CustomButton
             type="secondary"
             onClick={handleDownloadShift}

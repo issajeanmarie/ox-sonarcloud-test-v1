@@ -133,6 +133,12 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
 
       <Row className="mt-8">
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+          <div className="mb-4 mt-4">
+            <span className="font-light">Order details</span>
+          </div>
+        </Col>
+
+        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
           {items.length > 0 && (
             <>
               <div className="mb-4">
@@ -147,12 +153,6 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
       </Row>
 
       <Row justify="space-between" gutter={[16, 16]} align="bottom">
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <div className="mb-4 mt-4">
-            <span className="font-light">Order details</span>
-          </div>
-        </Col>
-
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             allowClear
@@ -172,6 +172,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
             ))}
           </Input>
         </Col>
+
         <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
           <Input
             onChange={handleChangeWeight}
@@ -182,6 +183,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
             placeholder="00"
           />
         </Col>
+
         <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
           {!weight || !warehouse ? (
             <Popover

@@ -17,7 +17,7 @@ const DropDownSelector = ({
   handleStateChange
 }: DropDownSelectorTypes) => {
   const dropdownMenu = (
-    <div className="max-h-[50vh] overflow-y-auto radius4 p-6 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
+    <div className="max-h-[50vh]  overflow-y-auto radius4 p-6 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
       {dropDownContent?.map((content: ContentTypes) => (
         <Row
           onClick={() => {
@@ -44,7 +44,7 @@ const DropDownSelector = ({
           gutter={12}
           align="middle"
           justify="space-between"
-          className="border p-2 py-2.8 rounded pointer"
+          className="border p-2 py-2.8 rounded pointer max-w-[200px]"
           wrap={false}
         >
           <Col className="font-bold text-sm">{label}:</Col>
