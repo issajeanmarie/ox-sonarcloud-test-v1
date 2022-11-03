@@ -30,7 +30,8 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
   isModalVisible,
   selectedSort,
   setSelectedSort,
-  stocksNumber
+  stocksNumber,
+  handleSearch
 }) => {
   const [addAnotherItem, setAddAnotherItem] = useState<boolean>(false);
   const [form] = Form.useForm();
@@ -94,6 +95,13 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
     });
   };
 
+  const sortOptions = [
+    { id: 0, name: "Z-A (Names)", value: "NAMES_DESC" },
+    { id: 1, name: "A-Z (Names)", value: "NAMES_ASC" },
+    { id: 2, name: "Z-A (Date)", value: "DATE_DESC" },
+    { id: 3, name: "A-Z (Date)", value: "DATE_ASC" }
+  ];
+
   const LeftSide = (
     <Col className="flex items-center gap-4">
       <Row gutter={24} align="middle" wrap={false}>
@@ -116,18 +124,15 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
             label="Sort"
             setDefaultSelected={setSelectedSort}
             defaultSelected={selectedSort}
-            dropDownContent={[
-              { id: 0, name: "Z-A (Names)", value: "NAMES_DESC" },
-              { id: 1, name: "A-Z (Names)", value: "NAMES_ASC" },
-              { id: 2, name: "Z-A (Date)", value: "DATE_DESC" },
-              { id: 3, name: "A-Z (Date)", value: "DATE_ASC" }
-            ]}
+            dropDownContent={
+              !query.page ? sortOptions : sortOptions.slice(2, 4)
+            }
           />
         </Col>
         {query?.page === "more" && (
           <Col>
             <Input
-              // onChange={handleSearch}
+              onChange={handleSearch}
               type="text"
               placeholder="Search item"
               name="searchClient"

@@ -7,4 +7,5 @@ export type StockTopNavigatorTypes = {
   selectedSort: object;
   setSelectedSort: React.Dispatch<SetStateAction<object>>;
   stocksNumber: number | undefined;
+  handleSearch: (search: string) => void;
 };

@@ -1,5 +1,6 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { BatchesModalTypes } from "../../lib/types/warehouse";
+import CustomButton from "../Shared/Button";
 import { StockTableLoader } from "../Shared/Loaders/Loaders";
 import StockHistoryTable from "../Tables/Warehouse/StockHistoryTable";
 import StockHistory from "../Warehouse/Stock/StockHistory";
@@ -10,12 +11,19 @@ const BatchesModal: FC<BatchesModalTypes> = ({
   setIsVisible,
   categoryInfo,
   batches,
-  isLoading,
   setStartDate,
   setEndDate,
   filter,
-  setFilter
+  setFilter,
+  setBatches,
+  getBatchesAction,
+  filtersBasedLoader,
+  currentPages,
+  setCurrentPages
 }) => {
+  const [isLoadMoreBatchesLoading, setIsLoadMoreBatchesLoading] =
+    useState(false);
+
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
   };
@@ -26,6 +34,37 @@ const BatchesModal: FC<BatchesModalTypes> = ({
     setIsVisible(false);
   };
 
+  const handleLoadMoreStocksSuccess = (res: any) => {
+    setBatches({
+      ...batches,
+      payload: {
+        ...batches.payload,
+        content: [...batches.payload.content, ...res.payload.content]
+      }
+    });
+    setIsLoadMoreBatchesLoading(false);
+  };
+
+  const handleLoadMoreStocksFailure = () => {
+    setIsLoadMoreBatchesLoading(false);
+  };
+
+  const handleLoadMore = () => {
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreBatchesLoading(true);
+
+    getBatchesAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreStocksFailure,
+      handleSuccess: handleLoadMoreStocksSuccess
+    });
+  };
+
+  const showFiltersLoader = filtersBasedLoader && !isLoadMoreBatchesLoading;
+  const showPagination =
+    (batches?.payload?.totalPages > currentPages || isLoadMoreBatchesLoading) &&
+    !showFiltersLoader;
+
   return (
     <ModalWrapper
       width={1000}
@@ -35,7 +74,7 @@ const BatchesModal: FC<BatchesModalTypes> = ({
       loading={false}
       onCancel={handleCancel}
     >
-      {isLoading ? (
+      {showFiltersLoader ? (
         <div className="mt-4">
           {[...Array(20)].map((_, index) => (
             <StockTableLoader key={index} />
@@ -52,9 +91,22 @@ const BatchesModal: FC<BatchesModalTypes> = ({
 
           <StockHistoryTable
             Stocks={batches}
+            setBatches={setBatches}
             isStocksFetching={false}
             isStockCategoriesFetching={false}
           />
+
+          {showPagination && (
+            <div style={{ width: "12%", margin: "32px auto" }}>
+              <CustomButton
+                loading={isLoadMoreBatchesLoading}
+                onClick={handleLoadMore}
+                type="secondary"
+              >
+                Load more
+              </CustomButton>
+            </div>
+          )}
         </>
       )}
     </ModalWrapper>

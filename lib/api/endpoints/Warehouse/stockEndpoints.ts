@@ -1,10 +1,10 @@
 import {
   Stock,
   StockResponse,
-  DeleteStockRequest,
   EditStockLocationRequest,
   GetStock,
-  PostStockRequest
+  PostStockRequest,
+  DeleteBatchRequest
 } from "../../../types/Warehouses/Warehouse/stock";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -49,11 +49,15 @@ const stockEndpoints = baseAPI.injectEndpoints({
     }),
     stockCategories: builder.query<
       ApiResponseMetadata<{ content: StockResponse }>,
-      void
+      GetStock
     >({
       providesTags: ["CreateStock"],
-      query: () => ({
-        url: "/warehouse-items",
+      query: (DTO) => ({
+        url: `/warehouse-items?search=${DTO.search}&page=${
+          DTO?.page || ""
+        }&size=${DTO?.size || ""}&start=${DTO?.start || ""}&end=${
+          DTO?.end || ""
+        }&depot=${DTO?.depot || ""}&sort=${DTO?.sort || ""}`,
         method: "GET"
       })
     }),
@@ -66,13 +70,13 @@ const stockEndpoints = baseAPI.injectEndpoints({
       })
     }),
 
-    deleteStock: builder.mutation<
+    deleteBatch: builder.mutation<
       ApiResponseMetadata<Stock>,
-      DeleteStockRequest
+      DeleteBatchRequest
     >({
       invalidatesTags: ["Stock"],
       query: (DTO) => ({
-        url: `/warehouse-items/${DTO?.id}`,
+        url: `/warehouse-items/${DTO?.id}/batches/${DTO?.batchId}`,
         method: "DELETE"
       })
     }),
@@ -82,7 +86,7 @@ const stockEndpoints = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Stock"],
       query: (DTO) => ({
-        url: `/warehouse-items/${DTO?.id}`,
+        url: `/warehouse-items/${DTO?.id}/batches/${DTO?.batchId}`,
         method: "PATCH",
         body: DTO
       })
@@ -93,9 +97,10 @@ const stockEndpoints = baseAPI.injectEndpoints({
 export const {
   useStockQuery,
   usePostStockMutation,
-  useDeleteStockMutation,
+  useDeleteBatchMutation,
   useEditStockMutation,
   useLazyStockQuery,
   useStockCategoriesQuery,
+  useLazyStockCategoriesQuery,
   useLazyWarehouseItemBatchesQuery
 } = stockEndpoints;

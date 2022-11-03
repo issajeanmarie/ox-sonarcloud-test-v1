@@ -146,12 +146,13 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
         </Col>
       </Row>
 
-      <Row
-        justify="space-between"
-        gutter={[16, 16]}
-        align="bottom"
-        className="mt-4"
-      >
+      <Row justify="space-between" gutter={[16, 16]} align="bottom">
+        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+          <div className="mb-4 mt-4">
+            <span className="font-light">Order details</span>
+          </div>
+        </Col>
+
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             allowClear
@@ -166,7 +167,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
           >
             {Stocks?.payload?.content?.map((item: any) => (
               <Option key={item?.id} value={JSON.stringify(item)}>
-                {item?.category?.name} - {item?.weight}KGs
+                {item?.categoryName} - {item?.weight}KGs
               </Option>
             ))}
           </Input>

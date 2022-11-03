@@ -114,11 +114,15 @@ export type EditStockTypes = {
 export type BatchesModalTypes = {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  isLoading: boolean;
   categoryInfo: any;
   batches: any;
   setStartDate: React.Dispatch<React.SetStateAction<any>>;
   setEndDate: React.Dispatch<React.SetStateAction<any>>;
   filter: any;
   setFilter: React.Dispatch<React.SetStateAction<any>>;
+  setBatches: React.Dispatch<React.SetStateAction<any>>;
+  getBatchesAction: any;
+  filtersBasedLoader: boolean;
+  currentPages: number;
+  setCurrentPages: React.Dispatch<React.SetStateAction<number>>;
 };

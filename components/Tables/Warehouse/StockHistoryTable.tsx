@@ -10,7 +10,7 @@ import Button from "../../Shared/Button";
 import moment from "moment";
 import { FC, useState } from "react";
 import {
-  useDeleteStockMutation,
+  useDeleteBatchMutation,
   useEditStockMutation
 } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import ModalWrapper from "../../Modals/ModalWrapper";
@@ -34,18 +34,18 @@ type StockHistoryTableProps = {
   isStocksFetching: boolean;
   isStockCategoriesFetching: boolean;
   tableType?: string;
+  setBatches: any;
 };
 
 const StockHistoryTable: FC<StockHistoryTableProps> = ({
   Stocks,
   isStockCategoriesFetching,
-  tableType
+  tableType,
+  setBatches
 }) => {
   const [form] = Form.useForm();
 
-  const [itemToDelete, setItemToDelete] = useState<
-    string | number | undefined
-  >();
+  const [itemToDelete, setItemToDelete] = useState<any>({});
   const [isDeleteModalVisible, setIsDeleteModalVisible] =
     useState<boolean>(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
@@ -53,7 +53,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
 
   const [editStock, { isLoading: isEditing }] = useEditStockMutation();
   const [deleteStock, { isLoading: isDeleteStockLoading }] =
-    useDeleteStockMutation();
+    useDeleteBatchMutation();
 
   const user = userType();
 
@@ -66,7 +66,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
     driver: "",
     truck: "",
     page: "",
-    size: 10000000,
+    size: 100,
     start: "",
     end: "",
     filter: "",
@@ -75,7 +75,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
 
   const { data: suppliers, isLoading: isSuppliersLoading } = useSuppliersQuery({
     page: "",
-    size: 10000000,
+    size: 100,
     sort: ""
   });
 
@@ -121,6 +121,14 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       }
     });
 
+    setBatches({
+      ...Stocks,
+      payload: {
+        ...Stocks.payload,
+        content: [...newStocksList]
+      }
+    });
+
     dispatchReplace(newStocksList);
   };
 
@@ -135,19 +143,34 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       depotId: values?.depotId,
       categoryId: values?.SubCategory,
       lhsOrderId: values?.lhsOrderId,
-      id: itemToEdit?.id,
+      batchId: itemToEdit?.id,
+      id: itemToEdit?.warehouseItem?.id,
       showSuccess: true,
       handleSuccess: handleEditStockSuccess
     });
   };
 
-  const showDeleteModal = (stockId: number | string) => {
-    setItemToDelete(stockId);
+  const showDeleteModal = (batch: any) => {
+    setItemToDelete(batch);
     setIsDeleteModalVisible(true);
   };
 
-  const handleDeleteStockSuccess = ({ payload }: any) => {
-    dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
+  const handleDeleteStockSuccess = () => {
+    const filteredBatches = Stocks?.payload?.content?.filter(
+      (batch: { id: number }) => batch.id !== itemToDelete.id
+    );
+
+    setBatches({
+      ...Stocks,
+      payload: {
+        ...Stocks.payload,
+        content: [...filteredBatches]
+      }
+    });
+
+    dispatch(
+      displayPaginatedData({ deleted: true, payload: { id: itemToDelete.id } })
+    );
 
     setIsDeleteModalVisible(false);
   };
@@ -155,7 +178,8 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
   const handleDeleteStock = () => {
     handleAPIRequests({
       request: deleteStock,
-      id: itemToDelete,
+      batchId: itemToDelete?.id,
+      id: itemToDelete?.warehouseItem?.id,
       showSuccess: true,
       handleSuccess: handleDeleteStockSuccess
     });
@@ -359,7 +383,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
             {user.isSuperAdmin && (
               <div className="h-1 flex items-center">
                 <CustomButton
-                  onClick={() => showDeleteModal(record?.id)}
+                  onClick={() => showDeleteModal(record)}
                   type="normal"
                   size="icon"
                   icon={

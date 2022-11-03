@@ -17,7 +17,7 @@ import { StockTopContentWrapper } from "../../../components/Warehouse/Wrappers";
 import {
   useLazyStockQuery,
   useLazyWarehouseItemBatchesQuery,
-  useStockCategoriesQuery
+  useLazyStockCategoriesQuery
 } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import CardRowWrapper, {
   CardMoreStockRowWrapper
@@ -39,13 +39,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { pagination } from "../../../config/pagination";
 import Image from "next/image";
-import MoreStockCard from "../../../components/Cards/MoreStockCard";
 import BatchesModal from "../../../components/Modals/BatchesModal";
 
 const Stock = () => {
   const [isBatchesModalVisible, setIsBatchesModalVisible] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [allBatches, setAllBatches] = useState<any>();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [batchesStartDate, setBatchesStartDate] = useState("");
   const [batchesEndDate, setBatchesEndDate] = useState("");
@@ -57,8 +58,11 @@ const Stock = () => {
   const [active, setActive] = useState<string>("STOCK");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentPages, setCurrentPages] = useState(1);
+  const [batchesCurrentPages, setBatchesCurrentPages] = useState(1);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
+  const [batchesFiltersBasedLoader, setBatchesFiltersBasedLoader] =
+    useState(false);
   const router = useRouter();
   const { query } = useRouter();
 
@@ -88,13 +92,16 @@ const Stock = () => {
     id === "SUPPLIERS" && changeRoute(`${routes.Suppliers.url}?wtb=SUPPLIERS`);
   };
 
-  const [getStocks, { data: apiData }] = useLazyStockQuery();
-  const {
-    data: stockCategories,
-    isLoading: isStockCategoriesLoading,
-    isFetching: isStockCategoriesFetching
-  } = useStockCategoriesQuery();
+  const [getStocks] = useLazyStockQuery();
 
+  const [
+    getCategories,
+    {
+      data: stockCategories,
+      isLoading: isStockCategoriesLoading,
+      isFetching: isStockCategoriesFetching
+    }
+  ] = useLazyStockCategoriesQuery();
   const AllStocks = useSelector(
     (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
   );
@@ -112,6 +119,28 @@ const Stock = () => {
   const handleRenderSuccess = (res: any) => {
     dispatch(displayPaginatedData({ payload: res, onRender: true }));
     setFiltersBasedLoader(false);
+  };
+
+  const getCategoriesActions = ({
+    page,
+    size = pagination.stock.size,
+    request = getCategories,
+    start = startDate,
+    end = endDate,
+    depot = depotId,
+    search = searchQuery,
+    sort = selectedSort?.value || ""
+  }: any) => {
+    handleAPIRequests({
+      request,
+      start,
+      end,
+      depot,
+      search,
+      sort,
+      size,
+      page
+    });
   };
 
   const getStocksAction = ({
@@ -139,6 +168,10 @@ const Stock = () => {
   };
 
   useEffect(() => {
+    getCategoriesActions({});
+  }, [startDate, endDate, selectedSort, depotId, searchQuery]);
+
+  useEffect(() => {
     getStocksAction({});
     setCurrentPages(1);
     setFiltersBasedLoader(true);
@@ -164,8 +197,12 @@ const Stock = () => {
     });
   };
 
-  const [getBatches, { isFetching: isBatchesFetching, data: batches }] =
-    useLazyWarehouseItemBatchesQuery();
+  const [getBatches] = useLazyWarehouseItemBatchesQuery();
+
+  const handleGetBatchesSuccess = (res: any) => {
+    setAllBatches(res);
+    setBatchesFiltersBasedLoader(false);
+  };
 
   const getBatchesAction = ({
     request = getBatches,
@@ -174,7 +211,8 @@ const Stock = () => {
     size = pagination.stock.size,
     start = batchesStartDate,
     end = batchesEndDate,
-    status = batchesFilter?.value || ""
+    status = batchesFilter?.value || "",
+    handleSuccess = handleGetBatchesSuccess
   }: any) => {
     handleAPIRequests({
       request,
@@ -183,13 +221,20 @@ const Stock = () => {
       start,
       end,
       status,
-      id
+      id,
+      handleSuccess
     });
+  };
+
+  const handleSearch = (search: string) => {
+    setSearchQuery(search);
   };
 
   useEffect(() => {
     if (categoryInfo) {
       getBatchesAction({});
+      setBatchesFiltersBasedLoader(true);
+      setBatchesCurrentPages(1);
     }
   }, [batchesStartDate, batchesEndDate, batchesFilter, categoryInfo]);
 
@@ -215,13 +260,17 @@ const Stock = () => {
       <BatchesModal
         isVisible={isBatchesModalVisible}
         setIsVisible={setIsBatchesModalVisible}
-        isLoading={isBatchesFetching}
         setStartDate={setBatchesStartDate}
         setEndDate={setBatchesEndDate}
         filter={batchesFilter}
         setFilter={setBatchesFilter}
-        batches={batches}
+        batches={allBatches}
+        setBatches={setAllBatches}
         categoryInfo={categoryInfo}
+        getBatchesAction={getBatchesAction}
+        filtersBasedLoader={batchesFiltersBasedLoader}
+        currentPages={batchesCurrentPages}
+        setCurrentPages={setBatchesCurrentPages}
       />
 
       <div className="mx-4 relative">
@@ -231,7 +280,8 @@ const Stock = () => {
           isModalVisible={isModalVisible}
           selectedSort={selectedSort}
           setSelectedSort={setSelectedSort}
-          stocksNumber={apiData?.payload?.totalElements}
+          stocksNumber={stockCategories?.payload?.totalElements}
+          handleSearch={handleSearch}
         />
 
         <>
@@ -243,21 +293,20 @@ const Stock = () => {
                 </div>
               ) : (
                 <CardMoreStockRowWrapper>
-                  {stockCategories?.payload?.content
-                    ?.slice(0, 5)
-                    ?.map((item: any) => (
-                      <CardMoreStockColWrapper key={item?.name}>
-                        <MoreStockCard
-                          title={item?.name}
-                          subTitle={`${
-                            item?.averageUnitCost &&
-                            numbersFormatter(item?.averageUnitCost)
-                          } Rwf / Kg`}
-                          count={item?.totalWeight}
-                          isFetching={isStockCategoriesFetching}
-                        />
-                      </CardMoreStockColWrapper>
-                    ))}
+                  {stockCategories?.payload?.content?.map((item: any) => (
+                    <CardMoreStockColWrapper key={item?.name}>
+                      <StockMediumCard
+                        showBatchesModal={showBatchesModal}
+                        title={item?.categoryName}
+                        subTitle={`${numbersFormatter(
+                          item?.unitSellingPrice || 0
+                        )} Rwf / Kg`}
+                        count={item?.weight}
+                        isFetching={isStockCategoriesFetching}
+                        categoryInfo={item}
+                      />
+                    </CardMoreStockColWrapper>
+                  ))}
                 </CardMoreStockRowWrapper>
               )}
             </Content>
@@ -291,19 +340,29 @@ const Stock = () => {
                         </CardColWrapper>
                       ))}
                     {stockCategories?.payload?.content?.length > 5 && (
-                      <div
-                        onClick={() =>
-                          changeRoute(`${routes.Stock.url}?wtb=STOCK&page=more`)
-                        }
-                        className="bg-[#FBF3DB] w-[123px] flex justify-center items-center cursor-pointer"
-                      >
-                        <Image
-                          src="/icons/arrow-right.svg"
-                          width="34px"
-                          height="19px"
-                          alt=""
-                        />
-                      </div>
+                      <>
+                        <div className="bg-[#FEFBF3] w-[123px] p-4 flex flex-col justify-center items-center border border-ox-input-white">
+                          <div
+                            onClick={() =>
+                              changeRoute(
+                                `${routes.Stock.url}?wtb=STOCK&page=more`
+                              )
+                            }
+                            className="text-base font-light bg-white border border-ox-input-white rounded-full p-4  flex justify-center items-center cursor-pointer"
+                          >
+                            <Image
+                              src="/icons/arrow-right.svg"
+                              width="16"
+                              height="16"
+                              alt=""
+                            />
+                          </div>
+
+                          <div className="text-base font-light mt-4">
+                            See all items
+                          </div>
+                        </div>
+                      </>
                     )}
                   </CardRowWrapper>
                 )}
@@ -330,6 +389,7 @@ const Stock = () => {
                       isStocksFetching={showFiltersLoader}
                       isStockCategoriesFetching={isStockCategoriesFetching}
                       tableType="STOCK_HISTORY"
+                      setBatches={setAllBatches}
                     />
                   )}
 
