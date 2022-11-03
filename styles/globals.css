@@ -1051,7 +1051,6 @@ body {
 }
 
 .my_input {
-  @apply text-ox-input-white !important;
   @apply h-[42px];
   @apply w-full;
   @apply border-none !important;
