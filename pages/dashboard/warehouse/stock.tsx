@@ -17,7 +17,7 @@ import { StockTopContentWrapper } from "../../../components/Warehouse/Wrappers";
 import {
   useLazyStockQuery,
   useLazyWarehouseItemBatchesQuery,
-  useLazyStockCategoriesQuery
+  useLazyWarehouseItemsQuery
 } from "../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import CardRowWrapper, {
   CardMoreStockRowWrapper
@@ -59,8 +59,17 @@ const Stock = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentPages, setCurrentPages] = useState(1);
   const [batchesCurrentPages, setBatchesCurrentPages] = useState(1);
+  const [warehouseItems, setWarehouseItems] = useState<any>({});
+  const [warehouseItemsCurrentPages, setWarehouseItemsCurrentPages] =
+    useState(1);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+  const [isLoadMoreWarehouseItemsLoading, setIsLoadMoreWarehouseItemsLoading] =
+    useState(false);
   const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
+  const [
+    warehouseITemsFiltersBasedLoader,
+    setWarehouseITemsFiltersBasedLoader
+  ] = useState(false);
   const [batchesFiltersBasedLoader, setBatchesFiltersBasedLoader] =
     useState(false);
   const router = useRouter();
@@ -95,13 +104,13 @@ const Stock = () => {
   const [getStocks] = useLazyStockQuery();
 
   const [
-    getCategories,
+    getWarehouseItems,
     {
       data: stockCategories,
       isLoading: isStockCategoriesLoading,
       isFetching: isStockCategoriesFetching
     }
-  ] = useLazyStockCategoriesQuery();
+  ] = useLazyWarehouseItemsQuery();
   const AllStocks = useSelector(
     (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
   );
@@ -121,15 +130,21 @@ const Stock = () => {
     setFiltersBasedLoader(false);
   };
 
-  const getCategoriesActions = ({
+  const handleWarehouseItemsRender = (res: any) => {
+    setWarehouseItems(res);
+    setWarehouseITemsFiltersBasedLoader(false);
+  };
+
+  const getWarehouseItemsAction = ({
     page,
-    size = pagination.stock.size,
-    request = getCategories,
+    size = pagination.warehouseItems.size,
+    request = getWarehouseItems,
     start = startDate,
     end = endDate,
     depot = depotId,
     search = searchQuery,
-    sort = selectedSort?.value || ""
+    sort = selectedSort?.value || "",
+    handleSuccess = handleWarehouseItemsRender
   }: any) => {
     handleAPIRequests({
       request,
@@ -139,7 +154,8 @@ const Stock = () => {
       search,
       sort,
       size,
-      page
+      page,
+      handleSuccess
     });
   };
 
@@ -168,13 +184,17 @@ const Stock = () => {
   };
 
   useEffect(() => {
-    getCategoriesActions({});
+    getWarehouseItemsAction({});
+    setWarehouseItemsCurrentPages(1);
+    setWarehouseITemsFiltersBasedLoader(true);
   }, [startDate, endDate, selectedSort, depotId, searchQuery]);
 
   useEffect(() => {
-    getStocksAction({});
-    setCurrentPages(1);
-    setFiltersBasedLoader(true);
+    if (query.page !== "more") {
+      getStocksAction({});
+      setCurrentPages(1);
+      setFiltersBasedLoader(true);
+    }
   }, [startDate, endDate, filter, selectedSort, depotId]);
 
   const handleLoadMoreStocksSuccess = ({ payload }: any) => {
@@ -194,6 +214,33 @@ const Stock = () => {
       page: currentPages,
       handleFailure: handleLoadMoreStocksFailure,
       handleSuccess: handleLoadMoreStocksSuccess
+    });
+  };
+
+  const handleLoadMoreWarehouseItemsSuccess = (res: any) => {
+    setWarehouseItems({
+      ...warehouseItems,
+      payload: {
+        ...warehouseItems.payload,
+        content: [...warehouseItems.payload.content, ...res.payload.content]
+      }
+    });
+
+    setIsLoadMoreWarehouseItemsLoading(false);
+  };
+
+  const handleLoadMoreWarehouseItemsFailure = () => {
+    setIsLoadMoreWarehouseItemsLoading(false);
+  };
+
+  const handleLoadMoreWarehouseItems = () => {
+    setWarehouseItemsCurrentPages(warehouseItemsCurrentPages + 1);
+    setIsLoadMoreWarehouseItemsLoading(true);
+
+    getWarehouseItemsAction({
+      page: warehouseItemsCurrentPages,
+      handleFailure: handleLoadMoreWarehouseItemsFailure,
+      handleSuccess: handleLoadMoreWarehouseItemsSuccess
     });
   };
 
@@ -248,6 +295,14 @@ const Stock = () => {
     (AllStocks?.payload?.totalPages > currentPages || isLoadMoreLoading) &&
     !showFiltersLoader;
 
+  const showWarehouseItemsFilterLoader =
+    warehouseITemsFiltersBasedLoader && !isLoadMoreWarehouseItemsLoading;
+
+  const showWarehouseItemsLoadMore =
+    (stockCategories?.payload?.totalPages > warehouseItemsCurrentPages ||
+      isLoadMoreWarehouseItemsLoading) &&
+    !showWarehouseItemsFilterLoader;
+
   return (
     <Layout>
       <WarehouseTopNavigator
@@ -287,13 +342,13 @@ const Stock = () => {
         <>
           {query?.page === "more" ? (
             <Content isOverflowHidden={false} navType="DOUBLE">
-              {isStockCategoriesLoading ? (
+              {showWarehouseItemsFilterLoader ? (
                 <div className="w-full h-full flex justify-center items-center">
                   <MediumSpinLoader />
                 </div>
               ) : (
                 <CardMoreStockRowWrapper>
-                  {stockCategories?.payload?.content?.map((item: any) => (
+                  {warehouseItems?.payload?.content?.map((item: any) => (
                     <CardMoreStockColWrapper key={item?.name}>
                       <StockMediumCard
                         showBatchesModal={showBatchesModal}
@@ -302,11 +357,23 @@ const Stock = () => {
                           item?.unitSellingPrice || 0
                         )} Rwf / Kg`}
                         count={item?.weight}
-                        isFetching={isStockCategoriesFetching}
+                        isFetching={showWarehouseItemsFilterLoader}
                         categoryInfo={item}
                       />
                     </CardMoreStockColWrapper>
                   ))}
+
+                  {showWarehouseItemsLoadMore && (
+                    <div style={{ width: "12%", margin: "32px auto" }}>
+                      <CustomButton
+                        loading={isLoadMoreWarehouseItemsLoading}
+                        onClick={handleLoadMoreWarehouseItems}
+                        type="secondary"
+                      >
+                        Load more
+                      </CustomButton>
+                    </div>
+                  )}
                 </CardMoreStockRowWrapper>
               )}
             </Content>

@@ -131,14 +131,17 @@ export type Stock = {
 };
 
 export type PostStockRequest = {
-  inDate: string;
-  expiryDate: string;
-  supplierId: number;
-  weight: number;
-  unitCost: number;
   depotId: number;
   categoryId: number;
-  lhsOrderId: number;
+  batches: {
+    inDate: string;
+    expiryDate: string;
+    supplierId: number | string;
+    weight: number | string;
+    lhsOrderId: number | string;
+    unitBuyingPrice: number | string;
+    unitSellingPrice: number | string;
+  };
 };
 
 export type DeleteBatchRequest = {

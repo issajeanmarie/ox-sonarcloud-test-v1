@@ -10,7 +10,7 @@ import { YellowCheckIcon } from "../../../Icons";
 import { AddWarehouseOrderTypes } from "../../../../lib/types/warehouse";
 import { useUnPaginatedTrucksQuery } from "../../../../lib/api/endpoints/Warehouse/salesEndpoints";
 import { useDepotsQuery } from "../../../../lib/api/endpoints/Depots/depotEndpoints";
-import { useStockQuery } from "../../../../lib/api/endpoints/Warehouse/stockEndpoints";
+import { useWarehouseItemsQuery } from "../../../../lib/api/endpoints/Warehouse/stockEndpoints";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
 import ClientSearch from "../../../Shared/Input/ClientSearch";
 import { useSelector } from "react-redux";
@@ -55,9 +55,9 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
 
   const { data: depots, isLoading: isDepotsLoading } = useDepotsQuery();
 
-  const { data: Stocks, isLoading: isStocksLoading } = useStockQuery({
+  const { data: Stocks, isLoading: isStocksLoading } = useWarehouseItemsQuery({
     page: "",
-    size: 1000000,
+    size: 100,
     start: "",
     end: "",
     depot: "",

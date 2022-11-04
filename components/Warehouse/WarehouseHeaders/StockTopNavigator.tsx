@@ -45,7 +45,7 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
 
   const { data: suppliers, isLoading: isSuppliersLoading } = useSuppliersQuery({
     page: "",
-    size: 10000000,
+    size: 100,
     sort: ""
   });
 
@@ -124,9 +124,7 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
             label="Sort"
             setDefaultSelected={setSelectedSort}
             defaultSelected={selectedSort}
-            dropDownContent={
-              !query.page ? sortOptions : sortOptions.slice(2, 4)
-            }
+            dropDownContent={sortOptions}
           />
         </Col>
         {query?.page === "more" && (
