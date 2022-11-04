@@ -59,7 +59,7 @@ const SalesPage = () => {
 
   useEffect(() => {
     if (router.isReady) {
-      if (Object.keys(query).length === 0 || !query.wtb) {
+      if (Object.keys(query)?.length === 0 || !query.wtb) {
         changeRoute(`${routes.Warehouse.url}?wtb=SALES`);
         setActive("SALES");
       }
@@ -137,7 +137,7 @@ const SalesPage = () => {
                     key={sale?.id}
                     itemNumber={index + 1}
                     sale={sale}
-                    AllSales={AllSales}
+                    AllSales={{}}
                   />
                 ))}
               </>

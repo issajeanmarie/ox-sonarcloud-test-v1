@@ -16,7 +16,6 @@ import {
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditStock from "../../Forms/Warehouse/Edit/EditStock";
 import { useCategoriesQuery } from "../../../lib/api/endpoints/Category/categoryEndpoints";
-import { useOrdersQuery } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { useSuppliersQuery } from "../../../lib/api/endpoints/Warehouse/supplierEndpoints";
 import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
 import Link from "next/link";
@@ -26,6 +25,7 @@ import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import ActionModal from "../../Shared/ActionModal";
 import { userType } from "../../../helpers/getLoggedInUser";
+import { useLhsOrdersQuery } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 
 const { Text } = Typography;
 
@@ -61,17 +61,8 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
 
   const { data: categories, isLoading: isCategoriesLoading } =
     useCategoriesQuery();
-  const { data: orders, isLoading: isOrdersLoading } = useOrdersQuery({
-    depot: "",
-    driver: "",
-    truck: "",
-    page: "",
-    size: 100,
-    start: "",
-    end: "",
-    filter: "",
-    momoRefCode: ""
-  });
+  const { data: lhsOrders, isLoading: isLhsOrdersLoading } =
+    useLhsOrdersQuery();
 
   const { data: suppliers, isLoading: isSuppliersLoading } = useSuppliersQuery({
     page: "",
@@ -85,8 +76,8 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
     setIsEditModalVisible(true);
     form.setFieldsValue({
       ...record,
-      inDate: moment(record?.inDate, "ll"),
-      expiryDate: moment(record?.expiryDate, "ll")
+      inDate: moment(record?.inDate),
+      expiryDate: moment(record?.expiryDate)
     });
   };
 
@@ -436,7 +427,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
         }
         setIsModalVisible={setIsEditModalVisible}
         isModalVisible={isEditModalVisible}
-        title="EDIT STOCK"
+        title="EDIT BATCH"
         loading={isEditing}
       >
         <EditStock
@@ -444,13 +435,13 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
           form={form}
           categories={categories?.payload}
           isCategoriesLoading={isCategoriesLoading}
-          orders={orders?.payload?.content}
-          isOrdersLoading={isOrdersLoading}
           depots={depots?.payload}
           isDepotsLoading={isDepotsLoading}
           suppliers={suppliers}
           isSuppliersLoading={isSuppliersLoading}
           itemToEdit={itemToEdit}
+          lhsOrders={lhsOrders?.payload?.content}
+          isOrdersLoading={isLhsOrdersLoading}
         />
       </ModalWrapper>
     </>

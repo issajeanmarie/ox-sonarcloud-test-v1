@@ -83,10 +83,10 @@ export type AddStockTypes = {
 
 export type EditStockTypes = {
   onEditStockFinish: (values: any) => void;
+  lhsOrders: any;
   form: any;
   categories: any;
   isCategoriesLoading: boolean;
-  orders: any;
   isOrdersLoading: boolean;
   depots: any;
   isDepotsLoading: boolean;
