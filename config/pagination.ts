@@ -7,7 +7,7 @@ export const pagination = {
   agents: { size: 40, page: 0 },
   admins: { size: 40, page: 0 },
   sales: { size: 40, page: 0 },
-  stock: { size: 40, page: 0 },
+  stock: { size: 1, page: 0 },
   suppliers: { size: 40, page: 0 },
   resources: { size: 40, page: 0 },
   warehouseItems: { size: 40, page: 0 },

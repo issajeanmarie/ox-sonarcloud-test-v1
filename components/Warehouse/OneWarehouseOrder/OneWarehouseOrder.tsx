@@ -311,3 +311,45 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
 };
 
 export default OneWarehouseOrder;
+
+// import { FC } from "react";
+// import { Row, Col, Tooltip, Typography } from "antd";
+// import { limitStringLengthSmall } from "../../../helpers/limitStringLength";
+// import { routes } from "../../../config/route-config";
+// import { changeRoute } from "../../../helpers/routesHandler";
+
+// const { Text } = Typography;
+
+// type OneWarehouseOrderTypes = {
+//   sale: { status: string; saleItems: any };
+//   itemNumber: number;
+//   AllSales: any;
+// };
+
+// const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
+//   sale,
+//   itemNumber
+// }) => {
+//   return (
+//     <div className="shadow-[0px_0px_19px_#00000008] w-full mb-2">
+//       <div className="py-8 px-4 border-b-2 border-gray-100 flex items-center justify-between bg-white">
+//         <div
+//           className={`flex-1 ${
+//             sale.status === "CANCELLED" ? "opacity-50" : ""
+//           }`}
+//         >
+//           <Row gutter={32} align="middle">
+//             <Col className="heading2 w-[32px]">
+//               <span className="font-bold text-lg">{itemNumber}.</span>
+//             </Col>{" "}
+//             <Col className="flex gap-2 items-center">
+//               <Text className="text-md font-bold"></Text>
+//             </Col>
+//           </Row>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default OneWarehouseOrder;

@@ -48,6 +48,21 @@ const stockEndpoints = baseAPI.injectEndpoints({
       })
     }),
 
+    warehouseItems: builder.query<
+      ApiResponseMetadata<{ content: StockResponse }>,
+      GetStock
+    >({
+      providesTags: ["CreateStock"],
+      query: (DTO) => ({
+        url: `/warehouse-items?page=${DTO?.page || ""}&size=${
+          DTO?.size || ""
+        }&start=${DTO?.start || ""}&end=${DTO?.end || ""}&depot=${
+          DTO?.depot || ""
+        }&status=${DTO?.status || ""}&sort=${DTO?.sort || ""}`,
+        method: "GET"
+      })
+    }),
+
     warehouseItemBatches: builder.query<
       ApiResponseMetadata<{ content: StockResponse }>,
       GetStock

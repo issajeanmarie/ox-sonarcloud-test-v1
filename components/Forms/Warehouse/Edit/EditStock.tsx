@@ -22,15 +22,6 @@ const EditStock: FC<EditStockTypes> = ({
     (item: any) => item.enabled
   );
 
-  const [parentCategoryChange, setParentCategory] = useState(
-    itemToEdit?.category?.parentCategory?.id
-  );
-
-  const onParentCategoryChange = (value: any) => {
-    setParentCategory(value);
-    form.setFieldsValue({ SubCategory: "" });
-  };
-
   return (
     <Form
       form={form}
@@ -60,7 +51,6 @@ const EditStock: FC<EditStockTypes> = ({
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
-            defaultValue={itemToEdit?.supplierName}
             name="supplierId"
             type="select"
             placeholder="Select supplier name"

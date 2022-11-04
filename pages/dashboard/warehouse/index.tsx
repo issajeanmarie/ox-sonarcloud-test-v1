@@ -219,7 +219,7 @@ const SalesPage = () => {
                     key={sale?.id}
                     itemNumber={index + 1}
                     sale={sale}
-                    AllSales={AllSales}
+                    AllSales={{}}
                   />
                 ))}
               </>
