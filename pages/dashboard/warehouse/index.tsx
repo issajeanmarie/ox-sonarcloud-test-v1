@@ -112,24 +112,52 @@ const SalesPage = () => {
     dispatch(displayPaginatedData({ payload: res, onRender: true }));
   };
 
+  useEffect(() => {
+    const savedFilters = getFromLocal(OX_ORDERS_FILTERS);
+    if (savedFilters) setIsFiltered(true);
+  }, []);
+
+  const depotsState = useSelector(
+    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
+  );
+  const filters = getFromLocal(OX_ORDERS_FILTERS);
+
   const getSalesAction = ({
+    request = getSales,
+    depot = depotsState?.depotId,
+    filter = filters?.filter || "",
     page,
     size = pagination.sales.size,
-    request = getSales,
-    handleSuccess = handleRenderSuccess
+    handleSuccess = handleRenderSuccess,
+    handleFailure,
+    start = filters?.start,
+    end = filters?.end,
+    momoRefCode = filters?.momoRefCode,
+    truck = filters?.truck,
+    driver = filters?.driver
   }: any) => {
     handleAPIRequests({
       request,
       page,
       size,
-      handleSuccess
+      filter,
+      start,
+      end,
+      momoRefCode,
+      truck,
+      driver,
+      depot,
+      handleSuccess,
+      handleFailure
     });
   };
 
   useEffect(() => {
-    getSalesAction({});
     setCurrentPages(1);
-  }, []);
+
+    depotsState.depotId !== undefined &&
+      getSalesAction({ depot: depotsState?.depotId });
+  }, [depotsState]);
 
   useEffect(() => {
     if (router.isReady) {
@@ -219,7 +247,7 @@ const SalesPage = () => {
                     key={sale?.id}
                     itemNumber={index + 1}
                     sale={sale}
-                    AllSales={{}}
+                    AllSales={AllSales}
                   />
                 ))}
               </>
