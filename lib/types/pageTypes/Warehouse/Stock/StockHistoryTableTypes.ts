@@ -12,4 +12,5 @@ export type StockHistoryTableTypes = {
   expired: boolean;
   supplierName: string;
   unitSellingPrice: number | string;
+  unitBuyingPrice: number | string;
 };

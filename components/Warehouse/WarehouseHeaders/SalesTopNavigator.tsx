@@ -12,6 +12,8 @@ import { usePostSaleMutation } from "../../../lib/api/endpoints/Warehouse/salesE
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import FilterOrdersForm from "../../Forms/Orders/Filter/filter";
+import FilterOrdersModal from "../../Shared/Modal";
 import { useDispatch } from "react-redux";
 
 const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
@@ -19,7 +21,14 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
   setIsModalVisible,
   isModalVisible,
   totalElements,
-  isSalesLoading
+  isSalesLoading,
+  setCurrentPages,
+  getSalesAction,
+  isFetching,
+  isFilterModalVisible,
+  setIsFilterModalVisible,
+  isFiltered,
+  setIsFiltered
 }) => {
   const [form] = Form.useForm();
   const [items, setItems]: any = useState([]);
@@ -60,6 +69,10 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
 
   const handleChangeWeight = (value: number | null) => {
     setWeight(value);
+  };
+
+  const showFilterModal = () => {
+    setIsFilterModalVisible(true);
   };
 
   const [postSale, { isLoading: isPostingSale }] = usePostSaleMutation();
@@ -108,16 +121,19 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
 
   const RightSide = (
     <div className="flex items-center gap-5">
-      <div className={` p-2 flex items-center justify-center`}>
-        {!isSalesLoading && (
-          <Image
-            width={16}
-            height={16}
-            src="/icons/filter.svg"
-            className="cursor-pointer"
-            alt="Filter icon"
-          />
-        )}
+      <div
+        className={` p-2 flex items-center justify-center ${
+          isFiltered ? "border rounded-lg border-ox-yellow" : ""
+        } `}
+      >
+        <Image
+          width={16}
+          height={16}
+          src="/icons/filter.svg"
+          onClick={showFilterModal}
+          className="cursor-pointer"
+          alt="Filter icon"
+        />
       </div>
 
       <div className="flex items-center gap-6 w-[120px]">
@@ -163,6 +179,19 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
           form={form}
         />
       </ModalWrapper>
+
+      <FilterOrdersModal
+        isModalVisible={isFilterModalVisible}
+        setIsModalVisible={setIsFilterModalVisible}
+      >
+        <FilterOrdersForm
+          getOrdersAction={getSalesAction}
+          loading={isFetching}
+          setIsFiltered={setIsFiltered}
+          setCurrentPages={setCurrentPages}
+          setIsVisible={setIsFilterModalVisible}
+        />
+      </FilterOrdersModal>
       <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
     </>
   );

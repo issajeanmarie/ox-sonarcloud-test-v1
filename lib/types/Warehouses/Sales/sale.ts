@@ -72,6 +72,13 @@ export type EditSaleTransactionRequest = {
 export type GetSales = {
   page: number | string;
   size: number | string;
+  filter: string;
+  start: string;
+  end: string;
+  momoRefCode: string;
+  truck: string;
+  driver: string;
+  depot: number | string;
 };
 
 export type GetSale = {

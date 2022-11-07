@@ -6,13 +6,13 @@ import { useLazyOrdersQuery } from "../../lib/api/endpoints/Orders/ordersEndpoin
 import { OrdersTableLoader } from "../../components/Shared/Loaders/Loaders";
 import { Order, Order_Filter } from "../../lib/types/orders";
 import { useDispatch, useSelector } from "react-redux";
-import { displayOrders } from "../../lib/redux/slices/ordersSlice";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { pagination } from "../../config/pagination";
 import { getFromLocal } from "../../helpers/handleLocalStorage";
 import { OX_ORDERS_FILTERS } from "../../config/constants";
 import Content from "../Shared/Content";
 import CustomButton from "../../components/Shared/Button";
+import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
 
 type DepotTypes = {
   depotName: string | undefined;
@@ -23,7 +23,9 @@ const Orders: FC = () => {
   const [currentPages, setCurrentPages] = useState(1);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
   const [depotBasedLoader, setDepotBasedLoader] = useState(false);
-  const ordersState = useSelector((state: any) => state.orders.displayOrders);
+  const ordersState = useSelector(
+    (state: any) => state.paginatedData.displayPaginatedData
+  );
   const dispatch = useDispatch();
 
   const depotsState = useSelector(
@@ -35,12 +37,12 @@ const Orders: FC = () => {
   const filters = getFromLocal(OX_ORDERS_FILTERS);
 
   const handleRenderSuccess = (res: any) => {
-    dispatch(displayOrders({ payload: res, onRender: true }));
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
     setDepotBasedLoader(false);
   };
 
   const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
-    dispatch(displayOrders({ payload, paginate: true }));
+    dispatch(displayPaginatedData({ payload, paginate: true }));
     setIsLoadMoreLoading(false);
   };
 

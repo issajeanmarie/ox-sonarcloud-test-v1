@@ -266,7 +266,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       ) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
-            {record?.unitSellingPrice}
+            {record?.unitBuyingPrice}
           </Text>
         </RowsWrapper>
       )

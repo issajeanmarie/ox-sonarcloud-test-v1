@@ -43,7 +43,7 @@ const Notification: React.FC<Types> = ({
 
   useEffect(() => {
     if (notify) {
-      openNotification("bottomLeft");
+      openNotification("bottomRight");
       endNotification({
         message: "",
         amount: 0

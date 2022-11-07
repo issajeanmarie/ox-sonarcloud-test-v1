@@ -71,7 +71,8 @@ const AppSider = ({ collapsed }: any) => {
   const showDepots =
     doesInclude(routes.Analytics.url) ||
     router.pathname === routes.Orders.url ||
-    doesInclude(routes.Stock.url);
+    doesInclude(routes.Stock.url) ||
+    doesInclude(routes.Warehouse.url);
 
   escape(setIsDropdownVisible);
 

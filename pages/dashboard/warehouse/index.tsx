@@ -17,12 +17,21 @@ import { pagination } from "../../../config/pagination";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { getFromLocal } from "../../../helpers/handleLocalStorage";
+import { OX_ORDERS_FILTERS } from "../../../config/constants";
+
+type DepotTypes = {
+  depotName: string | undefined;
+  depotId: number | undefined;
+};
 
 const SalesPage = () => {
   const [active, setActive] = useState<string>("SALES");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [currentPages, setCurrentPages] = useState(1);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+  const [isFiltered, setIsFiltered] = useState<boolean>(false);
   const router = useRouter();
   const { query } = useRouter();
   const dispatch = useDispatch();
@@ -35,27 +44,56 @@ const SalesPage = () => {
     useLazySalesQuery();
 
   const handleRenderSuccess = (res: any) => {
+    setIsFilterModalVisible(false);
     dispatch(displayPaginatedData({ payload: res, onRender: true }));
   };
 
+  useEffect(() => {
+    const savedFilters = getFromLocal(OX_ORDERS_FILTERS);
+    if (savedFilters) setIsFiltered(true);
+  }, []);
+
+  const depotsState = useSelector(
+    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
+  );
+  const filters = getFromLocal(OX_ORDERS_FILTERS);
+
   const getSalesAction = ({
+    request = getSales,
+    depot = depotsState?.depotId,
+    filter = filters?.filter || "",
     page,
     size = pagination.sales.size,
-    request = getSales,
-    handleSuccess = handleRenderSuccess
+    handleSuccess = handleRenderSuccess,
+    handleFailure,
+    start = filters?.start,
+    end = filters?.end,
+    momoRefCode = filters?.momoRefCode,
+    truck = filters?.truck,
+    driver = filters?.driver
   }: any) => {
     handleAPIRequests({
       request,
       page,
       size,
-      handleSuccess
+      filter,
+      start,
+      end,
+      momoRefCode,
+      truck,
+      driver,
+      depot,
+      handleSuccess,
+      handleFailure
     });
   };
 
   useEffect(() => {
-    getSalesAction({});
     setCurrentPages(1);
-  }, []);
+
+    depotsState.depotId !== undefined &&
+      getSalesAction({ depot: depotsState?.depotId });
+  }, [depotsState]);
 
   useEffect(() => {
     if (router.isReady) {
@@ -120,6 +158,13 @@ const SalesPage = () => {
           isModalVisible={isModalVisible}
           totalElements={apiData?.payload?.totalElements}
           isSalesLoading={onRenderLoader}
+          setCurrentPages={setCurrentPages}
+          getSalesAction={getSalesAction}
+          isFetching={isFetching}
+          isFilterModalVisible={isFilterModalVisible}
+          setIsFilterModalVisible={setIsFilterModalVisible}
+          isFiltered={isFiltered}
+          setIsFiltered={setIsFiltered}
         />
 
         <Content isOverflowHidden={false} navType="DOUBLE">
@@ -137,7 +182,7 @@ const SalesPage = () => {
                     key={sale?.id}
                     itemNumber={index + 1}
                     sale={sale}
-                    AllSales={{}}
+                    AllSales={AllSales}
                   />
                 ))}
               </>
