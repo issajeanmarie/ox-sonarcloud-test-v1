@@ -140,6 +140,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       expiryDate: moment(values?.expiryDate).format("YYYY-MM-DD"),
       batchId: itemToEdit?.id,
       id: itemToEdit?.warehouseItem?.id,
+      ...values,
       showSuccess: true,
       handleSuccess: handleEditStockSuccess
     });
