@@ -28,7 +28,11 @@ const salesEndpoints = baseAPI.injectEndpoints({
     >({
       providesTags: ["Sales"],
       query: (DTO) => ({
-        url: `sales?page=${DTO?.page || ""}&size=${DTO?.size || ""}`,
+        url: `sales?page=${DTO.page || ""}&size=${DTO.size || ""}&depot=${
+          DTO.depot || ""
+        }&driver=${DTO.driver || ""}&truck=${DTO.truck || ""}&start=${
+          DTO.start || ""
+        }&end=${DTO.end || ""}`,
         method: "GET"
       })
     }),
@@ -50,7 +54,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
       })
     }),
     postSale: builder.mutation<ApiResponseMetadata<Sale>, PostSaleRequest>({
-      invalidatesTags: ["Sales"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/sales`,
         method: "POST",
@@ -71,7 +75,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
     }),
 
     cancelSale: builder.mutation<ApiResponseMetadata<Sale>, CancelSaleRequest>({
-      invalidatesTags: ["Sales"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/sales/${DTO?.id}/cancel`,
         method: "PATCH"

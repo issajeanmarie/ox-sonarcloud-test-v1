@@ -26,6 +26,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import ActionModal from "../../Shared/ActionModal";
 import { userType } from "../../../helpers/getLoggedInUser";
 import { useLhsOrdersQuery } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
+import { localeString } from "../../../utils/numberFormatter";
 
 const { Text } = Typography;
 
@@ -74,10 +75,12 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
   const showEditModal = (record: any) => {
     setItemToEdit(record);
     setIsEditModalVisible(true);
+
     form.setFieldsValue({
       ...record,
       inDate: moment(record?.inDate),
-      expiryDate: moment(record?.expiryDate)
+      expiryDate: moment(record?.expiryDate),
+      lhsOrderId: record?.lhsOrder?.id
     });
   };
 
@@ -126,16 +129,9 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
   const onEditStockFinish = (values: any) => {
     handleAPIRequests({
       request: editStock,
-      inDate: values?.inDate,
-      expiryDate: values?.expiryDate,
-      supplierId: values?.supplierId,
-      weight: values?.weight,
-      unitCost: values?.unitCost,
-      depotId: values?.depotId,
-      categoryId: values?.SubCategory,
-      lhsOrderId: values?.lhsOrderId,
       batchId: itemToEdit?.id,
       id: itemToEdit?.warehouseItem?.id,
+      ...values,
       showSuccess: true,
       handleSuccess: handleEditStockSuccess
     });
@@ -226,7 +222,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
         record: StockHistoryTableTypes
       ) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">
+          <Text className="normalText opacity_56 text_ellipsis">
             {record?.expiryDate && moment(record?.expiryDate).format("ll")}
           </Text>
         </RowsWrapper>
@@ -240,48 +236,52 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
         record: StockHistoryTableTypes
       ) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">{record?.supplierName}</Text>
+          <Text className="normalText opacity_56 text_ellipsis">
+            {record?.supplierName}
+          </Text>
         </RowsWrapper>
       )
     },
     {
-      title: "KGs",
+      title: "KGs/Bags",
       key: "KGs",
       render: (
         text: StockHistoryTableTypes,
         record: StockHistoryTableTypes
       ) => (
         <RowsWrapper>
-          <Text className="normalText fowe700">{record?.weight}</Text>
-        </RowsWrapper>
-      )
-    },
-
-    {
-      title: <span className="nowrap">Buying price</span>,
-      key: "Buying price",
-      render: (
-        text: StockHistoryTableTypes,
-        record: StockHistoryTableTypes
-      ) => (
-        <RowsWrapper>
-          <Text className="normalText opacity_56">
-            {record?.unitSellingPrice}
+          <Text className="normalText fowe700">
+            {record?.weight} / {record?.weight / 50}
           </Text>
         </RowsWrapper>
       )
     },
 
     {
-      title: <span className="nowrap">Selling price</span>,
+      title: <span className="nowrap">Total buying price</span>,
+      key: "Buying price",
+      render: (
+        text: StockHistoryTableTypes,
+        record: StockHistoryTableTypes
+      ) => (
+        <RowsWrapper>
+          <Text className="normalText opacity_56 text_ellipsis">
+            {localeString(record?.unitBuyingPrice * record?.weight)}
+          </Text>
+        </RowsWrapper>
+      )
+    },
+
+    {
+      title: <span className="nowrap">Total selling price</span>,
       key: "Selling price",
       render: (
         text: StockHistoryTableTypes,
         record: StockHistoryTableTypes
       ) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">
-            {record?.unitSellingPrice}
+          <Text className="normalText opacity_56 text_ellipsis">
+            {localeString(record?.unitSellingPrice * record?.weight)}
           </Text>
         </RowsWrapper>
       )

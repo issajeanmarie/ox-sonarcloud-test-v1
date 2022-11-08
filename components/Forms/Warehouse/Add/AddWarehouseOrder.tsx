@@ -18,6 +18,7 @@ import { skipToken } from "@reduxjs/toolkit/dist/query";
 import { useClientQuery } from "../../../../lib/api/endpoints/Clients/clientsEndpoint";
 import moment from "moment";
 import { useDriverQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
+import { useState } from "react";
 
 const { Option } = Select;
 
@@ -38,10 +39,14 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
   weight,
   sale
 }) => {
-  const colSize = transport === "none" ? 12 : 8;
-
+  const [selectedDepot, setSelectedDepot] = useState<number | undefined>();
   const { data: trucks, isLoading: isTrucksLoading } =
     useUnPaginatedTrucksQuery();
+
+  const depotsState = useSelector(
+    (state: { depots: { payload: { depotId: number } } }) =>
+      state.depots.payload
+  );
 
   const { data: chosenClientInfo, isFetching: isInitialFetching } =
     useClientQuery(sale?.client?.id ? { id: sale?.client?.id } : skipToken);
@@ -55,20 +60,22 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
 
   const { data: depots, isLoading: isDepotsLoading } = useDepotsQuery();
 
-  const { data: Stocks, isLoading: isStocksLoading } = useWarehouseItemsQuery({
+  const { data: Stocks, isFetching: isStocksLoading } = useWarehouseItemsQuery({
     page: "",
     size: 100,
     start: "",
     end: "",
-    depot: "",
+    depot: selectedDepot || depotsState.depotId,
     status: "",
     sort: ""
   });
 
-  const depotsState = useSelector(
-    (state: { depots: { payload: { depotId: number } } }) =>
-      state.depots.payload
-  );
+  useEffect;
+
+  const handleSelectDepot = (value: number) => {
+    form.setFieldsValue({ warehouseId: "" });
+    setSelectedDepot(value);
+  };
 
   useEffect(() => {
     form.setFieldsValue({
@@ -89,6 +96,22 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
     sale?.saleDate,
     sale?.transportOrder?.stops
   ]);
+
+  useEffect(() => {
+    sale?.saleItems?.map(
+      (item: { weight: number; id: number; warehouseItem: any }) => {
+        setItems([
+          ...items,
+          {
+            category: item?.warehouseItem?.category?.name,
+            id: item.id,
+            parentCategory: undefined,
+            weight: item?.weight
+          }
+        ]);
+      }
+    );
+  }, [sale?.saleItems]);
 
   const showTruckOnEdit =
     (sale && sale?.transportOrder && transport !== "none") ||
@@ -129,6 +152,25 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
             existingValue={chosenClientInfo?.payload}
           />
         </Col>
+
+        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+          <Input
+            name="depotId"
+            type="select"
+            placeholder="Select Depot"
+            label="Select Depot"
+            isLoading={isDepotsLoading}
+            disabled={isDepotsLoading}
+            onChange={handleSelectDepot}
+            isGroupDropdown
+          >
+            {depots?.payload?.map((item: any) => (
+              <Option key={item?.id} value={item?.id}>
+                {item?.name}
+              </Option>
+            ))}
+          </Input>
+        </Col>
       </Row>
 
       <Row className="mt-8">
@@ -139,7 +181,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          {items.length > 0 && (
+          {(items.length > 0 || sale?.saleItems?.length > 0) && (
             <>
               <div className="mb-4">
                 <span className="font-light">Items</span>
@@ -234,19 +276,12 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
         className="mt-4"
       >
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <div className="mb-4 mt-4">
+          <div className="mb-1 mt-4">
             <span className="font-light">Transport</span>
           </div>
         </Col>
 
-        <Col
-          xs={24}
-          sm={24}
-          md={colSize}
-          lg={colSize}
-          xl={colSize}
-          xxl={colSize}
-        >
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             onChange={onTransportChange}
             name="transport"
@@ -259,88 +294,59 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
             <Option value="local">Local</Option>
           </Input>
         </Col>
+
         {transport !== "none" && (
-          <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-            <Input
-              name="localTransportCost"
-              type="text"
-              inputType="number"
-              label="Local price"
-              placeholder="00"
-            />
-          </Col>
+          <>
+            <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+              <Input
+                name="localTransportCost"
+                type="text"
+                inputType="number"
+                label="Local price"
+                placeholder="00"
+              />
+            </Col>
+
+            <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+              <Input
+                name="truckId"
+                type="select"
+                placeholder="Select Truck"
+                label="Truck"
+                isLoading={isTrucksLoading}
+                disabled={isTrucksLoading}
+                isGroupDropdown
+              >
+                {trucks?.payload?.map((item: any) => (
+                  <Option key={item?.id} value={item?.id}>
+                    {item?.plateNumber}
+                  </Option>
+                ))}
+              </Input>
+            </Col>
+
+            <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+              {showTruckOnEdit && (
+                <DriverSearch
+                  isDriverInitialFetching={isDriverInitialFetching}
+                  name="driverId"
+                  label="Driver"
+                  rules={requiredField("Driver")}
+                  existingValue={chosenDriverInfo?.payload}
+                />
+              )}
+            </Col>
+          </>
         )}
 
         <Col
           xs={24}
           sm={24}
-          md={colSize}
-          lg={colSize}
-          xl={colSize}
-          xxl={colSize}
+          md={transport === "none" ? 12 : 24}
+          lg={transport === "none" ? 12 : 24}
+          xl={transport === "none" ? 12 : 24}
+          xxl={transport === "none" ? 12 : 24}
         >
-          <Input
-            name="marginCost"
-            type="text"
-            inputType="number"
-            label="Margin"
-            placeholder="00"
-          />
-        </Col>
-      </Row>
-
-      <Row className="mt-4" justify="space-between" gutter={[16, 16]}>
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          {transport !== "none" && (
-            <Input
-              name="truckId"
-              type="select"
-              placeholder="Select Truck"
-              label="Truck"
-              isLoading={isTrucksLoading}
-              disabled={isTrucksLoading}
-              isGroupDropdown
-            >
-              {trucks?.payload?.map((item: any) => (
-                <Option key={item?.id} value={item?.id}>
-                  {item?.plateNumber}
-                </Option>
-              ))}
-            </Input>
-          )}
-        </Col>
-
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          {showTruckOnEdit && (
-            <DriverSearch
-              isDriverInitialFetching={isDriverInitialFetching}
-              name="driverId"
-              label="Driver"
-              rules={requiredField("Driver")}
-              existingValue={chosenDriverInfo?.payload}
-            />
-          )}
-        </Col>
-
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Input
-            name="depotId"
-            type="select"
-            placeholder="Select Depot"
-            label="Select Depot"
-            isLoading={isDepotsLoading}
-            disabled={isDepotsLoading}
-            isGroupDropdown
-          >
-            {depots?.payload?.map((item: any) => (
-              <Option key={item?.id} value={item?.id}>
-                {item?.name}
-              </Option>
-            ))}
-          </Input>
-        </Col>
-
-        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             name="Destination"
             type="location"

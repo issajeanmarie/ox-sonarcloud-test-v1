@@ -11,5 +11,6 @@ export type StockHistoryTableTypes = {
   lhsOrder: any;
   expired: boolean;
   supplierName: string;
-  unitSellingPrice: number | string;
+  unitSellingPrice: number;
+  unitBuyingPrice: number;
 };

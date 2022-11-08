@@ -67,7 +67,7 @@ const BatchesModal: FC<BatchesModalTypes> = ({
 
   return (
     <ModalWrapper
-      width={1000}
+      width={1200}
       title={`"${categoryInfo?.categoryName}" BATCHES`}
       isModalVisible={isVisible}
       setIsModalVisible={setIsVisible}

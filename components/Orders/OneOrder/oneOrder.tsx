@@ -11,7 +11,6 @@ import { dateFormatterNth } from "../../../utils/dateFormatter";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import { routes } from "../../../config/route-config";
-import { displayOrders } from "../../../lib/redux/slices/ordersSlice";
 import ActionModal from "../../Shared/ActionModal";
 import {
   useChangeOrderStatusMutation,
@@ -25,6 +24,7 @@ import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { escape } from "../../../utils/keyBinders";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -51,7 +51,9 @@ const Order: FC<OrderProps> = ({ order, index }) => {
   const [downloadInvoice, { isLoading: invoiceLoading }] =
     useOrderInvoiceMutation();
 
-  const ordersState = useSelector((state: any) => state.orders.displayOrders);
+  const ordersState = useSelector(
+    (state: any) => state.paginatedData.displayPaginatedData
+  );
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -77,7 +79,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
     });
 
     dispatch(
-      displayOrders({
+      displayPaginatedData({
         payload: {
           payload: {
             content: [...newOrdersList],
@@ -191,7 +193,9 @@ const Order: FC<OrderProps> = ({ order, index }) => {
       {/* MIDDLE ROW */}
       <Table
         className="data_table orders_table"
-        dataSource={[order, ...order?.supportOrders]}
+        dataSource={
+          order?.supportOrders ? [order, ...order?.supportOrders] : []
+        }
         rowKey={(record) => record.id}
         pagination={false}
         showHeader={false}

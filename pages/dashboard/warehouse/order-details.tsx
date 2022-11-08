@@ -52,7 +52,7 @@ const OrderDetails = () => {
         parentCategory: warehouse
           ? JSON.parse(warehouse)?.category?.parentCategory?.name
           : "",
-        category: warehouse ? JSON.parse(warehouse)?.category?.name : ""
+        category: warehouse ? JSON.parse(warehouse)?.categoryName : ""
       }
     ]);
     setWarehouse("");

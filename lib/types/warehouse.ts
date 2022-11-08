@@ -94,6 +94,10 @@ export type EditStockTypes = {
   isSuppliersLoading: boolean;
   itemToEdit: {
     category: {
+      unitBuyingPrice: number;
+      unitSellingPrice: number;
+      inDate: string;
+      expiryDate: string;
       id: number;
       name: string;
       parentCategory: {

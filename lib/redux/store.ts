@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { baseAPI } from "../api/api";
 import authReducer from "./slices/authSlice";
 import trucksReducer from "./slices/trucksSlice";
-import ordersReducer from "./slices/ordersSlice";
 import depotsReducer from "./slices/depotsSlice";
 import paginatedDataReducer from "./slices/paginatedData";
 
@@ -16,7 +15,6 @@ export const store = configureStore({
     [baseAPI.reducerPath]: baseAPI.reducer,
     auth: authReducer,
     trucks: trucksReducer,
-    orders: ordersReducer,
     depots: depotsReducer,
     paginatedData: paginatedDataReducer
   },

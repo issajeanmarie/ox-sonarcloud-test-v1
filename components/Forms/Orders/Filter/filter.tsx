@@ -18,11 +18,10 @@ import { OX_ORDERS_FILTERS } from "../../../../config/constants";
 import { yearDateFormat } from "../../../../config/dateFormats";
 import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import DriverSearch from "../../../Shared/Input/DriverSearch";
-import { displayOrders } from "../../../../lib/redux/slices/ordersSlice";
 import { useDispatch } from "react-redux";
 import { useDriverQuery } from "../../../../lib/api/endpoints/Accounts/driversEndpoints";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
-import { requiredField } from "../../../../lib/validation/InputValidations";
+import { displayPaginatedData } from "../../../../lib/redux/slices/paginatedData";
 
 const { Option } = Select;
 
@@ -31,13 +30,15 @@ interface FilterOrdersFormProps {
   loading: boolean;
   setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentPages: React.Dispatch<React.SetStateAction<number>>;
+  setIsVisible?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   getOrdersAction,
   setIsFiltered,
   loading,
-  setCurrentPages
+  setCurrentPages,
+  setIsVisible
 }) => {
   const [chosenDriverId, setChosenDriverId] = useState<number>();
   const dispatch = useDispatch();
@@ -88,7 +89,8 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   };
 
   const handleClearFiltersSuccess = (payload: any) => {
-    dispatch(displayOrders({ payload, replace: true }));
+    setIsVisible && setIsVisible(false);
+    dispatch(displayPaginatedData({ payload, replace: true }));
     form.resetFields();
   };
 
@@ -194,7 +196,6 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
               <DriverSearch
                 name="driver"
                 label="Driver"
-                rules={requiredField("Driver")}
                 existingValue={chosenDriverInfo?.payload}
               />
             </div>
