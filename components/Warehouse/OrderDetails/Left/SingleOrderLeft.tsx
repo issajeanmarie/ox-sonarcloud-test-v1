@@ -1,13 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Col, Form, Row, Typography } from "antd";
+import { Col, Row } from "antd";
 import React, { FC } from "react";
 import InfoWrapper from "./InfoWrapper";
-import Button from "../../../Shared/Button";
-import Input from "../../../Shared/Input";
-import { requiredInput } from "../../../../lib/validation/InputValidations";
 import moment from "moment";
-
-const { Text } = Typography;
 
 type SingleOrderLeftTypes = {
   sale: any;
@@ -74,7 +69,9 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                 />
                 <InfoWrapper
                   title="Weight"
-                  infoItem={`${item?.weight} KGs - ${item?.warehouseItem?.unitCost}Rwf/KG `}
+                  infoItem={`${item?.weight || 0} KGs - ${
+                    item?.warehouseItem?.unitCost || 0
+                  } Rwf/KG `}
                   isTransportOrder={false}
                 />
               </div>
@@ -87,41 +84,6 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
               isTransportOrder={true}
             />
           )}
-        </div>
-
-        <div className="w-full mt-9">
-          <div className="mb-4">
-            <span className="text-base font-light">Admin's comment</span>
-          </div>
-          <Form name="AddAdminComment" layout="vertical" title="">
-            <Row className="flex justify-end gap-8">
-              <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-                <Input
-                  type="text_area"
-                  name="comment"
-                  label="Comment"
-                  placeholder="Type something"
-                  rules={requiredInput}
-                />
-              </Col>
-            </Row>
-            <div className="flex items-center justify-end py-4 gap-2">
-              <Text className="text-sm opacity_56  nowrap font-bold">
-                Order created by:
-              </Text>
-              <Text className="text-sm opacity_56 nowrap">
-                {sale?.transportOrder?.createdBy}
-              </Text>
-            </div>
-
-            <Row className="flex justify-end gap-8">
-              <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
-                <Button type="primary" htmlType="submit">
-                  ADD COMMENT
-                </Button>
-              </Col>
-            </Row>
-          </Form>
         </div>
       </Row>
     </Col>

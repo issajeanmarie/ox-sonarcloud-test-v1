@@ -10,5 +10,5 @@ export const pagination = {
   stock: { size: 40, page: 0 },
   suppliers: { size: 40, page: 0 },
   resources: { size: 40, page: 0 },
-  warehouseItems: { size: 8, page: 0 }
+  warehouseItems: { size: 40, page: 0 }
 };

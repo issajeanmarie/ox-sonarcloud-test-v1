@@ -11,6 +11,7 @@ import { AddStockTypes } from "../../../../lib/types/warehouse";
 import { useSelector } from "react-redux";
 import CircleCheckbox from "../../../Shared/Custom";
 import moment from "moment";
+import { localeString } from "../../../../utils/numberFormatter";
 
 const { Option } = Select;
 
@@ -274,7 +275,9 @@ const AddStock: FC<AddStockTypes> = ({
           >
             {lhsOrders?.map((item: any) => (
               <Option key={item?.weight} value={item?.id}>
-                {`${item.weight} KGs - ${item.totalAmount} Rwf - `}{" "}
+                {`${localeString(item.weight)} KGs - ${localeString(
+                  item.totalAmount
+                )} Rwf - `}{" "}
                 <span className="captionText italic">
                   {moment(item.stateDateTime).format("ddd/MM/YYYY")}
                 </span>

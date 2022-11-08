@@ -27,8 +27,8 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
       xl={10}
       xxl={10}
     >
-      <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] p-7">
-        <div className="w-full mt-9">
+      <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] p-7 py-8">
+        <div className="w-full mt-">
           <div className="mb-8">
             <span className="font-bold text-lg">ORDER SUMMARY</span>
           </div>

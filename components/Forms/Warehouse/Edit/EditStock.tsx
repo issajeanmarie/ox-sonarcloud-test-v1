@@ -6,6 +6,7 @@ import Image from "next/image";
 import { EditStockTypes } from "../../../../lib/types/warehouse";
 import moment from "moment";
 import { requiredField } from "../../../../lib/validation/InputValidations";
+import { localeString } from "../../../../utils/numberFormatter";
 
 const { Option } = Select;
 
@@ -150,7 +151,9 @@ const EditStock: FC<EditStockTypes> = ({
           >
             {lhsOrders?.map((item: any) => (
               <Option key={item?.weight} value={item?.id}>
-                {`${item.weight} KGs - ${item.totalAmount} Rwf - `}{" "}
+                {`${localeString(item.weight)} KGs - ${localeString(
+                  item.totalAmount
+                )} Rwf - `}{" "}
                 <span className="captionText italic">
                   {moment(item.stateDateTime).format("ddd/MM/YYYY")}
                 </span>

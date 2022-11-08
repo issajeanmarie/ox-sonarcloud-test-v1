@@ -193,7 +193,9 @@ const Order: FC<OrderProps> = ({ order, index }) => {
       {/* MIDDLE ROW */}
       <Table
         className="data_table orders_table"
-        dataSource={[order, ...order?.supportOrders]}
+        dataSource={
+          order?.supportOrders ? [order, ...order?.supportOrders] : []
+        }
         rowKey={(record) => record.id}
         pagination={false}
         showHeader={false}
