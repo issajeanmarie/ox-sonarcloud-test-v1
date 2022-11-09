@@ -37,7 +37,7 @@ const stockEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<{ content: StockResponse }>,
       GetStock
     >({
-      providesTags: ["CreateStock"],
+      providesTags: ["CreateStock", "EditStock"],
       query: (DTO) => ({
         url: `/warehouse-items?page=${DTO?.page || ""}&size=${
           DTO?.size || ""
@@ -85,7 +85,7 @@ const stockEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Stock>,
       EditStockLocationRequest
     >({
-      invalidatesTags: ["Stock"],
+      invalidatesTags: ["EditStock"],
       query: (DTO) => ({
         url: `/warehouse-items/${DTO?.id}/batches/${DTO?.batchId}`,
         method: "PATCH",

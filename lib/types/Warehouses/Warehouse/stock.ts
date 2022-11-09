@@ -173,3 +173,10 @@ export type GetStock = {
   id?: number;
   search?: string;
 };
+
+export type PostSaleItemRequest = {
+  saleId: number;
+  id: number;
+  weight: number | string;
+  itemId?: number | string;
+};

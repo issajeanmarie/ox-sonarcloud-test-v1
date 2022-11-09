@@ -30,7 +30,9 @@ export const baseAPI = createApi({
     "Sales",
     "CreateDepot",
     "DeleteClient",
-    "CreateStock"
+    "CreateStock",
+    "EditStock",
+    "AddSaleItem"
   ],
   endpoints: () => ({})
 });

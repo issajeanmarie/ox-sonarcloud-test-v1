@@ -1,11 +1,13 @@
 import { Form, Row } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SingleOrderLeft from "../../../components/Warehouse/OrderDetails/Left/SingleOrderLeft";
 import SingleOrderRight from "../../../components/Warehouse/OrderDetails/Right/SingleOrderRight";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import SingleOrderTop from "../../../components/Warehouse/OrderDetails/SingleOrderTop";
 import {
+  useAddSaleItemMutation,
+  useDeleteSaleItemMutation,
   useEditSaleMutation,
   useSaleDetailsQuery
 } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
@@ -15,10 +17,12 @@ import Loader from "../../../components/Shared/Loader";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { LatLng } from "use-places-autocomplete";
 import moment from "moment";
+import { useRef } from "react";
 
 const OrderDetails = () => {
   const { query } = useRouter();
   const router = useRouter();
+  const componentDidMount = useRef(false);
 
   const {
     data: saleDetails,
@@ -43,7 +47,35 @@ const OrderDetails = () => {
     setTransport(value);
   };
 
+  const [addSaleItem, { isLoading: isAddItemLoading }] =
+    useAddSaleItemMutation();
+
+  const [deleteSaleItem] = useDeleteSaleItemMutation();
+
+  const addSaleItemAction = () => {
+    const warehouseToPost = {
+      id: JSON.parse(warehouse)?.id,
+      weight: JSON.parse(warehouse)?.weight
+    };
+
+    handleAPIRequests({
+      request: addSaleItem,
+      saleId: query?.sale,
+      ...warehouseToPost
+    });
+  };
+
+  const deleteSaleItemAction = (itemId: number) => {
+    handleAPIRequests({
+      request: deleteSaleItem,
+      saleId: query?.sale,
+      itemId
+    });
+  };
+
   const createItems = () => {
+    !!saleDetails && addSaleItemAction();
+
     setItems([
       ...items,
       {
@@ -55,6 +87,7 @@ const OrderDetails = () => {
         category: warehouse ? JSON.parse(warehouse)?.categoryName : ""
       }
     ]);
+
     setWarehouse("");
     setWeight(null);
     form.resetFields(["warehouseId", "weight"]);
@@ -95,6 +128,26 @@ const OrderDetails = () => {
     });
   };
 
+  useEffect(() => {
+    if (!componentDidMount.current && saleDetails) {
+      const currentItems: any[] = [];
+
+      saleDetails?.payload?.saleItems?.map(
+        (item: { weight: number; id: number; warehouseItem: any }) => {
+          currentItems.push({
+            category: item?.warehouseItem?.category?.name,
+            id: item.id,
+            parentCategory: undefined,
+            weight: item?.weight
+          });
+        }
+      );
+
+      setItems([...items, ...currentItems]);
+      componentDidMount.current = true;
+    }
+  }, [items, saleDetails]);
+
   return (
     <Layout>
       {router.isReady && !isSaleLoading && !saleDetails ? (
@@ -119,6 +172,8 @@ const OrderDetails = () => {
             onEditSaleFinish={onEditSaleFinish}
             setIsEditModalVisible={setIsEditModalVisible}
             isEditModalVisible={isEditModalVisible}
+            isAddItemLoading={isAddItemLoading}
+            deleteSaleItemAction={deleteSaleItemAction}
             form={form}
           />
 

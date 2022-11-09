@@ -16,9 +16,12 @@ const { Text } = Typography;
 
 const WarehouseItemsTable: FC<WarehouseItemsTableProps> = ({
   items,
-  setItems
+  setItems,
+  deleteSaleItemAction
 }) => {
   const deleteItem = (id: number) => {
+    deleteSaleItemAction && deleteSaleItemAction(id);
+
     setItems(items.filter((item: any) => item?.id !== id));
     SuccessMessage("Item was removed");
   };

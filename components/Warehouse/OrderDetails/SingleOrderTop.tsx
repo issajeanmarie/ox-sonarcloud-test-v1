@@ -30,6 +30,8 @@ const SingleOrderTop: FC<any> = ({
   setIsEditModalVisible,
   isEditModalVisible,
   isEditSaleLoading,
+  isAddItemLoading,
+  deleteSaleItemAction,
   form
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -144,6 +146,8 @@ const SingleOrderTop: FC<any> = ({
           isPostingSale={isPostingSale}
           onAddSaleFinish={onAddSaleFinish}
           onEditSaleFinish={onEditSaleFinish}
+          isAddItemLoading={isAddItemLoading}
+          deleteSaleItemAction={deleteSaleItemAction}
           form={form}
         />
       </ModalWrapper>
