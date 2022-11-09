@@ -52,7 +52,7 @@ const stockEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<{ content: StockResponse }>,
       GetStock
     >({
-      providesTags: ["CreateStock"],
+      providesTags: ["CreateStock", "EditStock"],
       query: (DTO) => ({
         url: `/warehouse-items?page=${DTO?.page || ""}&size=${
           DTO?.size || ""
