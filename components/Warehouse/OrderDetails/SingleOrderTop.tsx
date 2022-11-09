@@ -8,6 +8,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import AddWarehouseOrder from "../../Forms/Warehouse/Add/AddWarehouseOrder";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import ActionModal from "../../Shared/ActionModal";
+import MobilePayment from "../../Forms/Orders/MobilePayment";
 import Button from "../../Shared/Button";
 
 const SingleOrderTop: FC<any> = ({
@@ -34,6 +35,8 @@ const SingleOrderTop: FC<any> = ({
   deleteSaleItemAction,
   form
 }) => {
+  const [isMobilePaymentModalVisible, setIsMobilePaymentModalVisible] =
+    useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [cancelSale, { isLoading: isCancelingSale }] = useCancelSaleMutation();
 
@@ -53,6 +56,8 @@ const SingleOrderTop: FC<any> = ({
       handleSuccess: handleCancelSaleSuccess
     });
   };
+
+  const canUserPay = sale && sale?.status !== "CANCELLED";
 
   return (
     <Row
@@ -83,11 +88,27 @@ const SingleOrderTop: FC<any> = ({
           )}
         </div>
       </Col>
+
       <Col className="flex gap-8 items-center">
         {isSaleLoading ? (
           <span>...</span>
         ) : (
           <>
+            <Col>
+              <button
+                className={`rounded-lg bg-ox-yellow text-white w-[30px] h-[30px] flex items-center justify-center ${
+                  canUserPay
+                    ? "cursor-pointer"
+                    : "cursor-not-allowed opacity-50"
+                } `}
+                onClick={() =>
+                  canUserPay && setIsMobilePaymentModalVisible(true)
+                }
+              >
+                $
+              </button>
+            </Col>
+
             <AntDImage
               onClick={() => setIsEditModalVisible(true)}
               className="pointer"
@@ -97,6 +118,7 @@ const SingleOrderTop: FC<any> = ({
               height={18}
               preview={false}
             />
+
             {sale?.status !== "CANCELLED" ? (
               <AntDImage
                 className="pointer"
@@ -162,6 +184,14 @@ const SingleOrderTop: FC<any> = ({
         action={() => handleCancelSale()}
         loading={isCancelingSale}
       />
+
+      {sale && (
+        <MobilePayment
+          isModalVisible={isMobilePaymentModalVisible}
+          setIsModalVisible={setIsMobilePaymentModalVisible}
+          order={{ ...sale, clientPhone: sale?.client?.phone }}
+        />
+      )}
     </Row>
   );
 };
