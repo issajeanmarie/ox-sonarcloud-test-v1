@@ -84,7 +84,10 @@ const OrderDetails = () => {
         parentCategory: warehouse
           ? JSON.parse(warehouse)?.category?.parentCategory?.name
           : "",
-        category: warehouse ? JSON.parse(warehouse)?.categoryName : ""
+        category: warehouse ? JSON.parse(warehouse)?.categoryName : "",
+        unitSellingPrice: warehouse
+          ? JSON.parse(warehouse)?.unitSellingPrice
+          : 0
       }
     ]);
 
@@ -114,7 +117,10 @@ const OrderDetails = () => {
       depotId: values?.depotId,
       date: moment(values?.date)?.format("YYYY-MM-DDTHH:mm"),
       clientId: values?.clientId,
-      items: items,
+      items: items?.map(({ id, weight }: { id: number; weight: number }) => ({
+        id,
+        weight
+      })),
       marginCost: values?.marginCost,
       localTransportCost:
         transport !== "none" ? values?.localTransportCost : "",
@@ -138,7 +144,8 @@ const OrderDetails = () => {
             category: item?.warehouseItem?.category?.name,
             id: item.id,
             parentCategory: undefined,
-            weight: item?.weight
+            weight: item?.weight,
+            unitSellingPrice: item?.warehouseItem?.unitSellingPrice
           });
         }
       );

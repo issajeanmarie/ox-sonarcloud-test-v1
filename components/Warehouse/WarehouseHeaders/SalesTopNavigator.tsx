@@ -51,11 +51,14 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
       ...items,
       {
         id: warehouse ? JSON.parse(warehouse)?.id : warehouse,
-        weight: warehouse && JSON.parse(warehouse)?.weight,
+        weight: weight,
         parentCategory: warehouse
           ? JSON.parse(warehouse)?.category?.parentCategory
           : "",
-        category: warehouse ? JSON.parse(warehouse)?.categoryName : ""
+        category: warehouse ? JSON.parse(warehouse)?.categoryName : "",
+        unitSellingPrice: warehouse
+          ? JSON.parse(warehouse)?.unitSellingPrice
+          : 0
       }
     ]);
     setWarehouse("");
@@ -78,10 +81,10 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
   const [postSale, { isLoading: isPostingSale }] = usePostSaleMutation();
 
   const handleAddSaleSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload: { ...payload } }));
+
     form.resetFields();
     setIsModalVisible(false);
-
-    dispatch(displayPaginatedData({ payload }));
   };
 
   const onAddSaleFinish = (values: any) => {

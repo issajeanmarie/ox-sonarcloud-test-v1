@@ -279,7 +279,7 @@ const AddStock: FC<AddStockTypes> = ({
                   item.totalAmount
                 )} Rwf - `}{" "}
                 <span className="captionText italic">
-                  {moment(item.stateDateTime).format("ddd/MM/YYYY")}
+                  {moment(item.startDateTime).format("YYYY/MM/DD")}
                 </span>
               </Option>
             ))}

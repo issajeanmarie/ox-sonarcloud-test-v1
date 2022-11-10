@@ -464,7 +464,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
 
       <div className="mb-14">
         <div className="font-extralight text-[15px] mb-10">Stop details</div>
-        {stops.length !== 0 && (
+        {stops?.length !== 0 && (
           <div className="mb-10">
             {stops.map((st, index) => {
               return (

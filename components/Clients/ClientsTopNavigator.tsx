@@ -54,7 +54,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
     setOffices([
       ...offices,
       {
-        id: offices.length + 1,
+        id: offices?.length + 1,
         location: location ? location?.name : "",
         coordinates: location ? JSON.stringify(location?.coordinates) : "",
         names: officeName

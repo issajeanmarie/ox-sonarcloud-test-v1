@@ -126,7 +126,7 @@ const AddNewClient: FC<AddClientTypes> = ({
           <div className="mb-4">
             <span className="font-light">Add other offices</span>
           </div>
-          {offices.length > 0 && (
+          {offices?.length > 0 && (
             <div className="mb-4">
               <OtherOfficesTable offices={offices} setOffices={setOffices} />
             </div>
