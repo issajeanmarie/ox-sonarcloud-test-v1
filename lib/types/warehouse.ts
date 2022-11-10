@@ -2,6 +2,8 @@
 import { LatLng } from "use-places-autocomplete";
 
 export type AddWarehouseOrderTypes = {
+  isAddItemLoading?: boolean;
+  deleteSaleItemAction?: (id: number) => void;
   sale?: any;
   setLocation: React.Dispatch<
     React.SetStateAction<
@@ -63,6 +65,7 @@ export type WarehouseItemsTableTypes = {
 export type WarehouseItemsTableProps = {
   items: any;
   setItems: React.Dispatch<React.SetStateAction<any>>;
+  deleteSaleItemAction: any;
 };
 
 export type AddStockTypes = {

@@ -37,6 +37,8 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
   warehouse,
   handleChangeWeight,
   weight,
+  isAddItemLoading,
+  deleteSaleItemAction,
   sale
 }) => {
   const [selectedDepot, setSelectedDepot] = useState<number | undefined>();
@@ -70,8 +72,6 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
     sort: ""
   });
 
-  useEffect;
-
   const handleSelectDepot = (value: number) => {
     form.setFieldsValue({ warehouseId: "" });
     setSelectedDepot(value);
@@ -96,22 +96,6 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
     sale?.saleDate,
     sale?.transportOrder?.stops
   ]);
-
-  useEffect(() => {
-    sale?.saleItems?.map(
-      (item: { weight: number; id: number; warehouseItem: any }) => {
-        setItems([
-          ...items,
-          {
-            category: item?.warehouseItem?.category?.name,
-            id: item.id,
-            parentCategory: undefined,
-            weight: item?.weight
-          }
-        ]);
-      }
-    );
-  }, [sale?.saleItems]);
 
   const showTruckOnEdit =
     (sale && sale?.transportOrder && transport !== "none") ||
@@ -181,13 +165,17 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          {(items.length > 0 || sale?.saleItems?.length > 0) && (
+          {items.length > 0 && (
             <>
               <div className="mb-4">
                 <span className="font-light">Items</span>
               </div>
               <div className="mb-4">
-                <WarehouseItemsTable items={items} setItems={setItems} />
+                <WarehouseItemsTable
+                  items={items}
+                  setItems={setItems}
+                  deleteSaleItemAction={deleteSaleItemAction}
+                />
               </div>
             </>
           )}
@@ -239,7 +227,9 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
               title={false}
               trigger="click"
             >
-              <Button type="secondary">{YellowCheckIcon}</Button>
+              <Button type="secondary" loading={isAddItemLoading}>
+                {!isAddItemLoading && YellowCheckIcon}
+              </Button>
             </Popover>
           ) : (
             <>
@@ -257,11 +247,17 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
                   title={false}
                   trigger="click"
                 >
-                  <Button type="secondary">{YellowCheckIcon}</Button>
+                  <Button type="secondary" loading={isAddItemLoading}>
+                    {!isAddItemLoading && YellowCheckIcon}
+                  </Button>
                 </Popover>
               ) : (
-                <Button onClick={() => createItems()} type="secondary">
-                  {YellowCheckIcon}
+                <Button
+                  onClick={() => createItems()}
+                  type="secondary"
+                  loading={isAddItemLoading}
+                >
+                  {!isAddItemLoading && YellowCheckIcon}
                 </Button>
               )}
             </>

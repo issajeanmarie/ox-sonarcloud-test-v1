@@ -457,6 +457,7 @@ const Stock = () => {
                       isStockCategoriesFetching={isStockCategoriesFetching}
                       tableType="STOCK_HISTORY"
                       setBatches={setAllBatches}
+                      isEditSpecificBatch={isBatchesModalVisible}
                     />
                   )}
 

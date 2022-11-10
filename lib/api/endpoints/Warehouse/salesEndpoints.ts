@@ -12,6 +12,7 @@ import {
 } from "../../../types/Warehouses/Sales/sale";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
+import { PostSaleItemRequest } from "../../../types/Warehouses/Warehouse/stock";
 
 /**
  * Sale ENDPOINTS
@@ -32,7 +33,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
           DTO.depot || ""
         }&driver=${DTO.driver || ""}&truck=${DTO.truck || ""}&start=${
           DTO.start || ""
-        }&end=${DTO.end || ""}`,
+        }&end=${DTO.end || ""}&filter=${DTO.filter || ""}`,
         method: "GET"
       })
     }),
@@ -40,7 +41,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<{ content: SaleResponse }>,
       GetSale
     >({
-      providesTags: ["Sales"],
+      providesTags: ["Sales", "AddSaleItem"],
       query: (DTO) => ({
         url: `sales/${DTO?.id}`,
         method: "GET"
@@ -102,6 +103,30 @@ const salesEndpoints = baseAPI.injectEndpoints({
         method: "PUT",
         body: DTO
       })
+    }),
+
+    addSaleItem: builder.mutation<
+      ApiResponseMetadata<Sale>,
+      PostSaleItemRequest
+    >({
+      invalidatesTags: ["Sales", "AddSaleItem"],
+      query: (DTO) => ({
+        url: `/sales/${DTO.saleId}/items`,
+        method: "POST",
+        body: DTO
+      })
+    }),
+
+    deleteSaleItem: builder.mutation<
+      ApiResponseMetadata<Sale>,
+      PostSaleItemRequest
+    >({
+      invalidatesTags: ["Sales", "AddSaleItem"],
+      query: (DTO) => ({
+        url: `/sales/${DTO.saleId}/items/${DTO.itemId}`,
+        method: "DELETE",
+        body: DTO
+      })
     })
   })
 });
@@ -115,5 +140,7 @@ export const {
   useUnPaginatedTrucksQuery,
   useSaleDetailsQuery,
   usePostSalePaymentMutation,
-  useEditSaleTransactionMutation
+  useEditSaleTransactionMutation,
+  useAddSaleItemMutation,
+  useDeleteSaleItemMutation
 } = salesEndpoints;

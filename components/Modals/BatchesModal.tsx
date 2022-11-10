@@ -94,6 +94,7 @@ const BatchesModal: FC<BatchesModalTypes> = ({
             setBatches={setBatches}
             isStocksFetching={false}
             isStockCategoriesFetching={false}
+            isEditSpecificBatch={false}
           />
 
           {showPagination && (

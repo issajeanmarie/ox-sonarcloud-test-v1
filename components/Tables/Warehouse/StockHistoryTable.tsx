@@ -36,13 +36,15 @@ type StockHistoryTableProps = {
   isStockCategoriesFetching: boolean;
   tableType?: string;
   setBatches: any;
+  isEditSpecificBatch: boolean;
 };
 
 const StockHistoryTable: FC<StockHistoryTableProps> = ({
   Stocks,
   isStockCategoriesFetching,
   tableType,
-  setBatches
+  setBatches,
+  isEditSpecificBatch
 }) => {
   const [form] = Form.useForm();
 
@@ -80,7 +82,8 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       ...record,
       inDate: moment(record?.inDate),
       expiryDate: moment(record?.expiryDate),
-      lhsOrderId: record?.lhsOrder?.id
+      lhsOrderId: record?.lhsOrder?.id,
+      supplierId: record?.supplier.id
     });
   };
 
@@ -115,15 +118,16 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       }
     });
 
-    setBatches({
-      ...Stocks,
-      payload: {
-        ...Stocks.payload,
-        content: [...newStocksList]
-      }
-    });
+    isEditSpecificBatch &&
+      setBatches({
+        ...Stocks,
+        payload: {
+          ...Stocks.payload,
+          content: [...newStocksList]
+        }
+      });
 
-    dispatchReplace(newStocksList);
+    isEditSpecificBatch === false && dispatchReplace(newStocksList);
   };
 
   const onEditStockFinish = (values: any) => {
@@ -429,6 +433,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
         isModalVisible={isEditModalVisible}
         title="EDIT BATCH"
         loading={isEditing}
+        destroyOnClose
       >
         <EditStock
           onEditStockFinish={onEditStockFinish}
