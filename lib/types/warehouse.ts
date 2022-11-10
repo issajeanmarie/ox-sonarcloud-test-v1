@@ -60,6 +60,7 @@ export type WarehouseItemsTableTypes = {
   stockItem: string;
   category: string;
   parentCategory: string;
+  unitSellingPrice: number;
 };
 
 export type WarehouseItemsTableProps = {

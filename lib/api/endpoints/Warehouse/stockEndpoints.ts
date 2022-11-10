@@ -28,7 +28,7 @@ const stockEndpoints = baseAPI.injectEndpoints({
           DTO?.size || ""
         }&start=${DTO?.start || ""}&end=${DTO?.end || ""}&depot=${
           DTO?.depot || ""
-        }&status=${DTO?.status || ""}&sort=${DTO?.sort || ""}`,
+        }&status=${DTO?.status || ""}&sort=${DTO?.sort || "DATE_DESC"}`,
         method: "GET"
       })
     }),
@@ -43,7 +43,7 @@ const stockEndpoints = baseAPI.injectEndpoints({
           DTO?.size || ""
         }&start=${DTO?.start || ""}&end=${DTO?.end || ""}&depot=${
           DTO?.depot || ""
-        }&status=${DTO?.status || ""}&sort=${DTO?.sort || ""}`,
+        }&status=${DTO?.status || ""}&sort=${DTO?.sort || "DATE_DESC"}`,
         method: "GET"
       })
     }),
@@ -58,7 +58,7 @@ const stockEndpoints = baseAPI.injectEndpoints({
           DTO?.size || ""
         }&start=${DTO?.start || ""}&end=${DTO?.end || ""}&depot=${
           DTO?.depot || ""
-        }&status=${DTO?.status || ""}&sort=${DTO?.sort || ""}`,
+        }&status=${DTO?.status || ""}&sort=${DTO?.sort || "DATE_DESC"}`,
         method: "GET"
       })
     }),

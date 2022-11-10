@@ -432,7 +432,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                     <div className="font-extralight text-lg mb-10">
                       Payment history
                     </div>
-                    {data.transactions.length === 0 && (
+                    {data?.transactions?.length === 0 && (
                       <div className="flex flex-col gap-5 items-center justify-center">
                         <Image
                           src="/icons/transaction.svg"

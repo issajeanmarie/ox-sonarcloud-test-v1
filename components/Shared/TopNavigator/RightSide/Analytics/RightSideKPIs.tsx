@@ -26,7 +26,7 @@ const RightSideKPIs: FC<RightSideKPIsTypes> = ({
       <DropDownSelector
         label="Depot"
         dropDownContent={
-          data && data.payload.length > 0
+          data && data?.payload?.length > 0
             ? [{ id: 0, name: "All depots" }, ...data?.payload]
             : [{ id: 0, name: "All depots" }]
         }

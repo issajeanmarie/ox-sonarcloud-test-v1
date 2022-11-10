@@ -43,7 +43,7 @@ const ImageUploader = ({
       setUploadedPicInfo
     );
 
-    if (!files || files.length === 0) {
+    if (!files || files?.length === 0) {
       setSelectedFile(undefined);
       return;
     }

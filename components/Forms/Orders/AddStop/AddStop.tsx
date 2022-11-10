@@ -45,7 +45,7 @@ const AddStop: FC<AddStopProps> = ({
       name: location?.name || "",
       weight: Number(values.weight),
       coordinates: JSON.stringify(location?.coordinates || {}),
-      position: order.stops.length + 1
+      position: order.stops?.length + 1
     };
 
     addStop({ orderId: order.id, data })
