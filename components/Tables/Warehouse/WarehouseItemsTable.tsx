@@ -84,6 +84,20 @@ const WarehouseItemsTable: FC<WarehouseItemsTableProps> = ({
       )
     },
     {
+      title: "Unit price",
+      key: "unitSellingPrice",
+      render: (
+        text: WarehouseItemsTableTypes,
+        record: WarehouseItemsTableTypes
+      ) => (
+        <RowsWrapper>
+          <Text className="normalText opacity_56">
+            {localeString(record?.unitSellingPrice)} Rwf / Kg
+          </Text>
+        </RowsWrapper>
+      )
+    },
+    {
       title: "action",
       key: "action",
       render: (

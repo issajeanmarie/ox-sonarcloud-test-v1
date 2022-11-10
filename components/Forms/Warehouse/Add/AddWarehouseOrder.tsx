@@ -97,6 +97,23 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
     sale?.transportOrder?.stops
   ]);
 
+  // useEffect(() => {
+  //   sale?.saleItems?.map(
+  //     (item: { weight: number; id: number; warehouseItem: any }) => {
+  //       setItems([
+  //         ...items,
+  //         {
+  //           category: item?.warehouseItem?.category?.name,
+  //           id: item.id,
+  //           parentCategory: undefined,
+  //           weight: item?.weight,
+  //           unitSellingPrice: item?.warehouseItem?.unitSellingPrice
+  //         }
+  //       ]);
+  //     }
+  //   );
+  // }, [sale?.saleItems]);
+
   const showTruckOnEdit =
     (sale && sale?.transportOrder && transport !== "none") ||
     (!sale && transport !== "none");
