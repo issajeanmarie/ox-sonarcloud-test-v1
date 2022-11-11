@@ -85,6 +85,11 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
     });
   };
 
+  const totalWeight: number = sale?.saleItems?.reduce(
+    (accumulator: number, a: { weight: number }) => accumulator + a.weight,
+    0
+  );
+
   return (
     <div className="shadow-[0px_0px_19px_#00000008] w-full mb-2">
       <div className="py-8 px-4 gap-2 border-b-2 border-gray-100 flex items-center justify-between bg-white">
