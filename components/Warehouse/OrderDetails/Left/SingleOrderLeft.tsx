@@ -3,6 +3,7 @@ import { Col, Row } from "antd";
 import React, { FC } from "react";
 import InfoWrapper from "./InfoWrapper";
 import moment from "moment";
+import { numbersFormatter } from "../../../../helpers/numbersFormatter";
 
 type SingleOrderLeftTypes = {
   sale: any;
@@ -69,8 +70,12 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                 />
                 <InfoWrapper
                   title="Weight"
-                  infoItem={`${item?.weight || 0} KGs - ${
-                    item?.warehouseItem?.unitCost || 0
+                  infoItem={`${
+                    numbersFormatter(item?.weight || 0) || 0
+                  } KGs - ${
+                    numbersFormatter(
+                      item?.warehouseItem?.unitSellingPrice || 0
+                    ) || 0
                   } Rwf/KG `}
                   isTransportOrder={false}
                 />

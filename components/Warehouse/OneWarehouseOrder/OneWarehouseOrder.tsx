@@ -82,9 +82,14 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
     });
   };
 
+  const totalWeight: number = sale?.saleItems?.reduce(
+    (accumulator: number, a: { weight: number }) => accumulator + a.weight,
+    0
+  );
+
   return (
     <div className="shadow-[0px_0px_19px_#00000008] w-full mb-2">
-      <div className="py-8 px-4 border-b-2 border-gray-100 flex items-center justify-between bg-white">
+      <div className="py-8 px-4 gap-2 border-b-2 border-gray-100 flex items-center justify-between bg-white">
         <div
           className={`flex-1 ${
             sale.status === "CANCELLED" ? "opacity-50" : ""
@@ -122,8 +127,8 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
                   }
                   className="normalText opacity_56 cursor-pointer"
                 >
-                  <span className="font-bold">+</span> {sale?.saleItems?.length}{" "}
-                  more
+                  <span className="font-bold">+</span>{" "}
+                  {sale?.saleItems?.length - 1} more
                 </Text>
               )}
             </Col>
@@ -183,33 +188,40 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
           <Row gutter={32} align="middle">
             <Col>
               <Text className="text-md font-bold">
-                {numbersFormatter(sale?.transportOrder?.totalWeight || 0)} KG
+                {numbersFormatter(totalWeight || 0)} KG /{" "}
+                {numbersFormatter(totalWeight / 50)} Bags
               </Text>
             </Col>
 
             <Col>
               <Text className="normalText opacity_56">
                 {sale?.saleItems &&
-                  numbersFormatter(
-                    sale?.saleItems[0]?.warehouseItem?.unitCost
-                  )}{" "}
+                  numbersFormatter(sale?.totalAmount / totalWeight || 0)}{" "}
                 Rwf / Kg
               </Text>
             </Col>
           </Row>
         </div>
 
-        <div className="flex-1">
+        {/* <div className="flex-1">
           <Row gutter={32} align="middle">
             <Col>
               <span className="font-bold nowrap text-ox-orange">
-                {sale?.amount && numbersFormatter(sale?.amount)} Rwf
+                {sale?.totalAmount && numbersFormatter(sale?.totalAmount)} Rwf
               </span>
             </Col>
           </Row>
-        </div>
+        </div> */}
 
         <div className="flex gap-10 ">
+          <Row gutter={32} align="middle">
+            <Col>
+              <span className="font-bold nowrap text-ox-orange">
+                {sale?.totalAmount && numbersFormatter(sale?.totalAmount)} Rwf
+              </span>
+            </Col>
+          </Row>
+
           <div className="text-right">
             <Row align="middle" gutter={16} wrap={false}>
               {sale?.status !== "CANCELLED" ? (
