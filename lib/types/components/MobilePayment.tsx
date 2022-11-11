@@ -5,4 +5,5 @@ export interface MobilePaymentProps {
   isModalVisible: boolean;
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
   order: Order;
+  endpoint?: string;
 }

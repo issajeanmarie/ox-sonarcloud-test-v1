@@ -13,7 +13,8 @@ import { usePaymentPageMoMoPaymentListener } from "../../../../lib/useEffects/us
 const MobilePayment: FC<MobilePaymentProps> = ({
   isModalVisible,
   setIsModalVisible,
-  order
+  order,
+  endpoint
 }) => {
   const [initiatePayment, { isLoading: paymentInitLoading }] =
     useInitiatePaymentMutation();
@@ -59,7 +60,8 @@ const MobilePayment: FC<MobilePaymentProps> = ({
       handleAPIRequests({
         request: initiatePayment,
         orderId: order.id,
-        data: { ...values, phone: phoneNumber.replace("+", "") }
+        data: { ...values, phone: phoneNumber.replace("+", "") },
+        endpoint
       });
     }
   };

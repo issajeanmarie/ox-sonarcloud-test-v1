@@ -190,6 +190,7 @@ const SingleOrderTop: FC<any> = ({
           isModalVisible={isMobilePaymentModalVisible}
           setIsModalVisible={setIsMobilePaymentModalVisible}
           order={{ ...sale, clientPhone: sale?.client?.phone }}
+          endpoint="sales"
         />
       )}
     </Row>

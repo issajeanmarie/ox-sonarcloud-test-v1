@@ -381,14 +381,14 @@ const Order: FC<OrderProps> = ({ order, index }) => {
           <Row gutter={12} align="middle">
             <Col>
               <Text className="text-sm opacity_56 nowrap ml-14">
-                Created: {dateFormatterNth(order.startDateTime)}
+                Created: {dateFormatterNth(order?.startDateTime)}
               </Text>
             </Col>
 
             <Col>
               {order.lastEditedBy && (
                 <Text className="opacity_56  nowrap text-xs font-bold">
-                  - Edited by {order.lastEditedBy}
+                  - Edited by {order?.lastEditedBy}
                 </Text>
               )}
             </Col>
@@ -397,7 +397,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
         <Col>
           <Text className="text-xs opacity_56 italic nowrap mb0">
-            {order.depot.name}
+            {order?.depot?.name}
           </Text>
         </Col>
       </Row>
