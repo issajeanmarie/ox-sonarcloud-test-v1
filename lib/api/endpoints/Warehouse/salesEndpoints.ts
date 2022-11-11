@@ -41,7 +41,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<{ content: SaleResponse }>,
       GetSale
     >({
-      providesTags: ["Sales", "AddSaleItem"],
+      providesTags: ["Sales", "MoMoPayment"],
       query: (DTO) => ({
         url: `sales/${DTO?.id}`,
         method: "GET"

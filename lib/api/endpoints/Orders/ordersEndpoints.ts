@@ -123,11 +123,15 @@ const ordersApi = baseAPI.injectEndpoints({
     }),
     initiatePayment: builder.mutation<
       any,
-      { orderId: number; data: { amount: number; phone: string } }
+      {
+        orderId: number;
+        data: { amount: number; phone: string };
+        endpoint?: string;
+      }
     >({
-      invalidatesTags: ["Order", "Orders"],
-      query: ({ orderId, data }) => ({
-        url: `/orders/${orderId}/momo-pay/initiate`,
+      invalidatesTags: ["Order", "Orders", "MoMoPayment"],
+      query: ({ orderId, data, endpoint }) => ({
+        url: `/${endpoint || "orders"}/${orderId}/momo-pay/initiate`,
         method: "POST",
         body: data
       })
