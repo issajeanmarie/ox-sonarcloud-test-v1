@@ -118,16 +118,18 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       }
     });
 
-    isEditSpecificBatch &&
-      setBatches({
-        ...Stocks,
-        payload: {
-          ...Stocks.payload,
-          content: [...newStocksList]
-        }
-      });
-
-    isEditSpecificBatch === false && dispatchReplace(newStocksList);
+    if (isEditSpecificBatch === false) {
+      isEditSpecificBatch === false && dispatchReplace(newStocksList);
+    } else {
+      isEditSpecificBatch &&
+        setBatches({
+          ...Stocks,
+          payload: {
+            ...Stocks.payload,
+            content: [...newStocksList]
+          }
+        });
+    }
   };
 
   const onEditStockFinish = (values: any) => {

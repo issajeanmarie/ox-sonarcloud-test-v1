@@ -189,14 +189,18 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
             <Col>
               <Text className="text-md font-bold">
                 {numbersFormatter(totalWeight || 0)} KG /{" "}
-                {numbersFormatter(totalWeight / 50)} Bags
+                {numbersFormatter(Math.round(totalWeight / 50))} Bags
               </Text>
             </Col>
 
             <Col>
               <Text className="normalText opacity_56">
                 {sale?.saleItems &&
-                  numbersFormatter(sale?.totalAmount / totalWeight || 0)}{" "}
+                  numbersFormatter(
+                    totalWeight
+                      ? Math.round(sale?.totalAmount / totalWeight)
+                      : 0
+                  )}{" "}
                 Rwf / Kg
               </Text>
             </Col>
