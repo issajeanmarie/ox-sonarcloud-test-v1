@@ -55,7 +55,7 @@ export type AddWarehouseOrderTypes = {
 
 export type WarehouseItemsTableTypes = {
   id: number;
-  weight: string;
+  weight: number;
   type: string;
   stockItem: string;
   category: string;

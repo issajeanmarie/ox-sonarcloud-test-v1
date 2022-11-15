@@ -165,7 +165,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
         </Col>
 
         <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          {(items?.length > 0 || sale?.saleItems?.length > 0) && (
+          {items?.length > 0 && (
             <>
               <div className="mb-4">
                 <span className="font-light">Items</span>
@@ -220,8 +220,8 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
               placement="left"
               content={
                 <div className="flex flex-col">
-                  <span className="font-light">Item and weight </span>
-                  <span className="font-light">please</span>
+                  <span className="font-light">Please add item and weight</span>
+                  <span className="font-light">to continue!</span>
                 </div>
               }
               title={false}
@@ -241,6 +241,23 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
                       <span className="font-light">Weight must be</span>
                       <span className="font-light">
                         less than or equal to {warehouse?.weight}
+                      </span>
+                    </div>
+                  }
+                  title={false}
+                  trigger="click"
+                >
+                  <Button type="secondary" loading={isAddItemLoading}>
+                    {!isAddItemLoading && YellowCheckIcon}
+                  </Button>
+                </Popover>
+              ) : weight % 50 !== 0 ? (
+                <Popover
+                  placement="left"
+                  content={
+                    <div className="flex flex-col">
+                      <span className="font-light">
+                        Weight must be divisible by 50 KGs
                       </span>
                     </div>
                   }

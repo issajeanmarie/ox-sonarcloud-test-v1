@@ -19,9 +19,9 @@ const InfoWrapper: FC<InfoWrapperTypes> = ({
   isTransportOrder
 }) => {
   return (
-    <div className={`flex gap-4 mb-4`}>
+    <div className={`flex gap-12 mb-2`}>
       <div className="w-1/6">
-        <span className="font-bold text-sm">{title}:</span>
+        <span className="font-bold text-sm text_ellipsis">{title}:</span>
       </div>
       {isTransportOrder ? (
         <Link passHref href={routes.viewOrder.url + infoItem}>

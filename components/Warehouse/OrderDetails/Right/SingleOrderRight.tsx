@@ -73,7 +73,7 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
             title="Paid"
             count={`${
               sale?.totalPaid && numbersFormatter(sale?.totalPaid)
-            } RWF`}
+            } Rwf`}
           />
           <PaymentStatusCard
             title="Remaining"

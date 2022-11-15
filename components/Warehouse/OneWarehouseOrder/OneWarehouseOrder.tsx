@@ -83,11 +83,6 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
     });
   };
 
-  const totalWeight: number = sale?.saleItems?.reduce(
-    (accumulator: number, a: { weight: number }) => accumulator + a.weight,
-    0
-  );
-
   return (
     <div className="shadow-[0px_0px_19px_#00000008] w-full mb-2">
       <div className="py-8 px-4 gap-2 border-b-2 border-gray-100 flex items-center justify-between bg-white">
@@ -189,8 +184,9 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
           <Row gutter={32} align="middle">
             <Col>
               <Text className="text-md font-bold">
-                {numbersFormatter(totalWeight || 0)} KG /{" "}
-                {numbersFormatter(Math.round(totalWeight / 50))} Bags
+                {numbersFormatter(sale?.totalWeight || 0)} KG /{" "}
+                {numbersFormatter(Math.round(sale?.totalWeight / 50))}{" "}
+                {sale?.totalWeight > 50 ? "Bags" : "Bag"}
               </Text>
             </Col>
 
@@ -198,8 +194,8 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
               <Text className="normalText opacity_56">
                 {sale?.saleItems &&
                   numbersFormatter(
-                    totalWeight
-                      ? Math.round(sale?.totalAmount / totalWeight)
+                    sale?.totalWeight
+                      ? Math.round(sale?.totalAmount / sale?.totalWeight)
                       : 0
                   )}{" "}
                 Rwf / Kg

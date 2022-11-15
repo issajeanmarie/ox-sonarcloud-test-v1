@@ -9,7 +9,15 @@ type SingleOrderLeftTypes = {
   sale: any;
 };
 
+enum OfficeType {
+  HQ = "HQ",
+  BRANCH = "BRANCH"
+}
+
 const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
+  const hqBranch = sale?.client?.offices?.find(
+    (office: { type: OfficeType }) => office.type === OfficeType.HQ
+  );
   return (
     <Col
       className="h-[86vh] overflow-auto"
@@ -40,15 +48,15 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
             infoItem={sale?.client?.names}
             isTransportOrder={false}
           />
-          {sale?.client?.offices &&
-            sale?.client?.offices?.map((item: any) => (
-              <InfoWrapper
-                key={item?.id}
-                title={item?.type}
-                infoItem={item?.names}
-                isTransportOrder={false}
-              />
-            ))}
+
+          {sale?.client?.offices && (
+            <InfoWrapper
+              key={hqBranch?.id}
+              title={hqBranch?.type}
+              infoItem={hqBranch?.names}
+              isTransportOrder={false}
+            />
+          )}
         </div>
 
         <div className="w-full mt-9">
@@ -63,20 +71,44 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                   infoItem={item?.warehouseItem?.parentCategory?.name}
                   isTransportOrder={false}
                 />
+
                 <InfoWrapper
                   title="Type"
                   infoItem={item?.warehouseItem?.category?.name}
                   isTransportOrder={false}
                 />
+
                 <InfoWrapper
                   title="Weight"
-                  infoItem={`${
-                    numbersFormatter(item?.weight || 0) || 0
-                  } KGs - ${
-                    numbersFormatter(
-                      item?.warehouseItem?.unitSellingPrice || 0
-                    ) || 0
-                  } Rwf/KG `}
+                  infoItem={`${numbersFormatter(
+                    item?.weight || 0
+                  )} KGs / ${Math.round(item?.weight / 50)} ${
+                    item?.weight > 50 ? "Bags" : "Bag"
+                  } - ${numbersFormatter(
+                    item?.warehouseItem?.unitSellingPrice || 0
+                  )} Rwf/Kg`}
+                  isTransportOrder={false}
+                />
+
+                <InfoWrapper
+                  title="Supplier"
+                  infoItem={item?.warehouseItem?.supplierName}
+                  isTransportOrder={false}
+                />
+
+                <InfoWrapper
+                  title="Cost of goods sold"
+                  infoItem={`${numbersFormatter(
+                    item?.unitBuyingPrice * item?.weight
+                  )} Rwf`}
+                  isTransportOrder={false}
+                />
+
+                <InfoWrapper
+                  title="Selling price"
+                  infoItem={`${numbersFormatter(
+                    item?.unitSellingPrice * item?.weight
+                  )} Rwf`}
                   isTransportOrder={false}
                 />
               </div>

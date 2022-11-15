@@ -36,7 +36,7 @@ const OrderDetails = () => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [items, setItems]: any = useState([]);
   const [warehouse, setWarehouse] = useState("");
-  const [weight, setWeight] = useState<number | null>(null);
+  const [weight, setWeight] = useState<number>(0);
   const [transport, setTransport] = useState("");
   const [location, setLocation] = useState<{
     name: string;
@@ -54,8 +54,8 @@ const OrderDetails = () => {
 
   const addSaleItemAction = () => {
     const warehouseToPost = {
-      id: JSON.parse(warehouse)?.id,
-      weight: JSON.parse(warehouse)?.weight
+      id: +JSON.parse(warehouse)?.id,
+      weight: +weight
     };
 
     handleAPIRequests({
@@ -92,7 +92,7 @@ const OrderDetails = () => {
     ]);
 
     setWarehouse("");
-    setWeight(null);
+    setWeight(0);
     form.resetFields(["warehouseId", "weight"]);
   };
 
@@ -101,7 +101,7 @@ const OrderDetails = () => {
   };
 
   const handleChangeWeight = (value: number | null) => {
-    setWeight(value);
+    setWeight(value || 0);
   };
 
   const [editSale, { isLoading: isEditSaleLoading }] = useEditSaleMutation();

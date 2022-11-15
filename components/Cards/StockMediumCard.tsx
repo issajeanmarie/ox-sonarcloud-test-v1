@@ -68,7 +68,10 @@ const StockMediumCard: FC<StockMediumCardTypes> = ({
                       {abbreviateNumber(count)} KGs
                     </span>{" "}
                     /
-                    <span>{abbreviateNumber(Math.round(count / 50))} Bags</span>
+                    <span>
+                      {abbreviateNumber(Math.round(count / 50))}{" "}
+                      {count > 50 ? "Bags" : "Bag"}
+                    </span>
                   </>
                 ) : (
                   "None"
