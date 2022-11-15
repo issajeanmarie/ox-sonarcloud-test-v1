@@ -138,7 +138,7 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
             />
           </div>
           <div className="flex items-center gap-4">
-            <div className="text-sm">Add as waiting time feez</div>
+            <div className="text-sm">Add as waiting time fee</div>
             <div>
               <CircleCheckbox
                 defaultValue={true}

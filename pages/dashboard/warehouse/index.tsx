@@ -125,7 +125,7 @@ const SalesPage = () => {
   const getSalesAction = ({
     request = getSales,
     depot = depotsState?.depotId,
-    filter = filters?.filter || "",
+    filter = (willItFilter && filters?.filter) || "",
     page,
     size = pagination.sales.size,
     handleSuccess = handleRenderSuccess,

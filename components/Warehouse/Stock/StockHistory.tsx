@@ -88,7 +88,7 @@ const StockHistory: FC<StockHistoryTypes> = ({
 
   return (
     <>
-      <Navbar LeftSide={LeftSide} type="CENTER" />
+      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
     </>
   );
 };
