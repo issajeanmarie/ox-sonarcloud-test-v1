@@ -25,6 +25,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { escape } from "../../../utils/keyBinders";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import Link from "next/link";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -380,15 +381,18 @@ const Order: FC<OrderProps> = ({ order, index }) => {
         <Col>
           <Row gutter={12} align="middle">
             <Col>
-              <Text className="text-sm opacity_56 nowrap ml-14">
-                Created: {dateFormatterNth(order?.startDateTime)}
-              </Text>
+              <Link href={`${routes.Admins.url}?tb=ADMINS`} passHref>
+                <Text className="text-sm opacity_56 nowrap ml-14">
+                  Created: {dateFormatterNth(order?.startDateTime)}{" "}
+                  {order.lastEditedBy && "-"}
+                </Text>
+              </Link>
             </Col>
 
             <Col>
               {order.lastEditedBy && (
-                <Text className="opacity_56  nowrap text-xs font-bold">
-                  - Edited by {order?.lastEditedBy}
+                <Text className="opacity_56  nowrap text-xs font-bold underline italic">
+                  Edited by {order?.lastEditedBy}
                 </Text>
               )}
             </Col>

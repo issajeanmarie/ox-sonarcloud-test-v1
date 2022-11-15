@@ -1,6 +1,7 @@
 import { Card, Col, Image, Row, Typography } from "antd";
 import React, { FC } from "react";
-import { numbersFormatter } from "../../helpers/numbersFormatter";
+import { useSelector } from "react-redux";
+import { abbreviateNumber } from "../../utils/numberFormatter";
 import { SmallSpinLoader } from "../Shared/Loaders/Loaders";
 
 const { Text } = Typography;
@@ -22,6 +23,11 @@ const StockMediumCard: FC<StockMediumCardTypes> = ({
   categoryInfo,
   showBatchesModal
 }) => {
+  const depotsState = useSelector(
+    (state: { depots: { payload: { depotId: number; depotName: string } } }) =>
+      state.depots.payload
+  );
+
   return (
     <>
       <Card
@@ -29,7 +35,18 @@ const StockMediumCard: FC<StockMediumCardTypes> = ({
         headStyle={{ border: "none", marginBottom: "0" }}
         bodyStyle={{ padding: "0", overflow: "hidden" }}
         style={{ width: "auto", border: "1px solid #EAEFF2" }}
-        title={<Text className="text-base font-light">{title}</Text>}
+        title={
+          <div className="flex flex-col">
+            <Text className="text-base font-light">{title}</Text>
+            {depotsState?.depotId ? (
+              <Text className="text-sm font-light opacity_56">
+                {depotsState?.depotName}
+              </Text>
+            ) : (
+              ""
+            )}
+          </div>
+        }
         extra={
           <Image
             width={18}
@@ -40,15 +57,26 @@ const StockMediumCard: FC<StockMediumCardTypes> = ({
         }
       >
         <div className="px-[24px] mb-4">
-          <Text className="text-2xl font-semibold block yellow mb-3">
+          <Text className="text-2xl font-semibold block">
             {isFetching ? (
               <SmallSpinLoader />
             ) : (
               <>
-                {count !== null ? <>{numbersFormatter(count)} KGS</> : "None"}
+                {count !== null ? (
+                  <>
+                    <span className="yellow">
+                      {abbreviateNumber(count)} KGs
+                    </span>{" "}
+                    /
+                    <span>{abbreviateNumber(Math.round(count / 50))} Bags</span>
+                  </>
+                ) : (
+                  "None"
+                )}
               </>
             )}
           </Text>
+
           <Text className="captionText">
             {isFetching ? `Hold on, getting you ${title}...` : subTitle}
           </Text>

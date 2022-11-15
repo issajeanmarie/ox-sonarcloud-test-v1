@@ -185,7 +185,7 @@ const OrderDetails = () => {
           />
 
           <Row justify="space-between" gutter={[16, 16]} className="p-5">
-            {isSaleLoading ? (
+            {isSaleLoading || isSaleFetching ? (
               <Loader />
             ) : (
               <>

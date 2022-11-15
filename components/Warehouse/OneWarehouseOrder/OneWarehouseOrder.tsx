@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import Link from "next/link";
 import { limitStringLengthSmall } from "../../../helpers/limitStringLength";
+import PaymentStatus from "../../Shared/PaymentStatus";
 
 const { Text } = Typography;
 
@@ -189,36 +190,31 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
             <Col>
               <Text className="text-md font-bold">
                 {numbersFormatter(totalWeight || 0)} KG /{" "}
-                {numbersFormatter(totalWeight / 50)} Bags
+                {numbersFormatter(Math.round(totalWeight / 50))} Bags
               </Text>
             </Col>
 
             <Col>
               <Text className="normalText opacity_56">
                 {sale?.saleItems &&
-                  numbersFormatter(sale?.totalAmount / totalWeight || 0)}{" "}
+                  numbersFormatter(
+                    totalWeight
+                      ? Math.round(sale?.totalAmount / totalWeight)
+                      : 0
+                  )}{" "}
                 Rwf / Kg
               </Text>
             </Col>
           </Row>
         </div>
 
-        {/* <div className="flex-1">
-          <Row gutter={32} align="middle">
-            <Col>
-              <span className="font-bold nowrap text-ox-orange">
-                {sale?.totalAmount && numbersFormatter(sale?.totalAmount)} Rwf
-              </span>
-            </Col>
-          </Row>
-        </div> */}
-
         <div className="flex gap-10 ">
           <Row gutter={32} align="middle">
             <Col>
-              <span className="font-bold nowrap text-ox-orange">
-                {sale?.totalAmount && numbersFormatter(sale?.totalAmount)} Rwf
-              </span>
+              <PaymentStatus
+                amt={sale?.totalAmount}
+                status={sale?.paymentStatus}
+              />
             </Col>
           </Row>
 
@@ -285,7 +281,7 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
                 </Col>
                 <Col>
                   <Link href={`${routes.Admins.url}?tb=ADMINS`} passHref>
-                    <Text className="opacity_56  nowrap text-xs font-bold underline cursor-pointer italic">
+                    <Text className="opacity_56  nowrap text-xs font-bold underline cursor-pointer italic underline">
                       Edited by {sale?.lastEditedBy}
                     </Text>
                   </Link>

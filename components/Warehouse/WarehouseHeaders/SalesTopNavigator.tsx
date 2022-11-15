@@ -7,7 +7,7 @@ import Button from "../../Shared/Button";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import AddWarehouseOrder from "../../Forms/Warehouse/Add/AddWarehouseOrder";
 import { LatLng } from "use-places-autocomplete";
-import { Form } from "antd";
+import { Col, Form, Row } from "antd";
 import { usePostSaleMutation } from "../../../lib/api/endpoints/Warehouse/salesEndpoints";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
@@ -28,7 +28,8 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
   isFilterModalVisible,
   setIsFilterModalVisible,
   isFiltered,
-  setIsFiltered
+  setIsFiltered,
+  depotsState
 }) => {
   const [form] = Form.useForm();
   const [items, setItems]: any = useState([]);
@@ -113,13 +114,24 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
   };
 
   const LeftSide = (
-    <Heading1>
-      {isSalesLoading ? (
-        "..."
-      ) : (
-        <>{totalElements && numbersFormatter(totalElements)} Orders</>
-      )}
-    </Heading1>
+    <Row gutter={2} align="bottom">
+      <Col>
+        <Heading1>
+          {isSalesLoading ? (
+            "..."
+          ) : (
+            <>{totalElements && numbersFormatter(totalElements)} Orders </>
+          )}
+        </Heading1>
+      </Col>
+
+      <Col className="normalText opacity_56 italic">
+        {(!isSalesLoading &&
+          depotsState?.depotId &&
+          `( ${depotsState.depotName} )`) ||
+          ""}
+      </Col>
+    </Row>
   );
 
   const RightSide = (
@@ -193,6 +205,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
           setIsFiltered={setIsFiltered}
           setCurrentPages={setCurrentPages}
           setIsVisible={setIsFilterModalVisible}
+          isFromSales={true}
         />
       </FilterOrdersModal>
       <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />

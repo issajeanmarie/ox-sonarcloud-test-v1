@@ -40,7 +40,7 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
           />
           <OrderSummaryInfoWrapper
             title="Payment status"
-            infoItem={sale?.paymentStatus}
+            infoItem={sale?.paymentStatus?.replace("_", " ")}
           />
         </div>
       </Row>

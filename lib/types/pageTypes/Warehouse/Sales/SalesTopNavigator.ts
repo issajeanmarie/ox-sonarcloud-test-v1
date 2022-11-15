@@ -13,4 +13,5 @@ export type SalesTopNavigatorTypes = {
   setIsFilterModalVisible: React.Dispatch<SetStateAction<boolean>>;
   isFiltered: boolean;
   setIsFiltered: React.Dispatch<SetStateAction<boolean>>;
+  depotsState: { depotName: string | undefined; depotId: number | undefined };
 };

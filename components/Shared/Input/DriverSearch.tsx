@@ -4,8 +4,14 @@ import Input from ".";
 import { useLazySearchDriverQuery } from "../../../lib/api/endpoints/Accounts/driversEndpoints";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { SearchDriverTypes } from "../../../lib/types/pageTypes/Analytics/Inputs";
+import Spin from "antd/lib/spin";
+import LoadingOutlined from "@ant-design/icons/LoadingOutlined";
 
 const { Option } = Select;
+
+const antIcon = (
+  <LoadingOutlined style={{ fontSize: 16, color: "black" }} spin />
+);
 
 const DriverSearch: FC<SearchDriverTypes> = ({
   name = "driver",
@@ -48,6 +54,22 @@ const DriverSearch: FC<SearchDriverTypes> = ({
       isLoading={isLoading || isDriverInitialFetching}
       allowClear
       rules={rules}
+      notFoundContent={
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "20px 0"
+          }}
+        >
+          {isLoading ? (
+            <Spin indicator={antIcon} />
+          ) : (
+            <span>Type to search</span>
+          )}
+        </div>
+      }
     >
       {existingValue && (
         <Option

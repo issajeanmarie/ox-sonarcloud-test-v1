@@ -33,7 +33,9 @@ const salesEndpoints = baseAPI.injectEndpoints({
           DTO.depot || ""
         }&driver=${DTO.driver || ""}&truck=${DTO.truck || ""}&start=${
           DTO.start || ""
-        }&end=${DTO.end || ""}&filter=${DTO.filter || ""}`,
+        }&end=${DTO.end || ""}&filter=${DTO.filter || ""}&momoRefCode=${
+          DTO.momoRefCode || ""
+        }`,
         method: "GET"
       })
     }),
@@ -41,7 +43,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<{ content: SaleResponse }>,
       GetSale
     >({
-      providesTags: ["Sales", "MoMoPayment"],
+      providesTags: ["Sales", "MoMoPayment", "CancelSale"],
       query: (DTO) => ({
         url: `sales/${DTO?.id}`,
         method: "GET"
@@ -76,7 +78,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
     }),
 
     cancelSale: builder.mutation<ApiResponseMetadata<Sale>, CancelSaleRequest>({
-      invalidatesTags: [],
+      invalidatesTags: ["CancelSale"],
       query: (DTO) => ({
         url: `/sales/${DTO?.id}/cancel`,
         method: "PATCH"

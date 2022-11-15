@@ -45,7 +45,7 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
 
   const { data: suppliers, isLoading: isSuppliersLoading } = useSuppliersQuery({
     page: "",
-    size: 100,
+    size: 1000,
     sort: ""
   });
 
@@ -194,6 +194,7 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
           isSuppliersLoading={isSuppliersLoading}
         />
       </ModalWrapper>
+
       <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
     </>
   );

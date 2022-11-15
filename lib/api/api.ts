@@ -33,7 +33,8 @@ export const baseAPI = createApi({
     "CreateStock",
     "EditStock",
     "AddSaleItem",
-    "MoMoPayment"
+    "MoMoPayment",
+    "CancelSale"
   ],
   endpoints: () => ({})
 });

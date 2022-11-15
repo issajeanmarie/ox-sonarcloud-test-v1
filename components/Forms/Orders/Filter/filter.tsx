@@ -31,6 +31,7 @@ interface FilterOrdersFormProps {
   setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentPages: React.Dispatch<React.SetStateAction<number>>;
   setIsVisible?: React.Dispatch<React.SetStateAction<boolean>>;
+  isFromSales?: boolean;
 }
 
 const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
@@ -38,7 +39,8 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
   setIsFiltered,
   loading,
   setCurrentPages,
-  setIsVisible
+  setIsVisible,
+  isFromSales
 }) => {
   const [chosenDriverId, setChosenDriverId] = useState<number>();
   const dispatch = useDispatch();
@@ -155,7 +157,9 @@ const FilterOrdersForm: FC<FilterOrdersFormProps> = ({
               <Input
                 name="filter"
                 type="select"
-                options={PAYMENT_STATUS}
+                options={
+                  isFromSales ? PAYMENT_STATUS.slice(0, 4) : PAYMENT_STATUS
+                }
                 label="By payment status"
                 placeholder="Choose payment status"
                 allowClear

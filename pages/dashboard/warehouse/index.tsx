@@ -58,10 +58,16 @@ const SalesPage = () => {
   );
   const filters = getFromLocal(OX_ORDERS_FILTERS);
 
+  const willItFilter =
+    filters?.filter !== "ORDER_STARTED" &&
+    filters?.filter !== "ORDER_ENQUEUE" &&
+    filters?.filter !== "ORDER_CANCELLED" &&
+    filters?.filter !== "ORDER_COMPLETED";
+
   const getSalesAction = ({
     request = getSales,
     depot = depotsState?.depotId,
-    filter = filters?.filter || "",
+    filter = (willItFilter && filters?.filter) || "",
     page,
     size = pagination.sales.size,
     handleSuccess = handleRenderSuccess,
@@ -165,6 +171,7 @@ const SalesPage = () => {
           setIsFilterModalVisible={setIsFilterModalVisible}
           isFiltered={isFiltered}
           setIsFiltered={setIsFiltered}
+          depotsState={depotsState}
         />
 
         <Content isOverflowHidden={false} navType="DOUBLE">

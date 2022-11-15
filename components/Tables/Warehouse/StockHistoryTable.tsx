@@ -118,24 +118,28 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       }
     });
 
-    isEditSpecificBatch &&
-      setBatches({
-        ...Stocks,
-        payload: {
-          ...Stocks.payload,
-          content: [...newStocksList]
-        }
-      });
-
-    isEditSpecificBatch === false && dispatchReplace(newStocksList);
+    if (isEditSpecificBatch === false) {
+      isEditSpecificBatch === false && dispatchReplace(newStocksList);
+    } else {
+      isEditSpecificBatch &&
+        setBatches({
+          ...Stocks,
+          payload: {
+            ...Stocks.payload,
+            content: [...newStocksList]
+          }
+        });
+    }
   };
 
   const onEditStockFinish = (values: any) => {
     handleAPIRequests({
       request: editStock,
+      ...values,
+      inDate: moment(values?.inDate).format("YYYY-MM-DD"),
+      expiryDate: moment(values?.expiryDate).format("YYYY-MM-DD"),
       batchId: itemToEdit?.id,
       id: itemToEdit?.warehouseItem?.id,
-      ...values,
       showSuccess: true,
       handleSuccess: handleEditStockSuccess
     });
@@ -227,7 +231,7 @@ const StockHistoryTable: FC<StockHistoryTableProps> = ({
       ) => (
         <RowsWrapper>
           <Text className="normalText opacity_56 text_ellipsis">
-            {record?.expiryDate && moment(record?.expiryDate).format("ll")}
+            {record?.inDate && moment(record?.inDate).format("ll")}
           </Text>
         </RowsWrapper>
       )
