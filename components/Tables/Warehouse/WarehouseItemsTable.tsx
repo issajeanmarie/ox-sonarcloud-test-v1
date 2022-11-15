@@ -11,7 +11,7 @@ import {
   WarehouseItemsTableProps,
   WarehouseItemsTableTypes
 } from "../../../lib/types/warehouse";
-import { localeString } from "../../../utils/numberFormatter";
+import { abbreviateNumber, localeString } from "../../../utils/numberFormatter";
 
 const { Text } = Typography;
 
@@ -61,7 +61,11 @@ const WarehouseItemsTable: FC<WarehouseItemsTableProps> = ({
         record: WarehouseItemsTableTypes
       ) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">{record?.weight} Kgs</Text>
+          <Text className="normalText opacity_56">
+            {record?.weight} Kgs /{" "}
+            {abbreviateNumber(Math.round(record?.weight / 50))}{" "}
+            {record?.weight > 50 ? "Bags" : "Bag"}
+          </Text>
         </RowsWrapper>
       )
     },

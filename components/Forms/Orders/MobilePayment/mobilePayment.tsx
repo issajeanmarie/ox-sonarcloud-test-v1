@@ -55,13 +55,35 @@ const MobilePayment: FC<MobilePaymentProps> = ({
     setIsModalVisible(false);
   };
 
+  const handleNonSocketSuccess = () => {
+    setIsModalVisible(true);
+
+    setPaymentProgress({ ...paymentProgress, success: true });
+  };
+
+  const handleNonSocketFailure = () => {
+    setPaymentProgress({
+      initiated: false,
+      payload: null,
+      success: false,
+      disconnected: false,
+      failure: false
+    });
+
+    setIsModalVisible(false);
+  };
+
   const handleSubmit = (values: { amount: number; phone: string }) => {
     if (order) {
+      setPaymentProgress({ ...paymentProgress, initiated: true });
+
       handleAPIRequests({
         request: initiatePayment,
         orderId: order.id,
         data: { ...values, phone: phoneNumber.replace("+", "") },
-        endpoint
+        endpoint,
+        handleSuccess: handleNonSocketSuccess,
+        handleFailure: handleNonSocketFailure
       });
     }
   };
