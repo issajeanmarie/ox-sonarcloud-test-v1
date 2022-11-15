@@ -40,6 +40,10 @@ import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { pagination } from "../../../config/pagination";
 import Image from "next/image";
 import BatchesModal from "../../../components/Modals/BatchesModal";
+import { useDownloadAnalyticsReportMutation } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
+import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
+import moment from "moment";
+import fileDownload from "js-file-download";
 
 const Stock = () => {
   const [isBatchesModalVisible, setIsBatchesModalVisible] = useState(false);
@@ -119,6 +123,30 @@ const Stock = () => {
     (state: { depots: any }) => state.depots.payload
   );
   const dispatch = useDispatch();
+
+  const [downloadStockHistory, { isLoading: isDownloading }] =
+    useDownloadAnalyticsReportMutation();
+
+  const handleDownloadFile = (file: File) => {
+    const date = moment().format("YYYY-MM-DD");
+    fileDownload(file, `Report-${date}.XLS`);
+  };
+
+  const downloadStockHistoryReport = () => {
+    if (startDate) {
+      handleAPIRequests({
+        request: downloadStockHistory,
+        showSuccess: true,
+        handleSuccess: handleDownloadFile,
+        file_type: "XLS",
+        start: startDate,
+        end: endDate,
+        scope: "WAREHOUSE "
+      });
+    } else {
+      ErrorMessage("Please select start date to get the report!");
+    }
+  };
 
   //MODAL
   const showModal = () => {
@@ -439,6 +467,8 @@ const Stock = () => {
                   filter={filter}
                   onStartDateChange={onStartDateChange}
                   onEndDateChange={onEndDateChange}
+                  downloadStockHistoryReport={downloadStockHistoryReport}
+                  isDownloading={isDownloading}
                 />
               </StockTopContentWrapper>
 

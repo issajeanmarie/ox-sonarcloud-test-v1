@@ -4,8 +4,14 @@ import Input from ".";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { ClientSearchTypes } from "../../../lib/types/clients";
 import { useLazyClientsQuery } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
+import Spin from "antd/lib/spin";
+import LoadingOutlined from "@ant-design/icons/LoadingOutlined";
 
 const { Option } = Select;
+
+const antIcon = (
+  <LoadingOutlined style={{ fontSize: 16, color: "black" }} spin />
+);
 
 const ClientSearch: FC<ClientSearchTypes> = ({
   name = "clientId",
@@ -48,6 +54,22 @@ const ClientSearch: FC<ClientSearchTypes> = ({
       isLoading={isLoading || isInitialFetching}
       allowClear
       rules={rules}
+      notFoundContent={
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "20px 0"
+          }}
+        >
+          {isLoading ? (
+            <Spin indicator={antIcon} />
+          ) : (
+            <span>Type to search</span>
+          )}
+        </div>
+      }
     >
       {existingValue && (
         <Option

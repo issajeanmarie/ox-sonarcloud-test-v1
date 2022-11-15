@@ -1,5 +1,6 @@
 import { Col, Image, Row } from "antd";
 import React, { FC } from "react";
+import Button from "../../Shared/Button";
 import Input from "../../Shared/Input";
 import { StockHistoryTypes as StockHistoryTypes } from "../../../lib/types/pageTypes/Warehouse/Stock/StockHistoryTyes";
 import DropDownSelector from "../../Shared/DropDownSelector";
@@ -10,7 +11,9 @@ const StockHistory: FC<StockHistoryTypes> = ({
   filter,
   setFilter,
   onStartDateChange,
-  onEndDateChange
+  onEndDateChange,
+  downloadStockHistoryReport,
+  isDownloading
 }) => {
   const LeftSide = (
     <Col className="flex items-center gap-4">
@@ -35,7 +38,6 @@ const StockHistory: FC<StockHistoryTypes> = ({
         <Col>
           <Input
             onDateChange={onStartDateChange}
-            defaultValue={localStorage.getItem("ox_startDate")}
             type="date"
             name="Start"
             placeholder="Start"
@@ -53,7 +55,6 @@ const StockHistory: FC<StockHistoryTypes> = ({
         <Col>
           <Input
             onDateChange={onEndDateChange}
-            defaultValue={localStorage.getItem("ox_endDate")}
             type="date"
             name="End"
             placeholder="End"
@@ -71,9 +72,23 @@ const StockHistory: FC<StockHistoryTypes> = ({
     </Col>
   );
 
+  const RightSide = (
+    <div className="flex items-center gap-5">
+      <div className="flex items-center gap-6">
+        <Button
+          type="primary"
+          onClick={downloadStockHistoryReport}
+          loading={isDownloading}
+        >
+          Download report
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <>
-      <Navbar LeftSide={LeftSide} type="CENTER" />
+      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
     </>
   );
 };

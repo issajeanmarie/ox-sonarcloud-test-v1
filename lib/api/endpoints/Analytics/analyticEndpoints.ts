@@ -61,9 +61,9 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
 
     downloadAnalyticsReport: builder.mutation({
       query: (DTO) => ({
-        url: `/reports?startDate=${DTO.start}&endDate=${DTO.end}&scope=${
-          DTO.scope
-        }&file_type=${DTO.file_type || "XLS"}`,
+        url: `/reports?startDate=${DTO.start || ""}&endDate=${
+          DTO.end || ""
+        }&scope=${DTO.scope || ""}&file_type=${DTO.file_type || "XLS"}`,
         method: "GET",
         headers: {
           "content-type": "application/octet-stream"

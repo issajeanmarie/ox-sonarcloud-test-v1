@@ -5,4 +5,6 @@ export type StockHistoryTypes = {
   setFilter: React.Dispatch<SetStateAction<object>>;
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
+  downloadStockHistoryReport?: () => void;
+  isDownloading?: boolean;
 };

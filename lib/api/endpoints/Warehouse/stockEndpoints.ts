@@ -43,7 +43,9 @@ const stockEndpoints = baseAPI.injectEndpoints({
           DTO?.size || ""
         }&start=${DTO?.start || ""}&end=${DTO?.end || ""}&depot=${
           DTO?.depot || ""
-        }&status=${DTO?.status || ""}&sort=${DTO?.sort || "DATE_DESC"}`,
+        }&status=${DTO?.status || ""}&sort=${DTO?.sort || "DATE_DESC"}&search=${
+          DTO?.search || ""
+        }`,
         method: "GET"
       })
     }),
