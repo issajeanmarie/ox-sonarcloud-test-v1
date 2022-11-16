@@ -76,6 +76,21 @@ const settingsApi = baseAPI.injectEndpoints({
         })
       }
     ),
+    getRepairServices: builder.query<
+      ApiResponseMetadata<CategoriesResponse>,
+      void
+    >({
+      providesTags: [
+        "Settings",
+        "AddRepairService",
+        "DeleteRepairService",
+        "UpdateRepairService"
+      ],
+      query: () => ({
+        url: "/repair-services?page=0&size=10000",
+        method: "GET"
+      })
+    }),
     addCategory: builder.mutation<
       ApiResponseMetadata<CategoriesResponse>,
       AddCategory
@@ -83,6 +98,18 @@ const settingsApi = baseAPI.injectEndpoints({
       invalidatesTags: ["Settings"],
       query: (DTO) => ({
         url: "/categories",
+        method: "POST",
+        body: DTO
+      })
+    }),
+
+    addRepairService: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      AddCategory
+    >({
+      invalidatesTags: ["AddRepairService"],
+      query: (DTO) => ({
+        url: "/repair-services",
         method: "POST",
         body: DTO
       })
@@ -98,6 +125,17 @@ const settingsApi = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+    deleteRepairService: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      DeleteCategoryRequest
+    >({
+      invalidatesTags: ["DeleteRepairService"],
+      query: (DTO) => ({
+        url: `/repair-services/${DTO?.id}`,
+        method: "DELETE",
+        body: DTO
+      })
+    }),
     updateCategory: builder.mutation<
       ApiResponseMetadata<CategoriesResponse>,
       UpdateCategoryRequest
@@ -106,6 +144,20 @@ const settingsApi = baseAPI.injectEndpoints({
       query: (DTO) => ({
         url: `/categories/${DTO?.id}`,
         method: "PUT",
+        body: {
+          name: DTO?.name
+        }
+      })
+    }),
+
+    updateRepairService: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      UpdateCategoryRequest
+    >({
+      invalidatesTags: ["UpdateRepairService"],
+      query: (DTO) => ({
+        url: `/repair-services/${DTO?.id}`,
+        method: "PATCH",
         body: {
           name: DTO?.name
         }
@@ -135,5 +187,9 @@ export const {
   useAddCategoryMutation,
   useDeleteCategoryMutation,
   useUpdateCategoryMutation,
-  useMakeCategoryParentMutation
+  useMakeCategoryParentMutation,
+  useGetRepairServicesQuery,
+  useAddRepairServiceMutation,
+  useDeleteRepairServiceMutation,
+  useUpdateRepairServiceMutation
 } = settingsApi;

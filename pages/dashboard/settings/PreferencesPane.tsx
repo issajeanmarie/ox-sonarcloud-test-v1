@@ -5,7 +5,10 @@ import {
   useAddCategoryMutation,
   useDeleteCategoryMutation,
   useUpdateCategoryMutation,
-  useMakeCategoryParentMutation
+  useMakeCategoryParentMutation,
+  useAddRepairServiceMutation,
+  useDeleteRepairServiceMutation,
+  useUpdateRepairServiceMutation
 } from "../../../lib/api/endpoints/settings/settingsEndpoints";
 import { useForm } from "antd/lib/form/Form";
 import CategoriesSection from "./CategoriesSection";
@@ -13,6 +16,7 @@ import SettingsKPIsTable from "../../../components/Tables/Settings/SettingsKPIsT
 import SettingsCardWrapper from "../../../components/Settings/SettingsCardWrapper";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { SettingsKPILoader } from "../../../components/Shared/Loaders/Loaders";
+import RepairServicesSection from "./RepairServicesSection";
 
 const { Text } = Typography;
 
@@ -25,10 +29,18 @@ const PreferencesPane = () => {
 
   const [addCategory, { isLoading: isAddingCategory }] =
     useAddCategoryMutation();
+  const [addRepairService, { isLoading: isAddingRepairService }] =
+    useAddRepairServiceMutation();
+
   const [deleteCategory, { isLoading: isDeletingCategory }] =
     useDeleteCategoryMutation();
+  const [deleteRepairService, { isLoading: isDeletingRepairService }] =
+    useDeleteRepairServiceMutation();
   const [updateCategory, { isLoading: isUpdatingCategory }] =
     useUpdateCategoryMutation();
+  const [updateRepairService, { isLoading: isUpdatingRepairService }] =
+    useUpdateRepairServiceMutation();
+
   const [makeCategoryParent, { isLoading: isParentingCategory }] =
     useMakeCategoryParentMutation();
 
@@ -52,6 +64,16 @@ const PreferencesPane = () => {
     });
   };
 
+  const onAddRepairServiceFinish = (values: any) => {
+    handleAPIRequests({
+      request: addRepairService,
+      name: values?.name,
+      parentCategoryId: category ? category : null,
+      showSuccess: true,
+      handleSuccess: handleAddCategorySuccess
+    });
+  };
+
   const handleUpdateCategorySuccess = () => {
     setIsEditModalVisible(false);
   };
@@ -66,10 +88,29 @@ const PreferencesPane = () => {
     });
   };
 
+  const onUpdateRepairServiceFinish = (values: any) => {
+    handleAPIRequests({
+      request: updateRepairService,
+      name: values?.name,
+      id: categoryToEDit?.id,
+      showSuccess: true,
+      handleSuccess: handleUpdateCategorySuccess
+    });
+  };
+
   const handleDeleteCategory = (id: number) => {
     setIsId(id);
     handleAPIRequests({
       request: deleteCategory,
+      id,
+      showSuccess: true
+    });
+  };
+
+  const handleDeleteRepairService = (id: number) => {
+    setIsId(id);
+    handleAPIRequests({
+      request: deleteRepairService,
       id,
       showSuccess: true
     });
@@ -153,6 +194,26 @@ const PreferencesPane = () => {
         form={form}
         handleMakeCategoryParent={handleMakeCategoryParent}
         isParentingCategory={isParentingCategory}
+        isId={isId}
+      />
+
+      <RepairServicesSection
+        onAddCategoryFinish={onAddRepairServiceFinish}
+        isAddingCategory={isAddingRepairService}
+        handleCancel={handleCancel}
+        handleOk={handleOk}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        handleDeleteCategory={handleDeleteRepairService}
+        isDeletingCategory={isDeletingRepairService}
+        isUpdatingCategory={isUpdatingRepairService}
+        onUpdateCategoryFinish={onUpdateRepairServiceFinish}
+        showEditModal={showEditModal}
+        handleEditOk={handleEditOk}
+        handleEditCancel={handleEditCancel}
+        isEditModalVisible={isEditModalVisible}
+        setIsEditModalVisible={setIsEditModalVisible}
+        form={form}
         isId={isId}
       />
     </>

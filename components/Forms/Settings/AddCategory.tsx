@@ -9,11 +9,13 @@ import Input from "../../Shared/Input";
 type AddCategoryTypes = {
   onAddCategoryFinish: (values: any) => void;
   isAddingCategory: boolean;
+  btnTitle?: string;
 };
 
 const AddCategory: FC<AddCategoryTypes> = ({
   onAddCategoryFinish,
-  isAddingCategory
+  isAddingCategory,
+  btnTitle
 }) => {
   return (
     <Form
@@ -22,18 +24,20 @@ const AddCategory: FC<AddCategoryTypes> = ({
       layout="vertical"
       title="AddCategory"
     >
-      <Row className="flex items-center gap-4">
+      <Row className="flex items-center gap-4" wrap={false} align="top">
         <Col>
           <Input
             type="text"
             name="name"
-            placeholder="Enter category name"
+            placeholder={
+              btnTitle ? "Enter service name" : "Enter category name"
+            }
             rules={requiredInput}
           />
         </Col>
         <Col>
           <Button loading={isAddingCategory} type="primary" htmlType="submit">
-            ADD CATEGORY
+            {btnTitle || "ADD CATEGORY"}
           </Button>
         </Col>
       </Row>

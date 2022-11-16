@@ -34,7 +34,10 @@ export const baseAPI = createApi({
     "EditStock",
     "AddSaleItem",
     "MoMoPayment",
-    "CancelSale"
+    "CancelSale",
+    "AddRepairService",
+    "DeleteRepairService",
+    "UpdateRepairService"
   ],
   endpoints: () => ({})
 });

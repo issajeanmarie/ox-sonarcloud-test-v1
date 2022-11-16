@@ -10,6 +10,7 @@ import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import ModalWrapper from "./ModalWrapper";
 import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
+import { useGetRepairServicesQuery } from "../../lib/api/endpoints/settings/settingsEndpoints";
 
 const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -17,6 +18,16 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
   const [uploadedPicInfo, setUploadedPicInfo] = useState();
   const [, setUploadSuccess] = useState(false);
   const [allIMGs, setAllIMGs] = useState([]);
+
+  const { data: repairServices, isFetching: repairServicesFetching } =
+    useGetRepairServicesQuery();
+
+  const repairServiceOptions = repairServices?.payload?.content?.map(
+    (service: { id: number; name: string }) => ({
+      label: `${service.name}`,
+      value: service.id
+    })
+  );
 
   const dispatch = useDispatch();
 
@@ -160,12 +171,13 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
           <div className="flex-1">
             <div>
               <Input
-                name="serviceDone"
-                type="text"
-                placeholder="Ex: Fuel system"
-                inputType="text"
+                name="serviceId"
+                type="select"
                 label="Service done"
+                placeholder="Ex: Fuel system"
+                loading={repairServicesFetching}
                 rules={requiredField("Service done")}
+                options={repairServiceOptions}
               />
             </div>
           </div>
