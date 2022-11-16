@@ -2,17 +2,16 @@ import { Row, Col, Typography, Image } from "antd";
 import AddCategory from "../../../components/Forms/Settings/AddCategory";
 import SettingsCardWrapper from "../../../components/Settings/SettingsCardWrapper";
 import { SettingsCategoriesTableLoader } from "../../../components/Shared/Loaders/Loaders";
-import { useGetCategoriesQuery } from "../../../lib/api/endpoints/settings/settingsEndpoints";
+import { useGetRepairServicesQuery } from "../../../lib/api/endpoints/settings/settingsEndpoints";
 import Input from "../../../components/Shared/Input";
-import SettingsCategoriesTable from "../../../components/Tables/Settings/SettingsCategoriesTable";
 import { useState } from "react";
+import RepairServicesTable from "../../../components/Tables/Settings/RepairServicesTable";
 
 const { Text } = Typography;
 
-const CategoriesSection = ({
+const RepairServicesSection = ({
   isAddingCategory,
   onAddCategoryFinish,
-  showModal,
   handleCancel,
   handleOk,
   isModalVisible,
@@ -26,21 +25,19 @@ const CategoriesSection = ({
   handleEditCancel,
   isEditModalVisible,
   form,
-  handleMakeCategoryParent,
-  isParentingCategory,
   isId,
   setIsEditModalVisible
 }: any) => {
   const {
-    data: categories,
-    isLoading: isCategoriesLoading,
-    isFetching: categoriesFetching
-  } = useGetCategoriesQuery();
+    data: repairServices,
+    isLoading: isRepairServicesLoading,
+    isFetching: repairServicesFetching
+  } = useGetRepairServicesQuery();
 
-  const [customCategories, setCustomCategories] = useState(null);
+  const [customRepairServices, setCustomRepairServices] = useState(null);
 
   const handleCategorySearch = (value: string) => {
-    const filteredData = categories?.payload.filter(
+    const filteredData = repairServices?.payload?.content?.filter(
       (entry: { [s: string]: unknown } | ArrayLike<unknown>) =>
         Object.values(entry).some(
           (val) =>
@@ -48,7 +45,9 @@ const CategoriesSection = ({
             val.toLowerCase().includes(value.toLowerCase())
         )
     );
-    setCustomCategories(filteredData);
+    setCustomRepairServices(filteredData);
+
+    return null;
   };
 
   return (
@@ -56,7 +55,7 @@ const CategoriesSection = ({
       <SettingsCardWrapper>
         <div className="mb-6">
           <Text className="mediumText">
-            Categories ({categories?.payload?.length || 0})
+            Repair services ({repairServices?.payload?.totalElements || 0})
           </Text>
         </div>
 
@@ -70,7 +69,7 @@ const CategoriesSection = ({
               allowClear
               type="text"
               name="searchCategory"
-              placeholder="Search category"
+              placeholder="Search repair service"
               onChange={handleCategorySearch}
               suffixIcon={
                 <Image
@@ -86,21 +85,21 @@ const CategoriesSection = ({
           <AddCategory
             onAddCategoryFinish={onAddCategoryFinish}
             isAddingCategory={isAddingCategory}
+            btnTitle="Add service"
           />
         </Row>
 
-        {isCategoriesLoading ? (
+        {isRepairServicesLoading ? (
           <>
             {[...Array(10)].map((_, index) => (
               <SettingsCategoriesTableLoader key={index} />
             ))}
           </>
         ) : (
-          <SettingsCategoriesTable
-            data={customCategories || categories?.payload}
+          <RepairServicesTable
+            data={customRepairServices || repairServices?.payload?.content}
             onAddCategoryFinish={onAddCategoryFinish}
             isAddingCategory={isAddingCategory}
-            showModal={showModal}
             handleOk={handleOk}
             handleCancel={handleCancel}
             isModalVisible={isModalVisible}
@@ -115,9 +114,7 @@ const CategoriesSection = ({
             setIsModalVisible={setIsModalVisible}
             setIsEditModalVisible={setIsEditModalVisible}
             form={form}
-            categoriesFetching={categoriesFetching}
-            handleMakeCategoryParent={handleMakeCategoryParent}
-            isParentingCategory={isParentingCategory}
+            categoriesFetching={repairServicesFetching}
             isLoading={false}
             isId={isId}
           />
@@ -127,4 +124,4 @@ const CategoriesSection = ({
   );
 };
 
-export default CategoriesSection;
+export default RepairServicesSection;

@@ -34,7 +34,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <>
-      <SEO title="OX Dashboard" />
+      <SEO title="OX Delivers Portal" />
 
       <Provider store={store}>
         <Component {...pageProps} />
