@@ -6,6 +6,7 @@ type InfoWrapperTypes = {
   title: string;
   infoItem: string;
   isTransportOrder: boolean;
+  batchId?: number;
 };
 
 type OrderSummaryInfoWrapperTypes = {
@@ -16,7 +17,8 @@ type OrderSummaryInfoWrapperTypes = {
 const InfoWrapper: FC<InfoWrapperTypes> = ({
   title,
   infoItem,
-  isTransportOrder
+  isTransportOrder,
+  batchId
 }) => {
   return (
     <div className={`flex gap-12 mb-2`}>
@@ -36,15 +38,21 @@ const InfoWrapper: FC<InfoWrapperTypes> = ({
           </span>
         </Link>
       ) : (
-        <span
-          className={`text-sm ${
-            title === "Transport Ref"
-              ? "font-bold text-[#E3B221] underline"
-              : "opacity-50"
-          }   `}
-        >
-          {infoItem}
-        </span>
+        <>
+          <span
+            className={`text-sm ${
+              title === "Transport Ref"
+                ? "font-bold text-[#E3B221] underline"
+                : "opacity-50"
+            }   `}
+          >
+            {infoItem}
+          </span>
+
+          <span className="text-sm font-bold text-[#E3B221]">
+            {batchId ? `Batch #${batchId}` : ""}
+          </span>
+        </>
       )}
     </div>
   );

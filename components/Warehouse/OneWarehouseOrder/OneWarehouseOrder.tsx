@@ -101,12 +101,12 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
                 {sale?.saleItems?.length > 0 ? (
                   <Tooltip
                     title={
-                      sale?.saleItems[0]?.warehouseItem?.parentCategory
+                      sale?.saleItems[0]?.batch?.warehouseItem?.parentCategory
                         ?.categoryName
                     }
                   >
                     {limitStringLengthSmall(
-                      sale?.saleItems[0]?.warehouseItem?.categoryName
+                      sale?.saleItems[0]?.batch?.warehouseItem?.categoryName
                     )}
                   </Tooltip>
                 ) : (
