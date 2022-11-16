@@ -61,6 +61,16 @@ const NewRepairLogModal: FC<Props> = ({
     })
   );
 
+  const { data: repairServices, isFetching: repairServicesFetching } =
+    useGetRepairServicesQuery();
+
+  const repairServiceOptions = repairServices?.payload?.content?.map(
+    (service: { id: number; name: string }) => ({
+      label: `${service.name}`,
+      value: service.id
+    })
+  );
+
   const dispatch = useDispatch();
 
   const [createTruckRepairLog, { isLoading }] =
