@@ -18,6 +18,7 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
   const hqBranch = sale?.client?.offices?.find(
     (office: { type: OfficeType }) => office.type === OfficeType.HQ
   );
+
   return (
     <Col
       className="h-[86vh] overflow-auto"
@@ -68,13 +69,14 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
               <div key={item?.id} className="mb-10">
                 <InfoWrapper
                   title="Item"
-                  infoItem={item?.warehouseItem?.parentCategory?.name}
+                  infoItem={item?.batch?.categoryName}
                   isTransportOrder={false}
+                  batchId={item?.batch?.id}
                 />
 
                 <InfoWrapper
                   title="Type"
-                  infoItem={item?.warehouseItem?.category?.name}
+                  infoItem={item?.batch?.parentCategoryName}
                   isTransportOrder={false}
                 />
 
@@ -92,7 +94,7 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
 
                 <InfoWrapper
                   title="Supplier"
-                  infoItem={item?.warehouseItem?.supplierName}
+                  infoItem={item?.batch?.supplierName}
                   isTransportOrder={false}
                 />
 
