@@ -174,7 +174,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
               </div>
 
               <div className="bg-white shadow-[0px_0px_19px_#00000008]">
-                <div className="flex items-center justify-between mb-3 p-12 pb-6">
+                <div className="flex items-center justify-between mb-3 p-12 py-8 pb-3">
                   <span className="text-lg font-bold text-ox-dark">
                     DOCUMENTS
                   </span>

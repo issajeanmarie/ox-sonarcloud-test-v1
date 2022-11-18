@@ -5,7 +5,13 @@ import Col from "antd/lib/col";
 import { useState } from "react";
 import NewTRuckDocumentModal from "../../Modals/NewTruckDocumentModal";
 
-const DocumentCard = ({ document, truckData }: any) => {
+type Props = {
+  isDocumentForOrder?: boolean;
+  truckData: any;
+  document: any;
+};
+
+const DocumentCard = ({ document, truckData, isDocumentForOrder }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
   const [editTruckData, setEditTruckData] = useState({});
 
@@ -23,7 +29,9 @@ const DocumentCard = ({ document, truckData }: any) => {
         isUserEditing={true}
         editTruckData={editTruckData}
         setEditTruckData={setEditTruckData}
+        isDocumentForOrder={isDocumentForOrder}
       />
+
       <Card
         className="radius4 myCard"
         headStyle={{ border: "none", marginBottom: "0" }}

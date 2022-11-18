@@ -210,6 +210,23 @@ const ordersApi = baseAPI.injectEndpoints({
         url: `/orders/${orderId}/stops/${stopId}`,
         method: "DELETE"
       })
+    }),
+    uploadOrderDocument: builder.mutation({
+      invalidatesTags: ["Order"],
+      query: ({ id, ...DTO }) => ({
+        url: `/orders/${id}/documents`,
+        method: "POST",
+        body: DTO
+      })
+    }),
+
+    editOrderDocument: builder.mutation({
+      invalidatesTags: ["Order"],
+      query: ({ id, documentId, ...DTO }) => ({
+        url: `/orders/${id}/documents/${documentId}`,
+        method: "PATCH",
+        body: DTO
+      })
     })
   })
 });
@@ -231,5 +248,7 @@ export const {
   useInitiatePaymentMutation,
   useSupportOrderMutation,
   useVerifyPaymentMutation,
-  useLhsOrdersQuery
+  useLhsOrdersQuery,
+  useUploadOrderDocumentMutation,
+  useEditOrderDocumentMutation
 } = ordersApi;

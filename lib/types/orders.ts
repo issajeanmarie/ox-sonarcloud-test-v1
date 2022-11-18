@@ -13,6 +13,8 @@ import {
   Payment_Plan
 } from "./shared";
 
+export type Document = { title: string; url: string };
+
 export type OrderRequestBody = {
   officeId: number;
   clientId: number;
@@ -171,6 +173,7 @@ export type Order = {
   id: number;
   lastEditedBy?: string;
   supportOrders: Order[];
+  documents: Document[];
   transportOrder: {
     id: number;
   };
