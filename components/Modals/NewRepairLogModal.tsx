@@ -61,8 +61,18 @@ const NewRepairLogModal: FC<Props> = ({
     })
   );
 
-  const { data: repairServices, isFetching: repairServicesFetching } =
-    useGetRepairServicesQuery();
+  const [
+    getRepairServices,
+    { data: repairServices, isFetching: repairServicesFetching }
+  ] = useLazyGetRepairServicesQuery();
+
+  useEffect(() => {
+    handleAPIRequests({
+      request: getRepairServices,
+      page: 0,
+      size: 1000
+    });
+  }, []);
 
   const repairServiceOptions = repairServices?.payload?.content?.map(
     (service: { id: number; name: string }) => ({
