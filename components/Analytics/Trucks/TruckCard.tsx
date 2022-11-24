@@ -6,12 +6,18 @@ import { useState } from "react";
 import NewTRuckDocumentModal from "../../Modals/NewTruckDocumentModal";
 
 type Props = {
+  isDocumentForSale?: boolean;
   isDocumentForOrder?: boolean;
   truckData: any;
   document: any;
 };
 
-const DocumentCard = ({ document, truckData, isDocumentForOrder }: Props) => {
+const DocumentCard = ({
+  document,
+  truckData,
+  isDocumentForOrder,
+  isDocumentForSale
+}: Props) => {
   const [isVisible, setIsVisible] = useState(false);
   const [editTruckData, setEditTruckData] = useState({});
 
@@ -30,6 +36,7 @@ const DocumentCard = ({ document, truckData, isDocumentForOrder }: Props) => {
         editTruckData={editTruckData}
         setEditTruckData={setEditTruckData}
         isDocumentForOrder={isDocumentForOrder}
+        isDocumentForSale={isDocumentForSale}
       />
 
       <Card

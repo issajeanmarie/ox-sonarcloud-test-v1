@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import React, { FC, useEffect, useState } from "react";
-import { Steps, Form, Tooltip, Divider, Row, Col } from "antd";
+import { Steps, Form, Tooltip, Divider, Row, Col, Empty } from "antd";
 import { Query } from "../../../lib/types/shared";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Header from "./header";
@@ -528,21 +528,27 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                   <Divider />
 
                   <Row gutter={24} className="p-12">
-                    {data?.documents?.map((document: Document) => (
-                      <Col
-                        key={document.title}
-                        sm={{ span: 24 }}
-                        md={{ span: 24 }}
-                        lg={{ span: 12 }}
-                        className="mb-8"
-                      >
-                        <DocumentCard
-                          document={document}
-                          truckData={data}
-                          isDocumentForOrder
-                        />
-                      </Col>
-                    ))}
+                    {data?.documents?.length <= 0 ? (
+                      <div className="justify-center w-full">
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                      </div>
+                    ) : (
+                      data?.documents?.map((document: Document) => (
+                        <Col
+                          key={document.title}
+                          sm={{ span: 24 }}
+                          md={{ span: 24 }}
+                          lg={{ span: 12 }}
+                          className="mb-8"
+                        >
+                          <DocumentCard
+                            document={document}
+                            truckData={data}
+                            isDocumentForOrder
+                          />
+                        </Col>
+                      ))
+                    )}
                   </Row>
                 </div>
 

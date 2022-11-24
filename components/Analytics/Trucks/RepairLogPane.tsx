@@ -21,6 +21,7 @@ import NewRepairLogModal from "../../Modals/NewRepairLogModal";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { LoadingOutlined } from "@ant-design/icons";
+import { Empty } from "antd";
 
 const { Panel } = Collapse;
 
@@ -160,6 +161,8 @@ const RepairLogPane = () => {
 
       {isPageLoading ? (
         <Loader />
+      ) : data?.payload?.content?.length <= 0 ? (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       ) : (
         <>
           <Collapse bordered={false}>

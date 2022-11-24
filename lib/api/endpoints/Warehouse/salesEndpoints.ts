@@ -129,6 +129,24 @@ const salesEndpoints = baseAPI.injectEndpoints({
         method: "DELETE",
         body: DTO
       })
+    }),
+
+    editSaleDocument: builder.mutation({
+      invalidatesTags: ["Sales"],
+      query: ({ id, documentId, ...DTO }) => ({
+        url: `/sales/${id}/documents/${documentId}`,
+        method: "PATCH",
+        body: DTO
+      })
+    }),
+
+    uploadSaleDocument: builder.mutation({
+      invalidatesTags: ["Sales"],
+      query: ({ id, ...DTO }) => ({
+        url: `/sales/${id}/documents`,
+        method: "POST",
+        body: DTO
+      })
     })
   })
 });
@@ -144,5 +162,7 @@ export const {
   usePostSalePaymentMutation,
   useEditSaleTransactionMutation,
   useAddSaleItemMutation,
-  useDeleteSaleItemMutation
+  useDeleteSaleItemMutation,
+  useUploadSaleDocumentMutation,
+  useEditSaleDocumentMutation
 } = salesEndpoints;

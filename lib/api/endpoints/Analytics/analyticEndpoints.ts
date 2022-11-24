@@ -100,6 +100,19 @@ const analyticsEndpoints = baseAPI.injectEndpoints({
         }&end=${DTO?.end || ""}`,
         method: "GET"
       })
+    }),
+
+    getTruckRepairAnalytics: builder.query<
+      AnalyticsResponse,
+      KPIsAnalyticsRequest
+    >({
+      providesTags: ["Analytics", "Depot"],
+      query: (DTO) => ({
+        url: `/analytics/truck-repairs?truck=${DTO.id}&start=${
+          DTO?.start || ""
+        }&end=${DTO?.end || ""}`,
+        method: "GET"
+      })
     })
   })
 });
@@ -113,5 +126,6 @@ export const {
   useDownloadTruckAnalyticsQuery,
   useLazyDownloadTruckAnalyticsQuery,
   useDownloadAnalyticsReportMutation,
-  useLazyDownloadTruckMonthlyReportQuery
+  useLazyDownloadTruckMonthlyReportQuery,
+  useLazyGetTruckRepairAnalyticsQuery
 } = analyticsEndpoints;

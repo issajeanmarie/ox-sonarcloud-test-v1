@@ -25,6 +25,8 @@ import { TruckRevenueBreakdownChart } from "../Charts/TruckRevenueBreakdownChart
 import DropDownSelector from "../../Shared/DropDownSelector";
 import DaysCalculator from "../../../helpers/daysCalculator";
 import { InfoMessage } from "../../Shared/Messages/InfoMessage";
+import TruckRepairBreakdownChart from "../Charts/TruckRepairBreakdownChart";
+import { useLazyGetTruckRepairAnalyticsQuery } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
 
 const daysList = [
   { id: 0, name: "Last 7 days", value: 7 },
@@ -39,6 +41,9 @@ const OvervieWPane = () => {
     useLazyGetTruckShiftsAnalyticsQuery();
   const [getTruckRevenueAnalytics, { data: truckRevenueAnalyticsData }] =
     useLazyGetTruckRevenueAnalyticsQuery();
+  const [getTruckRepairAnalytics, { data: truckRepairAnalyticsData }] =
+    useLazyGetTruckRepairAnalyticsQuery();
+
   const [downloadTruckShifts, { isLoading: isDownloadLoading }] =
     useDownloadTruckShiftsMutation();
   const [startDate, setStartDate] = useState("");
@@ -57,6 +62,21 @@ const OvervieWPane = () => {
   const handleGetTruckOverviewFailure = () => {
     setIsPageLoading(false);
   };
+
+  useEffect(() => {
+    if (truckId) {
+      setIsPageLoading(true);
+
+      handleAPIRequests({
+        request: getTruckRepairAnalytics,
+        id: truckId,
+        start: startDate,
+        end: endDate,
+        handleSuccess: handleGetTruckOverviewSuccess,
+        handleFailure: handleGetTruckOverviewFailure
+      });
+    }
+  }, [truckId, getTruckRepairAnalytics, startDate, endDate]);
 
   useEffect(() => {
     if (truckId) {
@@ -387,13 +407,29 @@ const OvervieWPane = () => {
             </Col>
           </Row>
 
-          <p className="mb-6">Revenue breakdown</p>
+          <Row gutter={24}>
+            <Col xs={24} sm={24} md={14} lg={24} xl={14} xxl={14}>
+              <p className="mb-6">Revenue breakdown</p>
 
-          <div className="h-[fit-content] border p-6 relative mb-12">
-            <TruckRevenueBreakdownChart
-              chartData={truckRevenueAnalyticsData || []}
-            />
-          </div>
+              <div className="h-[240px] border p-6 relative mb-12">
+                <TruckRevenueBreakdownChart
+                  chartData={truckRevenueAnalyticsData || []}
+                />
+              </div>
+            </Col>
+
+            <Col xs={24} sm={24} md={10} lg={24} xl={10} xxl={10}>
+              <p className="mb-6">Repair breakdown</p>
+
+              <div className="h-[240px] border p-6 relative mb-12">
+                <TruckRepairBreakdownChart
+                  chartData={truckRepairAnalyticsData}
+                  isLoading={false}
+                  isFetching={false}
+                />
+              </div>
+            </Col>
+          </Row>
 
           <p className="mb-6">Activity breakdown</p>
 

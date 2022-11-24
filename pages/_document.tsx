@@ -8,6 +8,7 @@ class Document extends NextDocument<Props> {
     return (
       <Html>
         <Head>
+          <link rel="manifest" href="/manifest.json" />
           <link rel="icon" href="/logo.png" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link

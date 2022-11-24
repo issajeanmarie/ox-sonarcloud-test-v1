@@ -23,6 +23,10 @@ import {
   useEditOrderDocumentMutation,
   useUploadOrderDocumentMutation
 } from "../../lib/api/endpoints/Orders/ordersEndpoints";
+import {
+  useEditSaleDocumentMutation,
+  useUploadSaleDocumentMutation
+} from "../../lib/api/endpoints/Warehouse/salesEndpoints";
 
 type RequestTypes = {
   title: string;
@@ -38,6 +42,7 @@ type Props = {
   editTruckData?: any;
   setEditTruckData?: any;
   isDocumentForOrder?: boolean;
+  isDocumentForSale?: boolean;
 };
 
 const NewTRuckDocumentModal = ({
@@ -47,7 +52,8 @@ const NewTRuckDocumentModal = ({
   isUserEditing = false,
   editTruckData,
   setEditTruckData,
-  isDocumentForOrder = false
+  isDocumentForOrder = false,
+  isDocumentForSale = false
 }: Props) => {
   const [form] = Form.useForm();
 
@@ -62,11 +68,16 @@ const NewTRuckDocumentModal = ({
   const [uploadTruckDocument, { isLoading }] = useUploadTruckDocumentMutation();
   const [uploadOrderDocument, { isLoading: isUploadOrderDocumentLoading }] =
     useUploadOrderDocumentMutation();
+  const [uploadSaleDocument, { isLoading: isUploadSaleDocumentLoading }] =
+    useUploadSaleDocumentMutation();
 
   const [editTruckDocument, { isLoading: editDocumentLoading }] =
     useEditTruckDocumentMutation();
   const [editOrderDocument, { isLoading: editOrderDocumentLoading }] =
     useEditOrderDocumentMutation();
+  const [editSaleDocument, { isLoading: editSaleDocumentLoading }] =
+    useEditSaleDocumentMutation();
+
   const dispatch = useDispatch();
 
   const handleCancel = () => {
@@ -145,7 +156,16 @@ const NewTRuckDocumentModal = ({
       if (!isUserEditing) {
         if (isDocumentForOrder) {
           handleAPIRequests({
-            request: isUserEditing ? editOrderDocument : uploadOrderDocument,
+            request: uploadOrderDocument,
+            id: truckData?.id,
+            url: uploadedPicInfo,
+            sendEmail: hasExpiryDate,
+            ...truckDocumentData,
+            handleSuccess: handleDocumentSuccess
+          });
+        } else if (isDocumentForSale) {
+          handleAPIRequests({
+            request: uploadSaleDocument,
             id: truckData?.id,
             url: uploadedPicInfo,
             sendEmail: hasExpiryDate,
@@ -154,7 +174,7 @@ const NewTRuckDocumentModal = ({
           });
         } else {
           handleAPIRequests({
-            request: isUserEditing ? editTruckDocument : uploadTruckDocument,
+            request: uploadTruckDocument,
             id: truckData?.id,
             url: uploadedPicInfo,
             handleSuccess: handleDocumentSuccess,
@@ -169,7 +189,11 @@ const NewTRuckDocumentModal = ({
       }
 
       handleAPIRequests({
-        request: isDocumentForOrder ? editOrderDocument : editTruckDocument,
+        request: isDocumentForOrder
+          ? editOrderDocument
+          : isDocumentForSale
+          ? editSaleDocument
+          : editTruckDocument,
         id: truckData?.id,
         documentId: editTruckData?.id || 1,
         url: uploadedPicInfo || editTruckData?.url,
@@ -200,7 +224,9 @@ const NewTRuckDocumentModal = ({
     uploadLoading ||
     editDocumentLoading ||
     isUploadOrderDocumentLoading ||
-    editOrderDocumentLoading;
+    isUploadSaleDocumentLoading ||
+    editOrderDocumentLoading ||
+    editSaleDocumentLoading;
 
   return (
     <ModalWrapper
@@ -218,7 +244,9 @@ const NewTRuckDocumentModal = ({
             isLoading ||
             editDocumentLoading ||
             editOrderDocumentLoading ||
-            isUploadOrderDocumentLoading
+            isUploadOrderDocumentLoading ||
+            isUploadSaleDocumentLoading ||
+            editSaleDocumentLoading
           }
           type="primary"
           htmlType="submit"
@@ -271,7 +299,9 @@ const NewTRuckDocumentModal = ({
 
         <Row gutter={24} align="middle">
           <Col>
-            {isDocumentForOrder ? "Send an email" : "Has an expiry date"}
+            {isDocumentForOrder || isDocumentForSale
+              ? "Send an email"
+              : "Has an expiry date"}
           </Col>
 
           <Col>
@@ -285,7 +315,7 @@ const NewTRuckDocumentModal = ({
         </Row>
 
         <div className="flex gap-10 my-5">
-          {!isDocumentForOrder && (
+          {!isDocumentForOrder && !isDocumentForSale && (
             <div className="flex-1">
               <div>
                 <Input
@@ -306,7 +336,7 @@ const NewTRuckDocumentModal = ({
             </div>
           )}
 
-          {hasExpiryDate && !isDocumentForOrder && (
+          {hasExpiryDate && !isDocumentForOrder && !isDocumentForSale && (
             <div className="flex-1">
               <div>
                 <Input

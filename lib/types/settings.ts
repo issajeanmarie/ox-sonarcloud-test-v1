@@ -69,3 +69,9 @@ export type UpdateCategoryRequest = {
 export type MakeCategoryParentRequest = {
   id: number;
 };
+
+export type GetRepairService = {
+  page: number | undefined;
+  size: number | undefined;
+  query: string | undefined;
+};

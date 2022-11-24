@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { displayTruckIssues } from "../../../lib/redux/slices/trucksSlice";
 import { TruckIssuesTypes } from "../../../lib/types/pageTypes/Trucks/DisplayTrucksTypes";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { Empty } from "antd";
 
 type SingleIssueTypes = {
   createdAt: string;
@@ -125,71 +126,77 @@ const TruckIssuesPane = () => {
 
           <Divider />
 
-          {truckIssues?.content?.map(
-            (issue: SingleTruckIssueTypes, index: number) => {
-              return (
-                <Row
-                  key={issue.id}
-                  style={{
-                    padding: "24px",
-                    border: "1px solid var(--color_toggle_grey)",
-                    borderRadius: "4px",
-                    marginBottom: "16px"
-                  }}
-                  align="middle"
-                  justify="space-between"
-                >
-                  <Col>
-                    <Row align="middle" gutter={64}>
-                      <Col>{index + 1}</Col>
+          {truckIssues?.content?.length <= 0 ? (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          ) : (
+            truckIssues?.content?.map(
+              (issue: SingleTruckIssueTypes, index: number) => {
+                return (
+                  <Row
+                    key={issue.id}
+                    style={{
+                      padding: "24px",
+                      border: "1px solid var(--color_toggle_grey)",
+                      borderRadius: "4px",
+                      marginBottom: "16px"
+                    }}
+                    align="middle"
+                    justify="space-between"
+                  >
+                    <Col>
+                      <Row align="middle" gutter={64}>
+                        <Col>{index + 1}</Col>
 
-                      <Col>
-                        <span
-                          className={
-                            issue?.status === "RESOLVED"
-                              ? `line-through text-gray-400`
-                              : ""
-                          }
-                        >
-                          {issue?.description}
-                        </span>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col>
-                    <Row align="middle" gutter={64}>
-                      <Col>
-                        <span
-                          className={
-                            issue?.status === "RESOLVED" ? `text-gray-400` : ""
-                          }
-                        >
-                          {" "}
-                          Reported on{" "}
-                          {moment(issue.createdAt).format("MMMM DD, YYYY")}
-                        </span>
-                      </Col>
-
-                      <Col>
-                        {issue.id === loadingBtn ? (
-                          <Spin indicator={antIcon} />
-                        ) : (
-                          <Checkbox
-                            defaultChecked={
-                              issue?.status === "RESOLVED" ||
-                              (loadingBtn === issue.id &&
-                                issue.status === "UNRESOLVED")
+                        <Col>
+                          <span
+                            className={
+                              issue?.status === "RESOLVED"
+                                ? `line-through text-gray-400`
+                                : ""
                             }
-                            onChange={() => handleCheckBoxChange(issue.id)}
-                          />
-                        )}
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-              );
-            }
+                          >
+                            {issue?.description}
+                          </span>
+                        </Col>
+                      </Row>
+                    </Col>
+
+                    <Col>
+                      <Row align="middle" gutter={64}>
+                        <Col>
+                          <span
+                            className={
+                              issue?.status === "RESOLVED"
+                                ? `text-gray-400`
+                                : ""
+                            }
+                          >
+                            {" "}
+                            Reported on{" "}
+                            {moment(issue.createdAt).format("MMMM DD, YYYY")}
+                          </span>
+                        </Col>
+
+                        <Col>
+                          {issue.id === loadingBtn ? (
+                            <Spin indicator={antIcon} />
+                          ) : (
+                            <Checkbox
+                              defaultChecked={
+                                issue?.status === "RESOLVED" ||
+                                (loadingBtn === issue.id &&
+                                  issue.status === "UNRESOLVED")
+                              }
+                              onChange={() => handleCheckBoxChange(issue.id)}
+                            />
+                          )}
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                );
+              }
+            )
           )}
         </>
       )}
