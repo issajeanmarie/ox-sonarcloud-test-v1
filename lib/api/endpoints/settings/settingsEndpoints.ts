@@ -8,13 +8,14 @@ import {
   AddCategory,
   DeleteCategoryRequest,
   UpdateCategoryRequest,
-  MakeCategoryParentRequest
+  MakeCategoryParentRequest,
+  OxAppReleaseResponse
 } from "../../../types/settings";
 import { ApiResponseMetadata, GenericResponse } from "../../../types/shared";
 import { baseAPI } from "../../api";
 
 /**
- * AUTH ENDPOINTS
+ * SETTINGS ENDPOINTS
  * @author Elie K. Gashagaza
  * @authorEmail gashagaza@awesomity.rw
  * @since Jul 2022
@@ -172,6 +173,16 @@ const settingsApi = baseAPI.injectEndpoints({
         url: `/categories/${DTO?.id}/make-parent`,
         method: "PUT"
       })
+    }),
+    oxAppRelease: builder.query<
+      ApiResponseMetadata<OxAppReleaseResponse>,
+      void
+    >({
+      providesTags: ["oxAppRelease"],
+      query: () => ({
+        url: "https://dev-api.ox.rw/app/releases/latest",
+        method: "GET"
+      })
     })
   })
 });
@@ -191,5 +202,6 @@ export const {
   useGetRepairServicesQuery,
   useAddRepairServiceMutation,
   useDeleteRepairServiceMutation,
-  useUpdateRepairServiceMutation
+  useUpdateRepairServiceMutation,
+  useOxAppReleaseQuery
 } = settingsApi;

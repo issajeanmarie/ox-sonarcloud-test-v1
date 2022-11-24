@@ -69,3 +69,12 @@ export type UpdateCategoryRequest = {
 export type MakeCategoryParentRequest = {
   id: number;
 };
+export type OxAppReleaseResponse = {
+  id: number;
+  version: string;
+  apkUrl: string;
+  phone: string;
+  releaseDateTime: string;
+  size: boolean;
+  changeLog: string;
+};
