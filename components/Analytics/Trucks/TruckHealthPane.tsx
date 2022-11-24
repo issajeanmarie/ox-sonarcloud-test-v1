@@ -15,6 +15,7 @@ import Input from "../../Shared/Input";
 import { useRouter } from "next/router";
 import fileDownload from "js-file-download";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
+import { Empty } from "antd";
 
 const { Panel } = Collapse;
 
@@ -137,6 +138,8 @@ const TruckHelthPane = () => {
 
       {isPageLoading ? (
         <Loader />
+      ) : truckDailyInspections?.content?.length <= 0 ? (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       ) : (
         <>
           <Collapse bordered={false}>

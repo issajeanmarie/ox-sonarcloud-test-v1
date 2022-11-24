@@ -1,11 +1,16 @@
-import { Row, Col, Typography, Image } from "antd";
+import { Row, Col, Typography, Image, Empty } from "antd";
 import AddCategory from "../../../components/Forms/Settings/AddCategory";
 import SettingsCardWrapper from "../../../components/Settings/SettingsCardWrapper";
 import { SettingsCategoriesTableLoader } from "../../../components/Shared/Loaders/Loaders";
-import { useGetRepairServicesQuery } from "../../../lib/api/endpoints/settings/settingsEndpoints";
+import { useLazyGetRepairServicesQuery } from "../../../lib/api/endpoints/settings/settingsEndpoints";
 import Input from "../../../components/Shared/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RepairServicesTable from "../../../components/Tables/Settings/RepairServicesTable";
+import CustomButton from "../../../components/Shared/Button";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { pagination } from "../../../config/pagination";
+import { useDispatch, useSelector } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const { Text } = Typography;
 
@@ -28,27 +33,77 @@ const RepairServicesSection = ({
   isId,
   setIsEditModalVisible
 }: any) => {
-  const {
-    data: repairServices,
-    isLoading: isRepairServicesLoading,
-    isFetching: repairServicesFetching
-  } = useGetRepairServicesQuery();
+  const [currentPages, setCurrentPages] = useState(1);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
 
-  const [customRepairServices, setCustomRepairServices] = useState(null);
+  const AllRepairServices = useSelector(
+    (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
+  );
+
+  const [
+    getRepairServices,
+    { data: repairServices, isFetching: repairServicesFetching }
+  ] = useLazyGetRepairServicesQuery();
+
+  const dispatch = useDispatch();
+
+  const handleRenderSuccess = (payload: any) => {
+    dispatch(displayPaginatedData({ payload, onRender: true }));
+  };
+
+  const getRepairServicesAction = ({
+    page,
+    size = pagination.repairServices.size,
+    request = getRepairServices,
+    handleSuccess = handleRenderSuccess,
+    query
+  }: any) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      query,
+      handleSuccess
+    });
+  };
+
+  useEffect(() => {
+    setCurrentPages(1);
+    getRepairServicesAction({ query: searchValue });
+  }, [searchValue]);
+
+  const handleLoadMoreSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMoreFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
+
+  const handleLoadMore = () => {
+    setCurrentPages(currentPages + 1);
+    setIsLoadMoreLoading(true);
+
+    getRepairServicesAction({
+      page: currentPages,
+      handleFailure: handleLoadMoreFailure,
+      handleSuccess: handleLoadMoreSuccess
+    });
+  };
 
   const handleCategorySearch = (value: string) => {
-    const filteredData = repairServices?.payload?.content?.filter(
-      (entry: { [s: string]: unknown } | ArrayLike<unknown>) =>
-        Object.values(entry).some(
-          (val) =>
-            typeof val === "string" &&
-            val.toLowerCase().includes(value.toLowerCase())
-        )
-    );
-    setCustomRepairServices(filteredData);
+    setSearchValue(value);
 
     return null;
   };
+
+  const onRenderLoader = repairServicesFetching && !isLoadMoreLoading;
+  const showPagination =
+    (AllRepairServices?.payload?.totalPages > currentPages ||
+      isLoadMoreLoading) &&
+    !(repairServicesFetching && !isLoadMoreLoading);
 
   return (
     <>
@@ -89,35 +144,52 @@ const RepairServicesSection = ({
           />
         </Row>
 
-        {isRepairServicesLoading ? (
+        {onRenderLoader ? (
           <>
             {[...Array(10)].map((_, index) => (
               <SettingsCategoriesTableLoader key={index} />
             ))}
           </>
+        ) : repairServices?.payload?.length <= 0 ? (
+          <div className="justify-center w-full">
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          </div>
         ) : (
-          <RepairServicesTable
-            data={customRepairServices || repairServices?.payload?.content}
-            onAddCategoryFinish={onAddCategoryFinish}
-            isAddingCategory={isAddingCategory}
-            handleOk={handleOk}
-            handleCancel={handleCancel}
-            isModalVisible={isModalVisible}
-            handleDeleteCategory={handleDeleteCategory}
-            isDeletingCategory={isDeletingCategory}
-            isUpdatingCategory={isUpdatingCategory}
-            onUpdateCategoryFinish={onUpdateCategoryFinish}
-            showEditModal={showEditModal}
-            handleEditOk={handleEditOk}
-            handleEditCancel={handleEditCancel}
-            isEditModalVisible={isEditModalVisible}
-            setIsModalVisible={setIsModalVisible}
-            setIsEditModalVisible={setIsEditModalVisible}
-            form={form}
-            categoriesFetching={repairServicesFetching}
-            isLoading={false}
-            isId={isId}
-          />
+          <>
+            <RepairServicesTable
+              data={AllRepairServices?.payload?.content}
+              onAddCategoryFinish={onAddCategoryFinish}
+              isAddingCategory={isAddingCategory}
+              handleOk={handleOk}
+              handleCancel={handleCancel}
+              isModalVisible={isModalVisible}
+              handleDeleteCategory={handleDeleteCategory}
+              isDeletingCategory={isDeletingCategory}
+              isUpdatingCategory={isUpdatingCategory}
+              onUpdateCategoryFinish={onUpdateCategoryFinish}
+              showEditModal={showEditModal}
+              handleEditOk={handleEditOk}
+              handleEditCancel={handleEditCancel}
+              isEditModalVisible={isEditModalVisible}
+              setIsModalVisible={setIsModalVisible}
+              setIsEditModalVisible={setIsEditModalVisible}
+              form={form}
+              categoriesFetching={onRenderLoader}
+              isLoading={false}
+              isId={isId}
+            />
+            {showPagination && (
+              <div style={{ width: "12%", margin: "32px auto" }}>
+                <CustomButton
+                  loading={isLoadMoreLoading}
+                  onClick={handleLoadMore}
+                  type="secondary"
+                >
+                  Load more
+                </CustomButton>
+              </div>
+            )}{" "}
+          </>
         )}
       </SettingsCardWrapper>
     </>

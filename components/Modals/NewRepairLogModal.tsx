@@ -10,7 +10,7 @@ import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import ModalWrapper from "./ModalWrapper";
 import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
-import { useGetRepairServicesQuery } from "../../lib/api/endpoints/settings/settingsEndpoints";
+import { useLazyGetRepairServicesQuery } from "../../lib/api/endpoints/settings/settingsEndpoints";
 
 const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -19,8 +19,18 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
   const [, setUploadSuccess] = useState(false);
   const [allIMGs, setAllIMGs] = useState([]);
 
-  const { data: repairServices, isFetching: repairServicesFetching } =
-    useGetRepairServicesQuery();
+  const [
+    getRepairServices,
+    { data: repairServices, isFetching: repairServicesFetching }
+  ] = useLazyGetRepairServicesQuery();
+
+  useEffect(() => {
+    handleAPIRequests({
+      request: getRepairServices,
+      page: 0,
+      size: 1000
+    });
+  }, []);
 
   const repairServiceOptions = repairServices?.payload?.content?.map(
     (service: { id: number; name: string }) => ({

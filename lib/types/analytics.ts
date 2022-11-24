@@ -50,6 +50,7 @@ export interface KPIsAnalyticsRequest {
   depot: number | "" | undefined;
   start: string | null;
   end: string | null;
+  id?: number | undefined;
 }
 
 export interface MapAnalyticsRequest {

@@ -78,3 +78,9 @@ export type OxAppReleaseResponse = {
   size: boolean;
   changeLog: string;
 };
+
+export type GetRepairService = {
+  page: number | undefined;
+  size: number | undefined;
+  query: string | undefined;
+};

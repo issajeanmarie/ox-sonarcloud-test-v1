@@ -9,7 +9,8 @@ import {
   DeleteCategoryRequest,
   UpdateCategoryRequest,
   MakeCategoryParentRequest,
-  OxAppReleaseResponse
+  OxAppReleaseResponse,
+  GetRepairService
 } from "../../../types/settings";
 import { ApiResponseMetadata, GenericResponse } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -79,16 +80,13 @@ const settingsApi = baseAPI.injectEndpoints({
     ),
     getRepairServices: builder.query<
       ApiResponseMetadata<CategoriesResponse>,
-      void
+      GetRepairService
     >({
-      providesTags: [
-        "Settings",
-        "AddRepairService",
-        "DeleteRepairService",
-        "UpdateRepairService"
-      ],
-      query: () => ({
-        url: "/repair-services?page=0&size=10000",
+      providesTags: ["Settings"],
+      query: (DTO) => ({
+        url: `/repair-services?page=${DTO.page || 0}&size=${DTO.size}&q=${
+          DTO.query || ""
+        }`,
         method: "GET"
       })
     }),
@@ -199,9 +197,9 @@ export const {
   useDeleteCategoryMutation,
   useUpdateCategoryMutation,
   useMakeCategoryParentMutation,
-  useGetRepairServicesQuery,
   useAddRepairServiceMutation,
   useDeleteRepairServiceMutation,
   useUpdateRepairServiceMutation,
-  useOxAppReleaseQuery
+  useOxAppReleaseQuery,
+  useLazyGetRepairServicesQuery
 } = settingsApi;

@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import React, { FC, useEffect, useState } from "react";
-import { Steps, Form, Tooltip } from "antd";
+import { Steps, Form, Tooltip, Divider, Row, Col, Empty } from "antd";
 import { Query } from "../../../lib/types/shared";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Header from "./header";
@@ -17,7 +17,7 @@ import {
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import Loader from "../../Shared/Loader";
 import moment from "moment";
-import { Stop, Transaction } from "../../../lib/types/orders";
+import { Document, Stop, Transaction } from "../../../lib/types/orders";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import AddStop from "../../Forms/Orders/AddStop";
 import EditOrderClient from "../../Forms/Orders/EditOrderClient";
@@ -36,6 +36,10 @@ import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
 import { requiredField } from "../../../lib/validation/InputValidations";
 import { useForm } from "antd/lib/form/Form";
 import { SuccessMessage } from "../../Shared/Messages/SuccessMessage";
+import CustomButton from "../../Shared/Button";
+import { PlusOutlined } from "@ant-design/icons";
+import NewTRuckDocumentModal from "../../Modals/NewTruckDocumentModal";
+import DocumentCard from "../../Analytics/Trucks/TruckCard";
 
 const { Step } = Steps;
 
@@ -47,6 +51,8 @@ interface ViewOrderProps {
 const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [form] = useForm();
 
+  const [isNewDocumentModalVisible, setIsNewDocumentModalVisible] =
+    useState(false);
   const [comment, setComment] = useState<string>("");
   const [isEditClientModal, setIsEditClientModal] = useState<boolean>(false);
   const [isEditPriceModal, setIsEditPriceModal] = useState<boolean>(false);
@@ -251,6 +257,13 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             title={`Deleting ${chosenStopId?.name.split(",")[0]}`}
             loading={deleteStopLoading}
             type="danger"
+          />
+
+          <NewTRuckDocumentModal
+            truckData={data}
+            isVisible={isNewDocumentModalVisible}
+            setIsVisible={setIsNewDocumentModalVisible}
+            isDocumentForOrder
           />
 
           <Content
@@ -495,6 +508,48 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                       })}
                     </div>
                   </div>
+                </div>
+
+                <div className="bg-white shadow-[0px_0px_19px_#00000008]">
+                  <div className="flex items-center justify-between mb-3 p-12 py-8 pb-3">
+                    <span className="text-lg font-bold text-ox-dark">
+                      ATTACH DOCUMENTS
+                    </span>
+
+                    <CustomButton
+                      onClick={() => setIsNewDocumentModalVisible(true)}
+                      type="secondary"
+                      size="icon"
+                      loading={false}
+                      icon={<PlusOutlined />}
+                    />
+                  </div>
+
+                  <Divider />
+
+                  <Row gutter={24} className="p-12">
+                    {data?.documents?.length <= 0 ? (
+                      <div className="justify-center w-full">
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                      </div>
+                    ) : (
+                      data?.documents?.map((document: Document) => (
+                        <Col
+                          key={document.title}
+                          sm={{ span: 24 }}
+                          md={{ span: 24 }}
+                          lg={{ span: 12 }}
+                          className="mb-8"
+                        >
+                          <DocumentCard
+                            document={document}
+                            truckData={data}
+                            isDocumentForOrder
+                          />
+                        </Col>
+                      ))
+                    )}
+                  </Row>
                 </div>
 
                 {data?.paymentStatus !== "WRITTEN_OFF" && user.isSuperAdmin && (
