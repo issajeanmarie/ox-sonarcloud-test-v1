@@ -3,6 +3,8 @@ import { Col, Row } from "antd";
 import Typography from "antd/lib/typography";
 import Image from "antd/lib/image";
 import CustomButton from "../../components/Shared/Button/button";
+import { useOxAppReleaseQuery } from "../../lib/api/endpoints/settings/settingsEndpoints";
+import { SmallSpinLoader } from "../Shared/Loaders/Loaders";
 
 /**
  * @author Elie K. Gashagaza <gashagaza@awesomity.rw>
@@ -12,6 +14,20 @@ import CustomButton from "../../components/Shared/Button/button";
 const { Text } = Typography;
 
 const OxApp = () => {
+  const { data, isLoading } = useOxAppReleaseQuery();
+
+  const formatBytes = (bytes: number, decimals = 2) => {
+    if (!+bytes) return "0 Bytes";
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+  };
+
   return (
     <Fragment>
       <div className=" items-center">
@@ -19,9 +35,9 @@ const OxApp = () => {
           <Col span={6}>
             <Image
               preview={false}
-              width={150}
-              height={100}
-              src="/app.jpg"
+              width={140}
+              height={80}
+              src="/icons/OX_Logo.svg"
               style={{ borderRadius: "4px" }}
               alt="Profile picture"
             />
@@ -32,14 +48,35 @@ const OxApp = () => {
               <Text className="txt-title">OX APP</Text>
             </p>
             <p>
-              <Text className="txt-small">30 Sept 2022</Text>
+              <Text className="txt-small">
+                {isLoading ? (
+                  <SmallSpinLoader />
+                ) : (
+                  data?.payload.releaseDateTime
+                )}
+              </Text>
             </p>
             <p>
-              <Text className="captionText block">Version 10.0.1</Text>
+              <Text className="captionText block">
+                Version{" "}
+                {isLoading ? <SmallSpinLoader /> : data?.payload.version}
+              </Text>
+            </p>
+            <p>
+              <Text className="captionText block">
+                Size{" "}
+                {isLoading ? (
+                  <SmallSpinLoader />
+                ) : (
+                  formatBytes(data?.payload.size)
+                )}
+              </Text>
             </p>
           </Col>
           <Col span={5}>
-            <CustomButton type="secondary">DOWNLOAD APK</CustomButton>
+            <CustomButton type="secondary">
+              <a href={data?.payload.apkUrl}> DOWNLOAD APK</a>
+            </CustomButton>
           </Col>
         </Row>
       </div>
@@ -48,9 +85,7 @@ const OxApp = () => {
         <Row gutter={0}>
           <div className="flex flex-col gap-2">
             <Text className="heading1">WHAT&apos;S NEW</Text>
-            <Text className="normalText mato16">
-              1. Change truck health inspection level from HIGH to GOOD{" "}
-            </Text>
+            <Text className="normalText mato16">{data?.payload.changeLog}</Text>
           </div>
         </Row>
       </div>
