@@ -113,6 +113,7 @@ const settingsApi = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+
     deleteCategory: builder.mutation<
       ApiResponseMetadata<CategoriesResponse>,
       DeleteCategoryRequest
@@ -172,6 +173,7 @@ const settingsApi = baseAPI.injectEndpoints({
         method: "PUT"
       })
     }),
+
     oxAppRelease: builder.query<
       ApiResponseMetadata<OxAppReleaseResponse>,
       void
@@ -180,6 +182,29 @@ const settingsApi = baseAPI.injectEndpoints({
       query: () => ({
         url: "https://dev-api.ox.rw/app/releases/latest",
         method: "GET"
+      })
+    }),
+
+    getShiftPreferences: builder.query<
+      ApiResponseMetadata<CategoriesResponse>,
+      void
+    >({
+      providesTags: [],
+      query: () => ({
+        url: `/shift-preferences/current`,
+        method: "GET"
+      })
+    }),
+
+    addShiftPreferences: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      AddCategory
+    >({
+      invalidatesTags: [],
+      query: (DTO) => ({
+        url: `/shift-preferences`,
+        method: "POST",
+        body: DTO
       })
     })
   })
@@ -201,5 +226,7 @@ export const {
   useDeleteRepairServiceMutation,
   useUpdateRepairServiceMutation,
   useOxAppReleaseQuery,
-  useLazyGetRepairServicesQuery
+  useLazyGetRepairServicesQuery,
+  useGetShiftPreferencesQuery,
+  useAddShiftPreferencesMutation
 } = settingsApi;

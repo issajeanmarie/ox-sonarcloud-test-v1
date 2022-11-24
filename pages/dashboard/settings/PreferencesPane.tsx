@@ -19,6 +19,7 @@ import { SettingsKPILoader } from "../../../components/Shared/Loaders/Loaders";
 import RepairServicesSection from "./RepairServicesSection";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { useDispatch, useSelector } from "react-redux";
+import ShiftPreferencesSection from "./ShiftPreferencesSection";
 
 const { Text } = Typography;
 
@@ -255,6 +256,8 @@ const PreferencesPane = () => {
         form={form}
         isId={isId}
       />
+
+      <ShiftPreferencesSection />
     </>
   );
 };
