@@ -19,6 +19,14 @@ import moment from "moment";
 import ModalWrapper from "./ModalWrapper";
 import { SuccessMessage } from "../Shared/Messages/SuccessMessage";
 import { WarningMessage } from "../Shared/Messages/WarningMessage";
+import {
+  useEditOrderDocumentMutation,
+  useUploadOrderDocumentMutation
+} from "../../lib/api/endpoints/Orders/ordersEndpoints";
+import {
+  useEditSaleDocumentMutation,
+  useUploadSaleDocumentMutation
+} from "../../lib/api/endpoints/Warehouse/salesEndpoints";
 
 type RequestTypes = {
   title: string;
@@ -33,6 +41,8 @@ type Props = {
   isUserEditing?: boolean;
   editTruckData?: any;
   setEditTruckData?: any;
+  isDocumentForOrder?: boolean;
+  isDocumentForSale?: boolean;
 };
 
 const NewTRuckDocumentModal = ({
@@ -41,7 +51,9 @@ const NewTRuckDocumentModal = ({
   truckData,
   isUserEditing = false,
   editTruckData,
-  setEditTruckData
+  setEditTruckData,
+  isDocumentForOrder = false,
+  isDocumentForSale = false
 }: Props) => {
   const [form] = Form.useForm();
 
@@ -54,8 +66,18 @@ const NewTRuckDocumentModal = ({
   const [hasExpiryDate, setHasExpiryDate] = useState(false);
 
   const [uploadTruckDocument, { isLoading }] = useUploadTruckDocumentMutation();
+  const [uploadOrderDocument, { isLoading: isUploadOrderDocumentLoading }] =
+    useUploadOrderDocumentMutation();
+  const [uploadSaleDocument, { isLoading: isUploadSaleDocumentLoading }] =
+    useUploadSaleDocumentMutation();
+
   const [editTruckDocument, { isLoading: editDocumentLoading }] =
     useEditTruckDocumentMutation();
+  const [editOrderDocument, { isLoading: editOrderDocumentLoading }] =
+    useEditOrderDocumentMutation();
+  const [editSaleDocument, { isLoading: editSaleDocumentLoading }] =
+    useEditSaleDocumentMutation();
+
   const dispatch = useDispatch();
 
   const handleCancel = () => {
@@ -74,14 +96,14 @@ const NewTRuckDocumentModal = ({
     form.resetFields();
     handleCancel();
 
-    if (!isUserEditing) {
+    if (!isUserEditing && !isDocumentForOrder) {
       dispatch(
         displaySingleTruck({
           ...truckData,
           documents: [res.payload, ...truckData.documents]
         })
       );
-    } else {
+    } else if (!isDocumentForOrder) {
       const newDocumentsList: object[] = [];
 
       truckData?.documents?.map((document: { id: string }) => {
@@ -132,13 +154,33 @@ const NewTRuckDocumentModal = ({
   useEffect(() => {
     if (uploadSuccess) {
       if (!isUserEditing) {
-        handleAPIRequests({
-          request: isUserEditing ? editTruckDocument : uploadTruckDocument,
-          id: truckData?.id,
-          url: uploadedPicInfo,
-          handleSuccess: handleDocumentSuccess,
-          ...truckDocumentData
-        });
+        if (isDocumentForOrder) {
+          handleAPIRequests({
+            request: uploadOrderDocument,
+            id: truckData?.id,
+            url: uploadedPicInfo,
+            sendEmail: hasExpiryDate,
+            ...truckDocumentData,
+            handleSuccess: handleDocumentSuccess
+          });
+        } else if (isDocumentForSale) {
+          handleAPIRequests({
+            request: uploadSaleDocument,
+            id: truckData?.id,
+            url: uploadedPicInfo,
+            sendEmail: hasExpiryDate,
+            ...truckDocumentData,
+            handleSuccess: handleDocumentSuccess
+          });
+        } else {
+          handleAPIRequests({
+            request: uploadTruckDocument,
+            id: truckData?.id,
+            url: uploadedPicInfo,
+            handleSuccess: handleDocumentSuccess,
+            ...truckDocumentData
+          });
+        }
 
         setUploadSuccess(false);
         setUploadFailure(null);
@@ -147,9 +189,13 @@ const NewTRuckDocumentModal = ({
       }
 
       handleAPIRequests({
-        request: editTruckDocument,
+        request: isDocumentForOrder
+          ? editOrderDocument
+          : isDocumentForSale
+          ? editSaleDocument
+          : editTruckDocument,
         id: truckData?.id,
-        documentId: editTruckData?.id,
+        documentId: editTruckData?.id || 1,
         url: uploadedPicInfo || editTruckData?.url,
         handleSuccess: handleDocumentSuccess,
         ...truckDocumentData
@@ -173,7 +219,14 @@ const NewTRuckDocumentModal = ({
     });
   }, [editTruckData]);
 
-  const areRequestsLoading = isLoading || uploadLoading || editDocumentLoading;
+  const areRequestsLoading =
+    isLoading ||
+    uploadLoading ||
+    editDocumentLoading ||
+    isUploadOrderDocumentLoading ||
+    isUploadSaleDocumentLoading ||
+    editOrderDocumentLoading ||
+    editSaleDocumentLoading;
 
   return (
     <ModalWrapper
@@ -182,10 +235,19 @@ const NewTRuckDocumentModal = ({
       setIsModalVisible={setIsVisible}
       loading={areRequestsLoading}
       onCancel={handleCancel}
+      destroyOnClose
       footerContent={
         <Button
           form="EditTruckDocs"
-          loading={uploadLoading || isLoading || editDocumentLoading}
+          loading={
+            uploadLoading ||
+            isLoading ||
+            editDocumentLoading ||
+            editOrderDocumentLoading ||
+            isUploadOrderDocumentLoading ||
+            isUploadSaleDocumentLoading ||
+            editSaleDocumentLoading
+          }
           type="primary"
           htmlType="submit"
         >
@@ -236,7 +298,11 @@ const NewTRuckDocumentModal = ({
         </div>
 
         <Row gutter={24} align="middle">
-          <Col>Has an expiry date</Col>
+          <Col>
+            {isDocumentForOrder || isDocumentForSale
+              ? "Send an email"
+              : "Has an expiry date"}
+          </Col>
 
           <Col>
             <CircleCheckbox
@@ -249,26 +315,28 @@ const NewTRuckDocumentModal = ({
         </Row>
 
         <div className="flex gap-10 my-5">
-          <div className="flex-1">
-            <div>
-              <Input
-                rules={requiredField("Start date")}
-                name="validFrom"
-                type="date"
-                label="Date"
-                suffixIcon={
-                  <Image
-                    src="/icons/ic-actions-calendar.svg"
-                    alt="Calendar icon"
-                    width={18}
-                    height={18}
-                  />
-                }
-              />
+          {!isDocumentForOrder && !isDocumentForSale && (
+            <div className="flex-1">
+              <div>
+                <Input
+                  rules={requiredField("Start date")}
+                  name="validFrom"
+                  type="date"
+                  label="Date"
+                  suffixIcon={
+                    <Image
+                      src="/icons/ic-actions-calendar.svg"
+                      alt="Calendar icon"
+                      width={18}
+                      height={18}
+                    />
+                  }
+                />
+              </div>
             </div>
-          </div>
+          )}
 
-          {hasExpiryDate && (
+          {hasExpiryDate && !isDocumentForOrder && !isDocumentForSale && (
             <div className="flex-1">
               <div>
                 <Input

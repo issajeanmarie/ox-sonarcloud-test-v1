@@ -18,6 +18,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDeleteTruckMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
+import { Empty } from "antd";
 
 interface ViewTruckProps {
   truckId: Query;
@@ -174,7 +175,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
               </div>
 
               <div className="bg-white shadow-[0px_0px_19px_#00000008]">
-                <div className="flex items-center justify-between mb-3 p-12 pb-6">
+                <div className="flex items-center justify-between mb-3 p-12 py-8 pb-3">
                   <span className="text-lg font-bold text-ox-dark">
                     DOCUMENTS
                   </span>
@@ -191,17 +192,26 @@ const ViewTruck: FC<ViewTruckProps> = ({
                 <Divider />
 
                 <Row gutter={24} className="p-12">
-                  {truckData?.documents?.map((document: { id: number }) => (
-                    <Col
-                      key={document.id}
-                      sm={{ span: 24 }}
-                      md={{ span: 24 }}
-                      lg={{ span: 12 }}
-                      className="mb-8"
-                    >
-                      <DocumentCard document={document} truckData={truckData} />
-                    </Col>
-                  ))}
+                  {truckData?.documents?.length <= 0 ? (
+                    <div className="justify-center w-full">
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    </div>
+                  ) : (
+                    truckData?.documents?.map((document: { id: number }) => (
+                      <Col
+                        key={document.id}
+                        sm={{ span: 24 }}
+                        md={{ span: 24 }}
+                        lg={{ span: 12 }}
+                        className="mb-8"
+                      >
+                        <DocumentCard
+                          document={document}
+                          truckData={truckData}
+                        />
+                      </Col>
+                    ))
+                  )}
                 </Row>
               </div>
             </Col>

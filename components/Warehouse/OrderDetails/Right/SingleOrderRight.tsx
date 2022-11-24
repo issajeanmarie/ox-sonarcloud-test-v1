@@ -1,4 +1,4 @@
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Empty, Row } from "antd";
 import React, { FC, useState } from "react";
 import { OrderSummaryInfoWrapper } from "../Left/InfoWrapper";
 import CustomButton from "../../../Shared/Button/button";
@@ -7,6 +7,9 @@ import PaymentHistoryTable from "../../../Tables/Warehouse/PaymentHistoryTable";
 import { numbersFormatter } from "../../../../helpers/numbersFormatter";
 import EditPaymentStatus from "../../../Forms/Orders/EditPaymentStatus";
 import EmptyData from "../../../Shared/EmptyData";
+import { PlusOutlined } from "@ant-design/icons";
+import DocumentCard from "../../../Analytics/Trucks/TruckCard";
+import NewTRuckDocumentModal from "../../../Modals/NewTruckDocumentModal";
 
 type SingleOrderRightTypes = {
   sale: any;
@@ -16,6 +19,8 @@ type SingleOrderRightTypes = {
 const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
   const [isEditPaymentStatus, setIsEditPaymentStatus] =
     useState<boolean>(false);
+  const [isNewDocumentModalVisible, setIsNewDocumentModalVisible] =
+    useState(false);
 
   return (
     <Col
@@ -102,12 +107,63 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
           </Col>
         </Row>
       </Row>
+
+      <div className="bg-white shadow-[0px_0px_19px_#00000008]">
+        <div className="flex items-center justify-between mb-3 p-12 py-8 pb-3">
+          <span className="text-lg font-bold text-ox-dark">
+            ATTACH DOCUMENTS
+          </span>
+
+          <CustomButton
+            onClick={() => setIsNewDocumentModalVisible(true)}
+            type="secondary"
+            size="icon"
+            loading={false}
+            icon={<PlusOutlined />}
+          />
+        </div>
+
+        <Divider />
+
+        <Row gutter={24} className="p-12">
+          {sale?.documents?.length <= 0 ? (
+            <div className="justify-center w-full">
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            </div>
+          ) : (
+            sale?.documents?.map((document: Document) => (
+              <Col
+                key={document.title}
+                sm={{ span: 24 }}
+                md={{ span: 24 }}
+                lg={{ span: 12 }}
+                className="mb-8"
+              >
+                <DocumentCard
+                  document={document}
+                  truckData={sale}
+                  isDocumentForSale
+                  isDocumentForOrder={false}
+                />
+              </Col>
+            ))
+          )}
+        </Row>
+      </div>
+
       <EditPaymentStatus
         order={sale}
         closeModal={() => setIsEditPaymentStatus(false)}
         isEditPaymentStatus={isEditPaymentStatus}
         setIsEditPaymentStatus={setIsEditPaymentStatus}
         isSaleOrder={true}
+      />
+
+      <NewTRuckDocumentModal
+        truckData={sale}
+        isVisible={isNewDocumentModalVisible}
+        setIsVisible={setIsNewDocumentModalVisible}
+        isDocumentForSale
       />
     </Col>
   );

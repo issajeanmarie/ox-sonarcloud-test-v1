@@ -17,6 +17,8 @@ import SettingsCardWrapper from "../../../components/Settings/SettingsCardWrappe
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { SettingsKPILoader } from "../../../components/Shared/Loaders/Loaders";
 import RepairServicesSection from "./RepairServicesSection";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { useDispatch, useSelector } from "react-redux";
 
 const { Text } = Typography;
 
@@ -46,12 +48,20 @@ const PreferencesPane = () => {
 
   const [isId, setIsId] = useState(0);
 
+  const dispatch = useDispatch();
+
+  const AllRepairServices = useSelector(
+    (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
+  );
+
   // Working on KPIs
   const { data: KPIsList, isLoading: isGetKPIsLoading } = useGetKPIsQuery();
 
-  const handleAddCategorySuccess = () => {
+  const handleAddCategorySuccess = ({ payload }: any) => {
     form.resetFields();
     setIsModalVisible(false);
+
+    dispatch(displayPaginatedData({ payload }));
   };
 
   const onAddCategoryFinish = (values: any) => {
@@ -88,13 +98,37 @@ const PreferencesPane = () => {
     });
   };
 
+  const handleUpdateRepairServiceSuccess = (res: any) => {
+    setIsEditModalVisible(false);
+
+    const newList: object[] = [];
+
+    AllRepairServices?.payload?.content?.map((result: any) => {
+      if (result.id !== res?.payload?.id) {
+        newList.push(result);
+      } else {
+        newList.push(res?.payload);
+      }
+    });
+
+    const newPayload = {
+      payload: {
+        totalElements: AllRepairServices?.payload?.totalElements,
+        totalPages: AllRepairServices?.payload?.totalPages,
+        content: newList
+      }
+    };
+
+    dispatch(displayPaginatedData({ payload: newPayload, replace: true }));
+  };
+
   const onUpdateRepairServiceFinish = (values: any) => {
     handleAPIRequests({
       request: updateRepairService,
       name: values?.name,
       id: categoryToEDit?.id,
       showSuccess: true,
-      handleSuccess: handleUpdateCategorySuccess
+      handleSuccess: handleUpdateRepairServiceSuccess
     });
   };
 
@@ -107,12 +141,17 @@ const PreferencesPane = () => {
     });
   };
 
+  const handleDeleteRepairServiceSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
+  };
+
   const handleDeleteRepairService = (id: number) => {
     setIsId(id);
     handleAPIRequests({
       request: deleteRepairService,
       id,
-      showSuccess: true
+      showSuccess: true,
+      handleSuccess: handleDeleteRepairServiceSuccess
     });
   };
 
