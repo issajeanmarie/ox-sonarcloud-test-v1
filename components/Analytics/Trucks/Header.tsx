@@ -343,7 +343,19 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
     </Col>
   );
 
-  return <Navbar LeftSide={LeftSide} RightSide={RightSide} type="FULL" />;
+  const MaintenanceRightSide = (
+    <Button type="primary" onClick={() => setIsVisible(true)}>
+      New Inspection
+    </Button>
+  );
+
+  return (
+    <Navbar
+      LeftSide={LeftSide}
+      RightSide={urlIncludesMaintenance ? MaintenanceRightSide : RightSide}
+      type="FULL"
+    />
+  );
 };
 
 export default ViewTruckHeader;
