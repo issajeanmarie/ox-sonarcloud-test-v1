@@ -201,8 +201,19 @@ const Trucks = () => {
   const RightSide = (
     <div className="flex items-center gap-5">
       <Dropdown overlay={downloadOOSdropdown} placement="bottomLeft">
-        <div className="flex items-center gap-6 w-[120px]">
-          <Button loading={isDownloadLoading} type="secondary">
+        <div className="flex items-center gap-12 ">
+          <Button
+            loading={isDownloadLoading}
+            type="dropdown"
+            icon={
+              <Image
+                width={14}
+                src="/icons/expand_more_black_24dp_yellow.svg"
+                preview={false}
+                alt=""
+              />
+            }
+          >
             Download
           </Button>
         </div>

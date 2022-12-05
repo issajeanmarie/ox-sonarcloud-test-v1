@@ -270,12 +270,24 @@ const trucksApi = baseAPI.injectEndpoints({
         response.payload
     }),
 
+    getTruckMaintenanceChecklist: builder.query({
+      providesTags: ["Trucks"],
+      query: ({ id, start, end, page, size }) => ({
+        url: `/trucks/${id || 0}/maintenance-checks?page=${page || 0}&size=${
+          size || ""
+        }&start=${start || ""}&end=${end || ""}`,
+        method: "GET"
+      }),
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
+        response.payload
+    }),
+
     getTruckRevenueAnalytics: builder.query({
       providesTags: ["Trucks"],
       query: ({ truckId, id, start, end }) => ({
-        url: `/analytics/truck-revenue?depot=${
-          truckId || ""
-        }&truck=${id}&start=${start}&end=${end}`,
+        url: `/analytics/truck-revenue?depot=${truckId || ""}&truck=${
+          id || 0
+        }&start=${start || ""}&end=${end || ""}`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
@@ -307,5 +319,6 @@ export const {
   useCreateTruckRepairLogMutation,
   useLazyGetTruckShiftsAnalyticsQuery,
   useLazyGetTruckRevenueAnalyticsQuery,
-  useDeleteTruckRepairLogMutation
+  useDeleteTruckRepairLogMutation,
+  useLazyGetTruckMaintenanceChecklistQuery
 } = trucksApi;
