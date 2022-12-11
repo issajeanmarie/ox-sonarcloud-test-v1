@@ -1,4 +1,5 @@
 import { UploadProps } from "antd/es/upload";
+import { Query } from "../../shared";
 import { SearchType } from "./Inputs";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -46,4 +47,8 @@ export type TrucksUsageTypes = {
 export type TruckMaintenanceCheckListTypes = {
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
+  maintenanceData: any;
+  startDate: string;
+  endDate: string;
+  truckId: Query;
 };

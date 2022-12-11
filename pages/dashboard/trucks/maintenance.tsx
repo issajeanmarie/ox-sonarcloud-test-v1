@@ -11,6 +11,8 @@ const Maintenance = () => {
   const { id: truckId } = router.query;
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [isNewInspectionModalVisible, setIsNewInspectionModalVisible] =
+    useState(false);
 
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
@@ -47,6 +49,10 @@ const Maintenance = () => {
         isPageLoading={isLoading}
         onStartDateChange={onStartDateChange}
         onEndDateChange={onEndDateChange}
+        isAddInspectionModalVisible={isNewInspectionModalVisible}
+        setIsAddInspectionModalVisible={setIsNewInspectionModalVisible}
+        startDate={startDate}
+        endDate={endDate}
       />
     </Layout>
   );

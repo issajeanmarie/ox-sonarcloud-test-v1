@@ -38,7 +38,8 @@ export const baseAPI = createApi({
     "AddRepairService",
     "DeleteRepairService",
     "UpdateRepairService",
-    "oxAppRelease"
+    "oxAppRelease",
+    "MaintenanceCheck"
   ],
   endpoints: () => ({})
 });

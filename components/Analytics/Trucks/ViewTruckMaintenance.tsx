@@ -1,10 +1,11 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import Header from "./Header";
 import Loader from "../../Shared/Loader";
 import { Query } from "../../../lib/types/shared";
 import ViewTruckMaintenanceHeader from "./ViewTruckMaintenanceHeader";
 import Content from "../../Shared/Content";
 import TruckMaintenanceList from "./TruckMaintenanceList";
+import NewTruckInspectionModal from "../../Modals/NewTruckInspectionModal";
 
 interface ViewTruckProps {
   truckId: Query;
@@ -13,6 +14,10 @@ interface ViewTruckProps {
   isPageLoading: boolean;
   onStartDateChange: (_: string, date: string) => void;
   onEndDateChange: (_: string, date: string) => void;
+  isAddInspectionModalVisible: boolean;
+  setIsAddInspectionModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  startDate: string;
+  endDate: string;
 }
 
 const ViewTruckMaintenance: FC<ViewTruckProps> = ({
@@ -21,10 +26,13 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
   isLoading,
   isPageLoading,
   onStartDateChange,
-  onEndDateChange
+  onEndDateChange,
+  startDate,
+  endDate,
+  isAddInspectionModalVisible,
+  setIsAddInspectionModalVisible
 }) => {
   useState(false);
-  const [, setIsAddInspectionModalVisible] = useState(false);
 
   return (
     <div className="overflow-hidden">
@@ -32,6 +40,11 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
         <Loader />
       ) : (
         <>
+          <NewTruckInspectionModal
+            isVisible={isAddInspectionModalVisible}
+            setIsVisible={setIsAddInspectionModalVisible}
+          />
+
           <Header
             truckId={truckId}
             truckData={maintenanceData}
@@ -48,6 +61,10 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
               <ViewTruckMaintenanceHeader
                 onStartDateChange={onStartDateChange}
                 onEndDateChange={onEndDateChange}
+                maintenanceData={maintenanceData}
+                startDate={startDate}
+                endDate={endDate}
+                truckId={truckId}
               />
 
               {isLoading ? (

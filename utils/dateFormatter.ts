@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export const dateFormatterNth = (date: string) => {
+export const dateFormatterNth = (date: string | Date) => {
   return moment(date).format("Do MMM YYYY");
 };
 

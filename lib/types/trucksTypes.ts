@@ -137,6 +137,11 @@ export interface DeleteTruckRepairLogRequest {
   id: number;
 }
 
+export interface DeleteMaintenanceCheckRequest {
+  checkId: number;
+  id: number;
+}
+
 export interface Payload {
   content: SingleMaintenanceInterface[];
   pageable: Pageable;

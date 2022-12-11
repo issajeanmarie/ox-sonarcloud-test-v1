@@ -1,93 +1,55 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Collapse from "antd/lib/collapse";
-import {
-  useLazyGetTruckRepairLogQuery,
-  useDeleteTruckRepairLogMutation
-} from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import { useDeleteMaintenanceCheckMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useRouter } from "next/router";
-import Loader from "../../Shared/Loader";
-import { useDispatch } from "react-redux";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
-import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Empty } from "antd";
 import { SingleMaintenanceInterface } from "../../../lib/types/trucksTypes";
 import mappedObjects from "../../../utils/mappedObjects";
+import { dateFormatterNth } from "../../../utils/dateFormatter";
 
 const { Panel } = Collapse;
 
-const TruckMaintenanceList = ({ maintenanceData }: any) => {
-  const [getTruckLogRepair] = useLazyGetTruckRepairLogQuery();
-  const [deleteTruckRepairLog] = useDeleteTruckRepairLogMutation();
-  const componentDidMount = useRef(false);
-  const [isPageLoading, setIsPageLoading] = useState(false);
+const TruckMaintenanceList = ({
+  maintenanceData
+}: {
+  maintenanceData: any;
+}) => {
+  const [deleteMaintenanceCheck] = useDeleteMaintenanceCheckMutation();
   const [isDeletingItem, setIsDeletingItem] = useState<number | null>(null);
-
-  const dispatch = useDispatch();
 
   const router = useRouter();
   const { id: truckId } = router.query;
 
-  const handleDeleteLogRepairSuccess = ({ payload }: any) => {
-    dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
-
+  const handleDeleteMaintenanceCheckSuccess = () => {
     setIsDeletingItem(null);
   };
 
-  const handleDeleteLogRepairFailure = () => {
+  const handleDeleteMaintenanceCheckFailure = () => {
     setIsDeletingItem(null);
   };
 
-  const handleGetLogRepairSuccess = (res: any) => {
-    dispatch(displayPaginatedData({ payload: res, onRender: true }));
-    setIsPageLoading(false);
-  };
-
-  const handleGetLogRepairFailure = () => {
-    setIsPageLoading(false);
-  };
-
-  const callAPI = (start?: string, end?: string) => {
-    setIsPageLoading(true);
-    handleAPIRequests({
-      request: getTruckLogRepair,
-      id: truckId,
-      startDate: start || "",
-      endDate: end || "",
-      handleSuccess: handleGetLogRepairSuccess,
-      handleFailure: handleGetLogRepairFailure
-    });
-  };
-
-  useEffect(() => {
-    if (!componentDidMount.current && truckId) {
-      callAPI();
-      componentDidMount.current = true;
-    }
-  }, [truckId, getTruckLogRepair]);
-
-  const handleDeleteRepairLog = (id: number) => {
+  const handleDeleteMaintenanceCheck = (id: number) => {
     setIsDeletingItem(id);
 
     handleAPIRequests({
-      request: deleteTruckRepairLog,
-      repairId: id,
-      id: truckId,
+      request: deleteMaintenanceCheck,
       showSuccess: true,
-      handleSuccess: handleDeleteLogRepairSuccess,
-      handleFailure: handleDeleteLogRepairFailure
+      id: truckId,
+      checkId: id,
+      handleSuccess: handleDeleteMaintenanceCheckSuccess,
+      handleFailure: handleDeleteMaintenanceCheckFailure
     });
   };
 
   return (
     <>
-      {isPageLoading ? (
-        <Loader />
-      ) : maintenanceData?.content?.length <= 0 ? (
+      {maintenanceData?.content?.length <= 0 ? (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       ) : (
         <>
@@ -134,7 +96,7 @@ const TruckMaintenanceList = ({ maintenanceData }: any) => {
 
                             <Col className="text_ellipsis">
                               <span className="text-gray-400">
-                                Date will go here
+                                {dateFormatterNth(data?.createdAt)}
                               </span>
                             </Col>
                           </Row>
@@ -166,7 +128,9 @@ const TruckMaintenanceList = ({ maintenanceData }: any) => {
                                 />
                               ) : (
                                 <Image
-                                  onClick={() => handleDeleteRepairLog(data.id)}
+                                  onClick={() =>
+                                    handleDeleteMaintenanceCheck(data.id)
+                                  }
                                   src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
                                   preview={false}
                                   width={24}
@@ -300,7 +264,12 @@ export const DetailsComponent: React.FC<Types> = ({
 
           <Col>
             <span className="text-gray-400">
-              {record?.value?.replaceAll("_", " ")}
+              {record?.value?.replaceAll("_", " ").split("")[0]}
+            </span>
+            <span className="text-gray-400 lowercase">
+              {record?.value
+                ?.replaceAll("_", " ")
+                .replace(record?.value?.charAt(0), "")}
             </span>
           </Col>
         </Row>

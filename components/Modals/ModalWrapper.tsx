@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, SetStateAction } from "react";
-import { Button, Col, Modal, Row } from "antd";
+import { Button, Col, Modal, Row, Typography } from "antd";
 import { CloseIcon } from "../Icons";
+
+const { Text } = Typography;
 
 interface ModalProps {
   isModalVisible: boolean;
@@ -12,6 +14,7 @@ interface ModalProps {
   destroyOnClose?: boolean;
   footerContent?: React.ReactNode;
   width?: number;
+  subTitle?: string;
 }
 
 const ModalWrapper: FC<ModalProps> = ({
@@ -23,7 +26,8 @@ const ModalWrapper: FC<ModalProps> = ({
   onCancel,
   destroyOnClose,
   footerContent,
-  width = 550
+  width = 550,
+  subTitle
 }) => {
   const handleOk = () => {
     setIsModalVisible(false);
@@ -38,7 +42,18 @@ const ModalWrapper: FC<ModalProps> = ({
       className="ox-modal ox_medium_modal"
       title={
         <div className="flex justify-between items-center">
-          <span className="font-bold text-2xl uppercase">{title}</span>
+          <div>
+            <span
+              className={`font-bold text-2xl uppercase mb-2 ${
+                subTitle ? "block" : ""
+              }`}
+            >
+              {title}
+            </span>
+            {subTitle && (
+              <Text className="text-md font-normal">{subTitle}</Text>
+            )}
+          </div>
           {!loading && (
             <Button
               onClick={onCancel || handleCancel}

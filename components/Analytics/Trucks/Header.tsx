@@ -14,7 +14,6 @@ import {
   useToggleTruckMutation
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { displaySingleTruck } from "../../../lib/redux/slices/trucksSlice";
-import { userType } from "../../../helpers/getLoggedInUser";
 import { routes } from "../../../config/route-config";
 import Navbar from "../../Shared/Content/Navbar";
 import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
@@ -32,7 +31,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   setIsVisible
 }) => {
   const router = useRouter();
-  const user = userType();
+  const { id: truckId } = router.query;
 
   const [toggleTruck, { isLoading }] = useToggleTruckMutation();
   const [allTrucks, setAllTrucks] = useState([]);
@@ -84,14 +83,21 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   };
 
   const handleSelectTruck = (truck: any) => {
-    setSelectedTruck(truck);
-
-    router.push(
-      urlIncludesMaintenance
-        ? `${routes.Maintenance.url}?id=${truck.id}`
-        : `${routes.Trucks.url}/${truck.id}`
-    );
+    if (urlIncludesMaintenance) {
+      router.push(`${routes.Maintenance.url}?id=${truck.id}`);
+    } else {
+      setSelectedTruck(truck);
+      router.push(`${routes.Trucks.url}/${truck.id}`);
+    }
   };
+
+  useEffect(() => {
+    const foundTruck = allTrucks.find(
+      (truck: { id: number }) => truck.id === (truckId && +truckId)
+    );
+
+    setSelectedTruck(foundTruck);
+  }, [allTrucks, truckId]);
 
   const menu = (
     <div className="radius4 h-[500px] myCard p-6 py-12 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
@@ -211,18 +217,6 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
           alt="Backspace icon"
           width={18}
           height={18}
-          preview={false}
-        />
-      )}
-
-      {user.isSuperAdmin && (
-        <Image
-          className="pointer"
-          onClick={() => setIsVisible(true)}
-          src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
-          alt=""
-          width={22}
-          height={22}
           preview={false}
         />
       )}
