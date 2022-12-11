@@ -8,7 +8,8 @@ import {
   ToggleTruckResponse,
   ToggleTruckIssueRequest,
   EditTruckRequest,
-  DeleteTruckRepairLogRequest
+  DeleteTruckRepairLogRequest,
+  DeleteMaintenanceCheckRequest
 } from "../../../types/trucksTypes";
 import { baseAPI } from "../../api";
 
@@ -188,6 +189,19 @@ const trucksApi = baseAPI.injectEndpoints({
       })
     }),
 
+    downloadMaintenanceCheck: builder.mutation({
+      query: ({ fileType, truckId, start, end }) => ({
+        url: `/trucks/${truckId}/maintenance-checks/download?file_type=${
+          fileType || "CSV"
+        }&start=${start}&end=${end}`,
+        method: "GET",
+        headers: {
+          "content-type": "application/octet-stream"
+        },
+        responseHandler: (response) => response.blob()
+      })
+    }),
+
     getTruckDailyInspection: builder.query({
       providesTags: ["Trucks"],
       query: ({ id }) => ({
@@ -247,6 +261,17 @@ const trucksApi = baseAPI.injectEndpoints({
       }
     }),
 
+    createMaintenanceCheck: builder.mutation<unknown, unknown>({
+      invalidatesTags: ["MaintenanceCheck"],
+      query: ({ id, ...DTO }) => {
+        return {
+          url: `/trucks/${id}/maintenance-checks`,
+          method: "POST",
+          body: DTO
+        };
+      }
+    }),
+
     deleteTruckRepairLog: builder.mutation<
       CreateTruckResponse,
       DeleteTruckRepairLogRequest
@@ -255,6 +280,19 @@ const trucksApi = baseAPI.injectEndpoints({
       query: ({ id, repairId }) => {
         return {
           url: `/trucks/${id}/repairs/${repairId}`,
+          method: "DELETE"
+        };
+      }
+    }),
+
+    deleteMaintenanceCheck: builder.mutation<
+      CreateTruckResponse,
+      DeleteMaintenanceCheckRequest
+    >({
+      invalidatesTags: ["MaintenanceCheck"],
+      query: ({ id, checkId }) => {
+        return {
+          url: `/trucks/${id}/maintenance-checks/${checkId}`,
           method: "DELETE"
         };
       }
@@ -270,12 +308,24 @@ const trucksApi = baseAPI.injectEndpoints({
         response.payload
     }),
 
+    getTruckMaintenanceChecklist: builder.query({
+      providesTags: ["MaintenanceCheck"],
+      query: ({ id, start, end, page, size }) => ({
+        url: `/trucks/${id || 0}/maintenance-checks?page=${page || 0}&size=${
+          size || ""
+        }&start=${start || ""}&end=${end || ""}`,
+        method: "GET"
+      }),
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
+        response.payload
+    }),
+
     getTruckRevenueAnalytics: builder.query({
       providesTags: ["Trucks"],
       query: ({ truckId, id, start, end }) => ({
-        url: `/analytics/truck-revenue?depot=${
-          truckId || ""
-        }&truck=${id}&start=${start}&end=${end}`,
+        url: `/analytics/truck-revenue?depot=${truckId || ""}&truck=${
+          id || 0
+        }&start=${start || ""}&end=${end || ""}`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
@@ -307,5 +357,9 @@ export const {
   useCreateTruckRepairLogMutation,
   useLazyGetTruckShiftsAnalyticsQuery,
   useLazyGetTruckRevenueAnalyticsQuery,
-  useDeleteTruckRepairLogMutation
+  useDeleteTruckRepairLogMutation,
+  useLazyGetTruckMaintenanceChecklistQuery,
+  useDeleteMaintenanceCheckMutation,
+  useCreateMaintenanceCheckMutation,
+  useDownloadMaintenanceCheckMutation
 } = trucksApi;

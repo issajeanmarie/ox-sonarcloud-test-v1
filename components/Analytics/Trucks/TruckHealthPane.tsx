@@ -16,10 +16,20 @@ import { useRouter } from "next/router";
 import fileDownload from "js-file-download";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { Empty } from "antd";
+import mappedObjects from "../../../utils/mappedObjects";
 
 const { Panel } = Collapse;
 
-const TruckHelthPane = () => {
+type RecordTypes = {
+  key: number;
+  value: {
+    state: string;
+    photos: string[];
+    comment: string;
+  };
+};
+
+const TruckHealthPane = () => {
   const [getTruckDailyInspection, { data: truckDailyInspections }] =
     useLazyGetTruckDailyInspectionQuery();
   const [isPageLoading, setIsPageLoading] = useState(false);
@@ -49,15 +59,6 @@ const TruckHelthPane = () => {
         ErrorMessage(err?.data?.message || "Something is wrong");
       });
   }, [startDate, endDate, truckId, getTruckDailyInspection]);
-
-  const objectsMaped = (inspection: any) => {
-    const inspectionResult: any = [];
-    Object.keys(inspection).map((key) =>
-      inspectionResult.push({ key, value: inspection[key] })
-    );
-
-    return inspectionResult;
-  };
 
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
@@ -145,13 +146,13 @@ const TruckHelthPane = () => {
           <Collapse bordered={false}>
             {truckDailyInspections?.content?.map(
               (inspection: any, index: number) => {
-                const fluidLevelData = objectsMaped(inspection.fluidLevel);
-                const electricalCheckData = objectsMaped(
+                const fluidLevelData = mappedObjects(inspection.fluidLevel);
+                const electricalCheckData = mappedObjects(
                   inspection.electricalCheck
                 );
-                const cabCheckData = objectsMaped(inspection.cabCheck);
-                const chassisCheck = objectsMaped(inspection.chassisCheck);
-                const documentCheck = objectsMaped(inspection.documentCheck);
+                const cabCheckData = mappedObjects(inspection.cabCheck);
+                const chassisCheck = mappedObjects(inspection.chassisCheck);
+                const documentCheck = mappedObjects(inspection.documentCheck);
 
                 return (
                   <Panel
@@ -235,250 +236,46 @@ const TruckHelthPane = () => {
                       marginBottom: "12px"
                     }}
                   >
-                    <div className="h-[300px]  overflow-auto p-6">
-                      {/* DETAILS */}
-                      <p className="text-gray-400">Fluid level and T-Belt</p>
-                      <Row align="top" gutter={32}>
-                        <Col span={12}>
-                          <span className="text font-bold text-ox-dark">
-                            Odometer
-                          </span>
-                        </Col>
+                    <div className="h-[300px]  overflow-auto p-6 border-t border-grey">
+                      <OneInspection
+                        records={fluidLevelData}
+                        title="Fluid level and T-Belt"
+                      >
+                        <Row align="top" gutter={32}>
+                          <Col span={12}>
+                            <span className="text font-bold text-ox-dark">
+                              Odometer
+                            </span>
+                          </Col>
 
-                        <Col span={7}>
-                          <span className="text-gray-400">
-                            {inspection?.odometer}
-                          </span>
-                        </Col>
-                      </Row>
-                      {fluidLevelData?.map(
-                        (record: { key: number; value: any }) => (
-                          <Row
-                            align="top"
-                            gutter={32}
-                            style={{ marginTop: "12px" }}
-                            key={record.key}
-                          >
-                            <Col span={12}>
-                              <span className="text font-bold text-ox-dark">
-                                {record.key}
-                              </span>
-                            </Col>
+                          <Col span={7}>
+                            <span className="text-gray-400">
+                              {inspection?.odometer}
+                            </span>
+                          </Col>
+                        </Row>
+                      </OneInspection>
 
-                            <Col span={3}>
-                              <span
-                                className={`${
-                                  record?.value?.state === "BAD"
-                                    ? "text red"
-                                    : "text-gray-400"
-                                }`}
-                              >
-                                {record?.value?.state === "BAD"
-                                  ? "Not ok"
-                                  : "Ok"}
-                              </span>
-                            </Col>
-
-                            <Col span={7}>
-                              <span>{record?.value?.comment}</span>
-
-                              {record?.value?.photos?.length > 0 && (
-                                <Row gutter={32} align="middle">
-                                  {record?.value?.photos?.map(
-                                    (photo: string, index: number) => (
-                                      <Col key={`${photo} ${index}`}>
-                                        <Image
-                                          src={photo}
-                                          width={69}
-                                          preview={false}
-                                          alt=""
-                                        />
-                                      </Col>
-                                    )
-                                  )}
-                                </Row>
-                              )}
-                            </Col>
-                          </Row>
-                        )
-                      )}
                       {/* Electric checks */}
-                      <p className="text-gray-400 mt-6">Electrical check</p>
-                      {electricalCheckData?.map(
-                        (record: { key: number; value: any }) => (
-                          <Row
-                            align="top"
-                            gutter={32}
-                            style={{ marginTop: "12px" }}
-                            key={record.key}
-                          >
-                            <Col span={12}>
-                              <span className="text font-bold text-ox-dark">
-                                {record.key}
-                              </span>
-                            </Col>
+                      <OneInspection
+                        records={electricalCheckData}
+                        title="Electrical check"
+                      />
 
-                            <Col span={3}>
-                              <span
-                                className={`${
-                                  record?.value?.state === "BAD"
-                                    ? "text red"
-                                    : "text-gray-400"
-                                }`}
-                              >
-                                {record?.value?.state === "BAD"
-                                  ? "Not ok"
-                                  : "Ok"}
-                              </span>
-                            </Col>
-
-                            <Col span={7}>
-                              <span className="mb-[32px]">
-                                {record?.value?.comment}
-                              </span>
-
-                              {record?.value?.photos?.length > 0 && (
-                                <Row gutter={32} align="middle">
-                                  {record?.value?.photos?.map(
-                                    (photo: string, index: number) => (
-                                      <Col key={`${photo} ${index}`}>
-                                        <Image
-                                          alt=""
-                                          src={photo}
-                                          width={69}
-                                          height={69}
-                                          preview={false}
-                                        />
-                                      </Col>
-                                    )
-                                  )}
-                                </Row>
-                              )}
-                            </Col>
-                          </Row>
-                        )
-                      )}
                       {/* CAB */}
-                      <p className="text-gray-400 mt-6">CAB</p>
-
-                      {cabCheckData?.map(
-                        (record: { key: number; value: any }) => (
-                          <Row
-                            align="top"
-                            gutter={32}
-                            style={{ marginTop: "12px" }}
-                            key={record.key}
-                          >
-                            <Col span={14}>
-                              <span className="text font-bold text-ox-dark">
-                                {record.key}
-                              </span>
-                            </Col>
-
-                            <Col flex="auto">
-                              <span
-                                className={`${
-                                  record?.value !== "YES"
-                                    ? "text red"
-                                    : "text-gray-400"
-                                }`}
-                              >
-                                {record.value === "YES" ? "Ok" : "Not ok"}
-                              </span>
-                            </Col>
-                          </Row>
-                        )
-                      )}
+                      <OneInspection records={cabCheckData} title="Cab" />
 
                       {/* Chassis check */}
-                      <p className="text-gray-400 mt-6">Chassis check</p>
-
-                      {chassisCheck?.map(
-                        (record: { key: number; value: any }) => (
-                          <Row
-                            align="top"
-                            gutter={32}
-                            style={{ marginTop: "12px" }}
-                            key={record.key}
-                          >
-                            <Col span={12}>
-                              <span className="text font-bold text-ox-dark">
-                                {record.key}
-                              </span>
-                            </Col>
-
-                            <Col span={3}>
-                              <span
-                                className={`${
-                                  record?.value?.state === "BAD"
-                                    ? "text red"
-                                    : "text-gray-400"
-                                }`}
-                              >
-                                {record?.value?.state === "BAD"
-                                  ? "Not ok"
-                                  : "Ok"}
-                              </span>
-                            </Col>
-
-                            <Col span={7}>
-                              <span className="mb-[32px]">
-                                {record?.value?.comment}
-                              </span>
-
-                              {record?.value?.photos?.length > 0 && (
-                                <Row gutter={32} align="middle">
-                                  {record?.value?.photos?.map(
-                                    (photo: string, index: number) => (
-                                      <Col key={`${photo} ${index}`}>
-                                        <Image
-                                          alt=""
-                                          src={photo}
-                                          width={69}
-                                          height={69}
-                                          preview={false}
-                                        />
-                                      </Col>
-                                    )
-                                  )}
-                                </Row>
-                              )}
-                            </Col>
-                          </Row>
-                        )
-                      )}
+                      <OneInspection
+                        records={chassisCheck}
+                        title="Chassis check"
+                      />
 
                       {/* Documents */}
-                      <p className="text-gray-400 mt-6">Documents</p>
-
-                      {documentCheck?.map(
-                        (record: { key: number; value: any }) => (
-                          <Row
-                            align="top"
-                            gutter={32}
-                            style={{ marginTop: "12px" }}
-                            key={record.key}
-                          >
-                            <Col span={14}>
-                              <span className="text font-bold text-ox-dark">
-                                {record.key}
-                              </span>
-                            </Col>
-
-                            <Col flex="auto">
-                              <span
-                                className={`${
-                                  record?.value !== "YES"
-                                    ? "text red"
-                                    : "text-gray-400"
-                                }`}
-                              >
-                                {record.value === "YES" ? "Ok" : "Not ok"}
-                              </span>
-                            </Col>
-                          </Row>
-                        )
-                      )}
+                      <OneInspection
+                        records={documentCheck}
+                        title="Documents"
+                      />
                     </div>
                   </Panel>
                 );
@@ -490,4 +287,72 @@ const TruckHelthPane = () => {
     </>
   );
 };
-export default TruckHelthPane;
+
+export default TruckHealthPane;
+
+type OneInspectionTypes = {
+  records: RecordTypes[];
+  title: string;
+};
+
+export const OneInspection: React.FC<OneInspectionTypes> = ({
+  records,
+  title,
+  children
+}) => (
+  <>
+    <p className="text-gray-400 mt-6">{title}</p>
+
+    {records?.map((record: RecordTypes) => (
+      <>
+        {children && children}
+
+        <Row
+          align="top"
+          gutter={32}
+          style={{ marginTop: "12px" }}
+          key={record.key}
+        >
+          <Col span={12}>
+            <span className="text font-bold text-ox-dark">{record.key}</span>
+          </Col>
+
+          <Col span={3}>
+            <span
+              className={`${
+                record?.value?.state === "BAD" ? "text red" : "text-gray-400"
+              }`}
+            >
+              {record?.value?.state === "BAD" ? "Not ok" : "Ok"}
+            </span>
+          </Col>
+
+          <Col span={7}>
+            <span className="mb-[32px]">{record?.value?.comment}</span>
+
+            {record?.value?.photos?.length > 0 && (
+              <>
+                <p className="text-gray-400 mt-6">{title}</p>
+                <Row gutter={32} align="middle">
+                  {record?.value?.photos?.map(
+                    (photo: string, index: number) => (
+                      <Col key={`${photo} ${index}`}>
+                        <Image
+                          alt=""
+                          src={photo}
+                          width={69}
+                          height={69}
+                          preview={false}
+                        />
+                      </Col>
+                    )
+                  )}
+                </Row>
+              </>
+            )}
+          </Col>
+        </Row>
+      </>
+    ))}
+  </>
+);

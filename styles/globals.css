@@ -144,10 +144,6 @@ body {
   text-transform: uppercase;
 }
 
-.capitalize {
-  text-transform: capitalize;
-}
-
 .lowercase {
   text-transform: lowercase;
 }
@@ -677,4 +673,25 @@ body {
   font-family: Arial;
   padding: 12px;
   outline: none;
+}
+
+.dropdown_button {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+
+.dropdown_btn_icon {
+  position: relative;
+  padding-left: 14px;
+}
+
+.dropdown_btn_icon::before {
+  background-color: #fce08d;
+  content: "";
+  position: absolute;
+  height: 42px;
+  width: 1px;
+  left: 0;
+  top: -10px;
 }

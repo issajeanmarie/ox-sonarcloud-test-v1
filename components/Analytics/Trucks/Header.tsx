@@ -3,9 +3,9 @@ import { FC, useEffect, useState } from "react";
 import Image from "antd/lib/image";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
+import Dropdown from "antd/lib/dropdown";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
-import Dropdown from "antd/lib/dropdown";
 import CustomInput from "../../Shared/Input";
 import { ViewTruckHeaderTypes } from "../../../lib/types/pageTypes/Trucks/ViewTruckHeaderTypes";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
@@ -14,10 +14,10 @@ import {
   useToggleTruckMutation
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { displaySingleTruck } from "../../../lib/redux/slices/trucksSlice";
-import { userType } from "../../../helpers/getLoggedInUser";
 import { routes } from "../../../config/route-config";
 import Navbar from "../../Shared/Content/Navbar";
 import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
+import Button from "../../../components/Shared/Button";
 
 type TrucksHoverTypes = {
   plateNumber: string;
@@ -31,7 +31,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   setIsVisible
 }) => {
   const router = useRouter();
-  const user = userType();
+  const { id: truckId } = router.query;
 
   const [toggleTruck, { isLoading }] = useToggleTruckMutation();
   const [allTrucks, setAllTrucks] = useState([]);
@@ -40,6 +40,10 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   const [getTrucks, { data: trucks, isLoading: isGetTrucksLoading }] =
     useLazyGetTrucksQuery();
   const dispatch = useDispatch();
+
+  const urlIncludesMaintenance = router.pathname.includes(
+    routes.Maintenance.url
+  );
 
   const handleToggleTruckSuccess = (res: any) => {
     dispatch(
@@ -79,9 +83,21 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   };
 
   const handleSelectTruck = (truck: any) => {
-    setSelectedTruck(truck);
-    router.push(`${routes.Trucks.url}/${truck.id}`);
+    if (urlIncludesMaintenance) {
+      router.push(`${routes.Maintenance.url}?id=${truck.id}`);
+    } else {
+      setSelectedTruck(truck);
+      router.push(`${routes.Trucks.url}/${truck.id}`);
+    }
   };
+
+  useEffect(() => {
+    const foundTruck = allTrucks.find(
+      (truck: { id: number }) => truck.id === (truckId && +truckId)
+    );
+
+    setSelectedTruck(foundTruck);
+  }, [allTrucks, truckId]);
 
   const menu = (
     <div className="radius4 h-[500px] myCard p-6 py-12 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
@@ -153,7 +169,11 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
           <Col className="normalText">/</Col>
           <Col>
             <Row align="middle" gutter={4}>
-              <Col className="text-gray-400">
+              <Col
+                className={
+                  urlIncludesMaintenance ? "heading2" : "text-gray-400"
+                }
+              >
                 {selectedTruck?.plateNumber || truckData?.plateNumber}
               </Col>
               <Col>
@@ -171,6 +191,15 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
               </Col>
             </Row>
           </Col>
+
+          {urlIncludesMaintenance ? (
+            <>
+              <Col className="normalText">/</Col>
+              <Col className="text-gray-400">
+                Preventative maintenance checklist
+              </Col>
+            </>
+          ) : null}
         </Row>
       </Dropdown>
     </div>
@@ -192,21 +221,42 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
         />
       )}
 
-      {user.isSuperAdmin && (
-        <Image
-          className="pointer"
-          onClick={() => setIsVisible(true)}
-          src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
-          alt=""
-          width={22}
-          height={22}
-          preview={false}
-        />
-      )}
+      <div className="flex items-center gap-12 ">
+        <Button
+          onClick={() =>
+            router.push(`${routes.Maintenance.url}?id=${truckData?.id}`)
+          }
+          loading={false}
+          type="dropdown"
+          icon={
+            <Image
+              className="z-10"
+              width={14}
+              src="/icons/ic-actions-add-simple.svg"
+              preview={false}
+              alt=""
+            />
+          }
+        >
+          MAINTENANCE CHECKLIST
+        </Button>
+      </div>
     </Col>
   );
 
-  return <Navbar LeftSide={LeftSide} RightSide={RightSide} type="FULL" />;
+  const MaintenanceRightSide = (
+    <Button type="primary" onClick={() => setIsVisible(true)}>
+      New Inspection
+    </Button>
+  );
+
+  return (
+    <Navbar
+      LeftSide={LeftSide}
+      RightSide={urlIncludesMaintenance ? MaintenanceRightSide : RightSide}
+      type="FULL"
+    />
+  );
 };
 
 export default ViewTruckHeader;

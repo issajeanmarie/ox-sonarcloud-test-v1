@@ -8,7 +8,8 @@ interface ButtonProps {
     | "danger"
     | "danger_filled"
     | "normal"
-    | "view";
+    | "view"
+    | "dropdown";
   loading?: boolean;
   disabled?: boolean;
   size?: "icon" | "small";
@@ -63,6 +64,22 @@ const CustomButton: FC<ButtonProps> = ({
           htmlType={htmlType}
         >
           {children}
+        </Button>
+      );
+
+    case "dropdown":
+      return (
+        <Button
+          form={form}
+          className={`my_button dropdown_button uppercase ${
+            size === "icon" && "icon"
+          } ${size === "small" && "sm"}  bg_white_yellow yellow ${className}`}
+          loading={loading}
+          disabled={loading || disabled}
+          onClick={onClick}
+          htmlType={htmlType}
+        >
+          {children} <div className="dropdown_btn_icon">{icon}</div>
         </Button>
       );
 

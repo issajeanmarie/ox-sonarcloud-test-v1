@@ -35,6 +35,10 @@ export const routes = {
     name: "Trucks",
     url: "/dashboard/trucks"
   },
+  Maintenance: {
+    name: "Maintenance",
+    url: "/dashboard/trucks/maintenance"
+  },
   Accounts: {
     name: "OX Accounts",
     url: "/dashboard/accounts"
