@@ -43,6 +43,7 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
           <NewTruckInspectionModal
             isVisible={isAddInspectionModalVisible}
             setIsVisible={setIsAddInspectionModalVisible}
+            truckId={truckId}
           />
 
           <Header
