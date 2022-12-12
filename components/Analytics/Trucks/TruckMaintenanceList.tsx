@@ -116,7 +116,9 @@ const TruckMaintenanceList = ({
                                     : ""
                                 }`}
                               >
-                                {data?.overallCondition?.replace("_", " ")}
+                                {data?.overallCondition
+                                  ? data?.overallCondition?.replace("_", " ")
+                                  : "Not applicable"}
                               </span>
                             </Col>
 
@@ -264,7 +266,9 @@ export const DetailsComponent: React.FC<Types> = ({
 
           <Col>
             <span className="text-gray-400">
-              {record?.value?.replaceAll("_", " ").split("")[0]}
+              {record?.value
+                ? record?.value?.replaceAll("_", " ").split("")[0]
+                : "Not applicable"}
             </span>
             <span className="text-gray-400 lowercase">
               {record?.value

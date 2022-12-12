@@ -54,7 +54,7 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
   options: [
     { id: 0, value: "NEEDS_REPAIR", name: "Needs Repair" },
     { id: 1, value: "REPAIRED", name: "Repaired" },
-    { id: 2, value: "NOT_APPLICABLE", name: "N/A" }
+    { id: 2, value: null, name: "N/A" }
   ],
   steps: [
     {
@@ -62,12 +62,12 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "brakeSystem",
       title: "Brake System",
       list: [
-        { id: 0, name: "Service brake", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Parking brake", status: "NOT_APPLICABLE" },
-        { id: 2, name: "Brake pads and  shoes", status: "NOT_APPLICABLE" },
-        { id: 3, name: "Brake drums and/disks", status: "NOT_APPLICABLE" },
-        { id: 4, name: "Brake hose/pipes", status: "NOT_APPLICABLE" },
-        { id: 5, name: "Low pressure warning device", status: "NOT_APPLICABLE" }
+        { id: 0, name: "Service brake", status: null },
+        { id: 1, name: "Parking brake", status: null },
+        { id: 2, name: "Brake pads and  shoes", status: null },
+        { id: 3, name: "Brake drums and/disks", status: null },
+        { id: 4, name: "Brake hose/pipes", status: null },
+        { id: 5, name: "Low pressure warning device", status: null }
       ]
     },
 
@@ -76,12 +76,12 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "couplingDevices",
       title: "Coupling Devices",
       list: [
-        { id: 0, name: "Fifth wheel", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Pintle hooks", status: "NOT_APPLICABLE" },
+        { id: 0, name: "Fifth wheel", status: null },
+        { id: 1, name: "Pintle hooks", status: null },
         {
           id: 2,
           name: "Drawbar/towbar eye and tongue",
-          status: "NOT_APPLICABLE"
+          status: null
         }
       ]
     },
@@ -91,17 +91,17 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "engineOperation",
       title: "Engine Operation",
       list: [
-        { id: 0, name: "Fan and drive belt", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Engine sound", status: "NOT_APPLICABLE" },
-        { id: 2, name: "Oil filter", status: "NOT_APPLICABLE" },
-        { id: 3, name: "Air filter", status: "NOT_APPLICABLE" },
-        { id: 4, name: "Fuel filter", status: "NOT_APPLICABLE" },
-        { id: 5, name: "Leakage", status: "NOT_APPLICABLE" },
-        { id: 6, name: "Oil pressure", status: "NOT_APPLICABLE" },
-        { id: 7, name: "Radiator", status: "NOT_APPLICABLE" },
-        { id: 8, name: "Hoses", status: "NOT_APPLICABLE" },
-        { id: 9, name: "Hoses (Brittle, Cracked)", status: "NOT_APPLICABLE" },
-        { id: 10, name: "Battery", status: "NOT_APPLICABLE" }
+        { id: 0, name: "Fan and drive belt", status: null },
+        { id: 1, name: "Engine sound", status: null },
+        { id: 2, name: "Oil filter", status: null },
+        { id: 3, name: "Air filter", status: null },
+        { id: 4, name: "Fuel filter", status: null },
+        { id: 5, name: "Leakage", status: null },
+        { id: 6, name: "Oil pressure", status: null },
+        { id: 7, name: "Radiator", status: null },
+        { id: 8, name: "Hoses", status: null },
+        { id: 9, name: "Hoses (Brittle, Cracked)", status: null },
+        { id: 10, name: "Battery", status: null }
       ]
     },
 
@@ -110,8 +110,8 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "exhaustSystem",
       title: "Exhaust System",
       list: [
-        { id: 0, name: "Leakage", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Muffler", status: "NOT_APPLICABLE" }
+        { id: 0, name: "Leakage", status: null },
+        { id: 1, name: "Muffler", status: null }
       ]
     },
 
@@ -120,21 +120,21 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "fuelSystem",
       title: "Fuel System",
       list: [
-        { id: 0, name: "Fuel leak", status: "NOT_APPLICABLE" },
+        { id: 0, name: "Fuel leak", status: null },
         {
           id: 1,
           name: "Fuel tank filler cap missing",
-          status: "NOT_APPLICABLE"
+          status: null
         },
         {
           id: 2,
           name: "Fuel tank securely attached",
-          status: "NOT_APPLICABLE"
+          status: null
         },
         {
           id: 3,
           name: "Check for damage to wiring and fuel line",
-          status: "NOT_APPLICABLE"
+          status: null
         }
       ]
     },
@@ -144,13 +144,13 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "lightingDevices",
       title: "Lighting Devices",
       list: [
-        { id: 0, name: "Head lights", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Brake lights", status: "NOT_APPLICABLE" },
-        { id: 2, name: "Tail lights", status: "NOT_APPLICABLE" },
-        { id: 3, name: "Dash lights", status: "NOT_APPLICABLE" },
-        { id: 4, name: "Clearance lights", status: "NOT_APPLICABLE" },
-        { id: 5, name: "Turn indicators", status: "NOT_APPLICABLE" },
-        { id: 6, name: "Hazard lights", status: "NOT_APPLICABLE" }
+        { id: 0, name: "Head lights", status: null },
+        { id: 1, name: "Brake lights", status: null },
+        { id: 2, name: "Tail lights", status: null },
+        { id: 3, name: "Dash lights", status: null },
+        { id: 4, name: "Clearance lights", status: null },
+        { id: 5, name: "Turn indicators", status: null },
+        { id: 6, name: "Hazard lights", status: null }
       ]
     },
 
@@ -162,12 +162,12 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
         {
           id: 0,
           name: "Seat belts available and working",
-          status: "NOT_APPLICABLE"
+          status: null
         },
-        { id: 1, name: "Fire extinguisher", status: "NOT_APPLICABLE" },
-        { id: 2, name: "Fags, flares", status: "NOT_APPLICABLE" },
-        { id: 3, name: "Decals", status: "NOT_APPLICABLE" },
-        { id: 4, name: "Spare bulbs, fuses", status: "NOT_APPLICABLE" }
+        { id: 1, name: "Fire extinguisher", status: null },
+        { id: 2, name: "Fags, flares", status: null },
+        { id: 3, name: "Decals", status: null },
+        { id: 4, name: "Spare bulbs, fuses", status: null }
       ]
     },
 
@@ -179,9 +179,9 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
         {
           id: 0,
           name: "Protection against shifting cargo",
-          status: "NOT_APPLICABLE"
+          status: null
         },
-        { id: 1, name: "Lift gate and accessories", status: "NOT_APPLICABLE" }
+        { id: 1, name: "Lift gate and accessories", status: null }
       ]
     },
 
@@ -190,15 +190,15 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "steeringMechanism",
       title: "Steering Mechanism",
       list: [
-        { id: 0, name: "Steering wheel free play", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Steering column", status: "NOT_APPLICABLE" },
-        { id: 2, name: "Front axle beam", status: "NOT_APPLICABLE" },
-        { id: 3, name: "Steering gear box", status: "NOT_APPLICABLE" },
-        { id: 4, name: "Pitman arm", status: "NOT_APPLICABLE" },
-        { id: 5, name: "Power steering", status: "NOT_APPLICABLE" },
-        { id: 6, name: "Ball and socket joints", status: "NOT_APPLICABLE" },
-        { id: 7, name: "Tie rods, drag links", status: "NOT_APPLICABLE" },
-        { id: 8, name: "Steering Boots", status: "NOT_APPLICABLE" }
+        { id: 0, name: "Steering wheel free play", status: null },
+        { id: 1, name: "Steering column", status: null },
+        { id: 2, name: "Front axle beam", status: null },
+        { id: 3, name: "Steering gear box", status: null },
+        { id: 4, name: "Pitman arm", status: null },
+        { id: 5, name: "Power steering", status: null },
+        { id: 6, name: "Ball and socket joints", status: null },
+        { id: 7, name: "Tie rods, drag links", status: null },
+        { id: 8, name: "Steering Boots", status: null }
       ]
     },
 
@@ -207,16 +207,16 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "suspension",
       title: "Suspension",
       list: [
-        { id: 0, name: "U-bolts and spring hangers", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Spring assembly", status: "NOT_APPLICABLE" },
+        { id: 0, name: "U-bolts and spring hangers", status: null },
+        { id: 1, name: "Spring assembly", status: null },
         {
           id: 2,
           name: "Tongue, radius or tracking components",
-          status: "NOT_APPLICABLE"
+          status: null
         },
-        { id: 3, name: "Driveshaft Boots", status: "NOT_APPLICABLE" },
-        { id: 4, name: "Bushings", status: "NOT_APPLICABLE" },
-        { id: 5, name: "Shock absorbers", status: "NOT_APPLICABLE" }
+        { id: 3, name: "Driveshaft Boots", status: null },
+        { id: 4, name: "Bushings", status: null },
+        { id: 5, name: "Shock absorbers", status: null }
       ]
     },
 
@@ -225,14 +225,14 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "wheelsAndTires",
       title: "Wheels And Tires",
       list: [
-        { id: 0, name: "Condition", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Air pressure", status: "NOT_APPLICABLE" },
-        { id: 2, name: "Chains", status: "NOT_APPLICABLE" },
-        { id: 3, name: "Wheels and rims", status: "NOT_APPLICABLE" },
-        { id: 4, name: "Lock or side rings", status: "NOT_APPLICABLE" },
-        { id: 5, name: "Fasteners", status: "NOT_APPLICABLE" },
-        { id: 6, name: "Welds", status: "NOT_APPLICABLE" },
-        { id: 7, name: "Wheel bearing", status: "NOT_APPLICABLE" }
+        { id: 0, name: "Condition", status: null },
+        { id: 1, name: "Air pressure", status: null },
+        { id: 2, name: "Chains", status: null },
+        { id: 3, name: "Wheels and rims", status: null },
+        { id: 4, name: "Lock or side rings", status: null },
+        { id: 5, name: "Fasteners", status: null },
+        { id: 6, name: "Welds", status: null },
+        { id: 7, name: "Wheel bearing", status: null }
       ]
     },
 
@@ -244,11 +244,11 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
         {
           id: 0,
           name: "Glass free of cracks, discoloration",
-          status: "NOT_APPLICABLE"
+          status: null
         },
-        { id: 1, name: "Wiper power unit, blades", status: "NOT_APPLICABLE" },
-        { id: 2, name: "Cabin filter", status: "NOT_APPLICABLE" },
-        { id: 3, name: "Functionality", status: "NOT_APPLICABLE" }
+        { id: 1, name: "Wiper power unit, blades", status: null },
+        { id: 2, name: "Cabin filter", status: null },
+        { id: 3, name: "Functionality", status: null }
       ]
     },
 
@@ -257,11 +257,11 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "miscellaneous",
       title: "Miscellaneous",
       list: [
-        { id: 0, name: "Heater/defroster", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Mirrors", status: "NOT_APPLICABLE" },
-        { id: 2, name: "Frame", status: "NOT_APPLICABLE" },
-        { id: 3, name: "Body", status: "NOT_APPLICABLE" },
-        { id: 4, name: "Seats", status: "NOT_APPLICABLE" }
+        { id: 0, name: "Heater/defroster", status: null },
+        { id: 1, name: "Mirrors", status: null },
+        { id: 2, name: "Frame", status: null },
+        { id: 3, name: "Body", status: null },
+        { id: 4, name: "Seats", status: null }
       ]
     },
 
@@ -270,15 +270,15 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
       name: "transmission",
       title: "Transmission",
       list: [
-        { id: 0, name: "Gear shifting", status: "NOT_APPLICABLE" },
-        { id: 1, name: "Clutch free play", status: "NOT_APPLICABLE" },
-        { id: 2, name: "Support mountings", status: "NOT_APPLICABLE" },
-        { id: 3, name: "4WD", status: "NOT_APPLICABLE" },
-        { id: 4, name: "Propeller shaft", status: "NOT_APPLICABLE" },
-        { id: 5, name: "Differential", status: "NOT_APPLICABLE" },
-        { id: 6, name: "Clutch", status: "NOT_APPLICABLE" },
-        { id: 7, name: "Gear box", status: "NOT_APPLICABLE" },
-        { id: 8, name: "Transfer box", status: "NOT_APPLICABLE" }
+        { id: 0, name: "Gear shifting", status: null },
+        { id: 1, name: "Clutch free play", status: null },
+        { id: 2, name: "Support mountings", status: null },
+        { id: 3, name: "4WD", status: null },
+        { id: 4, name: "Propeller shaft", status: null },
+        { id: 5, name: "Differential", status: null },
+        { id: 6, name: "Clutch", status: null },
+        { id: 7, name: "Gear box", status: null },
+        { id: 8, name: "Transfer box", status: null }
       ]
     }
   ]

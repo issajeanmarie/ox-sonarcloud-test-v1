@@ -6,6 +6,7 @@ import ModalWrapper from "./ModalWrapper";
 import { useCreateMaintenanceCheckMutation } from "../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import MaintenanceCheckSummary from "./MaintenanceCheckSummary";
+import { Query } from "../../lib/types/shared";
 
 const { Text } = Typography;
 
@@ -17,16 +18,21 @@ type Types = {
   setIsUserEditing?: any;
   isUserEditing?: boolean;
   fromTruckProfile?: boolean | undefined;
+  truckId: Query;
 };
 
 const defaultSummary = {
-  mileage: 10,
+  mileage: 0,
   observations: "string",
   recommendations: "string",
-  overallCondition: "NOT_APPLICABLE"
+  overallCondition: null
 };
 
-const NewTruckInspectionModal = ({ isVisible, setIsVisible }: Types) => {
+const NewTruckInspectionModal = ({
+  isVisible,
+  setIsVisible,
+  truckId
+}: Types) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
   const [
@@ -75,7 +81,7 @@ const NewTruckInspectionModal = ({ isVisible, setIsVisible }: Types) => {
 
     handleAPIRequests({
       request: createMaintenanceCheck,
-      id: 54,
+      id: truckId,
       ...dataToSave,
       showSuccess: true,
       handleSuccess: handleAddCheckSuccess
@@ -103,7 +109,7 @@ const NewTruckInspectionModal = ({ isVisible, setIsVisible }: Types) => {
   interface SingleItemType {
     id: number;
     name: string;
-    status: string;
+    status: string | null;
   }
 
   const onStatusChange = ({
