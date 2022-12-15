@@ -25,7 +25,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { escape } from "../../../utils/keyBinders";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
-import Link from "next/link";
+import { ActivityLogModal } from "../../Modals/ActivityLogModal";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -48,10 +48,10 @@ type Types = {
 };
 
 const Order: FC<OrderProps> = ({ order, index }) => {
+  const [isActivityLogVisible, setIsActivityLogVisible] = useState(false);
   const [isCancelOrderOpen, setIsCancelOrderOpen] = useState<boolean>(false);
   const [downloadInvoice, { isLoading: invoiceLoading }] =
     useOrderInvoiceMutation();
-
   const ordersState = useSelector(
     (state: any) => state.paginatedData.displayPaginatedData
   );
@@ -142,6 +142,13 @@ const Order: FC<OrderProps> = ({ order, index }) => {
         type="danger"
         loading={cancelOrderLoading}
       />
+
+      <ActivityLogModal
+        isModalVisible={isActivityLogVisible}
+        setIsModalVisible={setIsActivityLogVisible}
+        order={order}
+      />
+
       <div className="p-5 border-b-2 border-gray-100 flex items-center justify-between bg-white">
         {/* TOP ROW RIGHT SIDE */}
         <div className="flex-1">
@@ -379,14 +386,17 @@ const Order: FC<OrderProps> = ({ order, index }) => {
       >
         {/* TOP ROW RIGHT SIDE */}
         <Col>
-          <Row gutter={12} align="middle">
+          <Row
+            gutter={12}
+            align="middle"
+            onClick={() => setIsActivityLogVisible(true)}
+            className="pointer"
+          >
             <Col>
-              <Link href={`${routes.Admins.url}?tb=ADMINS`} passHref>
-                <Text className="text-sm opacity_56 nowrap ml-14">
-                  Created: {dateFormatterNth(order?.startDateTime)}{" "}
-                  {order.lastEditedBy && "-"}
-                </Text>
-              </Link>
+              <Text className="text-sm opacity_56 nowrap ml-14">
+                Created: {dateFormatterNth(order?.startDateTime)}{" "}
+                {order.lastEditedBy && "-"}
+              </Text>
             </Col>
 
             <Col>
