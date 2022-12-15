@@ -65,18 +65,19 @@ const MaintenanceCheckSummary = ({ summary, setSummary }: any) => {
           className="py-6 text-gray-400 font-bold mb-4"
         >
           {/* Right side */}
-          <Col span={12}>
+          <Col span={10}>
             <Row align="middle" gutter={32}>
               <Col>Item</Col>
             </Row>
           </Col>
 
           {/* Left side */}
-          <Col span={12}>
+          <Col span={14}>
             <Row align="middle" gutter={32}>
-              <Col span={9}>Needs repair</Col>
-              <Col span={8}>Repaired</Col>
-              <Col span={7}>N/A</Col>
+              <Col span={4}>OK</Col>
+              <Col span={8}>Needs repair</Col>
+              <Col span={7}>Repaired</Col>
+              <Col span={5}>N/A</Col>
             </Row>
           </Col>
         </Row>
@@ -88,30 +89,37 @@ const MaintenanceCheckSummary = ({ summary, setSummary }: any) => {
           className="border border-grey py-6 rounded mb-4"
         >
           {/* Right side */}
-          <Col span={12}>
+          <Col span={10}>
             <Row align="middle" gutter={32}>
               <Col className="font-bold">Overall condition of the vehicle</Col>
             </Row>
           </Col>
 
           {/* Left side */}
-          <Col span={12}>
+          <Col span={14}>
             <Row align="middle" gutter={32}>
-              <Col span={9}>
+              <Col span={4}>
+                <Checkbox
+                  checked={overallStatus === "OK"}
+                  onChange={() => setOverallStatus("OK")}
+                />
+              </Col>
+
+              <Col span={8}>
                 <Checkbox
                   checked={overallStatus === "NEEDS_REPAIR"}
                   onChange={() => setOverallStatus("NEEDS_REPAIR")}
                 />
               </Col>
 
-              <Col span={8}>
+              <Col span={7}>
                 <Checkbox
                   checked={overallStatus === "REPAIRED"}
                   onChange={() => setOverallStatus("REPAIRED")}
                 />
               </Col>
 
-              <Col span={7}>
+              <Col span={5}>
                 <Checkbox
                   checked={overallStatus === "NOT_APPLICABLE"}
                   onChange={() => setOverallStatus("NOT_APPLICABLE")}

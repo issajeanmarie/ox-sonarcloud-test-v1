@@ -66,6 +66,11 @@ export type UpdateCategoryRequest = {
   // parentCategoryId: string | null;
 };
 
+export type UpdateRepairLogRequest = {
+  id: number;
+  repairId: number;
+};
+
 export type MakeCategoryParentRequest = {
   id: number;
 };

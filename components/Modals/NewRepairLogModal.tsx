@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import Form from "antd/lib/form";
 import Image from "antd/lib/image";
 import Button from "../Shared/Button";
@@ -10,19 +10,41 @@ import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import ModalWrapper from "./ModalWrapper";
 import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
-import { useLazyGetRepairServicesQuery } from "../../lib/api/endpoints/settings/settingsEndpoints";
+import {
+  useLazyGetRepairServicesQuery,
+  useUpdateRepairLogMutation
+} from "../../lib/api/endpoints/settings/settingsEndpoints";
+import moment from "moment";
+import { Query } from "../../lib/types/shared";
 
-const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
+interface Props {
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  truckId: Query;
+  logData: any;
+  setLogData: any;
+}
+
+const NewRepairLogModal: FC<Props> = ({
+  isVisible,
+  setIsVisible,
+  truckId,
+  logData,
+  setLogData
+}) => {
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadFailure, setUploadFailure] = useState(null);
   const [uploadedPicInfo, setUploadedPicInfo] = useState();
   const [, setUploadSuccess] = useState(false);
-  const [allIMGs, setAllIMGs] = useState([]);
+  const [allIMGs, setAllIMGs] = useState<string[]>([]);
 
   const [
     getRepairServices,
     { data: repairServices, isFetching: repairServicesFetching }
   ] = useLazyGetRepairServicesQuery();
+
+  const [updateRepairLog, { isLoading: isUpdateRepairLogLoading }] =
+    useUpdateRepairLogMutation();
 
   useEffect(() => {
     handleAPIRequests({
@@ -46,6 +68,9 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
 
   const handleCancel = () => {
     setIsVisible(false);
+    form.resetFields();
+    setLogData();
+    setAllIMGs([]);
   };
 
   useEffect(() => {
@@ -69,17 +94,45 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
     const data = {
       ...values,
       spareParts: [values.spareParts],
-      images: allIMGs
+      images: allIMGs,
+      truckId
     };
 
-    handleAPIRequests({
-      request: createTruckRepairLog,
-      id: truckId,
-      ...data,
-      showSuccess: true,
-      handleSuccess: handleCreateRepairLogSuccess
-    });
+    if (logData) {
+      handleAPIRequests({
+        request: updateRepairLog,
+        id: truckId,
+        repairId: logData.id,
+        ...data,
+        showSuccess: true,
+        handleSuccess: handleCreateRepairLogSuccess
+      });
+    } else {
+      handleAPIRequests({
+        request: createTruckRepairLog,
+        id: truckId,
+        ...data,
+        showSuccess: true,
+        handleSuccess: handleCreateRepairLogSuccess
+      });
+    }
   };
+
+  useEffect(() => {
+    if (logData) {
+      form.setFieldsValue({
+        inDate: moment(logData.inDate),
+        outDate: moment(logData.outDate),
+        cost: logData.cost,
+        odometer: logData.odometer,
+        serviceDescription: logData.description,
+        spareParts: logData.spareParts[0],
+        serviceId: logData?.service?.id
+      });
+
+      logData.images.forEach((img: string) => setAllIMGs([...allIMGs, img]));
+    }
+  }, [form, logData]);
 
   return (
     <ModalWrapper
@@ -91,7 +144,7 @@ const NewRepairLogModal = ({ isVisible, setIsVisible, truckId }: any) => {
       footerContent={
         <Button
           form="createLogRepair"
-          loading={isLoading}
+          loading={isLoading || isUpdateRepairLogLoading}
           type="primary"
           htmlType="submit"
           disabled={uploadLoading}

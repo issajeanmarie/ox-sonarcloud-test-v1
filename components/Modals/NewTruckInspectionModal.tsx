@@ -216,7 +216,7 @@ const NewTruckInspectionModal = ({
             className="py-6 text-gray-400 font-bold mb-4"
           >
             {/* Right side */}
-            <Col span={12}>
+            <Col span={10}>
               <Row align="middle" gutter={32}>
                 <Col>#</Col>
                 <Col>Item</Col>
@@ -224,11 +224,14 @@ const NewTruckInspectionModal = ({
             </Col>
 
             {/* Left side */}
-            <Col span={12}>
+            <Col span={14}>
               <Row align="middle" gutter={32}>
-                <Col span={9}>Needs repair</Col>
-                <Col span={8}>Repaired</Col>
-                <Col span={7}>N/A</Col>
+                <Col span={4}>Ok</Col>
+                <Col span={8} className="text_ellipsis">
+                  Needs repair
+                </Col>
+                <Col span={7}>Repaired</Col>
+                <Col span={5}>N/A</Col>
               </Row>
             </Col>
           </Row>
@@ -244,17 +247,29 @@ const NewTruckInspectionModal = ({
                 className="border border-grey py-6 rounded mb-4"
               >
                 {/* Right side */}
-                <Col span={12}>
-                  <Row align="middle" gutter={32}>
+                <Col span={10}>
+                  <Row align="middle" gutter={32} wrap={false}>
                     <Col className="text-gray-400">{index + 1}</Col>
                     <Col className="font-bold">{item.name}</Col>
                   </Row>
                 </Col>
 
                 {/* Left side */}
-                <Col span={12}>
+                <Col span={14}>
                   <Row align="middle" gutter={32}>
-                    <Col span={9}>
+                    <Col span={4}>
+                      <Checkbox
+                        checked={item.status === "OK"}
+                        onChange={() =>
+                          onStatusChange({
+                            status: "OK",
+                            item: item
+                          })
+                        }
+                      />
+                    </Col>
+
+                    <Col span={8}>
                       <Checkbox
                         checked={item.status === "NEEDS_REPAIR"}
                         onChange={() =>
@@ -266,7 +281,7 @@ const NewTruckInspectionModal = ({
                       />
                     </Col>
 
-                    <Col span={8}>
+                    <Col span={7}>
                       <Checkbox
                         checked={item.status === "REPAIRED"}
                         onChange={() =>
@@ -278,7 +293,7 @@ const NewTruckInspectionModal = ({
                       />
                     </Col>
 
-                    <Col span={7}>
+                    <Col span={5}>
                       <Checkbox
                         checked={item.status === "NOT_APPLICABLE"}
                         onChange={() =>
