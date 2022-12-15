@@ -136,7 +136,15 @@ export type Transaction = {
   transactionType: string;
 };
 
+export interface SingleEditRecord {
+  createdAt: string;
+  editedBy: string;
+  editedFields: string[];
+  id: number;
+}
+
 export type Order = {
+  orderEditRecords: SingleEditRecord[];
   createdBy: string;
   comment: null;
   momoRefCodes: "";

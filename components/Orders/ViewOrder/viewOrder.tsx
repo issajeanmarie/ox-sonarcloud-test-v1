@@ -40,6 +40,7 @@ import CustomButton from "../../Shared/Button";
 import { PlusOutlined } from "@ant-design/icons";
 import NewTRuckDocumentModal from "../../Modals/NewTruckDocumentModal";
 import DocumentCard from "../../Analytics/Trucks/TruckCard";
+import { ActivityLogModal } from "../../Modals/ActivityLogModal";
 
 const { Step } = Steps;
 
@@ -51,6 +52,7 @@ interface ViewOrderProps {
 const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [form] = useForm();
 
+  const [isActivityLogVisible, setIsActivityLogVisible] = useState(false);
   const [isNewDocumentModalVisible, setIsNewDocumentModalVisible] =
     useState(false);
   const [comment, setComment] = useState<string>("");
@@ -266,6 +268,13 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             isDocumentForOrder
           />
 
+          <ActivityLogModal
+            isModalVisible={isActivityLogVisible}
+            setIsModalVisible={setIsActivityLogVisible}
+            order={data}
+            activityLog={data.orderEditRecords}
+          />
+
           <Content
             isOverflowHidden={false}
             navType="FULL"
@@ -385,7 +394,10 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                     </>
                   )}
 
-                  <div className="flex justify-end mt-5">
+                  <div
+                    className="flex justify-end mt-5 pointer"
+                    onClick={() => setIsActivityLogVisible(true)}
+                  >
                     <span className="text-sm opacity_56 nowrap italic text-gray-600">
                       <span className="font-bold">Order created by:</span>{" "}
                       {data?.createdBy}
