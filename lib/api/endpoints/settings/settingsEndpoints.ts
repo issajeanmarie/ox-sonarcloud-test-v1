@@ -10,7 +10,8 @@ import {
   UpdateCategoryRequest,
   MakeCategoryParentRequest,
   OxAppReleaseResponse,
-  GetRepairService
+  GetRepairService,
+  UpdateRepairLogRequest
 } from "../../../types/settings";
 import { ApiResponseMetadata, GenericResponse } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -158,11 +159,22 @@ const settingsApi = baseAPI.injectEndpoints({
       query: (DTO) => ({
         url: `/repair-services/${DTO?.id}`,
         method: "PATCH",
-        body: {
-          name: DTO?.name
-        }
+        body: DTO
       })
     }),
+
+    updateRepairLog: builder.mutation<
+      ApiResponseMetadata<CategoriesResponse>,
+      UpdateRepairLogRequest
+    >({
+      invalidatesTags: [],
+      query: (DTO) => ({
+        url: `trucks/${DTO.id}/repairs/${DTO.repairId}`,
+        method: "PATCH",
+        body: DTO
+      })
+    }),
+
     makeCategoryParent: builder.mutation<
       ApiResponseMetadata<CategoriesResponse>,
       MakeCategoryParentRequest
@@ -228,5 +240,6 @@ export const {
   useOxAppReleaseQuery,
   useLazyGetRepairServicesQuery,
   useGetShiftPreferencesQuery,
-  useAddShiftPreferencesMutation
+  useAddShiftPreferencesMutation,
+  useUpdateRepairLogMutation
 } = settingsApi;

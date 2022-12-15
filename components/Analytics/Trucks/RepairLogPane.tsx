@@ -20,12 +20,12 @@ import { useDispatch, useSelector } from "react-redux";
 import NewRepairLogModal from "../../Modals/NewRepairLogModal";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
-import { LoadingOutlined } from "@ant-design/icons";
 import { Empty } from "antd";
 
 const { Panel } = Collapse;
 
 const RepairLogPane = () => {
+  const [logData, setLogData] = useState();
   const [getTruckLogRepair] = useLazyGetTruckRepairLogQuery();
   const [deleteTruckRepairLog] = useDeleteTruckRepairLogMutation();
   const componentDidMount = useRef(false);
@@ -107,12 +107,19 @@ const RepairLogPane = () => {
     });
   };
 
+  const handleEditRepairLog = (log: any) => {
+    setLogData(log);
+    setIsVisible(true);
+  };
+
   return (
     <>
       <NewRepairLogModal
         isVisible={isVisible}
         setIsVisible={setIsVisible}
         truckId={truckId}
+        logData={logData}
+        setLogData={setLogData}
       />
 
       <Row
@@ -223,12 +230,10 @@ const RepairLogPane = () => {
                             <Col className="text_ellipsis">
                               <span className="text-gray-400">
                                 {data.inDate &&
-                                  moment(data.inDate).format(
-                                    "MMM DD, YYYY"
-                                  )}{" "}
+                                  moment(data.inDate).format("MMM DD, YY")}{" "}
                                 -{" "}
                                 {data?.inDate &&
-                                  moment(data.outDate).format("MMM DD, YYYY")}
+                                  moment(data.outDate).format("MMM DD, YY")}
                               </span>
                             </Col>
                           </Row>
@@ -241,20 +246,42 @@ const RepairLogPane = () => {
                             </Col>
 
                             <Col>
-                              {isDeletingItem === data.id ? (
-                                <LoadingOutlined
-                                  style={{ fontSize: 13, color: "#e7b522" }}
-                                  spin
+                              {
+                                <CustomButton
+                                  type="normal"
+                                  size="icon"
+                                  loading={false}
+                                  onClick={() => handleEditRepairLog(data)}
+                                  icon={
+                                    <Image
+                                      src="/icons/ic-contact-edit.svg"
+                                      alt=""
+                                      width={12}
+                                      preview={false}
+                                    />
+                                  }
                                 />
-                              ) : (
-                                <Image
+                              }
+                            </Col>
+
+                            <Col>
+                              {
+                                <CustomButton
+                                  type="normal"
+                                  size="icon"
+                                  className="bg_danger"
+                                  loading={isDeletingItem === data.id}
                                   onClick={() => handleDeleteRepairLog(data.id)}
-                                  src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
-                                  preview={false}
-                                  width={24}
-                                  alt=""
+                                  icon={
+                                    <Image
+                                      src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
+                                      alt=""
+                                      width={16}
+                                      preview={false}
+                                    />
+                                  }
                                 />
-                              )}
+                              }
                             </Col>
 
                             <Col className="mr-4">
