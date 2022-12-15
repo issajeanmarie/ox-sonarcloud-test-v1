@@ -1,5 +1,14 @@
 import { FC } from "react";
 import Button from "antd/lib/button";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+
+const antIcon = (
+  <LoadingOutlined
+    style={{ fontSize: 12, color: "black", marginBottom: "6px" }}
+    spin
+  />
+);
 
 interface ButtonProps {
   type:
@@ -9,7 +18,8 @@ interface ButtonProps {
     | "danger_filled"
     | "normal"
     | "view"
-    | "dropdown";
+    | "dropdown"
+    | "toggle";
   loading?: boolean;
   disabled?: boolean;
   size?: "icon" | "small";
@@ -149,6 +159,17 @@ const CustomButton: FC<ButtonProps> = ({
         >
           {children}
         </Button>
+      );
+
+    case "toggle":
+      return (
+        <div className="p-3 pointer flex items-center justify-center h-[32px] w-[32px] rounded bg_danger">
+          {loading ? (
+            <Spin indicator={antIcon} />
+          ) : (
+            <div className="bg-ox-red w-[8px] h-[8px]"></div>
+          )}
+        </div>
       );
 
     default:

@@ -50,7 +50,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Driver>,
       PostDriverRequest
     >({
-      invalidatesTags: ["Drivers"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/drivers`,
         method: "POST",
@@ -62,7 +62,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Driver>,
       DeleteDriverRequest
     >({
-      invalidatesTags: ["Drivers"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/drivers/${DTO?.id}`,
         method: "DELETE"
@@ -72,7 +72,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Driver>,
       EditDriverLocationRequest
     >({
-      invalidatesTags: ["Drivers"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/drivers/${DTO?.id}`,
         method: "PUT",
@@ -83,7 +83,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Driver>,
       ToggleDriverRequest
     >({
-      invalidatesTags: ["Drivers"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/drivers/${DTO?.id || ""}/toggle-active`,
         method: "PUT",
@@ -95,7 +95,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Driver>,
       SeachDriverRequest
     >({
-      providesTags: ["Clients"],
+      providesTags: [],
       query: ({ search }) => ({
         url: `./drivers?search=${search}`,
         method: "GET"
@@ -106,9 +106,21 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Driver>,
       MakeDriverDispatcherRequest
     >({
-      invalidatesTags: ["Drivers"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/drivers/${DTO?.id}/toggle-dispatcher`,
+        method: "PATCH",
+        body: DTO
+      })
+    }),
+
+    endShift: builder.mutation<
+      ApiResponseMetadata<Driver>,
+      MakeDriverDispatcherRequest
+    >({
+      invalidatesTags: [],
+      query: (DTO) => ({
+        url: `/drivers/${DTO.id}/end-shift`,
         method: "PATCH",
         body: DTO
       })
@@ -125,5 +137,6 @@ export const {
   useLazyDriversQuery,
   useMakeDriverDispatcherMutation,
   useLazySearchDriverQuery,
-  useDriverQuery
+  useDriverQuery,
+  useEndShiftMutation
 } = driversEndpoints;

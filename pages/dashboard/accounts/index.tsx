@@ -65,7 +65,7 @@ const Drivers = () => {
     id === "ADMINS" && changeRoute(`${routes.Admins.url}?tb=ADMINS`);
   };
 
-  const [Drivers, { isLoading: isDriversLoading, data: apiData }] =
+  const [Drivers, { isFetching, isLoading: isDriversLoading, data: apiData }] =
     useLazyDriversQuery();
 
   const handleSearch = (value: string) => {
@@ -176,7 +176,7 @@ const Drivers = () => {
                 showModal={showWarningModal}
                 setIsModalVisible={setIsWarningModalVisible}
                 Drivers={AllDrivers}
-                isDriversFetching={false}
+                isDriversFetching={isFetching}
               />
             )}
 

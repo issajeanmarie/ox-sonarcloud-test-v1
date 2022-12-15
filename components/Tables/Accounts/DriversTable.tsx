@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Table from "antd/lib/table";
-import { Dropdown, Form, Menu } from "antd";
+import { Col, Dropdown, Form, Menu, Row } from "antd";
 import Typography from "antd/lib/typography";
 import { DriversTableTypes } from "../../../lib/types/pageTypes/Accounts/Drivers/DriversTableTypes";
 import { DriversTableProps } from "../../../lib/types/pageTypes/Accounts/Drivers/DriversTableProps";
@@ -17,6 +17,7 @@ import {
 import {
   useDeleteDriverMutation,
   useEditDriverMutation,
+  useEndShiftMutation,
   useMakeDriverDispatcherMutation,
   useToggleDriverMutation
 } from "../../../lib/api/endpoints/Accounts/driversEndpoints";
@@ -25,6 +26,11 @@ import EditDriver from "../../Forms/Accounts/Drivers/EditDriver";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { useDispatch, useSelector } from "react-redux";
+import { useGetShiftPreferencesQuery } from "../../../lib/api/endpoints/settings/settingsEndpoints";
+import getHoursDiff from "../../../utils/getHoursDiff";
+import { toNewDate } from "../../../utils/toNewDate";
+import { splitDates } from "../../../utils/splitDates";
+import { percentageCalculator } from "../../../helpers/pacentageCalculators";
 
 const { Text } = Typography;
 
@@ -36,6 +42,8 @@ const DriversTable: FC<DriversTableProps> = ({
   isDriversFetching
 }) => {
   const [form] = Form.useForm();
+  const [shiftToEnd, setShiftToEnd] =
+    useState<SetStateAction<number | null>>(null);
   const [itemToDelete, setItemToDelete] =
     useState<SetStateAction<number | undefined>>();
   const [driverToToggle, setDriverToToggle] = useState();
@@ -58,6 +66,8 @@ const DriversTable: FC<DriversTableProps> = ({
     useToggleDriverMutation();
   const [makeDriverDispatcher, { isLoading: isMakingDispatcher }] =
     useMakeDriverDispatcherMutation();
+  const { data: shiftPreferences } = useGetShiftPreferencesQuery();
+  const [endShift] = useEndShiftMutation();
 
   const handleDeleteDriverSuccess = ({ payload }: any) => {
     dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
@@ -179,6 +189,38 @@ const DriversTable: FC<DriversTableProps> = ({
     });
   };
 
+  const handleEndShiftFailure = () => {
+    setShiftToEnd(null);
+  };
+
+  const handleEndShiftSuccess = ({ payload }: any) => {
+    const newDriversList: any = [];
+
+    AllDrivers?.payload?.content?.map((driver: any) => {
+      if (driver.id === payload.id) {
+        newDriversList.push({ ...driver, ongoingShift: null });
+      } else {
+        newDriversList.push(driver);
+      }
+    });
+
+    dispatchReplace(newDriversList);
+
+    setShiftToEnd(null);
+  };
+
+  const handleEndShift = (id: number) => {
+    setShiftToEnd(id);
+
+    handleAPIRequests({
+      request: endShift,
+      id: id,
+      showSuccess: true,
+      handleSuccess: handleEndShiftSuccess,
+      handleFailure: handleEndShiftFailure
+    });
+  };
+
   const columns: any = [
     {
       title: (
@@ -286,6 +328,46 @@ const DriversTable: FC<DriversTableProps> = ({
           )}
         </RowsWrapper>
       )
+    },
+    {
+      title: <span className="text_ellipsis">Shift status</span>,
+      key: "ongoingShift",
+      render: (text: DriversTableTypes, record: DriversTableTypes) => {
+        const now = splitDates();
+        const shiftStartingTime = splitDates(
+          record.ongoingShift ? record.ongoingShift.startDateTime : ""
+        );
+
+        const diff = getHoursDiff(toNewDate(shiftStartingTime), toNewDate(now));
+
+        const percent = percentageCalculator(
+          shiftPreferences?.payload?.maxHoursPerDay,
+          diff
+        );
+
+        const percent_color =
+          percent <= 50
+            ? "text-dark"
+            : percent > 50 && percent < 100
+            ? "text-[#E3B221]"
+            : "text-ox-red";
+
+        return (
+          record.ongoingShift && (
+            <RowsWrapper>
+              <Row wrap={false} gutter={24} align="middle">
+                <Col>
+                  <span className={`${percent_color} fowe700`}>{percent}%</span>
+                </Col>
+
+                <Col onClick={() => handleEndShift(record.id)}>
+                  <Button type="toggle" loading={record.id === shiftToEnd} />
+                </Col>
+              </Row>
+            </RowsWrapper>
+          )
+        );
+      }
     },
     {
       title: "Status",
