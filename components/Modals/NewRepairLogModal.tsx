@@ -66,6 +66,9 @@ const NewRepairLogModal: FC<Props> = ({
     { data: repairServices, isFetching: repairServicesFetching }
   ] = useLazyGetRepairServicesQuery();
 
+  const [updateRepairLog, { isLoading: isUpdateRepairLogLoading }] =
+    useUpdateRepairLogMutation();
+
   useEffect(() => {
     handleAPIRequests({
       request: getRepairServices,
