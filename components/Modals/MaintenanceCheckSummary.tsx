@@ -32,7 +32,7 @@ const MaintenanceCheckSummary = ({ summary, setSummary }: any) => {
           placeholder="00"
           label="Mileage"
           inputType="number"
-          suffixIcon="KGs"
+          suffixIcon="KMs"
           onChange={(value: number) => handleMileageChange(value)}
         />
       </div>
