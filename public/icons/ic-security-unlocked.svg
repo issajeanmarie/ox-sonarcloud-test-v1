@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16.5" height="16.5" viewBox="0 0 16.5 16.5">
+  <g id="ic-security-unlocked" transform="translate(11.25 11.75)">
+    <g id="ic-security-unlocked-2" data-name="ic-security-unlocked" transform="translate(-10.5 -10)">
+      <rect id="Rectangle_307" data-name="Rectangle 307" width="14" height="10" rx="2" transform="translate(1 4)" fill="none" stroke="#2a3548" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_802" data-name="Path 802" d="M1.5,2H4.3A1.4,1.4,0,0,1,5.7,3.4V6.2" transform="translate(-1.5 -3)" fill="none" stroke="#2a3548" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" fill-rule="evenodd"/>
+      <circle id="Ellipse_309" data-name="Ellipse 309" cx="1.75" cy="1.75" r="1.75" transform="translate(5.95 6.3)" fill="none" stroke="#2a3548" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_644" data-name="Line 644" y2="2" transform="translate(8 10)" fill="none" stroke="#2a3548" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>
