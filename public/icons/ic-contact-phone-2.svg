@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="18.389" height="15.349" viewBox="0 0 18.389 15.349">
+  <g id="ic-contact-phone-2" transform="translate(10.405 8.678)">
+    <g id="ic-contact-phone-2-2" data-name="ic-contact-phone-2" transform="translate(-9.905 -8.169)">
+      <path id="Path_18" data-name="Path 18" d="M15.139,20.16H6.659A1.6,1.6,0,0,1,5.293,19.3a2.352,2.352,0,0,1-.185-1.846l1.6-5.14A1.709,1.709,0,0,1,8.252,11h5.285a1.7,1.7,0,0,1,1.56,1.3l1.593,5.14a2.353,2.353,0,0,1-.181,1.853A1.6,1.6,0,0,1,15.139,20.16Z" transform="translate(-2.08 -5.82)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <circle id="Ellipse_4" data-name="Ellipse 4" cx="2" cy="2" r="2" transform="translate(6.8 8.186)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="1"/>
+      <path id="Path_19" data-name="Path 19" d="M2.08,5.73V8.11a1.89,1.89,0,0,0,1.755,2h.808a1.89,1.89,0,0,0,1.755-2V6.84h0a19.81,19.81,0,0,1,8.777,0h0V8.11a1.89,1.89,0,0,0,1.755,2h.781a1.89,1.89,0,0,0,1.755-2V5.73a.978.978,0,0,0-.711-1h0a35.682,35.682,0,0,0-15.992,0h0A.984.984,0,0,0,2.08,5.73Z" transform="translate(-2.08 -3.823)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

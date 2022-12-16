@@ -1,0 +1,86 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+export type SaleResponse = Sale[];
+
+export type Sale = {
+  id: string;
+};
+
+export type PostSaleRequest = {
+  depotId: number;
+  date: string;
+  clientId: number;
+  items: [
+    {
+      id: number;
+      weight: number;
+    }
+  ];
+  marginCost: number;
+  localTransportCost: number;
+  truckId: number;
+  driverId: number;
+  destination: {
+    name: string;
+    location: string;
+    coordinates: string;
+  };
+};
+
+export type PostSalePaymentRequest = {
+  amount: number;
+  paymentDate: string;
+  momoRefCode: string;
+  isWaitTimeFee: boolean;
+};
+
+export type CancelSaleRequest = {
+  id: any;
+};
+
+export type EditSaleLocationRequest = {
+  depotId: number;
+  warehouseId: number;
+  date: string;
+  clientId: number;
+  items: [
+    {
+      id: number;
+      weight: number;
+    }
+  ];
+  marginCost: number;
+  localTransportCost: number;
+  truckId: number;
+  driverId: number;
+  destination: {
+    name: string;
+    location: string;
+    coordinates: string;
+  };
+  id: number;
+};
+
+export type EditSaleTransactionRequest = {
+  momoRefCode: string;
+  createdAt: string;
+  amount: number;
+  id: number;
+  transactionId: number;
+};
+
+export type GetSales = {
+  page: number | string;
+  size: number | string;
+  filter: string;
+  start: string;
+  end: string;
+  momoRefCode: string;
+  truck: string;
+  driver: string;
+  depot: number | string;
+};
+
+export type GetSale = {
+  id: string | string[] | undefined;
+};

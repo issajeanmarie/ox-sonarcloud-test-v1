@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="208" height="212.138" viewBox="0 0 208 212.138">
+  <g id="Group_218" data-name="Group 218" transform="translate(-979.478 -320.862)">
+    <circle id="Ellipse_121" data-name="Ellipse 121" cx="28" cy="28" r="28" transform="translate(979.478 477)" fill="#707070" opacity="0.06"/>
+    <circle id="Ellipse_122" data-name="Ellipse 122" cx="12" cy="12" r="12" transform="translate(1093.478 323)" fill="#707070" opacity="0.32"/>
+    <circle id="Ellipse_123" data-name="Ellipse 123" cx="55.5" cy="55.5" r="55.5" transform="translate(1076.478 422)" fill="#707070" opacity="0.19"/>
+    <g id="ic-actions-danger" transform="matrix(0.966, -0.259, 0.259, 0.966, 995.753, 353.565)">
+      <path id="Path_316" data-name="Path 316" d="M54,3.058.6,109.858a5.621,5.621,0,0,0,5,8.151H112.4a5.621,5.621,0,0,0,5-8.151l-53.4-106.8A5.621,5.621,0,0,0,54,3.058Z" transform="translate(0 0)" fill="none" stroke="#707070" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+      <rect id="Rectangle_82" data-name="Rectangle 82" width="11.242" height="50.589" rx="1" transform="translate(53.383 29.758)" fill="none" stroke="#707070" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="3.5"/>
+      <rect id="Rectangle_83" data-name="Rectangle 83" width="15.008" height="15.008" rx="1.33" transform="translate(51.528 91.477)" fill="none" stroke="#707070" stroke-linecap="round" stroke-linejoin="bevel" stroke-width="3.5"/>
+    </g>
+  </g>
+</svg>
