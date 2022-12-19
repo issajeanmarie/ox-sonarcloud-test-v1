@@ -4,11 +4,17 @@
  * @since Aug 19 2022
  */
 
+const toMyFixed = (num: number) => num.toFixed(2).replace(/[.,]00$/, "");
+
 export const truckPercentageCalculator = (current: number, prev: number) => {
   try {
     if (prev === 0) {
-      return ((current - prev) / current) * 100;
-    } else return ((current - prev) / prev) * 100;
+      const percentage = ((current - prev) / current) * 100;
+      return toMyFixed(percentage);
+    } else {
+      const percentage = ((current - prev) / prev) * 100;
+      return toMyFixed(percentage);
+    }
   } catch (error) {
     return error;
   }
@@ -26,7 +32,7 @@ export const KPIsPercentageCalculator = (
 ) => {
   try {
     const percentage = (actualAmount / TargetAmount) * 100;
-    return percentage.toFixed(3);
+    return toMyFixed(percentage);
   } catch (error) {
     return error;
   }
@@ -44,7 +50,7 @@ export const revenuePercentageCalculator = (
 ) => {
   try {
     const percentage = (totalSales / allRevenue) * 100;
-    return percentage.toFixed(1);
+    return toMyFixed(percentage);
   } catch (error) {
     return error;
   }
