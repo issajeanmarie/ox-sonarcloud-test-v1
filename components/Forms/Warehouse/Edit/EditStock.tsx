@@ -148,7 +148,6 @@ const EditStock: FC<EditStockTypes> = ({
             isLoading={isDepotsLoading}
             disabled={isDepotsLoading}
             isGroupDropdown
-            defaultValue={itemToEdit?.lhsOrder?.id}
           >
             {lhsOrders?.map((item: any) => (
               <Option key={item?.weight} value={item?.id}>
@@ -159,7 +158,7 @@ const EditStock: FC<EditStockTypes> = ({
                   {moment(item.stateDateTime).format("ddd/MM/YYYY")}
                 </span>
               </Option>
-            ))} */}
+            ))}
           </Input>
         </Col>
       </Row>

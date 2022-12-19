@@ -59,13 +59,6 @@ const Order: FC<OrderProps> = ({ order, index }) => {
 
   const router = useRouter();
 
-  const ordersState = useSelector(
-    (state: any) => state.paginatedData.displayPaginatedData
-  );
-  const dispatch = useDispatch();
-
-  const router = useRouter();
-
   const [changeOrderStatus, { isLoading: cancelOrderLoading }] =
     useChangeOrderStatusMutation();
 

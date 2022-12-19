@@ -73,24 +73,6 @@ const MobilePayment: FC<MobilePaymentProps> = ({
     setIsModalVisible(false);
   };
 
-  usePaymentPageMoMoPaymentListener({
-    setPaymentProgress,
-    paymentProgress,
-    setIsModalVisible
-  });
-
-  const handlePaymentFinish = () => {
-    setPaymentProgress({
-      initiated: false,
-      payload: null,
-      success: false,
-      disconnected: false,
-      failure: false
-    });
-
-    setIsModalVisible(false);
-  };
-
   const handleSubmit = (values: { amount: number; phone: string }) => {
     if (order) {
       setPaymentProgress({ ...paymentProgress, initiated: true });

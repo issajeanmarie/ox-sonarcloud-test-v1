@@ -33,9 +33,7 @@ export const manageSidebarMenus = () => [
     name: routeConfig.Accounts.name,
     icon: AccountsIcon,
     active: false,
-    url: `${routeConfig.Accounts.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
+    url: routeConfig.Accounts.url,
     urlKey: routeConfig.Accounts.url
   },
 
@@ -60,15 +58,6 @@ export const moreSidebarMenus = () => [
     icon: ResourcesIcon,
     active: false,
     url: routeConfig.Resources.url,
-    urlKey: routeConfig.Resources.url
-  },
-  {
-    name: routeConfig.Resources.name,
-    icon: ResourcesIcon,
-    active: false,
-    url: `${routeConfig.Resources.url}?depotId=${depotID || ""}&depotName=${
-      depotName || ""
-    }`,
     urlKey: routeConfig.Resources.url
   },
   {

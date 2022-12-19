@@ -29,32 +29,6 @@ type Errors = {
   status: number;
 };
 
-/**
- * This function handles all API requests,
- * @param {Boolean} showSuccess - Shows/hides success message from API/User - False by default as we don't need it that much
- * @param {Boolean} showFailure - Shows/hides success message from API/User - True by default as we always need to knwo when something is wrong
- * @param {String} successMessage - User defined success message in case API's success message isn't clear to the end-users
- * @param {Function} request - The requst to make, endpoint
- * @param {Function} handleSuccess - A function that runs when the request succeeds, it passes the result as a pram
- * @param {Function} handleFailure - A function that runs when the request fails, it passes the error as a pram
- * @param {any} props - All of the other values you want to pass to the request function/enndpoint
- */
-
-type Types = {
-  showSuccess?: boolean;
-  showFailure?: boolean;
-  successMessage?: string | object | any;
-  request: (value: any) => any;
-  handleSuccess: (res: GenericResponse) => any;
-  handleFailure: (error: Errors) => any;
-};
-
-type Errors = {
-  message: string;
-  data: { message: string };
-  status: number;
-};
-
 export const handleAPIRequests = ({
   showSuccess = false,
   showFailure = true,

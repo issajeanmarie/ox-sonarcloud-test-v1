@@ -65,17 +65,6 @@ const NewTRuckDocumentModal = ({
   const [truckDocumentData, setTruckDocumentData] = useState({});
   const [hasExpiryDate, setHasExpiryDate] = useState(false);
 
-  const initialValues = {
-    title: editTruckData?.title,
-    validFrom: editTruckData?.validFrom
-      ? moment(editTruckData?.validFrom, "YYYY-MM-DD HH:mm")
-      : "",
-    validTo: editTruckData?.validTo
-      ? moment(editTruckData?.validTo, "YYYY-MM-DD HH:mm")
-      : "",
-    document: editTruckData?.url || ""
-  };
-
   const [uploadTruckDocument, { isLoading }] = useUploadTruckDocumentMutation();
   const [uploadOrderDocument, { isLoading: isUploadOrderDocumentLoading }] =
     useUploadOrderDocumentMutation();

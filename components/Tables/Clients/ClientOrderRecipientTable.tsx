@@ -88,26 +88,6 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
     });
   };
 
-  //EDIT
-  const [editClientRecipient, { isLoading: isEditing }] =
-    useEditClientRecipientMutation();
-
-  const handleEditRecipientSuccess = () => {
-    setIsEditModalVisible(false);
-  };
-
-  const onEditClientRecipientFinish = (values: any) => {
-    handleAPIRequests({
-      request: editClientRecipient,
-      id: query?.client,
-      affiliateId: itemToEdit,
-      names: values?.names,
-      phone: phoneNumber?.replace("+", ""),
-      showSuccess: true,
-      handleSuccess: handleEditRecipientSuccess
-    });
-  };
-
   const columns: any = [
     {
       title: (

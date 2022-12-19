@@ -19,17 +19,3 @@ export type DropIconTypes = {
   showSearch: boolean;
   width: string;
 };
-
-export type CircleCheckBoxTypes = {
-  defaultValue: any;
-  checked: boolean;
-  state: boolean;
-  setState: any;
-};
-
-export type DropIconTypes = {
-  focused: boolean;
-  loading: boolean;
-  showSearch: boolean;
-  width: string;
-};

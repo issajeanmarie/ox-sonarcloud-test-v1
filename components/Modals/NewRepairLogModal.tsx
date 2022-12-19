@@ -61,29 +61,6 @@ const NewRepairLogModal: FC<Props> = ({
     })
   );
 
-  const [
-    getRepairServices,
-    { data: repairServices, isFetching: repairServicesFetching }
-  ] = useLazyGetRepairServicesQuery();
-
-  const [updateRepairLog, { isLoading: isUpdateRepairLogLoading }] =
-    useUpdateRepairLogMutation();
-
-  useEffect(() => {
-    handleAPIRequests({
-      request: getRepairServices,
-      page: 0,
-      size: 1000
-    });
-  }, []);
-
-  const repairServiceOptions = repairServices?.payload?.content?.map(
-    (service: { id: number; name: string }) => ({
-      label: `${service.name}`,
-      value: service.id
-    })
-  );
-
   const dispatch = useDispatch();
 
   const [createTruckRepairLog, { isLoading }] =

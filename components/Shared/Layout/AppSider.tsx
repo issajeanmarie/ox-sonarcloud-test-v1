@@ -78,10 +78,6 @@ const AppSider = ({ collapsed }: any) => {
 
   useGlobalMoMoPaymentListener({ setIsNotifyEnabled, setNotificationMessage });
 
-  escape(setIsDropdownVisible);
-
-  useGlobalMoMoPaymentListener({ setIsNotifyEnabled, setNotificationMessage });
-
   const depots = (
     <Space
       className="depot_dropdown rounded-md p-0"

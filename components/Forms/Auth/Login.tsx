@@ -18,8 +18,6 @@ import { setCredentials } from "../../../lib/redux/slices/authSlice";
 import { LoginResponse } from "../../../lib/types/auth";
 import { BackendErrorTypes } from "../../../lib/types/shared";
 
-const { Title } = Typography;
-
 const Login = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -51,48 +49,6 @@ const Login = () => {
         </Col>
         <Col flex="auto" className="mt-6">
           <div className="flex items-center justify-between mb-[8px]">
-            <div className="heading2">Password</div>
-            <div>
-              <Link href={routes.ForgetPassword.url}>
-                <a className="link animate">Forgot password?</a>
-              </Link>
-            </div>
-          </div>
-          <Input
-            name="password"
-            placeholder="***********"
-            type="password"
-            rules={passwordValidation}
-          />
-        </Col>
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24} className="mt-6">
-          <Button
-            loading={isLoading}
-            type="primary"
-            className="mt-5"
-            htmlType="submit"
-          >
-            LOGIN
-          </Button>
-        </Col>
-      </Row>
-
-      <Form.Item name="password" rules={passwordValidation} className="mb42">
-        <Input.Password
-          className="my_input"
-          placeholder="* * * * * * * *"
-          name="password"
-        />
-        <div className="flex items-center justify-between">
-          <div className="heading2">Password</div>
-          <div>
-            <Link href={routes.ForgetPassword.url}>
-              <a className="link animate">Forgot password?</a>
-            </Link>
-          </div>
-        </div>
-        <div>
-          <div className="flex items-center justify-between">
             <div className="heading2">Password</div>
             <div>
               <Link href={routes.ForgetPassword.url}>

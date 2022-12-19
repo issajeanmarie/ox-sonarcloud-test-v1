@@ -101,64 +101,6 @@ const SalesPage = () => {
       getSalesAction({ depot: depotsState?.depotId });
   }, [depotsState]);
 
-  const AllSales = useSelector(
-    (state: { paginatedData: any }) => state.paginatedData.displayPaginatedData
-  );
-
-  const [getSales, { isLoading, isFetching, data: apiData }] =
-    useLazySalesQuery();
-
-  const handleRenderSuccess = (res: any) => {
-    dispatch(displayPaginatedData({ payload: res, onRender: true }));
-  };
-
-  useEffect(() => {
-    const savedFilters = getFromLocal(OX_ORDERS_FILTERS);
-    if (savedFilters) setIsFiltered(true);
-  }, []);
-
-  const depotsState = useSelector(
-    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
-  );
-  const filters = getFromLocal(OX_ORDERS_FILTERS);
-
-  const getSalesAction = ({
-    request = getSales,
-    depot = depotsState?.depotId,
-    filter = (willItFilter && filters?.filter) || "",
-    page,
-    size = pagination.sales.size,
-    handleSuccess = handleRenderSuccess,
-    handleFailure,
-    start = filters?.start,
-    end = filters?.end,
-    momoRefCode = filters?.momoRefCode,
-    truck = filters?.truck,
-    driver = filters?.driver
-  }: any) => {
-    handleAPIRequests({
-      request,
-      page,
-      size,
-      filter,
-      start,
-      end,
-      momoRefCode,
-      truck,
-      driver,
-      depot,
-      handleSuccess,
-      handleFailure
-    });
-  };
-
-  useEffect(() => {
-    setCurrentPages(1);
-
-    depotsState.depotId !== undefined &&
-      getSalesAction({ depot: depotsState?.depotId });
-  }, [depotsState]);
-
   useEffect(() => {
     if (router.isReady) {
       if (Object.keys(query)?.length === 0 || !query.wtb) {

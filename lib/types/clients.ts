@@ -59,12 +59,6 @@ export type PostClientNoteRequest = {
   comment: string;
 };
 
-export type PostClientRecipientRequest = {
-  id: number;
-  names: string;
-  phone: string;
-};
-
 export type DeleteClientRequest = {
   id: any;
 };
@@ -121,10 +115,6 @@ export type GetClients = {
   sort?: string;
   source?: string;
   noPagination?: boolean;
-};
-
-export type GetClient = {
-  id: any;
 };
 
 export type GetClient = {

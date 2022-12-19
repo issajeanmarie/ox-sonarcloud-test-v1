@@ -46,16 +46,6 @@ const driversEndpoints = baseAPI.injectEndpoints({
         method: "GET"
       })
     }),
-    driver: builder.query<
-      ApiResponseMetadata<{ content: DriverResponse }>,
-      GetDriver
-    >({
-      providesTags: ["Drivers"],
-      query: ({ id }) => ({
-        url: `drivers/${id}`,
-        method: "GET"
-      })
-    }),
     postDriver: builder.mutation<
       ApiResponseMetadata<Driver>,
       PostDriverRequest

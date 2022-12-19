@@ -156,16 +156,6 @@ const AdminsTable: FC<AdminsTableProps> = ({
     });
   };
 
-  //reset
-  const handleResetPWDAdmin = (id: any) => {
-    setAdminToReset(id);
-    handleAPIRequests({
-      request: sendResetPWDToAdmin,
-      id,
-      showSuccess: true
-    });
-  };
-
   const columns: any = [
     {
       title: (

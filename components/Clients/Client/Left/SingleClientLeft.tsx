@@ -59,27 +59,6 @@ const SingleClientLeft: FC<SingleClientLeftTypes> = ({
           </CustomButton>
         </div>
       )}
-      {/* <div className="flex justify-center items-center py-10">
-        <div className="w-52">
-          <CustomButton type="secondary">
-            <span className="text-sm">Load More</span>
-          </CustomButton>
-        </div>
-      )}
-
-      {pageSize > 9 &&
-        clientOrders?.orders?.totalElements &&
-        clientOrders?.orders?.totalElements >= pageSize && (
-          <div style={{ width: "12%", margin: "32px auto" }}>
-            <CustomButton
-              loading={isMoreClientsOrderFetching}
-              onClick={handleLoadMore}
-              type="secondary"
-            >
-              Load more
-            </CustomButton>
-          </div>
-        )}
     </Col>
   );
 };

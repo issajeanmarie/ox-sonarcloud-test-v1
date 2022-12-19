@@ -19,11 +19,6 @@ type DepotTypes = {
   depotId: number | undefined;
 };
 
-type DepotTypes = {
-  depotName: string | undefined;
-  depotId: number | undefined;
-};
-
 const Orders: FC = () => {
   const [currentPages, setCurrentPages] = useState(1);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
@@ -48,56 +43,6 @@ const Orders: FC = () => {
 
   const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
     dispatch(displayPaginatedData({ payload, paginate: true }));
-    setIsLoadMoreLoading(false);
-  };
-
-  const handleLoadMoreOrdersFailure = () => {
-    setIsLoadMoreLoading(false);
-  };
-
-  const getOrdersAction = ({
-    depot = depotsState?.depotId,
-    filter = filters?.filter || "",
-    page,
-    size = pagination.orders.size,
-    handleSuccess = handleRenderSuccess,
-    handleFailure,
-    start = filters?.start,
-    end = filters?.end,
-    momoRefCode = filters?.momoRefCode,
-    truck = filters?.truck,
-    driver = filters?.driver,
-    request = getOrders
-  }: Order_Filter) => {
-    handleAPIRequests({
-      request,
-      page,
-      size,
-      handleSuccess,
-      handleFailure,
-      depot,
-      filter,
-      start,
-      end,
-      momoRefCode,
-      truck,
-      driver
-    });
-  };
-
-  const handleLoadMore = () => {
-    setCurrentPages(currentPages + 1);
-    setIsLoadMoreLoading(true);
-
-    getOrdersAction({
-      page: currentPages,
-      handleFailure: handleLoadMoreOrdersFailure,
-      handleSuccess: handleLoadMoreOrdersSuccess
-    });
-  };
-
-  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
-    dispatch(displayOrders({ payload, paginate: true }));
     setIsLoadMoreLoading(false);
   };
 

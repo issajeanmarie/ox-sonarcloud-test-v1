@@ -286,49 +286,6 @@ export const SettingsKPILoader = () => {
   );
 };
 
-export const SettingsCategoriesTableLoader = () => {
-  return (
-    <Row justify="space-between" className="mato8">
-      <Col md={1}>
-        <Skeleton.Input active size="small" />
-      </Col>
-      <Col md={8}>
-        <Skeleton.Input active size="small" block={true} />
-      </Col>
-      <Col md={5}>
-        <Row gutter={17}>
-          <Space size="small">
-            <Col xl={4}>
-              <Skeleton.Button active size="small" shape="square" />
-            </Col>
-            <Col xl={4}>
-              <Skeleton.Button active size="small" shape="square" />
-            </Col>
-            <Col xl={4}>
-              <Skeleton.Button active size="small" shape="square" />
-            </Col>
-            <Col xl={4}>
-              <Skeleton.Button active size="small" shape="square" />
-            </Col>
-          </Space>
-        </Row>
-      </Col>
-    </Row>
-  );
-};
-
-export const SettingsProfileLoader = () => {
-  return (
-    <Skeleton avatar active>
-      <List.Item.Meta
-        avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-        title="Card title"
-        description="This is the description"
-      />
-    </Skeleton>
-  );
-};
-
 export const ChartSmallLoader = (title: string) => {
   return (
     <div className="h-full w-full flex justify-center items-center flex-col gap-4">

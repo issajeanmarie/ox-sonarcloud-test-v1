@@ -39,9 +39,6 @@ const TruckHealthPane = () => {
   const [downloadTruckDailyInspection, { isLoading }] =
     useDownloadTruckDailyInspectionMutation();
 
-  const [downloadTruckDailyInspection, { isLoading }] =
-    useLazyDownloadTruckDailyInspectionQuery();
-
   const router = useRouter();
   const { id: truckId } = router.query;
 
@@ -62,33 +59,6 @@ const TruckHealthPane = () => {
         ErrorMessage(err?.data?.message || "Something is wrong");
       });
   }, [startDate, endDate, truckId, getTruckDailyInspection]);
-
-  const onStartDateChange = (_: string, date: string) => {
-    setStartDate(date);
-  };
-  const onEndDateChange = (_: string, date: string) => {
-    setEndDate(date);
-  };
-
-  const handleDownloadFile = (file: File) => {
-    const date = moment().format("YYYY-MM-DD");
-    fileDownload(file, `Report-${date}.xlsx`);
-  };
-
-  const handleDownloadReport = () => {
-    downloadTruckDailyInspection({
-      id: truckId,
-      start: startDate,
-      end: endDate
-    })
-      .unwrap()
-      .then((res) => {
-        handleDownloadFile(res);
-      })
-      .catch((err) => {
-        ErrorMessage(err?.data?.message || "Something is wrong");
-      });
-  };
 
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);

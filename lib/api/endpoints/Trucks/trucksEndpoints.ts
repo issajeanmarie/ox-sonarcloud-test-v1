@@ -330,33 +330,6 @@ const trucksApi = baseAPI.injectEndpoints({
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
         response.payload
-    }),
-
-    createTruckIssue: builder.mutation<
-      CreateTruckResponse,
-      CreateTruckIssueRequest
-    >({
-      invalidatesTags: ["Trucks"],
-      query: ({ id, ...DTO }) => {
-        return {
-          url: `/trucks/${id}/issues`,
-          method: "POST",
-          body: DTO
-        };
-      }
-    }),
-
-    toggleTruckIssueStatus: builder.mutation<
-      ToggleTruckResponse,
-      ToggleTruckIssueRequest
-    >({
-      invalidatesTags: ["Trucks"],
-      query: ({ truckId, issueId }) => {
-        return {
-          url: `/trucks/${truckId}/issues/${issueId}/toggle-status`,
-          method: "PATCH"
-        };
-      }
     })
   })
 });

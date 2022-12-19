@@ -35,12 +35,6 @@ type State = {
   paginatedData: Trucks;
 };
 
-type BrowserState = {
-  status: string | string[];
-  search: string | string[];
-  sort: string | string[];
-};
-
 const Trucks = () => {
   const [filtersBasedLoader, setFiltersBasedLoader] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -62,54 +56,10 @@ const Trucks = () => {
     });
   };
 
-  const handleDownloadSuccess = (file: File) => {
-    handleDownloadFile({
-      file,
-      name: "OOS Report",
-      fileFormat: "xls"
-    });
-  };
-
   const dispatch = useDispatch();
   const trucksState: any = useSelector(
     (state: State) => state.paginatedData.displayPaginatedData
   );
-
-  const handleRenderSuccess = (res: any) => {
-    setFiltersBasedLoader(false);
-    dispatch(displayPaginatedData({ payload: res, onRender: true }));
-  };
-
-  const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
-    dispatch(displayPaginatedData({ payload, paginate: true }));
-    setIsLoadMoreLoading(false);
-  };
-
-  const handleLoadMoreOrdersFailure = () => {
-    setIsLoadMoreLoading(false);
-  };
-
-  const getTrucksAction = ({
-    request = getTrucks,
-    handleSuccess = handleRenderSuccess,
-    page,
-    size = pagination.trucks.size,
-    status = selectedFilter.value || "",
-    sort = selectedSort.value || "",
-    search = searchValue || "",
-    showSuccess = false
-  }: any) => {
-    handleAPIRequests({
-      handleSuccess,
-      size,
-      page,
-      status,
-      sort,
-      search,
-      showSuccess,
-      request
-    });
-  };
 
   const handleRenderSuccess = (res: any) => {
     setFiltersBasedLoader(false);

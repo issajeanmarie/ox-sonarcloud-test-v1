@@ -37,8 +37,6 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
 
   const [cancelSale, { isLoading: isCancelingSale }] = useCancelSaleMutation();
 
-  const [cancelSale, { isLoading: isCancelingSale }] = useCancelSaleMutation();
-
   const dispatch = useDispatch();
 
   const showModal = () => {

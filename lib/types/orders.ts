@@ -94,45 +94,6 @@ export type Order_Filter = {
   request?: any;
 };
 
-export type EditOrderRequestBody = {
-  officeId?: number;
-  clientId?: number;
-  depotId?: number;
-  stops?: {
-    name: string;
-    location: string;
-    coordinates: string;
-    driverId: number;
-    truckId: number;
-    weight: number;
-    position: number;
-  }[];
-  paymentPlan?: Payment_Plan;
-  amount?: number;
-  categoryId?: number;
-  startDateTime?: string;
-  atPickupLocation?: boolean;
-};
-
-export type EditPaymentStatusRequest = {
-  amount: number;
-  paymentDate: string;
-  momoRefCode: string;
-  isWaitTimeFee: boolean;
-};
-
-export type Order_Filter = {
-  depot?: number | string;
-  driver?: number | string;
-  truck?: number | string;
-  page?: number | string;
-  size?: number | string;
-  start?: string;
-  end?: string;
-  filter?: Order_Status_Enums | string;
-  momoRefCode?: string;
-};
-
 export type OrdersResponse = {
   content: Order[];
   pageable: {
