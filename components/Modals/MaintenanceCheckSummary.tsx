@@ -74,7 +74,7 @@ const MaintenanceCheckSummary = ({ summary, setSummary }: any) => {
           {/* Left side */}
           <Col span={14}>
             <Row align="middle" gutter={32}>
-              <Col span={4}>OK</Col>
+              <Col span={4}>Ok</Col>
               <Col span={8}>Needs repair</Col>
               <Col span={7}>Repaired</Col>
               <Col span={5}>N/A</Col>

@@ -185,7 +185,6 @@ const NewRepairLogModal: FC<Props> = ({
           <div className="flex-1">
             <div>
               <Input
-                rules={requiredField("Out date")}
                 type="date"
                 label="Out"
                 name="outDate"
