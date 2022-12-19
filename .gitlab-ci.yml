@@ -14,7 +14,7 @@ variables:
   NODE_IMAGE_VERSION: node:16-alpine
   BASE_DEV_SERVER_PATH: /home/ubuntu/development/oxdelivery/web-typescript
   BASE_STG_SERVER_PATH: /home/ubuntu/staging/oxdelivery/web-typescript
-  BASE_PROD_SERVER_PATH: /home/ubuntu/prod/oxdelivery/web-typescript
+  BASE_PROD_SERVER_PATH: /home/ubuntu/ox/web-typescript
   DEV_PROJECT_NAME: web-typescript-dev
   STG_PROJECT_NAME: web-typescript-stg
   PROD_PROJECT_NAME: web-typescript-prod
@@ -139,7 +139,7 @@ deploy_to_stg_environment:
       docker-compose -f $BASE_STG_SERVER_PATH/stg.docker-compose.yml -p  $STG_PROJECT_NAME up -d"
   environment:
     name: staging
-    url: http://stg-subportal.ox.rw
+    url: https://stg-subportal.ox.rw
   only:
     - staging
 
