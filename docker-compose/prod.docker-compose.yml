@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  web-typescript-prod:
+    image: registry.gitlab.com/oxdelivery/oxdelivery-frontend-typescript/main:latest
+    container_name: web-typescript-prod
+    volumes:
+        - '.:/app'
+        - '/app/node_modules'
+    ports:
+      - 8020:3000
+    restart: always
