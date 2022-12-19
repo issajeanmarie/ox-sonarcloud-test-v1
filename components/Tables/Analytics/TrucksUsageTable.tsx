@@ -108,7 +108,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
       )
     },
     {
-      title: "KGKM (Pot-Act)",
+      title: () => <span className="text_ellipsis">KGKM (Pot-Act)</span>,
       key: "KGKM",
       render: (text: TrucksUsageTableTypes, record: TrucksUsageTableTypes) => (
         <RowsWrapper>
