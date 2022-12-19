@@ -139,7 +139,7 @@ deploy_to_stg_environment:
       docker-compose -f $BASE_STG_SERVER_PATH/stg.docker-compose.yml -p  $STG_PROJECT_NAME up -d"
   environment:
     name: staging
-    url: http://stg-subportal.ox.rw
+    url: https://stg-subportal.ox.rw
   only:
     - staging
 
