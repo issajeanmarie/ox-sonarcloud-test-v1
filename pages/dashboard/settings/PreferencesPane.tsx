@@ -27,6 +27,8 @@ const PreferencesPane = () => {
   const [form] = useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isEditRepairServiceModalVisible, setIsEditRepairServiceModalVisible] =
+    useState(false);
   const [category, setCategory] = useState(null);
   const [categoryToEDit, setCategoryToEdit]: any = useState(null);
 
@@ -58,10 +60,12 @@ const PreferencesPane = () => {
   // Working on KPIs
   const { data: KPIsList, isLoading: isGetKPIsLoading } = useGetKPIsQuery();
 
-  const handleAddCategorySuccess = ({ payload }: any) => {
+  const handleAddCategorySuccess = () => {
     form.resetFields();
     setIsModalVisible(false);
+  };
 
+  const handleAddRepairServiceSuccess = ({ payload }: any) => {
     dispatch(displayPaginatedData({ payload }));
   };
 
@@ -81,7 +85,7 @@ const PreferencesPane = () => {
       name: values?.name,
       parentCategoryId: category ? category : null,
       showSuccess: true,
-      handleSuccess: handleAddCategorySuccess
+      handleSuccess: handleAddRepairServiceSuccess
     });
   };
 
@@ -100,7 +104,7 @@ const PreferencesPane = () => {
   };
 
   const handleUpdateRepairServiceSuccess = (res: any) => {
-    setIsEditModalVisible(false);
+    setIsEditRepairServiceModalVisible(false);
 
     const newList: object[] = [];
 
@@ -189,6 +193,13 @@ const PreferencesPane = () => {
     form.setFieldsValue(category);
   };
 
+  const showEditRepairServiceModal = (service: any) => {
+    setIsEditRepairServiceModalVisible(true);
+    setCategoryToEdit(service);
+
+    form.setFieldsValue(service);
+  };
+
   const handleEditOk = () => {
     setIsEditModalVisible(false);
   };
@@ -238,8 +249,8 @@ const PreferencesPane = () => {
       />
 
       <RepairServicesSection
-        onAddCategoryFinish={onAddRepairServiceFinish}
-        isAddingCategory={isAddingRepairService}
+        onAddRepairServiceFinish={onAddRepairServiceFinish}
+        isAddingRepairService={isAddingRepairService}
         handleCancel={handleCancel}
         handleOk={handleOk}
         isModalVisible={isModalVisible}
@@ -248,11 +259,11 @@ const PreferencesPane = () => {
         isDeletingCategory={isDeletingRepairService}
         isUpdatingCategory={isUpdatingRepairService}
         onUpdateCategoryFinish={onUpdateRepairServiceFinish}
-        showEditModal={showEditModal}
+        showEditRepairServiceModal={showEditRepairServiceModal}
         handleEditOk={handleEditOk}
         handleEditCancel={handleEditCancel}
-        isEditModalVisible={isEditModalVisible}
-        setIsEditModalVisible={setIsEditModalVisible}
+        isEditRepairServiceModalVisible={isEditRepairServiceModalVisible}
+        setIsEditRepairServiceModalVisible={setIsEditRepairServiceModalVisible}
         form={form}
         isId={isId}
       />

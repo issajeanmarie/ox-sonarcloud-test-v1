@@ -1,5 +1,4 @@
 import { Row, Col, Typography, Image, Empty } from "antd";
-import AddCategory from "../../../components/Forms/Settings/AddCategory";
 import SettingsCardWrapper from "../../../components/Settings/SettingsCardWrapper";
 import { SettingsCategoriesTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import { useLazyGetRepairServicesQuery } from "../../../lib/api/endpoints/settings/settingsEndpoints";
@@ -11,27 +10,25 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { pagination } from "../../../config/pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import AddRepairService from "../../../components/Forms/Settings/AddRepairService";
 
 const { Text } = Typography;
 
 const RepairServicesSection = ({
-  isAddingCategory,
-  onAddCategoryFinish,
+  isAddingRepairService,
+  onAddRepairServiceFinish,
   handleCancel,
-  handleOk,
-  isModalVisible,
-  setIsModalVisible,
   handleDeleteCategory,
   isDeletingCategory,
   isUpdatingCategory,
   onUpdateCategoryFinish,
-  showEditModal,
+  showEditRepairServiceModal,
   handleEditOk,
   handleEditCancel,
-  isEditModalVisible,
+  isEditRepairServiceModalVisible,
   form,
   isId,
-  setIsEditModalVisible
+  setIsEditRepairServiceModalVisible
 }: any) => {
   const [currentPages, setCurrentPages] = useState(1);
   const [searchValue, setSearchValue] = useState<string>("");
@@ -137,9 +134,9 @@ const RepairServicesSection = ({
             />
           </Col>
 
-          <AddCategory
-            onAddCategoryFinish={onAddCategoryFinish}
-            isAddingCategory={isAddingCategory}
+          <AddRepairService
+            onAddRepairServiceFinish={onAddRepairServiceFinish}
+            isAddingRepairService={isAddingRepairService}
             btnTitle="Add service"
           />
         </Row>
@@ -158,21 +155,18 @@ const RepairServicesSection = ({
           <>
             <RepairServicesTable
               data={AllRepairServices?.payload?.content}
-              onAddCategoryFinish={onAddCategoryFinish}
-              isAddingCategory={isAddingCategory}
-              handleOk={handleOk}
               handleCancel={handleCancel}
-              isModalVisible={isModalVisible}
               handleDeleteCategory={handleDeleteCategory}
               isDeletingCategory={isDeletingCategory}
               isUpdatingCategory={isUpdatingCategory}
               onUpdateCategoryFinish={onUpdateCategoryFinish}
-              showEditModal={showEditModal}
+              showEditRepairServiceModal={showEditRepairServiceModal}
               handleEditOk={handleEditOk}
               handleEditCancel={handleEditCancel}
-              isEditModalVisible={isEditModalVisible}
-              setIsModalVisible={setIsModalVisible}
-              setIsEditModalVisible={setIsEditModalVisible}
+              isEditRepairServiceModalVisible={isEditRepairServiceModalVisible}
+              setIsEditRepairServiceModalVisible={
+                setIsEditRepairServiceModalVisible
+              }
               form={form}
               categoriesFetching={onRenderLoader}
               isLoading={false}
