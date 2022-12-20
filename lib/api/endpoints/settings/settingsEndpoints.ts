@@ -156,7 +156,7 @@ const settingsApi = baseAPI.injectEndpoints({
       ApiResponseMetadata<CategoriesResponse>,
       UpdateCategoryRequest
     >({
-      invalidatesTags: ["UpdateRepairService"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/repair-services/${DTO?.id}`,
         method: "PATCH",
