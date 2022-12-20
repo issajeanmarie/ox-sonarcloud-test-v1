@@ -7,6 +7,7 @@ import { truckTableTypes } from "../../../lib/types/pageTypes/Analytics/Analytic
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { truckPercentageCalculator } from "../../../helpers/pacentageCalculators";
+import { abbreviateNumber } from "../../../utils/numberFormatter";
 
 const { Text } = Typography;
 
@@ -28,7 +29,9 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
         <RowsWrapper>
           <div className="flex gap-10">
             <Text className="normalText opacity_56">{index + 1}</Text>
-            <Text className="normalText fowe700">{record?.plateNumber}</Text>
+            <Text className="normalText fowe700 text_ellipsis">
+              {record?.plateNumber}
+            </Text>
           </div>
         </RowsWrapper>
       )
@@ -43,13 +46,13 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
       )
     },
     {
-      title: "Revenue made",
+      title: () => <span className="text_ellipsis">Revenue made</span>,
       key: "RevenueMade",
       render: (text: TrucksUsageTableTypes, record: TrucksUsageTableTypes) => (
         <RowsWrapper>
           <div className="flex items-center gap-1">
             <Text className="normalText fowe700">
-              {record?.totalRevenue && numbersFormatter(record?.totalRevenue)}{" "}
+              {record?.totalRevenue && abbreviateNumber(record?.totalRevenue)}{" "}
               Rwf
             </Text>
             <Text className="text-xs fowe700 italic">
@@ -71,7 +74,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
         <RowsWrapper>
           <div className="flex items-center gap-1">
             <Text className="normalText fowe700">
-              {record?.totalPaid && numbersFormatter(record?.totalPaid)} Rwf
+              {record?.totalPaid && abbreviateNumber(record?.totalPaid)} Rwf
             </Text>
             <Text className="text-xs fowe700 red">
               {record.totalPaid &&
@@ -146,10 +149,10 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
       render: (text: TrucksUsageTableTypes, record: TrucksUsageTableTypes) => (
         <RowsWrapper>
           <div className="flex items-center gap-1">
-            <Text className="normalText fowe700">
+            <Text className="normalText fowe700 text_ellipsis">
               {record?.totalHours && numbersFormatter(record?.totalHours)} Hrs
             </Text>
-            <Text className="text-xs fowe700 red">
+            <Text className="text-xs fowe700 red text_ellipsis">
               {record.totalHours &&
                 truckPercentageCalculator(
                   record?.totalHours,
@@ -167,10 +170,10 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
       render: (record: TrucksUsageTableTypes) => (
         <RowsWrapper>
           <div className="flex items-center gap-1">
-            <Text className="normalText fowe700">
-              {record?.totalFuel && numbersFormatter(record?.totalFuel)} ltr
+            <Text className="normalText fowe700 text_ellipsis">
+              {record?.totalFuel && abbreviateNumber(record?.totalFuel)} ltr
             </Text>
-            <Text className="text-xs fowe700 red">
+            <Text className="text-xs fowe700 red text_ellipsis">
               {record.totalFuel &&
                 truckPercentageCalculator(
                   record?.totalFuel,
