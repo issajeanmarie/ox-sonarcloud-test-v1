@@ -1,3 +1,4 @@
+import { BASE_API_URL } from "../../../../config/constants";
 import {
   ProfileResponse,
   ProfileTypes,
@@ -192,7 +193,7 @@ const settingsApi = baseAPI.injectEndpoints({
     >({
       providesTags: ["oxAppRelease"],
       query: () => ({
-        url: "https://dev-api.ox.rw/app/releases/latest",
+        url: `${BASE_API_URL?.split("/api/v1")[0]}/app/releases/latest`,
         method: "GET"
       })
     }),
