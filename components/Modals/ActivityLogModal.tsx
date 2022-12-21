@@ -61,14 +61,14 @@ export const ActivityLogModal: FC<Props> = ({
           <Spin indicator={antIcon} />
         </div>
       ) : records.length > 0 ? (
-        records.map((record) => (
+        records.map((record, index: number) => (
           <Row
             gutter={32}
-            align="middle"
+            align="top"
             className="text-gray-400 mb-6"
             key={record.id}
           >
-            <Col span={2}>1</Col>
+            <Col span={2}>{index + 1}</Col>
             <Col span={10}>
               {moment(record.createdAt).format("DD MMM YYYY - hh:mm")}
             </Col>

@@ -177,9 +177,9 @@ const TruckHealthPane = () => {
                             </Col>
 
                             <Col md={6} lg={6} xl={10} xxl={10}>
-                              <span className="text-gray-400">
+                              <span className="text_ellipsis text-gray-400">
                                 {moment(inspection.createdAt).format(
-                                  "MMMM DD, YYYY"
+                                  "MMM, DD, YYYY"
                                 )}
                               </span>
                             </Col>
@@ -303,10 +303,10 @@ export const OneInspection: React.FC<OneInspectionTypes> = ({
   <>
     <p className="text-gray-400 mt-6">{title}</p>
 
+    {children && children}
+
     {records?.map((record: RecordTypes) => (
       <>
-        {children && children}
-
         <Row
           align="top"
           gutter={32}
