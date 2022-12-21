@@ -87,7 +87,7 @@ const DetailsSection = ({
       key: 0,
       label: "Job value",
       value: `${localeString(details?.totalAmount)} Rwf`,
-      editable: user.isSuperAdmin,
+      editable: user.isSuperAdmin || user.isAdmin || user.isDispatcher,
       editAction: editAction
     },
 
