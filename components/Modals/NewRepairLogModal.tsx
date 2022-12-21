@@ -136,7 +136,7 @@ const NewRepairLogModal: FC<Props> = ({
 
   return (
     <ModalWrapper
-      title="New Repair log"
+      title={logData ? "Edit Repair log" : "New Repair log"}
       isModalVisible={isVisible}
       setIsModalVisible={setIsVisible}
       loading={isLoading || uploadLoading}
@@ -165,7 +165,6 @@ const NewRepairLogModal: FC<Props> = ({
           <div className="flex-1">
             <div>
               <Input
-                rules={requiredField("In date")}
                 name="inDate"
                 placeholder="14 Feb 2022"
                 type="date"
