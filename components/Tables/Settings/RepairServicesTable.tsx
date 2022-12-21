@@ -4,7 +4,6 @@ import CustomButton from "../../Shared/Button/button";
 import { FC } from "react";
 import { RepairServicesTableProps } from "../../../lib/types/pageTypes/Settings/RepairSerivesTableProps";
 import { SettingsCategoriesTableTypes } from "../../../lib/types/pageTypes/Settings/SettingsCategoriesTableTypes";
-import AddSubCategory from "../../Forms/Settings/AddSubCategory";
 import UpdateCategory from "../../Forms/Settings/UpdateCategory";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import ModalWrapper from "../../Modals/ModalWrapper";
@@ -14,22 +13,17 @@ const { Text } = Typography;
 
 const RepairServicesTable: FC<RepairServicesTableProps> = ({
   data,
-  onAddCategoryFinish,
-  isAddingCategory,
-  handleOk,
   handleCancel,
-  isModalVisible,
   handleDeleteCategory,
   isDeletingCategory,
   onUpdateCategoryFinish,
   isUpdatingCategory,
-  showEditModal,
-  isEditModalVisible,
-  setIsEditModalVisible,
+  showEditRepairServiceModal,
+  isEditRepairServiceModalVisible,
+  setIsEditRepairServiceModalVisible,
   form,
   categoriesFetching,
   isLoading,
-  setIsModalVisible,
   isId
 }) => {
   //Change the subcategory keyname to children keyname
@@ -68,7 +62,7 @@ const RepairServicesTable: FC<RepairServicesTableProps> = ({
         return (
           <div className="flex items-center gap-3 justify-end">
             <CustomButton
-              onClick={() => showEditModal(record)}
+              onClick={() => showEditRepairServiceModal(record)}
               type="normal"
               size="icon"
               icon={
@@ -117,19 +111,10 @@ const RepairServicesTable: FC<RepairServicesTableProps> = ({
         loading={TableOnActionLoading(categoriesFetching)}
       />
 
-      <AddSubCategory
-        onAddCategoryFinish={onAddCategoryFinish}
-        isAddingCategory={isAddingCategory}
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
-        isLoading={false}
-      />
       <ModalWrapper
         title="Edit service"
-        isModalVisible={isEditModalVisible}
-        setIsModalVisible={setIsEditModalVisible}
+        isModalVisible={isEditRepairServiceModalVisible}
+        setIsModalVisible={setIsEditRepairServiceModalVisible}
         onCancel={handleCancel}
         loading={isLoading}
         destroyOnClose

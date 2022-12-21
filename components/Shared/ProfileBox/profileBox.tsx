@@ -7,7 +7,7 @@ import Image from "antd/lib/image";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { removeCredentials } from "../../../lib/redux/slices/authSlice";
 import { routes } from "../../../config/route-config";
@@ -40,6 +40,8 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
     dispatch(baseAPI.util.resetApiState());
     Router.replace(routes.login.url);
   };
+
+  const router = useRouter();
 
   const userProfile = (
     <Space direction="vertical" className="bg-white rounded-md p-4 shadow-md ">
@@ -80,8 +82,11 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
             alt=""
           />
         </Col>
-        <Col>
-          <Text className="text14 dark fowe400 ">My account</Text>
+        <Col
+          onClick={() => router.push(routes.Settings.url)}
+          className="pointer"
+        >
+          <Text className="text14 dark fowe400">My account</Text>
         </Col>
       </Row>
 

@@ -60,13 +60,15 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
     name: "report",
     showUploadList: false,
     onChange(info: any) {
-      formData.append("report", info?.file?.originFileObj);
+      if (info.file && !uploadingFuelReport) {
+        formData.append("report", info?.file?.originFileObj);
 
-      handleAPIRequests({
-        request: uploadFuelReport,
-        report: formData,
-        handleSuccess: handleUploadFileSuccess
-      });
+        handleAPIRequests({
+          request: uploadFuelReport,
+          report: formData,
+          handleSuccess: handleUploadFileSuccess
+        });
+      }
     }
   };
 
