@@ -7,7 +7,7 @@ import { Query } from "../../../lib/types/shared";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Header from "./header";
 import { localeString } from "../../../utils/numberFormatter";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
 import {
@@ -41,6 +41,8 @@ import { PlusOutlined } from "@ant-design/icons";
 import NewTRuckDocumentModal from "../../Modals/NewTruckDocumentModal";
 import DocumentCard from "../../Analytics/Trucks/TruckCard";
 import { ActivityLogModal } from "../../Modals/ActivityLogModal";
+import EditOrderDepot from "../../Forms/Orders/EditOrderDepot";
+import EditOrderDate from "../../Forms/Orders/EditOrderDate";
 
 const { Step } = Steps;
 
@@ -57,6 +59,8 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
     useState(false);
   const [comment, setComment] = useState<string>("");
   const [isEditClientModal, setIsEditClientModal] = useState<boolean>(false);
+  const [isEditDepotModal, setIsEditDepotModal] = useState<boolean>(false);
+  const [isEditDateModal, setIsEditDateModal] = useState<boolean>(false);
   const [isEditPriceModal, setIsEditPriceModal] = useState<boolean>(false);
   const [isAddStopModal, setIsAddStopModal] = useState<boolean>(false);
   const [isDeleteStopModal, setIsDeleteStopModal] = useState<boolean>(false);
@@ -70,6 +74,10 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [getOrder, { isLoading, data }] = useLazyOrderQuery();
 
   const user = userType();
+
+  const canUserUpdatePaymentStatus =
+    user.isAdmin || user.isSuperAdmin || user.isDispatcher;
+
   const [deleteStop, { isLoading: deleteStopLoading }] =
     useDeleteStopMutation();
 
@@ -228,6 +236,22 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             setIsEditClientModal={setIsEditClientModal}
           />
 
+          <EditOrderDepot
+            orderId={orderId}
+            existingDepot={data?.depot}
+            closeModal={() => setIsEditDepotModal(false)}
+            isEditDepotModal={isEditDepotModal}
+            setIsEditDepotModal={setIsEditDepotModal}
+          />
+
+          <EditOrderDate
+            orderId={orderId}
+            existingDate={data?.startDateTime}
+            closeModal={() => setIsEditDateModal(false)}
+            isEditDateModal={isEditDateModal}
+            setIsEditDateModal={setIsEditDateModal}
+          />
+
           <EditOrderPrice
             isVisible={isEditPriceModal}
             setIsVisible={setIsEditPriceModal}
@@ -293,6 +317,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                       onClick={handleCopyID}
                     >
                       <Image
+                        preview={false}
                         width={14}
                         height={14}
                         src="/icons/copy.svg"
@@ -307,9 +332,22 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                   </span>
                 </div>
 
-                <span className="normalText">
-                  {moment(data.startDateTime).format("Do MMMM YYYY")}
-                </span>
+                <div className="flex items-center gap-4">
+                  <span className="normalText">
+                    {moment(data.startDateTime).format("Do MMMM YYYY")}
+                  </span>
+
+                  {user.isSuperAdmin && (
+                    <Image
+                      onClick={() => setIsEditDateModal(true)}
+                      preview={false}
+                      className="pointer mb-[4px]"
+                      src="/icons/ic-contact-edit.svg"
+                      alt="Backspace icon"
+                      width={12}
+                    />
+                  )}
+                </div>
 
                 <DetailsSection
                   details={data}
@@ -323,6 +361,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                   title="Order"
                   type="ORDER"
                   totalWeight={totalWeight}
+                  editAction={setIsEditDepotModal}
                 />
 
                 <TruckDetails details={data} />
@@ -427,7 +466,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                       <div className="heading1 text-ox-dark">
                         PAYMENT STATUS
                       </div>
-                      {(user.isAdmin || user.isSuperAdmin) && (
+                      {canUserUpdatePaymentStatus && (
                         <div className="w-[150px]">
                           <Button
                             onClick={() => setIsEditPaymentStatus(true)}
@@ -460,6 +499,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                     {data?.transactions?.length === 0 && (
                       <div className="flex flex-col gap-5 items-center justify-center">
                         <Image
+                          preview={false}
                           src="/icons/transaction.svg"
                           width={150}
                           height={150}
@@ -506,6 +546,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                                   size="icon"
                                   icon={
                                     <Image
+                                      preview={false}
                                       src="/icons/ic-contact-edit.svg"
                                       alt="OX Delivery Logo"
                                       width={12}
