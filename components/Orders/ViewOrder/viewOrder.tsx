@@ -2,20 +2,11 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import React, { FC, useEffect, useState } from "react";
-import {
-  Steps,
-  Form,
-  Tooltip,
-  Divider,
-  Row,
-  Col,
-  Empty,
-  Typography
-} from "antd";
+import { Steps, Form, Tooltip, Divider, Row, Col, Empty } from "antd";
 import { Query } from "../../../lib/types/shared";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Header from "./header";
-import { abbreviateNumber, localeString } from "../../../utils/numberFormatter";
+import { localeString } from "../../../utils/numberFormatter";
 import Image from "antd/lib/image";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
@@ -25,8 +16,9 @@ import {
   useWriteOffMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import Loader from "../../Shared/Loader";
+import moment from "moment";
 import { Document, Stop, Transaction } from "../../../lib/types/orders";
-import { dateDisplay } from "../../../utils/dateFormatter";
+import { dateFormatter } from "../../../utils/dateFormatter";
 import AddStop from "../../Forms/Orders/AddStop";
 import EditOrderClient from "../../Forms/Orders/EditOrderClient";
 import ActionModal from "../../Shared/ActionModal";
@@ -51,11 +43,8 @@ import DocumentCard from "../../Analytics/Trucks/TruckCard";
 import { ActivityLogModal } from "../../Modals/ActivityLogModal";
 import EditOrderDepot from "../../Forms/Orders/EditOrderDepot";
 import EditOrderDate from "../../Forms/Orders/EditOrderDate";
-import { useRouter } from "next/router";
-import { routes } from "../../../config/route-config";
 
 const { Step } = Steps;
-const { Text } = Typography;
 
 interface ViewOrderProps {
   orderId?: Query;
@@ -85,8 +74,6 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [getOrder, { isLoading, data }] = useLazyOrderQuery();
 
   const user = userType();
-
-  const router = useRouter();
 
   const canUserUpdatePaymentStatus =
     user.isAdmin || user.isSuperAdmin || user.isDispatcher;
@@ -196,24 +183,12 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             <div key={stop.id} className="flex items-center mb-5">
               <div className="flex-1 flex items-center gap-8">
                 <span className="text-gray-400 font-light">{index + 1}</span>
-                <Text
-                  className="heading2 hover:underline pointer"
-                  onClick={() =>
-                    router.push(`${routes.Trucks.url}/${stop.truck?.id}`)
-                  }
-                >
-                  {stop.truck?.plateNumber}
-                </Text>
+                <span className="heading2">{stop.truck?.plateNumber}</span>
               </div>
               <div className="flex-1 normalText">{stop?.weight} KGs</div>
-              <Text
-                className="flex-1 opacity-50 hover:opacity-100 font-light hover:underline pointer"
-                onClick={() =>
-                  router.push(`${routes.DriverProfile.url}/${stop?.driver?.id}`)
-                }
-              >
+              <div className="flex-1 text-gray-400 font-light">
                 {stop?.driver?.names}
-              </Text>
+              </div>
             </div>
           );
         })}
@@ -333,17 +308,8 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
               <div className="flex-1 h-min bg-white shadow-[0px_0px_19px_#00000008] rounded p-14">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-top gap-12 ">
-                    <div className="heading1 text-ox-dark flex gap-3 items-center">
-                      <span> ORDER #{orderId}</span>
-
-                      {data.locked && (
-                        <Image
-                          src="/icons/lock.svg"
-                          alt="Lock icon"
-                          width={12}
-                          preview={false}
-                        />
-                      )}
+                    <div className="heading1 text-ox-dark">
+                      ORDER #{orderId}
                     </div>
 
                     <div
@@ -368,7 +334,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
 
                 <div className="flex items-center gap-4">
                   <span className="normalText">
-                    {dateDisplay(data.startDateTime)}
+                    {moment(data.startDateTime).format("Do MMMM YYYY")}
                   </span>
 
                   {user.isSuperAdmin && (
@@ -501,7 +467,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                         PAYMENT STATUS
                       </div>
                       {canUserUpdatePaymentStatus && (
-                        <div className="w-[120px]">
+                        <div className="w-[150px]">
                           <Button
                             onClick={() => setIsEditPaymentStatus(true)}
                             type="secondary"
@@ -512,17 +478,17 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                       )}
                     </div>
                   </div>
-                  <div className="flex justify-around m-14 gap-4 sm:gap-4 md:gap-4">
+                  <div className="flex justify-around m-14 gap-10">
                     <div className="w-11/12 flex flex-col border rounded p-5">
                       <div className="mb-1">Paid</div>
                       <div className="font-bold text-2xl text-ox-yellow">
-                        {abbreviateNumber(data.totalPaid)} Rwf
+                        {localeString(data.totalPaid)} Rwf
                       </div>
                     </div>
                     <div className="w-11/12 flex flex-col border p-5 rounded">
                       <div className="mb-1">Remaining</div>
                       <div className="text-2xl text-ox-red font-bold">
-                        {abbreviateNumber(data.remainingAmount)} Rwf
+                        {localeString(data.remainingAmount)} Rwf
                       </div>
                     </div>
                   </div>
@@ -557,7 +523,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                               </span>
                             </div>
                             <div className="flex-1 text-sm text-gray-400 italic font-extralight whitespace-nowrap overflow-hidden text-ellipsis">
-                              {dateDisplay(tx.createdAt)}
+                              {dateFormatter(tx.createdAt)}
                             </div>
                             <div className="flex-1 font-light text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                               <span className="text-md font-bold">
