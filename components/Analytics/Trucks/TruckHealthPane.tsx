@@ -17,13 +17,16 @@ import fileDownload from "js-file-download";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { Empty } from "antd";
 import mappedObjects from "../../../utils/mappedObjects";
-import { dateDisplay } from "../../../utils/dateFormatter";
 
 const { Panel } = Collapse;
 
 type RecordTypes = {
   key: number;
-  value: any;
+  value: {
+    state: string;
+    photos: string[];
+    comment: string;
+  };
 };
 
 const TruckHealthPane = () => {
@@ -175,7 +178,9 @@ const TruckHealthPane = () => {
 
                             <Col md={6} lg={6} xl={10} xxl={10}>
                               <span className="text_ellipsis text-gray-400">
-                                {dateDisplay(inspection.createdAt)}
+                                {moment(inspection.createdAt).format(
+                                  "MMM, DD, YYYY"
+                                )}
                               </span>
                             </Col>
                           </Row>
@@ -294,67 +299,60 @@ export const OneInspection: React.FC<OneInspectionTypes> = ({
   records,
   title,
   children
-}) => {
-  return (
-    <>
-      <p className="text-gray-400 mt-6">{title}</p>
+}) => (
+  <>
+    <p className="text-gray-400 mt-6">{title}</p>
 
-      {children && children}
+    {children && children}
 
-      {records?.map((record: RecordTypes) => {
-        const isRed =
-          record?.value?.state === "BAD" ||
-          record?.value?.state === "NO" ||
-          record?.value === "NO";
+    {records?.map((record: RecordTypes) => (
+      <>
+        <Row
+          align="top"
+          gutter={32}
+          style={{ marginTop: "12px" }}
+          key={record.key}
+        >
+          <Col span={12}>
+            <span className="text font-bold text-ox-dark">{record.key}</span>
+          </Col>
 
-        return (
-          <>
-            <Row
-              align="top"
-              gutter={32}
-              style={{ marginTop: "12px" }}
-              key={record.key}
+          <Col span={3}>
+            <span
+              className={`${
+                record?.value?.state === "BAD" ? "text red" : "text-gray-400"
+              }`}
             >
-              <Col span={12}>
-                <span className="text font-bold text-ox-dark">
-                  {record.key}
-                </span>
-              </Col>
+              {record?.value?.state === "BAD" ? "Not ok" : "Ok"}
+            </span>
+          </Col>
 
-              <Col span={3}>
-                <span className={`${isRed ? "text red" : "text-gray-400"}`}>
-                  {record?.value?.state || record.value}
-                </span>
-              </Col>
+          <Col span={7}>
+            <span className="mb-[32px]">{record?.value?.comment}</span>
 
-              <Col span={7}>
-                <span className="mb-[32px]">{record?.value?.comment}</span>
-
-                {record?.value?.photos?.length > 0 && (
-                  <>
-                    <p className="text-gray-400 mt-6">{title}</p>
-                    <Row gutter={32} align="middle">
-                      {record?.value?.photos?.map(
-                        (photo: string, index: number) => (
-                          <Col key={`${photo} ${index}`}>
-                            <Image
-                              alt=""
-                              src={photo}
-                              width={69}
-                              height={69}
-                              preview={false}
-                            />
-                          </Col>
-                        )
-                      )}
-                    </Row>
-                  </>
-                )}
-              </Col>
-            </Row>
-          </>
-        );
-      })}
-    </>
-  );
-};
+            {record?.value?.photos?.length > 0 && (
+              <>
+                <p className="text-gray-400 mt-6">{title}</p>
+                <Row gutter={32} align="middle">
+                  {record?.value?.photos?.map(
+                    (photo: string, index: number) => (
+                      <Col key={`${photo} ${index}`}>
+                        <Image
+                          alt=""
+                          src={photo}
+                          width={69}
+                          height={69}
+                          preview={false}
+                        />
+                      </Col>
+                    )
+                  )}
+                </Row>
+              </>
+            )}
+          </Col>
+        </Row>
+      </>
+    ))}
+  </>
+);
