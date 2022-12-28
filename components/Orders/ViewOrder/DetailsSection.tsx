@@ -46,7 +46,7 @@ const DetailsSection = ({
   const orderDetails = [
     {
       key: 0,
-      label: "Recipeint",
+      label: "Recipient",
       value: details?.depot.name,
       editable: false,
       editAction: () => null
@@ -77,8 +77,8 @@ const DetailsSection = ({
       key: 3,
       label: "Depot",
       value: details?.depot?.name,
-      editable: false,
-      editAction: () => null
+      editable: user.isSuperAdmin,
+      editAction: editAction
     }
   ];
 
