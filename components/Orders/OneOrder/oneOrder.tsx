@@ -386,12 +386,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
       >
         {/* TOP ROW RIGHT SIDE */}
         <Col>
-          <Row
-            gutter={12}
-            align="middle"
-            onClick={() => setIsActivityLogVisible(true)}
-            className="pointer"
-          >
+          <Row gutter={12} align="middle">
             <Col>
               <Text className="text-sm opacity_56 nowrap ml-14">
                 Created: {dateFormatterNth(order?.startDateTime)}{" "}
@@ -399,9 +394,9 @@ const Order: FC<OrderProps> = ({ order, index }) => {
               </Text>
             </Col>
 
-            <Col>
+            <Col onClick={() => setIsActivityLogVisible(true)}>
               {order.lastEditedBy && (
-                <Text className="opacity_56  nowrap text-xs font-bold underline italic">
+                <Text className="pointer opacity_56  nowrap text-xs font-bold underline italic">
                   Edited by {order?.lastEditedBy}
                 </Text>
               )}
