@@ -230,6 +230,7 @@ const DriversTable: FC<DriversTableProps> = ({
         </div>
       ),
       key: "Names",
+      width: "200px",
       render: (
         text: DriversTableTypes,
         record: DriversTableTypes,
@@ -246,6 +247,7 @@ const DriversTable: FC<DriversTableProps> = ({
     {
       title: "Phone number",
       key: "phoneNumber",
+      width: "120px",
       render: (text: DriversTableTypes, record: DriversTableTypes) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
@@ -257,6 +259,7 @@ const DriversTable: FC<DriversTableProps> = ({
     {
       title: "Email",
       key: "email",
+      width: "150px",
       render: (text: DriversTableTypes, record: DriversTableTypes) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
@@ -330,7 +333,7 @@ const DriversTable: FC<DriversTableProps> = ({
       )
     },
     {
-      title: <span className="text_ellipsis">Shift status</span>,
+      title: "Shift status",
       key: "ongoingShift",
       render: (text: DriversTableTypes, record: DriversTableTypes) => {
         const now = splitDates();
@@ -372,6 +375,7 @@ const DriversTable: FC<DriversTableProps> = ({
     {
       title: "Status",
       key: "status",
+      width: "120px",
       render: (text: DriversTableTypes, record: DriversTableTypes) => (
         <RowsWrapper>
           {!record?.enabled ? (
@@ -386,8 +390,9 @@ const DriversTable: FC<DriversTableProps> = ({
           <span>Action</span>
         </div>
       ),
-      width: "100px",
+      width: "150px",
       key: "Action",
+      fixed: "right",
       render: (text: DriversTableTypes, record: DriversTableTypes) => (
         <RowsWrapper>
           <div className="flex justify-start items-center gap-4">
@@ -454,7 +459,7 @@ const DriversTable: FC<DriversTableProps> = ({
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}
-        scroll={{ x: 0 }}
+        scroll={{ x: "100px" }}
         loading={TableOnActionLoading(isDriversFetching)}
       />
 
