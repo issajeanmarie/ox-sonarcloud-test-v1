@@ -31,8 +31,6 @@ import getHoursDiff from "../../../utils/getHoursDiff";
 import { toNewDate } from "../../../utils/toNewDate";
 import { splitDates } from "../../../utils/splitDates";
 import { percentageCalculator } from "../../../helpers/pacentageCalculators";
-import { useRouter } from "next/router";
-import { routes } from "../../../config/route-config";
 
 const { Text } = Typography;
 
@@ -55,8 +53,6 @@ const DriversTable: FC<DriversTableProps> = ({
   >();
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [itemToEdit, setItemToEdit]: any = useState();
-
-  const router = useRouter();
 
   const AllDrivers = useSelector(
     (state: any) => state.paginatedData.displayPaginatedData
@@ -234,7 +230,7 @@ const DriversTable: FC<DriversTableProps> = ({
         </div>
       ),
       key: "Names",
-      width: "22%",
+      width: "200px",
       render: (
         text: DriversTableTypes,
         record: DriversTableTypes,
@@ -243,26 +239,18 @@ const DriversTable: FC<DriversTableProps> = ({
         <RowsWrapper>
           <div className="flex gap-10">
             <Text className="normalText opacity_56">{index + 1}</Text>
-            <Text
-              className="normalText fowe700 text_ellipsis"
-              title={record.names}
-            >
-              {record?.names}
-            </Text>
+            <Text className="normalText fowe700">{record?.names}</Text>
           </div>
         </RowsWrapper>
       )
     },
     {
       title: "Phone number",
-      width: "12%",
       key: "phoneNumber",
+      width: "120px",
       render: (text: DriversTableTypes, record: DriversTableTypes) => (
         <RowsWrapper>
-          <Text
-            className="normalText opacity_56 text_ellipsis"
-            title={record?.phone}
-          >
+          <Text className="normalText opacity_56">
             {record?.phone ? record?.phone : "---"}
           </Text>
         </RowsWrapper>
@@ -270,14 +258,11 @@ const DriversTable: FC<DriversTableProps> = ({
     },
     {
       title: "Email",
-      width: "14%",
       key: "email",
+      width: "150px",
       render: (text: DriversTableTypes, record: DriversTableTypes) => (
         <RowsWrapper>
-          <Text
-            className="normalText opacity_56 text_ellipsis"
-            title={record?.email}
-          >
+          <Text className="normalText opacity_56">
             {record?.email ? record?.email : "---"}
           </Text>
         </RowsWrapper>
@@ -353,7 +338,7 @@ const DriversTable: FC<DriversTableProps> = ({
       render: (text: DriversTableTypes, record: DriversTableTypes) => {
         const now = splitDates();
         const shiftStartingTime = splitDates(
-          record.ongoingShift ? `${record.ongoingShift.startDateTime}Z` : ""
+          record.ongoingShift ? record.ongoingShift.startDateTime : ""
         );
 
         const diff = getHoursDiff(toNewDate(shiftStartingTime), toNewDate(now));
@@ -390,12 +375,11 @@ const DriversTable: FC<DriversTableProps> = ({
     {
       title: "Status",
       key: "status",
+      width: "120px",
       render: (text: DriversTableTypes, record: DriversTableTypes) => (
         <RowsWrapper>
           {!record?.enabled ? (
-            <Text className=" text-sm font-bold red text_ellipsis">
-              DEACTIVATED
-            </Text>
+            <Text className=" text-sm font-bold red">DEACTIVATED</Text>
           ) : null}
         </RowsWrapper>
       )
@@ -406,7 +390,7 @@ const DriversTable: FC<DriversTableProps> = ({
           <span>Action</span>
         </div>
       ),
-      width: "250px",
+      width: "150px",
       key: "Action",
       fixed: "right",
       render: (text: DriversTableTypes, record: DriversTableTypes) => (
@@ -427,7 +411,6 @@ const DriversTable: FC<DriversTableProps> = ({
                 }
               />
             </div>
-
             <div className="h-1 flex items-center">
               <CustomButton
                 onClick={() => handleToggleDriver(record?.id)}
@@ -447,7 +430,6 @@ const DriversTable: FC<DriversTableProps> = ({
                 }
               />
             </div>
-
             <div className="h-1 flex items-center">
               <CustomButton
                 onClick={() => showModal(setItemToDelete(record?.id))}
@@ -462,18 +444,6 @@ const DriversTable: FC<DriversTableProps> = ({
                   />
                 }
               />
-            </div>
-
-            <div className="h-1 flex items-center">
-              <CustomButton
-                type="view"
-                size="small"
-                onClick={() =>
-                  router.push(`${routes.DriverProfile.url}/${record.id}`)
-                }
-              >
-                View
-              </CustomButton>
             </div>
           </div>
         </RowsWrapper>
