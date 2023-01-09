@@ -6,7 +6,7 @@ import { Steps, Form, Tooltip, Divider, Row, Col, Empty } from "antd";
 import { Query } from "../../../lib/types/shared";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Header from "./header";
-import { localeString } from "../../../utils/numberFormatter";
+import { abbreviateNumber, localeString } from "../../../utils/numberFormatter";
 import Image from "antd/lib/image";
 import Input from "../../Shared/Input";
 import Button from "../../Shared/Button";
@@ -467,7 +467,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                         PAYMENT STATUS
                       </div>
                       {canUserUpdatePaymentStatus && (
-                        <div className="w-[150px]">
+                        <div className="w-[120px]">
                           <Button
                             onClick={() => setIsEditPaymentStatus(true)}
                             type="secondary"
@@ -478,17 +478,17 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                       )}
                     </div>
                   </div>
-                  <div className="flex justify-around m-14 gap-10">
+                  <div className="flex justify-around m-14 gap-4 sm:gap-4 md:gap-4">
                     <div className="w-11/12 flex flex-col border rounded p-5">
                       <div className="mb-1">Paid</div>
                       <div className="font-bold text-2xl text-ox-yellow">
-                        {localeString(data.totalPaid)} Rwf
+                        {abbreviateNumber(data.totalPaid)} Rwf
                       </div>
                     </div>
                     <div className="w-11/12 flex flex-col border p-5 rounded">
                       <div className="mb-1">Remaining</div>
                       <div className="text-2xl text-ox-red font-bold">
-                        {localeString(data.remainingAmount)} Rwf
+                        {abbreviateNumber(data.remainingAmount)} Rwf
                       </div>
                     </div>
                   </div>
