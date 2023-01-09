@@ -34,12 +34,12 @@ const trucksApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
     getTrucks: builder.query({
       providesTags: ["Trucks"],
-      query: ({ noPagination, page, size, sort, search, status }) => ({
+      query: ({ noPagination, page, size, sort, search, status, depot }) => ({
         url: `/trucks${noPagination ? "/no-pagination" : ""}?page=${
           page || ""
-        }&size=${size || ""}&status=${status || ""}&sort=${sort || ""}&search=${
-          search || ""
-        }`,
+        }&depot=${depot || 0}&size=${size || ""}&status=${status || ""}&sort=${
+          sort || ""
+        }&search=${search || ""}`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) => response
