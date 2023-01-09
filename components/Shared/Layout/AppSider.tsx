@@ -10,7 +10,7 @@ import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
 import { manageSidebarMenus, moreSidebarMenus } from "../../../helpers/menus";
 import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
-import { depotTypes, SelectedDepotTypes } from "../../../lib/types/depots";
+import { depotTypes } from "../../../lib/types/depots";
 import { getActiveMenu } from "../../../helpers/getActiveMenu";
 import { routes } from "../../../config/route-config";
 import { getFromLocal, saveToLocal } from "../../../helpers/handleLocalStorage";
@@ -22,9 +22,13 @@ import { escape } from "../../../utils/keyBinders";
 import Notification from "../Notification";
 import { useGlobalMoMoPaymentListener } from "../../../lib/useEffects/useHandleMoMoPaymentListener";
 import NewDepotModal from "../../Modals/NewDepotModal";
-import { userType } from "../../../helpers/getLoggedInUser";
 const { Sider } = Layout;
 const { Text } = Typography;
+
+type DepotTypes = {
+  depotName: string | undefined;
+  depotId: number | undefined;
+};
 
 const AppSider = ({ collapsed }: any) => {
   const [isNewDepotModalVisible, setIsNewDepotModalVisible] = useState(false);
@@ -32,7 +36,7 @@ const AppSider = ({ collapsed }: any) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const depotsState = useSelector(
-    (state: { depots: { payload: SelectedDepotTypes } }) => state.depots.payload
+    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
   );
   const [isNotifyEnabled, setIsNotifyEnabled] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState({
@@ -49,9 +53,6 @@ const AppSider = ({ collapsed }: any) => {
   const { data, isLoading } = useDepotsQuery();
 
   const handleDepotChange = (depot: depotTypes | undefined) => {
-    doesInclude(routes.DepotProfile.url) &&
-      router.push(`${routes.DepotProfile.url}/${depot?.id}`);
-
     dispatch(getDepots({ depotId: depot?.id, depotName: depot?.name }));
     setIsDropdownVisible(false);
 
@@ -72,53 +73,45 @@ const AppSider = ({ collapsed }: any) => {
     router.pathname === routes.Orders.url ||
     doesInclude(routes.Stock.url) ||
     doesInclude(routes.Trucks.url) ||
-    doesInclude(routes.DepotProfile.url) ||
     doesInclude(routes.Warehouse.url);
 
   escape(setIsDropdownVisible);
 
   useGlobalMoMoPaymentListener({ setIsNotifyEnabled, setNotificationMessage });
 
-  const showNotificationOnMenu = (menuName: string): boolean => {
-    return menuName === "Settings" || menuName === "Resources";
-  };
-
   const depots = (
     <Space
       className="depot_dropdown rounded-md p-0"
       direction="vertical"
-      style={{ width: "250px", marginLeft: "12px" }}
+      style={{ width: "90%", marginLeft: "12px" }}
     >
-      {userType().isSuperAdmin && (
-        <div className="text-white border-b border-black p-5">
-          <div className="bg-ox-yellow rounded">
-            <Row align="middle" wrap={false}>
-              <Col className="p-4 pb-3 border-r border-ox-shadow-dark">
-                <Image
-                  className="mt-1"
-                  width={20}
-                  src={`/icons/ic-ecommerce-house-white.svg`}
-                  preview={false}
-                  alt=""
-                />
-              </Col>
+      <div className="text-white border-b border-black p-5">
+        <div className="bg-ox-yellow rounded">
+          <Row align="middle" wrap={false}>
+            <Col className="p-4 pb-3 border-r border-ox-shadow-dark">
+              <Image
+                className="mt-1"
+                width={20}
+                src={`/icons/ic-ecommerce-house-white.svg`}
+                preview={false}
+                alt=""
+              />
+            </Col>
 
-              <Col
-                onClick={() => {
-                  setIsDropdownVisible(false);
-                  setIsNewDepotModalVisible(true);
-                }}
-                className="p-4 text-black font-bold pointer text_ellipsis"
-              >
-                Add new depot
-              </Col>
-            </Row>
-          </div>
+            <Col
+              onClick={() => {
+                setIsDropdownVisible(false);
+                setIsNewDepotModalVisible(true);
+              }}
+              className="p-4 text-black font-bold pointer text_ellipsis"
+            >
+              Add new depot
+            </Col>
+          </Row>
         </div>
-      )}
+      </div>
 
-      <div className="p-6 p-y-0 h-[75vh] overflow-y-auto">
-        <p className="pl-4 text-gray-500">Select to switch depot</p>
+      <div className="p-6">
         <Row
           className="p-4 cursor-pointer"
           onClick={() => handleDepotChange({ id: 0, name: "All depots" })}
@@ -140,45 +133,24 @@ const AppSider = ({ collapsed }: any) => {
 
         {data?.payload?.map((depot) => (
           <Row
-            className={`p-4 cursor-pointer ${
-              depot.id === depotsState.depotId && "bg-black"
-            }`}
+            className="p-4 cursor-pointer"
             onClick={() => handleDepotChange(depot)}
             gutter={12}
             align="middle"
-            justify="space-between"
             key={depot?.id}
             wrap={false}
           >
             <Col>
-              <Row align="middle" gutter={12} wrap={false}>
-                <Col>
-                  <Image
-                    width={16}
-                    src={`/icons/ic-ecommerce-house.svg`}
-                    preview={false}
-                    alt=""
-                  />
-                </Col>
-                <Col>
-                  <Text className="white text_ellipsis">{depot?.name}</Text>
-                </Col>
-              </Row>
+              <Image
+                width={16}
+                src={`/icons/ic-ecommerce-house.svg`}
+                preview={false}
+                alt=""
+              />
             </Col>
-
-            {depot.id === depotsState.depotId && (
-              <Col>
-                <Image
-                  onClick={() =>
-                    showDepots && setIsDropdownVisible(!isDropdownVisible)
-                  }
-                  width={12}
-                  src={`/icons/check.svg`}
-                  preview={false}
-                  alt=""
-                />
-              </Col>
-            )}
+            <Col>
+              <Text className="white text_ellipsis">{depot?.name}</Text>
+            </Col>
           </Row>
         ))}
       </div>
@@ -209,77 +181,59 @@ const AppSider = ({ collapsed }: any) => {
         collapsible
         collapsed={collapsed}
       >
-        <Row
-          align="middle"
-          justify="space-between"
-          className="pointer pad24 mb12  active_menu_bg"
+        <Dropdown
+          visible={isDropdownVisible}
+          trigger={["click"]}
+          disabled={isLoading}
+          overlay={showDepots ? depots : <></>}
+          placement="bottom"
+          className="pointer"
         >
-          <Col
-            className={`depot_background ${collapsed ? "w-[80px] pl-2" : ""}`}
-          >
-            <Dropdown
-              trigger={["hover"]}
-              disabled={isLoading}
-              overlay={showDepots ? depots : <></>}
-              placement="bottom"
-              className="pointer"
-            >
-              <div
-                className={`p-5 w-full ${
-                  showDepots ? "opacity-100" : "opacity-50 cursor-not-allowed"
-                }`}
-              >
-                <Image
-                  onClick={() =>
-                    showDepots && setIsDropdownVisible(!isDropdownVisible)
-                  }
-                  width={22}
-                  src={`/icons/ic-ecommerce-house.svg`}
-                  preview={false}
-                  alt=""
-                />
-              </div>
-            </Dropdown>
-          </Col>
-
-          <Col
-            flex={1}
-            className="px-6"
+          <Row
             onClick={() =>
-              depotsState.depotId &&
-              router.push(`${routes.DepotProfile.url}/${depotsState.depotId}`)
+              showDepots && setIsDropdownVisible(!isDropdownVisible)
             }
+            align="middle"
+            justify="space-between"
+            className="pad24 mb12 border-b border-ox-dark-border"
           >
-            <Row justify="space-between" align="middle">
-              <Col>
-                {!collapsed && (
-                  <div
-                    className={`normalText text-white opacity-50 ${
-                      depotsState?.depotId && "underline opacity-100"
-                    }`}
-                  >
-                    {isLoading ? "Loading" : depotsState?.depotName}
-                  </div>
-                )}
-              </Col>
+            <div
+              className={`flex justify-center items-center p-5 gap-3 w-full ${
+                showDepots ? "opacity-100" : "opacity-50 cursor-not-allowed"
+              }`}
+            >
+              <Image
+                width={22}
+                src={`/icons/ic-ecommerce-house.svg`}
+                preview={false}
+                alt=""
+              />
 
-              <Col>
-                {depotsState?.depotId ? (
-                  <div className="flex flex-1 justify-end">
-                    <Col>
-                      <Image
-                        width={6}
-                        src="/icons/next_btn.svg"
-                        preview={false}
-                        alt=""
-                      />
-                    </Col>
-                  </div>
-                ) : null}
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+              {!collapsed && (
+                <div className="normalText text-white">
+                  {isLoading ? "Loading" : depotsState?.depotName}
+                </div>
+              )}
+
+              {!collapsed && (
+                <div className="flex flex-1 justify-end">
+                  <Col>
+                    <Image
+                      width={12}
+                      src={`/icons/${
+                        isDropdownVisible
+                          ? "ic-actions-close-simple.svg"
+                          : "expand_more_black_24dp_yellow.svg"
+                      }`}
+                      preview={false}
+                      alt=""
+                    />
+                  </Col>
+                </div>
+              )}
+            </div>
+          </Row>
+        </Dropdown>
 
         {!collapsed && <div className="text-gray-500 italic m-6">Manage</div>}
 
@@ -310,7 +264,7 @@ const AppSider = ({ collapsed }: any) => {
                     />
                   }
                 >
-                  <text className={`text-white normalText pl-3 ${menu.name}`}>
+                  <text className="text-white normalText pl-3">
                     {!collapsed && menu.name}
                   </text>
                 </Menu.Item>
@@ -333,7 +287,7 @@ const AppSider = ({ collapsed }: any) => {
               router
             });
 
-            if (showNotificationOnMenu(moreMenu.name)) {
+            if (moreMenu.name === "Settings" || moreMenu.name === "Resources") {
               return (
                 <Menu.Item
                   onClick={() => router.push(moreMenu.url)}
@@ -351,9 +305,7 @@ const AppSider = ({ collapsed }: any) => {
                     />
                   }
                 >
-                  <text
-                    className={`text-white normalText pl-3 ${moreMenu.name}`}
-                  >
+                  <text className="text-white normalText pl-3">
                     {!collapsed && moreMenu.name}
                   </text>
 
@@ -386,7 +338,7 @@ const AppSider = ({ collapsed }: any) => {
                   />
                 }
               >
-                <text className={`text-white normalText pl-3 ${moreMenu.name}`}>
+                <text className="text-white normalText pl-3">
                   {!collapsed && moreMenu.name}
                 </text>
               </Menu.Item>
