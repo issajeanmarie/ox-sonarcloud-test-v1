@@ -197,6 +197,7 @@ export interface SingleMaintenanceInterface {
   lightingDevices: BrakeSystem;
   suspension: BrakeSystem;
   safetyEquipment: BrakeSystem;
+  date: string;
 }
 
 export interface BrakeSystem {
