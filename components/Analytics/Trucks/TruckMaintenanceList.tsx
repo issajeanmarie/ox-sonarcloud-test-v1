@@ -7,11 +7,11 @@ import Collapse from "antd/lib/collapse";
 import { useDeleteMaintenanceCheckMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useRouter } from "next/router";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
-import { LoadingOutlined } from "@ant-design/icons";
 import { Empty } from "antd";
 import { SingleMaintenanceInterface } from "../../../lib/types/trucksTypes";
 import mappedObjects from "../../../utils/mappedObjects";
 import { dateFormatterNth } from "../../../utils/dateFormatter";
+import ActionModal from "../../Shared/ActionModal";
 
 const { Panel } = Collapse;
 
@@ -22,6 +22,8 @@ const TruckMaintenanceList = ({
 }) => {
   const [deleteMaintenanceCheck] = useDeleteMaintenanceCheckMutation();
   const [isDeletingItem, setIsDeletingItem] = useState<number | null>(null);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] =
+    useState<boolean>(false);
 
   const router = useRouter();
   const { id: truckId } = router.query;
@@ -34,14 +36,17 @@ const TruckMaintenanceList = ({
     setIsDeletingItem(null);
   };
 
-  const handleDeleteMaintenanceCheck = (id: number) => {
-    setIsDeletingItem(id);
+  const handleDeleteMaintenanceCheck = (id?: number) => {
+    id && setIsDeletingItem(id);
+    setIsDeleteModalVisible(true);
+  };
 
+  const deleteMaintenanceCheckAction = () => {
     handleAPIRequests({
       request: deleteMaintenanceCheck,
       showSuccess: true,
       id: truckId,
-      checkId: id,
+      checkId: isDeletingItem,
       handleSuccess: handleDeleteMaintenanceCheckSuccess,
       handleFailure: handleDeleteMaintenanceCheckFailure
     });
@@ -53,6 +58,14 @@ const TruckMaintenanceList = ({
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       ) : (
         <>
+          <ActionModal
+            isModalVisible={isDeleteModalVisible}
+            setIsModalVisible={setIsDeleteModalVisible}
+            type="danger"
+            action={() => deleteMaintenanceCheckAction()}
+            loading={false}
+          />
+
           <Collapse bordered={false}>
             {maintenanceData?.content?.map(
               (data: SingleMaintenanceInterface, index: number) => {
@@ -96,7 +109,9 @@ const TruckMaintenanceList = ({
 
                             <Col className="text_ellipsis">
                               <span className="text-gray-400">
-                                {dateFormatterNth(data?.createdAt)}
+                                {dateFormatterNth(
+                                  data?.date || data?.createdAt
+                                )}
                               </span>
                             </Col>
                           </Row>
@@ -123,22 +138,15 @@ const TruckMaintenanceList = ({
                             </Col>
 
                             <Col>
-                              {isDeletingItem === data.id ? (
-                                <LoadingOutlined
-                                  style={{ fontSize: 13, color: "#e7b522" }}
-                                  spin
-                                />
-                              ) : (
-                                <Image
-                                  onClick={() =>
-                                    handleDeleteMaintenanceCheck(data.id)
-                                  }
-                                  src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
-                                  preview={false}
-                                  width={24}
-                                  alt=""
-                                />
-                              )}
+                              <Image
+                                onClick={() =>
+                                  handleDeleteMaintenanceCheck(data.id)
+                                }
+                                src="/icons/delete_forever_FILL0_wght400_GRAD0_opsz48 1.svg"
+                                preview={false}
+                                width={24}
+                                alt=""
+                              />
                             </Col>
 
                             <Col className="mr-4">
