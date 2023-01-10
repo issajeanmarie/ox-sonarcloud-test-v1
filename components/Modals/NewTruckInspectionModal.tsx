@@ -20,8 +20,6 @@ type Types = {
   isUserEditing?: boolean;
   fromTruckProfile?: boolean | undefined;
   truckId: Query;
-  currentTruckData: any;
-  getTruckMaintenanceAction: ({ page }: { page: number }) => void;
 };
 
 const defaultSummary = {
@@ -34,9 +32,7 @@ const defaultSummary = {
 const NewTruckInspectionModal = ({
   isVisible,
   setIsVisible,
-  truckId,
-  currentTruckData,
-  getTruckMaintenanceAction
+  truckId
 }: Types) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
@@ -71,8 +67,6 @@ const NewTruckInspectionModal = ({
     setCurrentStep(0);
     setShowSummary(false);
     setSummary(defaultSummary);
-
-    getTruckMaintenanceAction({ page: 0 });
   };
 
   const handleCreateMaintenanceCheck = () => {
@@ -90,7 +84,7 @@ const NewTruckInspectionModal = ({
     dataToSave = {
       ...dataToSave,
       ...summary,
-      date: moment(checklistDate).format("YYYY-MM-DDTHH:mm")
+      date: moment(checklistDate).format("YYY-MM-DDTHH:mm")
     };
 
     handleAPIRequests({
@@ -160,6 +154,7 @@ const NewTruckInspectionModal = ({
 
   const stepsPercentage =
     (currentStep * 100) / preventativeMaintenanceChecklist.steps.length;
+
   return (
     <ModalWrapper
       footerContent={
@@ -194,7 +189,7 @@ const NewTruckInspectionModal = ({
         </Row>
       }
       title="PREVENTATIVE MAINTENANCE CHECKLIST"
-      subTitle={currentTruckData?.plateNumber}
+      subTitle="RAC 533 H"
       isModalVisible={isVisible}
       setIsModalVisible={setIsVisible}
       loading={false}
