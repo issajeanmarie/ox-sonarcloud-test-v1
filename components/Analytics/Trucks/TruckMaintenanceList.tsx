@@ -10,10 +10,8 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { Empty } from "antd";
 import { SingleMaintenanceInterface } from "../../../lib/types/trucksTypes";
 import mappedObjects from "../../../utils/mappedObjects";
-import { dateDisplay } from "../../../utils/dateFormatter";
+import { dateFormatterNth } from "../../../utils/dateFormatter";
 import ActionModal from "../../Shared/ActionModal";
-import { useDispatch } from "react-redux";
-import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const { Panel } = Collapse;
 
@@ -22,31 +20,27 @@ const TruckMaintenanceList = ({
 }: {
   maintenanceData: any;
 }) => {
-  const [deleteMaintenanceCheck, { isLoading: isDeleteLoading }] =
-    useDeleteMaintenanceCheckMutation();
+  const [deleteMaintenanceCheck] = useDeleteMaintenanceCheckMutation();
   const [isDeletingItem, setIsDeletingItem] = useState<number | null>(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] =
     useState<boolean>(false);
 
   const router = useRouter();
   const { id: truckId } = router.query;
-  const dispatch = useDispatch();
 
-  const handleDeleteMaintenanceCheckSuccess = ({ payload }: any) => {
-    dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
+  const handleDeleteMaintenanceCheckSuccess = () => {
     setIsDeletingItem(null);
-    setIsDeleteModalVisible(false);
   };
 
   const handleDeleteMaintenanceCheckFailure = () => {
     setIsDeletingItem(null);
-    setIsDeleteModalVisible(false);
   };
 
   const handleDeleteMaintenanceCheck = (id?: number) => {
     id && setIsDeletingItem(id);
     setIsDeleteModalVisible(true);
   };
+
   const deleteMaintenanceCheckAction = () => {
     handleAPIRequests({
       request: deleteMaintenanceCheck,
@@ -69,7 +63,7 @@ const TruckMaintenanceList = ({
             setIsModalVisible={setIsDeleteModalVisible}
             type="danger"
             action={() => deleteMaintenanceCheckAction()}
-            loading={isDeleteLoading}
+            loading={false}
           />
 
           <Collapse bordered={false}>
@@ -115,7 +109,9 @@ const TruckMaintenanceList = ({
 
                             <Col className="text_ellipsis">
                               <span className="text-gray-400">
-                                {dateDisplay(data?.date || data?.createdAt)}
+                                {dateFormatterNth(
+                                  data?.date || data?.createdAt
+                                )}
                               </span>
                             </Col>
                           </Row>
