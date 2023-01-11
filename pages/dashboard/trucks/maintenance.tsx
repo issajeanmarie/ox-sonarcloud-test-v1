@@ -116,7 +116,6 @@ const Maintenance = () => {
         showPagination={showPagination}
         handleLoadMore={handleLoadMore}
         isLoadMoreLoading={isLoadMoreLoading}
-        getTruckMaintenanceAction={getTruckMaintenanceAction}
       />
     </Layout>
   );
