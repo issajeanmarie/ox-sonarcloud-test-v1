@@ -43,7 +43,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const [isCancelModalVisible, setIsCancelModalVisible] =
     useState<boolean>(false);
 
-  const [isRecipientCodeModalVisible, setIsRecipientCodeModalVisible] =
+  const [isReceipientCodeModalVisible, setIsReceipientCodeModalVisible] =
     useState<boolean>(false);
 
   const [isConfirmCompleteOrder, setIsConfirmCompleteOrder] =
@@ -148,7 +148,6 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             preview={false}
           />
         )}
-
         <Image
           className="cursor-pointer"
           src="/icons/code.svg"
@@ -156,9 +155,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
           width={16}
           height={16}
           preview={false}
-          onClick={() => setIsRecipientCodeModalVisible(true)}
+          onClick={() => setIsReceipientCodeModalVisible(true)}
         />
-
         <Image
           className={
             canUserDelete ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
@@ -223,8 +221,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         loading={orderStatusLoading}
       />
       <ReceipientCodeModal
-        isModalVisible={isRecipientCodeModalVisible}
-        setIsModalVisible={setIsRecipientCodeModalVisible}
+        isModalVisible={isReceipientCodeModalVisible}
+        setIsModalVisible={setIsReceipientCodeModalVisible}
         code={code}
       />
       <MobilePayment

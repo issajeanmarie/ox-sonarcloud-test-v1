@@ -144,7 +144,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
             <Col
               md={{ span: 24 }}
               lg={{ span: 10 }}
-              className="h-[84vh]  overflow-auto"
+              className="h-[85vh]  overflow-auto"
               style={{
                 padding: "0 12px 38px 24px",
                 marginTop: "24px"
@@ -220,7 +220,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
             <Col
               md={{ span: 24 }}
               lg={{ span: 14 }}
-              className="h-[84vh]"
+              className="h-[85vh]"
               style={{
                 padding: "0 24px 38px 12px",
                 marginTop: "24px"

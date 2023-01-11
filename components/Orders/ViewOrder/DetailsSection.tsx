@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { localeString } from "../../../utils/numberFormatter";
 import TextLight from "../../Shared/Text/TextLight";
 import { userType } from "../../../helpers/getLoggedInUser";
@@ -164,6 +164,7 @@ const DetailsSection = ({
                     alt="Backspace icon"
                     width={13}
                     height={13}
+                    preview={false}
                   />
                 </span>
               )}
