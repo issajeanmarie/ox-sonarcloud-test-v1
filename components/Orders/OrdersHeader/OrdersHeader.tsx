@@ -6,7 +6,7 @@ import { ApiResponseMetadata } from "../../../lib/types/shared";
 import FilterOrdersForm from "../../Forms/Orders/Filter/filter";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import FilterOrdersModal from "../../Shared/Modal";
 import { getFromLocal } from "../../../helpers/handleLocalStorage";
 import { OX_ORDERS_FILTERS } from "../../../config/constants";
@@ -67,6 +67,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
           onClick={showModal}
           className="cursor-pointer"
           alt="Filter icon"
+          preview={false}
         />
       </div>
 

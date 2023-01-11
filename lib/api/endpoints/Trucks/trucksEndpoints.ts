@@ -316,8 +316,7 @@ const trucksApi = baseAPI.injectEndpoints({
         }&start=${start || ""}&end=${end || ""}`,
         method: "GET"
       }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) => response
     }),
 
     getTruckRevenueAnalytics: builder.query({
