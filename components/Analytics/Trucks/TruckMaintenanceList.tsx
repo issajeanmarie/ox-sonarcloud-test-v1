@@ -12,6 +12,8 @@ import { SingleMaintenanceInterface } from "../../../lib/types/trucksTypes";
 import mappedObjects from "../../../utils/mappedObjects";
 import { dateFormatterNth } from "../../../utils/dateFormatter";
 import ActionModal from "../../Shared/ActionModal";
+import { useDispatch } from "react-redux";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 
 const { Panel } = Collapse;
 
@@ -20,27 +22,31 @@ const TruckMaintenanceList = ({
 }: {
   maintenanceData: any;
 }) => {
-  const [deleteMaintenanceCheck] = useDeleteMaintenanceCheckMutation();
+  const [deleteMaintenanceCheck, { isLoading: isDeleteLoading }] =
+    useDeleteMaintenanceCheckMutation();
   const [isDeletingItem, setIsDeletingItem] = useState<number | null>(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] =
     useState<boolean>(false);
 
   const router = useRouter();
   const { id: truckId } = router.query;
+  const dispatch = useDispatch();
 
-  const handleDeleteMaintenanceCheckSuccess = () => {
+  const handleDeleteMaintenanceCheckSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ deleted: true, payload: { id: payload } }));
     setIsDeletingItem(null);
+    setIsDeleteModalVisible(false);
   };
 
   const handleDeleteMaintenanceCheckFailure = () => {
     setIsDeletingItem(null);
+    setIsDeleteModalVisible(false);
   };
 
   const handleDeleteMaintenanceCheck = (id?: number) => {
     id && setIsDeletingItem(id);
     setIsDeleteModalVisible(true);
   };
-
   const deleteMaintenanceCheckAction = () => {
     handleAPIRequests({
       request: deleteMaintenanceCheck,
@@ -63,7 +69,7 @@ const TruckMaintenanceList = ({
             setIsModalVisible={setIsDeleteModalVisible}
             type="danger"
             action={() => deleteMaintenanceCheckAction()}
-            loading={false}
+            loading={isDeleteLoading}
           />
 
           <Collapse bordered={false}>
