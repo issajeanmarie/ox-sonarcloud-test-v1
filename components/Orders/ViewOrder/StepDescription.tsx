@@ -3,11 +3,6 @@ import Image from "antd/lib/image";
 import { Stop } from "../../../lib/types/orders";
 import { userType } from "../../../helpers/getLoggedInUser";
 import { orderStatus } from "../../../utils/orderStatus";
-import { useRouter } from "next/router";
-import { routes } from "../../../config/route-config";
-import { Typography } from "antd";
-
-const { Text } = Typography;
 
 const StepDescription = ({
   st,
@@ -23,7 +18,6 @@ const StepDescription = ({
   data: any;
 }) => {
   const user = userType();
-  const router = useRouter();
 
   const { isCanceled } = orderStatus(data?.status);
 
@@ -51,20 +45,10 @@ const StepDescription = ({
             </span>
           )}
         </div>
-
-        <Text
-          className="flex-2 opacity-50 hover:opacity-100 font-light hover:underline pointer"
-          onClick={() =>
-            router.push(`${routes.DriverProfile.url}/${st?.driver?.id}`)
-          }
-        >
-          {st.driver.names}
-        </Text>
-
+        <div className="flex-2 text-gray-400 font-light">{st.driver.names}</div>
         <div className="flex-1 text-black font-light text-right">
           {st.weight} KGs
         </div>
-
         <div
           className={`flex-1 flex items-center gap-5 justify-end ${
             !user.isAdmin && !user.isSuperAdmin && "opacity-50"
