@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import Input from "../../../Shared/Input";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Button from "../../../../components/Shared/Button";
@@ -268,6 +268,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                       alt="Calendar icon"
                       width={18}
                       height={18}
+                      preview={false}
                     />
                   }
                   rules={requiredField("Start date")}
@@ -481,6 +482,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                       src="/icons/ic-actions-close-simple.svg"
                       alt="Close icon"
                       onClick={() => handleRemoveStop(index)}
+                      preview={false}
                     />
                   </div>
                 </div>

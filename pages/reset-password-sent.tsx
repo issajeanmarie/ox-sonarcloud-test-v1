@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "antd/lib/image";
 import Link from "next/link";
 import React from "react";
 import { Button as AntButton } from "antd";
@@ -11,7 +11,13 @@ const ResetPasswordSent = () => {
   return (
     <AuthWrapper title="">
       <div className="mt-20 flex justify-center items-center flex-col">
-        <Image src="/mail_sent.svg" alt="" width="100px" height="100px" />
+        <Image
+          src="/mail_sent.svg"
+          alt=""
+          width="100px"
+          height="100px"
+          preview={false}
+        />
         <div className="mt-4 text-center">
           <span className="text-black">
             A link to reset your password <br /> was sent to your mail box

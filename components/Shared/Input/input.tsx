@@ -22,7 +22,7 @@ import usePlacesAutocomplete, {
 } from "use-places-autocomplete";
 import useOnClickOutside from "../../../utils/hooks/useOutsideClick";
 import { LoadingOutlined } from "@ant-design/icons";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { FileUploader } from "./fileUploader";
 import moment from "moment";
 import { WarningMessage } from "../Messages/WarningMessage";
@@ -273,6 +273,7 @@ const Entry = ({
               alt="Calendar icon"
               width={18}
               height={18}
+              preview={false}
             />
           }
           format={dateFormat || format || "YYYY-MM-DD"}

@@ -4,7 +4,7 @@ import React, { FC, useEffect } from "react";
 import { requiredField } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
 import Button from "../../../Shared/Button";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import WarehouseItemsTable from "../../../Tables/Warehouse/WarehouseItemsTable";
 import { YellowCheckIcon } from "../../../Icons";
 import { AddWarehouseOrderTypes } from "../../../../lib/types/warehouse";
@@ -122,6 +122,7 @@ const AddWarehouseOrder: FC<AddWarehouseOrderTypes> = ({
                 alt=""
                 width={18}
                 height={18}
+                preview={false}
               />
             }
             rules={[{ required: true, message: "Select date" }]}

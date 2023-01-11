@@ -38,7 +38,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { pagination } from "../../../config/pagination";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import BatchesModal from "../../../components/Modals/BatchesModal";
 import { useDownloadAnalyticsReportMutation } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
 import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
@@ -450,6 +450,7 @@ const Stock = () => {
                               width="16"
                               height="16"
                               alt=""
+                              preview={false}
                             />
                           </div>
 

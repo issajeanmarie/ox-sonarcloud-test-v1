@@ -2,7 +2,7 @@
 import { Col, Form, Row, Select } from "antd";
 import React, { FC } from "react";
 import Input from "../../../Shared/Input";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { EditStockTypes } from "../../../../lib/types/warehouse";
 import moment from "moment";
 import { requiredField } from "../../../../lib/validation/InputValidations";
@@ -43,6 +43,7 @@ const EditStock: FC<EditStockTypes> = ({
                 alt=""
                 width={18}
                 height={18}
+                preview={false}
               />
             }
             rules={[{ required: true, message: "Select date" }]}
@@ -95,6 +96,7 @@ const EditStock: FC<EditStockTypes> = ({
                 alt=""
                 width={18}
                 height={18}
+                preview={false}
               />
             }
             rules={[{ required: true, message: "Select date" }]}

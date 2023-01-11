@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { Query } from "../../../../lib/types/shared";
 import Button from "../../../Shared/Button";
 import { FormInstance } from "antd";
@@ -26,6 +26,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         alt="Backspace icon"
         width={20}
         height={20}
+        preview={false}
         onClick={() => setSupport(false)}
       />
       <span className="text-md font-bold">Orders</span>

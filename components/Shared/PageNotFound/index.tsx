@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "antd/lib/image";
 import Link from "next/link";
 import React from "react";
 import { routes } from "../../../config/route-config";
@@ -7,7 +7,13 @@ const PageNotFound = () => {
   return (
     <div className="h-full flex justify-center items-center w-full flex-col">
       <div className="flex flex-col gap-5 items-center justify-center mt-12">
-        <Image src="/icons/transaction.svg" width={80} height={80} alt="" />
+        <Image
+          src="/icons/transaction.svg"
+          width={80}
+          height={80}
+          alt=""
+          preview={false}
+        />
         <div className="font-extralight text-md w-[170px] text-center">
           <h6 className="font-bold">This page is not available.</h6>
           <span>

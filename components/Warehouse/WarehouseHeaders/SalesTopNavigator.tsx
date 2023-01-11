@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { SalesTopNavigatorTypes } from "../../../lib/types/pageTypes/Warehouse/Sales/SalesTopNavigator";
 import Navbar from "../../Shared/Content/Navbar";
 import Heading1 from "../../Shared/Text/Heading1";
@@ -148,6 +148,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
           onClick={showFilterModal}
           className="cursor-pointer"
           alt="Filter icon"
+          preview={false}
         />
       </div>
 

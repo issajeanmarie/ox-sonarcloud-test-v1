@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditClientLocation from "../../Forms/Clients/EditClientLocation";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { LatLng } from "use-places-autocomplete";
 import { RemoveCircleOutlineIcon } from "../../Icons";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
@@ -143,6 +143,7 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
               alt="Backspace icon"
               width={16}
               height={16}
+              preview={false}
             />
 
             <AntDButton
