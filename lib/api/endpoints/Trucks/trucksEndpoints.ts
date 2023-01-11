@@ -289,7 +289,7 @@ const trucksApi = baseAPI.injectEndpoints({
       CreateTruckResponse,
       DeleteMaintenanceCheckRequest
     >({
-      invalidatesTags: ["MaintenanceCheck"],
+      invalidatesTags: [],
       query: ({ id, checkId }) => {
         return {
           url: `/trucks/${id}/maintenance-checks/${checkId}`,
@@ -316,8 +316,7 @@ const trucksApi = baseAPI.injectEndpoints({
         }&start=${start || ""}&end=${end || ""}`,
         method: "GET"
       }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) => response
     }),
 
     getTruckRevenueAnalytics: builder.query({
