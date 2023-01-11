@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import Divider from "antd/lib/divider";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { PlusOutlined } from "@ant-design/icons";
 import Header from "./Header";
 import Loader from "../../Shared/Loader";
@@ -163,6 +163,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
                     alt=""
                     width={22}
                     height={22}
+                    preview={false}
                   />
                 </div>
 

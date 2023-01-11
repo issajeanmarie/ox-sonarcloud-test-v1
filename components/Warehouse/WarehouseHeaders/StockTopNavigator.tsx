@@ -18,7 +18,6 @@ import { useSuppliersQuery } from "../../../lib/api/endpoints/Warehouse/supplier
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import { changeRoute } from "../../../helpers/routesHandler";
@@ -107,13 +106,14 @@ const StockTopNavigator: FC<StockTopNavigatorTypes> = ({
       <Row gutter={24} align="middle" wrap={false}>
         <Col className="flex items-center gap-4">
           {query?.page === "more" && (
-            <Image
+            <AntdImage
               onClick={() => changeRoute(`${routes.Stock.url}?wtb=STOCK`)}
               className="pointer"
               src="/icons/keyboard_backspace_black_24dp.svg"
               alt="Backspace icon"
               width={20}
               height={20}
+              preview={false}
             />
           )}
           <Heading1>{localeString(stocksNumber || 0)} Items</Heading1>

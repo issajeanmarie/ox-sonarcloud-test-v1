@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Image from "next/image";
+import Image from "antd/lib/image";
 
 const Loader: FC = () => {
   return (
@@ -9,6 +9,7 @@ const Loader: FC = () => {
         alt=""
         width="120px"
         height="120px"
+        preview={false}
         className="animate-spin duration-1000"
       />
     </div>

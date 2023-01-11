@@ -1,6 +1,6 @@
 import React, { FC, useState, Fragment } from "react";
 import { Query } from "../../../lib/types/shared";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import Button from "../../Shared/Button";
 import { useRouter } from "next/router";
 import ActionModal from "../../Shared/ActionModal";
@@ -94,6 +94,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         alt="Backspace icon"
         width={20}
         height={20}
+        preview={false}
         onClick={() => router.push(routes.Orders.url)}
       />
       <span className="text-md font-bold">Orders</span>
@@ -117,6 +118,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             onClick={() => canUserDelete && downloadOrderInvoice()}
             width={18}
             height={18}
+            preview={false}
           />
         )}
         <Image
@@ -125,6 +127,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
           alt="Backspace icon"
           width={16}
           height={16}
+          preview={false}
           onClick={() => setIsReceipientCodeModalVisible(true)}
         />
         <Image
@@ -135,6 +138,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
           alt="Backspace icon"
           width={20}
           height={20}
+          preview={false}
           onClick={() => canUserDelete && setIsCancelModalVisible(true)}
         />
         <button

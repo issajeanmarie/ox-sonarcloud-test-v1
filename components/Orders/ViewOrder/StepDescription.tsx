@@ -1,5 +1,5 @@
 import moment from "moment";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { Stop } from "../../../lib/types/orders";
 import { userType } from "../../../helpers/getLoggedInUser";
 import { orderStatus } from "../../../utils/orderStatus";
@@ -67,6 +67,7 @@ const StepDescription = ({
               }}
               width={15}
               height={15}
+              preview={false}
             />
           )}
           <Image
@@ -81,6 +82,7 @@ const StepDescription = ({
             }}
             width={15}
             height={15}
+            preview={false}
           />
         </div>
       </div>

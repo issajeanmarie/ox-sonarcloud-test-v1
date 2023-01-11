@@ -12,7 +12,7 @@ import {
 } from "../../../lib/api/endpoints/Clients/clientsEndpoint";
 import { useRouter } from "next/router";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import Button from "../../Shared/Button";
 import ModalWrapper from "../../Modals/ModalWrapper";
 import EditClientRecipient from "../../Forms/Clients/EditClientRecipient";
@@ -134,6 +134,7 @@ const ClientOrderRecipientTable: FC<ClientOrderRecipientTableProps> = ({
                 alt="Backspace icon"
                 width={18}
                 height={18}
+                preview={false}
               />
             </AntDButton>
             <AntDButton

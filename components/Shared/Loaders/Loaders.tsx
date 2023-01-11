@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { Col, Row, Skeleton, Spin, Space, Avatar, List } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -33,6 +33,7 @@ export const AppLoadingLoader = () => {
         alt=""
         width="80px"
         height="80px"
+        preview={false}
         className="animate-spin duration-1000"
       />
     </div>
@@ -54,6 +55,7 @@ export const ComponentLoadingLoader = () => {
         alt=""
         width="80px"
         height="80px"
+        preview={false}
         className="animate-spin duration-1000"
       />
     </div>
