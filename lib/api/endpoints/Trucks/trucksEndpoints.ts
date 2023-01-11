@@ -289,7 +289,7 @@ const trucksApi = baseAPI.injectEndpoints({
       CreateTruckResponse,
       DeleteMaintenanceCheckRequest
     >({
-      invalidatesTags: ["MaintenanceCheck"],
+      invalidatesTags: [],
       query: ({ id, checkId }) => {
         return {
           url: `/trucks/${id}/maintenance-checks/${checkId}`,
