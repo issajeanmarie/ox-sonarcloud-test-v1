@@ -7,4 +7,5 @@ export type ViewTruckHeaderTypes = {
   truckData: any;
   isPageLoading: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentTruckData?: any;
 };

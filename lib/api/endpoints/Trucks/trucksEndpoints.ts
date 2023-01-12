@@ -262,7 +262,7 @@ const trucksApi = baseAPI.injectEndpoints({
     }),
 
     createMaintenanceCheck: builder.mutation<unknown, unknown>({
-      invalidatesTags: ["MaintenanceCheck"],
+      invalidatesTags: [],
       query: ({ id, ...DTO }) => {
         return {
           url: `/trucks/${id}/maintenance-checks`,
