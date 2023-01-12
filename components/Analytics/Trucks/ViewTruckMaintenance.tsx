@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Header from "./Header";
 import Loader from "../../Shared/Loader";
 import { Query } from "../../../lib/types/shared";
@@ -22,6 +22,7 @@ interface ViewTruckProps {
   showPagination: boolean;
   handleLoadMore: () => void;
   isLoadMoreLoading: boolean;
+  getTruckMaintenanceAction: ({ page }: { page: number }) => void;
 }
 
 const ViewTruckMaintenance: FC<ViewTruckProps> = ({
@@ -37,8 +38,11 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
   setIsAddInspectionModalVisible,
   showPagination,
   handleLoadMore,
-  isLoadMoreLoading
+  isLoadMoreLoading,
+  getTruckMaintenanceAction
 }) => {
+  const [currentTruckData, setCurrentTruckData] = useState();
+
   return (
     <div className="overflow-hidden">
       {isPageLoading ? (
@@ -49,6 +53,8 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
             isVisible={isAddInspectionModalVisible}
             setIsVisible={setIsAddInspectionModalVisible}
             truckId={truckId}
+            currentTruckData={currentTruckData}
+            getTruckMaintenanceAction={getTruckMaintenanceAction}
           />
 
           <Header
@@ -56,6 +62,7 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
             truckData={maintenanceData}
             isPageLoading={isPageLoading}
             setIsVisible={setIsAddInspectionModalVisible}
+            setCurrentTruckData={setCurrentTruckData}
           />
 
           <Content
