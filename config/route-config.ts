@@ -114,5 +114,9 @@ export const routes = {
   DriverProfile: {
     name: "Driver profile",
     url: "/dashboard/drivers"
+  },
+  Expenses: {
+    name: "Expenses Tracker",
+    url: "/dashboard/expenses"
   }
 };
