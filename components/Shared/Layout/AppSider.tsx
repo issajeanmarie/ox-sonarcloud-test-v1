@@ -321,7 +321,11 @@ const AppSider = ({ collapsed }: any) => {
               router
             });
 
-            if (moreMenu.name === "Settings" || moreMenu.name === "Resources") {
+            if (
+              moreMenu.name === "Settings" ||
+              moreMenu.name === "Resources" ||
+              moreMenu.name === "Expenses"
+            ) {
               return (
                 <Menu.Item
                   onClick={() => router.push(moreMenu.url)}
