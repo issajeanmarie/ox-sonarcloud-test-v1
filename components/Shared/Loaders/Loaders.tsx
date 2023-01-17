@@ -745,9 +745,6 @@ export const ExpensesTableLoader = () => {
       <Col md={4}>
         <Skeleton.Input active size="small" block={true} />
       </Col>
-      <Col md={4}>
-        <Skeleton.Input active size="small" block={true} />
-      </Col>
       <Col md={3}>
         <Skeleton.Input active size="small" block={true} />
       </Col>
@@ -778,14 +775,6 @@ export const ExpensesTableLoader = () => {
           </Space>
         </Row>
       </Col>
-    </Row>
-  );
-};
-
-export const DepotProfileLoader = () => {
-  return (
-    <Row justify="center" align="middle" className="w-[100%] h-[70vh]">
-      <Col>{loadingIcon}</Col>
     </Row>
   );
 };

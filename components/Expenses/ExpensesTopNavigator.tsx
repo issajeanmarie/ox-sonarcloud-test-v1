@@ -3,25 +3,32 @@ import { Col, Row } from "antd";
 import React from "react";
 import { FC } from "react";
 import { ExpensesTopNavigatorTypes } from "../../lib/types/pageTypes/Expenses/ExpensesTopNavigatorTypes";
+import ModalWrapper from "../Modals/ModalWrapper";
+import ReacordExpense from "../Forms/Expenses/RecordExpense";
 import DropDownSelector from "../Shared/DropDownSelector";
 import Navbar from "../Shared/Content/Navbar";
 import Heading1 from "../Shared/Text/Heading1";
 import Button from "../Shared/Button";
 import { localeString } from "../../utils/numberFormatter";
-import ActionModal from "../Shared/ActionModal";
 
 const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
+  isModalVisible,
   showModal,
-  isWarningModalVisible,
-  showWarningModal,
-  setIsWarningModalVisible,
+  setIsModalVisible,
   expenses,
   sort,
-  setSort,
-  selectedRows,
-  approveSelected,
-  isApproving
+  setSort
 }) => {
+  // ADD EXPENSE
+  // const handlePostExpenseSuccess = () => {
+  //   form.resetFields();
+  //   setIsModalVisible(false);
+  // };
+
+  const onRecordExpenseFinish = () => {
+    setIsModalVisible(false);
+  };
+
   const LeftSide = (
     <Col className="flex items-center gap-4">
       <Row gutter={24} align="middle" wrap={false}>
@@ -46,32 +53,6 @@ const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
 
   const RightSide = (
     <div className="flex items-center gap-5">
-      {selectedRows.length ? (
-        <>
-          <div className="flex items-center gap-6">
-            <Button
-              type="secondary"
-              onClick={showWarningModal}
-              loading={isApproving}
-              disabled={isApproving}
-            >
-              APPROVE SELECTED
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <Button
-              type="danger_filled"
-              onClick={showWarningModal}
-              loading={isApproving}
-              disabled={isApproving}
-            >
-              DELETE SELECTED
-            </Button>
-          </div>
-        </>
-      ) : null}
-
       <div className="flex items-center gap-6">
         <Button type="primary" onClick={showModal}>
           RECORD EXPENSE
@@ -82,17 +63,27 @@ const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
 
   return (
     <>
-      {/* Action Modal */}
-      <ActionModal
-        isModalVisible={isWarningModalVisible}
-        setIsModalVisible={setIsWarningModalVisible}
-        title="warning!"
-        description="This action is not reversible, please make sure you really want to proceed with this action!"
-        actionLabel="PROCEED"
-        type="danger"
-        action={() => approveSelected()}
-        loading={isApproving}
-      />
+      <ModalWrapper
+        setIsModalVisible={setIsModalVisible}
+        isModalVisible={isModalVisible}
+        title="NEW EXPENSE"
+        loading={false}
+        footerContent={
+          <Button
+            type="primary"
+            form="ReacordExpense"
+            htmlType="submit"
+            loading={false}
+          >
+            ADD EXPENSE
+          </Button>
+        }
+      >
+        <ReacordExpense
+          onRecordExpenseFinish={onRecordExpenseFinish}
+          isLoading={false}
+        />
+      </ModalWrapper>
 
       <Navbar type="CENTER" LeftSide={LeftSide} RightSide={RightSide} />
     </>

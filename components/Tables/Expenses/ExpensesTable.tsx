@@ -1,4 +1,4 @@
-import { Checkbox, Table } from "antd";
+import { Table } from "antd";
 import React, { FC, useState, SetStateAction } from "react";
 import Typography from "antd/lib/typography";
 import Image from "antd/lib/image";
@@ -10,109 +10,126 @@ import { dateFormatter } from "../../../utils/dateFormatter";
 import { ExpensesTableTypes } from "../../../lib/types/pageTypes/Expenses/ExpensesTableTypes";
 import { ExpensesTableProps } from "../../../lib/types/pageTypes/Expenses/ExpensesTableProps";
 import ActionModal from "../../Shared/ActionModal";
+import {
+  useDeleteResourceMutation,
+  useEditResourceMutation
+} from "../../../lib/api/endpoints/Resources/resourcesEndpoints";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import ModalWrapper from "../../Modals/ModalWrapper";
+import ReacordExpense from "../../Forms/Expenses/RecordExpense";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { useDispatch } from "react-redux";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import FilePreview from "../../Shared/FilePreview";
 import ViewExpense from "../../Expenses/ViewExpense";
-import { Expense } from "../../../lib/types/expenses";
-import { useDeleteExpenseMutation } from "../../../lib/api/endpoints/Expenses/expensesEndpoint";
 
 const { Column } = Table;
 const { Text } = Typography;
 
 const ResourcesTable: FC<ExpensesTableProps> = ({
+  isModalVisible,
+  showModal,
+  setIsModalVisible,
   expenses,
-  isExpensesFetching,
-  onSelectRows,
-  showEditModal
+  isExpensesFetching
 }) => {
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [isApproveModalVisible, setIsApproveModalVisible] =
-    useState<boolean>(false);
-  const [itemToAprove, setItemToAprove] =
+  const [itemToUpload, setItemToUpload] =
     useState<SetStateAction<number | undefined>>();
-  const [isDeleteModalVisible, setIsDeleteModalVisible] =
-    useState<boolean>(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
+  const [itemToEdit, setItemToEdit]: any = useState();
   const [itemToDelete, setItemToDelete] =
     useState<SetStateAction<number | undefined>>();
   const [isViewModalVisible, setIsViewModalVisible] = useState<boolean>(false);
-  const [itemToView, setItemToView] = useState<Expense>();
-  const [deleteExpense, { isLoading: isDeleting }] = useDeleteExpenseMutation();
+  const [itemToView, setItemToView]: any = useState();
+  const [, { isLoading: isEditing }] = useEditResourceMutation();
+  const [deleteResource, { isLoading: isDeleting }] =
+    useDeleteResourceMutation();
 
   const dispatch = useDispatch();
 
-  const onToggleRow = (id: number) => {
-    let newRows = [];
-    if (selectedRows.includes(id)) {
-      newRows = selectedRows.filter((row) => row !== id);
-    } else {
-      newRows = [...selectedRows, id];
-    }
-    setSelectedRows(newRows);
-    onSelectRows && onSelectRows(newRows);
-  };
+  // const dispatchReplace = (newContent: any) => {
+  //   dispatch(
+  //     displayPaginatedData({
+  //       payload: {
+  //         payload: {
+  //           content: [...newContent],
+  //           totalPages: expenses.payload.totalPages,
+  //           totalElements: expenses.payload.totalElements
+  //         }
+  //       },
+  //       replace: true
+  //     })
+  //   );
+  // };
 
-  const onToggleRows = () => {
-    let newRows = [];
-    if (selectedRows.length !== expenses?.payload?.content.length) {
-      newRows = expenses?.payload?.content.map(
-        (record: ExpensesTableTypes) => record.id
-      );
-    }
-
-    setSelectedRows(newRows);
-    onSelectRows && onSelectRows(newRows);
-  };
-
-  const handleApproveExpenseSuccess = () => {
+  const handleUploadExpenseSuccess = () => {
+    setIsModalVisible(false);
     dispatch(
       displayPaginatedData({ deleted: true, payload: { id: itemToDelete } })
     );
-    setIsApproveModalVisible(false);
   };
 
-  const handleApproveExpense = () => {
+  const handleUploadExpense = () => {
     handleAPIRequests({
-      request: deleteExpense,
-      id: itemToAprove,
+      request: deleteResource,
+      id: itemToUpload,
       showSuccess: true,
-      handleSuccess: handleApproveExpenseSuccess
+      handleSuccess: handleUploadExpenseSuccess
     });
   };
 
   const handleDeleteExpenseSuccess = () => {
+    setIsModalVisible(false);
     dispatch(
       displayPaginatedData({ deleted: true, payload: { id: itemToDelete } })
     );
-    setIsDeleteModalVisible(false);
   };
 
   const handleDeleteExpense = () => {
     handleAPIRequests({
-      request: deleteExpense,
+      request: deleteResource,
       id: itemToDelete,
       showSuccess: true,
       handleSuccess: handleDeleteExpenseSuccess
     });
   };
 
-  const showApproveModal = (id: number) => {
-    setItemToAprove(id);
-    setIsApproveModalVisible(true);
+  const showEditModal = (record: any) => {
+    setItemToEdit(record);
+    setIsEditModalVisible(true);
   };
 
-  const showDeleteModal = (id: number) => {
-    setItemToDelete(id);
-    setIsDeleteModalVisible(true);
-  };
-
-  const showViewModal = (record: Expense) => {
+  const showViewModal = (record: any) => {
     setItemToView(record);
     setIsViewModalVisible(true);
+  };
+
+  // const handleEditExpenseSuccess = ({ payload }: any) => {
+  //   setIsEditModalVisible(false);
+
+  //   const newExpensesList: any = [];
+
+  //   expenses?.payload?.content?.map((resource: any) => {
+  //     if (resource.id === payload.id) {
+  //       newExpensesList.push(payload);
+  //     } else {
+  //       newExpensesList.push(resource);
+  //     }
+  //   });
+
+  //   dispatchReplace(newExpensesList);
+  // };
+
+  const onEditExpenseFinish = () => {
+    // handleAPIRequests({
+    //   request: editResource,
+    //   title: values?.title,
+    //   link: values?.link,
+    //   id: itemToEdit?.id,
+    //   showSuccess: true,
+    //   handleSuccess: handleEditExpenseSuccess
+    // });
   };
 
   const handleDownloadFile = (link: string) => {
@@ -138,31 +155,6 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
         <Column
           width="4%"
           key="key"
-          title={() => {
-            return (
-              <Checkbox
-                checked={
-                  selectedRows.length > 0 &&
-                  selectedRows.length === expenses?.payload?.content.length
-                }
-                onChange={() => onToggleRows()}
-              />
-            );
-          }}
-          render={(text: ExpensesTableTypes, record: ExpensesTableTypes) => {
-            const child = (
-              <Checkbox
-                checked={selectedRows.includes(record.id)}
-                onChange={() => onToggleRow(record.id)}
-              />
-            );
-            return { children: child, props: { "data-label": "Toggle" } };
-          }}
-        />
-
-        <Column
-          width="4%"
-          key="key"
           title="#"
           render={(
             _text: ExpensesTableTypes,
@@ -182,9 +174,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           title="Supplier"
           render={(_text: ExpensesTableTypes, record: ExpensesTableTypes) => {
             const child = (
-              <Text className="normalText fowe700">
-                {record?.qbSupplierName}
-              </Text>
+              <Text className="normalText fowe700">{record?.supplier}</Text>
             );
             return {
               children: child,
@@ -200,7 +190,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           render={(text: ExpensesTableTypes, record: ExpensesTableTypes) => {
             const child = (
               <Text className="normalText opacity_56 text_ellipsis">
-                {record?.qbTruckName}
+                {record?.truck}
               </Text>
             );
             return {
@@ -249,26 +239,30 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           key="attachment"
           title="Attachment"
           render={(text: ExpensesTableTypes, record: ExpensesTableTypes) => {
-            const child = record?.attachmentUrl ? (
-              <FilePreview
-                className="h-9 w-56 !pr-2 !pl-2"
-                fileName={
-                  record.attachmentUrl.split("/")[
-                    record.attachmentUrl.split("/").length - 1
-                  ]
-                }
-                onClick={() => handleDownloadFile(record.attachmentUrl)}
-                suffixIcon={
-                  <Image
-                    src="/icons/download_2.svg"
-                    alt=""
-                    width={14}
-                    preview={false}
+            const child = (
+              <Text className="normalText opacity_56 text_ellipsis">
+                {record?.attachment ? (
+                  <FilePreview
+                    className="h-9 !pr-2 !pl-2"
+                    fileName={
+                      record.attachment.split("/")[
+                        record.attachment.split("/").length - 1
+                      ]
+                    }
+                    onClick={() => handleDownloadFile(record.attachment)}
+                    suffixIcon={
+                      <Image
+                        src="/icons/download_2.svg"
+                        alt=""
+                        width={14}
+                        preview={false}
+                      />
+                    }
                   />
-                }
-              />
-            ) : (
-              "---"
+                ) : (
+                  "---"
+                )}
+              </Text>
             );
             return {
               children: child,
@@ -281,11 +275,11 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           width="20%"
           key="key"
           title="Action"
-          render={(record: Expense) => {
+          render={(record: any) => {
             const child = (
               <Row align="middle" gutter={16} wrap={false}>
                 <Col className="my-[-12px]">
-                  {record.status === "APPROVED" ? (
+                  {record.approved ? (
                     <CustomButton
                       type="normal"
                       size="icon"
@@ -303,7 +297,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
                     <CustomButton
                       type="success"
                       size="icon"
-                      onClick={() => showApproveModal(record?.id)}
+                      onClick={() => showModal(setItemToUpload(record?.id))}
                       icon={
                         <Image
                           src="/icons/check.svg"
@@ -339,7 +333,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
                     type="danger"
                     size="icon"
                     className="bg_danger"
-                    onClick={() => showDeleteModal(record?.id)}
+                    onClick={() => showModal(setItemToDelete(record?.id))}
                     icon={
                       <Image
                         src="/icons/ic-actions-remove.svg"
@@ -369,18 +363,18 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
 
       {/* Action Modal */}
       <ActionModal
-        isModalVisible={isApproveModalVisible}
-        setIsModalVisible={setIsApproveModalVisible}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
         title="warning!"
         description="This action is not reversible, please make sure you really want to proceed with this action!"
         actionLabel="PROCEED"
         type="danger"
-        action={() => handleApproveExpense()}
+        action={() => handleUploadExpense()}
         loading={isDeleting}
       />
       <ActionModal
-        isModalVisible={isDeleteModalVisible}
-        setIsModalVisible={setIsDeleteModalVisible}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
         title="warning!"
         description="This action is not reversible, please make sure you really want to proceed with this action!"
         actionLabel="PROCEED"
@@ -390,25 +384,40 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
       />
 
       <ModalWrapper
-        setIsModalVisible={setIsViewModalVisible}
-        isModalVisible={isViewModalVisible}
-        title="EXPENSE TRACKER"
-        loading={isDeleting}
-        footerWidth={24}
+        setIsModalVisible={setIsEditModalVisible}
+        isModalVisible={isEditModalVisible}
+        title="EDIT EXPENSE"
+        loading={isEditing}
         footerContent={
-          <Row gutter={[16, 16]} align="middle" justify="space-between">
-            <Col flex="none">
-              <span className="heading2">PENDING APPROVAL</span>
-            </Col>
-            <Col flex="none">
-              <Button type="success" loading={isDeleting}>
-                APPROVE
-              </Button>
-            </Col>
-          </Row>
+          <Button
+            form="ReacordExpense"
+            type="primary"
+            htmlType="submit"
+            loading={isEditing}
+          >
+            SAVE CHANGES
+          </Button>
         }
       >
-        <ViewExpense expense={itemToView as Expense} />
+        <ReacordExpense
+          editExpenseData={itemToEdit}
+          onRecordExpenseFinish={onEditExpenseFinish}
+          isLoading={isEditing}
+        />
+      </ModalWrapper>
+
+      <ModalWrapper
+        setIsModalVisible={setIsViewModalVisible}
+        isModalVisible={isViewModalVisible}
+        title="EDIT EXPENSE"
+        loading={isEditing}
+        footerContent={
+          <Button type="success" loading={isDeleting}>
+            APPROVE
+          </Button>
+        }
+      >
+        <ViewExpense expense={itemToView} />
       </ModalWrapper>
     </>
   );
