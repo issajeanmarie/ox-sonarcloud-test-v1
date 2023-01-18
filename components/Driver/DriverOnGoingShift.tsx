@@ -4,27 +4,8 @@ import Row from "antd/lib/row";
 import CustomButton from "../Shared/Button";
 import Divider from "antd/lib/divider";
 import TruckOverviewCard from "../Analytics/Trucks/TruckOverviewCard";
-import { FC } from "react";
-import { DriverProfileResponse } from "../../lib/types/Accounts/drivers";
-import TimeOverviewCard from "../Analytics/Trucks/TimeOverviewCard";
-import { useEndShiftMutation } from "../../lib/api/endpoints/Accounts/driversEndpoints";
-import { handleAPIRequests } from "../../utils/handleAPIRequests";
 
-interface Props {
-  driverData: DriverProfileResponse;
-}
-
-const DriverOnGoingShift: FC<Props> = ({ driverData }) => {
-  const [endShift, { isLoading }] = useEndShiftMutation();
-
-  const handleEndShift = () => {
-    handleAPIRequests({
-      request: endShift,
-      id: driverData?.payload?.profileInfo?.id,
-      showSuccess: true
-    });
-  };
-
+const DriverOnGoingShift = () => {
   return (
     <Row className="bg-[#FFFFFF] rounded shadow-[0px_0px_19px_#00000008] mt-4">
       <Row justify="space-between" align="middle" className="w-full p-8">
@@ -35,12 +16,7 @@ const DriverOnGoingShift: FC<Props> = ({ driverData }) => {
         </Col>
 
         <Col flex="none">
-          <CustomButton
-            type="danger"
-            size="small"
-            loading={isLoading}
-            onClick={handleEndShift}
-          >
+          <CustomButton type="danger" size="small">
             <span className="red">STOP SHIFT</span>
           </CustomButton>
         </Col>
@@ -58,12 +34,7 @@ const DriverOnGoingShift: FC<Props> = ({ driverData }) => {
             xxl={{ span: 12 }}
             className="mb-8"
           >
-            <TimeOverviewCard
-              data={{
-                name: "Duration",
-                profileInfo: driverData?.payload?.profileInfo
-              }}
-            />
+            <TruckOverviewCard data={{ name: "Orders", num: 12323 }} />
           </Col>
 
           <Col
@@ -74,12 +45,7 @@ const DriverOnGoingShift: FC<Props> = ({ driverData }) => {
             xxl={{ span: 12 }}
             className="mb-8"
           >
-            <TruckOverviewCard
-              data={{
-                name: "Orders",
-                num: driverData?.payload?.ongoingOrders
-              }}
-            />
+            <TruckOverviewCard data={{ name: "Duration", num: 12323 }} />
           </Col>
         </Row>
       </div>

@@ -1,33 +1,41 @@
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
+import moment from "moment";
 import { FC } from "react";
 import Row from "antd/lib/row";
 import RowsWrapper from "../Tables/RowsWrapper";
-import { orderStatus } from "../../utils/orderStatus";
+import { numbersFormatter } from "../../helpers/numbersFormatter";
+import { orderStatus, paymentStatus } from "../../utils/orderStatus";
 import { TableOnActionLoading } from "../Shared/Loaders/Loaders";
-import {
-  DriverShiftOrders,
-  DriverShiftSingleOrder
-} from "../../lib/types/Accounts/drivers";
-import { abbreviateNumber } from "../../utils/numberFormatter";
-import { useRouter } from "next/router";
-import { routes } from "../../config/route-config";
-import { dateDisplay } from "../../utils/dateFormatter";
 
 const { Text } = Typography;
 
+const dumpData = [
+  {
+    id: 0,
+    startDateTime: "12-04-2022",
+    totalAmount: 765657,
+    paymentStatus: "PENDING",
+    status: "FULL_PAID"
+  },
+
+  {
+    id: 1,
+    startDateTime: "12-04-2022",
+    totalAmount: 765657,
+    paymentStatus: "PENDING",
+    status: "FULL_PAID"
+  }
+];
+
 type ClientOrderHistoryTableProps = {
-  isFetchingOrders: boolean;
-  data: DriverShiftOrders;
+  isClientOrdersFetching: boolean;
 };
 
 const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
-  isFetchingOrders,
-  data
+  isClientOrdersFetching
 }) => {
-  const router = useRouter();
-
   const columns: any = [
     {
       title: (
@@ -37,18 +45,11 @@ const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
         </div>
       ),
       key: "Order",
-      render: (text: string, record: DriverShiftSingleOrder, index: number) => (
+      render: (text: any, record: any, index: number) => (
         <RowsWrapper>
           <Row className="flex gap-10 cursor-pointer">
             <Text className="normalText opacity_56">{index + 1}</Text>
-            <Text
-              className="normalText fowe900 underline"
-              onClick={() =>
-                router.push(`${routes.viewOrder.url}/${record.id}`)
-              }
-            >
-              {record.id}
-            </Text>
+            <Text className="normalText fowe900 underline">{record?.id}</Text>
           </Row>
         </RowsWrapper>
       )
@@ -56,10 +57,11 @@ const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
     {
       title: "Date",
       key: "Date",
-      render: (text: string, record: DriverShiftSingleOrder) => (
+      render: (text: any, record: any) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
-            {record?.startDateTime && dateDisplay(record?.startDateTime)}
+            {record?.startDateTime &&
+              moment(record?.startDateTime).format("ll")}
           </Text>
         </RowsWrapper>
       )
@@ -67,18 +69,49 @@ const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
     {
       title: "Job value",
       key: "JobValue",
-      render: (text: string, record: DriverShiftSingleOrder) => (
+      render: (text: any, record: any) => (
         <RowsWrapper>
           <Text className="normalText fowe900">
-            {abbreviateNumber(record?.totalAmount || 0)} Rwf
+            {record?.totalAmount && numbersFormatter(record?.totalAmount)} Rwf
           </Text>
         </RowsWrapper>
       )
     },
     {
+      title: "Payment",
+      key: "Payment",
+      render: (text: any, record: any) => {
+        const { isFullPaid, isHalfPaid, isPending } = paymentStatus(
+          record?.paymentStatus
+        );
+
+        return (
+          <RowsWrapper>
+            <div className="flex gap-4">
+              <Text
+                className={`normalText fowe900
+            ${isHalfPaid && "yellow_faded_text"}
+             ${isFullPaid && "toggle_grey"}
+              ${isPending && "red"}
+            `}
+              >
+                {record?.paymentStatus}
+              </Text>
+              {isHalfPaid && (
+                <Text className="normalText opacity_56">
+                  {record?.paidAmount}
+                </Text>
+              )}
+            </div>
+          </RowsWrapper>
+        );
+      }
+    },
+    {
       title: "Order status",
       key: "OrderStatus",
-      render: (text: string, record: DriverShiftSingleOrder) => {
+      render: (text: any, record: any) => {
+        const { isPending } = paymentStatus(record?.paymentStatus);
         const { isCanceled, isComplete } = orderStatus(record?.status);
 
         return (
@@ -87,9 +120,10 @@ const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
               className={`normalText fowe900
             ${isComplete && "toggle_grey"}
             ${isCanceled && "red"}
+               ${isPending && "black"}
             `}
             >
-              {record?.status?.replace("_", " ")}
+              {record?.status}
             </Text>
           </RowsWrapper>
         );
@@ -101,12 +135,12 @@ const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
     <Table
       className="data_table light_white_header light_white_table"
       columns={columns}
-      dataSource={data?.payload?.orders}
+      dataSource={dumpData}
       rowKey={(record) => record?.id}
       pagination={false}
       bordered={false}
       scroll={{ x: 0 }}
-      loading={TableOnActionLoading(isFetchingOrders)}
+      loading={TableOnActionLoading(isClientOrdersFetching)}
     />
   );
 };
