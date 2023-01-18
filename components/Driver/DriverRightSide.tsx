@@ -1,20 +1,22 @@
-import { FC } from "react";
-import { DriverProfileResponse } from "../../lib/types/Accounts/drivers";
+import { Col } from "antd";
 import DriverInfo from "./DriverInfo";
 import DriverOnGoingShift from "./DriverOnGoingShift";
 
-interface Props {
-  driverData: DriverProfileResponse;
-}
-
-const DriverRightSide: FC<Props> = ({ driverData }) => {
+const DriverRightSide = () => {
   return (
-    <>
-      <DriverInfo driverData={driverData} />
-      {driverData?.payload?.profileInfo?.ongoingShift && (
-        <DriverOnGoingShift driverData={driverData} />
-      )}
-    </>
+    <Col
+      xs={24}
+      sm={24}
+      md={10}
+      lg={10}
+      xl={10}
+      xxl={10}
+      className="h-[86vh] overflow-auto"
+    >
+      <DriverInfo />
+
+      <DriverOnGoingShift />
+    </Col>
   );
 };
 
