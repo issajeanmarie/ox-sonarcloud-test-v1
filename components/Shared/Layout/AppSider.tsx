@@ -78,6 +78,10 @@ const AppSider = ({ collapsed }: any) => {
 
   useGlobalMoMoPaymentListener({ setIsNotifyEnabled, setNotificationMessage });
 
+  const showNotificationOnMenu = (menuName: string): boolean => {
+    return menuName === "Settings" || menuName === "Resources";
+  };
+
   const depots = (
     <Space
       className="depot_dropdown rounded-md p-0"
@@ -321,11 +325,7 @@ const AppSider = ({ collapsed }: any) => {
               router
             });
 
-            if (
-              moreMenu.name === "Settings" ||
-              moreMenu.name === "Resources" ||
-              moreMenu.name === "Expenses"
-            ) {
+            if (showNotificationOnMenu(moreMenu.name)) {
               return (
                 <Menu.Item
                   onClick={() => router.push(moreMenu.url)}
