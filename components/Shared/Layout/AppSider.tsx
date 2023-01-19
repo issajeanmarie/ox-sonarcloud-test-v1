@@ -10,7 +10,7 @@ import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
 import { manageSidebarMenus, moreSidebarMenus } from "../../../helpers/menus";
 import { useDepotsQuery } from "../../../lib/api/endpoints/Depots/depotEndpoints";
-import { depotTypes } from "../../../lib/types/depots";
+import { depotTypes, SelectedDepotTypes } from "../../../lib/types/depots";
 import { getActiveMenu } from "../../../helpers/getActiveMenu";
 import { routes } from "../../../config/route-config";
 import { getFromLocal, saveToLocal } from "../../../helpers/handleLocalStorage";
@@ -25,18 +25,13 @@ import NewDepotModal from "../../Modals/NewDepotModal";
 const { Sider } = Layout;
 const { Text } = Typography;
 
-type DepotTypes = {
-  depotName: string | undefined;
-  depotId: number | undefined;
-};
-
 const AppSider = ({ collapsed }: any) => {
   const [isNewDepotModalVisible, setIsNewDepotModalVisible] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const depotsState = useSelector(
-    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
+    (state: { depots: { payload: SelectedDepotTypes } }) => state.depots.payload
   );
   const [isNotifyEnabled, setIsNotifyEnabled] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState({
@@ -53,6 +48,9 @@ const AppSider = ({ collapsed }: any) => {
   const { data, isLoading } = useDepotsQuery();
 
   const handleDepotChange = (depot: depotTypes | undefined) => {
+    doesInclude(routes.DepotProfile.url) &&
+      router.push(`${routes.DepotProfile.url}/${depot?.id}`);
+
     dispatch(getDepots({ depotId: depot?.id, depotName: depot?.name }));
     setIsDropdownVisible(false);
 
@@ -73,7 +71,8 @@ const AppSider = ({ collapsed }: any) => {
     router.pathname === routes.Orders.url ||
     doesInclude(routes.Stock.url) ||
     doesInclude(routes.Trucks.url) ||
-    doesInclude(routes.Warehouse.url);
+    doesInclude(routes.DepotProfile.url);
+  doesInclude(routes.Warehouse.url);
 
   escape(setIsDropdownVisible);
 
@@ -83,7 +82,7 @@ const AppSider = ({ collapsed }: any) => {
     <Space
       className="depot_dropdown rounded-md p-0"
       direction="vertical"
-      style={{ width: "90%", marginLeft: "12px" }}
+      style={{ width: "250px", marginLeft: "12px" }}
     >
       <div className="text-white border-b border-black p-5">
         <div className="bg-ox-yellow rounded">
@@ -112,6 +111,7 @@ const AppSider = ({ collapsed }: any) => {
       </div>
 
       <div className="p-6">
+        <p className="pl-4 text-gray-500">Select to switch depot</p>
         <Row
           className="p-4 cursor-pointer"
           onClick={() => handleDepotChange({ id: 0, name: "All depots" })}
@@ -133,24 +133,45 @@ const AppSider = ({ collapsed }: any) => {
 
         {data?.payload?.map((depot) => (
           <Row
-            className="p-4 cursor-pointer"
+            className={`p-4 cursor-pointer ${
+              depot.id === depotsState.depotId && "bg-black"
+            }`}
             onClick={() => handleDepotChange(depot)}
             gutter={12}
             align="middle"
+            justify="space-between"
             key={depot?.id}
             wrap={false}
           >
             <Col>
-              <Image
-                width={16}
-                src={`/icons/ic-ecommerce-house.svg`}
-                preview={false}
-                alt=""
-              />
+              <Row align="middle" gutter={12}>
+                <Col>
+                  <Image
+                    width={16}
+                    src={`/icons/ic-ecommerce-house.svg`}
+                    preview={false}
+                    alt=""
+                  />
+                </Col>
+                <Col>
+                  <Text className="white text_ellipsis">{depot?.name}</Text>
+                </Col>
+              </Row>
             </Col>
-            <Col>
-              <Text className="white text_ellipsis">{depot?.name}</Text>
-            </Col>
+
+            {depot.id === depotsState.depotId && (
+              <Col>
+                <Image
+                  onClick={() =>
+                    showDepots && setIsDropdownVisible(!isDropdownVisible)
+                  }
+                  width={12}
+                  src={`/icons/check.svg`}
+                  preview={false}
+                  alt=""
+                />
+              </Col>
+            )}
           </Row>
         ))}
       </div>
@@ -181,59 +202,72 @@ const AppSider = ({ collapsed }: any) => {
         collapsible
         collapsed={collapsed}
       >
-        <Dropdown
-          visible={isDropdownVisible}
-          trigger={["click"]}
-          disabled={isLoading}
-          overlay={showDepots ? depots : <></>}
-          placement="bottom"
-          className="pointer"
+        <Row
+          align="middle"
+          justify="space-between"
+          className="pointer pad24 mb12  active_menu_bg"
         >
-          <Row
-            onClick={() =>
-              showDepots && setIsDropdownVisible(!isDropdownVisible)
-            }
-            align="middle"
-            justify="space-between"
-            className="pad24 mb12 border-b border-ox-dark-border"
+          <Col
+            className={`depot_background ${collapsed ? "w-[80px] pl-2" : ""}`}
           >
-            <div
-              className={`flex justify-center items-center p-5 gap-3 w-full ${
-                showDepots ? "opacity-100" : "opacity-50 cursor-not-allowed"
-              }`}
+            <Dropdown
+              trigger={["hover"]}
+              disabled={isLoading}
+              overlay={showDepots ? depots : <></>}
+              placement="bottom"
+              className="pointer"
             >
-              <Image
-                width={22}
-                src={`/icons/ic-ecommerce-house.svg`}
-                preview={false}
-                alt=""
-              />
+              <div
+                className={`p-5 w-full ${
+                  showDepots ? "opacity-100" : "opacity-50 cursor-not-allowed"
+                }`}
+              >
+                <Image
+                  onClick={() =>
+                    showDepots && setIsDropdownVisible(!isDropdownVisible)
+                  }
+                  width={22}
+                  src={`/icons/ic-ecommerce-house.svg`}
+                  preview={false}
+                  alt=""
+                />
+              </div>
+            </Dropdown>
+          </Col>
 
-              {!collapsed && (
-                <div className="normalText text-white">
-                  {isLoading ? "Loading" : depotsState?.depotName}
-                </div>
-              )}
+          <Col
+            flex={1}
+            className="px-6"
+            onClick={() =>
+              router.push(`${routes.DepotProfile.url}/${depotsState.depotId}`)
+            }
+          >
+            <Row justify="space-between" align="middle">
+              <Col>
+                {!collapsed && (
+                  <div className="normalText text-white underline">
+                    {isLoading ? "Loading" : depotsState?.depotName}
+                  </div>
+                )}
+              </Col>
 
-              {!collapsed && (
-                <div className="flex flex-1 justify-end">
-                  <Col>
-                    <Image
-                      width={12}
-                      src={`/icons/${
-                        isDropdownVisible
-                          ? "ic-actions-close-simple.svg"
-                          : "expand_more_black_24dp_yellow.svg"
-                      }`}
-                      preview={false}
-                      alt=""
-                    />
-                  </Col>
-                </div>
-              )}
-            </div>
-          </Row>
-        </Dropdown>
+              <Col>
+                {!collapsed && (
+                  <div className="flex flex-1 justify-end">
+                    <Col>
+                      <Image
+                        width={6}
+                        src="/icons/next_btn.svg"
+                        preview={false}
+                        alt=""
+                      />
+                    </Col>
+                  </div>
+                )}
+              </Col>
+            </Row>
+          </Col>
+        </Row>
 
         {!collapsed && <div className="text-gray-500 italic m-6">Manage</div>}
 
