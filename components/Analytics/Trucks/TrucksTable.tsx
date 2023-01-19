@@ -38,6 +38,8 @@ type SingleTruckTypes = {
   model: string;
   capacity: number;
   active: boolean;
+  minFuelPer100km: number | null;
+  maxFuelPer100km: number | null;
 };
 
 type State = {
@@ -203,6 +205,34 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
               const child = (
                 <Text className="normalText opacity_56">
                   {record?.capacity}
+                </Text>
+              );
+              return { children: child, props: { "data-label": "Capacity" } };
+            }}
+          />
+
+          <Column
+            width="20%"
+            key="minFuelPer100km"
+            title="Minimum Fuel/100km"
+            render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
+              const child = (
+                <Text className="normalText opacity_56">
+                  {record?.minFuelPer100km || 0} Litres
+                </Text>
+              );
+              return { children: child, props: { "data-label": "Capacity" } };
+            }}
+          />
+
+          <Column
+            width="20%"
+            key="maxFuelPer100km"
+            title="Maximum Fuel/100km"
+            render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
+              const child = (
+                <Text className="normalText opacity_56">
+                  {record?.maxFuelPer100km || 0} Litres
                 </Text>
               );
               return { children: child, props: { "data-label": "Capacity" } };

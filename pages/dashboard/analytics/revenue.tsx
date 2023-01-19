@@ -14,11 +14,7 @@ import { useRouter } from "next/router";
 import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import PageNotFound from "../../../components/Shared/PageNotFound";
-
-type DepotTypes = {
-  depotName: string | undefined;
-  depotId: number | undefined;
-};
+import { SelectedDepotTypes } from "../../../lib/types/depots";
 
 const Analytics = () => {
   const router = useRouter();
@@ -43,7 +39,7 @@ const Analytics = () => {
   const { start, end } = DaysCalculator(selectedDay?.value || "");
 
   const depotsState = useSelector(
-    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
+    (state: { depots: { payload: SelectedDepotTypes } }) => state.depots.payload
   );
 
   const {

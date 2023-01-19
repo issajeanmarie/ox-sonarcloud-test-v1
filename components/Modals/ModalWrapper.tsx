@@ -15,6 +15,7 @@ interface ModalProps {
   footerContent?: React.ReactNode;
   width?: number;
   subTitle?: string;
+  footerWidth?: number;
 }
 
 const ModalWrapper: FC<ModalProps> = ({
@@ -27,7 +28,8 @@ const ModalWrapper: FC<ModalProps> = ({
   destroyOnClose,
   footerContent,
   width = 550,
-  subTitle
+  subTitle,
+  footerWidth
 }) => {
   const handleOk = () => {
     setIsModalVisible(false);
@@ -69,7 +71,14 @@ const ModalWrapper: FC<ModalProps> = ({
       footer={
         footerContent ? (
           <Row justify="end">
-            <Col xs={24} sm={24} md={10} lg={10} xl={10} xxl={10}>
+            <Col
+              xs={24}
+              sm={24}
+              md={10}
+              lg={footerWidth || 10}
+              xl={footerWidth || 10}
+              xxl={footerWidth || 10}
+            >
               {footerContent}
             </Col>
           </Row>

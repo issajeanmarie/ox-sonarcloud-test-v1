@@ -19,7 +19,8 @@ interface ButtonProps {
     | "normal"
     | "view"
     | "dropdown"
-    | "toggle";
+    | "toggle"
+    | "green";
   loading?: boolean;
   disabled?: boolean;
   size?: "icon" | "small";
@@ -39,6 +40,7 @@ const CustomButton: FC<ButtonProps> = ({
   size,
   disabled,
   className,
+  transform,
   htmlType,
   children,
   onClick,
@@ -50,9 +52,9 @@ const CustomButton: FC<ButtonProps> = ({
       return (
         <Button
           form={form}
-          className={`my_button uppercase ${size === "icon" && "icon"} ${
-            size === "small" && "sm"
-          } bg_yellow ${className}`}
+          className={`my_button ${transform || "uppercase"} ${
+            size === "icon" && "icon"
+          } ${size === "small" && "sm"} bg_yellow ${className}`}
           loading={loading}
           disabled={loading || disabled}
           icon={icon}
@@ -68,9 +70,9 @@ const CustomButton: FC<ButtonProps> = ({
       return (
         <Button
           form={form}
-          className={`my_button uppercase ${size === "icon" && "icon"} ${
-            size === "small" && "sm"
-          }  bg_white_yellow yellow ${className}`}
+          className={`my_button ${transform || "uppercase"} ${
+            size === "icon" && "icon"
+          } ${size === "small" && "sm"}  bg_white_yellow yellow ${className}`}
           loading={loading}
           disabled={loading || disabled}
           icon={icon}
@@ -85,7 +87,7 @@ const CustomButton: FC<ButtonProps> = ({
       return (
         <Button
           form={form}
-          className={`my_button dropdown_button uppercase ${
+          className={`my_button dropdown_button ${transform || "uppercase"} ${
             size === "icon" && "icon"
           } ${size === "small" && "sm"}  bg_white_yellow yellow ${className}`}
           loading={loading}
@@ -101,9 +103,28 @@ const CustomButton: FC<ButtonProps> = ({
       return (
         <Button
           form={form}
-          className={`my_button uppercase ${size === "icon" && "icon"} ${
+          className={`my_button ${transform || "uppercase"} ${
+            size === "icon" && "icon"
+          } ${
             size === "small" && "sm"
           }  bg_yellow_view_btn yellow ${className}`}
+          loading={loading}
+          disabled={loading || disabled}
+          icon={icon}
+          htmlType={htmlType}
+          onClick={onClick}
+        >
+          {children}
+        </Button>
+      );
+
+    case "green":
+      return (
+        <Button
+          form={form}
+          className={`my_button ${transform || "uppercase"} ${
+            size === "icon" && "icon"
+          } ${size === "small" && "sm"}  bg_green_check_btn white ${className}`}
           loading={loading}
           disabled={loading || disabled}
           icon={icon}
@@ -120,7 +141,7 @@ const CustomButton: FC<ButtonProps> = ({
           form={form}
           className={`my_button ${size === "icon" && "icon"} ${
             size === "small" && "sm"
-          }  bg_danger yellow ${className}`}
+          }  bg_danger ${className}`}
           loading={loading}
           disabled={loading || disabled}
           icon={icon}
