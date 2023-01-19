@@ -23,3 +23,13 @@ export type CreateDepotRequest = {
   location: string;
   coordinates: string;
 };
+
+export type SelectedDepotTypes = {
+  depotName: string | undefined;
+  depotId: number | undefined;
+};
+
+export type DepotAlertModalTypes = {
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+};

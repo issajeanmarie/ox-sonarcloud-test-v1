@@ -104,7 +104,15 @@ export const routes = {
     url: "/dashboard/warehouse/suppliers"
   },
   SaleOrderDetails: {
-    name: "SaleOrderDetails",
+    name: "Sale Order Details",
     url: "/dashboard/warehouse/order-details"
+  },
+  DepotProfile: {
+    name: "Depot profile",
+    url: "/dashboard/depot"
+  },
+  DriverProfile: {
+    name: "Driver profile",
+    url: "/dashboard/drivers"
   }
 };

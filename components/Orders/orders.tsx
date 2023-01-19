@@ -13,11 +13,7 @@ import { OX_ORDERS_FILTERS } from "../../config/constants";
 import Content from "../Shared/Content";
 import CustomButton from "../../components/Shared/Button";
 import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
-
-type DepotTypes = {
-  depotName: string | undefined;
-  depotId: number | undefined;
-};
+import { SelectedDepotTypes } from "../../lib/types/depots";
 
 const Orders: FC = () => {
   const [currentPages, setCurrentPages] = useState(1);
@@ -29,7 +25,7 @@ const Orders: FC = () => {
   const dispatch = useDispatch();
 
   const depotsState = useSelector(
-    (state: { depots: { payload: DepotTypes } }) => state.depots.payload
+    (state: { depots: { payload: SelectedDepotTypes } }) => state.depots.payload
   );
 
   const [getOrders, { isLoading, isFetching }] = useLazyOrdersQuery({});
