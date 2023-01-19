@@ -739,3 +739,9 @@ body {
 .active_menu_bg {
   background-color: rgba(0, 0, 0, 0.25);
 }
+
+.file_peview.button {
+  height: auto !important;
+  width: auto !important;
+  background-color: transparent !important;
+}
