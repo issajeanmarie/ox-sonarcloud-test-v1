@@ -18,6 +18,8 @@
   --color_yellow_faded_text: #e3b221;
   --color_orage: #ed7818;
   --color_red: #bd062d;
+  --color_green: #cddf00;
+  --color_border_dash: #a2b3d1;
 
   /* FONTS */
   --text24: 1.5rem;
@@ -180,6 +182,10 @@ body {
   background-color: var(--color_yellow) !important;
 }
 
+.bg_green {
+  background-color: var(--color_green) !important;
+}
+
 .bg_danger {
   @apply bg-ox-danger !important;
 }
@@ -216,6 +222,10 @@ body {
 
 .border_grey {
   border: 1px solid var(--color_border_grey) !important;
+}
+
+.border_dash {
+  border: 1px dashed var(--color_border_dash) !important;
 }
 
 .toggle_grey {
@@ -484,6 +494,14 @@ body {
   @apply text-ox-yellow-faded-text !important;
 }
 
+.my_button.dark {
+  @apply text-ox-dark !important;
+}
+
+.my_button.border_dash {
+  border: 1px dashed var(--color_border_dash) !important;
+}
+
 .day_circle {
   width: 36px;
   height: 36px;
@@ -706,4 +724,24 @@ body {
 
 .active_menu_bg {
   background-color: rgba(0, 0, 0, 0.25);
+}
+
+.file_peview.button {
+  height: auto !important;
+  width: auto !important;
+  background-color: transparent !important;
+}
+
+.depot_background {
+  background: rgba(234, 239, 242, 0.11);
+}
+
+.active_menu_bg {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.file_peview.button {
+  height: auto !important;
+  width: auto !important;
+  background-color: transparent !important;
 }

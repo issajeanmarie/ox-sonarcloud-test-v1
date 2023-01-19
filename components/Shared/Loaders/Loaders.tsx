@@ -730,3 +730,51 @@ export const AnalyticsTruckLoader = () => {
     </Row>
   );
 };
+
+export const ExpensesTableLoader = () => {
+  return (
+    <Row
+      gutter={[1, 24]}
+      justify="space-between"
+      className="mato8"
+      style={{ background: "#fff", padding: "8px", paddingTop: "12px" }}
+    >
+      <Col>
+        <Skeleton.Button active size="small" shape="square" />
+      </Col>
+      <Col md={4}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={3}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={3}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={3}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={4}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={2}>
+        <Row gutter={1}>
+          <Space size="small">
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+          </Space>
+        </Row>
+      </Col>
+    </Row>
+  );
+};
