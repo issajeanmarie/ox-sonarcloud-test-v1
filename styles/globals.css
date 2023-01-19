@@ -18,8 +18,6 @@
   --color_yellow_faded_text: #e3b221;
   --color_orage: #ed7818;
   --color_red: #bd062d;
-  --color_green: #cddf00;
-  --color_border_dash: #a2b3d1;
 
   /* FONTS */
   --text24: 1.5rem;
@@ -47,7 +45,7 @@ body {
   margin: 0;
   font-family: Roboto, sans-serif;
   background-color: var(--color_white);
-  overflow: hidden;
+  overflow-x: hidden;
   font-size: 0.875rem /* 14px */;
   line-height: 0rem /* 20px */;
 }
@@ -182,10 +180,6 @@ body {
   background-color: var(--color_yellow) !important;
 }
 
-.bg_green {
-  background-color: var(--color_green) !important;
-}
-
 .bg_danger {
   @apply bg-ox-danger !important;
 }
@@ -222,10 +216,6 @@ body {
 
 .border_grey {
   border: 1px solid var(--color_border_grey) !important;
-}
-
-.border_dash {
-  border: 1px dashed var(--color_border_dash) !important;
 }
 
 .toggle_grey {
@@ -444,11 +434,6 @@ body {
   @apply h-[35px];
 }
 
-.bordered_input {
-  border-style: solid !important;
-  border-width: 1px;
-}
-
 .my_datepicker {
   width: 100%;
   flex-grow: 1;
@@ -499,14 +484,6 @@ body {
   @apply text-ox-yellow-faded-text !important;
 }
 
-.my_button.dark {
-  @apply text-ox-dark !important;
-}
-
-.my_button.border_dash {
-  border: 1px dashed var(--color_border_dash) !important;
-}
-
 .day_circle {
   width: 36px;
   height: 36px;
@@ -549,39 +526,6 @@ body {
   .data_table table tr,
   .data_table table td {
     width: 100%;
-  }
-
-  .auth_right .form_container {
-    background: white !important;
-    padding: 56px 42px;
-    width: 440px;
-    border-radius: 8px;
-    position: relative !important;
-    left: 0% !important;
-    bottom: 50%;
-    transform: translateX(-50%) translateY(50%);
-  }
-}
-
-@media screen and (max-width: 760px) {
-  .auth_right .form_container {
-    padding: 32px 26px !important;
-    width: 70% !important;
-    border-radius: 8px;
-    position: absolute !important;
-    bottom: 100% !important;
-    transform: translateX(15%) translateY(50%) !important;
-  }
-}
-
-@media screen and (max-width: 520px) {
-  .auth_right .form_container {
-    padding: 32px 26px !important;
-    width: 90% !important;
-    border-radius: 8px;
-    position: absolute !important;
-    bottom: 100% !important;
-    transform: translateX(5%) translateY(50%) !important;
   }
 }
 
@@ -762,24 +706,4 @@ body {
 
 .active_menu_bg {
   background-color: rgba(0, 0, 0, 0.25);
-}
-
-.file_peview.button {
-  height: auto !important;
-  width: auto !important;
-  background-color: transparent !important;
-}
-
-.depot_background {
-  background: rgba(234, 239, 242, 0.11);
-}
-
-.active_menu_bg {
-  background-color: rgba(0, 0, 0, 0.25);
-}
-
-.file_peview.button {
-  height: auto !important;
-  width: auto !important;
-  background-color: transparent !important;
 }
