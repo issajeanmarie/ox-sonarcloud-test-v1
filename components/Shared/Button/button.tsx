@@ -28,6 +28,8 @@ interface ButtonProps {
   htmlType?: "button" | "submit" | "reset";
   onClick?: (value: any) => any;
   form?: string;
+  transform?: string;
+  id?: string;
 }
 
 const CustomButton: FC<ButtonProps> = ({
@@ -40,6 +42,7 @@ const CustomButton: FC<ButtonProps> = ({
   htmlType,
   children,
   onClick,
+  id,
   form
 }) => {
   switch (type) {
@@ -55,6 +58,7 @@ const CustomButton: FC<ButtonProps> = ({
           icon={icon}
           onClick={onClick}
           htmlType={htmlType}
+          id={id}
         >
           {children}
         </Button>

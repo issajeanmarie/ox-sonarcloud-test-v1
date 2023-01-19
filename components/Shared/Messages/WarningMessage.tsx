@@ -5,7 +5,9 @@ export const WarningMessage = (text: string | undefined) => {
     <>
       {notification["warning"]({
         message: "Warning!",
-        description: text ? text : "Something is wrong. Pls report this error",
+        description: text
+          ? text
+          : "Something is wrong. Please report this error",
         placement: "bottomRight",
         duration: 10
       })}
