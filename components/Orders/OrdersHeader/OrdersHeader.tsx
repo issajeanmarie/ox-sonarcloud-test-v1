@@ -64,6 +64,7 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
           width={16}
           height={16}
           src="/icons/filter.svg"
+          data-test-id="order-filter"
           onClick={showModal}
           className="cursor-pointer"
           alt="Filter icon"

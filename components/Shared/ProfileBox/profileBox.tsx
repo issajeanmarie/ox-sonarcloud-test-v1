@@ -122,7 +122,7 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
 
   return (
     <Dropdown overlay={userProfile} className="pointer" trigger={["click"]}>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2" data-test-id="profile-pic">
         {data?.payload?.profilePic ? (
           <Image
             className="rounded img_fit"
