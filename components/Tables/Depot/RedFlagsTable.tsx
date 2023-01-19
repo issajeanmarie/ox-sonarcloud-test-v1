@@ -8,31 +8,52 @@ import Button from "../../Shared/Button";
 import CustomButton from "../../Shared/Button";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { RedFlagResponse, SingleRedFlag } from "../../../lib/types/depots";
-import { dateDisplay } from "../../../utils/dateFormatter";
 
 const { Text } = Typography;
 
 type Types = {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setIsJustifyFlagModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  isLoading: boolean;
-  flagsData: RedFlagResponse;
-  setActiveFlag: React.Dispatch<React.SetStateAction<SingleRedFlag | null>>;
 };
+
+interface SingleTruckTypes {
+  index: number;
+  plateNumber: string;
+  reported: string;
+  truck: string;
+  status: string;
+}
+
+const truckData = [
+  {
+    index: 0,
+    plateNumber: "Fuel usage",
+    reported: "2022-10-10",
+    truck: "RAB 355 J",
+    status: "RESOLVED"
+  },
+
+  {
+    index: 1,
+    plateNumber: "Fuel usage",
+    reported: "2022-10-10",
+    truck: "RAB 355 J",
+    status: "OPEN"
+  },
+
+  {
+    index: 2,
+    plateNumber: "Fuel usage",
+    reported: "2022-10-10",
+    truck: "RAB 355 J",
+    status: "JUSTIFIED"
+  }
+];
 
 const RedFlagsTable: FC<Types> = ({
   setIsVisible,
-  setIsJustifyFlagModalVisible,
-  isLoading,
-  flagsData,
-  setActiveFlag
+  setIsJustifyFlagModalVisible
 }) => {
-  const handleShowRedFlagData = (record: SingleRedFlag) => {
-    setActiveFlag(record);
-    setIsVisible(true);
-  };
-
   const columns: any = [
     {
       title: (
@@ -41,12 +62,12 @@ const RedFlagsTable: FC<Types> = ({
           <span>Red flag type</span>
         </div>
       ),
-      key: "type",
-      render: (text: string, record: SingleRedFlag, index: number) => (
+      key: "plateNumber",
+      render: (text: any, record: SingleTruckTypes, index: number) => (
         <div className="flex gap-10">
           <Text className="normalText opacity_56">{index + 1}</Text>
           <Text className="normalText fowe700 text_ellipsis">
-            {record?.type?.replaceAll("_", " ")}
+            {record?.plateNumber}
           </Text>
         </div>
       )
@@ -54,28 +75,26 @@ const RedFlagsTable: FC<Types> = ({
 
     {
       title: "Reported on",
-      key: "date",
-      render: (record: SingleRedFlag) => (
-        <span className="normalText">{dateDisplay(record?.date)}</span>
+      key: "reportedOn",
+      render: (record: SingleTruckTypes) => (
+        <span className="normalText">{record.reported}</span>
       )
     },
 
     {
       title: "Truck",
-      key: "plateNumber",
-      render: (record: SingleRedFlag) => (
-        <span className="normalText">
-          {record?.fuelRefill?.truck?.plateNumber}
-        </span>
+      key: "truck",
+      render: (record: SingleTruckTypes) => (
+        <span className="normalText">{record.truck}</span>
       )
     },
 
     {
       title: "Red flag",
       key: "redFlag",
-      render: (record: SingleRedFlag) => (
+      render: () => (
         <CustomButton
-          onClick={() => handleShowRedFlagData(record)}
+          onClick={() => setIsVisible(true)}
           type="danger"
           size="icon"
           icon={
@@ -93,9 +112,9 @@ const RedFlagsTable: FC<Types> = ({
     {
       title: "Status",
       key: "status",
-      render: (record: SingleRedFlag) => (
+      render: (record: SingleTruckTypes) => (
         <Text className="normalText fowe700 text_ellipsis">
-          {record?.status}
+          {record.status}
         </Text>
       )
     },
@@ -103,9 +122,9 @@ const RedFlagsTable: FC<Types> = ({
     {
       title: "Status",
       key: "status",
-      width: "100px",
-      render: (record: SingleRedFlag) => (
-        <Row gutter={12} align="middle" wrap={false}>
+      width: "150px",
+      render: (record: SingleTruckTypes) => (
+        <Row gutter={12} align="middle">
           <Col>
             <CustomButton
               type={record.status === "OPEN" ? "green" : "normal"}
@@ -146,12 +165,12 @@ const RedFlagsTable: FC<Types> = ({
     <Table
       className="data_table light_white_header light_white_table depot_profile_table"
       columns={columns}
-      dataSource={flagsData?.payload?.content}
-      rowKey={(record) => record?.id}
+      dataSource={truckData}
+      rowKey={(record) => record?.index}
       pagination={false}
       bordered={false}
       scroll={{ x: 0 }}
-      loading={TableOnActionLoading(isLoading)}
+      loading={TableOnActionLoading(false)}
     />
   );
 };

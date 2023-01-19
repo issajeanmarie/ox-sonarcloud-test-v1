@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
-import Form from "antd/lib/form";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import { AnalyticLinks } from "../../../components/Analytics/AnalyticLinks";
@@ -16,17 +15,13 @@ import { changeRoute } from "../../../helpers/routesHandler";
 import { routes } from "../../../config/route-config";
 import PageNotFound from "../../../components/Shared/PageNotFound";
 import { SelectedDepotTypes } from "../../../lib/types/depots";
-import moment from "moment";
 
 const Analytics = () => {
   const router = useRouter();
   const { query } = useRouter();
-  const [form] = Form.useForm();
 
   const [selectedDay, setSelectedDay] = useState<any>(daysList[0]);
-  const [isDateCustom, setIsDateCustom] = useState(
-    !!localStorage.getItem("ox_endDate")
-  );
+  const [isDateCustom, setIsDateCustom] = useState(false);
   const [, setActive] = useState<string>("TRUCKS");
   const [selectedDepot, setSelectedDepot] = useState<any>({
     id: 0,
@@ -42,18 +37,6 @@ const Analytics = () => {
   );
 
   const { start, end } = DaysCalculator(selectedDay?.value || "");
-
-  useEffect(() => {
-    if (!isDateCustom) {
-      localStorage.setItem("ox_startDate", start);
-      localStorage.setItem("ox_endDate", end);
-
-      form.setFieldsValue({
-        Start: moment(start),
-        End: moment(end)
-      });
-    }
-  }, [start, end, form, isDateCustom]);
 
   const depotsState = useSelector(
     (state: { depots: { payload: SelectedDepotTypes } }) => state.depots.payload
@@ -74,7 +57,6 @@ const Analytics = () => {
     localStorage.setItem("ox_startDate", date);
     setIsDateCustom(true);
   };
-
   const onEndDateChange = (_: string, date: string) => {
     setEndDate(date);
     localStorage.setItem("ox_endDate", date);
@@ -118,7 +100,6 @@ const Analytics = () => {
             daysList={daysList}
             selectedDepot={selectedDepot}
             setSelectedDepot={setSelectedDepot}
-            form={form}
           />
 
           <Content isOverflowHidden={false} navType="FULL">
