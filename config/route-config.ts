@@ -118,13 +118,5 @@ export const routes = {
   Expenses: {
     name: "Expenses Tracker",
     url: "/dashboard/expenses"
-  },
-  DepotProfile: {
-    name: "Depot profile",
-    url: "/dashboard/depot"
-  },
-  DriverProfile: {
-    name: "Driver profile",
-    url: "/dashboard/drivers"
   }
 };
