@@ -14,15 +14,13 @@ interface ButtonProps {
   type:
     | "primary"
     | "secondary"
-    | "success"
     | "danger"
     | "danger_filled"
     | "normal"
     | "view"
     | "dropdown"
     | "toggle"
-    | "green"
-    | "dash";
+    | "green";
   loading?: boolean;
   disabled?: boolean;
   size?: "icon" | "small";
@@ -197,40 +195,6 @@ const CustomButton: FC<ButtonProps> = ({
             <div className="bg-ox-red w-[8px] h-[8px]"></div>
           )}
         </div>
-      );
-
-    case "success":
-      return (
-        <Button
-          form={form}
-          className={`my_button ${size === "icon" && "icon"} ${
-            size === "small" && "sm"
-          }  bg_green white ${className}`}
-          loading={loading}
-          disabled={loading || disabled}
-          icon={icon}
-          htmlType={htmlType}
-          onClick={onClick}
-        >
-          {children}
-        </Button>
-      );
-
-    case "dash":
-      return (
-        <Button
-          form={form}
-          className={`my_button ${size === "icon" && "icon"} ${
-            size === "small" && "sm"
-          }  border_dash dark ${className}`}
-          loading={loading}
-          disabled={loading || disabled}
-          icon={icon}
-          htmlType={htmlType}
-          onClick={onClick}
-        >
-          {children}
-        </Button>
       );
 
     default:
