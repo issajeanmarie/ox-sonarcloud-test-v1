@@ -35,7 +35,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const LeftSide = (
     <div className="flex items-center gap-4 ">
       <Image
-        className="pointer"
+        className="pointer go-back-to-orders"
         src="/icons/keyboard_backspace_black_24dp.svg"
         alt="Backspace icon"
         width={20}
