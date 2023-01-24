@@ -40,8 +40,8 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
             </CardRowWrapper>
           </>
         ) : (
-          <CardRowWrapper cardsNumber={6} active={active}>
-            <CardColWrapper cardsNumber={6} active={active}>
+          <CardRowWrapper active={active}>
+            <CardColWrapper active={active}>
               <MediumCard
                 scope="CLIENTS"
                 start={start}
@@ -56,7 +56,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper cardsNumber={6} active={active}>
+            <CardColWrapper active={active}>
               <MediumCard
                 scope="REVENUE"
                 start={start}
@@ -67,17 +67,18 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   numbersFormatter(revenueData?.totalSalesRevenue)
                 } Rwf (${revenuePercentageCalculator(
                   revenueData?.totalSalesRevenue,
-                  revenueData?.totalRevenue + revenueData?.totalSalesRevenue
+                  revenueData?.totalRevenueByJob +
+                    revenueData?.totalSalesRevenue
                 )}%) warehouse sales`}
                 count={
-                  revenueData?.totalRevenue + revenueData?.totalSalesRevenue ||
-                  0
+                  revenueData?.totalRevenueByJob +
+                    revenueData?.totalSalesRevenue || 0
                 }
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
 
-            <CardColWrapper cardsNumber={6} active={active}>
+            <CardColWrapper active={active}>
               <MediumCard
                 title="Cash collected"
                 subTitle={`${
@@ -91,7 +92,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
-            <CardColWrapper cardsNumber={6} active={active}>
+            <CardColWrapper active={active}>
               <MediumCard
                 scope="DISTANCE"
                 start={start}
@@ -109,7 +110,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper cardsNumber={6} active={active}>
+            <CardColWrapper active={active}>
               <MediumCard
                 scope="HOURS_BY_JOB"
                 start={start}
@@ -127,7 +128,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper cardsNumber={6} active={active}>
+            <CardColWrapper active={active}>
               <MediumCard
                 title="Total weight in KG"
                 subTitle="..."
