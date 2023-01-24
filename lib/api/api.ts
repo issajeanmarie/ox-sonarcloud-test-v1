@@ -39,7 +39,10 @@ export const baseAPI = createApi({
     "DeleteRepairService",
     "UpdateRepairService",
     "oxAppRelease",
-    "MaintenanceCheck"
+    "MaintenanceCheck",
+    "ToggleDriver",
+    "EditDriver",
+    "EndShift"
   ],
   endpoints: () => ({})
 });

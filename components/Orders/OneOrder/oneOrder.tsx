@@ -166,7 +166,14 @@ const Order: FC<OrderProps> = ({ order, index }) => {
             </Col>
 
             <Col>
-              <Text className="text-md font-bold">
+              <Text
+                className="text-md font-bold hover:underline pointer"
+                onClick={() =>
+                  router.push(
+                    `${routes.Clients.url}/${order?.office?.client?.id}`
+                  )
+                }
+              >
                 {order?.office?.client?.names ? (
                   order?.office?.client?.names
                 ) : (
@@ -232,9 +239,16 @@ const Order: FC<OrderProps> = ({ order, index }) => {
                   ) : (
                     <span className=" text-gray-300">Unavailable</span>
                   )}
-                  <span className="nowrap opacity_56 text-sm">
+                  <Text
+                    className="nowrap opacity_56 text-sm hover:underline pointer"
+                    onClick={() =>
+                      router.push(
+                        `${routes.DriverProfile.url}/${record?.stops[0]?.driver?.id}`
+                      )
+                    }
+                  >
                     {record?.stops[0]?.driver?.names}
-                  </span>
+                  </Text>
                 </div>
               </div>
             );
@@ -277,7 +291,10 @@ const Order: FC<OrderProps> = ({ order, index }) => {
               <div className="flex items-center gap-4">
                 <Text className="heading2">From</Text>
                 <Text className="font-light">
-                  {record.stops[0]?.location?.split(" ")[0] || "---"}
+                  {[...record.stops]
+                    .sort((a, b) => a.position - b.position)[0]
+                    ?.location?.split(" ")[0]
+                    ?.replace(",", "") || "---"}
                 </Text>
               </div>
             );
@@ -293,9 +310,10 @@ const Order: FC<OrderProps> = ({ order, index }) => {
               <div className="flex items-center gap-4">
                 <Text className="heading2">To</Text>
                 <Text className="font-light">
-                  {record?.stops[record?.stops?.length - 1]?.location?.split(
-                    " "
-                  )[0] || "---"}
+                  {[...record?.stops]
+                    ?.sort((a, b) => a.position - b.position)
+                    [record?.stops?.length - 1]?.location?.split(" ")[0]
+                    ?.replace(",", "") || "---"}
                 </Text>
                 {record.isSupportOrder && (
                   <Text className="captionText ml-5">Supporting order</Text>
@@ -404,10 +422,24 @@ const Order: FC<OrderProps> = ({ order, index }) => {
           </Row>
         </Col>
 
-        <Col>
-          <Text className="text-xs opacity_56 italic nowrap mb0">
+        <Col className="flex gap-4 items-center">
+          <Text
+            className="text-xs opacity_56 italic nowrap mb0 hover:underline pointer"
+            onClick={() =>
+              router.push(`${routes.DepotProfile.url}/${order?.depot?.id}`)
+            }
+          >
             {order?.depot?.name}
           </Text>
+
+          {order.locked && (
+            <Image
+              src="/icons/lock.svg"
+              alt="Lock icon"
+              width={10}
+              preview={false}
+            />
+          )}
         </Col>
       </Row>
     </div>

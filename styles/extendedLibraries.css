@@ -416,3 +416,7 @@
   justify-content: center !important;
   align-items: center !important;
 }
+
+button:disabled {
+  opacity: 0.4 !important;
+}

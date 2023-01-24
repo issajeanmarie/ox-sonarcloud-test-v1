@@ -13,4 +13,5 @@ export type AnalyticsTopNavigatorProps = {
   daysList?: any;
   selectedDepot?: any;
   setSelectedDepot?: any;
+  form?: any;
 };

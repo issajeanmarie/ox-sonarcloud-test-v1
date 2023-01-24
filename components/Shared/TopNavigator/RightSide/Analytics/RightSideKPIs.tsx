@@ -1,6 +1,7 @@
 /* eslint-disable no-unsafe-optional-chaining */
 import { Image } from "antd";
 import React, { FC } from "react";
+import Form from "antd/lib/form";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useDepotsQuery } from "../../../../../lib/api/endpoints/Depots/depotEndpoints";
@@ -17,12 +18,19 @@ const RightSideKPIs: FC<RightSideKPIsTypes> = ({
   setIsDateCustom,
   daysList,
   selectedDepot,
-  setSelectedDepot
+  setSelectedDepot,
+  form
 }) => {
   const { data } = useDepotsQuery();
 
   return (
-    <>
+    <Form
+      className="flex gap-6"
+      name="SortAnalyticsRevenue"
+      form={form}
+      title="Issue"
+      id="SortAnalyticsRevenue"
+    >
       <DropDownSelector
         label="Depot"
         dropDownContent={
@@ -90,7 +98,7 @@ const RightSideKPIs: FC<RightSideKPIsTypes> = ({
           />
         }
       />
-    </>
+    </Form>
   );
 };
 

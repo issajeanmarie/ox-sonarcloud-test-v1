@@ -1,12 +1,17 @@
+import { Typography } from "antd";
 import Link from "next/link";
 import React, { FC } from "react";
 import { routes } from "../../../../config/route-config";
+
+const { Text } = Typography;
 
 type InfoWrapperTypes = {
   title: string;
   infoItem: string;
   isTransportOrder: boolean;
   batchId?: number;
+  isLink?: boolean;
+  redirectTo?: string | number;
 };
 
 type OrderSummaryInfoWrapperTypes = {
@@ -67,13 +72,13 @@ export const OrderSummaryInfoWrapper: FC<OrderSummaryInfoWrapperTypes> = ({
       <div className="w-1/5">
         <span className="font-bold text-sm">{title}:</span>
       </div>
-      <span
+      <Text
         className={`text-sm ${
           infoItem === "PENDING" ? "font-bold text-[#ED7818]" : "opacity-50"
         }   `}
       >
         {infoItem}
-      </span>
+      </Text>
     </div>
   );
 };

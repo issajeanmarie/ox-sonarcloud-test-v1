@@ -12,11 +12,11 @@ const Content: FC<ContentTypes> = ({
     style={{
       height:
         navType === "CENTER"
-          ? "83vh"
+          ? "81vh"
           : navType === "DOUBLE"
-          ? "75vh"
+          ? "74vh"
           : navType === "TRIPLE"
-          ? "46vh"
+          ? "38vh"
           : "86vh"
     }}
     className={`${classes.content_section} ${

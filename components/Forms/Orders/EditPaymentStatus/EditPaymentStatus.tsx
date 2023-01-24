@@ -10,8 +10,7 @@ import ModalWrapper from "../../../Modals/ModalWrapper";
 import { futureDateDisabler } from "../../../../helpers/datesValidator";
 import { usePostSalePaymentMutation } from "../../../../lib/api/endpoints/Warehouse/salesEndpoints";
 import { WarningMessage } from "../../../Shared/Messages/WarningMessage";
-import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
-import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 
 interface PaymentStatusProps {
   order: Order;
@@ -35,6 +34,11 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
   const [postSalePayment, { isLoading: isPostingSalePayment }] =
     usePostSalePaymentMutation();
 
+  const handlePaymentSuccess = () => {
+    closeModal();
+    form.resetFields();
+  };
+
   const handleFinish = (values: EditPaymentStatusRequest) => {
     if (
       values.amount > order?.remainingAmount &&
@@ -43,44 +47,19 @@ const PaymentStatus: FC<PaymentStatusProps> = ({
     ) {
       WarningMessage("Amount can't exceed the remaining");
     } else {
-      if (isSaleOrder) {
-        postSalePayment({
-          orderId: order?.id,
-          data: {
-            ...values,
-            isWaitTimeFee: checked,
-            amount: Number(values.amount),
-            paymentDate: moment(values.paymentDate).format("YYYY-MM-DD")
-          }
-        })
-          .unwrap()
-          .then((res) => {
-            SuccessMessage(res.message);
-            closeModal();
-            form.resetFields();
-          })
-          .catch((e) => {
-            ErrorMessage(e.data?.message || "Something went wrong");
-          });
-      } else {
-        editPaymentStatus({
-          orderId: order.id,
-          data: {
-            ...values,
-            isWaitTimeFee: checked,
-            amount: Number(values.amount),
-            paymentDate: moment(values.paymentDate).format("YYYY-MM-DD")
-          }
-        })
-          .unwrap()
-          .then((res) => {
-            SuccessMessage(res.message);
-            closeModal();
-          })
-          .catch((e) => {
-            ErrorMessage(e.data?.message || "Something went wrong");
-          });
-      }
+      handleAPIRequests({
+        request: isSaleOrder ? postSalePayment : editPaymentStatus,
+        orderId: order?.id,
+        handleSuccess: handlePaymentSuccess,
+        showSuccess: true,
+        data: {
+          ...values,
+          isWaitTimeFee: checked,
+          amount: Number(values.amount),
+          paymentDate: moment(values.paymentDate).format("YYYY-MM-DD"),
+          triggeredFrom: "PORTAL"
+        }
+      });
     }
   };
 
