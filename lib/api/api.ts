@@ -42,18 +42,7 @@ export const baseAPI = createApi({
     "MaintenanceCheck",
     "ToggleDriver",
     "EditDriver",
-    "EndShift",
-    "EditDepot",
-    "GetFlags",
-    "GetSingleFlag",
-    "ExpensesAuthorize",
-    "Expenses",
-    "QBSuppliers",
-    "QBTrucks",
-    "QBLocations",
-    "QBPaymentMethods",
-    "QBAccounts",
-    "QBCategories"
+    "EndShift"
   ],
   endpoints: () => ({})
 });

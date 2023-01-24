@@ -3,6 +3,11 @@ import { localeString } from "../../../utils/numberFormatter";
 import TextLight from "../../Shared/Text/TextLight";
 import { userType } from "../../../helpers/getLoggedInUser";
 import { paymentStatus } from "../../../utils/orderStatus";
+import { Typography } from "antd";
+import { useRouter } from "next/router";
+import { routes } from "../../../config/route-config";
+
+const { Text } = Typography;
 
 const DetailsSection = ({
   title,
@@ -25,21 +30,24 @@ const DetailsSection = ({
       label: "Name",
       value: details?.office?.client?.names || "N/A",
       editable: true,
-      editAction: editAction
+      editAction: editAction,
+      url: details?.office?.client?.id
     },
     {
       key: 1,
       label: "Branch",
       value: details?.office?.location || "N/A",
       editable: false,
-      editAction: () => null
+      editAction: () => null,
+      url: null
     },
     {
       key: 2,
       label: "Recipient code",
       value: details?.deliveryCode || "N/A",
       editable: false,
-      editAction: () => null
+      editAction: () => null,
+      url: null
     }
   ];
 
@@ -49,14 +57,16 @@ const DetailsSection = ({
       label: "Recipient",
       value: details?.depot.name,
       editable: false,
-      editAction: () => null
+      editAction: () => null,
+      url: null
     },
     {
       key: 1,
       label: "Category",
       value: details?.category?.name,
       editable: false,
-      editAction: () => null
+      editAction: () => null,
+      url: null
     },
     {
       key: 2,
@@ -71,14 +81,16 @@ const DetailsSection = ({
           : ""
       }`,
       editable: false,
-      editAction: () => null
+      editAction: () => null,
+      url: null
     },
     {
       key: 3,
       label: "Depot",
       value: details?.depot?.name,
       editable: user.isSuperAdmin,
-      editAction: editAction
+      editAction: editAction,
+      url: details?.depot?.id
     }
   ];
 
@@ -88,7 +100,8 @@ const DetailsSection = ({
       label: "Job value",
       value: `${localeString(details?.totalAmount)} Rwf`,
       editable: user.isSuperAdmin || user.isAdmin || user.isDispatcher,
-      editAction: editAction
+      editAction: editAction,
+      url: null
     },
 
     {
@@ -98,7 +111,8 @@ const DetailsSection = ({
         ? `${localeString(details?.suggestedAmount)} Rwf`
         : "N/A",
       editable: false,
-      editAction: editAction
+      editAction: editAction,
+      url: null
     },
 
     {
@@ -106,7 +120,8 @@ const DetailsSection = ({
       label: "Payment status",
       value: details?.paymentStatus?.replaceAll("_", " "),
       editable: false,
-      editAction: editAction
+      editAction: editAction,
+      url: null
     },
 
     {
@@ -114,7 +129,8 @@ const DetailsSection = ({
       label: "Duration",
       value: `${details?.duration || "N/A"}`,
       editable: false,
-      editAction: editAction
+      editAction: editAction,
+      url: null
     },
 
     {
@@ -122,7 +138,8 @@ const DetailsSection = ({
       label: "Distance",
       value: details?.distance,
       editable: false,
-      editAction: editAction
+      editAction: editAction,
+      url: null
     }
   ];
 
@@ -136,6 +153,8 @@ const DetailsSection = ({
   const { isFullPaid, isHalfPaid, isPending } = paymentStatus(
     details?.paymentStatus
   );
+
+  const router = useRouter();
 
   return (
     <div className="my-16">
@@ -155,18 +174,22 @@ const DetailsSection = ({
             <div className="w-[150px] font-bold">{detail.label}: </div>
 
             <div className="font-light flex items-center gap-5">
-              <span
+              <Text
+                onClick={() =>
+                  detail.url &&
+                  router.push(`${routes.Clients.url}/${detail.url}`)
+                }
                 className={`${
                   detail.label === "Payment status" ? "font-bold" : ""
                 } text-ox-${
                   detail.label === "Payment status" && paymentStatusClass
-                }`}
+                } ${detail.url && "hover:underline pointer"}`}
               >
                 {detail.value}
-              </span>
+              </Text>
 
               {detail.editable && (
-                <span className="cursor-pointer">
+                <div className="cursor-pointer">
                   <Image
                     onClick={() => detail?.editAction(true)}
                     className="pointer"
@@ -176,7 +199,7 @@ const DetailsSection = ({
                     height={13}
                     preview={false}
                   />
-                </span>
+                </div>
               )}
             </div>
           </div>

@@ -2,7 +2,16 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import React, { FC, useEffect, useState } from "react";
-import { Steps, Form, Tooltip, Divider, Row, Col, Empty } from "antd";
+import {
+  Steps,
+  Form,
+  Tooltip,
+  Divider,
+  Row,
+  Col,
+  Empty,
+  Typography
+} from "antd";
 import { Query } from "../../../lib/types/shared";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import Header from "./header";
@@ -43,8 +52,11 @@ import DocumentCard from "../../Analytics/Trucks/TruckCard";
 import { ActivityLogModal } from "../../Modals/ActivityLogModal";
 import EditOrderDepot from "../../Forms/Orders/EditOrderDepot";
 import EditOrderDate from "../../Forms/Orders/EditOrderDate";
+import { useRouter } from "next/router";
+import { routes } from "../../../config/route-config";
 
 const { Step } = Steps;
+const { Text } = Typography;
 
 interface ViewOrderProps {
   orderId?: Query;
@@ -74,6 +86,8 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const [getOrder, { isLoading, data }] = useLazyOrderQuery();
 
   const user = userType();
+
+  const router = useRouter();
 
   const canUserUpdatePaymentStatus =
     user.isAdmin || user.isSuperAdmin || user.isDispatcher;
@@ -183,12 +197,24 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
             <div key={stop.id} className="flex items-center mb-5">
               <div className="flex-1 flex items-center gap-8">
                 <span className="text-gray-400 font-light">{index + 1}</span>
-                <span className="heading2">{stop.truck?.plateNumber}</span>
+                <Text
+                  className="heading2 hover:underline pointer"
+                  onClick={() =>
+                    router.push(`${routes.Trucks.url}/${stop.truck?.id}`)
+                  }
+                >
+                  {stop.truck?.plateNumber}
+                </Text>
               </div>
               <div className="flex-1 normalText">{stop?.weight} KGs</div>
-              <div className="flex-1 text-gray-400 font-light">
+              <Text
+                className="flex-1 opacity-50 hover:opacity-100 font-light hover:underline pointer"
+                onClick={() =>
+                  router.push(`${routes.DriverProfile.url}/${stop?.driver?.id}`)
+                }
+              >
                 {stop?.driver?.names}
-              </div>
+              </Text>
             </div>
           );
         })}
@@ -308,8 +334,17 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
               <div className="flex-1 h-min bg-white shadow-[0px_0px_19px_#00000008] rounded p-14">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-top gap-12 ">
-                    <div className="heading1 text-ox-dark">
-                      ORDER #{orderId}
+                    <div className="heading1 text-ox-dark flex gap-3 items-center">
+                      <span> ORDER #{orderId}</span>
+
+                      {data.locked && (
+                        <Image
+                          src="/icons/lock.svg"
+                          alt="Lock icon"
+                          width={12}
+                          preview={false}
+                        />
+                      )}
                     </div>
 
                     <div
