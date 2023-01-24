@@ -8,7 +8,7 @@ export type NavbarTypes = {
 
 export type ContentTypes = {
   children: ReactElement;
-  navType?: string | undefined;
+  navType?: "CENTER" | "FULL" | "DOUBLE" | "TRIPLE";
   className?: string | undefined;
   isOverflowHidden: boolean;
 };

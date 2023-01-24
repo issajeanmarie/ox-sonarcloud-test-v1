@@ -340,34 +340,6 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
               />
             </div>
           </div>
-          <div className="flex gap-10 mb-5">
-            <div className="flex-1">
-              <div>
-                <Input
-                  name="paymentPlan"
-                  type="select"
-                  label="Plan"
-                  placeholder="Select plan"
-                  options={[
-                    { label: "Per job", value: "PAY_BY_JOB" },
-                    { label: "Per Kilogram", value: "PAY_BY_KG" }
-                  ]}
-                  rules={requiredField("Plan")}
-                />
-              </div>
-            </div>
-            <div className="flex-1">
-              <Input
-                name="amount"
-                type="text"
-                placeholder="00"
-                label="Rate"
-                inputType="number"
-                suffixIcon="Rwf"
-                rules={requiredField("Rate")}
-              />
-            </div>
-          </div>
         </div>
 
         {/* Truck details */}

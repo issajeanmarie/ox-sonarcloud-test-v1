@@ -51,7 +51,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   revenueData?.totalCustomers &&
                   numbersFormatter(revenueData?.totalCustomers)
                 } total clients`}
-                count={revenueData?.totalServedCustomers}
+                count={revenueData?.totalServedCustomers || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
@@ -72,7 +72,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 )}%) warehouse sales`}
                 count={
                   revenueData?.totalRevenueByJob +
-                  revenueData?.totalSalesRevenue
+                    revenueData?.totalSalesRevenue || 0
                 }
                 isFetching={revenueFetching}
               />
@@ -88,7 +88,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   revenueData?.totalCollectedAmountPaidByKg,
                   revenueData?.totalCollectedAmount
                 )}%) paid per KG`}
-                count={revenueData?.totalCollectedAmount}
+                count={revenueData?.totalCollectedAmount || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
@@ -105,7 +105,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   revenueData?.totalDistance,
                   revenueData?.totalDistanceByJobs
                 )}%) with cargo`}
-                count={revenueData?.totalDistance}
+                count={revenueData?.totalDistance || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
@@ -123,7 +123,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   revenueData?.totalHoursByJobs,
                   revenueData?.totalHours
                 )}%) with cargo`}
-                count={revenueData?.totalHours}
+                count={revenueData?.totalHours || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
@@ -132,7 +132,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               <MediumCard
                 title="Total weight in KG"
                 subTitle="..."
-                count={revenueData?.totalWeight}
+                count={revenueData?.totalWeight || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>

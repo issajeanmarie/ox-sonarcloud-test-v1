@@ -6,6 +6,8 @@ import { useCreateOrderMutation } from "../../../lib/api/endpoints/Orders/orders
 import { OrderRequestBody } from "../../../lib/types/orders";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import Content from "../../Shared/Content";
+import { removeFromLocal } from "../../../helpers/handleLocalStorage";
+import { OX_NEW_ORDER_VALUES } from "../../../config/constants";
 
 const AddOrder: FC = () => {
   const [isCreateOrderSuccess, setIsCreateOrderSuccess] =
@@ -19,6 +21,8 @@ const AddOrder: FC = () => {
 
   const handleNewOrderSuccess = () => {
     setIsCreateOrderSuccess(true);
+
+    removeFromLocal(OX_NEW_ORDER_VALUES);
   };
 
   const addOrderAction = (payload: OrderRequestBody) => {

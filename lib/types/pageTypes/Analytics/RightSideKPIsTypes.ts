@@ -9,4 +9,5 @@ export type RightSideKPIsTypes = {
   daysList: any;
   selectedDepot: any;
   setSelectedDepot: any;
+  form?: any;
 };

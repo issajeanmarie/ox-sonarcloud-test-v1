@@ -49,7 +49,7 @@ export const revenuePercentageCalculator = (
   allRevenue: number
 ) => {
   try {
-    const percentage = (totalSales / allRevenue) * 100;
+    const percentage = totalSales ? (totalSales / allRevenue) * 100 : 0;
     return toMyFixed(percentage);
   } catch (error) {
     return error;
