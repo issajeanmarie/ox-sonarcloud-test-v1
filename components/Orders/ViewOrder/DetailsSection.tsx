@@ -3,7 +3,7 @@ import { localeString } from "../../../utils/numberFormatter";
 import TextLight from "../../Shared/Text/TextLight";
 import { userType } from "../../../helpers/getLoggedInUser";
 import { paymentStatus } from "../../../utils/orderStatus";
-import { Dropdown, Menu, Typography } from "antd";
+import { Typography } from "antd";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 
@@ -31,8 +31,7 @@ const DetailsSection = ({
       value: details?.office?.client?.names || "N/A",
       editable: true,
       editAction: editAction,
-      url: details?.office?.client?.id,
-      showInfo: false
+      url: details?.office?.client?.id
     },
     {
       key: 1,
@@ -40,8 +39,7 @@ const DetailsSection = ({
       value: details?.office?.location || "N/A",
       editable: false,
       editAction: () => null,
-      url: null,
-      showInfo: false
+      url: null
     },
     {
       key: 2,
@@ -49,8 +47,7 @@ const DetailsSection = ({
       value: details?.deliveryCode || "N/A",
       editable: false,
       editAction: () => null,
-      url: null,
-      showInfo: false
+      url: null
     }
   ];
 
@@ -61,8 +58,7 @@ const DetailsSection = ({
       value: details?.depot.name,
       editable: false,
       editAction: () => null,
-      url: null,
-      showInfo: false
+      url: null
     },
     {
       key: 1,
@@ -70,8 +66,7 @@ const DetailsSection = ({
       value: details?.category?.name,
       editable: false,
       editAction: () => null,
-      url: null,
-      showInfo: false
+      url: null
     },
     {
       key: 2,
@@ -87,8 +82,7 @@ const DetailsSection = ({
       }`,
       editable: false,
       editAction: () => null,
-      url: null,
-      showInfo: false
+      url: null
     },
     {
       key: 3,
@@ -96,8 +90,7 @@ const DetailsSection = ({
       value: details?.depot?.name,
       editable: user.isSuperAdmin,
       editAction: editAction,
-      url: details?.depot?.id,
-      showInfo: false
+      url: details?.depot?.id
     }
   ];
 
@@ -108,8 +101,7 @@ const DetailsSection = ({
       value: `${localeString(details?.totalAmount)} Rwf`,
       editable: user.isSuperAdmin || user.isAdmin || user.isDispatcher,
       editAction: editAction,
-      url: null,
-      showInfo: false
+      url: null
     },
 
     {
@@ -119,46 +111,35 @@ const DetailsSection = ({
         ? `${localeString(details?.suggestedAmount)} Rwf`
         : "N/A",
       editable: false,
-      editAction: editAction
+      editAction: editAction,
+      url: null
     },
 
     {
       key: 1,
-      label: "Suggested price",
-      value: details?.suggestedAmount
-        ? `${localeString(details?.suggestedAmount)} Rwf`
-        : "N/A",
-      editable: false,
-      editAction: editAction,
-      url: null,
-      showInfo: true
-    },
-    {
-      key: 2,
       label: "Payment status",
       value: details?.paymentStatus?.replaceAll("_", " "),
       editable: false,
       editAction: editAction,
-      url: null,
-      showInfo: false
+      url: null
     },
+
     {
-      key: 3,
+      key: 2,
       label: "Duration",
       value: `${details?.duration || "N/A"}`,
       editable: false,
       editAction: editAction,
-      url: null,
-      showInfo: false
+      url: null
     },
+
     {
-      key: 4,
+      key: 3,
       label: "Distance",
       value: details?.distance,
       editable: false,
       editAction: editAction,
-      url: null,
-      showInfo: false
+      url: null
     }
   ];
 
@@ -215,46 +196,10 @@ const DetailsSection = ({
                     src="/icons/ic-contact-edit.svg"
                     alt="Backspace icon"
                     width={13}
+                    height={13}
                     preview={false}
                   />
                 </div>
-              )}
-
-              {detail.showInfo && (
-                <Dropdown
-                  overlay={() => (
-                    <Menu
-                      style={{
-                        marginTop: "15px",
-                        padding: "10px"
-                      }}
-                    >
-                      <Menu.Item style={{ marginBottom: "0.5rem" }}>
-                        <div className="flex flex-col">
-                          <span>We use</span>
-                          <span className="font-bold">
-                            Distance * Weight * 0.5
-                          </span>
-                          <span>
-                            formula to calculate estimated selling price
-                          </span>
-                        </div>
-                      </Menu.Item>
-                    </Menu>
-                  )}
-                  placement="topCenter"
-                >
-                  <div className="cursor-pointer">
-                    <Image
-                      title="This is a suggested price for this !"
-                      className="pointer opacity-50"
-                      src="/icons/info.svg"
-                      alt="Backspace icon"
-                      width={16}
-                      preview={false}
-                    />
-                  </div>
-                </Dropdown>
               )}
             </div>
           </div>

@@ -17,7 +17,7 @@ const Content: FC<ContentTypes> = ({
           ? "74vh"
           : navType === "TRIPLE"
           ? "38vh"
-          : "83vh"
+          : "86vh"
     }}
     className={`${classes.content_section} ${
       isOverflowHidden && classes.overflowHidden

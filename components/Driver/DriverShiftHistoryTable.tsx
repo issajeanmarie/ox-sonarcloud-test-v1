@@ -1,6 +1,7 @@
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
+import moment from "moment";
 import { FC } from "react";
 import Row from "antd/lib/row";
 import RowsWrapper from "../Tables/RowsWrapper";
@@ -11,9 +12,6 @@ import {
   DriverShiftSingleOrder
 } from "../../lib/types/Accounts/drivers";
 import { abbreviateNumber } from "../../utils/numberFormatter";
-import { useRouter } from "next/router";
-import { routes } from "../../config/route-config";
-import { dateDisplay } from "../../utils/dateFormatter";
 
 const { Text } = Typography;
 
@@ -26,8 +24,6 @@ const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
   isFetchingOrders,
   data
 }) => {
-  const router = useRouter();
-
   const columns: any = [
     {
       title: (
@@ -41,14 +37,7 @@ const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
         <RowsWrapper>
           <Row className="flex gap-10 cursor-pointer">
             <Text className="normalText opacity_56">{index + 1}</Text>
-            <Text
-              className="normalText fowe900 underline"
-              onClick={() =>
-                router.push(`${routes.viewOrder.url}/${record.id}`)
-              }
-            >
-              {record.id}
-            </Text>
+            <Text className="normalText fowe900 underline">{record.id}</Text>
           </Row>
         </RowsWrapper>
       )
@@ -59,7 +48,8 @@ const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
       render: (text: string, record: DriverShiftSingleOrder) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
-            {record?.startDateTime && dateDisplay(record?.startDateTime)}
+            {record?.startDateTime &&
+              moment(record?.startDateTime).format("ll")}
           </Text>
         </RowsWrapper>
       )
