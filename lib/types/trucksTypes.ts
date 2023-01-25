@@ -230,3 +230,19 @@ export interface Sort {
   unsorted: boolean;
   empty: boolean;
 }
+
+interface LastInspection {
+  score: number;
+  createdAt: string;
+}
+
+export interface SingleTruckTypes {
+  id: number;
+  plateNumber: string;
+  lastInspection: LastInspection;
+  model: string;
+  capacity: number;
+  active: boolean;
+  minFuelPer100km: number | null;
+  maxFuelPer100km: number | null;
+}
