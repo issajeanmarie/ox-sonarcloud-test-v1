@@ -3,13 +3,10 @@ import {
   CreateDepotRequest,
   DepotResponse,
   EditDepotRequest,
-  ResolveRedFlagRequest,
   GetDepotProfileRequest,
   GetDepotProfileResponse,
   GetFlagsRequest,
-  GetSingleFlagRequest,
-  RedFlagResponse,
-  SingleRedFlagResponse
+  RedFlagResponse
 } from "../../../types/depots";
 import { GenericResponse } from "../../../types/shared";
 
@@ -44,11 +41,9 @@ const depotsEndpoints = baseAPI.injectEndpoints({
     }),
 
     getFlags: builder.query<RedFlagResponse, GetFlagsRequest>({
-      providesTags: ["GetFlags"],
+      providesTags: ["EditDepot"],
       query: ({ id, start, end, search, page, size }) => ({
-        url: `/depots/${id}/red-flags?start=${start || ""}&end=${end}&search=${
-          search || ""
-        }&page=${page || 0}&size=${size || 1000}`,
+        url: `/depots/${id}/red-flags?start=${start}&end=${end}&search=${search}&page=${page}&size=${size}`,
         method: "GET"
       })
     }),
@@ -60,32 +55,6 @@ const depotsEndpoints = baseAPI.injectEndpoints({
         method: "PUT",
         body: DTO
       })
-    }),
-
-    getSingleFlag: builder.query<SingleRedFlagResponse, GetSingleFlagRequest>({
-      providesTags: ["GetSingleFlag"],
-      query: ({ id, redFlagId }) => ({
-        url: `/depots/${id}/red-flags/${redFlagId}`,
-        method: "GET"
-      })
-    }),
-
-    resolveRedFlag: builder.mutation<GenericResponse, ResolveRedFlagRequest>({
-      invalidatesTags: ["GetSingleFlag", "GetFlags"],
-      query: (DTO) => ({
-        url: `/depots/${DTO.id}/red-flags/${DTO.redFlagId}/resolve`,
-        method: "PATCH",
-        body: DTO
-      })
-    }),
-
-    justifyRedFlag: builder.mutation<GenericResponse, ResolveRedFlagRequest>({
-      invalidatesTags: ["GetSingleFlag", "GetFlags"],
-      query: (DTO) => ({
-        url: `/depots/${DTO.id}/red-flags/${DTO.redFlagId}/justify`,
-        method: "PATCH",
-        body: DTO
-      })
     })
   })
 });
@@ -95,8 +64,5 @@ export const {
   useCreateDepotMutation,
   useEditDepotMutation,
   useLazyDepotProfileQuery,
-  useLazyGetFlagsQuery,
-  useLazyGetSingleFlagQuery,
-  useResolveRedFlagMutation,
-  useJustifyRedFlagMutation
+  useLazyGetFlagsQuery
 } = depotsEndpoints;
