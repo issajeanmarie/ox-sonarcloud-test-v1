@@ -778,3 +778,11 @@ export const ExpensesTableLoader = () => {
     </Row>
   );
 };
+
+export const DepotProfileLoader = () => {
+  return (
+    <Row justify="center" align="middle" className="w-[100%] h-[70vh]">
+      <Col>{loadingIcon}</Col>
+    </Row>
+  );
+};
