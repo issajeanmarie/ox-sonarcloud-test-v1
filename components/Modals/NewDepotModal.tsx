@@ -1,16 +1,23 @@
 import { Col, Form, Row } from "antd";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Button from "../Shared/Button";
 import ModalWrapper from "./ModalWrapper";
 import { requiredField } from "../../lib/validation/InputValidations";
 import Input from "../Shared/Input";
 import { LatLng } from "use-places-autocomplete";
-import { useCreateDepotMutation } from "../../lib/api/endpoints/Depots/depotEndpoints";
+import {
+  useEditDepotMutation,
+  useCreateDepotMutation
+} from "../../lib/api/endpoints/Depots/depotEndpoints";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
+import { useRouter } from "next/router";
+import { GetDepotProfileResponse } from "../../lib/types/depots";
 
 type Types = {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isEditing?: boolean;
+  currentDepotData?: GetDepotProfileResponse;
 };
 
 type FormTypes = {
@@ -19,26 +26,54 @@ type FormTypes = {
   location: string;
 };
 
-const NewDepotModal: FC<Types> = ({ isVisible, setIsVisible }) => {
+const NewDepotModal: FC<Types> = ({
+  isVisible,
+  setIsVisible,
+  isEditing,
+  currentDepotData
+}) => {
   const [location, setLocation] = useState<{
-    name: string;
+    name: string | undefined;
     coordinates: LatLng;
   }>();
+
+  const router = useRouter();
+
+  const { id: depotId } = router.query;
 
   const handleCancel = () => {
     setIsVisible(false);
   };
 
   const [createNewDepot, { isLoading }] = useCreateDepotMutation();
+  const [editDepot, { isLoading: isEditLoading }] = useEditDepotMutation();
+
+  const [form] = Form.useForm();
 
   const handleCreateDepotSuccess = () => {
     handleCancel();
   };
 
+  useEffect(() => {
+    if (isEditing && currentDepotData) {
+      const currentCoordinates = currentDepotData?.payload?.depot?.coordinates;
+      const currentName = currentDepotData?.payload?.depot?.name;
+      setLocation({
+        name: currentName,
+        coordinates: currentCoordinates ? JSON.parse(currentCoordinates) : null
+      });
+      form.setFieldsValue({
+        name: currentName,
+        location: currentDepotData?.payload?.depot?.location
+      });
+    }
+  }, [currentDepotData, form, isEditing]);
+
   const onFinish = ({ name }: FormTypes) => {
     handleAPIRequests({
-      request: createNewDepot,
+      request: isEditing ? editDepot : createNewDepot,
       name,
+      id: depotId,
       location: JSON.stringify(location?.name),
       coordinates: JSON.stringify(location?.coordinates),
       showSuccess: true,
@@ -46,19 +81,17 @@ const NewDepotModal: FC<Types> = ({ isVisible, setIsVisible }) => {
     });
   };
 
-  const [form] = Form.useForm();
-
   return (
     <ModalWrapper
-      title="New depot"
+      title={isEditing ? "Edit depot" : "New depot"}
       isModalVisible={isVisible}
       setIsModalVisible={setIsVisible}
-      loading={isLoading}
+      loading={isLoading || isEditLoading}
       onCancel={handleCancel}
       footerContent={
         <Button
           form="createNewDepot"
-          loading={isLoading}
+          loading={isLoading || isEditLoading}
           type="primary"
           htmlType="submit"
           disabled={false}
