@@ -8,51 +8,22 @@ import Button from "../../Shared/Button";
 import CustomButton from "../../Shared/Button";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
+import { RedFlagResponse, SingleRedFlag } from "../../../lib/types/depots";
 
 const { Text } = Typography;
 
 type Types = {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setIsJustifyFlagModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+  flagsData: RedFlagResponse;
 };
-
-interface SingleTruckTypes {
-  index: number;
-  plateNumber: string;
-  reported: string;
-  truck: string;
-  status: string;
-}
-
-const truckData = [
-  {
-    index: 0,
-    plateNumber: "Fuel usage",
-    reported: "2022-10-10",
-    truck: "RAB 355 J",
-    status: "RESOLVED"
-  },
-
-  {
-    index: 1,
-    plateNumber: "Fuel usage",
-    reported: "2022-10-10",
-    truck: "RAB 355 J",
-    status: "OPEN"
-  },
-
-  {
-    index: 2,
-    plateNumber: "Fuel usage",
-    reported: "2022-10-10",
-    truck: "RAB 355 J",
-    status: "JUSTIFIED"
-  }
-];
 
 const RedFlagsTable: FC<Types> = ({
   setIsVisible,
-  setIsJustifyFlagModalVisible
+  setIsJustifyFlagModalVisible,
+  isLoading,
+  flagsData
 }) => {
   const columns: any = [
     {
@@ -62,12 +33,12 @@ const RedFlagsTable: FC<Types> = ({
           <span>Red flag type</span>
         </div>
       ),
-      key: "plateNumber",
-      render: (text: any, record: SingleTruckTypes, index: number) => (
+      key: "type",
+      render: (text: string, record: SingleRedFlag, index: number) => (
         <div className="flex gap-10">
           <Text className="normalText opacity_56">{index + 1}</Text>
           <Text className="normalText fowe700 text_ellipsis">
-            {record?.plateNumber}
+            {record?.type}
           </Text>
         </div>
       )
@@ -75,17 +46,19 @@ const RedFlagsTable: FC<Types> = ({
 
     {
       title: "Reported on",
-      key: "reportedOn",
-      render: (record: SingleTruckTypes) => (
-        <span className="normalText">{record.reported}</span>
+      key: "date",
+      render: (record: SingleRedFlag) => (
+        <span className="normalText">{record?.date}</span>
       )
     },
 
     {
       title: "Truck",
-      key: "truck",
-      render: (record: SingleTruckTypes) => (
-        <span className="normalText">{record.truck}</span>
+      key: "plateNumber",
+      render: (record: SingleRedFlag) => (
+        <span className="normalText">
+          {record?.lastRefuel?.truck?.plateNumber}
+        </span>
       )
     },
 
@@ -112,9 +85,9 @@ const RedFlagsTable: FC<Types> = ({
     {
       title: "Status",
       key: "status",
-      render: (record: SingleTruckTypes) => (
+      render: (record: SingleRedFlag) => (
         <Text className="normalText fowe700 text_ellipsis">
-          {record.status}
+          {record?.status}
         </Text>
       )
     },
@@ -122,9 +95,9 @@ const RedFlagsTable: FC<Types> = ({
     {
       title: "Status",
       key: "status",
-      width: "150px",
-      render: (record: SingleTruckTypes) => (
-        <Row gutter={12} align="middle">
+      width: "100px",
+      render: (record: SingleRedFlag) => (
+        <Row gutter={12} align="middle" wrap={false}>
           <Col>
             <CustomButton
               type={record.status === "OPEN" ? "green" : "normal"}
@@ -165,12 +138,12 @@ const RedFlagsTable: FC<Types> = ({
     <Table
       className="data_table light_white_header light_white_table depot_profile_table"
       columns={columns}
-      dataSource={truckData}
-      rowKey={(record) => record?.index}
+      dataSource={flagsData?.payload?.content}
+      rowKey={(record) => record?.id}
       pagination={false}
       bordered={false}
       scroll={{ x: 0 }}
-      loading={TableOnActionLoading(false)}
+      loading={TableOnActionLoading(isLoading)}
     />
   );
 };

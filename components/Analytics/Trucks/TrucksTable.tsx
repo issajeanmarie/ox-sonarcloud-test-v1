@@ -17,6 +17,7 @@ import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { SingleTruckTypes } from "../../../lib/types/trucksTypes";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -25,22 +26,6 @@ interface TrucksProps {
   data: any;
   isLoading: boolean;
 }
-
-interface LastInspection {
-  score: number;
-  createdAt: string;
-}
-
-type SingleTruckTypes = {
-  id: number;
-  plateNumber: string;
-  lastInspection: LastInspection;
-  model: string;
-  capacity: number;
-  active: boolean;
-  minFuelPer100km: number | null;
-  maxFuelPer100km: number | null;
-};
 
 type State = {
   paginatedData: any;
