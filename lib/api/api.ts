@@ -45,7 +45,9 @@ export const baseAPI = createApi({
     "EndShift",
     "EditDepot",
     "GetFlags",
-    "GetSingleFlag"
+    "GetSingleFlag",
+    "ExpensesAuthorize",
+    "Expenses"
   ],
   endpoints: () => ({})
 });

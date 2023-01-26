@@ -283,3 +283,9 @@ export const PREVENTATIVE_MAINTENANCE_CHECKLIST = {
     }
   ]
 };
+
+export const QB_PAYMENT_TYPES = [
+  { label: "Cash", value: "Cash" },
+  { label: "Check", value: "Check" },
+  { label: "Credit Card", value: "CreditCard" }
+];

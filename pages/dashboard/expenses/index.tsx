@@ -1,88 +1,119 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ExpensesTable from "../../../components/Tables/Expenses/ExpensesTable";
 import ExpensesTopNavigator from "../../../components/Expenses/ExpensesTopNavigator";
 import Layout from "../../../components/Shared/Layout";
 import WithPrivateRoute from "../../../components/Shared/Routes/WithPrivateRoute";
 import CustomButton from "../../../components/Shared/Button";
-// import {
-//   useLazyExpensesQuery
-// } from "../../../lib/api/endpoints/Expenses/expensesEndpoint";
+import {
+  // useAuthorizeQuery,
+  useLazyExpensesQuery
+} from "../../../lib/api/endpoints/Expenses/expensesEndpoint";
 import { ExpensesTableLoader } from "../../../components/Shared/Loaders/Loaders";
 import Content from "../../../components/Shared/Content";
+import { useDispatch, useSelector } from "react-redux";
+import { pagination } from "../../../config/pagination";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import RecordExpenseModal from "../../../components/Modals/RecordExpenseModal";
+import { Expense } from "../../../lib/types/expenses";
 
 const Expenses = () => {
   const [currentPages, setCurrentPages] = useState(1);
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
+  const [sortValue, setSort]: any = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory]: any = useState("");
-  const [sortValue, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
+  const [itemToEdit, setItemToEdit] = useState<Expense | null>(null);
 
-  // const [getExpenses, { isLoading: isExpensesLoading }] = useLazyExpensesQuery();
-  const isExpensesLoading = false;
+  // const { data } = useAuthorizeQuery();
+  const [getExpenses, { isLoading: isExpensesLoading }] =
+    useLazyExpensesQuery();
 
-  const expensesState = {
-    payload: {
-      content: [
-        {
-          id: 1,
-          depot: "Tyazo depot",
-          supplier: "Elvis Rugamba",
-          payee: "Elvis Rugamba",
-          truck: "RAD 345 D",
-          date: "2022-10-13T08:08:29.735267",
-          amount: 15000,
-          attachment:
-            "https://oxawsbucket.s3.af-south-1.amazonaws.com/sample.pdf",
-          description:
-            "https://oxawsbucket.s3.af-south-1.amazonaws.com/sample.pdf",
-          approved: false
+  const dispatch = useDispatch();
+
+  const expensesState = useSelector(
+    (state: any) => state.paginatedData.displayPaginatedData
+  );
+
+  const dispatchReplace = (newContent: any) => {
+    dispatch(
+      displayPaginatedData({
+        payload: {
+          payload: {
+            content: [...newContent],
+            totalPages: expensesState.payload.totalPages,
+            totalElements: expensesState.payload.totalElements
+          }
         },
-        {
-          id: 2,
-          depot: "Kayove depot",
-          supplier: "Brian Gitego",
-          payee: "Brian Gitego",
-          truck: "RAF 456 E",
-          date: "2022-10-12T08:08:29.735267",
-          amount: 10000,
-          description: "Here.s note about the expense",
-          approved: true
-        }
-      ],
-      totalElements: 2
-    }
+        replace: true
+      })
+    );
   };
 
-  // const dispatch = useDispatch();
+  const handleRenderSuccess = (res: any) => {
+    dispatch(displayPaginatedData({ payload: res, onRender: true }));
+  };
 
-  // useSelector(
-  //   (state: any) => state.paginatedData.displayPaginatedData
-  // );
+  const handleLoadMoreSuccess = ({ payload }: any) => {
+    dispatch(displayPaginatedData({ payload, paginate: true }));
+    setIsLoadMoreLoading(false);
+  };
 
-  // const handleRenderSuccess = (res: any) => {
-  //   setFiltersBasedLoader(false);
-  //   dispatch(displayPaginatedData({ payload: res, onRender: true }));
-  // };
-
-  // const handleLoadMoreOrdersSuccess = ({ payload }: any) => {
-  //   dispatch(displayPaginatedData({ payload, paginate: true }));
-  //   setIsLoadMoreLoading(false);
-  // };
-
-  // const handleLoadMoreOrdersFailure = () => {
-  //   setIsLoadMoreLoading(false);
-  // };
+  const handleLoadMoreFailure = () => {
+    setIsLoadMoreLoading(false);
+  };
 
   const handleLoadMore = () => {
     setCurrentPages(currentPages + 1);
     setIsLoadMoreLoading(true);
+
+    getExpensesAction({
+      page: currentPages,
+      handleSuccess: handleLoadMoreSuccess,
+      handleFailure: handleLoadMoreFailure
+    });
   };
+
+  const getExpensesAction = ({
+    page,
+    size = pagination.clients.size,
+    sort = sortValue.value || "",
+    handleSuccess = handleRenderSuccess,
+    handleFailure,
+    request = getExpenses
+  }: any) => {
+    handleAPIRequests({
+      request,
+      page,
+      size,
+      sort,
+      handleSuccess,
+      handleFailure
+    });
+  };
+
+  const onSelectedRows = (rows: number[]) => {
+    setSelectedRows(rows);
+  };
+
+  const approveSlected = () => {
+    setIsWarningModalVisible(false);
+  };
+
+  useEffect(() => {
+    getExpensesAction({});
+  }, [sortValue]);
 
   //MODAL
   const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const showEditModal = (record: Expense) => {
+    setItemToEdit(record);
     setIsModalVisible(true);
   };
 
@@ -91,22 +122,43 @@ const Expenses = () => {
     setIsWarningModalVisible(true);
   };
 
-  const showPagination = false;
-  // expensesState?.payload?.totalPages > currentPages || isLoadMoreLoading;
+  const onRecordExpenseFinish = () => {
+    setIsModalVisible(false);
+  };
+
+  const onEditExpenseFinish = ({ payload }: any) => {
+    const newExpensesList: any = [];
+
+    expensesState?.payload?.content?.map((resource: any) => {
+      if (resource.id === payload.id) {
+        newExpensesList.push(payload);
+      } else {
+        newExpensesList.push(resource);
+      }
+    });
+
+    dispatchReplace(newExpensesList);
+    setItemToEdit(null);
+    setIsModalVisible(false);
+  };
+
+  const showPagination =
+    expensesState?.payload?.totalPages > currentPages || isLoadMoreLoading;
 
   return (
     <Layout>
       <div className="mx-4 relative">
         <ExpensesTopNavigator
-          isModalVisible={isModalVisible}
           showModal={showModal}
-          setIsModalVisible={setIsModalVisible}
+          isWarningModalVisible={isWarningModalVisible}
+          showWarningModal={showWarningModal}
+          setIsWarningModalVisible={setIsWarningModalVisible}
           expenses={expensesState?.payload}
-          defaultSelected={selectedCategory}
-          setDefaultSelected={setSelectedCategory}
           sort={sortValue}
           setSort={setSort}
-          setCurrentPages={setCurrentPages}
+          selectedRows={selectedRows}
+          approveSelected={approveSlected}
+          isApproving={false}
         />
 
         <Content isOverflowHidden={false} navType="CENTER">
@@ -119,11 +171,10 @@ const Expenses = () => {
               </>
             ) : (
               <ExpensesTable
-                isModalVisible={isWarningModalVisible}
-                showModal={showWarningModal}
-                setIsModalVisible={setIsWarningModalVisible}
                 expenses={expensesState}
-                isExpensesFetching={false}
+                isExpensesFetching={isExpensesLoading}
+                onSelectRows={onSelectedRows}
+                showEditModal={showEditModal}
               />
             )}
 
@@ -141,6 +192,14 @@ const Expenses = () => {
           </>
         </Content>
       </div>
+      <RecordExpenseModal
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        isEdit={!!itemToEdit}
+        editExpenseData={itemToEdit}
+        onRecordExpenseFinish={onRecordExpenseFinish}
+        onEditExpenseFinish={onEditExpenseFinish}
+      />
     </Layout>
   );
 };
