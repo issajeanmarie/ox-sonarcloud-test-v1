@@ -13,5 +13,6 @@ export const pagination = {
   warehouseItems: { size: 40, page: 0 },
   repairServices: { size: 100, page: 0 },
   preventativeMaintenanceChecklist: { size: 40, page: 0 },
-  driverShifts: { size: 40, page: 0 }
+  driverShifts: { size: 40, page: 0 },
+  expenses: { size: 40, page: 0 }
 };

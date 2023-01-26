@@ -1,4 +1,3 @@
-import { buildQueryFromArray } from "../../../../utils/buildQuery";
 import {
   GetAuthorizeResponse,
   ExpenseResponse,
@@ -6,9 +5,7 @@ import {
   Expense,
   DeleteExpenseRequest,
   EditExpenseRequest,
-  PostExpenseRequest,
-  QBSchema,
-  ApproveExpenseRequest
+  PostExpenseRequest
 } from "../../../types/expenses";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -45,7 +42,7 @@ const expensesApi = baseAPI.injectEndpoints({
       ApiResponseMetadata<Expense>,
       PostExpenseRequest
     >({
-      invalidatesTags: ["Expenses"],
+      invalidatesTags: [],
       query: (DTO) => ({
         url: `/quickbooks-expenses`,
         method: "POST",
@@ -58,7 +55,7 @@ const expensesApi = baseAPI.injectEndpoints({
     >({
       invalidatesTags: ["Expenses"],
       query: (DTO) => ({
-        url: `/quickbooks-expenses?${buildQueryFromArray("ids", DTO.ids)}`,
+        url: `/quickbooks-expenses/${DTO?.id || ""}`,
         method: "DELETE"
       })
     }),
@@ -72,79 +69,14 @@ const expensesApi = baseAPI.injectEndpoints({
         method: "PATCH",
         body: DTO
       })
-    }),
-    suppliers: builder.query<ApiResponseMetadata<{ content: QBSchema }>, void>({
-      providesTags: ["QBSuppliers"],
-      query: () => ({
-        url: "/quickbooks-expenses/vendors",
-        method: "GET"
-      })
-    }),
-    trucks: builder.query<ApiResponseMetadata<{ content: QBSchema }>, void>({
-      providesTags: ["QBTrucks"],
-      query: () => ({
-        url: "/quickbooks-expenses/classes",
-        method: "GET"
-      })
-    }),
-    locations: builder.query<ApiResponseMetadata<{ content: QBSchema }>, void>({
-      providesTags: ["QBLocations"],
-      query: () => ({
-        url: "/quickbooks-expenses/locations",
-        method: "GET"
-      })
-    }),
-    paymentMethods: builder.query<
-      ApiResponseMetadata<{ content: QBSchema }>,
-      void
-    >({
-      providesTags: ["QBPaymentMethods"],
-      query: () => ({
-        url: "/quickbooks-expenses/payment-methods",
-        method: "GET"
-      })
-    }),
-    accounts: builder.query<ApiResponseMetadata<{ content: QBSchema }>, void>({
-      providesTags: ["QBAccounts"],
-      query: () => ({
-        url: "/quickbooks-expenses/accounts",
-        method: "GET"
-      })
-    }),
-    categories: builder.query<ApiResponseMetadata<{ content: QBSchema }>, void>(
-      {
-        providesTags: ["QBCategories"],
-        query: () => ({
-          url: "/quickbooks-expenses/categories",
-          method: "GET"
-        })
-      }
-    ),
-    approve: builder.mutation<
-      ApiResponseMetadata<Expense>,
-      ApproveExpenseRequest
-    >({
-      invalidatesTags: ["Expenses"],
-      query: (DTO) => ({
-        url: "/quickbooks-expenses/approve",
-        method: "PATCH",
-        body: DTO
-      })
     })
   })
 });
 
 export const {
-  useLazyAuthorizeQuery,
+  useAuthorizeQuery,
   useLazyExpensesQuery,
   usePostExpenseMutation,
   useDeleteExpenseMutation,
-  useEditExpenseMutation,
-  useSuppliersQuery,
-  useTrucksQuery,
-  useLocationsQuery,
-  usePaymentMethodsQuery,
-  useAccountsQuery,
-  useCategoriesQuery,
-  useApproveMutation
+  useEditExpenseMutation
 } = expensesApi;

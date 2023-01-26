@@ -79,6 +79,10 @@ export type PostExpenseRequest = {
   hasEbm: boolean;
 };
 
+export type DeleteExpenseRequest = {
+  id: any;
+};
+
 export type EditExpenseRequest = {
   id: number;
   qbAccountId: string;
@@ -98,21 +102,8 @@ export type EditExpenseRequest = {
   hasEbm: boolean;
 };
 
-export type DeleteExpenseRequest = {
-  ids: number[];
-};
-
-export type ApproveExpenseRequest = {
-  ids: number[];
-};
-
 export type GetExpenses = {
   page?: number | string;
   size?: number | string;
   sort?: string;
-};
-
-export type QBSchema = {
-  Id: string;
-  Name: string;
 };
