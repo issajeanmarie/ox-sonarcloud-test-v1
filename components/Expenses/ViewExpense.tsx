@@ -21,7 +21,7 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Text className="heading2 mb-[8px]">Depot</Text>
           <div className="my_input bg-ox-input-white flex items-center px-4 text-sm">
-            <span>{expense.depot}</span>
+            <span>{expense.depot.name}</span>
           </div>
         </Col>
 
@@ -32,23 +32,24 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
           </div>
         </Col>
 
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <Text className="heading2 mb-[8px]">Supplier</Text>
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Text className="heading2 mb-[8px]">Payment method</Text>
           <div className="my_input bg-ox-input-white flex items-center px-4 text-sm">
-            <span>{expense.supplier}</span>
+            <span>{expense.qbPaymentMethodName}</span>
           </div>
         </Col>
 
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-          <Text className="heading2 mb-[8px]">Payee</Text>
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Text className="heading2 mb-[8px]">Payment type</Text>
           <div className="my_input bg-ox-input-white flex items-center px-4 text-sm">
-            <span>{expense.payee}</span>
+            <span>{expense.qbPaymentType}</span>
           </div>
         </Col>
+
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-          <Text className="heading2 mb-[8px]">Truck</Text>
+          <Text className="heading2 mb-[8px]">Payment account</Text>
           <div className="my_input bg-ox-input-white flex items-center px-4 text-sm">
-            <span>{expense.truck}</span>
+            <span>{expense.qbAccountName}</span>
           </div>
         </Col>
 
@@ -58,6 +59,34 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
             <span>
               {expense.amount && abbreviateNumber(expense.amount) + " RWF"}
             </span>
+          </div>
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Text className="heading2 mb-[8px]">Truck</Text>
+          <div className="my_input bg-ox-input-white flex items-center px-4 text-sm">
+            <span>{expense.qbTruckName}</span>
+          </div>
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Text className="heading2 mb-[8px]">Category</Text>
+          <div className="my_input bg-ox-input-white flex items-center px-4 text-sm">
+            <span>{expense.qbCategoryName}</span>
+          </div>
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Text className="heading2 mb-[8px]">Supplier</Text>
+          <div className="my_input bg-ox-input-white flex items-center px-4 text-sm">
+            <span>{expense.qbSupplierName}</span>
+          </div>
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Text className="heading2 mb-[8px]">Location</Text>
+          <div className="my_input bg-ox-input-white flex items-center px-4 text-sm">
+            <span>{expense.qbLocationName}</span>
           </div>
         </Col>
 
@@ -77,14 +106,14 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
 
       <Row gutter={[16, 16]} justify="space-between" className="mt-6">
         <Col xs={24} sm={24} md={15}>
-          {expense.attachment && (
+          {expense.attachmentUrl && (
             <FilePreview
               fileName={
-                expense.attachment.split("/")[
-                  expense.attachment.split("/").length - 1
+                expense.attachmentUrl.split("/")[
+                  expense.attachmentUrl.split("/").length - 1
                 ]
               }
-              onClick={() => handleDownloadFile(expense.attachment)}
+              onClick={() => handleDownloadFile(expense.attachmentUrl)}
               suffixIcon={
                 <Image
                   src="/icons/download_2.svg"

@@ -745,6 +745,9 @@ export const ExpensesTableLoader = () => {
       <Col md={4}>
         <Skeleton.Input active size="small" block={true} />
       </Col>
+      <Col md={4}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
       <Col md={3}>
         <Skeleton.Input active size="small" block={true} />
       </Col>
