@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "antd/lib/table";
 import Row from "antd/lib/row";
-import moment from "moment";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
@@ -17,6 +16,8 @@ import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { SingleTruckTypes } from "../../../lib/types/trucksTypes";
+import { dateDisplay } from "../../../utils/dateFormatter";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -25,22 +26,6 @@ interface TrucksProps {
   data: any;
   isLoading: boolean;
 }
-
-interface LastInspection {
-  score: number;
-  createdAt: string;
-}
-
-type SingleTruckTypes = {
-  id: number;
-  plateNumber: string;
-  lastInspection: LastInspection;
-  model: string;
-  capacity: number;
-  active: boolean;
-  minFuelPer100km: number | null;
-  maxFuelPer100km: number | null;
-};
 
 type State = {
   paginatedData: any;
@@ -251,9 +236,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                   </span>{" "}
                   <span className="captionText text_ellipsis">{`${
                     record?.lastInspection?.createdAt
-                      ? `(${moment(
-                          record?.lastInspection?.createdAt
-                        ).fromNow()})`
+                      ? `(${dateDisplay(record?.lastInspection?.createdAt)})`
                       : ""
                   }`}</span>
                 </>

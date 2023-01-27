@@ -42,7 +42,10 @@ export const baseAPI = createApi({
     "MaintenanceCheck",
     "ToggleDriver",
     "EditDriver",
-    "EndShift"
+    "EndShift",
+    "EditDepot",
+    "GetFlags",
+    "GetSingleFlag"
   ],
   endpoints: () => ({})
 });

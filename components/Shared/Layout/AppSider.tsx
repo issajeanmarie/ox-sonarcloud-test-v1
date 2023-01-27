@@ -22,6 +22,7 @@ import { escape } from "../../../utils/keyBinders";
 import Notification from "../Notification";
 import { useGlobalMoMoPaymentListener } from "../../../lib/useEffects/useHandleMoMoPaymentListener";
 import NewDepotModal from "../../Modals/NewDepotModal";
+import { userType } from "../../../helpers/getLoggedInUser";
 const { Sider } = Layout;
 const { Text } = Typography;
 
@@ -71,12 +72,16 @@ const AppSider = ({ collapsed }: any) => {
     router.pathname === routes.Orders.url ||
     doesInclude(routes.Stock.url) ||
     doesInclude(routes.Trucks.url) ||
-    doesInclude(routes.DepotProfile.url);
-  doesInclude(routes.Warehouse.url);
+    doesInclude(routes.DepotProfile.url) ||
+    doesInclude(routes.Warehouse.url);
 
   escape(setIsDropdownVisible);
 
   useGlobalMoMoPaymentListener({ setIsNotifyEnabled, setNotificationMessage });
+
+  const showNotificationOnMenu = (menuName: string): boolean => {
+    return menuName === "Settings" || menuName === "Resources";
+  };
 
   const depots = (
     <Space
@@ -84,33 +89,35 @@ const AppSider = ({ collapsed }: any) => {
       direction="vertical"
       style={{ width: "250px", marginLeft: "12px" }}
     >
-      <div className="text-white border-b border-black p-5">
-        <div className="bg-ox-yellow rounded">
-          <Row align="middle" wrap={false}>
-            <Col className="p-4 pb-3 border-r border-ox-shadow-dark">
-              <Image
-                className="mt-1"
-                width={20}
-                src={`/icons/ic-ecommerce-house-white.svg`}
-                preview={false}
-                alt=""
-              />
-            </Col>
+      {userType().isSuperAdmin && (
+        <div className="text-white border-b border-black p-5">
+          <div className="bg-ox-yellow rounded">
+            <Row align="middle" wrap={false}>
+              <Col className="p-4 pb-3 border-r border-ox-shadow-dark">
+                <Image
+                  className="mt-1"
+                  width={20}
+                  src={`/icons/ic-ecommerce-house-white.svg`}
+                  preview={false}
+                  alt=""
+                />
+              </Col>
 
-            <Col
-              onClick={() => {
-                setIsDropdownVisible(false);
-                setIsNewDepotModalVisible(true);
-              }}
-              className="p-4 text-black font-bold pointer text_ellipsis"
-            >
-              Add new depot
-            </Col>
-          </Row>
+              <Col
+                onClick={() => {
+                  setIsDropdownVisible(false);
+                  setIsNewDepotModalVisible(true);
+                }}
+                className="p-4 text-black font-bold pointer text_ellipsis"
+              >
+                Add new depot
+              </Col>
+            </Row>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="p-6">
+      <div className="p-6 p-y-0 h-[75vh] overflow-y-auto">
         <p className="pl-4 text-gray-500">Select to switch depot</p>
         <Row
           className="p-4 cursor-pointer"
@@ -239,20 +246,25 @@ const AppSider = ({ collapsed }: any) => {
             flex={1}
             className="px-6"
             onClick={() =>
+              depotsState.depotId &&
               router.push(`${routes.DepotProfile.url}/${depotsState.depotId}`)
             }
           >
             <Row justify="space-between" align="middle">
               <Col>
                 {!collapsed && (
-                  <div className="normalText text-white underline">
+                  <div
+                    className={`normalText text-white opacity-50 ${
+                      depotsState?.depotId && "underline opacity-100"
+                    }`}
+                  >
                     {isLoading ? "Loading" : depotsState?.depotName}
                   </div>
                 )}
               </Col>
 
               <Col>
-                {!collapsed && (
+                {depotsState?.depotId ? (
                   <div className="flex flex-1 justify-end">
                     <Col>
                       <Image
@@ -263,7 +275,7 @@ const AppSider = ({ collapsed }: any) => {
                       />
                     </Col>
                   </div>
-                )}
+                ) : null}
               </Col>
             </Row>
           </Col>
@@ -321,11 +333,7 @@ const AppSider = ({ collapsed }: any) => {
               router
             });
 
-            if (
-              moreMenu.name === "Settings" ||
-              moreMenu.name === "Resources" ||
-              moreMenu.name === "Expenses"
-            ) {
+            if (showNotificationOnMenu(moreMenu.name)) {
               return (
                 <Menu.Item
                   onClick={() => router.push(moreMenu.url)}

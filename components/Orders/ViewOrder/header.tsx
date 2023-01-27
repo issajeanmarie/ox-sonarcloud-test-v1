@@ -9,7 +9,7 @@ import MobilePayment from "../../Forms/Orders/MobilePayment";
 import {
   useChangeOrderStatusMutation,
   useOrderInvoiceMutation,
-  useLockOrderMutation
+  useToggleOrderLockMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { LoadingOutlined } from "@ant-design/icons";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
@@ -58,7 +58,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const [changeOrderStatus, { isLoading: orderStatusLoading }] =
     useChangeOrderStatusMutation();
 
-  const [lockOrder, { isLoading: isTogglingLock }] = useLockOrderMutation();
+  const [toggleOrderLock, { isLoading: isTogglingLock }] =
+    useToggleOrderLockMutation();
 
   const router = useRouter();
 
@@ -90,9 +91,9 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
     });
   };
 
-  const handlelockOrder = () => {
+  const handleToggleOrderLock = () => {
     handleAPIRequests({
-      request: lockOrder,
+      request: toggleOrderLock,
       id: order.id,
       showSuccess: true
     });
@@ -124,9 +125,9 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
           ) : (
             <Image
               className="cursor-pointer"
-              src={`/icons/lock-triggerer.svg`}
+              src={`/icons/${order.locked ? "unlock" : "lock-triggerer"}.svg`}
               alt="Backspace icon"
-              onClick={handlelockOrder}
+              onClick={handleToggleOrderLock}
               width={order.locked ? 24 : 18}
               height={order.locked ? 24 : 18}
               preview={false}
