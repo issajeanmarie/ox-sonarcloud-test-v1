@@ -27,7 +27,7 @@ const DepotLeftSide: FC<Props> = ({ depotData }) => {
         isEditing
       />
 
-      <Col flex="32%" className="p-4 h-[79vh] overflow-y-auto">
+      <Col flex="32%" className="h-[79vh] overflow-y-auto">
         <div className="radius4 p-12 mb-6 bg-white shadow-[0px_0px_19px_#00000008]">
           <Row align="middle" justify="space-between" gutter={12}>
             <Col>
@@ -36,7 +36,7 @@ const DepotLeftSide: FC<Props> = ({ depotData }) => {
               </span>
             </Col>
 
-            {!userType().isSuperAdmin && (
+            {userType().isSuperAdmin && (
               <Col>
                 <Image
                   onClick={() => setIsNewDepotModalVisible(true)}

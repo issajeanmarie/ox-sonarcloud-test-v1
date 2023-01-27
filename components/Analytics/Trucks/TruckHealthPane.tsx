@@ -17,6 +17,7 @@ import fileDownload from "js-file-download";
 import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 import { Empty } from "antd";
 import mappedObjects from "../../../utils/mappedObjects";
+import { dateDisplay } from "../../../utils/dateFormatter";
 
 const { Panel } = Collapse;
 
@@ -174,9 +175,7 @@ const TruckHealthPane = () => {
 
                             <Col md={6} lg={6} xl={10} xxl={10}>
                               <span className="text_ellipsis text-gray-400">
-                                {moment(inspection.createdAt).format(
-                                  "MMM, DD, YYYY"
-                                )}
+                                {dateDisplay(inspection.createdAt)}
                               </span>
                             </Col>
                           </Row>

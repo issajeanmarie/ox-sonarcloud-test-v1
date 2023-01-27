@@ -70,7 +70,7 @@ const WarehouseItemsTable: FC<WarehouseItemsTableProps> = ({
       )
     },
     {
-      title: "Unit price",
+      title: "Unit selling price",
       key: "unitSellingPrice",
       render: (
         text: WarehouseItemsTableTypes,

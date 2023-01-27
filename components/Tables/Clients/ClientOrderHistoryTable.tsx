@@ -3,7 +3,6 @@ import Table from "antd/lib/table";
 import Typography from "antd/lib/typography";
 import { ClientOrderHistoryTableTypes } from "../../../lib/types/pageTypes/Clients/ClientOrderHistoryTableTypes";
 import RowsWrapper from "../RowsWrapper";
-import moment from "moment";
 import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import { FC } from "react";
 import Row from "antd/lib/row";
@@ -11,6 +10,7 @@ import { routes } from "../../../config/route-config";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import { useRouter } from "next/router";
 import { orderStatus, paymentStatus } from "../../../utils/orderStatus";
+import { dateDisplay } from "../../../utils/dateFormatter";
 
 const { Text } = Typography;
 
@@ -59,8 +59,7 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
       ) => (
         <RowsWrapper>
           <Text className="normalText opacity_56">
-            {record?.startDateTime &&
-              moment(record?.startDateTime).format("ll")}
+            {record?.startDateTime && dateDisplay(record?.startDateTime)}
           </Text>
         </RowsWrapper>
       )

@@ -45,7 +45,7 @@ const SalesPage = () => {
 
   const handleRenderSuccess = (res: any) => {
     setIsFilterModalVisible(false);
-    dispatch(displayPaginatedData({ payload: res, onRender: true }));
+    res && dispatch(displayPaginatedData({ payload: res, onRender: true }));
   };
 
   useEffect(() => {

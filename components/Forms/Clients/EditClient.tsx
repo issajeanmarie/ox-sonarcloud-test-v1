@@ -74,7 +74,7 @@ const EditClient: FC<EditClientTypes> = ({
           />
         </Col>
 
-        <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
           <Input
             rules={requiredInput}
             type="select"
@@ -95,6 +95,15 @@ const EditClient: FC<EditClientTypes> = ({
                 width={10}
               />
             }
+          />
+        </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Input
+            name="tinNumber"
+            type="text"
+            label="TIN Number"
+            placeholder="Enter TIN Number"
           />
         </Col>
       </Row>

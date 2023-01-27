@@ -119,6 +119,15 @@ const AddNewClient: FC<AddClientTypes> = ({
             // rules={requiredInput}
           />
         </Col>
+
+        <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+          <Input
+            name="tinNumber"
+            type="text"
+            label="TIN Number"
+            placeholder="Enter TIN Number"
+          />
+        </Col>
       </Row>
 
       <Row className="mt-12 ">

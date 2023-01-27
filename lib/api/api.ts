@@ -43,7 +43,9 @@ export const baseAPI = createApi({
     "ToggleDriver",
     "EditDriver",
     "EndShift",
-    "EditDepot"
+    "EditDepot",
+    "GetFlags",
+    "GetSingleFlag"
   ],
   endpoints: () => ({})
 });

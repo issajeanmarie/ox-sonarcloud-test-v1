@@ -69,7 +69,7 @@ export const OrderSummaryInfoWrapper: FC<OrderSummaryInfoWrapperTypes> = ({
 }) => {
   return (
     <div className={`flex gap-4 ${title !== "Email" && "mb-4"} items-center`}>
-      <div className="w-1/5">
+      <div className="w-1/4">
         <span className="font-bold text-sm">{title}:</span>
       </div>
       <Text

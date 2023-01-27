@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "antd/lib/table";
 import Row from "antd/lib/row";
-import moment from "moment";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
@@ -18,6 +17,7 @@ import { useRouter } from "next/router";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { SingleTruckTypes } from "../../../lib/types/trucksTypes";
+import { dateDisplay } from "../../../utils/dateFormatter";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -236,9 +236,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                   </span>{" "}
                   <span className="captionText text_ellipsis">{`${
                     record?.lastInspection?.createdAt
-                      ? `(${moment(
-                          record?.lastInspection?.createdAt
-                        ).fromNow()})`
+                      ? `(${dateDisplay(record?.lastInspection?.createdAt)})`
                       : ""
                   }`}</span>
                 </>
