@@ -1,8 +1,14 @@
 import Col from "antd/lib/col";
 import Row from "antd/lib/row";
 import Typography from "antd/lib/typography";
+import { useRouter } from "next/router";
 import React, { FC } from "react";
+import { useEffect } from "react";
+import { numbersFormatter } from "../../helpers/numbersFormatter";
+import { useLazyGetSingleFlagQuery } from "../../lib/api/endpoints/Depots/depotEndpoints";
 import { DepotAlertModalTypes } from "../../lib/types/depots";
+import { dateDisplay } from "../../utils/dateFormatter";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import Button from "../Shared/Button";
 import ModalWrapper from "./ModalWrapper";
 
@@ -12,37 +18,106 @@ interface SingleItemTypes {
   item: { title: string; value: string; id: number };
 }
 
-const dumpData = [
-  {
-    id: 0,
-    title: "Litres",
-    value: "100 Litres"
-  },
-
-  {
-    id: 1,
-    title: "Odometer",
-    value: "12324332 Km"
-  },
-
-  {
-    id: 2,
-    title: "Location",
-    value: "Kigali, Rwanda, Nyarugenge"
-  }
-];
-
 const RedFlagModal: FC<DepotAlertModalTypes> = ({
   isVisible,
-  setIsVisible
+  setIsVisible,
+  activeFlag
 }) => {
+  const router = useRouter();
+  const { id } = router.query;
+
   const handleCancel = () => {
     setIsVisible(false);
   };
 
+  const [getSingleFlag, { isLoading, data: redFlagData }] =
+    useLazyGetSingleFlagQuery();
+
+  useEffect(() => {
+    if (id && activeFlag) {
+      handleAPIRequests({
+        request: getSingleFlag,
+        redFlagId: activeFlag?.id,
+        id
+      });
+    }
+  }, [activeFlag, activeFlag?.id, getSingleFlag, id]);
+
+  const fuelRefillData = [
+    {
+      id: 0,
+      title: "Litres",
+      value: `${numbersFormatter(
+        redFlagData?.payload?.fuelRefill?.litres || 0
+      )} Litres`
+    },
+
+    {
+      id: 1,
+      title: "Odometer",
+      value: `${numbersFormatter(
+        redFlagData?.payload?.fuelRefill?.odometer || 0
+      )} Km`
+    },
+
+    {
+      id: 2,
+      title: "Location",
+      value: `${redFlagData?.payload?.fuelRefill?.pos}`
+    },
+
+    {
+      id: 3,
+      title: "Fuel price",
+      value: `${numbersFormatter(
+        redFlagData?.payload?.fuelRefill?.amount || 0
+      )} Rwf`
+    },
+
+    {
+      id: 4,
+      title: "Driver",
+      value: `${
+        redFlagData?.payload?.fuelRefill?.shift?.driver?.names || "N/A"
+      } `
+    }
+  ];
+
+  const lastFuelData = [
+    {
+      id: 0,
+      title: "Litres",
+      value: `${numbersFormatter(
+        redFlagData?.payload?.lastRefuel?.litres || 0
+      )} Litres`
+    },
+
+    {
+      id: 1,
+      title: "Odometer",
+      value: `${numbersFormatter(
+        redFlagData?.payload?.lastRefuel?.odometer || 0
+      )} Km`
+    },
+
+    {
+      id: 2,
+      title: "Date",
+      value: `${dateDisplay(redFlagData?.payload?.lastRefuel?.date || "")}`
+    },
+
+    {
+      id: 3,
+      title: "Driver",
+      value: `${
+        redFlagData?.payload?.lastRefuel?.shift?.driver?.names || "N/A"
+      } `
+    }
+  ];
+
   return (
     <ModalWrapper
-      title={`"RAC 533 H" FUEL USAGE ALERT`}
+      title={`${redFlagData?.payload?.fuelRefill?.truck?.plateNumber} FUEL USAGE ALERT`}
       isModalVisible={isVisible}
       setIsModalVisible={setIsVisible}
       subTitle="14 Feb 2022"
@@ -77,63 +152,75 @@ const RedFlagModal: FC<DepotAlertModalTypes> = ({
       }
       onCancel={handleCancel}
     >
-      <Row
-        gutter={24}
-        align="middle"
-        className="w-[100%] pb-12 mb-12 border-b border-grey"
-      >
-        <Col flex={1}>
-          <span className="text-gray-400 block mb-2">Cost (Rwf) / Km</span>
+      {isLoading ? (
+        <p>LOading...</p>
+      ) : (
+        <>
+          <Row
+            gutter={24}
+            align="middle"
+            className="w-[100%] pb-12 mb-12 border-b border-grey"
+          >
+            <Col flex={1}>
+              <span className="text-gray-400 block mb-2">Cost (Rwf) / Km</span>
 
-          <Row align="bottom" gutter={6}>
-            <Col>
-              <Text className="text-2xl font-semibold block text-slate-50">
-                787567
-              </Text>
+              <Row align="bottom" gutter={6}>
+                <Col>
+                  <Text className="text-2xl font-semibold block text-slate-50">
+                    {redFlagData?.payload?.fuelRefill?.amount}
+                  </Text>
+                </Col>
+
+                <Col>
+                  <Text className="text-sm italic text-ox-red">20+</Text>
+                </Col>
+              </Row>
             </Col>
 
-            <Col>
-              <Text className="text-sm italic text-ox-red">20+</Text>
+            <Col flex={1}>
+              <span className="text-gray-400 block mb-2">Cost (Rwf) / Km</span>
+
+              <Row align="bottom" gutter={6}>
+                <Col>
+                  <Text className="text-2xl font-semibold block text-slate-50">
+                    787567
+                  </Text>
+                </Col>
+
+                <Col>
+                  <Text className="text-sm italic text-ox-red">20+</Text>
+                </Col>
+              </Row>
+            </Col>
+
+            <Col flex={1}>
+              <span className="text-gray-400 block mb-2">Cost (Rwf) / Km</span>
+
+              <Row align="bottom" gutter={6}>
+                <Col>
+                  <Text className="text-2xl font-semibold block text-slate-50">
+                    787567
+                  </Text>
+                </Col>
+
+                <Col>
+                  <Text className="text-sm italic text-ox-red">20+</Text>
+                </Col>
+              </Row>
             </Col>
           </Row>
-        </Col>
 
-        <Col flex={1}>
-          <span className="text-gray-400 block mb-2">Cost (Rwf) / Km</span>
+          {fuelRefillData.map((data) => (
+            <SingleItem key={data.id} item={data} />
+          ))}
 
-          <Row align="bottom" gutter={6}>
-            <Col>
-              <Text className="text-2xl font-semibold block text-slate-50">
-                787567
-              </Text>
-            </Col>
+          <span className="text-gray-400 block mt-12 mb-4">Last fuel</span>
 
-            <Col>
-              <Text className="text-sm italic text-ox-red">20+</Text>
-            </Col>
-          </Row>
-        </Col>
-
-        <Col flex={1}>
-          <span className="text-gray-400 block mb-2">Cost (Rwf) / Km</span>
-
-          <Row align="bottom" gutter={6}>
-            <Col>
-              <Text className="text-2xl font-semibold block text-slate-50">
-                787567
-              </Text>
-            </Col>
-
-            <Col>
-              <Text className="text-sm italic text-ox-red">20+</Text>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-
-      {dumpData.map((data) => (
-        <SingleItem key={data.id} item={data} />
-      ))}
+          {lastFuelData.map((data) => (
+            <SingleItem key={data.id} item={data} />
+          ))}
+        </>
+      )}
     </ModalWrapper>
   );
 };
