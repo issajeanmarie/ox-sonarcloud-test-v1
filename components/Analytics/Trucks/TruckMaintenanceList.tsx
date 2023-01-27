@@ -10,7 +10,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { Empty } from "antd";
 import { SingleMaintenanceInterface } from "../../../lib/types/trucksTypes";
 import mappedObjects from "../../../utils/mappedObjects";
-import { dateFormatterNth } from "../../../utils/dateFormatter";
+import { dateDisplay } from "../../../utils/dateFormatter";
 import ActionModal from "../../Shared/ActionModal";
 import { useDispatch } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
@@ -115,9 +115,7 @@ const TruckMaintenanceList = ({
 
                             <Col className="text_ellipsis">
                               <span className="text-gray-400">
-                                {dateFormatterNth(
-                                  data?.date || data?.createdAt
-                                )}
+                                {dateDisplay(data?.date || data?.createdAt)}
                               </span>
                             </Col>
                           </Row>

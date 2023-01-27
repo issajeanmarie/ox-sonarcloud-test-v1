@@ -229,10 +229,10 @@ const ordersApi = baseAPI.injectEndpoints({
       })
     }),
 
-    lockOrder: builder.mutation({
+    toggleOrderLock: builder.mutation({
       invalidatesTags: ["Order"],
       query: ({ id }) => ({
-        url: `/orders/${id}/lock`,
+        url: `/orders/${id}/toggle-lock`,
         method: "PATCH"
       })
     })
@@ -259,5 +259,5 @@ export const {
   useLhsOrdersQuery,
   useUploadOrderDocumentMutation,
   useEditOrderDocumentMutation,
-  useLockOrderMutation
+  useToggleOrderLockMutation
 } = ordersApi;

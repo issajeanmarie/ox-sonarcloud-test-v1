@@ -9,7 +9,7 @@ import MobilePayment from "../../Forms/Orders/MobilePayment";
 import {
   useChangeOrderStatusMutation,
   useOrderInvoiceMutation,
-  useLockOrderMutation
+  useToggleOrderLockMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { LoadingOutlined } from "@ant-design/icons";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
@@ -43,7 +43,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const [isCancelModalVisible, setIsCancelModalVisible] =
     useState<boolean>(false);
 
-  const [isReceipientCodeModalVisible, setIsReceipientCodeModalVisible] =
+  const [isRecipientCodeModalVisible, setIsRecipientCodeModalVisible] =
     useState<boolean>(false);
 
   const [isConfirmCompleteOrder, setIsConfirmCompleteOrder] =
@@ -58,7 +58,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const [changeOrderStatus, { isLoading: orderStatusLoading }] =
     useChangeOrderStatusMutation();
 
-  const [lockOrder, { isLoading: isTogglingLock }] = useLockOrderMutation();
+  const [toggleOrderLock, { isLoading: isTogglingLock }] =
+    useToggleOrderLockMutation();
 
   const router = useRouter();
 
@@ -90,9 +91,9 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
     });
   };
 
-  const handlelockOrder = () => {
+  const handleToggleOrderLock = () => {
     handleAPIRequests({
-      request: lockOrder,
+      request: toggleOrderLock,
       id: order.id,
       showSuccess: true
     });
@@ -124,9 +125,9 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
           ) : (
             <Image
               className="cursor-pointer"
-              src={`/icons/lock-triggerer.svg`}
+              src={`/icons/${order.locked ? "unlock" : "lock-triggerer"}.svg`}
               alt="Backspace icon"
-              onClick={handlelockOrder}
+              onClick={handleToggleOrderLock}
               width={order.locked ? 24 : 18}
               height={order.locked ? 24 : 18}
               preview={false}
@@ -148,6 +149,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             preview={false}
           />
         )}
+
         <Image
           className="cursor-pointer"
           src="/icons/code.svg"
@@ -155,8 +157,9 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
           width={16}
           height={16}
           preview={false}
-          onClick={() => setIsReceipientCodeModalVisible(true)}
+          onClick={() => setIsRecipientCodeModalVisible(true)}
         />
+
         <Image
           className={
             canUserDelete ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
@@ -221,8 +224,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         loading={orderStatusLoading}
       />
       <ReceipientCodeModal
-        isModalVisible={isReceipientCodeModalVisible}
-        setIsModalVisible={setIsReceipientCodeModalVisible}
+        isModalVisible={isRecipientCodeModalVisible}
+        setIsModalVisible={setIsRecipientCodeModalVisible}
         code={code}
       />
       <MobilePayment
