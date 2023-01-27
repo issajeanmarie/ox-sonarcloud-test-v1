@@ -7,7 +7,11 @@ type CardMoreStockColWrapperTypes = {
 };
 
 const CardColWrapper: FC<CardColWrapperTypes> = ({ children, active }) => {
-  return <Col flex={`${active === "KPIs" ? "none" : "auto"}`}>{children}</Col>;
+  return (
+    <Col flex={`${active === "KPIs" || active === "KPIs" ? "none" : "auto"}`}>
+      {children}
+    </Col>
+  );
 };
 
 export const CardMoreStockColWrapper: FC<CardMoreStockColWrapperTypes> = ({

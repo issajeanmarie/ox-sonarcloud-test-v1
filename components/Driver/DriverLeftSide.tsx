@@ -118,18 +118,24 @@ const DriverLeftSide = ({
                   borderBottom: "1px solid transparent"
                 }}
               >
-                {data && (
-                  <div className="border border-grey rounded p-2 m-2">
-                    <LeftSideInnerHeader
-                      totalRevenue={data?.payload?.totalRevenue || 0}
-                      ordersNumbers={data?.payload?.orders?.length || 0}
-                    />
-
-                    <DriverShiftHistoryTable
-                      data={data}
-                      isFetchingOrders={isFetchingOrders}
-                    />
+                {isFetchingOrders ? (
+                  <div className="w-[100%] flex justify-center p-12">
+                    <MediumSpinLoader />
                   </div>
+                ) : (
+                  data && (
+                    <div className="border border-grey rounded p-2 m-2">
+                      <LeftSideInnerHeader
+                        totalRevenue={data?.payload?.totalRevenue || 0}
+                        ordersNumbers={data?.payload?.orders?.length || 0}
+                      />
+
+                      <DriverShiftHistoryTable
+                        data={data}
+                        isFetchingOrders={isFetchingOrders}
+                      />
+                    </div>
+                  )
                 )}
               </Panel>
             ))}

@@ -3,7 +3,6 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Divider from "antd/lib/divider";
 import Checkbox from "antd/lib/checkbox";
-import moment from "moment";
 import Spin from "antd/lib/spin";
 import LoadingOutlined from "@ant-design/icons/LoadingOutlined";
 import CustomButton from "../../Shared/Button/button";
@@ -20,6 +19,7 @@ import { displayTruckIssues } from "../../../lib/redux/slices/trucksSlice";
 import { TruckIssuesTypes } from "../../../lib/types/pageTypes/Trucks/DisplayTrucksTypes";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { Empty } from "antd";
+import { dateDisplay } from "../../../utils/dateFormatter";
 
 type SingleIssueTypes = {
   createdAt: string;
@@ -172,8 +172,7 @@ const TruckIssuesPane = () => {
                             }
                           >
                             {" "}
-                            Reported on{" "}
-                            {moment(issue.createdAt).format("MMMM DD, YYYY")}
+                            Reported on {dateDisplay(issue.createdAt)}
                           </span>
                         </Col>
 

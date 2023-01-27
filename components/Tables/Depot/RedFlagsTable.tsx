@@ -9,6 +9,7 @@ import CustomButton from "../../Shared/Button";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { RedFlagResponse, SingleRedFlag } from "../../../lib/types/depots";
+import { dateDisplay } from "../../../utils/dateFormatter";
 
 const { Text } = Typography;
 
@@ -17,14 +18,21 @@ type Types = {
   setIsJustifyFlagModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
   flagsData: RedFlagResponse;
+  setActiveFlag: React.Dispatch<React.SetStateAction<SingleRedFlag | null>>;
 };
 
 const RedFlagsTable: FC<Types> = ({
   setIsVisible,
   setIsJustifyFlagModalVisible,
   isLoading,
-  flagsData
+  flagsData,
+  setActiveFlag
 }) => {
+  const handleShowRedFlagData = (record: SingleRedFlag) => {
+    setActiveFlag(record);
+    setIsVisible(true);
+  };
+
   const columns: any = [
     {
       title: (
@@ -38,7 +46,7 @@ const RedFlagsTable: FC<Types> = ({
         <div className="flex gap-10">
           <Text className="normalText opacity_56">{index + 1}</Text>
           <Text className="normalText fowe700 text_ellipsis">
-            {record?.type}
+            {record?.type?.replaceAll("_", " ")}
           </Text>
         </div>
       )
@@ -48,7 +56,7 @@ const RedFlagsTable: FC<Types> = ({
       title: "Reported on",
       key: "date",
       render: (record: SingleRedFlag) => (
-        <span className="normalText">{record?.date}</span>
+        <span className="normalText">{dateDisplay(record?.date)}</span>
       )
     },
 
@@ -57,7 +65,7 @@ const RedFlagsTable: FC<Types> = ({
       key: "plateNumber",
       render: (record: SingleRedFlag) => (
         <span className="normalText">
-          {record?.lastRefuel?.truck?.plateNumber}
+          {record?.fuelRefill?.truck?.plateNumber}
         </span>
       )
     },
@@ -65,9 +73,9 @@ const RedFlagsTable: FC<Types> = ({
     {
       title: "Red flag",
       key: "redFlag",
-      render: () => (
+      render: (record: SingleRedFlag) => (
         <CustomButton
-          onClick={() => setIsVisible(true)}
+          onClick={() => handleShowRedFlagData(record)}
           type="danger"
           size="icon"
           icon={

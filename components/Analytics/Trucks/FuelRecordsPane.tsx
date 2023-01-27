@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import Row from "antd/lib/row";
-import moment from "moment";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Divider from "antd/lib/divider";
@@ -14,6 +13,7 @@ import Loader from "../../Shared/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { FuelRecordsTypes } from "../../../lib/types/pageTypes/Trucks/DisplayTrucksTypes";
 import { InfoMessage } from "../../Shared/Messages/InfoMessage";
+import { dateDisplay } from "../../../utils/dateFormatter";
 
 const FuelRecordsPane = () => {
   const componentDidMount = useRef(false);
@@ -155,9 +155,7 @@ const FuelRecordsPane = () => {
               className="mt-6"
             >
               <Col>
-                <p className="text-gray-400">
-                  {moment(row.date).format("MMMM DD, YYYY")}
-                </p>
+                <p className="text-gray-400">{dateDisplay(row?.date)}</p>
                 <p className="font-bold">{row?.pos}</p>
               </Col>
 

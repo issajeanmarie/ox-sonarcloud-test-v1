@@ -35,6 +35,7 @@ const DriverLeftHeader = ({
           setDefaultSelected={setSelectedFilter}
         />
       </Col>
+
       <Col className="flex items-center gap-4">
         <span className=" opacity_56">Total Revenue Made:</span>
         <span className="font-bold yellow">

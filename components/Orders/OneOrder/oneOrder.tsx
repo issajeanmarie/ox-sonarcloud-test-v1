@@ -7,7 +7,7 @@ import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
 import CustomButton from "../../Shared/Button";
 import { Order, Order as OrderType } from "../../../lib/types/orders";
-import { dateFormatterNth } from "../../../utils/dateFormatter";
+import { dateDisplay } from "../../../utils/dateFormatter";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import PaymentStatus from "../../Shared/PaymentStatus";
 import { routes } from "../../../config/route-config";
@@ -407,7 +407,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
           <Row gutter={12} align="middle">
             <Col>
               <Text className="text-sm opacity_56 nowrap ml-14">
-                Created: {dateFormatterNth(order?.startDateTime)}{" "}
+                Created: {dateDisplay(order?.startDateTime)}{" "}
                 {order.lastEditedBy && "-"}
               </Text>
             </Col>

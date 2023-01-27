@@ -58,6 +58,12 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
               isTransportOrder={false}
             />
           )}
+
+          <InfoWrapper
+            title="TIN Number"
+            infoItem={sale?.client?.tinNumber || "N/A"}
+            isTransportOrder={false}
+          />
         </div>
 
         <div className="w-full mt-9">
@@ -86,9 +92,7 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                     item?.weight || 0
                   )} KGs / ${Math.round(item?.weight / 50)} ${
                     item?.weight > 50 ? "Bags" : "Bag"
-                  } - ${numbersFormatter(
-                    item?.warehouseItem?.unitSellingPrice || 0
-                  )} Rwf/Kg`}
+                  }`}
                   isTransportOrder={false}
                 />
 
@@ -110,6 +114,14 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                   title="Selling price"
                   infoItem={`${numbersFormatter(
                     item?.unitSellingPrice * item?.weight
+                  )} Rwf`}
+                  isTransportOrder={false}
+                />
+
+                <InfoWrapper
+                  title="Unit selling price"
+                  infoItem={`${numbersFormatter(
+                    (item?.unitSellingPrice * item?.weight) / item?.weight
                   )} Rwf`}
                   isTransportOrder={false}
                 />

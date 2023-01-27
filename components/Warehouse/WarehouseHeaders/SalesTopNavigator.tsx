@@ -81,8 +81,8 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
 
   const [postSale, { isLoading: isPostingSale }] = usePostSaleMutation();
 
-  const handleAddSaleSuccess = ({ payload }: any) => {
-    dispatch(displayPaginatedData({ payload: { ...payload } }));
+  const handleAddSaleSuccess = (res: any) => {
+    res && dispatch(displayPaginatedData({ payload: res }));
 
     form.resetFields();
     setIsModalVisible(false);
