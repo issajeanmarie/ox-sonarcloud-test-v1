@@ -72,8 +72,8 @@ const AppSider = ({ collapsed }: any) => {
     router.pathname === routes.Orders.url ||
     doesInclude(routes.Stock.url) ||
     doesInclude(routes.Trucks.url) ||
-    doesInclude(routes.DepotProfile.url);
-  doesInclude(routes.Warehouse.url);
+    doesInclude(routes.DepotProfile.url) ||
+    doesInclude(routes.Warehouse.url);
 
   escape(setIsDropdownVisible);
 
@@ -89,7 +89,7 @@ const AppSider = ({ collapsed }: any) => {
       direction="vertical"
       style={{ width: "250px", marginLeft: "12px" }}
     >
-      {!userType().isSuperAdmin && (
+      {userType().isSuperAdmin && (
         <div className="text-white border-b border-black p-5">
           <div className="bg-ox-yellow rounded">
             <Row align="middle" wrap={false}>
@@ -246,20 +246,25 @@ const AppSider = ({ collapsed }: any) => {
             flex={1}
             className="px-6"
             onClick={() =>
+              depotsState.depotId &&
               router.push(`${routes.DepotProfile.url}/${depotsState.depotId}`)
             }
           >
             <Row justify="space-between" align="middle">
               <Col>
                 {!collapsed && (
-                  <div className="normalText text-white underline">
+                  <div
+                    className={`normalText text-white opacity-50 ${
+                      depotsState?.depotId && "underline opacity-100"
+                    }`}
+                  >
                     {isLoading ? "Loading" : depotsState?.depotName}
                   </div>
                 )}
               </Col>
 
               <Col>
-                {!collapsed && (
+                {depotsState?.depotId ? (
                   <div className="flex flex-1 justify-end">
                     <Col>
                       <Image
@@ -270,7 +275,7 @@ const AppSider = ({ collapsed }: any) => {
                       />
                     </Col>
                   </div>
-                )}
+                ) : null}
               </Col>
             </Row>
           </Col>

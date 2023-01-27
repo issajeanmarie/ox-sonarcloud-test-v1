@@ -8,7 +8,7 @@ import CustomButton from "../Shared/Button";
 import RedFlagsTable from "../Tables/Depot/RedFlagsTable";
 import RedFlagModal from "../Modals/RedFlagModal";
 import JustifyFlagModal from "../Modals/JustifyFlagModal";
-import { RedFlagResponse } from "../../lib/types/depots";
+import { RedFlagResponse, SingleRedFlag } from "../../lib/types/depots";
 
 interface Props {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
@@ -17,6 +17,7 @@ interface Props {
 }
 
 const RedFlagsPane: FC<Props> = ({ setSearch, flagsData, isLoading }) => {
+  const [activeFlag, setActiveFlag] = useState<SingleRedFlag | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isJustifyFlagModalVisible, setIsJustifyFlagModalVisible] =
     useState(false);
@@ -59,10 +60,16 @@ const RedFlagsPane: FC<Props> = ({ setSearch, flagsData, isLoading }) => {
 
   return (
     <>
-      <RedFlagModal isVisible={isVisible} setIsVisible={setIsVisible} />
+      <RedFlagModal
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        activeFlag={activeFlag}
+      />
+
       <JustifyFlagModal
         isVisible={isJustifyFlagModalVisible}
         setIsVisible={setIsJustifyFlagModalVisible}
+        activeFlag={activeFlag}
       />
 
       <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
@@ -72,6 +79,7 @@ const RedFlagsPane: FC<Props> = ({ setSearch, flagsData, isLoading }) => {
         setIsJustifyFlagModalVisible={setIsJustifyFlagModalVisible}
         flagsData={flagsData}
         isLoading={isLoading}
+        setActiveFlag={setActiveFlag}
       />
     </>
   );

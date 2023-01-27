@@ -25,9 +25,8 @@ import {
   useWriteOffMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import Loader from "../../Shared/Loader";
-import moment from "moment";
 import { Document, Stop, Transaction } from "../../../lib/types/orders";
-import { dateFormatter } from "../../../utils/dateFormatter";
+import { dateDisplay } from "../../../utils/dateFormatter";
 import AddStop from "../../Forms/Orders/AddStop";
 import EditOrderClient from "../../Forms/Orders/EditOrderClient";
 import ActionModal from "../../Shared/ActionModal";
@@ -369,7 +368,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
 
                 <div className="flex items-center gap-4">
                   <span className="normalText">
-                    {moment(data.startDateTime).format("Do MMMM YYYY")}
+                    {dateDisplay(data.startDateTime)}
                   </span>
 
                   {user.isSuperAdmin && (
@@ -558,7 +557,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                               </span>
                             </div>
                             <div className="flex-1 text-sm text-gray-400 italic font-extralight whitespace-nowrap overflow-hidden text-ellipsis">
-                              {dateFormatter(tx.createdAt)}
+                              {dateDisplay(tx.createdAt)}
                             </div>
                             <div className="flex-1 font-light text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                               <span className="text-md font-bold">
