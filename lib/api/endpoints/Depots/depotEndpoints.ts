@@ -6,7 +6,9 @@ import {
   GetDepotProfileRequest,
   GetDepotProfileResponse,
   GetFlagsRequest,
-  RedFlagResponse
+  GetSingleFlagRequest,
+  RedFlagResponse,
+  SingleRedFlagResponse
 } from "../../../types/depots";
 import { GenericResponse } from "../../../types/shared";
 
@@ -41,7 +43,7 @@ const depotsEndpoints = baseAPI.injectEndpoints({
     }),
 
     getFlags: builder.query<RedFlagResponse, GetFlagsRequest>({
-      providesTags: ["EditDepot"],
+      providesTags: ["GetFlags"],
       query: ({ id, start, end, search, page, size }) => ({
         url: `/depots/${id}/red-flags?start=${start}&end=${end}&search=${search}&page=${page}&size=${size}`,
         method: "GET"
@@ -55,6 +57,14 @@ const depotsEndpoints = baseAPI.injectEndpoints({
         method: "PUT",
         body: DTO
       })
+    }),
+
+    getSingleFlag: builder.query<SingleRedFlagResponse, GetSingleFlagRequest>({
+      providesTags: ["GetSingleFlag"],
+      query: ({ id, redFlagId }) => ({
+        url: `/depots/${id}/red-flags/${redFlagId}`,
+        method: "GET"
+      })
     })
   })
 });
@@ -64,5 +74,6 @@ export const {
   useCreateDepotMutation,
   useEditDepotMutation,
   useLazyDepotProfileQuery,
-  useLazyGetFlagsQuery
+  useLazyGetFlagsQuery,
+  useLazyGetSingleFlagQuery
 } = depotsEndpoints;

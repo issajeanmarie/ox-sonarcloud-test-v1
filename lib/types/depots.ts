@@ -40,6 +40,7 @@ export type SelectedDepotTypes = {
 export type DepotAlertModalTypes = {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  activeFlag: SingleRedFlag | null;
 };
 
 export interface GetDepotProfileRequest {
@@ -52,6 +53,11 @@ export interface GetFlagsRequest extends GetDepotProfileRequest {
   search: string;
   page: number;
   size: number;
+}
+
+export interface GetSingleFlagRequest {
+  id: number;
+  redFlagId: number;
 }
 
 export interface GetDepotProfileResponse {
@@ -105,6 +111,11 @@ export interface RedFlagPayload {
   size: number;
   number: number;
   empty: boolean;
+}
+
+export interface SingleRedFlagResponse {
+  message: string;
+  payload: SingleRedFlag;
 }
 
 export interface Pageable {
