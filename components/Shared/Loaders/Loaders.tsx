@@ -779,9 +779,13 @@ export const ExpensesTableLoader = () => {
   );
 };
 
-export const DepotProfileLoader = () => {
+export const DepotProfileLoader = ({ className }: { className?: string }) => {
   return (
-    <Row justify="center" align="middle" className="w-[100%] h-[70vh]">
+    <Row
+      justify="center"
+      align="middle"
+      className={`${className} w-[100%] h-[70vh]`}
+    >
       <Col>{loadingIcon}</Col>
     </Row>
   );

@@ -4,7 +4,6 @@ import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Navbar from "../Shared/Content/Navbar";
 import Input from "../Shared/Input";
-import CustomButton from "../Shared/Button";
 import RedFlagsTable from "../Tables/Depot/RedFlagsTable";
 import RedFlagModal from "../Modals/RedFlagModal";
 import JustifyFlagModal from "../Modals/JustifyFlagModal";
@@ -50,20 +49,14 @@ const RedFlagsPane: FC<Props> = ({ setSearch, flagsData, isLoading }) => {
     </Row>
   );
 
-  const RightSide = (
-    <div className="w-[120px]">
-      <CustomButton disabled={false} type="secondary">
-        Download
-      </CustomButton>
-    </div>
-  );
-
   return (
     <>
       <RedFlagModal
         isVisible={isVisible}
         setIsVisible={setIsVisible}
+        setIsJustifyFlagModalVisible={setIsJustifyFlagModalVisible}
         activeFlag={activeFlag}
+        setActiveFlag={setActiveFlag}
       />
 
       <JustifyFlagModal
@@ -72,7 +65,7 @@ const RedFlagsPane: FC<Props> = ({ setSearch, flagsData, isLoading }) => {
         activeFlag={activeFlag}
       />
 
-      <Navbar LeftSide={LeftSide} RightSide={RightSide} type="CENTER" />
+      <Navbar LeftSide={LeftSide} type="CENTER" />
 
       <RedFlagsTable
         setIsVisible={setIsVisible}
