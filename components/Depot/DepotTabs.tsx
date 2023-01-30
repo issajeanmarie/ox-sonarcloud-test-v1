@@ -20,7 +20,7 @@ const DepotTabs: FC<Props> = ({ setSearch, flagsData, isLoading }) => (
         }
         key={1}
       >
-        <div className="h-[79vh] overflow-x-hidden overflow-auto py-6">
+        <div className="h-[79vh] overflow-x-hidden overflow-auto py-6 pb-32">
           <RedFlagsPane
             isLoading={isLoading}
             flagsData={flagsData}

@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Table from "antd/lib/table";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
@@ -10,6 +10,9 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { RedFlagResponse, SingleRedFlag } from "../../../lib/types/depots";
 import { dateDisplay } from "../../../utils/dateFormatter";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { useResolveRedFlagMutation } from "../../../lib/api/endpoints/Depots/depotEndpoints";
+import { useRouter } from "next/router";
 
 const { Text } = Typography;
 
@@ -28,9 +31,36 @@ const RedFlagsTable: FC<Types> = ({
   flagsData,
   setActiveFlag
 }) => {
+  const [flagToResolve, setFlagToResolve] = useState<number | null>(null);
   const handleShowRedFlagData = (record: SingleRedFlag) => {
     setActiveFlag(record);
     setIsVisible(true);
+  };
+
+  const handleShowJustifyModal = (record: SingleRedFlag) => {
+    setActiveFlag(record);
+    setIsJustifyFlagModalVisible(true);
+  };
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  const [resolveRedFlag] = useResolveRedFlagMutation();
+
+  const handleResolveFlagSuccess = () => {
+    setFlagToResolve(null);
+  };
+
+  const handleResolveRedFlag = (redFlagId: number) => {
+    setFlagToResolve(redFlagId);
+
+    handleAPIRequests({
+      request: resolveRedFlag,
+      id,
+      redFlagId,
+      showSuccess: true,
+      handleSuccess: handleResolveFlagSuccess
+    });
   };
 
   const columns: any = [
@@ -94,9 +124,22 @@ const RedFlagsTable: FC<Types> = ({
       title: "Status",
       key: "status",
       render: (record: SingleRedFlag) => (
-        <Text className="normalText fowe700 text_ellipsis">
-          {record?.status}
-        </Text>
+        <Row>
+          <Col
+            onClick={() =>
+              record?.status === "JUSTIFIED" && handleShowJustifyModal(record)
+            }
+            className={`normalText fowe700 text_ellipsis ${
+              record?.status === "RESOLVED"
+                ? "text-gray-500"
+                : record?.status === "OPEN"
+                ? "text-ox-red"
+                : "dark underline pointer"
+            }`}
+          >
+            {record?.status}
+          </Col>
+        </Row>
       )
     },
 
@@ -110,7 +153,10 @@ const RedFlagsTable: FC<Types> = ({
             <CustomButton
               type={record.status === "OPEN" ? "green" : "normal"}
               size="icon"
-              loading={false}
+              loading={record?.id === flagToResolve}
+              onClick={() =>
+                record.status === "OPEN" && handleResolveRedFlag(record?.id)
+              }
               icon={
                 <Image
                   src={`/icons/${
@@ -132,7 +178,8 @@ const RedFlagsTable: FC<Types> = ({
             <Button
               type="view"
               transform="none"
-              onClick={() => setIsJustifyFlagModalVisible(true)}
+              disabled={record?.status === "JUSTIFIED"}
+              onClick={() => handleShowJustifyModal(record)}
             >
               Justify
             </Button>
