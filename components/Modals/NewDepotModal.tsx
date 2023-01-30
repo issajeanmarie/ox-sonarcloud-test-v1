@@ -58,9 +58,20 @@ const NewDepotModal: FC<Types> = ({
     if (isEditing && currentDepotData) {
       const currentCoordinates = currentDepotData?.payload?.depot?.coordinates;
       const currentName = currentDepotData?.payload?.depot?.name;
+
+      let parsedCoordinates;
+
+      try {
+        parsedCoordinates = currentCoordinates
+          ? JSON.parse(currentCoordinates)
+          : null;
+      } catch (error) {
+        parsedCoordinates = null;
+      }
+
       setLocation({
         name: currentName,
-        coordinates: currentCoordinates ? JSON.parse(currentCoordinates) : null
+        coordinates: parsedCoordinates
       });
       form.setFieldsValue({
         name: currentName,

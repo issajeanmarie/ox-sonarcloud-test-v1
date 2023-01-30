@@ -151,7 +151,7 @@ const AppSider = ({ collapsed }: any) => {
             wrap={false}
           >
             <Col>
-              <Row align="middle" gutter={12}>
+              <Row align="middle" gutter={12} wrap={false}>
                 <Col>
                   <Image
                     width={16}
