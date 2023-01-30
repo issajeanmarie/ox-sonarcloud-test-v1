@@ -32,6 +32,11 @@ export interface EditDepotRequest extends CreateDepotRequest {
   id: number | Query;
 }
 
+export interface ResolveRedFlagRequest {
+  id: number | Query;
+  redFlagId: number | string;
+}
+
 export type SelectedDepotTypes = {
   depotName: string | undefined;
   depotId: number | undefined;
@@ -40,6 +45,8 @@ export type SelectedDepotTypes = {
 export type DepotAlertModalTypes = {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsJustifyFlagModalVisible?: React.Dispatch<React.SetStateAction<boolean>>;
+  setActiveFlag?: React.Dispatch<React.SetStateAction<any>>;
   activeFlag: SingleRedFlag | null;
 };
 
