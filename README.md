@@ -66,6 +66,7 @@ You will also see any lint errors in the console.
 - Elie
 - Yannick Fleury
 - Lionel Mpfizi
+- Brian Gitego
 
 ## Copyright
 
