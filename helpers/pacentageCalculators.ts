@@ -4,7 +4,7 @@
  * @since Aug 19 2022
  */
 
-const toMyFixed = (num: number) => num.toFixed(2).replace(/[.,]00$/, "");
+export const toMyFixed = (num: number) => num.toFixed(2).replace(/[.,]00$/, "");
 
 export const truckPercentageCalculator = (current: number, prev: number) => {
   try {

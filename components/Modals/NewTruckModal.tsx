@@ -130,19 +130,7 @@ const NewTruckModal = ({
 
   useEffect(() => {
     form.setFieldsValue({
-      plateNumber: editTruckData?.plateNumber || "",
-      yearManufactured: editTruckData?.yearManufactured || "",
-      model: editTruckData?.model || "",
-      type: editTruckData?.type || "",
-      fuelCardAssigned: editTruckData?.fuelCardAssigned || "",
-      fuelType: editTruckData?.fuelType || "",
-      engineNumber: editTruckData?.engineNumber || "",
-      engineOilType: editTruckData?.engineOilType || "",
-      capacity: editTruckData?.capacity || "",
-      chassisNumber: editTruckData?.chassisNumber || "",
-      tireSize: editTruckData?.tireSize || "",
-      tireBrand: editTruckData?.tireBrand || "",
-      trackingUnitSerialNumber: editTruckData?.trackingUnitSerialNumber || "",
+      ...editTruckData,
       depotId: editTruckData?.depot?.id || depotsState?.depotId || ""
     });
   }, [depotsState?.depotId, editTruckData, form]);

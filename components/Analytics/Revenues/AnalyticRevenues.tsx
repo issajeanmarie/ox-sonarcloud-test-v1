@@ -67,12 +67,11 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   numbersFormatter(revenueData?.totalSalesRevenue)
                 } Rwf (${revenuePercentageCalculator(
                   revenueData?.totalSalesRevenue,
-                  revenueData?.totalRevenueByJob +
-                    revenueData?.totalSalesRevenue
+                  revenueData?.totalRevenue + revenueData?.totalSalesRevenue
                 )}%) warehouse sales`}
                 count={
-                  revenueData?.totalRevenueByJob +
-                    revenueData?.totalSalesRevenue || 0
+                  revenueData?.totalRevenue + revenueData?.totalSalesRevenue ||
+                  0
                 }
                 isFetching={revenueFetching}
               />
