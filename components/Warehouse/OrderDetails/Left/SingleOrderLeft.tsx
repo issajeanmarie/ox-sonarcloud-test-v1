@@ -121,8 +121,35 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                 <InfoWrapper
                   title="Unit selling price"
                   infoItem={`${numbersFormatter(
-                    (item?.unitSellingPrice * item?.weight) / item?.weight
+                    (item?.unitSellingPrice * item?.weight) /
+                      (item?.weight / 50)
                   )} Rwf`}
+                  isTransportOrder={false}
+                />
+
+                <InfoWrapper
+                  title="Order value"
+                  infoItem="N/A"
+                  isTransportOrder={false}
+                />
+
+                <InfoWrapper
+                  title="Truck"
+                  infoItem={
+                    (sale?.transportOrder?.stops?.length &&
+                      sale?.transportOrder?.stops[0]?.truck?.plateNumber) ||
+                    "N/A"
+                  }
+                  isTransportOrder={false}
+                />
+
+                <InfoWrapper
+                  title="Driver"
+                  infoItem={
+                    (sale?.transportOrder?.stops?.length &&
+                      sale?.transportOrder?.stops[0]?.driver?.names) ||
+                    "N/A"
+                  }
                   isTransportOrder={false}
                 />
               </div>
