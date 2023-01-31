@@ -26,7 +26,7 @@ const InfoWrapper: FC<InfoWrapperTypes> = ({
   batchId
 }) => {
   return (
-    <div className={`flex gap-12 mb-2`}>
+    <div className={`flex gap-12 mb-2 items-center`}>
       <div className="w-1/6">
         <span className="font-bold text-sm text_ellipsis">{title}:</span>
       </div>

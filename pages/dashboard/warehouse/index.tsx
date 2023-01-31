@@ -162,7 +162,7 @@ const SalesPage = () => {
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
-          totalElements={apiData?.payload?.totalElements}
+          totalElements={apiData?.payload?.totalElements || 0}
           isSalesLoading={onRenderLoader}
           setCurrentPages={setCurrentPages}
           getSalesAction={getSalesAction}
