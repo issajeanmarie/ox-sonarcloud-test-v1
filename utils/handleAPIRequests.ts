@@ -1,6 +1,7 @@
 import { ErrorMessage } from "../components/Shared/Messages/ErrorMessage";
 import { SuccessMessage } from "../components/Shared/Messages/SuccessMessage";
 import { errorCodes } from "../config/errorCodes";
+import { removeFromLocal } from "../helpers/handleLocalStorage";
 import { GenericResponse } from "../lib/types/shared";
 
 /**
@@ -61,7 +62,7 @@ export const handleAPIRequests = ({
           ErrorMessage(error);
         } else {
           if (error.status === 403) {
-            SuccessMessage("Please login to perform any action!");
+            removeFromLocal("_ox_tkn_");
             window.location.href = "/";
           }
 
