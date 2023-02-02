@@ -1,5 +1,5 @@
 import { Checkbox, Table } from "antd";
-import React, { FC, useState, SetStateAction } from "react";
+import React, { FC, useState } from "react";
 import Typography from "antd/lib/typography";
 import Image from "antd/lib/image";
 import Row from "antd/lib/row";
@@ -9,17 +9,12 @@ import Button from "../../Shared/Button";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import { ExpensesTableTypes } from "../../../lib/types/pageTypes/Expenses/ExpensesTableTypes";
 import { ExpensesTableProps } from "../../../lib/types/pageTypes/Expenses/ExpensesTableProps";
-import ActionModal from "../../Shared/ActionModal";
 import { TableOnActionLoading } from "../../Shared/Loaders/Loaders";
 import ModalWrapper from "../../Modals/ModalWrapper";
-import { handleAPIRequests } from "../../../utils/handleAPIRequests";
-import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
-import { useDispatch } from "react-redux";
 import { abbreviateNumber } from "../../../utils/numberFormatter";
 import FilePreview from "../../Shared/FilePreview";
 import ViewExpense from "../../Expenses/ViewExpense";
 import { Expense } from "../../../lib/types/expenses";
-import { useDeleteExpenseMutation } from "../../../lib/api/endpoints/Expenses/expensesEndpoint";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -28,22 +23,13 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
   expenses,
   isExpensesFetching,
   onSelectRows,
-  showEditModal
+  showEditModal,
+  showDeleteModal,
+  showApproveModal
 }) => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [isApproveModalVisible, setIsApproveModalVisible] =
-    useState<boolean>(false);
-  const [itemToAprove, setItemToAprove] =
-    useState<SetStateAction<number | undefined>>();
-  const [isDeleteModalVisible, setIsDeleteModalVisible] =
-    useState<boolean>(false);
-  const [itemToDelete, setItemToDelete] =
-    useState<SetStateAction<number | undefined>>();
   const [isViewModalVisible, setIsViewModalVisible] = useState<boolean>(false);
   const [itemToView, setItemToView] = useState<Expense>();
-  const [deleteExpense, { isLoading: isDeleting }] = useDeleteExpenseMutation();
-
-  const dispatch = useDispatch();
 
   const onToggleRow = (id: number) => {
     let newRows = [];
@@ -56,58 +42,18 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
     onSelectRows && onSelectRows(newRows);
   };
 
+  const expensesToSelect = expenses?.payload?.content.filter(
+    (expense: Expense) => expense.status !== "APPROVED"
+  );
+
   const onToggleRows = () => {
     let newRows = [];
-    if (selectedRows.length !== expenses?.payload?.content.length) {
-      newRows = expenses?.payload?.content.map(
-        (record: ExpensesTableTypes) => record.id
-      );
+    if (selectedRows.length !== expensesToSelect.length) {
+      newRows = expensesToSelect.map((record: ExpensesTableTypes) => record.id);
     }
 
     setSelectedRows(newRows);
     onSelectRows && onSelectRows(newRows);
-  };
-
-  const handleApproveExpenseSuccess = () => {
-    dispatch(
-      displayPaginatedData({ deleted: true, payload: { id: itemToDelete } })
-    );
-    setIsApproveModalVisible(false);
-  };
-
-  const handleApproveExpense = () => {
-    handleAPIRequests({
-      request: deleteExpense,
-      id: itemToAprove,
-      showSuccess: true,
-      handleSuccess: handleApproveExpenseSuccess
-    });
-  };
-
-  const handleDeleteExpenseSuccess = () => {
-    dispatch(
-      displayPaginatedData({ deleted: true, payload: { id: itemToDelete } })
-    );
-    setIsDeleteModalVisible(false);
-  };
-
-  const handleDeleteExpense = () => {
-    handleAPIRequests({
-      request: deleteExpense,
-      id: itemToDelete,
-      showSuccess: true,
-      handleSuccess: handleDeleteExpenseSuccess
-    });
-  };
-
-  const showApproveModal = (id: number) => {
-    setItemToAprove(id);
-    setIsApproveModalVisible(true);
-  };
-
-  const showDeleteModal = (id: number) => {
-    setItemToDelete(id);
-    setIsDeleteModalVisible(true);
   };
 
   const showViewModal = (record: Expense) => {
@@ -119,6 +65,11 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
     if (window) {
       window.open(link, "_blank", "noreferrer");
     }
+  };
+
+  const onApprove = (id: number) => {
+    setIsViewModalVisible(false);
+    showApproveModal(id);
   };
 
   return (
@@ -143,7 +94,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
               <Checkbox
                 checked={
                   selectedRows.length > 0 &&
-                  selectedRows.length === expenses?.payload?.content.length
+                  selectedRows.length === expensesToSelect.length
                 }
                 onChange={() => onToggleRows()}
               />
@@ -154,6 +105,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
               <Checkbox
                 checked={selectedRows.includes(record.id)}
                 onChange={() => onToggleRow(record.id)}
+                disabled={record.status === "APPROVED"}
               />
             );
             return { children: child, props: { "data-label": "Toggle" } };
@@ -320,13 +272,12 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
                   )}
                 </Col>
 
-                <Col
-                  className="my-[-12px]"
-                  onClick={() => showEditModal(record)}
-                >
+                <Col className="my-[-12px]">
                   <CustomButton
                     type="normal"
                     size="icon"
+                    disabled={record?.status === "APPROVED"}
+                    onClick={() => showEditModal(record)}
                     icon={
                       <Image
                         src="/icons/ic-contact-edit.svg"
@@ -343,6 +294,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
                     type="danger"
                     size="icon"
                     className="bg_danger"
+                    disabled={record?.status === "APPROVED"}
                     onClick={() => showDeleteModal(record?.id)}
                     icon={
                       <Image
@@ -371,45 +323,31 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
         />
       </Table>
 
-      {/* Action Modal */}
-      <ActionModal
-        isModalVisible={isApproveModalVisible}
-        setIsModalVisible={setIsApproveModalVisible}
-        title="warning!"
-        description="This action is not reversible, please make sure you really want to proceed with this action!"
-        actionLabel="PROCEED"
-        type="danger"
-        action={() => handleApproveExpense()}
-        loading={isDeleting}
-      />
-      <ActionModal
-        isModalVisible={isDeleteModalVisible}
-        setIsModalVisible={setIsDeleteModalVisible}
-        title="warning!"
-        description="This action is not reversible, please make sure you really want to proceed with this action!"
-        actionLabel="PROCEED"
-        type="danger"
-        action={() => handleDeleteExpense()}
-        loading={isDeleting}
-      />
-
       <ModalWrapper
         setIsModalVisible={setIsViewModalVisible}
         isModalVisible={isViewModalVisible}
         title="EXPENSE TRACKER"
-        loading={isDeleting}
+        loading={false}
         footerWidth={24}
         footerContent={
-          <Row gutter={[16, 16]} align="middle" justify="space-between">
-            <Col flex="none">
-              <span className="heading2">PENDING APPROVAL</span>
-            </Col>
-            <Col flex="none">
-              <Button type="success" loading={isDeleting}>
-                APPROVE
-              </Button>
-            </Col>
-          </Row>
+          itemToView && itemToView.status === "PENDING" ? (
+            <Row gutter={[16, 16]} align="middle" justify="space-between">
+              <Col flex="none">
+                <span className="heading2">PENDING APPROVAL</span>
+              </Col>
+              <Col flex="none">
+                <Button type="success" onClick={() => onApprove(itemToView.id)}>
+                  APPROVE
+                </Button>
+              </Col>
+            </Row>
+          ) : (
+            <Row gutter={[16, 16]} align="middle" justify="space-between">
+              <Col flex="none">
+                <span className="heading2">APPROVED EXPENSE</span>
+              </Col>
+            </Row>
+          )
         }
       >
         <ViewExpense expense={itemToView as Expense} />
