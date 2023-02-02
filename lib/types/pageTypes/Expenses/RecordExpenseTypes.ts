@@ -10,4 +10,6 @@ export type RecordExpenseTypes = {
   onEditExpenseFinish: (res: any) => void;
   isEdit?: boolean;
   editExpenseData?: Expense | null;
+  onCancel: () => void;
+  onQBAuthFailure: () => void;
 };
