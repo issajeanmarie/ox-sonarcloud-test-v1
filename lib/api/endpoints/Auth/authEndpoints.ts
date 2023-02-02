@@ -31,9 +31,18 @@ const authApi = baseAPI.injectEndpoints({
         body: DTO
       })
     }),
+
     resetPassword: builder.mutation<GenericResponse, ResetPasswordRequest>({
       query: (DTO) => ({
         url: `/auth/reset-password/${DTO?.token}`,
+        method: "POST",
+        body: DTO
+      })
+    }),
+
+    verifyAdmin: builder.mutation<GenericResponse, ResetPasswordRequest>({
+      query: (DTO) => ({
+        url: `/auth/register-agent`,
         method: "POST",
         body: DTO
       })
@@ -44,5 +53,6 @@ const authApi = baseAPI.injectEndpoints({
 export const {
   useLoginMutation,
   useForgotPasswordMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
+  useVerifyAdminMutation
 } = authApi;
