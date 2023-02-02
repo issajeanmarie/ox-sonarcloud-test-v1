@@ -17,26 +17,26 @@ export const STATIC_DAYS = [
 ];
 
 export const PAYMENT_STATUS = [
-  { key: 0, label: "Payment pending", value: "PAYMENT_PENDING" },
-  { key: 1, label: "Payment paid", value: "PAYMENT_PAID" },
-  { key: 2, label: "Payment half paid", value: "PAYMENT_HALF_PAID" },
-  { key: 3, label: "Payment written off", value: "PAYMENT_WRITTEN_OFF" },
-  { key: 4, label: "Order enqueue", value: "ORDER_ENQUEUE" },
-  { key: 5, label: "Order started", value: "ORDER_STARTED" },
-  { key: 6, label: "Order completed", value: "ORDER_COMPLETED" },
-  { key: 7, label: "Order cancelled", value: "ORDER_CANCELLED" }
+  { key: "Payment pending", label: "Payment pending", value: "PAYMENT_PENDING" },
+  { key: "Payment paid", label: "Payment paid", value: "PAYMENT_PAID" },
+  { key: "Payment half paid", label: "Payment half paid", value: "PAYMENT_HALF_PAID" },
+  { key: "Payment written off", label: "Payment written off", value: "PAYMENT_WRITTEN_OFF" },
+  { key: "Order enqueue", label: "Order enqueue", value: "ORDER_ENQUEUE" },
+  { key: "Order started", label: "Order started", value: "ORDER_STARTED" },
+  { key: "Order completed", label: "Order completed", value: "ORDER_COMPLETED" },
+  { key: "Order cancelled", label: "Order cancelled", value: "ORDER_CANCELLED" }
 ];
 
 export const ECONOMIC_STATUS = [
-  { label: "INDIVIDUAL", value: "INDIVIDUAL" },
-  { label: "COMPANY", value: "COMPANY" },
-  { label: "GROUP", value: "GROUP" },
-  { label: "UBUDEHE CATEGORY A", value: "UBUDEHE_CATEGORY_A" },
-  { label: "UBUDEHE CATEGORY B", value: "UBUDEHE_CATEGORY_B" },
-  { label: "UBUDEHE CATEGORY C", value: "UBUDEHE_CATEGORY_C" },
-  { label: "UBUDEHE CATEGORY D", value: "UBUDEHE_CATEGORY_D" },
-  { label: "UBUDEHE CATEGORY E", value: "UBUDEHE_CATEGORY_E" },
-  { label: "WAREHOUSE", value: "WAREHOUSE" }
+  { key: "INDIVIDUAL", label: "INDIVIDUAL", value: "INDIVIDUAL" },
+  { key: "COMPANY", label: "COMPANY", value: "COMPANY" },
+  { key: "GROUP", label: "GROUP", value: "GROUP" },
+  { key: "UBUDEHE CATEGORY A", label: "UBUDEHE CATEGORY A", value: "UBUDEHE_CATEGORY_A" },
+  { key: "UBUDEHE CATEGORY B", label: "UBUDEHE CATEGORY B", value: "UBUDEHE_CATEGORY_B" },
+  { key: "UBUDEHE CATEGORY C", label: "UBUDEHE CATEGORY C", value: "UBUDEHE_CATEGORY_C" },
+  { key: "UBUDEHE CATEGORY D", label: "UBUDEHE CATEGORY D", value: "UBUDEHE_CATEGORY_D" },
+  { key: "UBUDEHE CATEGORY E", label: "UBUDEHE CATEGORY E", value: "UBUDEHE_CATEGORY_E" },
+  { key: "WAREHOUSE", label: "WAREHOUSE", value: "WAREHOUSE" }
 ];
 
 export const classes = {

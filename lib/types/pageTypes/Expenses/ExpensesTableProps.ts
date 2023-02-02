@@ -6,4 +6,6 @@ export type ExpensesTableProps = {
   isExpensesFetching: boolean;
   onSelectRows?: (rows: number[]) => void;
   showEditModal: (record: Expense) => void;
+  showDeleteModal: (id: number) => void;
+  showApproveModal: (id: number) => void;
 };

@@ -181,7 +181,7 @@ const Entry = ({
             ? children
             : options?.map((opt: any, index: number) => {
                 return (
-                  <Option key={index} value={opt.value} title={opt.value}>
+                  <Option key={index} value={opt.value} title={opt.label}>
                     {opt.label}
                   </Option>
                 );
@@ -216,7 +216,7 @@ const Entry = ({
             ? children
             : options?.map((opt: any, index: number) => {
                 return (
-                  <Option key={index} value={opt.value} title={opt.value}>
+                  <Option key={index} value={opt.value} title={opt.label}>
                     {opt.label}
                   </Option>
                 );
