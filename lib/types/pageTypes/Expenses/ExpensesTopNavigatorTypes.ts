@@ -2,13 +2,19 @@
 import { SetStateAction } from "react";
 
 export type ExpensesTopNavigatorTypes = {
-  isModalVisible: boolean;
   showModal: () => void;
-  setIsModalVisible: React.Dispatch<SetStateAction<boolean>>;
+  isDeleteModalVisible: boolean;
+  setIsDeleteModalVisible: React.Dispatch<SetStateAction<boolean>>;
+  showDeleteModal: () => void;
+  isApproveModalVisible: boolean;
+  showApproveModal: () => void;
+  setIsApproveModalVisible: React.Dispatch<SetStateAction<boolean>>;
   expenses: any;
-  defaultSelected: object;
-  setDefaultSelected: React.Dispatch<SetStateAction<object>>;
   sort: object;
   setSort: React.Dispatch<SetStateAction<object>>;
-  setCurrentPages: React.Dispatch<SetStateAction<number>>;
+  selectedRows: number[];
+  approveSelected: () => void;
+  isApproving: boolean;
+  deleteSelected: () => void;
+  isDeleting: boolean;
 };

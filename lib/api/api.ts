@@ -45,7 +45,15 @@ export const baseAPI = createApi({
     "EndShift",
     "EditDepot",
     "GetFlags",
-    "GetSingleFlag"
+    "GetSingleFlag",
+    "ExpensesAuthorize",
+    "Expenses",
+    "QBSuppliers",
+    "QBTrucks",
+    "QBLocations",
+    "QBPaymentMethods",
+    "QBAccounts",
+    "QBCategories"
   ],
   endpoints: () => ({})
 });

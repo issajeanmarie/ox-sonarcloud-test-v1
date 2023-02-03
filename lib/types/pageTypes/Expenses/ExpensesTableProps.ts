@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Dispatch, SetStateAction } from "react";
+import { Expense } from "../../expenses";
 
 export type ExpensesTableProps = {
-  isModalVisible: boolean;
-  showModal: any;
-  setIsModalVisible: Dispatch<SetStateAction<boolean>>;
   expenses: any;
   isExpensesFetching: boolean;
+  onSelectRows?: (rows: number[]) => void;
+  showEditModal: (record: Expense) => void;
+  showDeleteModal: (id: number) => void;
+  showApproveModal: (id: number) => void;
 };
