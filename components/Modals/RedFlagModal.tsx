@@ -36,7 +36,7 @@ const RedFlagModal: FC<DepotAlertModalTypes> = ({
     setIsVisible(false);
   };
 
-  const [getSingleFlag, { isLoading, data: redFlagData }] =
+  const [getSingleFlag, { isLoading, isFetching, data: redFlagData }] =
     useLazyGetSingleFlagQuery();
 
   const [resolveRedFlag, { isLoading: isResolvingFlag }] =
@@ -182,7 +182,7 @@ const RedFlagModal: FC<DepotAlertModalTypes> = ({
       }
       onCancel={handleCancel}
     >
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <DepotProfileLoader className="h-[40vh]" />
       ) : (
         <>
