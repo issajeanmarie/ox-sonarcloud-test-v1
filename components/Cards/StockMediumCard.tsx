@@ -37,9 +37,11 @@ const StockMediumCard: FC<StockMediumCardTypes> = ({
         style={{ width: "auto", border: "1px solid #EAEFF2" }}
         title={
           <div className="flex flex-col">
-            <Text className="text-base font-light">{title}</Text>
+            <Text className="text-base font-light whitespace-nowrap overflow-hidden text-ellipsis">
+              {title}
+            </Text>
             {depotsState?.depotId ? (
-              <Text className="text-sm font-light opacity_56">
+              <Text className="text-sm font-light opacity_56 whitespace-nowrap overflow-hidden text-ellipsis">
                 {depotsState?.depotName}
               </Text>
             ) : (
