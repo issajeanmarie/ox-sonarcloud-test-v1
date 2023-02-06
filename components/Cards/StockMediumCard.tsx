@@ -81,7 +81,7 @@ const StockMediumCard: FC<StockMediumCardTypes> = ({
           </Text>
 
           <Text className="captionText">
-            {isFetching ? `Hold on, getting you ${title}...` : subTitle}
+            {isFetching ? `Hold on...` : subTitle}
           </Text>
         </div>
 
