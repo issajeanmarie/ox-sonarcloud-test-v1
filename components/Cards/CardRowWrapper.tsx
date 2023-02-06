@@ -6,12 +6,12 @@ type CardMoreStockRowWrapperTypes = {
   children: React.ReactNode;
 };
 
-const CardRowWrapper: FC<CardRowWrapperTypes> = ({ children, active }) => {
+const CardRowWrapper: FC<CardRowWrapperTypes> = ({ children, cardsNumber }) => {
   return (
     <Row
       className={`flex ${
-        active !== "KPIs" ? "justify-between" : "justify-start"
-      }  py-5 gap-5`}
+        cardsNumber && cardsNumber >= 5 ? "justify-between" : "justify-start"
+      }  py-5 gap-4`}
     >
       {children}
     </Row>
