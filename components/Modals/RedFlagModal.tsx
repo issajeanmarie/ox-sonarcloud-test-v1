@@ -5,11 +5,15 @@ import { useRouter } from "next/router";
 import React, { FC } from "react";
 import { useEffect } from "react";
 import { numbersFormatter } from "../../helpers/numbersFormatter";
-import { useLazyGetSingleFlagQuery } from "../../lib/api/endpoints/Depots/depotEndpoints";
+import {
+  useLazyGetSingleFlagQuery,
+  useResolveRedFlagMutation
+} from "../../lib/api/endpoints/Depots/depotEndpoints";
 import { DepotAlertModalTypes } from "../../lib/types/depots";
 import { dateDisplay } from "../../utils/dateFormatter";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import Button from "../Shared/Button";
+import { DepotProfileLoader } from "../Shared/Loaders/Loaders";
 import ModalWrapper from "./ModalWrapper";
 
 const { Text } = Typography;
@@ -21,7 +25,9 @@ interface SingleItemTypes {
 const RedFlagModal: FC<DepotAlertModalTypes> = ({
   isVisible,
   setIsVisible,
-  activeFlag
+  setIsJustifyFlagModalVisible,
+  activeFlag,
+  setActiveFlag
 }) => {
   const router = useRouter();
   const { id } = router.query;
@@ -30,18 +36,37 @@ const RedFlagModal: FC<DepotAlertModalTypes> = ({
     setIsVisible(false);
   };
 
-  const [getSingleFlag, { isLoading, data: redFlagData }] =
+  const [getSingleFlag, { isLoading, isFetching, data: redFlagData }] =
     useLazyGetSingleFlagQuery();
 
+  const [resolveRedFlag, { isLoading: isResolvingFlag }] =
+    useResolveRedFlagMutation();
+
   useEffect(() => {
-    if (id && activeFlag) {
+    if (id && activeFlag && isVisible) {
       handleAPIRequests({
         request: getSingleFlag,
         redFlagId: activeFlag?.id,
         id
       });
     }
-  }, [activeFlag, activeFlag?.id, getSingleFlag, id]);
+  }, [activeFlag, activeFlag?.id, getSingleFlag, id, isVisible]);
+
+  const handleResolveFlag = () => {
+    handleAPIRequests({
+      request: resolveRedFlag,
+      id,
+      redFlagId: redFlagData?.payload?.id,
+      showSuccess: true,
+      handleSuccess: handleCancel
+    });
+  };
+
+  const handleShowJustifyModal = () => {
+    handleCancel();
+    setActiveFlag && setActiveFlag(activeFlag);
+    setIsJustifyFlagModalVisible && setIsJustifyFlagModalVisible(true);
+  };
 
   const fuelRefillData = [
     {
@@ -120,20 +145,22 @@ const RedFlagModal: FC<DepotAlertModalTypes> = ({
       title={`${redFlagData?.payload?.fuelRefill?.truck?.plateNumber} FUEL USAGE ALERT`}
       isModalVisible={isVisible}
       setIsModalVisible={setIsVisible}
-      subTitle="14 Feb 2022"
-      loading={false}
+      subTitle={dateDisplay(redFlagData?.payload?.date || "")}
+      loading={isResolvingFlag}
       footerWidth={16}
+      width={600}
       footerContent={
         <Row align="middle" gutter={24}>
           <Col flex={1}>
             <Button
+              onClick={handleResolveFlag}
               form="resolveLog"
-              loading={false}
+              loading={isResolvingFlag}
               type="secondary"
               htmlType="submit"
-              disabled={false}
+              disabled={redFlagData?.payload?.status !== "OPEN"}
             >
-              Resolved
+              Resolve
             </Button>
           </Col>
 
@@ -143,7 +170,10 @@ const RedFlagModal: FC<DepotAlertModalTypes> = ({
               loading={false}
               type="primary"
               htmlType="submit"
-              disabled={false}
+              disabled={
+                isResolvingFlag || redFlagData?.payload?.status === "JUSTIFIED"
+              }
+              onClick={() => handleShowJustifyModal()}
             >
               Justify
             </Button>
@@ -152,8 +182,8 @@ const RedFlagModal: FC<DepotAlertModalTypes> = ({
       }
       onCancel={handleCancel}
     >
-      {isLoading ? (
-        <p>LOading...</p>
+      {isLoading || isFetching ? (
+        <DepotProfileLoader className="h-[40vh]" />
       ) : (
         <>
           <Row
@@ -162,49 +192,61 @@ const RedFlagModal: FC<DepotAlertModalTypes> = ({
             className="w-[100%] pb-12 mb-12 border-b border-grey"
           >
             <Col flex={1}>
-              <span className="text-gray-400 block mb-2">Cost (Rwf) / Km</span>
+              <span className="block mb-2">Cost (Rwf) / 100Km</span>
 
               <Row align="bottom" gutter={6}>
                 <Col>
-                  <Text className="text-2xl font-semibold block text-slate-50">
-                    {redFlagData?.payload?.fuelRefill?.amount}
+                  <Text className="text-2xl font-semibold block yellow">
+                    {Math.round(
+                      (redFlagData?.payload?.fuelRefill?.amount || 0) / 100
+                    )}
                   </Text>
-                </Col>
-
-                <Col>
-                  <Text className="text-sm italic text-ox-red">20+</Text>
                 </Col>
               </Row>
             </Col>
 
             <Col flex={1}>
-              <span className="text-gray-400 block mb-2">Cost (Rwf) / Km</span>
+              <span className="block mb-2">Litres (Rwf) / 100Km</span>
 
               <Row align="bottom" gutter={6}>
                 <Col>
-                  <Text className="text-2xl font-semibold block text-slate-50">
-                    787567
+                  <Text className="text-2xl font-semibold block yellow">
+                    {Math.round(
+                      (redFlagData?.payload?.fuelRefill?.litres || 0) / 100
+                    )}
                   </Text>
-                </Col>
-
-                <Col>
-                  <Text className="text-sm italic text-ox-red">20+</Text>
                 </Col>
               </Row>
             </Col>
 
             <Col flex={1}>
-              <span className="text-gray-400 block mb-2">Cost (Rwf) / Km</span>
+              <span className="block mb-2">Avg fuel</span>
 
               <Row align="bottom" gutter={6}>
                 <Col>
                   <Text className="text-2xl font-semibold block text-slate-50">
-                    787567
+                    {Math.round(
+                      ((redFlagData?.payload?.fuelRefill?.truck
+                        ?.maxFuelPer100km || 0) +
+                        (redFlagData?.payload?.fuelRefill?.truck
+                          ?.minFuelPer100km || 0)) /
+                        2
+                    )}
                   </Text>
                 </Col>
 
-                <Col>
-                  <Text className="text-sm italic text-ox-red">20+</Text>
+                <Col className="flex gap-4 text-gray-500 text-sm italic mb-[2px]">
+                  <span>
+                    Min:{" "}
+                    {redFlagData?.payload?.fuelRefill?.truck?.minFuelPer100km ||
+                      0}
+                  </span>
+
+                  <span>
+                    Max:{" "}
+                    {redFlagData?.payload?.fuelRefill?.truck?.maxFuelPer100km ||
+                      0}
+                  </span>
                 </Col>
               </Row>
             </Col>
