@@ -40,8 +40,8 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
             </CardRowWrapper>
           </>
         ) : (
-          <CardRowWrapper active={active}>
-            <CardColWrapper active={active}>
+          <CardRowWrapper cardsNumber={5} active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 scope="CLIENTS"
                 start={start}
@@ -56,7 +56,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 scope="REVENUE"
                 start={start}
@@ -78,7 +78,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 title="Cash collected"
                 subTitle={`${
@@ -92,7 +92,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 scope="DISTANCE"
                 start={start}
@@ -110,7 +110,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 scope="HOURS_BY_JOB"
                 start={start}
@@ -128,7 +128,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 title="Total weight in KG"
                 subTitle="..."
