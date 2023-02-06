@@ -6,9 +6,12 @@ type CardMoreStockColWrapperTypes = {
   children: React.ReactNode;
 };
 
-const CardColWrapper: FC<CardColWrapperTypes> = ({ children, active }) => {
+const CardColWrapper: FC<CardColWrapperTypes> = ({ children, cardsNumber }) => {
   return (
-    <Col flex={`${active === "KPIs" || active === "KPIs" ? "none" : "auto"}`}>
+    <Col
+      className="w-[270px]"
+      flex={`${cardsNumber && cardsNumber >= 5 ? "auto" : "none"}`}
+    >
       {children}
     </Col>
   );
