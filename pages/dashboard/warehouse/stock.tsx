@@ -417,11 +417,20 @@ const Stock = () => {
                     </CardRowWrapper>
                   </>
                 ) : (
-                  <CardRowWrapper active="STOCK">
+                  <CardRowWrapper
+                    cardsNumber={stockCategories?.payload?.content?.length}
+                    active="STOCK"
+                  >
                     {stockCategories?.payload?.content
                       ?.slice(0, 5)
                       ?.map((item: any) => (
-                        <CardColWrapper key={item?.name} active="STOCK">
+                        <CardColWrapper
+                          cardsNumber={
+                            stockCategories?.payload?.content?.length
+                          }
+                          key={item?.name}
+                          active="STOCK"
+                        >
                           <StockMediumCard
                             showBatchesModal={showBatchesModal}
                             title={item?.categoryName}

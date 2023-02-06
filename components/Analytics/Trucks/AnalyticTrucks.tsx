@@ -88,8 +88,8 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
             </CardRowWrapper>
           </>
         ) : (
-          <CardRowWrapper active={active}>
-            <CardColWrapper active={active}>
+          <CardRowWrapper cardsNumber={5} active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 title="Number of trucks"
                 subTitle="The total number of trucks"
@@ -97,7 +97,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
                 isFetching={truckFetching}
               />
             </CardColWrapper>
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 title="In use"
                 subTitle="Those ready to be used"
@@ -105,7 +105,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
                 isFetching={truckFetching}
               />
             </CardColWrapper>
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 title="Deactivated"
                 subTitle="In garage or out of service"
@@ -113,7 +113,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
                 isFetching={truckFetching}
               />
             </CardColWrapper>
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 title="Top performing"
                 subTitle="The truck that is doing great"
@@ -121,7 +121,7 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
                 isFetching={truckFetching}
               />
             </CardColWrapper>
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={5} active={active}>
               <MediumCard
                 title="Worst performing"
                 subTitle="The truck that is performing poorly"
