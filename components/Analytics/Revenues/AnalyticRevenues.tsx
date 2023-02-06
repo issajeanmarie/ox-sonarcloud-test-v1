@@ -40,8 +40,8 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
             </CardRowWrapper>
           </>
         ) : (
-          <CardRowWrapper cardsNumber={5} active={active}>
-            <CardColWrapper cardsNumber={5} active={active}>
+          <CardRowWrapper cardsNumber={6} active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 scope="CLIENTS"
                 start={start}
@@ -56,7 +56,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper cardsNumber={5} active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 scope="REVENUE"
                 start={start}
@@ -77,7 +77,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper cardsNumber={5} active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 title="Cash collected"
                 subTitle={`${
@@ -91,7 +91,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
-            <CardColWrapper cardsNumber={5} active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 scope="DISTANCE"
                 start={start}
@@ -109,7 +109,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper cardsNumber={5} active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 scope="HOURS_BY_JOB"
                 start={start}
@@ -127,7 +127,7 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
               />
             </CardColWrapper>
 
-            <CardColWrapper cardsNumber={5} active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 title="Total weight in KG"
                 subTitle="..."
