@@ -126,41 +126,49 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                   )} Rwf`}
                   isTransportOrder={false}
                 />
-
-                <InfoWrapper
-                  title="Order value"
-                  infoItem="N/A"
-                  isTransportOrder={false}
-                />
-
-                <InfoWrapper
-                  title="Truck"
-                  infoItem={
-                    (sale?.transportOrder?.stops?.length &&
-                      sale?.transportOrder?.stops[0]?.truck?.plateNumber) ||
-                    "N/A"
-                  }
-                  isTransportOrder={false}
-                />
-
-                <InfoWrapper
-                  title="Driver"
-                  infoItem={
-                    (sale?.transportOrder?.stops?.length &&
-                      sale?.transportOrder?.stops[0]?.driver?.names) ||
-                    "N/A"
-                  }
-                  isTransportOrder={false}
-                />
               </div>
             ))}
 
           {sale?.transportOrder?.id && (
-            <InfoWrapper
-              title="Transport Ref"
-              infoItem={sale?.transportOrder?.id}
-              isTransportOrder={true}
-            />
+            <>
+              <InfoWrapper
+                title="Transport Ref"
+                infoItem={sale?.transportOrder?.id}
+                isTransportOrder={true}
+              />
+
+              <InfoWrapper
+                title="Order value"
+                infoItem={
+                  sale?.transportOrder?.totalAmount
+                    ? `${numbersFormatter(
+                        sale?.transportOrder?.totalAmount || 0
+                      )} Rwf`
+                    : "N/A"
+                }
+                isTransportOrder={false}
+              />
+
+              <InfoWrapper
+                title="Truck"
+                infoItem={
+                  (sale?.transportOrder?.stops?.length &&
+                    sale?.transportOrder?.stops[0]?.truck?.plateNumber) ||
+                  "N/A"
+                }
+                isTransportOrder={false}
+              />
+
+              <InfoWrapper
+                title="Driver"
+                infoItem={
+                  (sale?.transportOrder?.stops?.length &&
+                    sale?.transportOrder?.stops[0]?.driver?.names) ||
+                  "N/A"
+                }
+                isTransportOrder={false}
+              />
+            </>
           )}
         </div>
       </Row>
