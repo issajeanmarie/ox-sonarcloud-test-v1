@@ -61,7 +61,10 @@ const Entry = ({
   list,
   disabledDate,
   selfHandleValue,
-  notFoundContent
+  notFoundContent,
+  onSearch,
+  help,
+  className
 }: any) => {
   const [coordinatesLoading, setCoordinatesLoading] = useState<boolean>(false);
   const {
@@ -129,12 +132,17 @@ const Entry = ({
   const textInput = (
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
-      <Form.Item name={name} rules={rules} initialValue={initialValue}>
+      <Form.Item
+        name={name}
+        rules={rules}
+        initialValue={initialValue}
+        help={help}
+      >
         <Input
           list={list}
           disabled={disabled}
           defaultValue={defaultValue}
-          className={`my_input ${size === "small" && "sm"}`}
+          className={`my_input ${size === "small" && "sm"} ${className}`}
           placeholder={placeholder}
           allowClear={allowClear}
           type={inputType}
@@ -157,19 +165,20 @@ const Entry = ({
   const selectInput = (
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
-      <Form.Item name={name} rules={rules}>
+      <Form.Item name={name} rules={rules} help={help}>
         <Select
           notFoundContent={notFoundContent}
           showSearch={showSearch || true}
           placeholder={placeholder}
           allowClear={allowClear}
           size="large"
-          className={`my_input bordered_input ${size === "small" && "sm"} `}
+          className={`my_input ${size === "small" && "sm"} ${className}`}
           disabled={disabled}
           loading={isLoading}
           defaultValue={defaultValue}
           onChange={(value: string) => onChange && onChange(value)}
           onKeyUp={({ target }: any) => onKeyUp && onKeyUp(target.value)}
+          onSearch={onSearch}
           suffixIcon={suffixIcon}
           filterOption={(input, option) =>
             (option &&
@@ -194,17 +203,20 @@ const Entry = ({
   const dropdownSelectInput = (
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
-      <Form.Item name={name} rules={rules}>
+      <Form.Item name={name} rules={rules} help={help}>
         <Select
           showSearch={showSearch || true}
           placeholder={placeholder}
           allowClear={allowClear}
           size="large"
-          className={`dropdownSelectInput ${size === "small" && "sm"} `}
+          className={`dropdownSelectInput ${
+            size === "small" && "sm"
+          } ${className}`}
           disabled={disabled}
           loading={isLoading}
           defaultValue={defaultValue}
           onChange={(value: string) => onChange && onChange(value)}
+          onSearch={onSearch}
           suffixIcon={suffixIcon}
           filterOption={(input, option) =>
             (option &&
@@ -229,7 +241,7 @@ const Entry = ({
   const textAreaInput = (
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
-      <Form.Item name={name} rules={rules}>
+      <Form.Item name={name} rules={rules} help={help}>
         <Input.TextArea
           defaultValue={defaultValue}
           className="my_input"
@@ -244,7 +256,7 @@ const Entry = ({
   const passwordInput = (
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
-      <Form.Item name={name} rules={rules}>
+      <Form.Item name={name} rules={rules} help={help}>
         <Input.Password
           className="my_input p-[12px]"
           allowClear={allowClear}
@@ -257,13 +269,13 @@ const Entry = ({
   const dateInput = (
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
-      <Form.Item name={name} rules={rules}>
+      <Form.Item name={name} rules={rules} help={help}>
         <DatePicker
           defaultValue={
             defaultValue && moment(defaultValue && defaultValue, dateFormat)
           }
           onChange={onDateChange}
-          className={`my_datepicker ${size === "small" && "sm"}`}
+          className={`my_datepicker ${size === "small" && "sm"} ${className}`}
           // allowClear
           name={name}
           picker={picker}
@@ -289,9 +301,9 @@ const Entry = ({
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
       <div className="w-full relative">
-        <Form.Item name={name} rules={rules}>
+        <Form.Item name={name} rules={rules} help={help}>
           <Input
-            className={`my_input ${size === "small" && "sm"}`}
+            className={`my_input ${size === "small" && "sm"} ${className}`}
             placeholder={placeholder}
             type={inputType}
             value={value}
@@ -316,7 +328,7 @@ const Entry = ({
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
 
-      <Form.Item name={name}>
+      <Form.Item name={name} help={help}>
         <FileUploader fileName={fileName}>
           <Input
             name={name}
