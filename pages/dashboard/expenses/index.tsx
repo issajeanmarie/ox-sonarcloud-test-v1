@@ -24,6 +24,7 @@ import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import RecordExpenseModal from "../../../components/Modals/RecordExpenseModal";
 import { Expense, ExpenseStatus } from "../../../lib/types/expenses";
 import ActionModal from "../../../components/Shared/ActionModal";
+import { useRouter } from "next/router";
 
 const Expenses = () => {
   const [isAuthError, setIsAuthError] = useState(false);
@@ -43,6 +44,7 @@ const Expenses = () => {
   const [itemToEdit, setItemToEdit] = useState<Expense | null>(null);
   const [itemToDelete, setItemToDelete] = useState<number>();
   const [itemToApprove, setItemToApprove] = useState<number>();
+  const router = useRouter();
 
   const [authenticate, { isLoading: isAuthLoading }] = useLazyAuthorizeQuery();
   const [
@@ -75,7 +77,7 @@ const Expenses = () => {
 
   const handleAuthSuccess = (res: any) => {
     if (res?.payload) {
-      window.open(res.payload, "_blank", "noreferrer");
+      router.replace(res.payload);
     }
   };
 
@@ -153,7 +155,7 @@ const Expenses = () => {
     setSelectedRows([]);
     setIsApproveModalVisible(false);
     setIsApproveSelectedModalVisible(false);
-    if (res?.status === 401) {
+    if (res?.status === 401 || res?.message?.indexOf("Token expired") !== -1) {
       onQBAuthFailure();
     }
   };
