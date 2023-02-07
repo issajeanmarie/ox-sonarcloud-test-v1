@@ -26,6 +26,9 @@ import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
 import ModalWrapper from "../Modals/ModalWrapper";
 import { QB_PAYMENT_TYPES } from "../../config/constants";
 import { QBSchema } from "../../lib/types/expenses";
+import { userType } from "../../helpers/getLoggedInUser";
+import ExtendableSelect from "../Shared/Input/ExtendableSelect";
+import { ReloadOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 
@@ -43,8 +46,8 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
   const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
   const [isUploadingAttachment, setIsUploadingAttachment] = useState(false);
   const [hasNoEbm, setHasNoEbm] = useState(false);
-  const [, setUploadFailure] = useState(null);
-  const [, setUploadSuccess] = useState(false);
+  const [attachmentError, setAttachmentError] = useState<string | null>(null);
+  const [uploadFailure, setUploadFailure] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -52,7 +55,8 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
   const {
     data: suppliersData,
     isLoading: suppliersLoading,
-    error: suppliersError
+    error: suppliersError,
+    refetch: refetchSuppliers
   } = useSuppliersQuery();
   const {
     data: trucksData,
@@ -122,21 +126,33 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
 
   if (
     (suppliersError as any)?.status === 401 ||
+    // (suppliersError as any)?.message?.indexOf("Token expired") !== -1 ||
     (trucksError as any)?.status === 401 ||
+    // (trucksError as any)?.message?.indexOf("Token expired") !== -1 ||
     (locationsError as any)?.status === 401 ||
+    // (locationsError as any)?.message?.indexOf("Token expired") !== -1 ||
     (paymentMethodsError as any)?.status === 401 ||
+    // (paymentMethodsError as any)?.message?.indexOf("Token expired") !== -1 ||
     (accountsError as any)?.status === 401 ||
+    // (accountsError as any)?.message?.indexOf("Token expired") !== -1 ||
     (categoriesError as any)?.status === 401
+    // (categoriesError as any)?.message?.indexOf("Token expired") !== -1
   ) {
     onQBAuthFailure();
   }
+
+  const setUploadSuccess = () => {
+    setAttachmentError(null);
+  };
 
   useEffect(() => {
     if (isEdit && editExpenseData) {
       form.setFieldsValue({
         ...editExpenseData,
         depotId: editExpenseData.depot.id,
-        date: moment(editExpenseData.date)
+        date: moment(editExpenseData.date),
+        qbSupplierId:
+          editExpenseData.qbSupplierId || editExpenseData.qbSupplierName
       });
       if (editExpenseData.attachmentUrl) {
         setAttachmentUrl(editExpenseData.attachmentUrl);
@@ -185,11 +201,19 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
   };
 
   const onRecordExpense = (values: any) => {
+    if (!attachmentUrl) {
+      setAttachmentError("Supporting document is required");
+      return;
+    }
+
     const payload = {
       ...values,
-      qbSupplierName:
-        suppliers.find((el: any) => el.value === values.qbSupplierId)?.label ||
-        "",
+      qbSupplierId: !isNaN(Number(values.qbSupplierId))
+        ? values.qbSupplierId
+        : null,
+      qbSupplierName: !isNaN(Number(values.qbSupplierId))
+        ? suppliers.find((el: any) => el.value === values.qbSupplierId)?.label
+        : values.qbSupplierId || "",
       qbTruckName:
         trucks.find((el: any) => el.value === values.qbTruckId)?.label || "",
       qbLocationName:
@@ -314,14 +338,42 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
           </Col>
 
           <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-            <Input
+            <ExtendableSelect
               type="select"
               name="qbSupplierId"
-              label="Supplier *"
               rules={requiredField("Supplier")}
               placeholder="Select the name of the business that was paid"
               options={suppliers}
               isLoading={suppliersLoading}
+              className={
+                editExpenseData && !editExpenseData.qbSupplierId
+                  ? "bordered_input border-[#dc0000]"
+                  : ""
+              }
+              label={
+                <div className="flex items-center justify-between">
+                  Supplier *
+                  <button
+                    type="button"
+                    className="ml-1 flex items-center justify-center"
+                    onClick={refetchSuppliers}
+                    title="Refresh suppliers"
+                  >
+                    <ReloadOutlined
+                      className="text-sm text-ox-red"
+                      spin={suppliersLoading}
+                    />
+                  </button>
+                </div>
+              }
+              help={
+                editExpenseData &&
+                !editExpenseData.qbSupplierId && (
+                  <span className="ant-form-item-explain-error">
+                    This supplier is not present in the Quickbooks
+                  </span>
+                )
+              }
               suffixIcon={
                 <Image
                   preview={false}
@@ -426,92 +478,114 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
               setUploadedPicInfo={setAttachmentUrl}
               setUploadSuccess={setUploadSuccess}
               setUploadFailure={setUploadFailure}
+              validations={[
+                ".pdf",
+                "image/*",
+                ".doc",
+                ".docx",
+                ".xml",
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              ]}
             />
+          </Col>
+          <Col xs={24} sm={24} md={24}>
+            {(attachmentError || uploadFailure) && (
+              <div className="ant-form-item-explain ant-form-item-explain-connected">
+                <span role="alert" className="ant-form-item-explain-error">
+                  Supporting document is required
+                </span>
+              </div>
+            )}
           </Col>
         </Row>
 
-        <Row className="mt-8 mb-6">
-          <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
-            <span className="font-light">For Accountants</span>
-          </Col>
-        </Row>
+        {(userType().isAdmin || userType().isSuperAdmin) && (
+          <>
+            <Row className="mt-8 mb-6">
+              <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+                <span className="font-light">For Accountants</span>
+              </Col>
+            </Row>
 
-        <Row justify="space-between" gutter={[16, 16]}>
-          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-            <Input
-              type="select"
-              name="qbPaymentMethodId"
-              label="Payment method"
-              placeholder="What did you pay with"
-              options={paymentMethods}
-              isLoading={paymentMethodsLoading}
-              suffixIcon={
-                <Image
-                  preview={false}
-                  src="/icons/expand_more_black_24dp.svg"
-                  alt=""
-                  width={10}
+            <Row justify="space-between" gutter={[16, 16]}>
+              <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                <Input
+                  type="select"
+                  name="qbPaymentMethodId"
+                  label="Payment method"
+                  placeholder="What did you pay with"
+                  options={paymentMethods}
+                  isLoading={paymentMethodsLoading}
+                  suffixIcon={
+                    <Image
+                      preview={false}
+                      src="/icons/expand_more_black_24dp.svg"
+                      alt=""
+                      width={10}
+                    />
+                  }
                 />
-              }
-            />
-          </Col>
+              </Col>
 
-          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-            <Input
-              type="select"
-              name="qbPaymentType"
-              label="Payment type"
-              placeholder="Cash on hand"
-              options={QB_PAYMENT_TYPES}
-              suffixIcon={
-                <Image
-                  preview={false}
-                  src="/icons/expand_more_black_24dp.svg"
-                  alt=""
-                  width={10}
+              <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                <Input
+                  type="select"
+                  name="qbPaymentType"
+                  label="Payment type"
+                  placeholder="Cash on hand"
+                  options={QB_PAYMENT_TYPES}
+                  suffixIcon={
+                    <Image
+                      preview={false}
+                      src="/icons/expand_more_black_24dp.svg"
+                      alt=""
+                      width={10}
+                    />
+                  }
                 />
-              }
-            />
-          </Col>
+              </Col>
 
-          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-            <Input
-              type="select"
-              name="qbAccountId"
-              label="Payment account"
-              placeholder="Cash on hand"
-              options={accounts}
-              isLoading={accountsLoading}
-              suffixIcon={
-                <Image
-                  preview={false}
-                  src="/icons/expand_more_black_24dp.svg"
-                  alt=""
-                  width={10}
+              <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                <Input
+                  type="select"
+                  name="qbAccountId"
+                  label="Payment account"
+                  placeholder="Cash on hand"
+                  options={accounts}
+                  isLoading={accountsLoading}
+                  suffixIcon={
+                    <Image
+                      preview={false}
+                      src="/icons/expand_more_black_24dp.svg"
+                      alt=""
+                      width={10}
+                    />
+                  }
                 />
-              }
-            />
-          </Col>
+              </Col>
 
-          <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
-            <Input
-              type="select"
-              name="qbCategoryId"
-              label="Category"
-              placeholder="Select category"
-              options={categories}
-              isLoading={categoriesLoading}
-              suffixIcon={
-                <Image
-                  preview={false}
-                  src="/icons/expand_more_black_24dp.svg"
-                  alt=""
-                  width={10}
+              <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                <Input
+                  type="select"
+                  name="qbCategoryId"
+                  label="Category"
+                  placeholder="Select category"
+                  options={categories}
+                  isLoading={categoriesLoading}
+                  suffixIcon={
+                    <Image
+                      preview={false}
+                      src="/icons/expand_more_black_24dp.svg"
+                      alt=""
+                      width={10}
+                    />
+                  }
                 />
-              }
-            />
-          </Col>
-        </Row>
+              </Col>
+            </Row>
+          </>
+        )}
       </Form>
     </ModalWrapper>
   );
