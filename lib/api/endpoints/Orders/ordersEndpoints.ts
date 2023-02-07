@@ -227,14 +227,6 @@ const ordersApi = baseAPI.injectEndpoints({
         method: "PATCH",
         body: DTO
       })
-    }),
-
-    lockOrder: builder.mutation({
-      invalidatesTags: ["Order"],
-      query: ({ id }) => ({
-        url: `/orders/${id}/lock`,
-        method: "PATCH"
-      })
     })
   })
 });
@@ -258,6 +250,5 @@ export const {
   useVerifyPaymentMutation,
   useLhsOrdersQuery,
   useUploadOrderDocumentMutation,
-  useEditOrderDocumentMutation,
-  useLockOrderMutation
+  useEditOrderDocumentMutation
 } = ordersApi;

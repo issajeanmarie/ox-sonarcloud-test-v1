@@ -8,8 +8,7 @@ import ReceipientCodeModal from "../ReceipientCode";
 import MobilePayment from "../../Forms/Orders/MobilePayment";
 import {
   useChangeOrderStatusMutation,
-  useOrderInvoiceMutation,
-  useLockOrderMutation
+  useOrderInvoiceMutation
 } from "../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { LoadingOutlined } from "@ant-design/icons";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
@@ -17,7 +16,6 @@ import { Order } from "../../../lib/types/orders";
 import { routes } from "../../../config/route-config";
 import Navbar from "../../Shared/Content/Navbar";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
-import { userType } from "../../../helpers/getLoggedInUser";
 
 interface ViewOrderHeaderProps {
   orderId: Query;
@@ -58,8 +56,6 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const [changeOrderStatus, { isLoading: orderStatusLoading }] =
     useChangeOrderStatusMutation();
 
-  const [lockOrder, { isLoading: isTogglingLock }] = useLockOrderMutation();
-
   const router = useRouter();
 
   const handleDownloadInvoiceSuccess = (file: File) => {
@@ -90,14 +86,6 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
     });
   };
 
-  const handlelockOrder = () => {
-    handleAPIRequests({
-      request: lockOrder,
-      id: order.id,
-      showSuccess: true
-    });
-  };
-
   const LeftSide = (
     <div className="flex items-center gap-4 ">
       <Image
@@ -118,21 +106,6 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const RightSide = (
     <div className="flex items-center flex-1 justify-end gap-11">
       <div className="flex items-center gap-8">
-        {userType().isSuperAdmin &&
-          (isTogglingLock ? (
-            <LoadingOutlined />
-          ) : (
-            <Image
-              className="cursor-pointer"
-              src={`/icons/lock-triggerer.svg`}
-              alt="Backspace icon"
-              onClick={handlelockOrder}
-              width={order.locked ? 24 : 18}
-              height={order.locked ? 24 : 18}
-              preview={false}
-            />
-          ))}
-
         {invoiceLoading ? (
           <LoadingOutlined />
         ) : (
