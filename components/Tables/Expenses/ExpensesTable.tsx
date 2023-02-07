@@ -201,30 +201,26 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           key="attachment"
           title="Attachment"
           render={(text: ExpensesTableTypes, record: ExpensesTableTypes) => {
-            const child = (
-              <Text className="normalText opacity_56 text_ellipsis">
-                {record?.attachmentUrl ? (
-                  <FilePreview
-                    className="h-9 !pr-2 !pl-2"
-                    fileName={
-                      record.attachmentUrl.split("/")[
-                        record.attachmentUrl.split("/").length - 1
-                      ]
-                    }
-                    onClick={() => handleDownloadFile(record.attachmentUrl)}
-                    suffixIcon={
-                      <Image
-                        src="/icons/download_2.svg"
-                        alt=""
-                        width={14}
-                        preview={false}
-                      />
-                    }
+            const child = record?.attachmentUrl ? (
+              <FilePreview
+                className="h-9 w-56 !pr-2 !pl-2"
+                fileName={
+                  record.attachmentUrl.split("/")[
+                    record.attachmentUrl.split("/").length - 1
+                  ]
+                }
+                onClick={() => handleDownloadFile(record.attachmentUrl)}
+                suffixIcon={
+                  <Image
+                    src="/icons/download_2.svg"
+                    alt=""
+                    width={14}
+                    preview={false}
                   />
-                ) : (
-                  "---"
-                )}
-              </Text>
+                }
+              />
+            ) : (
+              "---"
             );
             return {
               children: child,

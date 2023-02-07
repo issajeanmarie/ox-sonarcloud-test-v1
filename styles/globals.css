@@ -444,6 +444,11 @@ body {
   @apply h-[35px];
 }
 
+.bordered_input {
+  border-style: solid !important;
+  border-width: 1px;
+}
+
 .my_datepicker {
   width: 100%;
   flex-grow: 1;

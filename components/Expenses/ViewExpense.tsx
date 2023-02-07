@@ -37,6 +37,11 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
           <div className="my_input bg-ox-input-white flex items-center px-4 text-sm">
             <span>{expense.qbSupplierName}</span>
           </div>
+          {expense.qbSupplierName && !expense.qbSupplierId && (
+            <span className="ant-form-item-explain-error">
+              This supplier is not present in the Quickbooks
+            </span>
+          )}
         </Col>
 
         <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
