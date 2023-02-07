@@ -10,6 +10,7 @@ interface FileUploaderProps {
   setUploadFailure?: (err: any) => void;
   setUploadedPicInfo?: (value: string) => void;
   setUploadSuccess?: (value: boolean) => void;
+  validations?: string[];
   className?: string;
 }
 
@@ -20,6 +21,7 @@ const FileUploader: FC<FileUploaderProps> = ({
   setUploadFailure,
   setUploadedPicInfo,
   setUploadSuccess,
+  validations,
   className
 }) => {
   const handleFileUpload = (files: File[]) => {
@@ -47,6 +49,7 @@ const FileUploader: FC<FileUploaderProps> = ({
         type="file"
         disabled={uploadLoading}
         onChange={(e: any) => handleFileUpload(e.target.files)}
+        accept={validations?.join(",") ?? "*"}
       />
       {uploadLoading ? (
         <LoadingOutlined spin={uploadLoading} className="ml-4" />
