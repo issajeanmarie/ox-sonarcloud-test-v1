@@ -38,7 +38,7 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
             <span>{expense.qbSupplierName}</span>
           </div>
           {expense.qbSupplierName && !expense.qbSupplierId && (
-            <span className="ant-form-item-explain-error">
+            <span className="ant-form-item-explain-error orage">
               This supplier is not present in the Quickbooks
             </span>
           )}

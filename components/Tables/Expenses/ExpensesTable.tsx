@@ -15,6 +15,7 @@ import { abbreviateNumber } from "../../../utils/numberFormatter";
 import FilePreview from "../../Shared/FilePreview";
 import ViewExpense from "../../Expenses/ViewExpense";
 import { Expense } from "../../../lib/types/expenses";
+import { userType } from "../../../helpers/getLoggedInUser";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -72,11 +73,31 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
     showApproveModal(id);
   };
 
+  const isApproveDisabled = (expense: Expense) => {
+    return (
+      !expense.depot ||
+      !expense.date ||
+      !expense.qbSupplierId ||
+      !expense.amount ||
+      !expense.qbTruckId ||
+      !expense.qbLocationId ||
+      !expense.description ||
+      !expense.attachmentUrl ||
+      !expense.qbPaymentMethodId ||
+      !expense.qbPaymentType ||
+      !expense.qbAccountId ||
+      !expense.qbCategoryId ||
+      (!userType().isAdmin && !userType().isSuperAdmin)
+    );
+  };
+
   return (
     <>
       <Table
         className="data_table"
-        rowClassName="rounded"
+        rowClassName={(record: ExpensesTableTypes) =>
+          `rounded${record.status === "APPROVED" ? " bg_light_white" : ""}`
+        }
         dataSource={expenses?.payload?.content}
         rowKey={(record: ExpensesTableTypes) => {
           return record.id;
@@ -256,6 +277,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
                       type="success"
                       size="icon"
                       onClick={() => showApproveModal(record?.id)}
+                      disabled={isApproveDisabled(record)}
                       icon={
                         <Image
                           src="/icons/check.svg"
