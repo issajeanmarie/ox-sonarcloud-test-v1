@@ -1,6 +1,8 @@
 import { Col, Form, Image, Row } from "antd";
 import Typography from "antd/lib/typography";
+import { ReloadOutlined } from "@ant-design/icons";
 import React, { FC, useState, useEffect } from "react";
+import moment from "moment";
 import { requiredField } from "../../lib/validation/InputValidations";
 import Input from "../Shared/Input";
 import { RecordExpenseTypes } from "../../lib/types/pageTypes/Expenses/RecordExpenseTypes";
@@ -8,7 +10,6 @@ import { useDepotsQuery } from "../../lib/api/endpoints/Depots/depotEndpoints";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import FilePreview from "../Shared/FilePreview";
 import FileUploader from "../Shared/FileUploader";
-import moment from "moment";
 import {
   useAccountsQuery,
   useCategoriesQuery,
@@ -28,7 +29,6 @@ import { QB_PAYMENT_TYPES } from "../../config/constants";
 import { QBSchema } from "../../lib/types/expenses";
 import { userType } from "../../helpers/getLoggedInUser";
 import ExtendableSelect from "../Shared/Input/ExtendableSelect";
-import { ReloadOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 
@@ -56,6 +56,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
   const {
     data: suppliersData,
     isLoading: suppliersLoading,
+    isFetching: suppliersFetching,
     error: suppliersError,
     refetch: refetchSuppliers
   } = useSuppliersQuery();
@@ -131,17 +132,23 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
 
   if (
     (suppliersError as any)?.status === 401 ||
-    // (suppliersError as any)?.message?.indexOf("Token expired") !== -1 ||
+    ((suppliersError as any)?.message &&
+      (suppliersError as any).message.indexOf("Token expired") !== -1) ||
     (trucksError as any)?.status === 401 ||
-    // (trucksError as any)?.message?.indexOf("Token expired") !== -1 ||
+    ((trucksError as any)?.message &&
+      (trucksError as any).message.indexOf("Token expired") !== -1) ||
     (locationsError as any)?.status === 401 ||
-    // (locationsError as any)?.message?.indexOf("Token expired") !== -1 ||
+    ((locationsError as any)?.message &&
+      (locationsError as any).message.indexOf("Token expired") !== -1) ||
     (paymentMethodsError as any)?.status === 401 ||
-    // (paymentMethodsError as any)?.message?.indexOf("Token expired") !== -1 ||
+    ((paymentMethodsError as any)?.message &&
+      (paymentMethodsError as any).message.indexOf("Token expired") !== -1) ||
     (accountsError as any)?.status === 401 ||
-    // (accountsError as any)?.message?.indexOf("Token expired") !== -1 ||
-    (categoriesError as any)?.status === 401
-    // (categoriesError as any)?.message?.indexOf("Token expired") !== -1
+    ((accountsError as any)?.message &&
+      (accountsError as any).message.indexOf("Token expired") !== -1) ||
+    (categoriesError as any)?.status === 401 ||
+    ((categoriesError as any)?.message &&
+      (categoriesError as any).message.indexOf("Token expired") !== -1)
   ) {
     onQBAuthFailure();
   }
@@ -350,7 +357,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
               isLoading={suppliersLoading}
               className={
                 watchqQbSupplierId && !supplierFromQB()
-                  ? "bordered_input border-[#dc0000]"
+                  ? "bordered_input border-[#ed7818]"
                   : ""
               }
               label={
@@ -359,12 +366,13 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
                   <button
                     type="button"
                     className="ml-1 flex items-center justify-center"
-                    onClick={refetchSuppliers}
                     title="Refresh suppliers"
+                    onClick={refetchSuppliers}
+                    disabled={suppliersFetching}
                   >
                     <ReloadOutlined
                       className="text-sm text-ox-red"
-                      spin={suppliersLoading}
+                      spin={suppliersFetching}
                     />
                   </button>
                 </div>
@@ -372,7 +380,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
               help={
                 watchqQbSupplierId &&
                 !supplierFromQB() && (
-                  <span className="ant-form-item-explain-error">
+                  <span className="ant-form-item-explain-error orage">
                     This supplier is not present in the Quickbooks
                   </span>
                 )
