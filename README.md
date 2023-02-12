@@ -70,4 +70,4 @@ You will also see any lint errors in the console.
 
 ## Copyright
 
-Copyright © 2022 Awesomity Lab
+Copyright © 2022 Awesomity Lab.
