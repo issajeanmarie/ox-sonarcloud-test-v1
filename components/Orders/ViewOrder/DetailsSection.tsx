@@ -111,7 +111,6 @@ const DetailsSection = ({
       url: null,
       showInfo: false
     },
-
     {
       key: 1,
       label: "Suggested price",
@@ -123,7 +122,6 @@ const DetailsSection = ({
       url: null,
       showInfo: true
     },
-
     {
       key: 2,
       label: "Payment status",
@@ -133,7 +131,6 @@ const DetailsSection = ({
       url: null,
       showInfo: false
     },
-
     {
       key: 3,
       label: "Duration",
@@ -143,7 +140,6 @@ const DetailsSection = ({
       url: null,
       showInfo: false
     },
-
     {
       key: 4,
       label: "Distance",
