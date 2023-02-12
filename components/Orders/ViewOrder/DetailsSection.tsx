@@ -120,17 +120,6 @@ const DetailsSection = ({
         : "N/A",
       editable: false,
       editAction: editAction,
-      url: null
-    },
-
-    {
-      key: 1,
-      label: "Suggested price",
-      value: details?.suggestedAmount
-        ? `${localeString(details?.suggestedAmount)} Rwf`
-        : "N/A",
-      editable: false,
-      editAction: editAction,
       url: null,
       showInfo: true
     },
