@@ -8,7 +8,6 @@ const ClientsIcon = "ic-actions-user.svg";
 const SettingsIcon = "ic-actions-settings.svg";
 const ResourcesIcon = "link-line.svg";
 const WarehouseIcon = "ic-ecommerce-house-white.svg";
-const ExpensesIcon = "money.svg";
 
 export const manageSidebarMenus = () => [
   {
@@ -53,12 +52,6 @@ export const moreSidebarMenus = () => [
     icon: AnalyticsIcon,
     active: false,
     url: routeConfig.Analytics.url
-  },
-  {
-    name: routeConfig.Expenses.name,
-    icon: ExpensesIcon,
-    active: false,
-    url: routeConfig.Expenses.url
   },
   {
     name: routeConfig.Resources.name,
