@@ -112,7 +112,6 @@ const DetailsSection = ({
       showInfo: false
     },
 
-
     {
       key: 1,
       label: "Suggested price",
