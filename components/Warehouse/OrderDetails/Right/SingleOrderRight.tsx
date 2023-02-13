@@ -40,7 +40,10 @@ const SingleOrderRight: FC<SingleOrderRightTypes> = ({ sale, isFetching }) => {
           <OrderSummaryInfoWrapper
             title="Price"
             infoItem={`${
-              sale?.totalAmount && numbersFormatter(sale?.totalAmount)
+              sale?.totalAmount &&
+              numbersFormatter(
+                sale?.totalAmount + (sale?.transportOrder?.totalAmount || 0)
+              )
             } Rwf`}
           />
           <OrderSummaryInfoWrapper
