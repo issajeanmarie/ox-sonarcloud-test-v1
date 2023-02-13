@@ -53,7 +53,7 @@ export const ActivityLogModal: FC<Props> = ({
       setIsModalVisible={setIsModalVisible}
       isModalVisible={isModalVisible}
       title="ACTIVITY LOG"
-      subTitle="Order ID: 5467"
+      subTitle={`Order ID: ${order?.id}`}
       loading={isLoading}
     >
       {isLoading ? (

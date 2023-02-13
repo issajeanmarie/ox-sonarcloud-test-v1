@@ -12,12 +12,12 @@ const Content: FC<ContentTypes> = ({
     style={{
       height:
         navType === "CENTER"
-          ? "83vh"
+          ? "81vh"
           : navType === "DOUBLE"
-          ? "75vh"
+          ? "74vh"
           : navType === "TRIPLE"
-          ? "46vh"
-          : "86vh"
+          ? "38vh"
+          : "83vh"
     }}
     className={`${classes.content_section} ${
       isOverflowHidden && classes.overflowHidden

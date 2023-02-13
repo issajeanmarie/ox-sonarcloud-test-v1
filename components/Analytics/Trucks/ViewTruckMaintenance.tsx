@@ -6,6 +6,7 @@ import ViewTruckMaintenanceHeader from "./ViewTruckMaintenanceHeader";
 import Content from "../../Shared/Content";
 import TruckMaintenanceList from "./TruckMaintenanceList";
 import NewTruckInspectionModal from "../../Modals/NewTruckInspectionModal";
+import CustomButton from "../../Shared/Button";
 
 interface ViewTruckProps {
   truckId: Query;
@@ -18,6 +19,10 @@ interface ViewTruckProps {
   setIsAddInspectionModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   startDate: string;
   endDate: string;
+  showPagination: boolean;
+  handleLoadMore: () => void;
+  isLoadMoreLoading: boolean;
+  getTruckMaintenanceAction: ({ page }: { page: number }) => void;
 }
 
 const ViewTruckMaintenance: FC<ViewTruckProps> = ({
@@ -30,9 +35,13 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
   startDate,
   endDate,
   isAddInspectionModalVisible,
-  setIsAddInspectionModalVisible
+  setIsAddInspectionModalVisible,
+  showPagination,
+  handleLoadMore,
+  isLoadMoreLoading,
+  getTruckMaintenanceAction
 }) => {
-  useState(false);
+  const [currentTruckData, setCurrentTruckData] = useState();
 
   return (
     <div className="overflow-hidden">
@@ -44,6 +53,8 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
             isVisible={isAddInspectionModalVisible}
             setIsVisible={setIsAddInspectionModalVisible}
             truckId={truckId}
+            currentTruckData={currentTruckData}
+            getTruckMaintenanceAction={getTruckMaintenanceAction}
           />
 
           <Header
@@ -51,6 +62,7 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
             truckData={maintenanceData}
             isPageLoading={isPageLoading}
             setIsVisible={setIsAddInspectionModalVisible}
+            setCurrentTruckData={setCurrentTruckData}
           />
 
           <Content
@@ -71,7 +83,20 @@ const ViewTruckMaintenance: FC<ViewTruckProps> = ({
               {isLoading ? (
                 <Loader />
               ) : (
-                <TruckMaintenanceList maintenanceData={maintenanceData} />
+                <>
+                  <TruckMaintenanceList maintenanceData={maintenanceData} />
+                  {showPagination && (
+                    <div style={{ width: "12%", margin: "32px auto" }}>
+                      <CustomButton
+                        loading={isLoadMoreLoading}
+                        onClick={handleLoadMore}
+                        type="secondary"
+                      >
+                        Load more
+                      </CustomButton>
+                    </div>
+                  )}
+                </>
               )}
             </>
           </Content>

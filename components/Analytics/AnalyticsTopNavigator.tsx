@@ -21,7 +21,8 @@ const AnalyticsTopNavigator: FC<AnalyticsTopNavigatorProps> = ({
   setIsDateCustom,
   daysList,
   selectedDepot,
-  setSelectedDepot
+  setSelectedDepot,
+  form
 }) => {
   useEffect(() => {
     headerLinks && setActive && setActive(headerLinks[0].id);
@@ -65,6 +66,7 @@ const AnalyticsTopNavigator: FC<AnalyticsTopNavigatorProps> = ({
             setSelectedDay={setSelectedDay}
             isDateCustom={isDateCustom}
             setIsDateCustom={setIsDateCustom}
+            form={form}
           />
         </TopNavigatorRightSideWrapper>
       )}
@@ -80,6 +82,7 @@ const AnalyticsTopNavigator: FC<AnalyticsTopNavigatorProps> = ({
             setIsDateCustom={setIsDateCustom}
             selectedDepot={selectedDepot}
             setSelectedDepot={setSelectedDepot}
+            form={form}
           />
         </TopNavigatorRightSideWrapper>
       )}

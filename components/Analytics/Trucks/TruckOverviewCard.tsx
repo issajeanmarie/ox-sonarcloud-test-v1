@@ -6,10 +6,19 @@ import LoadingOutlined from "@ant-design/icons/LoadingOutlined";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDownloadOOSReportMutation } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
+import { FC } from "react";
+import { Query } from "../../../lib/types/shared";
 
-const TruckOverviewCard = ({ data, truckId }: any) => {
+interface Props {
+  data: { name: string; num: number };
+  truckId?: number | Query;
+  isRed?: boolean;
+}
+
+const TruckOverviewCard: FC<Props> = ({ data, truckId, isRed }) => {
   const [downloadOOSReport, { isLoading: isDownloadLoading }] =
     useDownloadOOSReportMutation();
+
   const handleDownloadSuccess = (file: File) => {
     handleDownloadFile({
       file,
@@ -36,7 +45,11 @@ const TruckOverviewCard = ({ data, truckId }: any) => {
 
       <Row align="middle" justify="space-between">
         <Col>
-          <span className="text-2xl font-semibold block yellow">
+          <span
+            className={`${
+              isRed ? "red" : "yellow"
+            } text-2xl font-semibold block`}
+          >
             {data?.num}
           </span>
         </Col>

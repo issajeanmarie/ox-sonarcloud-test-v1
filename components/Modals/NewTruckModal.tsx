@@ -130,19 +130,7 @@ const NewTruckModal = ({
 
   useEffect(() => {
     form.setFieldsValue({
-      plateNumber: editTruckData?.plateNumber || "",
-      yearManufactured: editTruckData?.yearManufactured || "",
-      model: editTruckData?.model || "",
-      type: editTruckData?.type || "",
-      fuelCardAssigned: editTruckData?.fuelCardAssigned || "",
-      fuelType: editTruckData?.fuelType || "",
-      engineNumber: editTruckData?.engineNumber || "",
-      engineOilType: editTruckData?.engineOilType || "",
-      capacity: editTruckData?.capacity || "",
-      chassisNumber: editTruckData?.chassisNumber || "",
-      tireSize: editTruckData?.tireSize || "",
-      tireBrand: editTruckData?.tireBrand || "",
-      trackingUnitSerialNumber: editTruckData?.trackingUnitSerialNumber || "",
+      ...editTruckData,
       depotId: editTruckData?.depot?.id || depotsState?.depotId || ""
     });
   }, [depotsState?.depotId, editTruckData, form]);
@@ -340,7 +328,7 @@ const NewTruckModal = ({
           </div>
         </div>
 
-        <div className="flex gap-10">
+        <div className="flex gap-10 mb-5">
           <div className="flex-1">
             <div>
               <Input
@@ -364,6 +352,36 @@ const NewTruckModal = ({
               options={depots}
               rules={requiredField("Depot")}
             />
+          </div>
+        </div>
+
+        <div className="flex gap-10">
+          <div className="flex-1">
+            <div>
+              <Input
+                name="minFuelPer100km"
+                type="text"
+                placeholder="Enter minimum fuel"
+                inputType="number"
+                label="Minimum fuel / 100km"
+                suffixIcon="Litres"
+                rules={requiredField("Minimum fuel")}
+              />
+            </div>
+          </div>
+
+          <div className="flex-1">
+            <div>
+              <Input
+                name="maxFuelPer100km"
+                type="text"
+                placeholder="Enter maximum fuel"
+                inputType="number"
+                label="Maximum fuel / 100km"
+                suffixIcon="Litres"
+                rules={requiredField("Maximum fuel")}
+              />
+            </div>
           </div>
         </div>
       </Form>

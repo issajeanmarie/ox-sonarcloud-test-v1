@@ -19,13 +19,17 @@ import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import Link from "next/link";
 import { limitStringLengthSmall } from "../../../helpers/limitStringLength";
 import PaymentStatus from "../../Shared/PaymentStatus";
+import {
+  SalesResponse,
+  SingleSale
+} from "../../../lib/types/Warehouses/Sales/sale";
 
 const { Text } = Typography;
 
 type OneWarehouseOrderTypes = {
-  sale: any;
+  sale: SingleSale;
   itemNumber: number;
-  AllSales: any;
+  AllSales: SalesResponse;
 };
 
 const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
@@ -98,19 +102,20 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
 
             <Col className="flex gap-2 items-center">
               <Text className="text-md font-bold">
-                {sale?.saleItems?.length > 0 ? (
+                {sale?.saleItems?.length ? (
                   <Tooltip
                     title={
-                      sale?.saleItems[0]?.batch?.warehouseItem?.parentCategory
-                        ?.categoryName
+                      sale?.saleItems[0]?.batch?.warehouseItem?.categoryName ||
+                      ""
                     }
                   >
                     {limitStringLengthSmall(
-                      sale?.saleItems[0]?.batch?.warehouseItem?.categoryName
+                      sale?.saleItems[0]?.batch?.warehouseItem?.categoryName ||
+                        ""
                     )}
                   </Tooltip>
                 ) : (
-                  "Unkown Item"
+                  "Unknown Item"
                 )}
               </Text>
 
@@ -133,7 +138,7 @@ const OneWarehouseOrder: FC<OneWarehouseOrderTypes> = ({
 
         <div
           className={`flex-1 ${
-            sale.status === "CANCELLED" ? "opacity-50" : ""
+            sale?.status === "CANCELLED" ? "opacity-50" : ""
           }`}
         >
           <Row gutter={32} align="middle">

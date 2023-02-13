@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { Col, Row, Skeleton, Spin, Space, Avatar, List } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -33,6 +33,7 @@ export const AppLoadingLoader = () => {
         alt=""
         width="80px"
         height="80px"
+        preview={false}
         className="animate-spin duration-1000"
       />
     </div>
@@ -54,6 +55,7 @@ export const ComponentLoadingLoader = () => {
         alt=""
         width="80px"
         height="80px"
+        preview={false}
         className="animate-spin duration-1000"
       />
     </div>
@@ -725,6 +727,69 @@ export const AnalyticsTruckLoader = () => {
       <Col md={2}>
         <Skeleton.Input active size="small" block={true} />
       </Col>
+    </Row>
+  );
+};
+
+export const ExpensesTableLoader = () => {
+  return (
+    <Row
+      gutter={[1, 24]}
+      justify="space-between"
+      className="mato8"
+      style={{ background: "#fff", padding: "8px", paddingTop: "12px" }}
+    >
+      <Col>
+        <Skeleton.Button active size="small" shape="square" />
+      </Col>
+      <Col md={4}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={4}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={3}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={3}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={3}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={4}>
+        <Skeleton.Input active size="small" block={true} />
+      </Col>
+      <Col md={2}>
+        <Row gutter={1}>
+          <Space size="small">
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+            <Col xl={4}>
+              <Skeleton.Button active size="small" shape="square" />
+            </Col>
+          </Space>
+        </Row>
+      </Col>
+    </Row>
+  );
+};
+
+export const DepotProfileLoader = ({ className }: { className?: string }) => {
+  return (
+    <Row
+      justify="center"
+      align="middle"
+      className={`${className} w-[100%] h-[70vh]`}
+    >
+      <Col>{loadingIcon}</Col>
     </Row>
   );
 };

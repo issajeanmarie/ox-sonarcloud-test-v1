@@ -146,9 +146,10 @@ export interface SingleEditRecord {
 export type Order = {
   orderEditRecords: SingleEditRecord[];
   createdBy: string;
-  comment: null;
-  momoRefCodes: "";
-  isSupportOrder: false;
+  locked: boolean;
+  comment: string | null;
+  momoRefCodes: string;
+  isSupportOrder: boolean;
   waitTimeTransactions: [];
   duration: string;
   distance: string;

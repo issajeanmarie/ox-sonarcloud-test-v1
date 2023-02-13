@@ -5,13 +5,13 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import LoadingOutlined from "@ant-design/icons/LoadingOutlined";
 import moment from "moment";
-import { numbersFormatter } from "../../helpers/numbersFormatter";
 import { AnalyticsCardTypes } from "../../lib/types/pageTypes/Analytics/AnalyticsCardTypes";
 import { SmallSpinLoader } from "../Shared/Loaders/Loaders";
 import { useDownloadAnalyticsReportMutation } from "../../lib/api/endpoints/Analytics/analyticEndpoints";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import fileDownload from "js-file-download";
 import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
+import { abbreviateNumber } from "../../utils/numberFormatter";
 
 const { Text } = Typography;
 
@@ -116,7 +116,7 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
         {isFetching ? (
           <SmallSpinLoader />
         ) : (
-          <>{count !== null ? numbersFormatter(count) : "None"}</>
+          <>{count !== null ? abbreviateNumber(count) : "None"}</>
         )}
       </Text>
       <Text className="captionText">

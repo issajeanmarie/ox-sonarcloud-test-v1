@@ -34,12 +34,12 @@ const trucksApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
     getTrucks: builder.query({
       providesTags: ["Trucks"],
-      query: ({ noPagination, page, size, sort, search, status }) => ({
+      query: ({ noPagination, page, size, sort, search, status, depot }) => ({
         url: `/trucks${noPagination ? "/no-pagination" : ""}?page=${
           page || ""
-        }&size=${size || ""}&status=${status || ""}&sort=${sort || ""}&search=${
-          search || ""
-        }`,
+        }&depot=${depot || 0}&size=${size || ""}&status=${status || ""}&sort=${
+          sort || ""
+        }&search=${search || ""}`,
         method: "GET"
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) => response
@@ -262,7 +262,7 @@ const trucksApi = baseAPI.injectEndpoints({
     }),
 
     createMaintenanceCheck: builder.mutation<unknown, unknown>({
-      invalidatesTags: ["MaintenanceCheck"],
+      invalidatesTags: [],
       query: ({ id, ...DTO }) => {
         return {
           url: `/trucks/${id}/maintenance-checks`,
@@ -289,7 +289,7 @@ const trucksApi = baseAPI.injectEndpoints({
       CreateTruckResponse,
       DeleteMaintenanceCheckRequest
     >({
-      invalidatesTags: ["MaintenanceCheck"],
+      invalidatesTags: [],
       query: ({ id, checkId }) => {
         return {
           url: `/trucks/${id}/maintenance-checks/${checkId}`,
@@ -316,8 +316,7 @@ const trucksApi = baseAPI.injectEndpoints({
         }&start=${start || ""}&end=${end || ""}`,
         method: "GET"
       }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
+      transformResponse: (response: ApiResponseMetadata<TruckTypes>) => response
     }),
 
     getTruckRevenueAnalytics: builder.query({

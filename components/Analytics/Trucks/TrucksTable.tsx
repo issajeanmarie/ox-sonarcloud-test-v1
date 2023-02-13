@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "antd/lib/table";
 import Row from "antd/lib/row";
-import moment from "moment";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
 import Typography from "antd/lib/typography";
@@ -17,6 +16,8 @@ import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { SingleTruckTypes } from "../../../lib/types/trucksTypes";
+import { dateDisplay } from "../../../utils/dateFormatter";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -25,20 +26,6 @@ interface TrucksProps {
   data: any;
   isLoading: boolean;
 }
-
-interface LastInspection {
-  score: number;
-  createdAt: string;
-}
-
-type SingleTruckTypes = {
-  id: number;
-  plateNumber: string;
-  lastInspection: LastInspection;
-  model: string;
-  capacity: number;
-  active: boolean;
-};
 
 type State = {
   paginatedData: any;
@@ -210,6 +197,34 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
           />
 
           <Column
+            width="20%"
+            key="minFuelPer100km"
+            title="Minimum Fuel/100km"
+            render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
+              const child = (
+                <Text className="normalText opacity_56">
+                  {record?.minFuelPer100km || 0} Litres
+                </Text>
+              );
+              return { children: child, props: { "data-label": "Capacity" } };
+            }}
+          />
+
+          <Column
+            width="20%"
+            key="maxFuelPer100km"
+            title="Maximum Fuel/100km"
+            render={(text: SingleTruckTypes, record: SingleTruckTypes) => {
+              const child = (
+                <Text className="normalText opacity_56">
+                  {record?.maxFuelPer100km || 0} Litres
+                </Text>
+              );
+              return { children: child, props: { "data-label": "Capacity" } };
+            }}
+          />
+
+          <Column
             width="15%"
             key="lastInspection"
             title="Last inspection"
@@ -221,9 +236,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
                   </span>{" "}
                   <span className="captionText text_ellipsis">{`${
                     record?.lastInspection?.createdAt
-                      ? `(${moment(
-                          record?.lastInspection?.createdAt
-                        ).fromNow()})`
+                      ? `(${dateDisplay(record?.lastInspection?.createdAt)})`
                       : ""
                   }`}</span>
                 </>

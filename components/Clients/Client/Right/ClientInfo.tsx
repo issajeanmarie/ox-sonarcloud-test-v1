@@ -74,14 +74,22 @@ const ClientInfo: FC<ClientInfoTypes> = ({ client }) => {
       <Col span={24} w-full>
         <div className="w-full p-8">
           <ClientInfoWrapper title="Phone number" infoItem={client?.phone} />
+
           <ClientInfoWrapper
             title="Source"
             infoItem={client?.source?.replaceAll("_", " ") || "N/A"}
           />
+
           <ClientInfoWrapper
             title="Economic class"
             infoItem={client?.economicStatus?.replaceAll("_", " ") || "N/A"}
           />
+
+          <ClientInfoWrapper
+            title="TIN number"
+            infoItem={client?.tinNumber || "N/A"}
+          />
+
           <ClientInfoWrapper title="Email" infoItem={client?.email || "N/A"} />
         </div>
       </Col>

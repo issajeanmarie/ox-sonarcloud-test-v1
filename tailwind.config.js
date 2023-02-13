@@ -20,7 +20,8 @@ module.exports = {
         "ox-red": "#bd062d",
         "ox-danger": "#FCF2F4",
         "ox-dark-border": "#181f2b",
-        "ox-border-color": "#EAEFF2A1"
+        "ox-border-color": "#EAEFF2A1",
+        "ox-border-dash": "#A2B3D1"
       }
     }
   },

@@ -7,8 +7,12 @@ import {
   PostDriverRequest,
   ToggleDriverRequest,
   MakeDriverDispatcherRequest,
-  SeachDriverRequest,
-  GetDriver
+  SeachDriverRequest as SearchDriverRequest,
+  GetDriver,
+  DriverShiftResponse,
+  DriverShiftOrders,
+  SingleDriverResponse,
+  DriverProfileResponse
 } from "../../../types/Accounts/drivers";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -26,7 +30,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<{ content: DriverResponse }>,
       GetDrivers
     >({
-      providesTags: ["Drivers"],
+      providesTags: ["ToggleDriver"],
       query: (DTO) => ({
         url: `drivers${DTO.noPagination ? "/no-pagination" : ""}?page=${
           DTO?.page || ""
@@ -36,10 +40,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
         method: "GET"
       })
     }),
-    driver: builder.query<
-      ApiResponseMetadata<{ content: DriverResponse }>,
-      GetDriver
-    >({
+    driver: builder.query<SingleDriverResponse, GetDriver>({
       providesTags: ["Drivers"],
       query: ({ id }) => ({
         url: `drivers/${id}`,
@@ -72,7 +73,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Driver>,
       EditDriverLocationRequest
     >({
-      invalidatesTags: [],
+      invalidatesTags: ["EditDriver"],
       query: (DTO) => ({
         url: `/drivers/${DTO?.id}`,
         method: "PUT",
@@ -83,7 +84,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Driver>,
       ToggleDriverRequest
     >({
-      invalidatesTags: [],
+      invalidatesTags: ["ToggleDriver"],
       query: (DTO) => ({
         url: `/drivers/${DTO?.id || ""}/toggle-active`,
         method: "PUT",
@@ -93,7 +94,7 @@ const driversEndpoints = baseAPI.injectEndpoints({
 
     searchDriver: builder.query<
       ApiResponseMetadata<Driver>,
-      SeachDriverRequest
+      SearchDriverRequest
     >({
       providesTags: [],
       query: ({ search }) => ({
@@ -118,11 +119,39 @@ const driversEndpoints = baseAPI.injectEndpoints({
       ApiResponseMetadata<Driver>,
       MakeDriverDispatcherRequest
     >({
-      invalidatesTags: [],
+      invalidatesTags: ["EndShift"],
       query: (DTO) => ({
         url: `/drivers/${DTO.id}/end-shift`,
         method: "PATCH",
         body: DTO
+      })
+    }),
+
+    getDriverShifts: builder.query<DriverShiftResponse, GetDriver>({
+      providesTags: [],
+      query: ({ id, page, size, status }) => ({
+        url: `./drivers/${id}/shifts?page=${page || 0}&size=${
+          size || 40
+        }&status=${status || ""}`,
+        method: "GET"
+      })
+    }),
+
+    getDriverShiftOrders: builder.query<DriverShiftOrders, GetDriver>({
+      providesTags: [],
+      query: ({ id, page, size, status }) => ({
+        url: `./shifts/${id}/orders?page=${page || 0}&size=${
+          size || 40
+        }&status=${status || ""}`,
+        method: "GET"
+      })
+    }),
+
+    driverProfile: builder.query<DriverProfileResponse, GetDriver>({
+      providesTags: ["EditDriver", "ToggleDriver", "EndShift"],
+      query: ({ id }) => ({
+        url: `drivers/${id}/profile`,
+        method: "GET"
       })
     })
   })
@@ -138,5 +167,8 @@ export const {
   useMakeDriverDispatcherMutation,
   useLazySearchDriverQuery,
   useDriverQuery,
-  useEndShiftMutation
+  useEndShiftMutation,
+  useLazyGetDriverShiftsQuery,
+  useLazyGetDriverShiftOrdersQuery,
+  useDriverProfileQuery
 } = driversEndpoints;

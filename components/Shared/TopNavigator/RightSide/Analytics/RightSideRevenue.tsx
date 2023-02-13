@@ -1,6 +1,7 @@
 import { Image } from "antd";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
+import Form from "antd/lib/form";
 import React, { FC } from "react";
 import { RightSideRevenueTypes } from "../../../../../lib/types/pageTypes/Analytics/RightSideRevenueTypes";
 import Input from "../../../../Shared/Input";
@@ -13,10 +14,17 @@ const RightSideRevenue: FC<RightSideRevenueTypes> = ({
   setSelectedDay,
   isDateCustom,
   setIsDateCustom,
-  daysList
+  daysList,
+  form
 }) => {
   return (
-    <>
+    <Form
+      className="flex gap-6"
+      name="SortAnalyticsRevenue"
+      form={form}
+      title="Issue"
+      id="SortAnalyticsRevenue"
+    >
       {!isDateCustom ? (
         <DropDownSelector
           label="Show"
@@ -73,7 +81,7 @@ const RightSideRevenue: FC<RightSideRevenueTypes> = ({
           />
         }
       />
-    </>
+    </Form>
   );
 };
 

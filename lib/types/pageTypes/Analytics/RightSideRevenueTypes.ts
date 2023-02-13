@@ -6,4 +6,5 @@ export type RightSideRevenueTypes = {
   isDateCustom: any;
   setIsDateCustom: any;
   daysList: any;
+  form?: any;
 };

@@ -48,6 +48,11 @@ const Trucks = () => {
   const [downloadOOSReport, { isLoading: isDownloadLoading }] =
     useDownloadOOSReportMutation();
 
+  const depotsState = useSelector(
+    (state: { depots: { payload: { depotId: number; depotName: string } } }) =>
+      state.depots.payload
+  );
+
   const handleDownloadSuccess = (file: File) => {
     handleDownloadFile({
       file,
@@ -83,7 +88,8 @@ const Trucks = () => {
     status = selectedFilter.value || "",
     sort = selectedSort.value || "",
     search = searchValue || "",
-    showSuccess = false
+    showSuccess = false,
+    depot = depotsState.depotId
   }: any) => {
     handleAPIRequests({
       handleSuccess,
@@ -91,6 +97,7 @@ const Trucks = () => {
       page,
       status,
       sort,
+      depot,
       search,
       showSuccess,
       request
@@ -101,7 +108,7 @@ const Trucks = () => {
     setFiltersBasedLoader(true);
     getTrucksAction({});
     setCurrentPages(1);
-  }, [searchValue, selectedSort.value, selectedFilter.value]);
+  }, [searchValue, selectedSort.value, selectedFilter.value, depotsState]);
 
   const handleSearchTruck = (search: string) => {
     setSearchValue(search);

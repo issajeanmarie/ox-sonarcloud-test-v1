@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import Image from "antd/lib/image";
 
 const ComingSoon = () => {
   return (
@@ -18,6 +18,7 @@ const ComingSoon = () => {
         alt=""
         width="250px"
         height="200px"
+        preview={false}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import Input from "../../../Shared/Input";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Button from "../../../../components/Shared/Button";
@@ -268,6 +268,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                       alt="Calendar icon"
                       width={18}
                       height={18}
+                      preview={false}
                     />
                   }
                   rules={requiredField("Start date")}
@@ -336,34 +337,6 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                 inputType="number"
                 suffixIcon="KGs"
                 rules={requiredField("Weight")}
-              />
-            </div>
-          </div>
-          <div className="flex gap-10 mb-5">
-            <div className="flex-1">
-              <div>
-                <Input
-                  name="paymentPlan"
-                  type="select"
-                  label="Plan"
-                  placeholder="Select plan"
-                  options={[
-                    { label: "Per job", value: "PAY_BY_JOB" },
-                    { label: "Per Kilogram", value: "PAY_BY_KG" }
-                  ]}
-                  rules={requiredField("Plan")}
-                />
-              </div>
-            </div>
-            <div className="flex-1">
-              <Input
-                name="amount"
-                type="text"
-                placeholder="00"
-                label="Rate"
-                inputType="number"
-                suffixIcon="Rwf"
-                rules={requiredField("Rate")}
               />
             </div>
           </div>
@@ -481,6 +454,7 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
                       src="/icons/ic-actions-close-simple.svg"
                       alt="Close icon"
                       onClick={() => handleRemoveStop(index)}
+                      preview={false}
                     />
                   </div>
                 </div>

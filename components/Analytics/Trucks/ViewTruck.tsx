@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import Divider from "antd/lib/divider";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { PlusOutlined } from "@ant-design/icons";
 import Header from "./Header";
 import Loader from "../../Shared/Loader";
@@ -144,7 +144,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
             <Col
               md={{ span: 24 }}
               lg={{ span: 10 }}
-              className="h-[85vh]  overflow-auto"
+              className="h-[84vh]  overflow-auto"
               style={{
                 padding: "0 12px 38px 24px",
                 marginTop: "24px"
@@ -163,6 +163,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
                     alt=""
                     width={22}
                     height={22}
+                    preview={false}
                   />
                 </div>
 
@@ -219,7 +220,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
             <Col
               md={{ span: 24 }}
               lg={{ span: 14 }}
-              className="h-[85vh]"
+              className="h-[84vh]"
               style={{
                 padding: "0 24px 38px 12px",
                 marginTop: "24px"

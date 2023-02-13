@@ -24,7 +24,7 @@ const slice = createSlice({
       if (payload?.payload) {
         // UPDATE STATE WHEN COMPONENT HAS MOUNTED OR IF YOU ARE REPLACING DATA WITH NEW ONES
         if (payload.onRender || payload.replace) {
-          state.displayPaginatedData = payload.payload;
+          state.displayPaginatedData = payload?.payload;
 
           return;
         }

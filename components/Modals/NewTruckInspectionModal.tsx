@@ -7,6 +7,7 @@ import { useCreateMaintenanceCheckMutation } from "../../lib/api/endpoints/Truck
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import MaintenanceCheckSummary from "./MaintenanceCheckSummary";
 import { Query } from "../../lib/types/shared";
+import moment from "moment";
 
 const { Text } = Typography;
 
@@ -19,6 +20,8 @@ type Types = {
   isUserEditing?: boolean;
   fromTruckProfile?: boolean | undefined;
   truckId: Query;
+  currentTruckData: any;
+  getTruckMaintenanceAction: ({ page }: { page: number }) => void;
 };
 
 const defaultSummary = {
@@ -31,10 +34,13 @@ const defaultSummary = {
 const NewTruckInspectionModal = ({
   isVisible,
   setIsVisible,
-  truckId
+  truckId,
+  currentTruckData,
+  getTruckMaintenanceAction
 }: Types) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
+  const [checklistDate, setChecklistDate] = useState(moment());
   const [
     preventativeMaintenanceChecklist,
     setPreventativeMaintenanceChecklist
@@ -50,6 +56,11 @@ const NewTruckInspectionModal = ({
 
   const canGoNext =
     currentStep < preventativeMaintenanceChecklist.steps.length - 1;
+  const isNextDisabled =
+    canGoNext &&
+    preventativeMaintenanceChecklist.steps[currentStep].list.find(
+      (el) => el.status === null
+    );
   const canSubmit =
     currentStep === preventativeMaintenanceChecklist.steps.length;
   const canGoBack = currentStep > 0;
@@ -60,6 +71,8 @@ const NewTruckInspectionModal = ({
     setCurrentStep(0);
     setShowSummary(false);
     setSummary(defaultSummary);
+
+    getTruckMaintenanceAction({ page: 0 });
   };
 
   const handleCreateMaintenanceCheck = () => {
@@ -76,7 +89,8 @@ const NewTruckInspectionModal = ({
 
     dataToSave = {
       ...dataToSave,
-      ...summary
+      ...summary,
+      date: moment(checklistDate).format("YYYY-MM-DDTHH:mm")
     };
 
     handleAPIRequests({
@@ -146,7 +160,6 @@ const NewTruckInspectionModal = ({
 
   const stepsPercentage =
     (currentStep * 100) / preventativeMaintenanceChecklist.steps.length;
-
   return (
     <ModalWrapper
       footerContent={
@@ -169,6 +182,11 @@ const NewTruckInspectionModal = ({
               type="primary"
               htmlType="submit"
               loading={isLoading}
+              disabled={
+                !!isNextDisabled ||
+                (canSubmit && !summary.mileage) ||
+                !checklistDate
+              }
             >
               {canSubmit ? "Submit" : "Next"}
             </Button>
@@ -176,7 +194,7 @@ const NewTruckInspectionModal = ({
         </Row>
       }
       title="PREVENTATIVE MAINTENANCE CHECKLIST"
-      subTitle="RAC 533 H"
+      subTitle={currentTruckData?.plateNumber}
       isModalVisible={isVisible}
       setIsModalVisible={setIsVisible}
       loading={false}
@@ -206,7 +224,11 @@ const NewTruckInspectionModal = ({
       </Text>
 
       {showSummary ? (
-        <MaintenanceCheckSummary summary={summary} setSummary={setSummary} />
+        <MaintenanceCheckSummary
+          summary={summary}
+          setSummary={setSummary}
+          setChecklistDate={setChecklistDate}
+        />
       ) : (
         <>
           <Row
