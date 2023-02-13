@@ -13,7 +13,7 @@ const { Text } = Typography;
 
 type Types = {
   isVisible: boolean;
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsVisible: any;
   editTruckData?: any;
   setEditTruckData?: any;
   setIsUserEditing?: any;
@@ -52,28 +52,26 @@ const NewTruckInspectionModal = ({
 
   const handleCancel = () => {
     setIsVisible(false);
-    setPreventativeMaintenanceChecklist(PMList);
-    setCurrentStep(0);
-    setShowSummary(false);
-    setSummary(defaultSummary);
   };
 
   const canGoNext =
     currentStep < preventativeMaintenanceChecklist.steps.length - 1;
-
   const isNextDisabled =
-    currentStep < preventativeMaintenanceChecklist.steps.length &&
+    canGoNext &&
     preventativeMaintenanceChecklist.steps[currentStep].list.find(
       (el) => el.status === null
     );
-
   const canSubmit =
     currentStep === preventativeMaintenanceChecklist.steps.length;
-
   const canGoBack = currentStep > 0;
 
   const handleAddCheckSuccess = () => {
-    handleCancel();
+    setIsVisible(false);
+    setPreventativeMaintenanceChecklist(PMList);
+    setCurrentStep(0);
+    setShowSummary(false);
+    setSummary(defaultSummary);
+
     getTruckMaintenanceAction({ page: 0 });
   };
 
@@ -92,7 +90,7 @@ const NewTruckInspectionModal = ({
     dataToSave = {
       ...dataToSave,
       ...summary,
-      date: new Date(String(checklistDate)).toISOString()
+      date: moment(checklistDate).format("YYYY-MM-DDTHH:mm")
     };
 
     handleAPIRequests({
@@ -100,15 +98,14 @@ const NewTruckInspectionModal = ({
       id: truckId,
       ...dataToSave,
       showSuccess: true,
-      handleSuccess: handleAddCheckSuccess,
-      handleFailure: handleCancel
+      handleSuccess: handleAddCheckSuccess
     });
   };
 
   const handleNextStep = () => {
     if (canGoNext) {
       setCurrentStep(currentStep + 1);
-    } else if (canSubmit && !canGoNext && !isLoading) {
+    } else if (canSubmit) {
       handleCreateMaintenanceCheck();
     } else {
       setShowSummary(true);
@@ -137,7 +134,6 @@ const NewTruckInspectionModal = ({
     item: SingleItemType;
   }) => {
     const newList: SingleItemType[] = [];
-
     preventativeMaintenanceChecklist.steps[currentStep].list.map((list) => {
       if (list.id === item.id) {
         newList.push({ ...list, status: status });
@@ -164,7 +160,6 @@ const NewTruckInspectionModal = ({
 
   const stepsPercentage =
     (currentStep * 100) / preventativeMaintenanceChecklist.steps.length;
-
   return (
     <ModalWrapper
       footerContent={
@@ -190,8 +185,7 @@ const NewTruckInspectionModal = ({
               disabled={
                 !!isNextDisabled ||
                 (canSubmit && !summary.mileage) ||
-                !checklistDate ||
-                isLoading
+                !checklistDate
               }
             >
               {canSubmit ? "Submit" : "Next"}

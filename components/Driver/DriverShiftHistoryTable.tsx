@@ -33,7 +33,7 @@ const DriverShiftHistoryTable: FC<ClientOrderHistoryTableProps> = ({
       title: (
         <div className="flex gap-10">
           <span>#</span>
-          <span>Order</span>
+          <span>Date</span>
         </div>
       ),
       key: "Order",

@@ -9,7 +9,6 @@ import Heading1 from "../Shared/Text/Heading1";
 import Button from "../Shared/Button";
 import { localeString } from "../../utils/numberFormatter";
 import ActionModal from "../Shared/ActionModal";
-import { Expense } from "../../lib/types/expenses";
 
 const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
   showModal,
@@ -28,30 +27,6 @@ const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
   approveSelected,
   isApproving
 }) => {
-  const isApproveDisabled = () => {
-    const selectedExpenses = expenses?.content.filter(
-      (expense: Expense) => selectedRows.indexOf(expense.id) !== -1
-    );
-    return (
-      isApproving ||
-      selectedExpenses?.find(
-        (expense: Expense) =>
-          !expense.depot ||
-          !expense.date ||
-          !expense.qbSupplierId ||
-          !expense.amount ||
-          !expense.qbTruckId ||
-          !expense.qbLocationId ||
-          !expense.description ||
-          !expense.attachmentUrl ||
-          !expense.qbPaymentMethodId ||
-          !expense.qbPaymentType ||
-          !expense.qbAccountId ||
-          !expense.qbCategoryId
-      )
-    );
-  };
-
   const LeftSide = (
     <Col className="flex items-center gap-4">
       <Row gutter={24} align="middle" wrap={false}>
@@ -83,9 +58,9 @@ const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
               type="secondary"
               onClick={showApproveModal}
               loading={isApproving}
-              disabled={isApproveDisabled()}
+              disabled={isApproving}
             >
-              {`APPROVE SELECTED (${selectedRows.length})`}
+              APPROVE SELECTED
             </Button>
           </div>
 
@@ -96,7 +71,7 @@ const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
               loading={isApproving}
               disabled={isApproving}
             >
-              {`DELETE SELECTED (${selectedRows.length})`}
+              DELETE SELECTED
             </Button>
           </div>
         </>

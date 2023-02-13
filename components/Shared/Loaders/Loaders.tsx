@@ -782,7 +782,7 @@ export const ExpensesTableLoader = () => {
   );
 };
 
-export const SpinningLoader = ({ className }: { className?: string }) => {
+export const DepotProfileLoader = ({ className }: { className?: string }) => {
   return (
     <Row
       justify="center"

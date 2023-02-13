@@ -1,83 +1,17 @@
 import { Col, Image, Row } from "antd";
 import Typography from "antd/lib/typography";
 import React, { FC } from "react";
-import { LoadingOutlined } from "@ant-design/icons";
 import FilePreview from "../Shared/FilePreview";
 import { ViewExpenseTypes } from "../../lib/types/pageTypes/Expenses/ViewExpenseTypes";
 import { dateFormatter } from "../../utils/dateFormatter";
 import { abbreviateNumber } from "../../utils/numberFormatter";
-import {
-  useLazyDownloadFromQBQuery,
-  useLazyDownloadFromServerQuery
-} from "../../lib/api/endpoints/Expenses/expensesEndpoint";
-import { handleAPIRequests } from "../../utils/handleAPIRequests";
-import { handleDownloadFile } from "../../utils/handleDownloadFile";
-import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 
 const { Text } = Typography;
 
-const ViewExpense: FC<ViewExpenseTypes> = ({ expense, onQBAuthFailure }) => {
-  const [downloadFromServer, { isLoading: isLoadingFromServer }] =
-    useLazyDownloadFromServerQuery();
-  const [downloadFromQB, { isLoading: isLoadingFromQB }] =
-    useLazyDownloadFromQBQuery();
-
-  const downloadFile = () => {
-    if (expense.qbAttachableId && expense.qbAttachableFileName) {
-      handleAPIRequests({
-        request: downloadFromQB,
-        handleSuccess: handleDownloadFromQBSuccess,
-        handleFailure: handleDownloadFailure,
-        showFailure: false,
-        id: expense.id
-      });
-    } else {
-      handleAPIRequests({
-        request: downloadFromServer,
-        handleSuccess: handleDownloadSuccess,
-        handleFailure: handleDownloadFailure,
-        showFailure: false,
-        id: expense.id
-      });
-    }
-  };
-
-  const handleDownloadSuccess = (file: File) => {
-    const name =
-      expense.attachmentUrl.split("/")[
-        expense.attachmentUrl.split("/").length - 1
-      ];
-    const fileFormat =
-      expense.attachmentUrl.split(".")[
-        expense.attachmentUrl.split(".").length - 1
-      ];
-
-    handleDownloadFile({
-      file,
-      name,
-      fileFormat
-    });
-  };
-
-  const handleDownloadFromQBSuccess = (res: any) => {
+const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
+  const handleDownloadFile = (link: string) => {
     if (window) {
-      window.open(res?.payload, "_blank", "noreferrer");
-    }
-  };
-
-  const handleDownloadFailure = (res: any) => {
-    if (
-      res?.status === 401 ||
-      (res?.data?.message &&
-        (res.data.message.indexOf("Access is denied") !== -1 ||
-          res.data.message.indexOf("Token expired") !== -1 ||
-          res.data.message.indexOf("Token revoked") !== -1))
-    ) {
-      onQBAuthFailure();
-    } else {
-      ErrorMessage(
-        res?.data?.message || "No attachable found for this expense"
-      );
+      window.open(link, "_blank", "noreferrer");
     }
   };
 
@@ -104,7 +38,7 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense, onQBAuthFailure }) => {
             <span>{expense.qbSupplierName}</span>
           </div>
           {expense.qbSupplierName && !expense.qbSupplierId && (
-            <span className="ant-form-item-explain-error orage">
+            <span className="ant-form-item-explain-error">
               This supplier is not present in the Quickbooks
             </span>
           )}
@@ -149,27 +83,21 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense, onQBAuthFailure }) => {
 
       <Row gutter={[16, 16]} justify="space-between">
         <Col xs={24} sm={24} md={15}>
-          {(expense.qbAttachableFileName || expense.attachmentUrl) && (
+          {expense.attachmentUrl && (
             <FilePreview
               fileName={
-                expense.qbAttachableFileName ||
                 expense.attachmentUrl.split("/")[
                   expense.attachmentUrl.split("/").length - 1
                 ]
               }
-              onClick={downloadFile}
-              disabled={isLoadingFromServer || isLoadingFromQB}
+              onClick={() => handleDownloadFile(expense.attachmentUrl)}
               suffixIcon={
-                isLoadingFromServer || isLoadingFromQB ? (
-                  <LoadingOutlined width={14} className="text-sm text-ox-red" />
-                ) : (
-                  <Image
-                    src={"/icons/download_2.svg"}
-                    alt=""
-                    width={14}
-                    preview={false}
-                  />
-                )
+                <Image
+                  src="/icons/download_2.svg"
+                  alt=""
+                  width={14}
+                  preview={false}
+                />
               }
             />
           )}

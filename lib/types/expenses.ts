@@ -59,34 +59,9 @@ export type Expense = {
   hasEbm: boolean;
   id: number;
   depot: depotTypes;
-  qbAttachableId: string | null;
-  qbAttachableFileName: string | null;
-};
-
-export type PostExpense = {
-  qbAccountId: string;
-  qbCategoryId: string;
-  qbSupplierId: string;
-  qbSupplierName: string;
-  qbTruckId: string;
-  qbTruckName: string;
-  qbPaymentMethodId: string;
-  description: string;
-  depotId: number;
-  date: string;
-  amount: number;
-  attachmentUrl: string;
-  qbPaymentType: string;
-  qbLocationId: string;
-  hasEbm: boolean;
-  file: File;
 };
 
 export type PostExpenseRequest = {
-  formData: FormData;
-};
-
-export type EditExpense = {
   qbAccountId: string;
   qbCategoryId: string;
   qbSupplierId: string;
@@ -102,12 +77,25 @@ export type EditExpense = {
   qbPaymentType: string;
   qbLocationId: string;
   hasEbm: boolean;
-  file: File;
 };
 
 export type EditExpenseRequest = {
   id: number;
-  formData: FormData;
+  qbAccountId: string;
+  qbCategoryId: string;
+  qbSupplierId: string;
+  qbSupplierName: string;
+  qbTruckId: string;
+  qbTruckName: string;
+  qbPaymentMethodId: string;
+  description: string;
+  depotId: number;
+  date: string;
+  amount: number;
+  attachmentUrl: string;
+  qbPaymentType: string;
+  qbLocationId: string;
+  hasEbm: boolean;
 };
 
 export type DeleteExpenseRequest = {
@@ -116,10 +104,6 @@ export type DeleteExpenseRequest = {
 
 export type ApproveExpenseRequest = {
   ids: number[];
-};
-
-export type DownloadExpenseRequest = {
-  id: number;
 };
 
 export type GetExpenses = {

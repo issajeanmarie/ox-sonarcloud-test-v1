@@ -6,7 +6,6 @@ interface FilePreviewProps {
   fileName: string;
   suffixIcon: React.ReactElement;
   onClick?: (value: any) => any;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -14,7 +13,6 @@ const FilePreview: FC<FilePreviewProps> = ({
   fileName,
   suffixIcon,
   onClick,
-  disabled,
   className
 }) => {
   return (
@@ -36,7 +34,6 @@ const FilePreview: FC<FilePreviewProps> = ({
         className="file_peview button"
         icon={suffixIcon}
         onClick={onClick}
-        disabled={disabled}
       />
     </div>
   );

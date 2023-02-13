@@ -20,7 +20,9 @@ const TimeOverviewCard: FC<Props> = ({ data }) => {
   });
 
   const shiftStartingTime = splitDates(
-    data?.profileInfo ? `${data?.profileInfo?.ongoingShift?.startDateTime}` : ""
+    data?.profileInfo
+      ? `${data?.profileInfo?.ongoingShift?.startDateTime}Z`
+      : ""
   );
 
   useEffect(() => {

@@ -5,13 +5,11 @@ import { s3Clients } from "../../../helpers/AWSClient";
 
 interface FileUploaderProps {
   label?: string;
-  uploadLoading?: boolean;
-  setUploadLoading?: (value: boolean) => void;
+  uploadLoading: boolean;
+  setUploadLoading: (value: boolean) => void;
   setUploadFailure?: (err: any) => void;
   setUploadedPicInfo?: (value: string) => void;
   setUploadSuccess?: (value: boolean) => void;
-  onFileChange?: (files: File[]) => void;
-  uploadFile?: boolean;
   validations?: string[];
   className?: string;
 }
@@ -23,8 +21,6 @@ const FileUploader: FC<FileUploaderProps> = ({
   setUploadFailure,
   setUploadedPicInfo,
   setUploadSuccess,
-  onFileChange,
-  uploadFile = true,
   validations,
   className
 }) => {
@@ -32,13 +28,9 @@ const FileUploader: FC<FileUploaderProps> = ({
     if (!files.length) {
       return;
     }
-    if (!uploadFile && onFileChange) {
-      onFileChange(files);
-      return;
-    }
+    setUploadLoading && setUploadLoading(true);
 
     // S3 TO UPLOAD
-    setUploadLoading && setUploadLoading(true);
     s3Clients.s3UploadFile(
       files[0],
       setUploadLoading,

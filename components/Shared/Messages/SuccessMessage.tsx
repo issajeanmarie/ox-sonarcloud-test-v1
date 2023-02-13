@@ -5,7 +5,9 @@ export const SuccessMessage = (text: string | undefined) => {
     <>
       {notification["success"]({
         message: "Notification",
-        description: text ? text : "Operation successful!",
+        description: text
+          ? text
+          : "Something is wrong. Please report this error",
         placement: "bottomRight"
       })}
     </>
