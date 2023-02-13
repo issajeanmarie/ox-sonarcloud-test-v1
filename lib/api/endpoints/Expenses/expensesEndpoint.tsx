@@ -8,8 +8,7 @@ import {
   EditExpenseRequest,
   PostExpenseRequest,
   QBSchema,
-  ApproveExpenseRequest,
-  DownloadExpenseRequest
+  ApproveExpenseRequest
 } from "../../../types/expenses";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -35,10 +34,10 @@ const expensesApi = baseAPI.injectEndpoints({
       GetExpenses
     >({
       providesTags: ["Expenses"],
-      query: ({ page, size, sort }) => ({
-        url: `/quickbooks-expenses?page=${page || "0"}&size=${
-          size || ""
-        }&sort=${sort || ""}`,
+      query: (DTO) => ({
+        url: `/quickbooks-expenses?page=${DTO?.page || "0"}&size=${
+          DTO?.size || ""
+        }&sort=${DTO?.sort || ""}`,
         method: "GET"
       })
     }),
@@ -47,10 +46,10 @@ const expensesApi = baseAPI.injectEndpoints({
       PostExpenseRequest
     >({
       invalidatesTags: ["Expenses"],
-      query: ({ formData }) => ({
+      query: (DTO) => ({
         url: `/quickbooks-expenses`,
         method: "POST",
-        body: formData
+        body: DTO
       })
     }),
     deleteExpense: builder.mutation<
@@ -58,8 +57,8 @@ const expensesApi = baseAPI.injectEndpoints({
       DeleteExpenseRequest
     >({
       invalidatesTags: ["Expenses"],
-      query: ({ ids }) => ({
-        url: `/quickbooks-expenses?${buildQueryFromArray("ids", ids)}`,
+      query: (DTO) => ({
+        url: `/quickbooks-expenses?${buildQueryFromArray("ids", DTO.ids)}`,
         method: "DELETE"
       })
     }),
@@ -68,10 +67,10 @@ const expensesApi = baseAPI.injectEndpoints({
       EditExpenseRequest
     >({
       invalidatesTags: ["Expenses"],
-      query: ({ id, formData }) => ({
-        url: `/quickbooks-expenses/${id || ""}`,
+      query: (DTO) => ({
+        url: `/quickbooks-expenses/${DTO?.id || ""}`,
         method: "PATCH",
-        body: formData
+        body: DTO
       })
     }),
     suppliers: builder.query<ApiResponseMetadata<{ content: QBSchema }>, void>({
@@ -131,25 +130,6 @@ const expensesApi = baseAPI.injectEndpoints({
         method: "PATCH",
         body: DTO
       })
-    }),
-    downloadFromServer: builder.query<File, DownloadExpenseRequest>({
-      query: ({ id }) => ({
-        url: `quickbooks-expenses/${id}/attachable/server/download`,
-        method: "GET",
-        headers: {
-          "content-type": "application/octet-stream"
-        },
-        responseHandler: (response) => response.blob()
-      })
-    }),
-    downloadFromQB: builder.query<
-      ApiResponseMetadata<string>,
-      DownloadExpenseRequest
-    >({
-      query: ({ id }) => ({
-        url: `quickbooks-expenses/${id}/attachable/qb/download`,
-        method: "GET"
-      })
     })
   })
 });
@@ -166,7 +146,5 @@ export const {
   usePaymentMethodsQuery,
   useAccountsQuery,
   useCategoriesQuery,
-  useApproveMutation,
-  useLazyDownloadFromServerQuery,
-  useLazyDownloadFromQBQuery
+  useApproveMutation
 } = expensesApi;

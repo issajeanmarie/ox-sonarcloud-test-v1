@@ -18,7 +18,6 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { SingleTruckTypes } from "../../../lib/types/trucksTypes";
 import { dateDisplay } from "../../../utils/dateFormatter";
-import NearByClientsModal from "../../Modals/NearByClientsModal";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -39,12 +38,6 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
   const [editTruckData, setEditTruckData] = useState();
   const [isGetSingleTruckLoading, setIsGetSingleTruckLoading] = useState(null);
   const [isUserEditing, setIsUserEditing] = useState(false);
-  const [activeTruck, setActiveTruck] = useState<null | {
-    id: number;
-    plateNumber: string;
-  }>(null);
-  const [isNearByClientsModalVisible, setIsNearByClientsModalVisible] =
-    useState(false);
 
   const router = useRouter();
 
@@ -115,14 +108,6 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
     });
   };
 
-  const handleViewNearByClientsModal = (record: {
-    id: number;
-    plateNumber: string;
-  }) => {
-    setActiveTruck(record);
-    setIsNearByClientsModalVisible(true);
-  };
-
   return (
     <>
       <NewTruckModal
@@ -132,13 +117,6 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
         setEditTruckData={setEditTruckData}
         isUserEditing={isUserEditing}
         setIsUserEditing={setIsUserEditing}
-      />
-
-      <NearByClientsModal
-        activeTruck={activeTruck}
-        setActiveTruck={setActiveTruck}
-        isVisible={isNearByClientsModalVisible}
-        setIsVisible={setIsNearByClientsModalVisible}
       />
 
       {isLoading ? (
@@ -160,7 +138,7 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
           scroll={{ x: 0 }}
         >
           <Column
-            width="10%"
+            width="4%"
             key="key"
             title="#"
             render={(
@@ -295,24 +273,6 @@ const TrucksTable: FC<TrucksProps> = ({ data, isLoading }) => {
             render={(record: any) => {
               const child = (
                 <Row align="middle" gutter={16} wrap={false}>
-                  <Col
-                    className="my-[-12px]"
-                    onClick={() => handleViewNearByClientsModal(record)}
-                  >
-                    <CustomButton
-                      type="normal"
-                      size="icon"
-                      icon={
-                        <Image
-                          src="/icons/radar.svg"
-                          alt=""
-                          width={12}
-                          preview={false}
-                        />
-                      }
-                    />
-                  </Col>
-
                   <Col
                     className="my-[-12px]"
                     onClick={() => handleEditTruckModal(record)}

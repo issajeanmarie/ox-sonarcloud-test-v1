@@ -8,5 +8,4 @@ export type ExpensesTableProps = {
   showEditModal: (record: Expense) => void;
   showDeleteModal: (id: number) => void;
   showApproveModal: (id: number) => void;
-  onQBAuthFailure: () => void;
 };
