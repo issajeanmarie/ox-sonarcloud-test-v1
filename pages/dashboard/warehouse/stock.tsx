@@ -38,7 +38,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch, useSelector } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { pagination } from "../../../config/pagination";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import BatchesModal from "../../../components/Modals/BatchesModal";
 import { useDownloadAnalyticsReportMutation } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
 import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
@@ -417,11 +417,20 @@ const Stock = () => {
                     </CardRowWrapper>
                   </>
                 ) : (
-                  <CardRowWrapper active="STOCK">
+                  <CardRowWrapper
+                    cardsNumber={stockCategories?.payload?.content?.length}
+                    active="STOCK"
+                  >
                     {stockCategories?.payload?.content
                       ?.slice(0, 5)
                       ?.map((item: any) => (
-                        <CardColWrapper key={item?.name} active="STOCK">
+                        <CardColWrapper
+                          cardsNumber={
+                            stockCategories?.payload?.content?.length
+                          }
+                          key={item?.name}
+                          active="STOCK"
+                        >
                           <StockMediumCard
                             showBatchesModal={showBatchesModal}
                             title={item?.categoryName}
@@ -450,6 +459,7 @@ const Stock = () => {
                               width="16"
                               height="16"
                               alt=""
+                              preview={false}
                             />
                           </div>
 

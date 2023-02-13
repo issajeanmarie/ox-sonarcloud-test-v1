@@ -45,7 +45,7 @@ const SalesPage = () => {
 
   const handleRenderSuccess = (res: any) => {
     setIsFilterModalVisible(false);
-    dispatch(displayPaginatedData({ payload: res, onRender: true }));
+    res && dispatch(displayPaginatedData({ payload: res, onRender: true }));
   };
 
   useEffect(() => {
@@ -162,7 +162,7 @@ const SalesPage = () => {
           showModal={showModal}
           setIsModalVisible={setIsModalVisible}
           isModalVisible={isModalVisible}
-          totalElements={apiData?.payload?.totalElements}
+          totalElements={apiData?.payload?.totalElements || 0}
           isSalesLoading={onRenderLoader}
           setCurrentPages={setCurrentPages}
           getSalesAction={getSalesAction}

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Sale,
-  SaleResponse,
   EditSaleLocationRequest,
   GetSale,
   PostSaleRequest,
   CancelSaleRequest,
   GetSales,
   PostSalePaymentRequest,
-  EditSaleTransactionRequest
+  EditSaleTransactionRequest,
+  SalesResponse,
+  SingleSale
 } from "../../../types/Warehouses/Sales/sale";
 import { ApiResponseMetadata } from "../../../types/shared";
 import { baseAPI } from "../../api";
@@ -23,10 +23,7 @@ import { PostSaleItemRequest } from "../../../types/Warehouses/Warehouse/stock";
 
 const salesEndpoints = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
-    sales: builder.query<
-      ApiResponseMetadata<{ content: SaleResponse }>,
-      GetSales
-    >({
+    sales: builder.query<SalesResponse, GetSales>({
       providesTags: ["Sales"],
       query: (DTO) => ({
         url: `sales?page=${DTO.page || ""}&size=${DTO.size || ""}&depot=${
@@ -39,8 +36,9 @@ const salesEndpoints = baseAPI.injectEndpoints({
         method: "GET"
       })
     }),
+
     saleDetails: builder.query<
-      ApiResponseMetadata<{ content: SaleResponse }>,
+      ApiResponseMetadata<{ content: SingleSale }>,
       GetSale
     >({
       providesTags: ["Sales", "MoMoPayment", "CancelSale"],
@@ -56,7 +54,10 @@ const salesEndpoints = baseAPI.injectEndpoints({
         method: "GET"
       })
     }),
-    postSale: builder.mutation<ApiResponseMetadata<Sale>, PostSaleRequest>({
+    postSale: builder.mutation<
+      ApiResponseMetadata<SingleSale>,
+      PostSaleRequest
+    >({
       invalidatesTags: [],
       query: (DTO) => ({
         url: `/sales`,
@@ -66,7 +67,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
     }),
 
     postSalePayment: builder.mutation<
-      ApiResponseMetadata<Sale>,
+      ApiResponseMetadata<SingleSale>,
       { orderId: number; data: PostSalePaymentRequest }
     >({
       invalidatesTags: ["Sales"],
@@ -77,7 +78,10 @@ const salesEndpoints = baseAPI.injectEndpoints({
       })
     }),
 
-    cancelSale: builder.mutation<ApiResponseMetadata<Sale>, CancelSaleRequest>({
+    cancelSale: builder.mutation<
+      ApiResponseMetadata<SingleSale>,
+      CancelSaleRequest
+    >({
       invalidatesTags: ["CancelSale"],
       query: (DTO) => ({
         url: `/sales/${DTO?.id}/cancel`,
@@ -85,7 +89,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
       })
     }),
     editSale: builder.mutation<
-      ApiResponseMetadata<Sale>,
+      ApiResponseMetadata<SingleSale>,
       EditSaleLocationRequest
     >({
       invalidatesTags: ["Sales"],
@@ -96,7 +100,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
       })
     }),
     editSaleTransaction: builder.mutation<
-      ApiResponseMetadata<Sale>,
+      ApiResponseMetadata<SingleSale>,
       EditSaleTransactionRequest
     >({
       invalidatesTags: ["Sales"],
@@ -108,7 +112,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
     }),
 
     addSaleItem: builder.mutation<
-      ApiResponseMetadata<Sale>,
+      ApiResponseMetadata<SingleSale>,
       PostSaleItemRequest
     >({
       invalidatesTags: ["Sales", "AddSaleItem"],
@@ -120,7 +124,7 @@ const salesEndpoints = baseAPI.injectEndpoints({
     }),
 
     deleteSaleItem: builder.mutation<
-      ApiResponseMetadata<Sale>,
+      ApiResponseMetadata<SingleSale>,
       PostSaleItemRequest
     >({
       invalidatesTags: ["Sales", "AddSaleItem"],

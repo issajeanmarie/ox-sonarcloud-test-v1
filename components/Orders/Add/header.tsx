@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import Button from "../../Shared/Button";
 import { useRouter } from "next/router";
 import { FormInstance } from "antd/lib/form/Form";
@@ -35,11 +35,12 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const LeftSide = (
     <div className="flex items-center gap-4 ">
       <Image
-        className="pointer"
+        className="pointer go-back-to-orders"
         src="/icons/keyboard_backspace_black_24dp.svg"
         alt="Backspace icon"
         width={20}
         height={20}
+        preview={false}
         onClick={() => router.push(routes.Orders.url)}
       />
       <span className="heading2">Orders</span>
@@ -72,8 +73,9 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
           <div className="mt-10">
             <Image
               width={100}
-              alt="Create order successful"
               height={100}
+              preview={false}
+              alt="Create order successful"
               src="/icons/create-order.svg"
             />
           </div>

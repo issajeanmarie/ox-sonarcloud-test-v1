@@ -40,8 +40,8 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
             </CardRowWrapper>
           </>
         ) : (
-          <CardRowWrapper active={active}>
-            <CardColWrapper active={active}>
+          <CardRowWrapper cardsNumber={6} active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 scope="CLIENTS"
                 start={start}
@@ -51,12 +51,12 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   revenueData?.totalCustomers &&
                   numbersFormatter(revenueData?.totalCustomers)
                 } total clients`}
-                count={revenueData?.totalServedCustomers}
+                count={revenueData?.totalServedCustomers || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
 
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 scope="REVENUE"
                 start={start}
@@ -67,18 +67,17 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   numbersFormatter(revenueData?.totalSalesRevenue)
                 } Rwf (${revenuePercentageCalculator(
                   revenueData?.totalSalesRevenue,
-                  revenueData?.totalRevenueByJob +
-                    revenueData?.totalSalesRevenue
+                  revenueData?.totalRevenue + revenueData?.totalSalesRevenue
                 )}%) warehouse sales`}
                 count={
-                  revenueData?.totalRevenueByJob +
-                  revenueData?.totalSalesRevenue
+                  revenueData?.totalRevenue + revenueData?.totalSalesRevenue ||
+                  0
                 }
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
 
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 title="Cash collected"
                 subTitle={`${
@@ -88,11 +87,11 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   revenueData?.totalCollectedAmountPaidByKg,
                   revenueData?.totalCollectedAmount
                 )}%) paid per KG`}
-                count={revenueData?.totalCollectedAmount}
+                count={revenueData?.totalCollectedAmount || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 scope="DISTANCE"
                 start={start}
@@ -105,12 +104,12 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   revenueData?.totalDistance,
                   revenueData?.totalDistanceByJobs
                 )}%) with cargo`}
-                count={revenueData?.totalDistance}
+                count={revenueData?.totalDistance || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
 
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 scope="HOURS_BY_JOB"
                 start={start}
@@ -123,16 +122,16 @@ const AnalyticRevenues: FC<AnalyticRevenuesTypes> = ({
                   revenueData?.totalHoursByJobs,
                   revenueData?.totalHours
                 )}%) with cargo`}
-                count={revenueData?.totalHours}
+                count={revenueData?.totalHours || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>
 
-            <CardColWrapper active={active}>
+            <CardColWrapper cardsNumber={6} active={active}>
               <MediumCard
                 title="Total weight in KG"
                 subTitle="..."
-                count={revenueData?.totalWeight}
+                count={revenueData?.totalWeight || 0}
                 isFetching={revenueFetching}
               />
             </CardColWrapper>

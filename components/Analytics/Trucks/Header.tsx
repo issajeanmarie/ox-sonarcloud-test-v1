@@ -28,7 +28,8 @@ type TrucksHoverTypes = {
 const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   truckData,
   isPageLoading,
-  setIsVisible
+  setIsVisible,
+  setCurrentTruckData
 }) => {
   const router = useRouter();
   const { id: truckId } = router.query;
@@ -98,6 +99,11 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
 
     setSelectedTruck(foundTruck);
   }, [allTrucks, truckId]);
+
+  const showModal = () => {
+    setCurrentTruckData(selectedTruck);
+    setIsVisible(true);
+  };
 
   const menu = (
     <div className="radius4 h-[500px] myCard p-6 py-12 bg-white rounded shadow-[0px_0px_19px_#2A354808] border">
@@ -245,7 +251,7 @@ const ViewTruckHeader: FC<ViewTruckHeaderTypes> = ({
   );
 
   const MaintenanceRightSide = (
-    <Button type="primary" onClick={() => setIsVisible(true)}>
+    <Button type="primary" onClick={showModal}>
       New Inspection
     </Button>
   );

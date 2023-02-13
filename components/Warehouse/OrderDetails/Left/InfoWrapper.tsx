@@ -1,12 +1,17 @@
+import { Typography } from "antd";
 import Link from "next/link";
 import React, { FC } from "react";
 import { routes } from "../../../../config/route-config";
+
+const { Text } = Typography;
 
 type InfoWrapperTypes = {
   title: string;
   infoItem: string;
   isTransportOrder: boolean;
   batchId?: number;
+  isLink?: boolean;
+  redirectTo?: string | number;
 };
 
 type OrderSummaryInfoWrapperTypes = {
@@ -21,7 +26,7 @@ const InfoWrapper: FC<InfoWrapperTypes> = ({
   batchId
 }) => {
   return (
-    <div className={`flex gap-12 mb-2`}>
+    <div className={`flex gap-12 mb-2 items-center`}>
       <div className="w-1/6">
         <span className="font-bold text-sm text_ellipsis">{title}:</span>
       </div>
@@ -64,16 +69,16 @@ export const OrderSummaryInfoWrapper: FC<OrderSummaryInfoWrapperTypes> = ({
 }) => {
   return (
     <div className={`flex gap-4 ${title !== "Email" && "mb-4"} items-center`}>
-      <div className="w-1/5">
+      <div className="w-1/4">
         <span className="font-bold text-sm">{title}:</span>
       </div>
-      <span
+      <Text
         className={`text-sm ${
           infoItem === "PENDING" ? "font-bold text-[#ED7818]" : "opacity-50"
         }   `}
       >
         {infoItem}
-      </span>
+      </Text>
     </div>
   );
 };

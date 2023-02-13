@@ -1,11 +1,17 @@
 /* eslint-disable react/no-unescaped-entities */
-import Image from "next/image";
+import Image from "antd/lib/image";
 import React from "react";
 
 const NetworkError = () => {
   return (
     <div className="flex justify-center items-center flex-col">
-      <Image src="/noInternet.svg" alt="" width="100px" height="100px" />
+      <Image
+        src="/noInternet.svg"
+        alt=""
+        width="100px"
+        height="100px"
+        preview={false}
+      />
       <div className="mt-4 flex justify-center flex-col items-center">
         <span className="text-black">Connect to the internet</span>
         <span className="font-light text-base">

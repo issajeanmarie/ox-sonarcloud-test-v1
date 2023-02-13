@@ -80,7 +80,11 @@ const MobilePayment: FC<MobilePaymentProps> = ({
       handleAPIRequests({
         request: initiatePayment,
         orderId: order.id,
-        data: { ...values, phone: phoneNumber.replace("+", "") },
+        data: {
+          ...values,
+          phone: phoneNumber.replace("+", ""),
+          triggeredFrom: "PORTAL"
+        },
         endpoint,
         handleSuccess: handleNonSocketSuccess,
         handleFailure: handleNonSocketFailure

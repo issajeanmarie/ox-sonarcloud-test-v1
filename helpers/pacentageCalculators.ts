@@ -4,7 +4,7 @@
  * @since Aug 19 2022
  */
 
-const toMyFixed = (num: number) => num.toFixed(2).replace(/[.,]00$/, "");
+export const toMyFixed = (num: number) => num.toFixed(2).replace(/[.,]00$/, "");
 
 export const truckPercentageCalculator = (current: number, prev: number) => {
   try {
@@ -49,7 +49,7 @@ export const revenuePercentageCalculator = (
   allRevenue: number
 ) => {
   try {
-    const percentage = (totalSales / allRevenue) * 100;
+    const percentage = totalSales ? (totalSales / allRevenue) * 100 : 0;
     return toMyFixed(percentage);
   } catch (error) {
     return error;

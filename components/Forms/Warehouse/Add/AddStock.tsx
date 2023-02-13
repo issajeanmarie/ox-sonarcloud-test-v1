@@ -6,7 +6,7 @@ import {
   requiredInput
 } from "../../../../lib/validation/InputValidations";
 import Input from "../../../Shared/Input";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { AddStockTypes } from "../../../../lib/types/warehouse";
 import { useSelector } from "react-redux";
 import CircleCheckbox from "../../../Shared/Custom";
@@ -75,6 +75,7 @@ const AddStock: FC<AddStockTypes> = ({
                 alt=""
                 width={18}
                 height={18}
+                preview={false}
               />
             }
             rules={[{ required: true, message: "Select date" }]}
@@ -201,6 +202,7 @@ const AddStock: FC<AddStockTypes> = ({
                 alt=""
                 width={18}
                 height={18}
+                preview={false}
               />
             }
             rules={[{ required: true, message: "Select date" }]}

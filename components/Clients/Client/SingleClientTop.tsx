@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Col, Image as AntDImage } from "antd";
-import Image from "next/image";
 import React, { FC, SetStateAction, useState } from "react";
 import { routes } from "../../../config/route-config";
 import {
@@ -58,13 +57,14 @@ const SingleClientTop: FC<SingleClientTopTypes> = ({ client, router }) => {
 
   const LeftSide = (
     <div className="flex items-center gap-4 ">
-      <Image
+      <AntDImage
         onClick={() => router.push(routes.Clients.url)}
         className="pointer"
         src="/icons/keyboard_backspace_black_24dp.svg"
         alt="Backspace icon"
         width={20}
         height={20}
+        preview={false}
       />
       <span className="text-md font-bold">Clients</span>
       <span className="normalText">/</span>

@@ -58,6 +58,12 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
               isTransportOrder={false}
             />
           )}
+
+          <InfoWrapper
+            title="TIN Number"
+            infoItem={sale?.client?.tinNumber || "N/A"}
+            isTransportOrder={false}
+          />
         </div>
 
         <div className="w-full mt-9">
@@ -86,9 +92,7 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                     item?.weight || 0
                   )} KGs / ${Math.round(item?.weight / 50)} ${
                     item?.weight > 50 ? "Bags" : "Bag"
-                  } - ${numbersFormatter(
-                    item?.warehouseItem?.unitSellingPrice || 0
-                  )} Rwf/Kg`}
+                  }`}
                   isTransportOrder={false}
                 />
 
@@ -113,15 +117,58 @@ const SingleOrderLeft: FC<SingleOrderLeftTypes> = ({ sale }) => {
                   )} Rwf`}
                   isTransportOrder={false}
                 />
+
+                <InfoWrapper
+                  title="Unit selling price"
+                  infoItem={`${numbersFormatter(
+                    (item?.unitSellingPrice * item?.weight) /
+                      (item?.weight / 50)
+                  )} Rwf`}
+                  isTransportOrder={false}
+                />
               </div>
             ))}
 
           {sale?.transportOrder?.id && (
-            <InfoWrapper
-              title="Transport Ref"
-              infoItem={sale?.transportOrder?.id}
-              isTransportOrder={true}
-            />
+            <>
+              <InfoWrapper
+                title="Transport Ref"
+                infoItem={sale?.transportOrder?.id}
+                isTransportOrder={true}
+              />
+
+              <InfoWrapper
+                title="Order value"
+                infoItem={
+                  sale?.transportOrder?.totalAmount
+                    ? `${numbersFormatter(
+                        sale?.transportOrder?.totalAmount || 0
+                      )} Rwf`
+                    : "N/A"
+                }
+                isTransportOrder={false}
+              />
+
+              <InfoWrapper
+                title="Truck"
+                infoItem={
+                  (sale?.transportOrder?.stops?.length &&
+                    sale?.transportOrder?.stops[0]?.truck?.plateNumber) ||
+                  "N/A"
+                }
+                isTransportOrder={false}
+              />
+
+              <InfoWrapper
+                title="Driver"
+                infoItem={
+                  (sale?.transportOrder?.stops?.length &&
+                    sale?.transportOrder?.stops[0]?.driver?.names) ||
+                  "N/A"
+                }
+                isTransportOrder={false}
+              />
+            </>
           )}
         </div>
       </Row>

@@ -2,9 +2,18 @@
 import { useEffect, useState } from "react";
 import { Checkbox, Col, Row } from "antd";
 import React from "react";
-import Input from "../Shared/Input/input";
+import Image from "antd/lib/image";
+import Form from "antd/lib/form";
+import Input from "../Shared/Input";
+import { useForm } from "antd/lib/form/Form";
+import moment from "moment";
+import { yearDateFormat } from "../../config/dateFormats";
 
-const MaintenanceCheckSummary = ({ summary, setSummary }: any) => {
+const MaintenanceCheckSummary = ({
+  summary,
+  setSummary,
+  setChecklistDate
+}: any) => {
   const [overallStatus, setOverallStatus] = useState("NOT_APPLICABLE");
 
   const handleMileageChange = (value: number) => {
@@ -23,18 +32,53 @@ const MaintenanceCheckSummary = ({ summary, setSummary }: any) => {
     setSummary({ ...summary, overallCondition: overallStatus });
   }, [overallStatus, setSummary]);
 
+  const onStartDateChange = (_: string, date: string) => {
+    setChecklistDate(date);
+  };
+
+  const [form] = useForm();
+
+  form.setFieldsValue({
+    date: moment(moment(), yearDateFormat)
+  });
+
   return (
-    <>
-      <div className="mb-6">
-        <Input
-          name="mileage"
-          type="text"
-          placeholder="00"
-          label="Mileage"
-          inputType="number"
-          suffixIcon="KMs"
-          onChange={(value: number) => handleMileageChange(value)}
-        />
+    <Form
+      name="Filter orders"
+      form={form}
+      layout="vertical"
+      title="FILTER ORDERS"
+    >
+      <div className="flex w-[100%] gap-12">
+        <div className="mb-6 flex-1">
+          <Input
+            onDateChange={onStartDateChange}
+            type="date"
+            name="date"
+            label="Date"
+            placeholder="Date"
+            suffixIcon={
+              <Image
+                preview={false}
+                src="/icons/ic-actions-calendar.svg"
+                alt=""
+                width={18}
+              />
+            }
+          />
+        </div>
+
+        <div className="mb-6 flex-1">
+          <Input
+            name="mileage"
+            type="text"
+            placeholder="00"
+            label="Mileage"
+            inputType="number"
+            suffixIcon="KMs"
+            onChange={(value: number) => handleMileageChange(value)}
+          />
+        </div>
       </div>
 
       <div className="mb-6">
@@ -129,7 +173,7 @@ const MaintenanceCheckSummary = ({ summary, setSummary }: any) => {
           </Col>
         </Row>
       </div>
-    </>
+    </Form>
   );
 };
 

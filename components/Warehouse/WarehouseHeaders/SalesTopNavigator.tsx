@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import { SalesTopNavigatorTypes } from "../../../lib/types/pageTypes/Warehouse/Sales/SalesTopNavigator";
 import Navbar from "../../Shared/Content/Navbar";
 import Heading1 from "../../Shared/Text/Heading1";
@@ -81,8 +81,8 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
 
   const [postSale, { isLoading: isPostingSale }] = usePostSaleMutation();
 
-  const handleAddSaleSuccess = ({ payload }: any) => {
-    dispatch(displayPaginatedData({ payload: { ...payload } }));
+  const handleAddSaleSuccess = (res: any) => {
+    res && dispatch(displayPaginatedData({ payload: res }));
 
     form.resetFields();
     setIsModalVisible(false);
@@ -148,6 +148,7 @@ const SalesTopNavigator: FC<SalesTopNavigatorTypes> = ({
           onClick={showFilterModal}
           className="cursor-pointer"
           alt="Filter icon"
+          preview={false}
         />
       </div>
 

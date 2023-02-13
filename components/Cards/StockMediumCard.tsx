@@ -31,15 +31,17 @@ const StockMediumCard: FC<StockMediumCardTypes> = ({
   return (
     <>
       <Card
-        className="radius4 shadow-[0px_0px_19px_#00000008]"
+        className="radius4 shadow-[0px_0px_19px_#00000008] min-h-[190px] relative"
         headStyle={{ border: "none", marginBottom: "0" }}
         bodyStyle={{ padding: "0", overflow: "hidden" }}
         style={{ width: "auto", border: "1px solid #EAEFF2" }}
         title={
           <div className="flex flex-col">
-            <Text className="text-base font-light">{title}</Text>
+            <Text className="text-base font-light whitespace-nowrap overflow-hidden text-ellipsis">
+              {title}
+            </Text>
             {depotsState?.depotId ? (
-              <Text className="text-sm font-light opacity_56">
+              <Text className="text-sm font-light opacity_56 whitespace-nowrap overflow-hidden text-ellipsis">
                 {depotsState?.depotName}
               </Text>
             ) : (
@@ -81,7 +83,7 @@ const StockMediumCard: FC<StockMediumCardTypes> = ({
           </Text>
 
           <Text className="captionText">
-            {isFetching ? `Hold on, getting you ${title}...` : subTitle}
+            {isFetching ? `Hold on...` : subTitle}
           </Text>
         </div>
 
@@ -90,7 +92,7 @@ const StockMediumCard: FC<StockMediumCardTypes> = ({
           justify="space-between"
           gutter={12}
           align="middle"
-          className="bg-[#FEFBF3] py-4 px-6 pointer"
+          className="bg-[#FEFBF3] py-4 px-6 pointer absolute bottom-0 left-[6px] right-[6px]"
         >
           <Col className="text-base font-light">See batches</Col>
 

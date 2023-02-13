@@ -1,6 +1,6 @@
 import React, { FC, useState, Fragment } from "react";
 import { Query } from "../../../lib/types/shared";
-import Image from "next/image";
+import Image from "antd/lib/image";
 import Button from "../../Shared/Button";
 import { useRouter } from "next/router";
 import ActionModal from "../../Shared/ActionModal";
@@ -41,7 +41,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
   const [isCancelModalVisible, setIsCancelModalVisible] =
     useState<boolean>(false);
 
-  const [isReceipientCodeModalVisible, setIsReceipientCodeModalVisible] =
+  const [isRecipientCodeModalVisible, setIsRecipientCodeModalVisible] =
     useState<boolean>(false);
 
   const [isConfirmCompleteOrder, setIsConfirmCompleteOrder] =
@@ -94,6 +94,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         alt="Backspace icon"
         width={20}
         height={20}
+        preview={false}
         onClick={() => router.push(routes.Orders.url)}
       />
       <span className="text-md font-bold">Orders</span>
@@ -117,16 +118,20 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
             onClick={() => canUserDelete && downloadOrderInvoice()}
             width={18}
             height={18}
+            preview={false}
           />
         )}
+
         <Image
           className="cursor-pointer"
           src="/icons/code.svg"
           alt="Backspace icon"
           width={16}
           height={16}
-          onClick={() => setIsReceipientCodeModalVisible(true)}
+          preview={false}
+          onClick={() => setIsRecipientCodeModalVisible(true)}
         />
+
         <Image
           className={
             canUserDelete ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
@@ -135,6 +140,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
           alt="Backspace icon"
           width={20}
           height={20}
+          preview={false}
           onClick={() => canUserDelete && setIsCancelModalVisible(true)}
         />
         <button
@@ -190,8 +196,8 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
         loading={orderStatusLoading}
       />
       <ReceipientCodeModal
-        isModalVisible={isReceipientCodeModalVisible}
-        setIsModalVisible={setIsReceipientCodeModalVisible}
+        isModalVisible={isRecipientCodeModalVisible}
+        setIsModalVisible={setIsRecipientCodeModalVisible}
         code={code}
       />
       <MobilePayment

@@ -39,7 +39,21 @@ export const baseAPI = createApi({
     "DeleteRepairService",
     "UpdateRepairService",
     "oxAppRelease",
-    "MaintenanceCheck"
+    "MaintenanceCheck",
+    "ToggleDriver",
+    "EditDriver",
+    "EndShift",
+    "EditDepot",
+    "GetFlags",
+    "GetSingleFlag",
+    "ExpensesAuthorize",
+    "Expenses",
+    "QBSuppliers",
+    "QBTrucks",
+    "QBLocations",
+    "QBPaymentMethods",
+    "QBAccounts",
+    "QBCategories"
   ],
   endpoints: () => ({})
 });

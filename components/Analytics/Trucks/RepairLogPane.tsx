@@ -13,7 +13,6 @@ import {
   useDeleteTruckRepairLogMutation
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useRouter } from "next/router";
-import { numbersFormatter } from "../../../helpers/numbersFormatter";
 import Loader from "../../Shared/Loader";
 import { SingleLogTypes } from "../../../lib/types/trucksTypes";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +20,7 @@ import NewRepairLogModal from "../../Modals/NewRepairLogModal";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
 import { Empty } from "antd";
+import { abbreviateNumber } from "../../../utils/numberFormatter";
 
 const { Panel } = Collapse;
 
@@ -221,7 +221,7 @@ const RepairLogPane = () => {
                               <span className="text-gray-400">{index + 1}</span>
                             </Col>
 
-                            <Col md={2} lg={9} className="text_ellipsis">
+                            <Col md={2} lg={7} className="text_ellipsis">
                               <span className="text font-bold text-ox-dark">
                                 {data.serviceDone}
                               </span>
@@ -242,7 +242,7 @@ const RepairLogPane = () => {
                         <Col style={{ marginRight: "-24px" }}>
                           <Row align="middle" justify="end" gutter={12}>
                             <Col>
-                              <span>{numbersFormatter(data.cost)} Rwf</span>
+                              <span>{abbreviateNumber(data.cost)} Rwf</span>
                             </Col>
 
                             <Col>

@@ -66,7 +66,8 @@ You will also see any lint errors in the console.
 - Elie
 - Yannick Fleury
 - Lionel Mpfizi
+- Brian Gitego
 
 ## Copyright
 
-Copyright © 2022 Awesomity Lab
+Copyright © 2022 Awesomity Lab.

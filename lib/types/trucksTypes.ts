@@ -197,6 +197,7 @@ export interface SingleMaintenanceInterface {
   lightingDevices: BrakeSystem;
   suspension: BrakeSystem;
   safetyEquipment: BrakeSystem;
+  date: string;
 }
 
 export interface BrakeSystem {
@@ -228,4 +229,20 @@ export interface Sort {
   sorted: boolean;
   unsorted: boolean;
   empty: boolean;
+}
+
+interface LastInspection {
+  score: number;
+  createdAt: string;
+}
+
+export interface SingleTruckTypes {
+  id: number;
+  plateNumber: string;
+  lastInspection: LastInspection;
+  model: string;
+  capacity: number;
+  active: boolean;
+  minFuelPer100km: number | null;
+  maxFuelPer100km: number | null;
 }
