@@ -8,14 +8,9 @@ import { useDownloadOOSReportMutation } from "../../../lib/api/endpoints/Trucks/
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
 import { FC } from "react";
 import { Query } from "../../../lib/types/shared";
-import { GetTruckOverviewResponse_Payload } from "../../../lib/types/trucksTypes";
 
 interface Props {
-  data: {
-    name: string;
-    num: number | string;
-    url?: GetTruckOverviewResponse_Payload | undefined;
-  };
+  data: { name: string; num: number };
   truckId?: number | Query;
   isRed?: boolean;
 }

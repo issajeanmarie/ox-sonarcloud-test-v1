@@ -49,6 +49,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
   const [uploadFailure, setUploadFailure] = useState(null);
 
+  const watchqQbSupplierId = Form.useWatch("qbSupplierId", form);
   const dispatch = useDispatch();
 
   const { data: depotsData, isLoading: depotsLoading } = useDepotsQuery();
@@ -123,6 +124,10 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
     label: category.Name,
     value: category.Id
   }));
+
+  const supplierFromQB = (): { label: string; value: string } | undefined => {
+    return suppliers?.find((el: any) => el.value === watchqQbSupplierId);
+  };
 
   if (
     (suppliersError as any)?.status === 401 ||
@@ -206,14 +211,12 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
       return;
     }
 
+    const qbSupplier = supplierFromQB();
+
     const payload = {
       ...values,
-      qbSupplierId: !isNaN(Number(values.qbSupplierId))
-        ? values.qbSupplierId
-        : null,
-      qbSupplierName: !isNaN(Number(values.qbSupplierId))
-        ? suppliers.find((el: any) => el.value === values.qbSupplierId)?.label
-        : values.qbSupplierId || "",
+      qbSupplierId: qbSupplier?.value || null,
+      qbSupplierName: qbSupplier?.label || values.qbSupplierId || "",
       qbTruckName:
         trucks.find((el: any) => el.value === values.qbTruckId)?.label || "",
       qbLocationName:
@@ -346,7 +349,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
               options={suppliers}
               isLoading={suppliersLoading}
               className={
-                editExpenseData && !editExpenseData.qbSupplierId
+                watchqQbSupplierId && !supplierFromQB()
                   ? "bordered_input border-[#dc0000]"
                   : ""
               }
@@ -367,8 +370,8 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
                 </div>
               }
               help={
-                editExpenseData &&
-                !editExpenseData.qbSupplierId && (
+                watchqQbSupplierId &&
+                !supplierFromQB() && (
                   <span className="ant-form-item-explain-error">
                     This supplier is not present in the Quickbooks
                   </span>
