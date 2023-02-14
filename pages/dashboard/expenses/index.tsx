@@ -155,7 +155,12 @@ const Expenses = () => {
     setSelectedRows([]);
     setIsApproveModalVisible(false);
     setIsApproveSelectedModalVisible(false);
-    if (res?.status === 401 || res?.message?.indexOf("Token expired") !== -1) {
+    if (
+      res?.status === 401 ||
+      (res?.message &&
+        (res?.message?.indexOf("Access is denied") !== -1 ||
+          res?.message?.indexOf("Token expired") !== -1))
+    ) {
       onQBAuthFailure();
     }
   };
@@ -347,16 +352,18 @@ const Expenses = () => {
               </>
             </Content>
           </div>
-          <RecordExpenseModal
-            isModalVisible={isModalVisible}
-            setIsModalVisible={setIsModalVisible}
-            isEdit={!!itemToEdit}
-            editExpenseData={itemToEdit}
-            onRecordExpenseFinish={onRecordExpenseFinish}
-            onEditExpenseFinish={onEditExpenseFinish}
-            onCancel={() => setItemToEdit(null)}
-            onQBAuthFailure={onQBAuthFailure}
-          />
+          {isModalVisible && (
+            <RecordExpenseModal
+              isModalVisible={isModalVisible}
+              setIsModalVisible={setIsModalVisible}
+              isEdit={!!itemToEdit}
+              editExpenseData={itemToEdit}
+              onRecordExpenseFinish={onRecordExpenseFinish}
+              onEditExpenseFinish={onEditExpenseFinish}
+              onCancel={() => setItemToEdit(null)}
+              onQBAuthFailure={onQBAuthFailure}
+            />
+          )}
 
           {/* Action Modal */}
           <ActionModal
