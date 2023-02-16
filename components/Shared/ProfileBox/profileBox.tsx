@@ -44,7 +44,10 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
   const router = useRouter();
 
   const userProfile = (
-    <Space direction="vertical" className="bg-white rounded-md p-4 shadow-md ">
+    <Space
+      direction="vertical"
+      className="bg-white rounded-md p-4 shadow-md  transition ease-in-out delay-150"
+    >
       <Row gutter={24} align="middle" className="pad24 mb-3">
         <Col>
           {data?.payload?.profilePic ? (
@@ -73,7 +76,10 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
         </Col>
       </Row>
 
-      <Row gutter={16} className="px-5 pb-2">
+      <Row
+        gutter={16}
+        className="px-5 pb-2 pointer hover:bg-gray-200 hover:py-4"
+      >
         <Col>
           <Image
             width={14}
@@ -90,7 +96,21 @@ const ProfileBox: FC<ProfileBoxProps> = () => {
         </Col>
       </Row>
 
-      <Row gutter={16} className="px-5">
+      <Row
+        onClick={() => router.push(routes.Policy.url)}
+        gutter={16}
+        className="px-5 pb-2 pointer hover:bg-gray-200 hover:py-4"
+      >
+        <Col>
+          <Image width={20} src="/icons/policy.svg" preview={false} alt="" />
+        </Col>
+
+        <Col>
+          <Text className="text14 dark fowe400 ">Privacy policy</Text>
+        </Col>
+      </Row>
+
+      <Row gutter={16} className="px-5 pointer hover:bg-gray-200 hover:py-4">
         <Col>
           <Image
             width={14}
