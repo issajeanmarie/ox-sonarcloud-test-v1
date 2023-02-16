@@ -10,6 +10,7 @@ const AuthWrapper = ({ children, title }: AuthWrapperTypes) => {
   return (
     <Row style={{ height: "100vh" }} className="bg_dark">
       <Col className="auth_left" xs={24} sm={24} md={16} lg={16} xl={16} />
+
       <Col className="auth_right" xs={24} sm={24} md={8} lg={8} xl={8}>
         <div className="form_container">
           <Row
