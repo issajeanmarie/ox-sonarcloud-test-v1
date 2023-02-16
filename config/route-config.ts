@@ -118,5 +118,10 @@ export const routes = {
   Expenses: {
     name: "Expenses Tracker",
     url: "/dashboard/expenses"
+  },
+
+  Policy: {
+    name: "Policy",
+    url: "/dashboard/policy"
   }
 };
