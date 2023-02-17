@@ -9,7 +9,10 @@ import {
   ToggleTruckIssueRequest,
   EditTruckRequest,
   DeleteTruckRepairLogRequest,
-  DeleteMaintenanceCheckRequest
+  DeleteMaintenanceCheckRequest,
+  GetTruckNearByLocationsRequest,
+  GetTruckNearByLocationsResponse,
+  GetTruckNearByClientsResponse
 } from "../../../types/trucksTypes";
 import { baseAPI } from "../../api";
 
@@ -329,6 +332,28 @@ const trucksApi = baseAPI.injectEndpoints({
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
         response.payload
+    }),
+
+    getTruckNearByLocations: builder.query<
+      GetTruckNearByLocationsResponse,
+      GetTruckNearByLocationsRequest
+    >({
+      providesTags: [],
+      query: ({ truckId }) => ({
+        url: `/trucks/${truckId}/nearby-locations`,
+        method: "GET"
+      })
+    }),
+
+    getTruckNearByClients: builder.query<
+      GetTruckNearByClientsResponse,
+      GetTruckNearByLocationsRequest
+    >({
+      providesTags: [],
+      query: ({ truckId }) => ({
+        url: `/trucks/${truckId}/nearby-clients`,
+        method: "GET"
+      })
     })
   })
 });
@@ -360,5 +385,7 @@ export const {
   useLazyGetTruckMaintenanceChecklistQuery,
   useDeleteMaintenanceCheckMutation,
   useCreateMaintenanceCheckMutation,
-  useDownloadMaintenanceCheckMutation
+  useDownloadMaintenanceCheckMutation,
+  useGetTruckNearByLocationsQuery,
+  useGetTruckNearByClientsQuery
 } = trucksApi;
