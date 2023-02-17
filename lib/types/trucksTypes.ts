@@ -1,4 +1,5 @@
 import React from "react";
+import { Query } from "./shared";
 
 /**
  * TRUCKS TYPES
@@ -245,4 +246,29 @@ export interface SingleTruckTypes {
   active: boolean;
   minFuelPer100km: number | null;
   maxFuelPer100km: number | null;
+}
+
+export interface GetTruckNearByLocationsRequest {
+  truckId: Query | number;
+}
+
+export interface GetTruckNearByLocationsResponse {
+  message: string;
+  payload: SingleNearByLocation[];
+}
+
+export interface SingleNearByLocation {
+  name: string;
+  distance: number;
+}
+
+export interface GetTruckNearByClientsResponse {
+  message: string;
+  payload: SingleNearByClient[];
+}
+
+export interface SingleNearByClient extends SingleNearByLocation {
+  phone: string;
+  coordinates: string;
+  location: string;
 }

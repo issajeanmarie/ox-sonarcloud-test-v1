@@ -76,7 +76,7 @@ const DriverLeftSide = ({
 
                         <Col md={6} lg={6} xl={10} xxl={10}>
                           <span className="text_ellipsis text-gray-400">
-                            {moment(shift?.endDateTime).format("ll")}
+                            {moment(shift?.startDateTime).format("ll")}
                           </span>
                         </Col>
 
