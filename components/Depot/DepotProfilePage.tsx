@@ -17,7 +17,7 @@ import Loader from "../Shared/Loader";
 import { daysList } from "../Analytics/DTOs/daysList";
 import DaysCalculator from "../../helpers/daysCalculator";
 import moment from "moment";
-import { DepotProfileLoader } from "../Shared/Loaders/Loaders";
+import { SpinningLoader } from "../Shared/Loaders/Loaders";
 
 const DepotProfilePage = () => {
   const [search, setSearch] = useState("");
@@ -111,7 +111,7 @@ const DepotProfilePage = () => {
       <Content isOverflowHidden={false} navType="FULL">
         <Row className="p-5 gap-5" wrap={false}>
           {isFetching ? (
-            <DepotProfileLoader />
+            <SpinningLoader />
           ) : (
             <>
               {data && <DepotLeftSide depotData={data} />}

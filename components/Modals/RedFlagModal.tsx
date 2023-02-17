@@ -13,7 +13,7 @@ import { DepotAlertModalTypes } from "../../lib/types/depots";
 import { dateDisplay } from "../../utils/dateFormatter";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import Button from "../Shared/Button";
-import { DepotProfileLoader } from "../Shared/Loaders/Loaders";
+import { SpinningLoader } from "../Shared/Loaders/Loaders";
 import ModalWrapper from "./ModalWrapper";
 
 const { Text } = Typography;
@@ -183,7 +183,7 @@ const RedFlagModal: FC<DepotAlertModalTypes> = ({
       onCancel={handleCancel}
     >
       {isLoading || isFetching ? (
-        <DepotProfileLoader className="h-[40vh]" />
+        <SpinningLoader className="h-[40vh]" />
       ) : (
         <>
           <Row
