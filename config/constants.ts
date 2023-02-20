@@ -328,6 +328,8 @@ export const QB_PAYMENT_TYPES = [
 ];
 
 export const PRIVACY_POLICY_CONTENT = {
+  title: `OX Privacy Policy`,
+  lastUpdate: `22nd January 2023`,
   intro: `OX Delivers ("Company") operates the OX App ("App"). This Privacy Policy describes how the Company collects, uses, and discloses personal information and other data related to the End User's use of the App.`,
   sections: [
     {
@@ -388,6 +390,81 @@ export const PRIVACY_POLICY_CONTENT = {
       title: "Contact us",
       subTitle:
         "If you have any questions or concerns about this Privacy Policy, please contact us at info@oxdelivers.com.",
+      details: []
+    }
+  ]
+};
+
+export const END_USER_AGREEMENTS_CONTENT = {
+  title: `End User License Agreement (EULA) for OX App`,
+  lastUpdate: `22nd January 2023`,
+  intro: `This End User License Agreement ("Agreement") is a legal agreement between you ("End User") and OX Delivers ("Company") for the use of the OX App ("App"). By using the App, you agree to be bound by the terms of this Agreement.`,
+  sections: [
+    {
+      id: 1,
+      title: "License Grant:",
+      subTitle:
+        "The Company grants to the End User a limited, non-exclusive, non-transferable license to use the App solely for the purpose of logging jobs/expenses as a driver for OX Delivers.",
+      details: []
+    },
+
+    {
+      id: 2,
+      title: "Restrictions on Use:",
+      subTitle:
+        "The End User shall not: (a) copy, modify, or distribute the App, (b) reverse engineer, decompile, or disassemble the App, (c) attempt to bypass any security measures in the App, (d) use the App for any unlawful purpose, or (e) use the App in any way that violates the terms of this Agreement.",
+      details: []
+    },
+
+    {
+      id: 3,
+      title: "Ownership",
+      subTitle:
+        "The Company retains all rights, title, and interest in and to the App, including all intellectual property rights therein.",
+      details: []
+    },
+
+    {
+      id: 4,
+      title: "Privacy",
+      subTitle:
+        "The Company may collect, use, and disclose personal information and other data related to the End User's use of the App. The Company's use of this information is governed by the Company's privacy policy.",
+      details: []
+    },
+
+    {
+      id: 5,
+      title: "Termination",
+      subTitle:
+        "The license granted by this Agreement shall terminate automatically if the End User breaches any of the terms of this Agreement. Upon termination, the End User shall cease all use of the App and delete all copies of the App.",
+      details: []
+    },
+
+    {
+      id: 6,
+      title: "Disclaimer of Warranty",
+      subTitle: `The App is provided "as is" without warranty of any kind. The Company disclaims all warranties, express or implied, including without limitation, warranties of merchantability and fitness for a particular purpose.`,
+      details: []
+    },
+
+    {
+      id: 7,
+      title: "Limitation of Liability.",
+      subTitle: `The Company shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with the use or inability to use the App, even if the Company has been advised of the possibility of such damages.`,
+      details: []
+    },
+
+    {
+      id: 8,
+      title: "Governing Law",
+      subTitle: `This Agreement shall be governed by and construed in accordance with the laws of the jurisdiction of the Republic of Rwanda.`,
+      details: []
+    },
+
+    {
+      id: 9,
+      title: "Entire Agreement",
+      subTitle: `This Agreement constitutes the entire agreement between the End User and the Company with respect to the use of the App and supersedes all prior or contemporaneous communications and proposals, whether oral or written, between the parties.`,
       details: []
     }
   ]
