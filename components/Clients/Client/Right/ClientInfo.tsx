@@ -12,6 +12,7 @@ import ModalWrapper from "../../../Modals/ModalWrapper";
 import CustomButton from "../../../Shared/Button/button";
 import ClientInfoWrapper from "./ClientInfoWrapper";
 import Button from "../../../Shared/Button";
+import { dateDisplay } from "../../../../utils/dateFormatter";
 
 const ClientInfo: FC<ClientInfoTypes> = ({ client }) => {
   const [form] = Form.useForm();
@@ -83,6 +84,15 @@ const ClientInfo: FC<ClientInfoTypes> = ({ client }) => {
           <ClientInfoWrapper
             title="Economic class"
             infoItem={client?.economicStatus?.replaceAll("_", " ") || "N/A"}
+          />
+
+          <ClientInfoWrapper
+            title="Last order"
+            infoItem={
+              client?.lastOrderDate
+                ? `${dateDisplay(client?.lastOrderDate?.startDateTime)}`
+                : "N/A"
+            }
           />
 
           <ClientInfoWrapper

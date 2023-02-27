@@ -115,6 +115,8 @@ export type GetClients = {
   sort?: string;
   source?: string;
   noPagination?: boolean;
+  start?: string;
+  end?: string;
 };
 
 export type GetClient = {
@@ -130,6 +132,8 @@ export type DownoadClients = {
   q: string;
   sort: string;
   source: string;
+  start: string | Date;
+  end: string | Date;
 };
 
 export type DownoadInvoice = {

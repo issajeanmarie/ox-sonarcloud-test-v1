@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+declare const google: any;
+
 import { Checkbox, Col, Image, Row } from "antd";
 import React, { FC, useEffect, useState } from "react";
 import {
@@ -10,10 +12,9 @@ import HeatmapLayer from "react-google-maps/lib/components/visualization/Heatmap
 import { AnalyticMapTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticMapTypes";
 import CustomInput from "../../Shared/Input";
 import { MediumSpinLoader } from "../../Shared/Loaders/Loaders";
-import { mapStyles } from "../../../helpers/mapStyles";
+import { orderRouteMapStyles } from "../../../helpers/mapStyles";
 import { LatLng } from "use-places-autocomplete";
-
-declare const google: any;
+import Markers from "./Markers";
 
 type officeLocationType = {
   office: {
@@ -33,6 +34,7 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
   //HANDLE SEARCH
   const [filtered, setFiltered] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     if (categories) {
       setFiltered(categories?.payload);
@@ -91,9 +93,11 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
     <GoogleMapComponent
       defaultZoom={10}
       defaultCenter={{ lat: -1.9440727, lng: 30.0618851 }}
-      defaultOptions={{ styles: mapStyles }}
+      defaultOptions={{ styles: orderRouteMapStyles }}
     >
       {coordinates && <HeatmapLayer data={heatMapData} />}
+
+      <Markers />
     </GoogleMapComponent>
   );
 

@@ -386,6 +386,6 @@ export const {
   useDeleteMaintenanceCheckMutation,
   useCreateMaintenanceCheckMutation,
   useDownloadMaintenanceCheckMutation,
-  useGetTruckNearByLocationsQuery,
-  useGetTruckNearByClientsQuery
+  useLazyGetTruckNearByClientsQuery,
+  useLazyGetTruckNearByLocationsQuery
 } = trucksApi;

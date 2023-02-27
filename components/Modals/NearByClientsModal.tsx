@@ -1,14 +1,13 @@
-import { skipToken } from "@reduxjs/toolkit/dist/query";
 import React, { FC } from "react";
-import {
-  useGetTruckNearByClientsQuery,
-  useGetTruckNearByLocationsQuery
-} from "../../lib/api/endpoints/Trucks/trucksEndpoints";
 import EmptyData from "../Shared/EmptyData";
 import { SpinningLoader } from "../Shared/Loaders/Loaders";
 import NearbyCenterCard from "../Trucks/NearbyCenterCard";
 import NearByClientCard from "../Trucks/NearByClientCard";
 import ModalWrapper from "./ModalWrapper";
+import {
+  useHandleNearByClients,
+  useHandleNearByLocations
+} from "./useHandleNearBys";
 interface Props {
   activeTruck: { id: number; plateNumber: string } | null;
   setActiveTruck: React.Dispatch<
@@ -29,23 +28,11 @@ const NearByClientsModal: FC<Props> = ({
     setActiveTruck(null);
   };
 
-  const { data, isFetching: isNearByLocationsFetching } =
-    useGetTruckNearByLocationsQuery(
-      activeTruck
-        ? {
-            truckId: activeTruck?.id
-          }
-        : skipToken
-    );
-
   const { data: nearbyClients, isFetching: isNearByClientsFetching } =
-    useGetTruckNearByClientsQuery(
-      activeTruck
-        ? {
-            truckId: activeTruck?.id
-          }
-        : skipToken
-    );
+    useHandleNearByClients({ activeTruck });
+
+  const { data, isFetching: isNearByLocationsFetching } =
+    useHandleNearByLocations({ activeTruck });
 
   const isLoading = isNearByLocationsFetching || isNearByClientsFetching;
   const showEmpty = !(nearbyClients?.payload?.length && data?.payload?.length);
@@ -60,12 +47,14 @@ const NearByClientsModal: FC<Props> = ({
       destroyOnClose
     >
       {isLoading ? (
-        <SpinningLoader className="h-[30vh]" />
+        <SpinningLoader className="h-[25vh]" />
       ) : !showEmpty ? (
         <>
           {nearbyClients?.payload?.length && (
             <>
-              <p className="text-md opacity_56">Clients (2)</p>
+              <p className="text-md opacity_56">
+                Clients ({nearbyClients?.payload?.length})
+              </p>
               {nearbyClients?.payload?.map((client, index) => (
                 <NearByClientCard
                   index={index}
@@ -78,7 +67,9 @@ const NearByClientsModal: FC<Props> = ({
 
           {data?.payload?.length && (
             <>
-              <p className="text-md opacity_56 mt-12">Centers / Markets (3)</p>
+              <p className="text-md opacity_56 mt-12">
+                Centers / Markets ({data?.payload?.length})
+              </p>
               {data?.payload?.map((location) => (
                 <NearbyCenterCard key={location?.name} center={location} />
               ))}

@@ -172,7 +172,7 @@ const Entry = ({
           placeholder={placeholder}
           allowClear={allowClear}
           size="large"
-          className={`my_input ${size === "small" && "sm"} ${className}`}
+          className={`my_input  ${size === "small" && "sm"} ${className}`}
           disabled={disabled}
           loading={isLoading}
           defaultValue={defaultValue}
