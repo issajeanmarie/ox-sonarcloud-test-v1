@@ -95,7 +95,6 @@ const AddEditOrder: FC<AddEditProps> = ({ title, form, addOrderAction }) => {
     const payload: OrderRequestBody = {
       ...values,
       stops: stopsWithTrucksAndDrivers,
-      startDateTime: moment(values.startDateTime).format("YYYY-MM-DDTHH:mm"),
       amount: Number(values.amount)
     };
 

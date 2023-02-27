@@ -16,6 +16,8 @@ import { localeString } from "../../utils/numberFormatter";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
+import FilterOrdersModal from "../../components/Shared/Modal";
+import FilterClientForm from "../Forms/Clients/FilterClientForm";
 
 const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   isModalVisible,
@@ -26,14 +28,15 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   categories,
   handleDownloadClients,
   isDownloadingClientsLoading,
-  defaultSelected,
   setDefaultSelected,
   sort,
   setSort,
-  setCurrentPages
+  setCurrentPages,
+  setStart,
+  setEnd
 }) => {
-  const [form] = Form.useForm();
-
+  const [isVisible, setIsVisible] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
   const [offices, setOffices]: any = useState([]);
   const [location, setLocation] = useState<{
     name: string;
@@ -44,8 +47,11 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
     coordinates: LatLng;
   }>();
   const [officeName, setOfficeName] = useState("");
-  const [postClient, { isLoading }] = usePostClientMutation();
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [postClient, { isLoading }] = usePostClientMutation();
+
+  const [form] = Form.useForm();
 
   const dispatch = useDispatch();
 
@@ -121,19 +127,19 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
           />
         </Col>
 
-        <Col>
+        {/* <Col>
           <DropDownSelector
             label="Category"
             dropDownContent={
               categories
-                ? [{ name: "All categories", id: undefined }, ...categories]
+                ? [{ name: "All categories", id: 0 }, ...categories]
                 : []
             }
             defaultSelected={defaultSelected}
             setDefaultSelected={setDefaultSelected}
             handleStateChange={() => setCurrentPages(1)}
           />
-        </Col>
+        </Col> */}
 
         <Col>
           <DropDownSelector
@@ -142,11 +148,40 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
               { id: 0, name: "Z-A (Names)", value: "names__desc" },
               { id: 1, name: "A-Z (Names)", value: "names__asc" },
               { id: 2, name: "Z-A (Locations)", value: "location__desc" },
-              { id: 3, name: "A-Z (Locations)", value: "location__asc" }
+              { id: 3, name: "A-Z (Locations)", value: "location__asc" },
+              {
+                id: 4,
+                name: "Z-A (Pending payment)",
+                value: "pending_amount__desc"
+              },
+              {
+                id: 5,
+                name: "A-Z (Pending payment)",
+                value: "pending_amount__asc"
+              }
             ]}
             defaultSelected={sort}
             setDefaultSelected={setSort}
           />
+        </Col>
+
+        <Col>
+          <div
+            className={` rounded p-3 flex items-center justify-center ${
+              isFiltered ? "border border-ox-yellow" : "border border-gray-200 "
+            } `}
+          >
+            <Image
+              width={16}
+              height={16}
+              src="/icons/filter.svg"
+              data-test-id="order-filter"
+              onClick={() => setIsVisible(true)}
+              className="cursor-pointer"
+              alt="Filter icon"
+              preview={false}
+            />
+          </div>
         </Col>
       </Row>
     </Col>
@@ -174,6 +209,21 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
 
   return (
     <>
+      <FilterOrdersModal
+        isModalVisible={isVisible}
+        setIsModalVisible={setIsVisible}
+      >
+        <FilterClientForm
+          categories={categories}
+          setStart={setStart}
+          setEnd={setEnd}
+          setDefaultSelected={setDefaultSelected}
+          setIsVisible={setIsVisible}
+          setCurrentPages={setCurrentPages}
+          setIsFiltered={setIsFiltered}
+        />
+      </FilterOrdersModal>
+
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}

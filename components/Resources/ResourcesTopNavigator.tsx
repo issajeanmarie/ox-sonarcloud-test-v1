@@ -59,9 +59,9 @@ const ResourcesTopNavigator: FC<ResourcesTopNavigatorTypes> = ({
             dropDownContent={[
               { id: 0, name: "Reset", value: "" },
               { id: 1, name: "Date (New - Old)", value: "DATE_DESC" },
-              { id: 3, name: "Date (Old - New)", value: "DATE_ASC" },
-              { id: 4, name: "Name (A - Z)", value: "NAMES_ASC" },
-              { id: 5, name: "Name (Z - A)", value: "NAMES_DESC" }
+              { id: 2, name: "Date (Old - New)", value: "DATE_ASC" },
+              { id: 3, name: "Name (A - Z)", value: "NAMES_ASC" },
+              { id: 4, name: "Name (Z - A)", value: "NAMES_DESC" }
             ]}
             defaultSelected={sort}
             setDefaultSelected={setSort}

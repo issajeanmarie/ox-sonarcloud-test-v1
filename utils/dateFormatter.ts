@@ -13,7 +13,7 @@ export const dateDisplay = (dateToConvert: Date | string) => {
   if (!dateToConvert) return;
 
   const now = new Date();
-  const date = new Date(dateToConvert);
+  const date = new Date(`${dateToConvert}`);
 
   const diff = now.getTime() - date.getTime();
   const { seconds, minutes, hours, days } = msToTime(diff);

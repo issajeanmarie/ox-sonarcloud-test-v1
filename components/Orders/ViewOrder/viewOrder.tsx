@@ -504,6 +504,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
 
                   <DetailsSection
                     details={data}
+                    totalWeight={totalWeight}
                     title=""
                     type="SUMMARY"
                     editAction={setIsEditPriceModal}
