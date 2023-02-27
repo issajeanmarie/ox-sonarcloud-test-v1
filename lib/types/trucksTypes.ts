@@ -271,4 +271,5 @@ export interface SingleNearByClient extends SingleNearByLocation {
   phone: string;
   coordinates: string;
   location: string;
+  id: number;
 }

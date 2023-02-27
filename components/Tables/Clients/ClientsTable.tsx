@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import { dateDisplay } from "../../../utils/dateFormatter";
 
 const { Text } = Typography;
 
@@ -100,7 +101,20 @@ const ClientsTable: FC<ClientsTableProps> = ({
       key: "location",
       render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
         <RowsWrapper>
-          <Text className="normalText opacity_56">{record?.location}</Text>
+          <Text className="normalText opacity_56">
+            {record?.location?.split(",")[0]}
+          </Text>
+        </RowsWrapper>
+      )
+    },
+    {
+      title: "Last order",
+      key: "lastOrder",
+      render: (text: ClientsTableTypes, record: ClientsTableTypes) => (
+        <RowsWrapper>
+          <Text className="normalText opacity_56">
+            {dateDisplay(record?.lastOrderDate)}
+          </Text>
         </RowsWrapper>
       )
     },

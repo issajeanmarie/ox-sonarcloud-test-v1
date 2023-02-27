@@ -28,6 +28,8 @@ const Clients = () => {
   const [selectedCategory, setSelectedCategory]: any = useState("");
   const [sortValue, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const [getClients, { isLoading: isClientsLoading }] = useLazyClientsQuery();
 
@@ -61,6 +63,8 @@ const Clients = () => {
       categoryId: selectedCategory?.id || "",
       q: searchQuery,
       sort: sortValue.value || "",
+      start: startDate,
+      endDate: endDate,
       source: "",
       showSuccess: true,
       handleSuccess: handleDownloadClientsSuccess
@@ -87,6 +91,8 @@ const Clients = () => {
     org = "",
     dest = "",
     hq = "",
+    start = startDate,
+    end = endDate,
     categoryId = selectedCategory?.id || "",
     q = searchQuery,
     sort = sortValue.value || "",
@@ -102,6 +108,8 @@ const Clients = () => {
       org,
       dest,
       hq,
+      start,
+      end,
       categoryId,
       q,
       sort,
@@ -125,7 +133,7 @@ const Clients = () => {
   useEffect(() => {
     setFiltersBasedLoader(true);
     getClientsAction({});
-  }, [sortValue, searchQuery, selectedCategory]);
+  }, [sortValue, searchQuery, selectedCategory, startDate, endDate]);
 
   //MODAL
   const showModal = () => {
@@ -154,10 +162,11 @@ const Clients = () => {
           categories={categories?.payload}
           handleDownloadClients={handleDownloadClients}
           isDownloadingClientsLoading={isDownloadingClientsLoading}
-          defaultSelected={selectedCategory}
           setDefaultSelected={setSelectedCategory}
           sort={sortValue}
           setSort={setSort}
+          setStart={setStartDate}
+          setEnd={setEndDate}
           setCurrentPages={setCurrentPages}
         />
 

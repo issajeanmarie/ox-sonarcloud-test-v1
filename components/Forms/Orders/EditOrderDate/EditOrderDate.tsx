@@ -35,11 +35,7 @@ const EditOrderDate: FC<EditOrderDateProps> = ({
     handleAPIRequests({
       request: editOrder,
       orderId,
-      data: {
-        startDateTime: moment(values.startDateTime).format(
-          "YYYY-MM-DDTHH:mm:ss"
-        )
-      },
+      ...values,
       showSuccess: true,
       handleSuccess: handleEditOrderSuccess
     });

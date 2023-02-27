@@ -213,6 +213,10 @@ const DetailsSection = ({
 
   const router = useRouter();
 
+  const formula = `${details?.estimatedDistance} KMs * ${
+    totalWeight || 0
+  } KGs * 0.5`;
+
   return (
     <div className="my-16 mt-8">
       <TextLight className="mb-6">{title && `${title} details`}</TextLight>
@@ -287,10 +291,7 @@ const DetailsSection = ({
                       <Menu.Item style={{ marginBottom: "0.5rem" }}>
                         <div className="flex flex-col">
                           <span>We use</span>
-                          <span className="font-bold">
-                            {details?.estimatedDistance || "Estimated distance"}{" "}
-                            * Weight * 0.5
-                          </span>
+                          <span className="font-bold">{formula}</span>
                           <span>
                             formula to calculate estimated selling price
                           </span>

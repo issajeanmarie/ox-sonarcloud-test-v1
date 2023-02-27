@@ -10,9 +10,10 @@ export type ClientsTopNavigatorTypes = {
   categories: any;
   handleDownloadClients: () => void;
   isDownloadingClientsLoading: boolean;
-  defaultSelected: object;
-  setDefaultSelected: React.Dispatch<SetStateAction<object>>;
+  setDefaultSelected: React.Dispatch<SetStateAction<object | string>>;
   sort: object;
   setSort: React.Dispatch<SetStateAction<object>>;
   setCurrentPages: React.Dispatch<SetStateAction<number>>;
+  setStart: React.Dispatch<SetStateAction<string>>;
+  setEnd: React.Dispatch<SetStateAction<string>>;
 };
