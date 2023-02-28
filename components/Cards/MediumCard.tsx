@@ -116,7 +116,13 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
         {isFetching ? (
           <SmallSpinLoader />
         ) : (
-          <>{count !== null ? abbreviateNumber(count) : "None"}</>
+          <>
+            {count !== null ? (
+              <>{typeof count === "number" ? abbreviateNumber(count) : count}</>
+            ) : (
+              "None"
+            )}
+          </>
         )}
       </Text>
       <Text className="captionText">
