@@ -1,18 +1,71 @@
 import { Col, Image, Row } from "antd";
 import Typography from "antd/lib/typography";
 import React, { FC } from "react";
+import { LoadingOutlined } from "@ant-design/icons";
 import FilePreview from "../Shared/FilePreview";
 import { ViewExpenseTypes } from "../../lib/types/pageTypes/Expenses/ViewExpenseTypes";
 import { dateFormatter } from "../../utils/dateFormatter";
 import { abbreviateNumber } from "../../utils/numberFormatter";
+import {
+  useLazyDownloadFromQBQuery,
+  useLazyDownloadFromServerQuery
+} from "../../lib/api/endpoints/Expenses/expensesEndpoint";
+import { handleAPIRequests } from "../../utils/handleAPIRequests";
+import { handleDownloadFile } from "../../utils/handleDownloadFile";
+import { InfoMessage } from "../Shared/Messages/InfoMessage";
 
 const { Text } = Typography;
 
 const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
-  const handleDownloadFile = (link: string) => {
-    if (window) {
-      window.open(link, "_blank", "noreferrer");
+  const [downloadFromServer, { isLoading: isLoadingFromServer }] =
+    useLazyDownloadFromServerQuery();
+  const [downloadFromQB, { isLoading: isLoadingFromQB }] =
+    useLazyDownloadFromQBQuery();
+
+  const downloadFile = () => {
+    if (expense.qbAttachableId && expense.qbAttachableFileName) {
+      handleAPIRequests({
+        request: downloadFromQB,
+        handleSuccess: handleDownloadFromQBSuccess,
+        handleFailure: handleDownloadFailure,
+        id: expense.id
+      });
+    } else {
+      handleAPIRequests({
+        request: downloadFromServer,
+        handleSuccess: handleDownloadSuccess,
+        handleFailure: handleDownloadFailure,
+        showFailure: false,
+        id: expense.id
+      });
     }
+  };
+
+  const handleDownloadSuccess = (file: File) => {
+    const name =
+      expense.attachmentUrl.split("/")[
+        expense.attachmentUrl.split("/").length - 1
+      ];
+    const fileFormat =
+      expense.attachmentUrl.split(".")[
+        expense.attachmentUrl.split(".").length - 1
+      ];
+
+    handleDownloadFile({
+      file,
+      name,
+      fileFormat
+    });
+  };
+
+  const handleDownloadFromQBSuccess = (res: any) => {
+    if (window) {
+      window.open(res?.payload, "_blank", "noreferrer");
+    }
+  };
+
+  const handleDownloadFailure = () => {
+    InfoMessage("No data to download");
   };
 
   return (
@@ -83,21 +136,27 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
 
       <Row gutter={[16, 16]} justify="space-between">
         <Col xs={24} sm={24} md={15}>
-          {expense.attachmentUrl && (
+          {(expense.qbAttachableFileName || expense.attachmentUrl) && (
             <FilePreview
               fileName={
+                expense.qbAttachableFileName ||
                 expense.attachmentUrl.split("/")[
                   expense.attachmentUrl.split("/").length - 1
                 ]
               }
-              onClick={() => handleDownloadFile(expense.attachmentUrl)}
+              onClick={downloadFile}
+              disabled={isLoadingFromServer || isLoadingFromQB}
               suffixIcon={
-                <Image
-                  src="/icons/download_2.svg"
-                  alt=""
-                  width={14}
-                  preview={false}
-                />
+                isLoadingFromServer || isLoadingFromQB ? (
+                  <LoadingOutlined width={14} className="text-sm text-ox-red" />
+                ) : (
+                  <Image
+                    src={"/icons/download_2.svg"}
+                    alt=""
+                    width={14}
+                    preview={false}
+                  />
+                )
               }
             />
           )}
