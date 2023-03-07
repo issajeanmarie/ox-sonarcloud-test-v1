@@ -4,6 +4,7 @@ import Typography from "antd/lib/typography";
 import Image from "antd/lib/image";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
+import { LoadingOutlined } from "@ant-design/icons";
 import CustomButton from "../../Shared/Button/button";
 import Button from "../../Shared/Button";
 import { dateFormatter } from "../../../utils/dateFormatter";
@@ -16,6 +17,13 @@ import FilePreview from "../../Shared/FilePreview";
 import ViewExpense from "../../Expenses/ViewExpense";
 import { Expense } from "../../../lib/types/expenses";
 import { userType } from "../../../helpers/getLoggedInUser";
+import {
+  useLazyDownloadFromQBQuery,
+  useLazyDownloadFromServerQuery
+} from "../../../lib/api/endpoints/Expenses/expensesEndpoint";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
+import { InfoMessage } from "../../Shared/Messages/InfoMessage";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -31,6 +39,11 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isViewModalVisible, setIsViewModalVisible] = useState<boolean>(false);
   const [itemToView, setItemToView] = useState<Expense>();
+  const [itemsToDownload, setItemsToDownload] = useState<Expense[]>([]);
+  const [downloadFromServer, { isFetching: isLoadingFromServer }] =
+    useLazyDownloadFromServerQuery();
+  const [downloadFromQB, { isFetching: isLoadingFromQB }] =
+    useLazyDownloadFromQBQuery();
 
   const onToggleRow = (id: number) => {
     let newRows = [];
@@ -62,10 +75,63 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
     setIsViewModalVisible(true);
   };
 
-  const handleDownloadFile = (link: string) => {
-    if (window) {
-      window.open(link, "_blank", "noreferrer");
+  const downloadFile = (expense: Expense) => {
+    setItemsToDownload([...itemsToDownload, expense]);
+    if (expense.qbAttachableId && expense.qbAttachableFileName) {
+      handleAPIRequests({
+        request: downloadFromQB,
+        handleSuccess: (res: any) => handleDownloadFromQBSuccess(res, expense),
+        handleFailure: () => handleDownloadFailure(expense),
+        id: expense.id
+      });
+    } else {
+      handleAPIRequests({
+        request: downloadFromServer,
+        handleSuccess: (file: File) => handleDownloadSuccess(file, expense),
+        handleFailure: () => handleDownloadFailure(expense),
+        showFailure: false,
+        id: expense.id
+      });
     }
+  };
+
+  const handleDownloadSuccess = (file: File, expense: Expense) => {
+    const name =
+      expense.attachmentUrl.split("/")[
+        expense.attachmentUrl.split("/").length - 1
+      ];
+    const fileFormat =
+      expense.attachmentUrl.split(".")[
+        expense.attachmentUrl.split(".").length - 1
+      ];
+
+    setItemsToDownload(
+      itemsToDownload.filter((item) => item.id !== expense.id)
+    );
+
+    handleDownloadFile({
+      file,
+      name,
+      fileFormat
+    });
+  };
+
+  const handleDownloadFromQBSuccess = (res: any, expense: Expense) => {
+    setItemsToDownload(
+      itemsToDownload.filter((item) => item.id !== expense.id)
+    );
+
+    if (window) {
+      window.open(res?.payload, "_blank", "noreferrer");
+    }
+  };
+
+  const handleDownloadFailure = (expense: Expense) => {
+    setItemsToDownload(
+      itemsToDownload.filter((item) => item.id !== expense.id)
+    );
+
+    InfoMessage("No attachable found for this expense to download");
   };
 
   const onApprove = (id: number) => {
@@ -222,27 +288,41 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           key="attachment"
           title="Attachment"
           render={(text: ExpensesTableTypes, record: ExpensesTableTypes) => {
-            const child = record?.attachmentUrl ? (
-              <FilePreview
-                className="h-9 w-56 !pr-2 !pl-2"
-                fileName={
-                  record.attachmentUrl.split("/")[
-                    record.attachmentUrl.split("/").length - 1
-                  ]
-                }
-                onClick={() => handleDownloadFile(record.attachmentUrl)}
-                suffixIcon={
-                  <Image
-                    src="/icons/download_2.svg"
-                    alt=""
-                    width={14}
-                    preview={false}
-                  />
-                }
-              />
-            ) : (
-              "---"
-            );
+            const child =
+              record.qbAttachableFileName || record?.attachmentUrl ? (
+                <FilePreview
+                  className="h-9 w-56 !pr-2 !pl-2"
+                  fileName={
+                    record.qbAttachableFileName ||
+                    record.attachmentUrl.split("/")[
+                      record.attachmentUrl.split("/").length - 1
+                    ]
+                  }
+                  onClick={() => downloadFile(record)}
+                  disabled={
+                    itemsToDownload.find((item) => item.id === record.id) &&
+                    (isLoadingFromServer || isLoadingFromQB)
+                  }
+                  suffixIcon={
+                    itemsToDownload.find((item) => item.id === record.id) &&
+                    (isLoadingFromServer || isLoadingFromQB) ? (
+                      <LoadingOutlined
+                        width={14}
+                        className="text-sm text-ox-red"
+                      />
+                    ) : (
+                      <Image
+                        src={"/icons/download_2.svg"}
+                        alt=""
+                        width={14}
+                        preview={false}
+                      />
+                    )
+                  }
+                />
+              ) : (
+                "---"
+              );
             return {
               children: child,
               props: { "data-label": "Attachment" }
