@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import EmptyData from "../Shared/EmptyData";
 import { SpinningLoader } from "../Shared/Loaders/Loaders";
 import NearbyCenterCard from "../Trucks/NearbyCenterCard";
 import NearByClientCard from "../Trucks/NearByClientCard";
@@ -35,7 +34,6 @@ const NearByClientsModal: FC<Props> = ({
     useHandleNearByLocations({ activeTruck });
 
   const isLoading = isNearByLocationsFetching || isNearByClientsFetching;
-  const showEmpty = !(nearbyClients?.payload?.length && data?.payload?.length);
 
   return (
     <ModalWrapper
@@ -48,7 +46,7 @@ const NearByClientsModal: FC<Props> = ({
     >
       {isLoading ? (
         <SpinningLoader className="h-[25vh]" />
-      ) : !showEmpty ? (
+      ) : (
         <>
           {nearbyClients?.payload?.length && (
             <>
@@ -76,8 +74,6 @@ const NearByClientsModal: FC<Props> = ({
             </>
           )}
         </>
-      ) : (
-        <EmptyData text="No data to display!" width={100} />
       )}
     </ModalWrapper>
   );

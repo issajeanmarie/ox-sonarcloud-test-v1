@@ -1,4 +1,3 @@
-import moment from "moment";
 import Image from "antd/lib/image";
 import { Stop } from "../../../lib/types/orders";
 import { userType } from "../../../helpers/getLoggedInUser";
@@ -6,6 +5,7 @@ import { orderStatus } from "../../../utils/orderStatus";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import { Typography } from "antd";
+import { getHoursFromDate } from "../../../utils/dateFormatter";
 
 const { Text } = Typography;
 
@@ -27,6 +27,11 @@ const StepDescription = ({
 
   const { isCanceled } = orderStatus(data?.status);
 
+  const { hours, minutes } = getHoursFromDate(st.departureDateTime || "");
+  const { hours: arrivalHours, minutes: arrivalMinutes } = getHoursFromDate(
+    st.arrivalDateTime || ""
+  );
+
   return (
     <div>
       <div className="font-semibold" style={{ color: "black" }}>
@@ -36,8 +41,7 @@ const StepDescription = ({
       <div className="my-3 text-xs font-light">
         {st.arrivalDateTime && st.departureDateTime && (
           <>
-            {moment(st.arrivalDateTime).format("HH:MM a")} -{" "}
-            {moment(st.departureDateTime).format("HH:MM a")}
+            {hours}:{minutes} - {arrivalHours}:{arrivalMinutes}
           </>
         )}
       </div>

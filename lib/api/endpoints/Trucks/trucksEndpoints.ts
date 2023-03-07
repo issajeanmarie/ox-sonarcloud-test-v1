@@ -12,7 +12,10 @@ import {
   DeleteMaintenanceCheckRequest,
   GetTruckNearByLocationsRequest,
   GetTruckNearByLocationsResponse,
-  GetTruckNearByClientsResponse
+  GetTruckNearByClientsResponse,
+  GetTruckMovementRequest,
+  GetTruckMovementResponse,
+  GetTruckOverviewResponse
 } from "../../../types/trucksTypes";
 import { baseAPI } from "../../api";
 
@@ -91,8 +94,9 @@ const trucksApi = baseAPI.injectEndpoints({
         url: `/trucks/${id}/overview?start=${start || ""}&end=${end || ""}`,
         method: "GET"
       }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
+      transformResponse: (
+        response: ApiResponseMetadata<GetTruckOverviewResponse>
+      ) => response.payload
     }),
 
     getTruckRepairLog: builder.query({
@@ -354,6 +358,17 @@ const trucksApi = baseAPI.injectEndpoints({
         url: `/trucks/${truckId}/nearby-clients`,
         method: "GET"
       })
+    }),
+
+    getTruckMovement: builder.query<
+      GetTruckMovementResponse,
+      GetTruckMovementRequest
+    >({
+      providesTags: [],
+      query: ({ id, start, end }) => ({
+        url: `/trucks/${id}/movement?start=${start}&end=${end}`,
+        method: "GET"
+      })
     })
   })
 });
@@ -387,5 +402,9 @@ export const {
   useCreateMaintenanceCheckMutation,
   useDownloadMaintenanceCheckMutation,
   useLazyGetTruckNearByClientsQuery,
-  useLazyGetTruckNearByLocationsQuery
+  useLazyGetTruckNearByLocationsQuery,
+  useGetTruckMovementQuery,
+  useLazyGetTruckMovementQuery,
+  useGetTrucksQuery,
+  useGetTruckOverviewQuery
 } = trucksApi;
