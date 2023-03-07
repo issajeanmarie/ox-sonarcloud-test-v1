@@ -53,7 +53,7 @@ import EditOrderDepot from "../../Forms/Orders/EditOrderDepot";
 import EditOrderDate from "../../Forms/Orders/EditOrderDate";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
-import OrderRoute from "./OrderRoute";
+import OrderPathWay from "./OrderPathWay";
 
 const { Step } = Steps;
 const { Text } = Typography;
@@ -126,6 +126,12 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const handleDeleteStopSuccess = () => {
     setIsDeleteStopModal(false);
   };
+
+  const now = new Date().getTime();
+  const orderStartTime = new Date(`${data?.startDateTime}`).getTime();
+  const orderEndTime = new Date(`${data?.endDateTime || ""}`).getTime();
+
+  const isOrderComplete = orderEndTime < now;
 
   const deleteStopAction = () => {
     handleAPIRequests({
@@ -449,7 +455,21 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                     Order route
                   </span>
 
-                  <OrderRoute />
+                  <div className="relative h-[300px] mt-4 mb-12 border rounded overflow-hidden">
+                    <OrderPathWay
+                      truckID={data?.stops[0]?.truck?.id}
+                      start={orderStartTime}
+                      end={orderEndTime || now}
+                      isMoving={!isOrderComplete}
+                    />
+
+                    {!isOrderComplete && (
+                      <div className="absolute bottom-4 left-4 bg-ox-green rounded-full p-2 pr-4 py-[3px] font-medium text-[10px] flex gap-2 items-center">
+                        <div className="bg-white rounded-full w-[8px] h-[8px]" />
+                        <span>Live</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div

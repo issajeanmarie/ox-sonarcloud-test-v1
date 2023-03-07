@@ -16,6 +16,7 @@ import Select from "antd/lib/select";
 import Typography from "antd/lib/typography";
 import Input from "antd/lib/input";
 import DatePicker from "antd/lib/date-picker";
+import TimePicker from "antd/lib/time-picker";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng
@@ -266,6 +267,34 @@ const Entry = ({
     </Fragment>
   );
 
+  const TimeInput = (
+    <Fragment>
+      {label && <Text className="heading2 mb-[8px]">{label}</Text>}
+      <Form.Item name={name} rules={rules} help={help}>
+        <TimePicker
+          defaultValue={
+            defaultValue && moment(defaultValue && defaultValue, dateFormat)
+          }
+          onChange={onDateChange}
+          className={`my_datepicker ${size === "small" && "sm"} ${className}`}
+          name={name}
+          suffixIcon={
+            <Image
+              src="/icons/ic-actions-calendar.svg"
+              alt="Calendar icon"
+              width={18}
+              height={18}
+              preview={false}
+            />
+          }
+          format={dateFormat || format || "YYYY-MM-DD"}
+          placeholder={placeholder}
+          disabledDate={disabledDate}
+        />
+      </Form.Item>
+    </Fragment>
+  );
+
   const dateInput = (
     <Fragment>
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
@@ -369,6 +398,9 @@ const Entry = ({
 
     case "dropdownSelect":
       return dropdownSelectInput;
+
+    case "time-picker":
+      return TimeInput;
 
     default:
       return null;

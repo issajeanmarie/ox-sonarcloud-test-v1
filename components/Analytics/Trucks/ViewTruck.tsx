@@ -10,7 +10,10 @@ import { Query } from "../../../lib/types/shared";
 import DocumentCard from "./TruckCard";
 import CustomButton from "../../Shared/Button";
 import TruckTabs from "./TruckTabs";
-import { TruckDataTypes } from "../../../lib/types/trucksTypes";
+import {
+  TruckDataTypes,
+  ViewTruckPassedProps_To_OverviewPane
+} from "../../../lib/types/trucksTypes";
 import { NewTruckModal } from "../../Modals";
 import NewTRuckDocumentModal from "../../Modals/NewTruckDocumentModal";
 import ActionModal from "../../Shared/ActionModal";
@@ -20,9 +23,8 @@ import { routes } from "../../../config/route-config";
 import { useRouter } from "next/router";
 import { Empty } from "antd";
 
-interface ViewTruckProps {
+interface ViewTruckProps extends ViewTruckPassedProps_To_OverviewPane {
   truckId: Query;
-  isLoading: boolean;
   truckData: TruckDataTypes;
   isPageLoading: boolean;
 }
@@ -48,8 +50,12 @@ const DetailsComponent = ({ truckData }: any) => {
 const ViewTruck: FC<ViewTruckProps> = ({
   truckId,
   truckData,
-  isLoading,
-  isPageLoading
+  isPageLoading,
+  truckOverViewData,
+  endDate,
+  setEndDate,
+  setStartDate,
+  startDate
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isNewDocumentModalVisible, setIsNewDocumentModalVisible] =
@@ -106,7 +112,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
 
   return (
     <div className="overflow-hidden">
-      {isLoading ? (
+      {isPageLoading ? (
         <Loader />
       ) : (
         <>
@@ -140,93 +146,159 @@ const ViewTruck: FC<ViewTruckProps> = ({
             setIsVisible={setIsDeleteModalVisible}
           />
 
-          <Row align="middle" gutter={0} justify="space-between">
+          <Row align="top" gutter={0} justify="space-between">
             <Col
               md={{ span: 24 }}
               lg={{ span: 10 }}
-              className="h-[84vh]  overflow-auto"
               style={{
                 padding: "0 12px 38px 24px",
                 marginTop: "24px"
               }}
             >
-              <div className="bg-white shadow-[0px_0px_19px_#00000008] p-12 pb-6 mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-lg font-bold text-ox-dark">
-                    {truckData?.plateNumber || "Unknown"}
+              {truckOverViewData?.ongoingOrder && (
+                <div className="rounded mb-6 border-l-6 border-ox-green bg-white border-l-4 border-ox-green W-[100%]">
+                  <Row
+                    className="w-[100%] p-4 px-6 border-b border-gray"
+                    justify="space-between"
+                    align="middle"
+                  >
+                    <Col className="flex items-center gap-2 width-[fit-content]">
+                      <span className="text-sm font-bold text-ox-dark">
+                        ONGOING ORDER
+                      </span>
+
+                      <div className="w-[8px] h-[8px] mb-1 rounded-full bg-ox-green"></div>
+                    </Col>
+
+                    <Col className="captionText">
+                      Order ID: {truckOverViewData?.ongoingOrder?.id}
+                    </Col>
+                  </Row>
+
+                  <Row
+                    align="middle"
+                    justify="space-between"
+                    gutter={12}
+                    className="w-[100%] p-6"
+                  >
+                    <Col flex={1} className="w-[100px] text_ellipsis">
+                      <span className="text-gray-400 font-medium"> To:</span>{" "}
+                      <span className="text-sm font-bold text-ox-dark">
+                        {truckOverViewData?.ongoingOrder?.destinationStop?.name}
+                      </span>
+                    </Col>
+
+                    <Col>
+                      <Row align="middle" gutter={24}>
+                        <Col
+                          onClick={() =>
+                            router.push(
+                              `${routes.Orders?.url}/${truckOverViewData?.ongoingOrder?.id}`
+                            )
+                          }
+                        >
+                          <div className="p-6 py-2 bg-ox-yellow-faded-text bg_yellow_view_btn yellow rounded font-[600] pointer uppercase">
+                            Track on map
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </div>
+              )}
+
+              <div
+                className=" overflow-y-auto overflow-x-hidden"
+                style={{
+                  height: truckOverViewData?.ongoingOrder
+                    ? "calc(100vh - 300px)"
+                    : "calc(100vh - 160px)"
+                }}
+              >
+                <div className="bg-white shadow-[0px_0px_19px_#00000008] p-12 pb-6 mb-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-lg font-bold text-ox-dark">
+                      {truckData?.plateNumber || "Unknown"}
+                    </span>
+
+                    <Image
+                      onClick={handleEditTruckModal}
+                      className="pointer"
+                      src="/icons/ic-contact-edit@4x@2x.png"
+                      alt=""
+                      width={22}
+                      height={22}
+                      preview={false}
+                    />
+                  </div>
+
+                  <span className="text-gray-400">
+                    {truckData?.yearManufactured} - {truckData?.model} -{" "}
+                    {truckData?.type?.replaceAll("_", " ")}
                   </span>
 
-                  <Image
-                    onClick={handleEditTruckModal}
-                    className="pointer"
-                    src="/icons/ic-contact-edit@4x@2x.png"
-                    alt=""
-                    width={22}
-                    height={22}
-                    preview={false}
-                  />
+                  <DetailsComponent truckData={truckInfo} />
                 </div>
 
-                <span className="text-gray-400">
-                  {truckData?.yearManufactured} - {truckData?.model} -{" "}
-                  {truckData?.type?.replaceAll("_", " ")}
-                </span>
+                <div className="bg-white shadow-[0px_0px_19px_#00000008]">
+                  <div className="flex items-center justify-between mb-3 p-12 py-8 pb-3">
+                    <span className="text-lg font-bold text-ox-dark">
+                      DOCUMENTS
+                    </span>
 
-                <DetailsComponent truckData={truckInfo} />
-              </div>
+                    <CustomButton
+                      onClick={() => setIsNewDocumentModalVisible(true)}
+                      type="secondary"
+                      size="icon"
+                      loading={false}
+                      icon={<PlusOutlined />}
+                    />
+                  </div>
 
-              <div className="bg-white shadow-[0px_0px_19px_#00000008]">
-                <div className="flex items-center justify-between mb-3 p-12 py-8 pb-3">
-                  <span className="text-lg font-bold text-ox-dark">
-                    DOCUMENTS
-                  </span>
+                  <Divider />
 
-                  <CustomButton
-                    onClick={() => setIsNewDocumentModalVisible(true)}
-                    type="secondary"
-                    size="icon"
-                    loading={false}
-                    icon={<PlusOutlined />}
-                  />
+                  <Row gutter={24} className="p-12">
+                    {truckData?.documents?.length <= 0 ? (
+                      <div className="justify-center w-full">
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                      </div>
+                    ) : (
+                      truckData?.documents?.map((document: { id: number }) => (
+                        <Col
+                          key={document.id}
+                          sm={{ span: 24 }}
+                          md={{ span: 24 }}
+                          lg={{ span: 12 }}
+                          className="mb-8"
+                        >
+                          <DocumentCard
+                            document={document}
+                            truckData={truckData}
+                          />
+                        </Col>
+                      ))
+                    )}
+                  </Row>
                 </div>
-
-                <Divider />
-
-                <Row gutter={24} className="p-12">
-                  {truckData?.documents?.length <= 0 ? (
-                    <div className="justify-center w-full">
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    </div>
-                  ) : (
-                    truckData?.documents?.map((document: { id: number }) => (
-                      <Col
-                        key={document.id}
-                        sm={{ span: 24 }}
-                        md={{ span: 24 }}
-                        lg={{ span: 12 }}
-                        className="mb-8"
-                      >
-                        <DocumentCard
-                          document={document}
-                          truckData={truckData}
-                        />
-                      </Col>
-                    ))
-                  )}
-                </Row>
               </div>
             </Col>
 
             <Col
               md={{ span: 24 }}
               lg={{ span: 14 }}
-              className="h-[84vh]"
               style={{
                 padding: "0 24px 38px 12px",
-                marginTop: "24px"
+                marginTop: "24px",
+                height: "calc(100vh - 150px)"
               }}
             >
-              <TruckTabs />
+              <TruckTabs
+                endDate={endDate}
+                setEndDate={setEndDate}
+                setStartDate={setStartDate}
+                startDate={startDate}
+                truckOverViewData={truckOverViewData}
+              />
             </Col>
           </Row>
         </>

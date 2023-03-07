@@ -3,40 +3,41 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ViewTruck from "../../../components/Analytics/Trucks/ViewTruck";
 import Layout from "../../../components/Shared/Layout";
-import { useLazyGetSingleTruckQuery } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
+import {
+  useGetTruckOverviewQuery,
+  useLazyGetSingleTruckQuery
+} from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
 import { useDispatch, useSelector } from "react-redux";
 import { displaySingleTruck } from "../../../lib/redux/slices/trucksSlice";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { skipToken } from "@reduxjs/toolkit/dist/query";
 
 const SingleTruck = () => {
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+
   const router = useRouter();
   const { id: truckId } = router.query;
   const dispatch = useDispatch();
-  const [isPageLoading, setIsPageLoading] = useState(false);
 
   const [getSingleTruck, { isLoading }] = useLazyGetSingleTruckQuery();
+  const { data: truckOverViewData, isLoading: isOverviewLoading } =
+    useGetTruckOverviewQuery(truckId ? { id: truckId, start, end } : skipToken);
+
   const truckData = useSelector(
     (state: any) => state.trucks.displaySingleTruck
   );
 
   const handleGetTruckSuccess = (res: any) => {
     dispatch(displaySingleTruck(res));
-    setIsPageLoading(false);
-  };
-
-  const handleGetTruckFailure = () => {
-    setIsPageLoading(false);
   };
 
   useEffect(() => {
     if (truckId) {
-      setIsPageLoading(true);
-
       handleAPIRequests({
         request: getSingleTruck,
         id: truckId,
-        handleSuccess: handleGetTruckSuccess,
-        handleFailure: handleGetTruckFailure
+        handleSuccess: handleGetTruckSuccess
       });
     }
   }, [truckId, getSingleTruck]);
@@ -46,8 +47,12 @@ const SingleTruck = () => {
       <ViewTruck
         truckId={truckId}
         truckData={truckData}
-        isLoading={isLoading}
-        isPageLoading={isPageLoading}
+        truckOverViewData={truckOverViewData}
+        isPageLoading={isLoading || isOverviewLoading}
+        setEndDate={setEnd}
+        setStartDate={setStart}
+        startDate={start}
+        endDate={end}
       />
     </Layout>
   );

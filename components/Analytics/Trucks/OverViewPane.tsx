@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Image from "antd/lib/image";
@@ -8,7 +8,6 @@ import CustomButton from "../../Shared/Button/button";
 import TruckOverviewCard from "./TruckOverviewCard";
 import {
   useDownloadTruckShiftsMutation,
-  useLazyGetTruckOverviewQuery,
   useLazyGetTruckRevenueAnalyticsQuery,
   useLazyGetTruckShiftsAnalyticsQuery
 } from "../../../lib/api/endpoints/Trucks/trucksEndpoints";
@@ -27,16 +26,23 @@ import DaysCalculator from "../../../helpers/daysCalculator";
 import { InfoMessage } from "../../Shared/Messages/InfoMessage";
 import TruckRepairBreakdownChart from "../Charts/TruckRepairBreakdownChart";
 import { useLazyGetTruckRepairAnalyticsQuery } from "../../../lib/api/endpoints/Analytics/analyticEndpoints";
+import { daysList } from "../../../config/constants";
+import {
+  GetTruckOverviewResponse_Payload,
+  ViewTruckPassedProps_To_OverviewPane
+} from "../../../lib/types/trucksTypes";
 
-const daysList = [
-  { id: 0, name: "Last 7 days", value: 7 },
-  { id: 1, name: "Last 15 days", value: 15 },
-  { id: 2, name: "Last 30 days", value: 30 },
-  { id: 3, name: "Last 60 days", value: 60 }
-];
+interface Props extends ViewTruckPassedProps_To_OverviewPane {
+  truckOverViewData: GetTruckOverviewResponse_Payload;
+}
 
-const OvervieWPane = () => {
-  const [getTruckOverview, { data }] = useLazyGetTruckOverviewQuery();
+const OvervieWPane: FC<Props> = ({
+  truckOverViewData,
+  setStartDate,
+  startDate,
+  endDate,
+  setEndDate
+}) => {
   const [getTruckShiftsAnalytics, { data: truckShiftAnalyticsData }] =
     useLazyGetTruckShiftsAnalyticsQuery();
   const [getTruckRevenueAnalytics, { data: truckRevenueAnalyticsData }] =
@@ -46,52 +52,24 @@ const OvervieWPane = () => {
 
   const [downloadTruckShifts, { isLoading: isDownloadLoading }] =
     useDownloadTruckShiftsMutation();
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [isPageLoading, setIsPageLoading] = useState(false);
   const [selectedDay, setSelectedDay] = useState<any>(daysList[0]);
   const [isDateCustom, setIsDateCustom] = useState(false);
 
   const router = useRouter();
   const { id: truckId } = router.query;
 
-  const handleGetTruckOverviewSuccess = () => {
-    setIsPageLoading(false);
-  };
-
-  const handleGetTruckOverviewFailure = () => {
-    setIsPageLoading(false);
-  };
+  const isPageLoading = false;
 
   useEffect(() => {
     if (truckId) {
-      setIsPageLoading(true);
-
       handleAPIRequests({
         request: getTruckRepairAnalytics,
         id: truckId,
         start: startDate,
-        end: endDate,
-        handleSuccess: handleGetTruckOverviewSuccess,
-        handleFailure: handleGetTruckOverviewFailure
+        end: endDate
       });
     }
   }, [truckId, getTruckRepairAnalytics, startDate, endDate]);
-
-  useEffect(() => {
-    if (truckId) {
-      setIsPageLoading(true);
-
-      handleAPIRequests({
-        request: getTruckOverview,
-        id: truckId,
-        start: startDate,
-        end: endDate,
-        handleSuccess: handleGetTruckOverviewSuccess,
-        handleFailure: handleGetTruckOverviewFailure
-      });
-    }
-  }, [truckId, getTruckOverview, startDate, endDate]);
 
   useEffect(() => {
     if (truckId) {
@@ -131,18 +109,25 @@ const OvervieWPane = () => {
   };
 
   const cardsData = [
-    { name: "Repairs done", num: data?.repairsDone },
+    { name: "Repairs done", num: truckOverViewData?.repairsDone },
     {
       name: "Unresolved issues reports",
-      num: data?.unresolvedIssues
+      num: truckOverViewData?.unresolvedIssues
     },
-    { name: "KMs driven by OX", num: data?.kmsDriven },
-    { name: "Out of service days", num: data?.outOfServiceDays, url: data },
+    { name: "KMs driven by OX", num: truckOverViewData?.kmsDriven },
+    {
+      name: "Out of service days",
+      num: truckOverViewData?.outOfServiceDays,
+      url: truckOverViewData
+    },
     {
       name: "Days since last repair",
-      num: data?.daysSinceLastRepair
+      num: truckOverViewData?.daysSinceLastRepair
     },
-    { name: "KMs since last repair", num: data?.kmsSinceLastRepair }
+    {
+      name: "KMs since last repair",
+      num: truckOverViewData?.kmsSinceLastRepair
+    }
   ];
 
   const handleDownloadFile = (file: File) => {
@@ -279,22 +264,29 @@ const OvervieWPane = () => {
                 <Col
                   className="text_ellipsis"
                   title={`${numbersFormatter(
-                    data?.totalRevenues
-                  )} Rwf of ${numbersFormatter(data?.totalKpis)} Rwf`}
+                    truckOverViewData?.totalRevenues
+                  )} Rwf of ${numbersFormatter(
+                    truckOverViewData?.totalKpis
+                  )} Rwf`}
                 >
                   <span className="font-bold">
                     {" "}
-                    {numbersFormatter(data?.totalRevenues)} Rwf{" "}
+                    {numbersFormatter(
+                      truckOverViewData?.totalRevenues
+                    )} Rwf{" "}
                   </span>
 
                   <span className=" text-gray-400">
-                    of {numbersFormatter(data?.totalKpis)} Rwf
+                    of {numbersFormatter(truckOverViewData?.totalKpis)} Rwf
                   </span>
                 </Col>
 
                 <Col>
                   <span className="text-gray-400 italic">
-                    {percentageCalculator(data?.totalKpis, data?.totalRevenues)}
+                    {percentageCalculator(
+                      truckOverViewData?.totalKpis as number,
+                      truckOverViewData?.totalRevenues as number
+                    )}
                     %
                   </span>
                 </Col>
@@ -302,8 +294,8 @@ const OvervieWPane = () => {
 
               <Progress
                 percent={percentageCalculator(
-                  data?.totalKpis,
-                  data?.totalRevenues
+                  truckOverViewData?.totalKpis as number,
+                  truckOverViewData?.totalRevenues as number
                 )}
                 strokeColor="#E3B221"
                 trailColor="#EAEFF2"
@@ -325,22 +317,24 @@ const OvervieWPane = () => {
                 <Col
                   className="text_ellipsis"
                   title={`${numbersFormatter(
-                    data?.totalRepairCost
-                  )} RWf vs ${numbersFormatter(data?.totalRevenues)} Rwf`}
+                    truckOverViewData?.totalRepairCost
+                  )} RWf vs ${numbersFormatter(
+                    truckOverViewData?.totalRevenues
+                  )} Rwf`}
                 >
                   <span className="font-bold">
-                    {numbersFormatter(data?.totalRepairCost)} Rwf{" "}
+                    {numbersFormatter(truckOverViewData?.totalRepairCost)} Rwf{" "}
                   </span>
                   <span className="text-gray-400">
-                    vs {numbersFormatter(data?.totalRevenues)} Rwf
+                    vs {numbersFormatter(truckOverViewData?.totalRevenues)} Rwf
                   </span>
                 </Col>
 
                 <Col>
                   <span className="text-gray-400 italic">
                     {percentageCalculator(
-                      data?.totalRevenues,
-                      data?.totalRepairCost
+                      truckOverViewData?.totalRevenues as number,
+                      truckOverViewData?.totalRepairCost as number
                     )}
                     %
                   </span>
@@ -349,8 +343,8 @@ const OvervieWPane = () => {
 
               <Progress
                 percent={percentageCalculator(
-                  data?.totalRevenues,
-                  data?.totalRepairCost
+                  truckOverViewData?.totalRevenues as number,
+                  truckOverViewData?.totalRepairCost as number
                 )}
                 strokeColor="#A2B3D1"
                 trailColor="#EAEFF2"
@@ -372,23 +366,25 @@ const OvervieWPane = () => {
                 <Col
                   className="text_ellipsis"
                   title={`${numbersFormatter(
-                    data?.totalFuelCost
-                  )} Rwf vs ${numbersFormatter(data?.totalRevenues)} Rwf`}
+                    truckOverViewData?.totalFuelCost
+                  )} Rwf vs ${numbersFormatter(
+                    truckOverViewData?.totalRevenues
+                  )} Rwf`}
                 >
                   <span className="font-bold">
-                    {numbersFormatter(data?.totalFuelCost)} Rwf{" "}
+                    {numbersFormatter(truckOverViewData?.totalFuelCost)} Rwf{" "}
                   </span>
 
                   <span className=" text-gray-400">
-                    vs {numbersFormatter(data?.totalRevenues)} Rwf
+                    vs {numbersFormatter(truckOverViewData?.totalRevenues)} Rwf
                   </span>
                 </Col>
 
                 <Col>
                   <span className="text-gray-400 italic">
                     {percentageCalculator(
-                      data?.totalRevenues,
-                      data?.totalFuelCost
+                      truckOverViewData?.totalRevenues as number,
+                      truckOverViewData?.totalFuelCost as number
                     )}
                     %
                   </span>
@@ -397,8 +393,8 @@ const OvervieWPane = () => {
 
               <Progress
                 percent={percentageCalculator(
-                  data?.totalRevenues,
-                  data?.totalFuelCost
+                  truckOverViewData?.totalRevenues as number,
+                  truckOverViewData?.totalFuelCost as number
                 )}
                 strokeColor="#A2B3D1"
                 trailColor="#EAEFF2"

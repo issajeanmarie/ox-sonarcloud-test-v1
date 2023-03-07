@@ -31,6 +31,7 @@ const FuelRecordsPane = () => {
   const onStartDateChange = (_: string, date: string) => {
     setStartDate(date);
   };
+
   const onEndDateChange = (_: string, date: string) => {
     setEndDate(date);
   };
