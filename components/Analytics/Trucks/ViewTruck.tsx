@@ -193,7 +193,7 @@ const ViewTruck: FC<ViewTruckProps> = ({
                         <Col
                           onClick={() =>
                             router.push(
-                              `${routes.Orders?.url}/${truckOverViewData?.ongoingOrder?.id}`
+                              `${routes.viewOrder?.url}/${truckOverViewData?.ongoingOrder?.id}`
                             )
                           }
                         >
