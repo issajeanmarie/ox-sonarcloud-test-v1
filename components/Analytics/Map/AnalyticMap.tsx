@@ -12,9 +12,9 @@ import HeatmapLayer from "react-google-maps/lib/components/visualization/Heatmap
 import { AnalyticMapTypes } from "../../../lib/types/pageTypes/Analytics/AnalyticMapTypes";
 import CustomInput from "../../Shared/Input";
 import { MediumSpinLoader } from "../../Shared/Loaders/Loaders";
-import { orderRouteMapStyles } from "../../../helpers/mapStyles";
+import { mapStyles } from "../../../helpers/mapStyles";
 import { LatLng } from "use-places-autocomplete";
-import Markers from "./Markers";
+import LiveTrucks from "./LiveTrucks";
 
 type officeLocationType = {
   office: {
@@ -93,11 +93,11 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
     <GoogleMapComponent
       defaultZoom={10}
       defaultCenter={{ lat: -1.9440727, lng: 30.0618851 }}
-      defaultOptions={{ styles: orderRouteMapStyles }}
+      defaultOptions={{ styles: mapStyles }}
     >
       {coordinates && <HeatmapLayer data={heatMapData} />}
 
-      <Markers />
+      <LiveTrucks />
     </GoogleMapComponent>
   );
 

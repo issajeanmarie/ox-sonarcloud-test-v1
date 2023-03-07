@@ -273,3 +273,95 @@ export interface SingleNearByClient extends SingleNearByLocation {
   location: string;
   id: number;
 }
+
+export interface GetTruckMovementRequest {
+  start: string | Date;
+  end: string | Date;
+  id: number | Query;
+}
+
+export interface GetTruckMovementResponse {
+  message: string;
+  payload: SingleMovement[];
+}
+
+export interface SingleMovement {
+  latitude: number;
+  longitude: number;
+  deviceTime: Date | string;
+  fixTime: Date | string;
+  serverTime: Date | string;
+}
+
+export interface GetTruckOverviewRequest {
+  id: number | Query | string;
+  start: string;
+  end: string;
+}
+
+export interface GetTruckOverviewResponse {
+  message: string;
+  payload: GetTruckOverviewResponse_Payload;
+}
+
+export interface GetTruckOverviewResponse_Payload {
+  repairsDone: number;
+  unresolvedIssues: number;
+  outOfServiceDays: number;
+  daysSinceLastRepair: number;
+  kmsDriven: number;
+  kmsSinceLastRepair: number;
+  totalRepairCost: number;
+  totalRevenues: number;
+  totalFuelCost: number;
+  totalKpis: number;
+  ongoingOrder: GetTruckOverviewResponse_OngoingOrder;
+}
+
+export interface GetTruckOverviewResponse_OngoingOrder {
+  status: string;
+  paymentStatus: string;
+  startDateTime: Date;
+  endDateTime: Date;
+  totalAmount: number;
+  paymentPlan: string;
+  originStop: GetTruckOverviewResponse_NStop;
+  destinationStop: GetTruckOverviewResponse_NStop;
+  id: number;
+}
+
+export interface GetTruckOverviewResponse_NStop {
+  position: number;
+  parsedCoordinates: GetTruckOverviewResponse_ParsedCoordinates;
+  name: string;
+  location: string;
+  id: number;
+  coordinates: string;
+}
+
+export interface GetTruckOverviewResponse_ParsedCoordinates {
+  lat: number;
+  lng: number;
+}
+
+export interface ViewTruckPassedProps_To_OverviewPane {
+  truckOverViewData: GetTruckOverviewResponse_Payload | undefined;
+  setEndDate: React.Dispatch<React.SetStateAction<string>>;
+  setStartDate: React.Dispatch<React.SetStateAction<string>>;
+  startDate: string;
+  endDate: string;
+}
+
+export interface GetTruckNoPaginationResponse {
+  message: string;
+  payload: GetTruckNoPaginationResponse_SingleTruck[];
+}
+
+export interface GetTruckNoPaginationResponse_SingleTruck {
+  plateNumber: string;
+  model: string;
+  capacity: number;
+  trackingLatitude: number;
+  trackingLongitude: number;
+  id: number;
+}

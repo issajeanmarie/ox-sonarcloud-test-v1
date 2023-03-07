@@ -30,3 +30,31 @@ export const dateDisplay = (dateToConvert: Date | string) => {
     return `${seconds} ${seconds <= 1 ? "second" : "seconds"} ago`;
   }
 };
+
+export const getHoursFromDate = (date: Date | string) => {
+  if (!date) {
+    return { hours: "", minutes: "", seconds: "" };
+  }
+
+  return {
+    hours: new Date(date).getHours(),
+    minutes: new Date(date).getMinutes(),
+    seconds: new Date(date).getSeconds()
+  };
+};
+
+export const subtractHours = ({
+  date,
+  hours
+}: {
+  date: Date | null;
+  hours: number;
+}) => {
+  date && date.setHours(date.getHours() - hours);
+
+  const fromNow = new Date();
+
+  fromNow.setHours(fromNow.getHours() - hours);
+
+  return date || fromNow;
+};
