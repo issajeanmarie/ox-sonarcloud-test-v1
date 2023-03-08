@@ -1,3 +1,4 @@
+export const TIME_API_KEY = process.env.NEXT_PUBLIC_TIME_API_KEY;
 export const BASE_API_URL = process.env.NEXT_PUBLIC_API_HOST;
 export const BASE_API_WS_URL = process.env.NEXT_PUBLIC_API_WS_HOST;
 export const JWT_SECRET = process.env.NEXT_PUBLIC_API_JWT_KEY;
