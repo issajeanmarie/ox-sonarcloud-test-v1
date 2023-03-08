@@ -13,11 +13,11 @@ export const useHandleDateTime = () => {
     getTimeFromOnline(timeZone).then((res) => {
       const { isTimeAccurate } = clockIsSEt({
         clientTime,
-        onlineTime: res?.datetime
+        onlineTime: res?.date_time_ymd
       });
 
       setClock({
-        date: res?.datetime,
+        date: res?.date_time_ymd,
         setClockNotification: !isTimeAccurate
       });
     });
