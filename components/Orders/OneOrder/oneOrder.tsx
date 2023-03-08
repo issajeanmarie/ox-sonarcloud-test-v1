@@ -288,7 +288,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
           title="From"
           render={(text, record: Order) => {
             const child = (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 text_ellipsis">
                 <Text className="heading2">From</Text>
                 <Text className="font-light">
                   {[...record.stops]
@@ -307,7 +307,7 @@ const Order: FC<OrderProps> = ({ order, index }) => {
           title="To"
           render={(text, record: Order) => {
             const child = (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 text_ellipsis">
                 <Text className="heading2">To</Text>
                 <Text className="font-light">
                   {[...record?.stops]

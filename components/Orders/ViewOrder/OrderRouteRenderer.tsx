@@ -37,21 +37,28 @@ const OrderRouteRenderer: FC<Props> = ({
     }
   }, [liveTruckMovementsFromAPI, setLiveTruckMovements, isMoving]);
 
-  const firstEl = movements?.payload[0];
-  const lastEl = movements?.payload[movements.payload.length - 1];
+  const firstEl = movements?.payload?.length && movements?.payload[0];
+  const lastEl =
+    movements?.payload?.length &&
+    movements?.payload[movements.payload.length - 1];
 
-  const firstElOnLive = liveTruckMovements?.payload[0];
+  const firstElOnLive =
+    liveTruckMovements?.payload?.length && liveTruckMovements?.payload[0];
   const lastElOnLive =
+    liveTruckMovements?.payload?.length &&
     liveTruckMovements?.payload[liveTruckMovements.payload.length - 1];
 
   const originMarkerPos =
     isMoving && firstElOnLive
       ? { lat: firstElOnLive?.latitude, lng: firstElOnLive?.longitude }
-      : { lat: firstEl?.latitude, lng: firstEl?.longitude };
+      : {
+          lat: (firstEl as SingleMovement)?.latitude,
+          lng: (firstEl as SingleMovement)?.longitude
+        };
 
   const destinationMarkerPos = {
-    lat: lastEl?.latitude,
-    lng: lastEl?.longitude
+    lat: (lastEl as SingleMovement)?.latitude,
+    lng: (lastEl as SingleMovement)?.longitude
   };
 
   const routeHistoryPath = movements?.payload?.map((mov) => ({
@@ -65,23 +72,23 @@ const OrderRouteRenderer: FC<Props> = ({
   }));
 
   const routeHistoryDirectionServiceOrigin = {
-    lat: firstEl?.latitude,
-    lng: firstEl?.longitude
+    lat: (firstEl as SingleMovement)?.latitude,
+    lng: (firstEl as SingleMovement)?.longitude
   };
 
   const routeHistoryDirectionServiceDestination = {
-    lat: lastEl?.latitude,
-    lng: lastEl?.longitude
+    lat: (lastEl as SingleMovement)?.latitude,
+    lng: (lastEl as SingleMovement)?.longitude
   };
 
   const liveTruckDirectionServiceOrigin = {
-    lat: firstElOnLive?.latitude,
-    lng: firstElOnLive?.longitude
+    lat: (firstElOnLive as SingleMovement)?.latitude,
+    lng: (firstElOnLive as SingleMovement)?.longitude
   };
 
   const liveTruckDirectionServiceDestination = {
-    lat: lastElOnLive?.latitude,
-    lng: lastElOnLive?.longitude
+    lat: (lastElOnLive as SingleMovement)?.latitude,
+    lng: (lastElOnLive as SingleMovement)?.longitude
   };
 
   const directionServiceOrigin = isMoving
@@ -93,6 +100,7 @@ const OrderRouteRenderer: FC<Props> = ({
     : routeHistoryDirectionServiceDestination;
 
   const truckPosition =
+    liveTruckMovements?.payload?.length &&
     liveTruckMovements?.payload[liveTruckMovements.payload.length - 2];
 
   useEffect(() => {
@@ -163,12 +171,16 @@ const OrderRouteRenderer: FC<Props> = ({
               lng: truckPosition.longitude
             },
             {
-              lat: liveTruckMovements?.payload[
-                liveTruckMovements?.payload.length - 1
-              ].latitude,
-              lng: liveTruckMovements?.payload[
-                liveTruckMovements?.payload.length - 1
-              ].longitude
+              lat:
+                liveTruckMovements?.payload?.length &&
+                liveTruckMovements?.payload[
+                  liveTruckMovements?.payload.length - 1
+                ].latitude,
+              lng:
+                liveTruckMovements?.payload?.length &&
+                liveTruckMovements?.payload[
+                  liveTruckMovements?.payload.length - 1
+                ].longitude
             }
           );
 
@@ -219,9 +231,8 @@ const OrderRouteRenderer: FC<Props> = ({
           }}
           onCloseClick={handleCloseInfoWindow}
         >
-          <div className="p-4 px-2">
-            <p className="font-bold text-[16px]">Time the truck arrived here</p>
-            <p className="text-[12px]">
+          <div className="px-4 mt-8 gs">
+            <p className="text-[14px] font-medium">
               {activeInfoWindow?.deviceTime
                 ? new Date(activeInfoWindow?.deviceTime)
                     .toLocaleString()

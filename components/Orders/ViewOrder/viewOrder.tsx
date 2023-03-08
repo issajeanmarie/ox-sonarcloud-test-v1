@@ -54,6 +54,7 @@ import EditOrderDate from "../../Forms/Orders/EditOrderDate";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
 import OrderPathWay from "./OrderPathWay";
+import getHoursDiff from "../../../utils/getHoursDiff";
 
 const { Step } = Steps;
 const { Text } = Typography;
@@ -130,6 +131,8 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const now = new Date().getTime();
   const orderStartTime = new Date(`${data?.startDateTime}`).getTime();
   const orderEndTime = new Date(`${data?.endDateTime || ""}`).getTime();
+
+  const isOrderAbove24Hours = getHoursDiff(now, orderStartTime) > 24;
 
   const isOrderComplete = orderEndTime < now;
 
@@ -461,6 +464,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                       start={orderStartTime}
                       end={orderEndTime || now}
                       isMoving={!isOrderComplete}
+                      isOrderAbove24Hours={isOrderAbove24Hours}
                     />
 
                     {!isOrderComplete && (
