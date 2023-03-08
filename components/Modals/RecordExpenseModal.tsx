@@ -43,11 +43,11 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
   onQBAuthFailure
 }) => {
   const [form] = Form.useForm();
-  const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
-  const [isUploadingAttachment, setIsUploadingAttachment] = useState(false);
+  const [attachmentUrl, setAttachmentUrl] = useState<File | string | null>(
+    null
+  );
   const [hasNoEbm, setHasNoEbm] = useState(false);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
-  const [uploadFailure, setUploadFailure] = useState(null);
 
   const watchqQbSupplierId = Form.useWatch("qbSupplierId", form);
   const dispatch = useDispatch();
@@ -132,30 +132,36 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
 
   if (
     (suppliersError as any)?.status === 401 ||
-    ((suppliersError as any)?.message &&
-      (suppliersError as any).message.indexOf("Token expired") !== -1) ||
+    ((suppliersError as any)?.data?.message &&
+      ((suppliersError as any).data.message.indexOf("Token expired") !== -1 ||
+        (suppliersError as any).data.message.indexOf("Token revoked") !==
+          -1)) ||
     (trucksError as any)?.status === 401 ||
-    ((trucksError as any)?.message &&
-      (trucksError as any).message.indexOf("Token expired") !== -1) ||
+    ((trucksError as any)?.data?.message &&
+      ((trucksError as any).data.message.indexOf("Token expired") !== -1 ||
+        (trucksError as any).data.message.indexOf("Token revoked") !== -1)) ||
     (locationsError as any)?.status === 401 ||
-    ((locationsError as any)?.message &&
-      (locationsError as any).message.indexOf("Token expired") !== -1) ||
+    ((locationsError as any)?.data?.message &&
+      ((locationsError as any).data.message.indexOf("Token expired") !== -1 ||
+        (locationsError as any).data.message.indexOf("Token revoked") !==
+          -1)) ||
     (paymentMethodsError as any)?.status === 401 ||
-    ((paymentMethodsError as any)?.message &&
-      (paymentMethodsError as any).message.indexOf("Token expired") !== -1) ||
+    ((paymentMethodsError as any)?.data?.message &&
+      ((paymentMethodsError as any).data.message.indexOf("Token expired") !==
+        -1 ||
+        (paymentMethodsError as any).data.message.indexOf("Token revoked") !==
+          -1)) ||
     (accountsError as any)?.status === 401 ||
-    ((accountsError as any)?.message &&
-      (accountsError as any).message.indexOf("Token expired") !== -1) ||
+    ((accountsError as any)?.data?.message &&
+      ((accountsError as any).data.message.indexOf("Token expired") !== -1 ||
+        (accountsError as any).data.message.indexOf("Token revoked") !== -1)) ||
     (categoriesError as any)?.status === 401 ||
-    ((categoriesError as any)?.message &&
-      (categoriesError as any).message.indexOf("Token expired") !== -1)
+    ((categoriesError as any)?.data?.message &&
+      ((categoriesError as any).data.message.indexOf("Token expired") !== -1 ||
+        (categoriesError as any).data.message.indexOf("Token expired") !== -1))
   ) {
     onQBAuthFailure();
   }
-
-  const setUploadSuccess = () => {
-    setAttachmentError(null);
-  };
 
   useEffect(() => {
     if (isEdit && editExpenseData) {
@@ -197,6 +203,10 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
     onCancel && onCancel();
   };
 
+  const onAttachmentChange = (files: File[]) => {
+    setAttachmentUrl(files[0]);
+  };
+
   const handleRecordExpenseSuccess = (res: any) => {
     form.resetFields();
     setAttachmentUrl(null);
@@ -219,28 +229,51 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
     }
 
     const qbSupplier = supplierFromQB();
-
-    const payload = {
-      ...values,
-      qbSupplierId: qbSupplier?.value || null,
-      qbSupplierName: qbSupplier?.label || values.qbSupplierId || "",
-      qbTruckName:
-        trucks.find((el: any) => el.value === values.qbTruckId)?.label || "",
-      qbLocationName:
-        locations.find((el: any) => el.value === values.qbLocationId)?.label ||
-        "",
-      qbPaymentMethodName:
-        paymentMethods.find((el: any) => el.value === values.qbPaymentMethodId)
-          ?.label || "",
-      qbAccountName:
-        accounts.find((el: any) => el.value === values.qbAccountId)?.label ||
-        "",
-      qbCategoryName:
-        accounts.find((el: any) => el.value === values.qbCategoryId)?.label ||
-        "",
-      attachmentUrl,
-      hasEbm: !hasNoEbm
-    };
+    const formData = new FormData();
+    Object.keys(values).map((key: any) => {
+      if (values[key]) {
+        if (key === "date") {
+          formData.append(key, moment(values[key]).format("YYYY-MM-DD"));
+          return;
+        }
+        // Check if supplier is from Quickbooks
+        if (key === "qbSupplierId" && qbSupplier?.value) {
+          formData.append("qbSupplierId", qbSupplier.value);
+          return;
+        }
+        formData.append(key, values[key]);
+      }
+    });
+    // if supply is not from Quickbooks, send value entered in supplier field
+    formData.append(
+      "qbSupplierName",
+      qbSupplier?.label || values.qbSupplierId || ""
+    );
+    formData.append(
+      "qbTruckName",
+      trucks.find((el: any) => el.value === values.qbTruckId)?.label || ""
+    );
+    formData.append(
+      "qbLocationName",
+      locations.find((el: any) => el.value === values.qbLocationId)?.label
+    );
+    formData.append(
+      "qbPaymentMethodName",
+      paymentMethods.find((el: any) => el.value === values.qbPaymentMethodId)
+        ?.label || ""
+    );
+    formData.append(
+      "qbAccountName",
+      accounts.find((el: any) => el.value === values.qbAccountId)?.label || ""
+    );
+    formData.append(
+      "qbCategoryName",
+      accounts.find((el: any) => el.value === values.qbCategoryId)?.label || ""
+    );
+    formData.append("hasEbm", `${!hasNoEbm}`);
+    if (typeof attachmentUrl !== "string") {
+      formData.append("file", attachmentUrl);
+    }
 
     if (isEdit) {
       handleAPIRequests({
@@ -248,7 +281,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
         handleSuccess: handleEditExpenseSuccess,
         showSuccess: true,
         id: editExpenseData?.id,
-        ...payload
+        formData
       });
       return;
     }
@@ -257,7 +290,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
       request: recordExpense,
       handleSuccess: handleRecordExpenseSuccess,
       showSuccess: true,
-      ...payload
+      formData
     });
   };
 
@@ -468,7 +501,11 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
             {attachmentUrl && (
               <FilePreview
                 fileName={
-                  attachmentUrl.split("/")[attachmentUrl.split("/").length - 1]
+                  typeof attachmentUrl === "string"
+                    ? attachmentUrl.split("/")[
+                        attachmentUrl.split("/").length - 1
+                      ]
+                    : attachmentUrl.name
                 }
                 onClick={() => setAttachmentUrl(null)}
                 suffixIcon={
@@ -484,11 +521,8 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
           </Col>
           <Col flex="none">
             <FileUploader
-              uploadLoading={isUploadingAttachment}
-              setUploadLoading={setIsUploadingAttachment}
-              setUploadedPicInfo={setAttachmentUrl}
-              setUploadSuccess={setUploadSuccess}
-              setUploadFailure={setUploadFailure}
+              uploadFile={false}
+              onFileChange={onAttachmentChange}
               validations={[
                 ".pdf",
                 "image/*",
@@ -501,7 +535,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
             />
           </Col>
           <Col xs={24} sm={24} md={24}>
-            {(attachmentError || uploadFailure) && (
+            {attachmentError && (
               <div className="ant-form-item-explain ant-form-item-explain-connected">
                 <span role="alert" className="ant-form-item-explain-error">
                   Supporting document is required

@@ -49,16 +49,16 @@ export const manageSidebarMenus = () => [
 
 export const moreSidebarMenus = () => [
   {
-    name: routeConfig.Expenses.name,
-    icon: ExpenseTrackerIcon,
-    active: false,
-    url: routeConfig.Expenses.url
-  },
-  {
     name: routeConfig.Analytics.name,
     icon: AnalyticsIcon,
     active: false,
     url: routeConfig.Analytics.url
+  },
+  {
+    name: routeConfig.Expenses.name,
+    icon: ExpenseTrackerIcon,
+    active: false,
+    url: routeConfig.Expenses.url
   },
   {
     name: routeConfig.Resources.name,

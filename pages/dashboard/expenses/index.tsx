@@ -157,9 +157,10 @@ const Expenses = () => {
     setIsApproveSelectedModalVisible(false);
     if (
       res?.status === 401 ||
-      (res?.message &&
-        (res?.message?.indexOf("Access is denied") !== -1 ||
-          res?.message?.indexOf("Token expired") !== -1))
+      (res?.data?.message &&
+        (res.data.message.indexOf("Access is denied") !== -1 ||
+          res.data.message.indexOf("Token expired") !== -1 ||
+          res.data.message.indexOf("Token revoked") !== -1))
     ) {
       onQBAuthFailure();
     }
