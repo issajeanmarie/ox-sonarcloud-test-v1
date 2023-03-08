@@ -20,6 +20,7 @@ const OrderRoute: FC<Props> = ({ movements, isMoving, start, truckID }) => {
   const [center, setCenter] = useState({ lat: -1.9440727, lng: 30.0618851 });
 
   const centerTo =
+    movements?.payload?.length &&
     movements?.payload[Math.round(movements?.payload?.length / 2)];
 
   useEffect(() => {

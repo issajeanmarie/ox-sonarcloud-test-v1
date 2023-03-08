@@ -783,3 +783,14 @@ body {
   width: auto !important;
   background-color: transparent !important;
 }
+
+/* Google map close infowindow icon */
+.gm-ui-hover-effect {
+  margin-top: 12px !important;
+  margin-right: 16px !important;
+}
+
+.gm-ui-hover-effect span {
+  width: 18px !important;
+  height: 18px !important;
+}

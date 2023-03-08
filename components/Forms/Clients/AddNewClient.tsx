@@ -11,6 +11,7 @@ import { AddClientTypes } from "../../../lib/types/pageTypes/Clients/AddClientTy
 import { YellowCheckIcon } from "../../Icons";
 import { ECONOMIC_STATUS } from "../../../config/constants";
 import CustomPhoneInput from "../../Shared/Custom/CustomPhoneInput";
+
 const AddNewClient: FC<AddClientTypes> = ({
   onAddClientFinish,
   createOffices,
@@ -156,7 +157,6 @@ const AddNewClient: FC<AddClientTypes> = ({
             type="text"
             label="Name"
             placeholder="Office name"
-            // rules={requiredInput}
           />
         </Col>
 
