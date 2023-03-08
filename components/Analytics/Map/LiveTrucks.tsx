@@ -11,7 +11,7 @@ import {
 } from "../../../lib/types/trucksTypes";
 import { subtractHours } from "../../../utils/dateFormatter";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
-import { SmallSpinLoader } from "../../Shared/Loaders/Loaders";
+import Button from "../../Shared/Button";
 
 const LiveTrucks = () => {
   const [activeInfoWindow, setActiveInfoWindow] =
@@ -28,8 +28,8 @@ const LiveTrucks = () => {
     setTruckMovements(truckMovementsFromAPI);
   }, [truckMovementsFromAPI]);
 
-  const icon1 = {
-    url: "/icons/ox_truck_top_view.svg",
+  const icon = {
+    url: "/icons/ox_marker.svg",
     scaledSize: new window.google.maps.Size(30, 30),
     anchor: new window.google.maps.Point(15, 15),
     scale: 0.7
@@ -56,17 +56,15 @@ const LiveTrucks = () => {
     (truck) => truck.trackingLatitude && truck.trackingLongitude
   );
 
-  const handleClickTruck = (
-    truck: GetTruckNoPaginationResponse_SingleTruck
-  ) => {
-    setActiveInfoWindow(truck);
+  const handleViewTruckRoute = () => {
+    setTruckMovements(null);
 
     const now = new Date().getTime();
     const startTimeStamp = subtractHours({ date: null, hours: 12 }).getTime();
 
     handleAPIRequests({
       request: getTruckMovements,
-      id: truck.id,
+      id: activeInfoWindow?.id,
       start: new Date(startTimeStamp).toISOString(),
       end: new Date(now).toISOString()
     });
@@ -76,8 +74,15 @@ const LiveTrucks = () => {
     setActiveInfoWindow(null);
   };
 
+  const handleHoverTruck = (
+    truck: GetTruckNoPaginationResponse_SingleTruck
+  ) => {
+    setActiveInfoWindow(truck);
+  };
+
   return (
     <>
+      cons
       {activeInfoWindow && (
         <InfoWindow
           position={{
@@ -95,33 +100,33 @@ const LiveTrucks = () => {
               View route for last 12 hours
             </span>
 
-            {isFetching && (
-              <div className="h-[100%] flex nowrap gap-2">
-                <SmallSpinLoader />
-                <span className="mt-2 text-gray-500">
-                  Wait for several seconds...
-                </span>
-              </div>
-            )}
+            <div className="w-[60px] mt-6">
+              <Button
+                type="dash"
+                loading={isFetching}
+                className="underline font-medium pointer"
+                onClick={handleViewTruckRoute}
+              >
+                View route
+              </Button>
+            </div>
           </div>
         </InfoWindow>
       )}
-
       {filteredTrucks?.map((truck) => (
         <Marker
           key={truck.id}
           clickable
-          onClick={() => handleClickTruck(truck)}
+          onMouseOver={() => handleHoverTruck(truck)}
           position={
             new google.maps.LatLng(
               truck?.trackingLatitude,
               truck?.trackingLongitude
             )
           }
-          icon={icon1}
+          icon={icon}
         />
       ))}
-
       {truckMovements?.payload?.length && (
         <Marker
           position={{
@@ -134,7 +139,6 @@ const LiveTrucks = () => {
           }}
         />
       )}
-
       {truckMovements && (
         <Polyline
           path={truckMovements?.payload?.map((truck) => ({

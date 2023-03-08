@@ -37,6 +37,7 @@ const WithPrivateRoute = (Wrapped: any) => {
       router.replace(routes.login.url);
       return null;
     }
+
     return (
       <>
         {router.pathname !== routes.MapAnalytics.url && (

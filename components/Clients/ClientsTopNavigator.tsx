@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
 import FilterOrdersModal from "../../components/Shared/Modal";
 import FilterClientForm from "../Forms/Clients/FilterClientForm";
+import CircleCheckbox from "../Shared/Custom/CircleCheckbox";
 
 const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   isModalVisible,
@@ -35,6 +36,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   setStart,
   setEnd
 }) => {
+  const [receiveNotification, setReceiveNotification] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
   const [offices, setOffices]: any = useState([]);
@@ -80,6 +82,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
     setMainLocation(undefined);
     form.resetFields();
     setIsModalVisible(false);
+    setReceiveNotification(false);
 
     dispatch(displayPaginatedData({ payload }));
   };
@@ -97,6 +100,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         coordinates: values?.coordinates,
         tinNumber: values?.tinNumber,
         economicStatus: values?.economicStatus,
+        receiveNotification: receiveNotification,
         showSuccess: true,
         handleSuccess: handlePostClientSuccess
       });
@@ -126,20 +130,6 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
             }
           />
         </Col>
-
-        {/* <Col>
-          <DropDownSelector
-            label="Category"
-            dropDownContent={
-              categories
-                ? [{ name: "All categories", id: 0 }, ...categories]
-                : []
-            }
-            defaultSelected={defaultSelected}
-            setDefaultSelected={setDefaultSelected}
-            handleStateChange={() => setCurrentPages(1)}
-          />
-        </Col> */}
 
         <Col>
           <DropDownSelector
@@ -229,34 +219,53 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         isModalVisible={isModalVisible}
         title="NEW CLIENT"
         loading={isLoading}
+        footerWidth={24}
         footerContent={
-          <>
-            {!mainLocation ? (
-              <Popover
-                placement="left"
-                content={
-                  <div className="flex flex-col">
-                    <span className="font-light"> Add main location</span>
-                  </div>
-                }
-                title={false}
-                trigger="click"
-              >
-                <Button form="AddNewClient" type="primary">
+          <Row className="w-[100%]" justify="space-between" align="middle">
+            <Col>
+              <div className="flex items-center gap-4">
+                <div className="text-sm underline font-bold">
+                  Receive notification
+                </div>
+                <div>
+                  <CircleCheckbox
+                    defaultValue={false}
+                    checked={receiveNotification}
+                    setState={setReceiveNotification}
+                    state={receiveNotification}
+                  />
+                </div>
+              </div>
+            </Col>
+
+            <Col>
+              {!mainLocation ? (
+                <Popover
+                  placement="left"
+                  content={
+                    <div className="flex flex-col">
+                      <span className="font-light"> Add main location</span>
+                    </div>
+                  }
+                  title={false}
+                  trigger="click"
+                >
+                  <Button form="AddNewClient" type="primary">
+                    ADD CLIENT
+                  </Button>
+                </Popover>
+              ) : (
+                <Button
+                  form="AddNewClient"
+                  loading={isLoading}
+                  type="primary"
+                  htmlType="submit"
+                >
                   ADD CLIENT
                 </Button>
-              </Popover>
-            ) : (
-              <Button
-                form="AddNewClient"
-                loading={isLoading}
-                type="primary"
-                htmlType="submit"
-              >
-                ADD CLIENT
-              </Button>
-            )}
-          </>
+              )}
+            </Col>
+          </Row>
         }
       >
         <AddNewClient

@@ -9,6 +9,9 @@ import NProgress from "nprogress";
 import { AppLoadingLoader } from "../components/Shared/Loaders";
 import { SEO } from "../components/Shared";
 import { store } from "../lib/redux/store";
+import DateIsInAccurate from "../components/Shared/DateIsInAccurate";
+import { useHandleDateTime } from "../utils/hooks/useHandleDateTime";
+import { CheckDateAndTimeAccuracy } from "../components/Shared/DateIsInAccurate/DateIsInAccurate";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const router = useRouter();
@@ -32,13 +35,21 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
     };
   }, [router]);
 
+  const { clock } = useHandleDateTime();
+
   return (
     <>
       <SEO title="OX Delivers Portal" />
 
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
+      {!clock.date ? (
+        <CheckDateAndTimeAccuracy />
+      ) : clock.setClockNotification ? (
+        <DateIsInAccurate accurateTime={clock.date} />
+      ) : (
+        <Provider store={store}>
+          <Component {...pageProps} />
+        </Provider>
+      )}
     </>
   );
 };
