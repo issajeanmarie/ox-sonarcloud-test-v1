@@ -23,7 +23,7 @@ import {
 } from "../../../lib/api/endpoints/Expenses/expensesEndpoint";
 import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { handleDownloadFile } from "../../../utils/handleDownloadFile";
-import { InfoMessage } from "../../Shared/Messages/InfoMessage";
+import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -34,7 +34,8 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
   onSelectRows,
   showEditModal,
   showDeleteModal,
-  showApproveModal
+  showApproveModal,
+  onQBAuthFailure
 }) => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isViewModalVisible, setIsViewModalVisible] = useState<boolean>(false);
@@ -81,14 +82,15 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
       handleAPIRequests({
         request: downloadFromQB,
         handleSuccess: (res: any) => handleDownloadFromQBSuccess(res, expense),
-        handleFailure: () => handleDownloadFailure(expense),
+        handleFailure: (res: any) => handleDownloadFailure(res, expense),
+        showFailure: false,
         id: expense.id
       });
     } else {
       handleAPIRequests({
         request: downloadFromServer,
         handleSuccess: (file: File) => handleDownloadSuccess(file, expense),
-        handleFailure: () => handleDownloadFailure(expense),
+        handleFailure: (res: any) => handleDownloadFailure(res, expense),
         showFailure: false,
         id: expense.id
       });
@@ -126,12 +128,24 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
     }
   };
 
-  const handleDownloadFailure = (expense: Expense) => {
+  const handleDownloadFailure = (res: any, expense: Expense) => {
     setItemsToDownload(
       itemsToDownload.filter((item) => item.id !== expense.id)
     );
 
-    InfoMessage("No attachable found for this expense to download");
+    if (
+      res?.status === 401 ||
+      (res?.data?.message &&
+        (res.data.message.indexOf("Access is denied") !== -1 ||
+          res.data.message.indexOf("Token expired") !== -1 ||
+          res.data.message.indexOf("Token revoked") !== -1))
+    ) {
+      onQBAuthFailure();
+    } else {
+      ErrorMessage(
+        res?.data?.message || "No attachable found for this expense"
+      );
+    }
   };
 
   const onApprove = (id: number) => {
@@ -448,7 +462,10 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           )
         }
       >
-        <ViewExpense expense={itemToView as Expense} />
+        <ViewExpense
+          expense={itemToView as Expense}
+          onQBAuthFailure={onQBAuthFailure}
+        />
       </ModalWrapper>
     </>
   );
