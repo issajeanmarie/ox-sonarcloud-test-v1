@@ -12,11 +12,11 @@ import {
 } from "../../lib/api/endpoints/Expenses/expensesEndpoint";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { handleDownloadFile } from "../../utils/handleDownloadFile";
-import { InfoMessage } from "../Shared/Messages/InfoMessage";
+import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 
 const { Text } = Typography;
 
-const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
+const ViewExpense: FC<ViewExpenseTypes> = ({ expense, onQBAuthFailure }) => {
   const [downloadFromServer, { isLoading: isLoadingFromServer }] =
     useLazyDownloadFromServerQuery();
   const [downloadFromQB, { isLoading: isLoadingFromQB }] =
@@ -28,6 +28,7 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
         request: downloadFromQB,
         handleSuccess: handleDownloadFromQBSuccess,
         handleFailure: handleDownloadFailure,
+        showFailure: false,
         id: expense.id
       });
     } else {
@@ -64,8 +65,20 @@ const ViewExpense: FC<ViewExpenseTypes> = ({ expense }) => {
     }
   };
 
-  const handleDownloadFailure = () => {
-    InfoMessage("No data to download");
+  const handleDownloadFailure = (res: any) => {
+    if (
+      res?.status === 401 ||
+      (res?.data?.message &&
+        (res.data.message.indexOf("Access is denied") !== -1 ||
+          res.data.message.indexOf("Token expired") !== -1 ||
+          res.data.message.indexOf("Token revoked") !== -1))
+    ) {
+      onQBAuthFailure();
+    } else {
+      ErrorMessage(
+        res?.data?.message || "No attachable found for this expense"
+      );
+    }
   };
 
   return (
