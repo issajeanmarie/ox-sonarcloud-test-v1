@@ -18,6 +18,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { pagination } from "../../../config/pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import moment from "moment";
 
 const Clients = () => {
   const [currentPages, setCurrentPages] = useState(1);
@@ -63,8 +64,8 @@ const Clients = () => {
       categoryId: selectedCategory?.id || "",
       q: searchQuery,
       sort: sortValue.value || "",
-      start: startDate,
-      endDate: endDate,
+      start: startDate ? moment(startDate).format("YYYY-MM-DD") : "",
+      endDate: endDate ? moment(endDate).format("YYYY-MM-DD") : "",
       source: "",
       showSuccess: true,
       handleSuccess: handleDownloadClientsSuccess
@@ -91,8 +92,8 @@ const Clients = () => {
     org = "",
     dest = "",
     hq = "",
-    start = startDate,
-    end = endDate,
+    start = startDate ? moment(startDate).format("YYYY-MM-DD") : "",
+    end = endDate ? moment(endDate).format("YYYY-MM-DD") : "",
     categoryId = selectedCategory?.id || "",
     q = searchQuery,
     sort = sortValue.value || "",
