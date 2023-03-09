@@ -29,6 +29,7 @@ import { QB_PAYMENT_TYPES } from "../../config/constants";
 import { QBSchema } from "../../lib/types/expenses";
 import { userType } from "../../helpers/getLoggedInUser";
 import ExtendableSelect from "../Shared/Input/ExtendableSelect";
+import { ErrorMessage } from "../Shared/Messages/ErrorMessage";
 
 const { Text } = Typography;
 
@@ -161,6 +162,15 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
         (categoriesError as any).data.message.indexOf("Token expired") !== -1))
   ) {
     onQBAuthFailure();
+  } else if (
+    suppliersError ||
+    trucksError ||
+    locationsError ||
+    paymentMethodsError ||
+    accountsError ||
+    categoriesError
+  ) {
+    ErrorMessage("Something went wrong!");
   }
 
   useEffect(() => {
