@@ -213,9 +213,9 @@ const DetailsSection = ({
 
   const router = useRouter();
 
-  const formula = `${details?.estimatedDistance} KMs * ${
-    totalWeight || 0
-  } KGs * 0.5`;
+  const formula = `${Number(details?.estimatedDistance || 0).toFixed(
+    2
+  )} KMs * ${totalWeight || 0} KGs * 0.5`;
 
   return (
     <div className="my-16 mt-8">
