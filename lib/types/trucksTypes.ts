@@ -316,6 +316,7 @@ export interface GetTruckOverviewResponse_Payload {
   totalFuelCost: number;
   totalKpis: number;
   ongoingOrder: GetTruckOverviewResponse_OngoingOrder;
+  totalKGs: number;
 }
 
 export interface GetTruckOverviewResponse_OngoingOrder {
