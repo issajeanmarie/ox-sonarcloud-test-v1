@@ -31,6 +31,7 @@ import {
   GetTruckOverviewResponse_Payload,
   ViewTruckPassedProps_To_OverviewPane
 } from "../../../lib/types/trucksTypes";
+import { abbreviateNumber } from "../../../utils/numberFormatter";
 
 interface Props extends ViewTruckPassedProps_To_OverviewPane {
   truckOverViewData: GetTruckOverviewResponse_Payload;
@@ -109,24 +110,46 @@ const OvervieWPane: FC<Props> = ({
   };
 
   const cardsData = [
-    { name: "Repairs done", num: truckOverViewData?.repairsDone },
+    {
+      name: "Repairs done",
+      num: abbreviateNumber(truckOverViewData?.repairsDone || 0)
+    },
     {
       name: "Unresolved issues reports",
-      num: truckOverViewData?.unresolvedIssues
+      num: abbreviateNumber(truckOverViewData?.unresolvedIssues || 0)
     },
-    { name: "KMs driven by OX", num: truckOverViewData?.kmsDriven },
+    {
+      name: "KMs driven by OX",
+      num: abbreviateNumber(truckOverViewData?.kmsDriven || 0)
+    },
     {
       name: "Out of service days",
-      num: truckOverViewData?.outOfServiceDays,
+      num: abbreviateNumber(truckOverViewData?.outOfServiceDays || 0),
       url: truckOverViewData
     },
     {
       name: "Days since last repair",
-      num: truckOverViewData?.daysSinceLastRepair
+      num: abbreviateNumber(truckOverViewData?.daysSinceLastRepair || 0)
     },
     {
       name: "KMs since last repair",
-      num: truckOverViewData?.kmsSinceLastRepair
+      num: abbreviateNumber(truckOverViewData?.kmsSinceLastRepair || 0)
+    },
+    {
+      name: "Repair cost per KM",
+      num: truckOverViewData?.kmsDriven
+        ? abbreviateNumber(
+            truckOverViewData?.totalRepairCost / truckOverViewData?.kmsDriven
+          )
+        : 0
+    },
+    {
+      name: "Repair cost per KG",
+      num: truckOverViewData?.kmsDriven
+        ? abbreviateNumber(
+            truckOverViewData?.totalKGs / truckOverViewData?.kmsDriven
+          )
+        : 0
     }
   ];
 
