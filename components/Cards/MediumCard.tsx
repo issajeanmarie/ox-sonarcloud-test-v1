@@ -28,7 +28,8 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
   isFetching,
   scope,
   start,
-  end
+  end,
+  countReplacer
 }) => {
   const [downloadAnlyticsReport, { isLoading }] =
     useDownloadAnalyticsReportMutation();
@@ -116,7 +117,7 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
         {isFetching ? (
           <SmallSpinLoader />
         ) : (
-          <>{count !== null ? abbreviateNumber(count) : "None"}</>
+          countReplacer || (count ? abbreviateNumber(count) : 0)
         )}
       </Text>
       <Text className="captionText">
