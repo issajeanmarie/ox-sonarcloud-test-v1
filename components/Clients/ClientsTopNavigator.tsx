@@ -16,6 +16,9 @@ import { localeString } from "../../utils/numberFormatter";
 import { handleAPIRequests } from "../../utils/handleAPIRequests";
 import { useDispatch } from "react-redux";
 import { displayPaginatedData } from "../../lib/redux/slices/paginatedData";
+import FilterOrdersModal from "../../components/Shared/Modal";
+import FilterClientForm from "../Forms/Clients/FilterClientForm";
+import CircleCheckbox from "../Shared/Custom/CircleCheckbox";
 
 const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   isModalVisible,
@@ -26,14 +29,16 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
   categories,
   handleDownloadClients,
   isDownloadingClientsLoading,
-  defaultSelected,
   setDefaultSelected,
   sort,
   setSort,
-  setCurrentPages
+  setCurrentPages,
+  setStart,
+  setEnd
 }) => {
-  const [form] = Form.useForm();
-
+  const [receiveNotification, setReceiveNotification] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
   const [offices, setOffices]: any = useState([]);
   const [location, setLocation] = useState<{
     name: string;
@@ -44,8 +49,11 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
     coordinates: LatLng;
   }>();
   const [officeName, setOfficeName] = useState("");
-  const [postClient, { isLoading }] = usePostClientMutation();
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [postClient, { isLoading }] = usePostClientMutation();
+
+  const [form] = Form.useForm();
 
   const dispatch = useDispatch();
 
@@ -74,6 +82,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
     setMainLocation(undefined);
     form.resetFields();
     setIsModalVisible(false);
+    setReceiveNotification(false);
 
     dispatch(displayPaginatedData({ payload }));
   };
@@ -91,6 +100,7 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
         coordinates: values?.coordinates,
         tinNumber: values?.tinNumber,
         economicStatus: values?.economicStatus,
+        receiveNotification: receiveNotification,
         showSuccess: true,
         handleSuccess: handlePostClientSuccess
       });
@@ -123,30 +133,45 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
 
         <Col>
           <DropDownSelector
-            label="Category"
-            dropDownContent={
-              categories
-                ? [{ name: "All categories", id: undefined }, ...categories]
-                : []
-            }
-            defaultSelected={defaultSelected}
-            setDefaultSelected={setDefaultSelected}
-            handleStateChange={() => setCurrentPages(1)}
-          />
-        </Col>
-
-        <Col>
-          <DropDownSelector
             label="Sort"
             dropDownContent={[
               { id: 0, name: "Z-A (Names)", value: "names__desc" },
               { id: 1, name: "A-Z (Names)", value: "names__asc" },
               { id: 2, name: "Z-A (Locations)", value: "location__desc" },
-              { id: 3, name: "A-Z (Locations)", value: "location__asc" }
+              { id: 3, name: "A-Z (Locations)", value: "location__asc" },
+              {
+                id: 4,
+                name: "Z-A (Pending payment)",
+                value: "pending_amount__desc"
+              },
+              {
+                id: 5,
+                name: "A-Z (Pending payment)",
+                value: "pending_amount__asc"
+              }
             ]}
             defaultSelected={sort}
             setDefaultSelected={setSort}
           />
+        </Col>
+
+        <Col>
+          <div
+            className={` rounded p-3 flex items-center justify-center ${
+              isFiltered ? "border border-ox-yellow" : "border border-gray-200 "
+            } `}
+          >
+            <Image
+              width={16}
+              height={16}
+              src="/icons/filter.svg"
+              data-test-id="order-filter"
+              onClick={() => setIsVisible(true)}
+              className="cursor-pointer"
+              alt="Filter icon"
+              preview={false}
+            />
+          </div>
         </Col>
       </Row>
     </Col>
@@ -174,39 +199,73 @@ const ClientsTopNavigator: FC<ClientsTopNavigatorTypes> = ({
 
   return (
     <>
+      <FilterOrdersModal
+        isModalVisible={isVisible}
+        setIsModalVisible={setIsVisible}
+      >
+        <FilterClientForm
+          categories={categories}
+          setStart={setStart}
+          setEnd={setEnd}
+          setDefaultSelected={setDefaultSelected}
+          setIsVisible={setIsVisible}
+          setCurrentPages={setCurrentPages}
+          setIsFiltered={setIsFiltered}
+        />
+      </FilterOrdersModal>
+
       <ModalWrapper
         setIsModalVisible={setIsModalVisible}
         isModalVisible={isModalVisible}
         title="NEW CLIENT"
         loading={isLoading}
+        footerWidth={24}
         footerContent={
-          <>
-            {!mainLocation ? (
-              <Popover
-                placement="left"
-                content={
-                  <div className="flex flex-col">
-                    <span className="font-light"> Add main location</span>
-                  </div>
-                }
-                title={false}
-                trigger="click"
-              >
-                <Button form="AddNewClient" type="primary">
+          <Row className="w-[100%]" justify="space-between" align="middle">
+            <Col>
+              <div className="flex items-center gap-4">
+                <div className="text-sm underline font-bold">
+                  Receive notification
+                </div>
+                <div>
+                  <CircleCheckbox
+                    defaultValue={false}
+                    checked={receiveNotification}
+                    setState={setReceiveNotification}
+                    state={receiveNotification}
+                  />
+                </div>
+              </div>
+            </Col>
+
+            <Col>
+              {!mainLocation ? (
+                <Popover
+                  placement="left"
+                  content={
+                    <div className="flex flex-col">
+                      <span className="font-light"> Add main location</span>
+                    </div>
+                  }
+                  title={false}
+                  trigger="click"
+                >
+                  <Button form="AddNewClient" type="primary">
+                    ADD CLIENT
+                  </Button>
+                </Popover>
+              ) : (
+                <Button
+                  form="AddNewClient"
+                  loading={isLoading}
+                  type="primary"
+                  htmlType="submit"
+                >
                   ADD CLIENT
                 </Button>
-              </Popover>
-            ) : (
-              <Button
-                form="AddNewClient"
-                loading={isLoading}
-                type="primary"
-                htmlType="submit"
-              >
-                ADD CLIENT
-              </Button>
-            )}
-          </>
+              )}
+            </Col>
+          </Row>
         }
       >
         <AddNewClient

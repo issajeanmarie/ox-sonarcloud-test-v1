@@ -81,7 +81,7 @@ const ViewOrderHeader: FC<ViewOrderHeaderProps> = ({
           </div>
           <div className="mb-2 text-2xl font-bold mt-9">Order confirmed</div>
           <div className="text-lg font-light text-gray-400">
-            Would you like to add another client?
+            Would you like to add another order?
           </div>
           <div className="mt-9 w-[250px]">
             <Button type="primary" onClick={addAnotherClient}>

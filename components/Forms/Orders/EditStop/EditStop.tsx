@@ -6,11 +6,10 @@ import { FC, useEffect } from "react";
 import { useEditStopMutation } from "../../../../lib/api/endpoints/Orders/ordersEndpoints";
 import { EditStopRequest, Order, Stop } from "../../../../lib/types/orders";
 import { requiredField } from "../../../../lib/validation/InputValidations";
+import { handleAPIRequests } from "../../../../utils/handleAPIRequests";
 import ModalWrapper from "../../../Modals/ModalWrapper";
 import Button from "../../../Shared/Button";
 import Input from "../../../Shared/Input";
-import { ErrorMessage } from "../../../Shared/Messages/ErrorMessage";
-import { SuccessMessage } from "../../../Shared/Messages/SuccessMessage";
 
 interface EditStopProps {
   order: Order;
@@ -31,31 +30,29 @@ const EditStop: FC<EditStopProps> = ({
 
   const [form] = useForm();
 
+  const handleEditStopSuccess = () => {
+    form.resetFields();
+    closeModal();
+  };
+
   const handleOnFinish = (values: EditStopRequest) => {
     if (stop) {
       const data = {
         ...values,
-        departureDateTime: moment(values.departureDateTime).format(
-          "YYYY-MM-DDTHH:mm"
-        ),
-        arrivalDateTime: moment(values.arrivalDateTime).format(
-          "YYYY-MM-DDTHH:mm"
-        ),
         name: stop.name,
         location: stop.location,
         coordinates: stop.coordinates || "",
         position: stop.position
       };
-      editStop({ orderId: order.id, stopId: stop?.id, data })
-        .unwrap()
-        .then((res) => {
-          SuccessMessage(res.message);
-          form.resetFields();
-          closeModal();
-        })
-        .catch((e) => {
-          ErrorMessage(e.data?.message || "Something went wrong");
-        });
+
+      handleAPIRequests({
+        request: editStop,
+        orderId: order.id,
+        stopId: stop?.id,
+        data,
+        showSuccess: true,
+        handleSuccess: handleEditStopSuccess
+      });
     }
   };
 

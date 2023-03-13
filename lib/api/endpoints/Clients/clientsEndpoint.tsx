@@ -43,7 +43,9 @@ const clientsApi = baseAPI.injectEndpoints({
           DTO?.dest || ""
         }&hq=${DTO?.hq || ""}&categoryId=${DTO?.categoryId || ""}&q=${
           DTO?.q || ""
-        }&sort=${DTO?.sort || ""}&source=${DTO?.source || ""}`,
+        }&sort=${DTO?.sort || ""}&source=${DTO?.source || ""}&start=${
+          DTO.start || ""
+        }&end=${DTO.end || ""}`,
         method: "GET"
       })
     }),
@@ -81,7 +83,7 @@ const clientsApi = baseAPI.injectEndpoints({
           DTO?.categoryId || ""
         }&q=${DTO?.q || ""}&sort=${DTO?.sort || ""}&source=${
           DTO?.source || ""
-        }`,
+        }&start=${DTO.start || ""}&end=${DTO.end || ""}`,
         method: "GET",
         headers: {
           "content-type": "application/octet-stream"

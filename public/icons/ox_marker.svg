@@ -1,0 +1,27 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="273.56" height="399.22" viewBox="0 0 273.56 399.22">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #001928;
+      }
+
+      .cls-2 {
+        fill: #f8be2c;
+      }
+
+      .cls-3 {
+        opacity: 0.33;
+        fill: url(#radial-gradient);
+      }
+    </style>
+    <radialGradient id="radial-gradient" cx="136.78" cy="560.78" r="87.88" gradientTransform="translate(-31.99 321.3) scale(1.23 0.11)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#231f20"/>
+      <stop offset="1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g>
+    <path class="cls-1" d="M273.56,136.78c0,97.22-136.78,166.78-136.78,166.78S0,238.44,0,136.78a136.78,136.78,0,0,1,273.56,0Z"/>
+    <path id="truck" class="cls-2" d="M195.4,101.34a10.1,10.1,0,0,0-8.26-4.3H162V81.9a10.1,10.1,0,0,0-10.09-10.09H71.18A10.09,10.09,0,0,0,61.09,81.9V185.35H77.83a21.44,21.44,0,0,0,42.2,0h33.49a21.44,21.44,0,0,0,42.21,0h16.74V128.11a7.55,7.55,0,0,0-1.37-4.34ZM71.17,81.9h80.75v55.51H71.18Zm27.76,111a11.35,11.35,0,1,1,11.36-11.35,11.35,11.35,0,0,1-11.36,11.35Zm75.7,0A11.35,11.35,0,1,1,186,181.56a11.36,11.36,0,0,1-11.35,11.35Zm27.75-17.66h-7.26a21.44,21.44,0,0,0-41,0h-34.7a21.45,21.45,0,0,0-41,0H71.18V147.49h131.2Zm0-37.85H162V107.12h25.13l15.24,21.79Z"/>
+    <ellipse class="cls-3" cx="136.78" cy="385.11" rx="108.44" ry="10"/>
+  </g>
+</svg>

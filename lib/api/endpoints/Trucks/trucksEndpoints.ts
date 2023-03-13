@@ -9,7 +9,13 @@ import {
   ToggleTruckIssueRequest,
   EditTruckRequest,
   DeleteTruckRepairLogRequest,
-  DeleteMaintenanceCheckRequest
+  DeleteMaintenanceCheckRequest,
+  GetTruckNearByLocationsRequest,
+  GetTruckNearByLocationsResponse,
+  GetTruckNearByClientsResponse,
+  GetTruckMovementRequest,
+  GetTruckMovementResponse,
+  GetTruckOverviewResponse
 } from "../../../types/trucksTypes";
 import { baseAPI } from "../../api";
 
@@ -88,8 +94,9 @@ const trucksApi = baseAPI.injectEndpoints({
         url: `/trucks/${id}/overview?start=${start || ""}&end=${end || ""}`,
         method: "GET"
       }),
-      transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
-        response.payload
+      transformResponse: (
+        response: ApiResponseMetadata<GetTruckOverviewResponse>
+      ) => response.payload
     }),
 
     getTruckRepairLog: builder.query({
@@ -329,6 +336,39 @@ const trucksApi = baseAPI.injectEndpoints({
       }),
       transformResponse: (response: ApiResponseMetadata<TruckTypes>) =>
         response.payload
+    }),
+
+    getTruckNearByLocations: builder.query<
+      GetTruckNearByLocationsResponse,
+      GetTruckNearByLocationsRequest
+    >({
+      providesTags: [],
+      query: ({ truckId }) => ({
+        url: `/trucks/${truckId}/nearby-locations`,
+        method: "GET"
+      })
+    }),
+
+    getTruckNearByClients: builder.query<
+      GetTruckNearByClientsResponse,
+      GetTruckNearByLocationsRequest
+    >({
+      providesTags: [],
+      query: ({ truckId }) => ({
+        url: `/trucks/${truckId}/nearby-clients`,
+        method: "GET"
+      })
+    }),
+
+    getTruckMovement: builder.query<
+      GetTruckMovementResponse,
+      GetTruckMovementRequest
+    >({
+      providesTags: [],
+      query: ({ id, start, end }) => ({
+        url: `/trucks/${id}/movement?start=${start}&end=${end}`,
+        method: "GET"
+      })
     })
   })
 });
@@ -360,5 +400,11 @@ export const {
   useLazyGetTruckMaintenanceChecklistQuery,
   useDeleteMaintenanceCheckMutation,
   useCreateMaintenanceCheckMutation,
-  useDownloadMaintenanceCheckMutation
+  useDownloadMaintenanceCheckMutation,
+  useLazyGetTruckNearByClientsQuery,
+  useLazyGetTruckNearByLocationsQuery,
+  useGetTruckMovementQuery,
+  useLazyGetTruckMovementQuery,
+  useGetTrucksQuery,
+  useGetTruckOverviewQuery
 } = trucksApi;

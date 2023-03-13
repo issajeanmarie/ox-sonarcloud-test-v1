@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+declare const google: any;
+
 import { Checkbox, Col, Image, Row } from "antd";
 import React, { FC, useEffect, useState } from "react";
 import {
@@ -12,8 +14,7 @@ import CustomInput from "../../Shared/Input";
 import { MediumSpinLoader } from "../../Shared/Loaders/Loaders";
 import { mapStyles } from "../../../helpers/mapStyles";
 import { LatLng } from "use-places-autocomplete";
-
-declare const google: any;
+import LiveTrucks from "./LiveTrucks";
 
 type officeLocationType = {
   office: {
@@ -33,6 +34,7 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
   //HANDLE SEARCH
   const [filtered, setFiltered] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     if (categories) {
       setFiltered(categories?.payload);
@@ -94,6 +96,8 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
       defaultOptions={{ styles: mapStyles }}
     >
       {coordinates && <HeatmapLayer data={heatMapData} />}
+
+      <LiveTrucks />
     </GoogleMapComponent>
   );
 
@@ -110,7 +114,7 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
         </div>
       ) : (
         <WrappedMap
-          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places,visualization&key=AIzaSyBHgwcB3X6WdORbT2I5Ra5spl1raTEDWG8"
+          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places,visualization&key=AIzaSyB9hqG4ozeDqzIdNd-OoftYqgFCHc33U_4"
           loadingElement={<div style={{ height: "100%" }} />}
           containerElement={<div style={{ height: "100%" }} />}
           mapElement={<div style={{ height: "100%" }} />}
@@ -157,13 +161,18 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
             {filtered?.length !== 0 ? (
               <>
                 {filtered?.map((item: any, index: number) => (
-                  <Row key={item?.id} className="mb-3">
+                  <Row key={item?.id} className="mb-3" gutter={6}>
                     <Col
                       flex="auto"
                       className="flex items-center gap-4 flex-nowrap"
                     >
                       <span className="text-xs font-light">{index + 1}</span>
-                      <span className="text-xs font-bold">{item?.name}</span>
+                      <span
+                        className="text-xs font-bold text_ellipsis max-w-[300px]"
+                        title={item?.name}
+                      >
+                        {item?.name}
+                      </span>
                     </Col>
                     <Col flex="none">
                       <Checkbox.Group

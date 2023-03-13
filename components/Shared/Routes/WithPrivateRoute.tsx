@@ -37,11 +37,12 @@ const WithPrivateRoute = (Wrapped: any) => {
       router.replace(routes.login.url);
       return null;
     }
+
     return (
       <>
         {router.pathname !== routes.MapAnalytics.url && (
           <Script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHgwcB3X6WdORbT2I5Ra5spl1raTEDWG8&libraries=places"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9hqG4ozeDqzIdNd-OoftYqgFCHc33U_4&libraries=places"
             defer
           />
         )}

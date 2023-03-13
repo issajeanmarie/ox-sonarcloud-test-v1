@@ -18,6 +18,7 @@ import { handleAPIRequests } from "../../../utils/handleAPIRequests";
 import { pagination } from "../../../config/pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { displayPaginatedData } from "../../../lib/redux/slices/paginatedData";
+import moment from "moment";
 
 const Clients = () => {
   const [currentPages, setCurrentPages] = useState(1);
@@ -28,6 +29,8 @@ const Clients = () => {
   const [selectedCategory, setSelectedCategory]: any = useState("");
   const [sortValue, setSort]: any = useState("");
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const [getClients, { isLoading: isClientsLoading }] = useLazyClientsQuery();
 
@@ -61,6 +64,8 @@ const Clients = () => {
       categoryId: selectedCategory?.id || "",
       q: searchQuery,
       sort: sortValue.value || "",
+      start: startDate ? moment(startDate).format("YYYY-MM-DD") : "",
+      endDate: endDate ? moment(endDate).format("YYYY-MM-DD") : "",
       source: "",
       showSuccess: true,
       handleSuccess: handleDownloadClientsSuccess
@@ -87,6 +92,8 @@ const Clients = () => {
     org = "",
     dest = "",
     hq = "",
+    start = startDate ? moment(startDate).format("YYYY-MM-DD") : "",
+    end = endDate ? moment(endDate).format("YYYY-MM-DD") : "",
     categoryId = selectedCategory?.id || "",
     q = searchQuery,
     sort = sortValue.value || "",
@@ -102,6 +109,8 @@ const Clients = () => {
       org,
       dest,
       hq,
+      start,
+      end,
       categoryId,
       q,
       sort,
@@ -125,7 +134,7 @@ const Clients = () => {
   useEffect(() => {
     setFiltersBasedLoader(true);
     getClientsAction({});
-  }, [sortValue, searchQuery, selectedCategory]);
+  }, [sortValue, searchQuery, selectedCategory, startDate, endDate]);
 
   //MODAL
   const showModal = () => {
@@ -154,10 +163,11 @@ const Clients = () => {
           categories={categories?.payload}
           handleDownloadClients={handleDownloadClients}
           isDownloadingClientsLoading={isDownloadingClientsLoading}
-          defaultSelected={selectedCategory}
           setDefaultSelected={setSelectedCategory}
           sort={sortValue}
           setSort={setSort}
+          setStart={setStartDate}
+          setEnd={setEndDate}
           setCurrentPages={setCurrentPages}
         />
 

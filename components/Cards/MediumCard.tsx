@@ -113,11 +113,7 @@ const MediumCard: FC<AnalyticsCardTypes> = ({
       }
     >
       <Text className="text-2xl font-semibold block yellow mb-3">
-        {isFetching ? (
-          <SmallSpinLoader />
-        ) : (
-          <>{count !== null ? abbreviateNumber(count) : "None"}</>
-        )}
+        {isFetching ? <SmallSpinLoader /> : count ? abbreviateNumber(count) : 0}
       </Text>
       <Text className="captionText">
         {isFetching ? `Hold on, getting you ${title}...` : subTitle}

@@ -56,8 +56,8 @@ const OrdersHeader: FC<OrdersHeaderProps> = ({
   const RightSide = (
     <div className="flex items-center gap-5">
       <div
-        className={` p-2 flex items-center justify-center ${
-          isFiltered ? "border rounded-lg border-ox-yellow" : ""
+        className={` rounded p-3 flex items-center justify-center ${
+          isFiltered ? "border border-ox-yellow" : "border border-gray-200 "
         } `}
       >
         <Image
