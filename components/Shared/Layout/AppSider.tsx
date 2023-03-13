@@ -151,7 +151,7 @@ const AppSider = ({ collapsed }: any) => {
             wrap={false}
           >
             <Col>
-              <Row align="middle" gutter={12}>
+              <Row align="middle" gutter={12} wrap={false}>
                 <Col>
                   <Image
                     width={16}
@@ -310,7 +310,7 @@ const AppSider = ({ collapsed }: any) => {
                     />
                   }
                 >
-                  <text className="text-white normalText pl-3">
+                  <text className={`text-white normalText pl-3 ${menu.name}`}>
                     {!collapsed && menu.name}
                   </text>
                 </Menu.Item>
@@ -351,7 +351,9 @@ const AppSider = ({ collapsed }: any) => {
                     />
                   }
                 >
-                  <text className="text-white normalText pl-3">
+                  <text
+                    className={`text-white normalText pl-3 ${moreMenu.name}`}
+                  >
                     {!collapsed && moreMenu.name}
                   </text>
 
@@ -384,7 +386,7 @@ const AppSider = ({ collapsed }: any) => {
                   />
                 }
               >
-                <text className="text-white normalText pl-3">
+                <text className={`text-white normalText pl-3 ${moreMenu.name}`}>
                   {!collapsed && moreMenu.name}
                 </text>
               </Menu.Item>

@@ -3,6 +3,7 @@ import {
   CreateDepotRequest,
   DepotResponse,
   EditDepotRequest,
+  ResolveRedFlagRequest,
   GetDepotProfileRequest,
   GetDepotProfileResponse,
   GetFlagsRequest,
@@ -45,7 +46,9 @@ const depotsEndpoints = baseAPI.injectEndpoints({
     getFlags: builder.query<RedFlagResponse, GetFlagsRequest>({
       providesTags: ["GetFlags"],
       query: ({ id, start, end, search, page, size }) => ({
-        url: `/depots/${id}/red-flags?start=${start}&end=${end}&search=${search}&page=${page}&size=${size}`,
+        url: `/depots/${id}/red-flags?start=${start || ""}&end=${end}&search=${
+          search || ""
+        }&page=${page || 0}&size=${size || 1000}`,
         method: "GET"
       })
     }),
@@ -65,6 +68,24 @@ const depotsEndpoints = baseAPI.injectEndpoints({
         url: `/depots/${id}/red-flags/${redFlagId}`,
         method: "GET"
       })
+    }),
+
+    resolveRedFlag: builder.mutation<GenericResponse, ResolveRedFlagRequest>({
+      invalidatesTags: ["GetSingleFlag", "GetFlags"],
+      query: (DTO) => ({
+        url: `/depots/${DTO.id}/red-flags/${DTO.redFlagId}/resolve`,
+        method: "PATCH",
+        body: DTO
+      })
+    }),
+
+    justifyRedFlag: builder.mutation<GenericResponse, ResolveRedFlagRequest>({
+      invalidatesTags: ["GetSingleFlag", "GetFlags"],
+      query: (DTO) => ({
+        url: `/depots/${DTO.id}/red-flags/${DTO.redFlagId}/justify`,
+        method: "PATCH",
+        body: DTO
+      })
     })
   })
 });
@@ -75,5 +96,7 @@ export const {
   useEditDepotMutation,
   useLazyDepotProfileQuery,
   useLazyGetFlagsQuery,
-  useLazyGetSingleFlagQuery
+  useLazyGetSingleFlagQuery,
+  useResolveRedFlagMutation,
+  useJustifyRedFlagMutation
 } = depotsEndpoints;
