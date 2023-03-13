@@ -6,4 +6,5 @@ export type AnalyticsCardTypes = {
   scope?: string;
   start?: string | undefined;
   end?: string | undefined;
+  countReplacer?: string;
 };
