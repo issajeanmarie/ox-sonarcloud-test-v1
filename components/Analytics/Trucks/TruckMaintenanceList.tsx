@@ -84,6 +84,13 @@ const TruckMaintenanceList = ({
                 const suspensionData = mappedObjects(data.suspension);
                 const wheelsAndTiresData = mappedObjects(data.wheelsAndTires);
                 const windshieldAndAcData = mappedObjects(data.windshieldAndAc);
+                const observationAndRecommendationData = [
+                  {
+                    key: "Observations",
+                    value: data.observations
+                  },
+                  { key: "Recommendations", value: data.recommendations }
+                ];
 
                 return (
                   <Panel
@@ -227,6 +234,11 @@ const TruckMaintenanceList = ({
                         records={windshieldAndAcData}
                         title="Windshield And Ac"
                       />
+
+                      <DetailsComponent
+                        records={observationAndRecommendationData}
+                        title="Observations & recommendations"
+                      />
                     </div>
                   </Panel>
                 );
@@ -243,7 +255,7 @@ export default TruckMaintenanceList;
 
 type Types = {
   title: string;
-  records: { key: number; value: string }[];
+  records: { key: string; value: string }[];
 };
 
 export const DetailsComponent: React.FC<Types> = ({
@@ -254,7 +266,7 @@ export const DetailsComponent: React.FC<Types> = ({
   <>
     <p className="text-gray-400 mt-6 uppercase mb-4">{title}</p>
 
-    {records?.map((record: { key: number; value: string }, index: number) => (
+    {records?.map((record: { key: string; value: string }, index: number) => (
       <>
         {children && children}
 
@@ -263,6 +275,7 @@ export const DetailsComponent: React.FC<Types> = ({
           gutter={16}
           style={{ marginTop: "12px" }}
           key={record.key}
+          wrap={false}
         >
           <Col md={2} lg={8}>
             <span className="text font-bold text-ox-dark">

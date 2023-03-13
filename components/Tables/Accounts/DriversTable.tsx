@@ -353,7 +353,7 @@ const DriversTable: FC<DriversTableProps> = ({
       render: (text: DriversTableTypes, record: DriversTableTypes) => {
         const now = splitDates();
         const shiftStartingTime = splitDates(
-          record.ongoingShift ? `${record.ongoingShift.startDateTime}Z` : ""
+          record.ongoingShift ? `${record.ongoingShift.startDateTime}` : ""
         );
 
         const diff = getHoursDiff(toNewDate(shiftStartingTime), toNewDate(now));

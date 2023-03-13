@@ -15,11 +15,12 @@ const TimeOverviewCard: FC<Props> = ({ data }) => {
   const [duration, setDuration] = useState({
     hours: 0,
     minutes: 0,
-    seconds: 0
+    seconds: 0,
+    days: 0
   });
 
   const shiftStartingTime = splitDates(
-    data?.profileInfo ? data?.profileInfo?.ongoingShift?.startDateTime : ""
+    data?.profileInfo ? `${data?.profileInfo?.ongoingShift?.startDateTime}` : ""
   );
 
   useEffect(() => {
@@ -45,6 +46,12 @@ const TimeOverviewCard: FC<Props> = ({ data }) => {
 
       <Row align="middle" justify="space-between">
         <Col>
+          {duration.days ? (
+            <span className="text-sm text-gray-500 font-[400]">
+              {duration.days > 1 ? `${duration.days} days` : duration.days} day
+              and
+            </span>
+          ) : null}
           <span className="text-2xl font-semibold block red">
             {`${duration.hours} : ${duration.minutes} : ${duration.seconds} `}
           </span>

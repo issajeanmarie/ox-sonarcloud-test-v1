@@ -21,7 +21,9 @@ module.exports = {
         "ox-danger": "#FCF2F4",
         "ox-dark-border": "#181f2b",
         "ox-border-color": "#EAEFF2A1",
-        "ox-border-dash": "#A2B3D1"
+        "ox-border-dash": "#A2B3D1",
+        "ox-blue": "#4AC3FC",
+        "ox-green": "#CDDF00"
       }
     }
   },

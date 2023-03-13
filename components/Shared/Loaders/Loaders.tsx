@@ -781,3 +781,15 @@ export const ExpensesTableLoader = () => {
     </Row>
   );
 };
+
+export const SpinningLoader = ({ className }: { className?: string }) => {
+  return (
+    <Row
+      justify="center"
+      align="middle"
+      className={`${className} w-[100%] h-[70vh]`}
+    >
+      <Col>{loadingIcon}</Col>
+    </Row>
+  );
+};
