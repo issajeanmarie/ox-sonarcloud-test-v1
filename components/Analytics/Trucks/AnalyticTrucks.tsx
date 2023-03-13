@@ -117,7 +117,8 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
               <MediumCard
                 title="Top performing"
                 subTitle="The truck that is doing great"
-                count={truckData?.payload?.topPerforming}
+                count={0}
+                countReplacer={truckData?.payload?.topPerforming}
                 isFetching={truckFetching}
               />
             </CardColWrapper>
@@ -125,7 +126,8 @@ const AnalyticTrucks: FC<AnalyticTrucksTypes> = ({
               <MediumCard
                 title="Worst performing"
                 subTitle="The truck that is performing poorly"
-                count={truckData?.payload?.worstPerforming}
+                countReplacer={truckData?.payload?.worstPerforming}
+                count={0}
                 isFetching={truckFetching}
               />
             </CardColWrapper>
