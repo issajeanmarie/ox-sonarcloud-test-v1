@@ -53,6 +53,8 @@ import EditOrderDepot from "../../Forms/Orders/EditOrderDepot";
 import EditOrderDate from "../../Forms/Orders/EditOrderDate";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
+import OrderPathWay from "./OrderPathWay";
+import getHoursDiff from "../../../utils/getHoursDiff";
 
 const { Step } = Steps;
 const { Text } = Typography;
@@ -125,6 +127,14 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
   const handleDeleteStopSuccess = () => {
     setIsDeleteStopModal(false);
   };
+
+  const now = new Date().getTime();
+  const orderStartTime = new Date(`${data?.startDateTime}`).getTime();
+  const orderEndTime = new Date(`${data?.endDateTime || ""}`).getTime();
+
+  const isOrderAbove24Hours = getHoursDiff(now, orderStartTime) > 24;
+
+  const isOrderComplete = orderEndTime < now;
 
   const deleteStopAction = () => {
     handleAPIRequests({
@@ -442,7 +452,37 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                   )}
                 </div>
 
-                <div className={`${!isCanceled && !isComplete ? "mt-20" : ""}`}>
+                {/* Order route */}
+                <div className="my-4">
+                  <span className="text-[17px] font-extralight">
+                    Order route
+                  </span>
+
+                  <div className="relative h-[300px] mt-4 mb-12 border rounded overflow-hidden">
+                    <OrderPathWay
+                      truckID={data?.stops[0]?.truck?.id}
+                      start={orderStartTime}
+                      end={orderEndTime || now}
+                      isMoving={!isOrderComplete}
+                      isOrderAbove24Hours={isOrderAbove24Hours}
+                    />
+
+                    {!isOrderComplete && (
+                      <div className="absolute bottom-4 left-4 bg-ox-green rounded-full p-2 pr-4 py-[3px] font-medium text-[10px] flex gap-2 items-center">
+                        <div className="bg-white rounded-full w-[8px] h-[8px]" />
+                        <span>Live</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div
+                  className={`${
+                    !isCanceled && !isComplete
+                      ? "mt-20"
+                      : " mt-6 flex items-center justify-between gap-4"
+                  }`}
+                >
                   {
                     <span className="text-gray-400 font-light">
                       {data?.comment}
@@ -453,7 +493,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                     <>
                       <TextLight>Admin&apos;s comment</TextLight>
 
-                      <div>
+                      <div className="mb-5">
                         <Form form={form}>
                           <Input
                             name="comment"
@@ -468,7 +508,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                   )}
 
                   <div
-                    className="flex justify-end mt-5 pointer"
+                    className="flex justify-end pointer"
                     onClick={() => setIsActivityLogVisible(true)}
                   >
                     <span className="text-sm opacity_56 nowrap italic text-gray-600">
@@ -482,12 +522,13 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
               {/* RIGHT SIDE */}
               <div className="w-full xl:w-[45%] flex flex-col gap-7">
                 <div className="bg-white shadow-[0px_0px_19px_#00000008] rounded pt-14 px-14 pb-1">
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center justify-between mb-0">
                     <div className="heading1 text-ox-dark">ORDER SUMMARY</div>
                   </div>
 
                   <DetailsSection
                     details={data}
+                    totalWeight={totalWeight}
                     title=""
                     type="SUMMARY"
                     editAction={setIsEditPriceModal}
@@ -637,6 +678,21 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
                       ))
                     )}
                   </Row>
+                </div>
+
+                <div className="bg-white shadow-[0px_0px_19px_#00000008] rounded pt-14 px-14 pb-1">
+                  <div className="flex items-center justify-between mb-0">
+                    <div className="heading1 text-ox-dark">
+                      ROAD CONDITION REVIEW
+                    </div>
+                  </div>
+
+                  <DetailsSection
+                    details={data}
+                    title=""
+                    type="ROAD_CONDITION"
+                    editAction={setIsEditPriceModal}
+                  />
                 </div>
 
                 {data?.paymentStatus !== "WRITTEN_OFF" && user.isSuperAdmin && (

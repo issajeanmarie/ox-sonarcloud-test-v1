@@ -7,7 +7,7 @@ export const WarningMessage = (text: string | undefined) => {
         message: "Warning!",
         description: text
           ? text
-          : "Something is wrong. Please report this error",
+          : "Something is wrong. Please report this error!",
         placement: "bottomRight",
         duration: 10
       })}

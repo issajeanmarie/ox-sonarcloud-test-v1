@@ -1,11 +1,12 @@
 import Image from "antd/lib/image";
-import { localeString } from "../../../utils/numberFormatter";
+import { abbreviateNumber, localeString } from "../../../utils/numberFormatter";
 import TextLight from "../../Shared/Text/TextLight";
 import { userType } from "../../../helpers/getLoggedInUser";
 import { paymentStatus } from "../../../utils/orderStatus";
 import { Dropdown, Menu, Typography } from "antd";
 import { useRouter } from "next/router";
 import { routes } from "../../../config/route-config";
+import { numbersFormatter } from "../../../helpers/numbersFormatter";
 
 const { Text } = Typography;
 
@@ -143,7 +144,53 @@ const DetailsSection = ({
     {
       key: 4,
       label: "Distance",
-      value: details?.distance,
+      value: `${numbersFormatter(details?.distance || 0)} km`,
+      editable: false,
+      editAction: editAction,
+      url: null,
+      showInfo: false
+    },
+
+    {
+      key: 5,
+      label: "EV battery consumption",
+      value: `${
+        details?.evBatteryConsumption
+          ? `${details?.evBatteryConsumption}%`
+          : "N/A"
+      }`,
+      editable: false,
+      editAction: editAction,
+      url: null,
+      showInfo: false
+    }
+  ];
+
+  const roadConditionDetails = [
+    {
+      key: 1,
+      label: "Ratings",
+      value: details?.rating || "N/A",
+      editable: false,
+      editAction: editAction,
+      url: null,
+      showInfo: false
+    },
+
+    {
+      key: 2,
+      label: "Bad road KMs",
+      value: `${abbreviateNumber(details?.kmsOnBadRoad || 0)} Kms`,
+      editable: false,
+      editAction: editAction,
+      url: null,
+      showInfo: false
+    },
+
+    {
+      key: 3,
+      label: "Comment",
+      value: details?.ratingComment || "N/A",
       editable: false,
       editAction: editAction,
       url: null,
@@ -156,6 +203,8 @@ const DetailsSection = ({
       ? clientDetails
       : type === "SUMMARY"
       ? summaryDetails
+      : type === "ROAD_CONDITION"
+      ? roadConditionDetails
       : orderDetails;
 
   const { isFullPaid, isHalfPaid, isPending } = paymentStatus(
@@ -164,8 +213,12 @@ const DetailsSection = ({
 
   const router = useRouter();
 
+  const formula = `${Number(details?.estimatedDistance || 0).toFixed(
+    2
+  )} KMs * ${totalWeight || 0} KGs * 0.5`;
+
   return (
-    <div className="my-16">
+    <div className="my-16 mt-8">
       <TextLight className="mb-6">{title && `${title} details`}</TextLight>
 
       {displayDetails.map((detail) => {
@@ -179,19 +232,26 @@ const DetailsSection = ({
 
         return (
           <div key={detail.key} className="flex items-center mb-5">
-            <div className="w-[150px] font-bold">{detail.label}: </div>
+            <div className="w-[130px] font-bold">{detail.label}: </div>
 
-            <div className="font-light flex items-center gap-5">
+            <div className="font-light flex gap-5">
               <Text
                 onClick={() =>
                   detail.url &&
                   router.push(`${routes.Clients.url}/${detail.url}`)
                 }
+                style={{
+                  color: `${
+                    detail.label === "EV battery consumption" && "#4AC3FC"
+                  }`
+                }}
                 className={`${
                   detail.label === "Payment status" ? "font-bold" : ""
                 } text-ox-${
                   detail.label === "Payment status" && paymentStatusClass
-                } ${detail.url && "hover:underline pointer"}`}
+                } ${detail.url && "hover:underline pointer"} ${
+                  detail.label === "EV battery consumption" && "font-bold"
+                }`}
               >
                 {detail.value}
               </Text>
@@ -209,6 +269,16 @@ const DetailsSection = ({
                 </div>
               )}
 
+              {detail.label === "Ratings" && (
+                <Image
+                  className="ml-[-12px]"
+                  src="/icons/star.svg"
+                  alt="Backspace icon"
+                  width={13}
+                  preview={false}
+                />
+              )}
+
               {detail.showInfo && (
                 <Dropdown
                   overlay={() => (
@@ -221,9 +291,7 @@ const DetailsSection = ({
                       <Menu.Item style={{ marginBottom: "0.5rem" }}>
                         <div className="flex flex-col">
                           <span>We use</span>
-                          <span className="font-bold">
-                            Distance * Weight * 0.5
-                          </span>
+                          <span className="font-bold">{formula}</span>
                           <span>
                             formula to calculate estimated selling price
                           </span>

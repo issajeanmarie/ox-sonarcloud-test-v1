@@ -123,5 +123,10 @@ export const routes = {
   Policy: {
     name: "Policy",
     url: "/dashboard/policy"
+  },
+
+  Agreements: {
+    name: "Agreements",
+    url: "/dashboard/policy?page=AGREEMENTS"
   }
 };

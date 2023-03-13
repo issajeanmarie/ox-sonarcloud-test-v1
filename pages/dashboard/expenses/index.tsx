@@ -25,6 +25,8 @@ import RecordExpenseModal from "../../../components/Modals/RecordExpenseModal";
 import { Expense, ExpenseStatus } from "../../../lib/types/expenses";
 import ActionModal from "../../../components/Shared/ActionModal";
 import { useRouter } from "next/router";
+import { InfoMessage } from "../../../components/Shared/Messages/InfoMessage";
+import { ErrorMessage } from "../../../components/Shared/Messages/ErrorMessage";
 
 const Expenses = () => {
   const [isAuthError, setIsAuthError] = useState(false);
@@ -155,8 +157,16 @@ const Expenses = () => {
     setSelectedRows([]);
     setIsApproveModalVisible(false);
     setIsApproveSelectedModalVisible(false);
-    if (res?.status === 401 || res?.message?.indexOf("Token expired") !== -1) {
+    if (
+      res?.status === 401 ||
+      (res?.data?.message &&
+        (res.data.message.indexOf("Access is denied") !== -1 ||
+          res.data.message.indexOf("Token expired") !== -1 ||
+          res.data.message.indexOf("Token revoked") !== -1))
+    ) {
       onQBAuthFailure();
+    } else {
+      ErrorMessage("Something went wrong!");
     }
   };
 
@@ -246,6 +256,7 @@ const Expenses = () => {
 
   useEffect(() => {
     if (isAuthError) {
+      InfoMessage("Please, login to Quickbooks first. Redirecting...");
       authenticationAction({});
     }
   }, [isAuthError]);
@@ -330,6 +341,7 @@ const Expenses = () => {
                     showEditModal={showEditModal}
                     showApproveModal={showApproveModal}
                     showDeleteModal={showDeleteModal}
+                    onQBAuthFailure={onQBAuthFailure}
                   />
                 )}
 
@@ -347,16 +359,18 @@ const Expenses = () => {
               </>
             </Content>
           </div>
-          <RecordExpenseModal
-            isModalVisible={isModalVisible}
-            setIsModalVisible={setIsModalVisible}
-            isEdit={!!itemToEdit}
-            editExpenseData={itemToEdit}
-            onRecordExpenseFinish={onRecordExpenseFinish}
-            onEditExpenseFinish={onEditExpenseFinish}
-            onCancel={() => setItemToEdit(null)}
-            onQBAuthFailure={onQBAuthFailure}
-          />
+          {isModalVisible && (
+            <RecordExpenseModal
+              isModalVisible={isModalVisible}
+              setIsModalVisible={setIsModalVisible}
+              isEdit={!!itemToEdit}
+              editExpenseData={itemToEdit}
+              onRecordExpenseFinish={onRecordExpenseFinish}
+              onEditExpenseFinish={onEditExpenseFinish}
+              onCancel={() => setItemToEdit(null)}
+              onQBAuthFailure={onQBAuthFailure}
+            />
+          )}
 
           {/* Action Modal */}
           <ActionModal

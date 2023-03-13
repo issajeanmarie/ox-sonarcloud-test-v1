@@ -4,6 +4,7 @@ import Typography from "antd/lib/typography";
 import Image from "antd/lib/image";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
+import { LoadingOutlined } from "@ant-design/icons";
 import CustomButton from "../../Shared/Button/button";
 import Button from "../../Shared/Button";
 import { dateFormatter } from "../../../utils/dateFormatter";
@@ -15,6 +16,14 @@ import { abbreviateNumber } from "../../../utils/numberFormatter";
 import FilePreview from "../../Shared/FilePreview";
 import ViewExpense from "../../Expenses/ViewExpense";
 import { Expense } from "../../../lib/types/expenses";
+import { userType } from "../../../helpers/getLoggedInUser";
+import {
+  useLazyDownloadFromQBQuery,
+  useLazyDownloadFromServerQuery
+} from "../../../lib/api/endpoints/Expenses/expensesEndpoint";
+import { handleAPIRequests } from "../../../utils/handleAPIRequests";
+import { handleDownloadFile } from "../../../utils/handleDownloadFile";
+import { ErrorMessage } from "../../Shared/Messages/ErrorMessage";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -25,11 +34,17 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
   onSelectRows,
   showEditModal,
   showDeleteModal,
-  showApproveModal
+  showApproveModal,
+  onQBAuthFailure
 }) => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isViewModalVisible, setIsViewModalVisible] = useState<boolean>(false);
   const [itemToView, setItemToView] = useState<Expense>();
+  const [itemsToDownload, setItemsToDownload] = useState<Expense[]>([]);
+  const [downloadFromServer, { isFetching: isLoadingFromServer }] =
+    useLazyDownloadFromServerQuery();
+  const [downloadFromQB, { isFetching: isLoadingFromQB }] =
+    useLazyDownloadFromQBQuery();
 
   const onToggleRow = (id: number) => {
     let newRows = [];
@@ -61,9 +76,75 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
     setIsViewModalVisible(true);
   };
 
-  const handleDownloadFile = (link: string) => {
+  const downloadFile = (expense: Expense) => {
+    setItemsToDownload([...itemsToDownload, expense]);
+    if (expense.qbAttachableId && expense.qbAttachableFileName) {
+      handleAPIRequests({
+        request: downloadFromQB,
+        handleSuccess: (res: any) => handleDownloadFromQBSuccess(res, expense),
+        handleFailure: (res: any) => handleDownloadFailure(res, expense),
+        showFailure: false,
+        id: expense.id
+      });
+    } else {
+      handleAPIRequests({
+        request: downloadFromServer,
+        handleSuccess: (file: File) => handleDownloadSuccess(file, expense),
+        handleFailure: (res: any) => handleDownloadFailure(res, expense),
+        showFailure: false,
+        id: expense.id
+      });
+    }
+  };
+
+  const handleDownloadSuccess = (file: File, expense: Expense) => {
+    const name =
+      expense.attachmentUrl.split("/")[
+        expense.attachmentUrl.split("/").length - 1
+      ];
+    const fileFormat =
+      expense.attachmentUrl.split(".")[
+        expense.attachmentUrl.split(".").length - 1
+      ];
+
+    setItemsToDownload(
+      itemsToDownload.filter((item) => item.id !== expense.id)
+    );
+
+    handleDownloadFile({
+      file,
+      name,
+      fileFormat
+    });
+  };
+
+  const handleDownloadFromQBSuccess = (res: any, expense: Expense) => {
+    setItemsToDownload(
+      itemsToDownload.filter((item) => item.id !== expense.id)
+    );
+
     if (window) {
-      window.open(link, "_blank", "noreferrer");
+      window.open(res?.payload, "_blank", "noreferrer");
+    }
+  };
+
+  const handleDownloadFailure = (res: any, expense: Expense) => {
+    setItemsToDownload(
+      itemsToDownload.filter((item) => item.id !== expense.id)
+    );
+
+    if (
+      res?.status === 401 ||
+      (res?.data?.message &&
+        (res.data.message.indexOf("Access is denied") !== -1 ||
+          res.data.message.indexOf("Token expired") !== -1 ||
+          res.data.message.indexOf("Token revoked") !== -1))
+    ) {
+      onQBAuthFailure();
+    } else {
+      ErrorMessage(
+        res?.data?.message || "No attachable found for this expense"
+      );
     }
   };
 
@@ -72,11 +153,31 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
     showApproveModal(id);
   };
 
+  const isApproveDisabled = (expense: Expense) => {
+    return (
+      !expense.depot ||
+      !expense.date ||
+      !expense.qbSupplierId ||
+      !expense.amount ||
+      !expense.qbTruckId ||
+      !expense.qbLocationId ||
+      !expense.description ||
+      !expense.attachmentUrl ||
+      !expense.qbPaymentMethodId ||
+      !expense.qbPaymentType ||
+      !expense.qbAccountId ||
+      !expense.qbCategoryId ||
+      (!userType().isAdmin && !userType().isSuperAdmin)
+    );
+  };
+
   return (
     <>
       <Table
         className="data_table"
-        rowClassName="rounded"
+        rowClassName={(record: ExpensesTableTypes) =>
+          `rounded${record.status === "APPROVED" ? " bg_light_white" : ""}`
+        }
         dataSource={expenses?.payload?.content}
         rowKey={(record: ExpensesTableTypes) => {
           return record.id;
@@ -201,27 +302,41 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           key="attachment"
           title="Attachment"
           render={(text: ExpensesTableTypes, record: ExpensesTableTypes) => {
-            const child = record?.attachmentUrl ? (
-              <FilePreview
-                className="h-9 w-56 !pr-2 !pl-2"
-                fileName={
-                  record.attachmentUrl.split("/")[
-                    record.attachmentUrl.split("/").length - 1
-                  ]
-                }
-                onClick={() => handleDownloadFile(record.attachmentUrl)}
-                suffixIcon={
-                  <Image
-                    src="/icons/download_2.svg"
-                    alt=""
-                    width={14}
-                    preview={false}
-                  />
-                }
-              />
-            ) : (
-              "---"
-            );
+            const child =
+              record.qbAttachableFileName || record?.attachmentUrl ? (
+                <FilePreview
+                  className="h-9 w-56 !pr-2 !pl-2"
+                  fileName={
+                    record.qbAttachableFileName ||
+                    record.attachmentUrl.split("/")[
+                      record.attachmentUrl.split("/").length - 1
+                    ]
+                  }
+                  onClick={() => downloadFile(record)}
+                  disabled={
+                    itemsToDownload.find((item) => item.id === record.id) &&
+                    (isLoadingFromServer || isLoadingFromQB)
+                  }
+                  suffixIcon={
+                    itemsToDownload.find((item) => item.id === record.id) &&
+                    (isLoadingFromServer || isLoadingFromQB) ? (
+                      <LoadingOutlined
+                        width={14}
+                        className="text-sm text-ox-red"
+                      />
+                    ) : (
+                      <Image
+                        src={"/icons/download_2.svg"}
+                        alt=""
+                        width={14}
+                        preview={false}
+                      />
+                    )
+                  }
+                />
+              ) : (
+                "---"
+              );
             return {
               children: child,
               props: { "data-label": "Attachment" }
@@ -256,6 +371,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
                       type="success"
                       size="icon"
                       onClick={() => showApproveModal(record?.id)}
+                      disabled={isApproveDisabled(record)}
                       icon={
                         <Image
                           src="/icons/check.svg"
@@ -346,7 +462,10 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           )
         }
       >
-        <ViewExpense expense={itemToView as Expense} />
+        <ViewExpense
+          expense={itemToView as Expense}
+          onQBAuthFailure={onQBAuthFailure}
+        />
       </ModalWrapper>
     </>
   );
