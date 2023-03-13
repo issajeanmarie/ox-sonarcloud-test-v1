@@ -13,13 +13,18 @@ import { Expense } from "../../lib/types/expenses";
 
 const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
   showModal,
-  isWarningModalVisible,
-  showWarningModal,
-  setIsWarningModalVisible,
+  isDeleteModalVisible,
+  setIsDeleteModalVisible,
+  showDeleteModal,
+  isApproveModalVisible,
+  setIsApproveModalVisible,
+  showApproveModal,
   expenses,
   sort,
   setSort,
   selectedRows,
+  deleteSelected,
+  isDeleting,
   approveSelected,
   isApproving
 }) => {
@@ -76,7 +81,7 @@ const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
           <div className="flex items-center gap-6">
             <Button
               type="secondary"
-              onClick={showWarningModal}
+              onClick={showApproveModal}
               loading={isApproving}
               disabled={isApproveDisabled()}
             >
@@ -87,7 +92,7 @@ const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
           <div className="flex items-center gap-6">
             <Button
               type="danger_filled"
-              onClick={showWarningModal}
+              onClick={showDeleteModal}
               loading={isApproving}
               disabled={isApproving}
             >
@@ -107,19 +112,30 @@ const ExpensesTopNavigator: FC<ExpensesTopNavigatorTypes> = ({
 
   return (
     <>
+      <Navbar type="CENTER" LeftSide={LeftSide} RightSide={RightSide} />
+
       {/* Action Modal */}
       <ActionModal
-        isModalVisible={isWarningModalVisible}
-        setIsModalVisible={setIsWarningModalVisible}
+        isModalVisible={isDeleteModalVisible}
+        setIsModalVisible={setIsDeleteModalVisible}
         title="warning!"
         description="This action is not reversible, please make sure you really want to proceed with this action!"
         actionLabel="PROCEED"
         type="danger"
-        action={() => approveSelected()}
-        loading={isApproving}
+        action={deleteSelected}
+        loading={isDeleting}
       />
 
-      <Navbar type="CENTER" LeftSide={LeftSide} RightSide={RightSide} />
+      <ActionModal
+        isModalVisible={isApproveModalVisible}
+        setIsModalVisible={setIsApproveModalVisible}
+        title="warning!"
+        description="This action is not reversible, please make sure you really want to proceed with this action!"
+        actionLabel="PROCEED"
+        type="danger"
+        action={approveSelected}
+        loading={isApproving}
+      />
     </>
   );
 };
