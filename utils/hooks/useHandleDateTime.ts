@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ErrorMessage } from "../../components/Shared/Messages/ErrorMessage";
 import { clientTime, timeZone } from "../../config/constants";
 import clockIsSEt from "../../helpers/clockIsSet";
 import { getTimeFromOnline } from "../../helpers/getTimeFromOnline";
@@ -16,10 +17,16 @@ export const useHandleDateTime = () => {
         onlineTime: res?.date_time_ymd
       });
 
-      setClock({
-        date: res?.date_time_ymd,
-        setClockNotification: !isTimeAccurate
-      });
+      if (res?.date_time_ymd) {
+        setClock({
+          date: res?.date_time_ymd,
+          setClockNotification: !isTimeAccurate
+        });
+      } else {
+        ErrorMessage(
+          "We can't fetch accurate time from online, please check if your date and time is accurate!"
+        );
+      }
     });
   };
 

@@ -39,18 +39,12 @@ const OrderPathWay: FC<Props> = ({
       <SmallSpinLoader />
     </div>
   ) : !truckMovements?.payload?.length && !isMoving ? (
-    <div className="h-[100%] w-[100%] grid items-center justify-center">
-      <p className="w-[180px] text-center text-gray-500">
-        The truck carrying this order did&apos;t move at all!
-      </p>
-    </div>
+    <OrderPathWayMessages message=" The truck carrying this order neither did it move nor was it being tracked by maps!" />
   ) : isMoving && isOrderAbove24Hours ? (
-    <div className="h-[100%] w-[100%] grid items-center justify-center">
-      <p className="w-[280px] text-center text-gray-500">
-        This order has gone above 24 hours, hence we are unable to track it on
-        maps!
-      </p>
-    </div>
+    <OrderPathWayMessages
+      message="This order has gone above 24 hours, hence we are unable to track it on
+        maps!"
+    />
   ) : (
     <OrderRoute
       movements={truckMovements as GetTruckMovementResponse}
@@ -62,3 +56,11 @@ const OrderPathWay: FC<Props> = ({
 };
 
 export default OrderPathWay;
+
+export const OrderPathWayMessages = ({ message }: { message: string }) => {
+  return (
+    <div className="h-[100%] w-[100%] grid items-center justify-center">
+      <p className="w-[180px] text-center text-gray-500">{message}</p>
+    </div>
+  );
+};
