@@ -4,18 +4,21 @@ interface Props {
 }
 
 const clockIsSEt = ({ onlineTime, clientTime }: Props) => {
-  const onlineTimeMonth = new Date(onlineTime).getMonth() + 1;
-  const onlineTimeDate = new Date(onlineTime).getDate();
-  const onlineTimeHours = new Date(onlineTime).getHours();
-  const onlineTimeMinutes = new Date(onlineTime).getMinutes();
+  const onlineTimeToString = new Date(onlineTime);
+  const clientTimeToString = new Date(clientTime);
 
-  const clientTimeMonth = new Date(clientTime).getMonth() + 1;
-  const clientTimeDate = new Date(clientTime).getDate();
-  const clientTimeHours = new Date(clientTime).getHours();
-  const clientTimeMinutes = new Date(clientTime).getMinutes();
+  const onlineTimeMonth = onlineTimeToString.getMonth() + 1;
+  const onlineTimeDate = onlineTimeToString.getDate();
+  const onlineTimeHours = onlineTimeToString.getHours();
+  const onlineTimeMinutes = onlineTimeToString.getMinutes();
+
+  const clientTimeMonth = clientTimeToString.getMonth() + 1;
+  const clientTimeDate = clientTimeToString.getDate();
+  const clientTimeHours = clientTimeToString.getHours();
+  const clientTimeMinutes = clientTimeToString.getMinutes();
 
   const onlineTimeDetails = {
-    year: new Date(onlineTime).getFullYear(),
+    year: onlineTimeToString.getFullYear(),
     month: `${onlineTimeMonth < 10 ? `0${onlineTimeMonth}` : onlineTimeMonth}`,
     date: `${onlineTimeDate < 10 ? `0${onlineTimeDate}` : onlineTimeDate}`,
     hours: `${onlineTimeHours < 10 ? `0${onlineTimeHours}` : onlineTimeHours}`,
@@ -25,7 +28,7 @@ const clockIsSEt = ({ onlineTime, clientTime }: Props) => {
   };
 
   const clientTimeDetails = {
-    year: new Date(clientTime).getFullYear(),
+    year: clientTimeToString.getFullYear(),
     month: `${clientTimeMonth < 10 ? `0${clientTimeMonth}` : clientTimeMonth}`,
     date: `${clientTimeDate < 10 ? `0${clientTimeDate}` : clientTimeDate}`,
     hours: `${clientTimeHours < 10 ? `0${clientTimeHours}` : clientTimeHours}`,
@@ -43,9 +46,7 @@ const clockIsSEt = ({ onlineTime, clientTime }: Props) => {
   );
 
   return {
-    isTimeAccurate: onlineTime
-      ? String(onlineTimeStamp) === String(clientTimeStamp)
-      : true
+    isTimeAccurate: String(onlineTimeStamp) === String(clientTimeStamp)
   };
 };
 

@@ -11,7 +11,6 @@ import { SEO } from "../components/Shared";
 import { store } from "../lib/redux/store";
 import DateIsInAccurate from "../components/Shared/DateIsInAccurate";
 import { useHandleDateTime } from "../utils/hooks/useHandleDateTime";
-import { CheckDateAndTimeAccuracy } from "../components/Shared/DateIsInAccurate/DateIsInAccurate";
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const router = useRouter();
@@ -40,10 +39,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <SEO title="OX Delivers Portal" />
-
-      {!clock.date ? (
-        <CheckDateAndTimeAccuracy />
-      ) : clock.setClockNotification ? (
+      {clock.setClockNotification ? (
         <DateIsInAccurate accurateTime={clock.date} />
       ) : (
         <Provider store={store}>

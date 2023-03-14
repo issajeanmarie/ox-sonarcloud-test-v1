@@ -33,8 +33,6 @@ const NearByClientsModal: FC<Props> = ({
   const { data, isFetching: isNearByLocationsFetching } =
     useHandleNearByLocations({ activeTruck });
 
-  const isLoading = isNearByLocationsFetching || isNearByClientsFetching;
-
   return (
     <ModalWrapper
       title={`${activeTruck?.plateNumber} NEARBY`}
@@ -44,37 +42,39 @@ const NearByClientsModal: FC<Props> = ({
       loading={false}
       destroyOnClose
     >
-      {isLoading ? (
-        <SpinningLoader className="h-[25vh]" />
-      ) : (
-        <>
-          {nearbyClients?.payload?.length && (
-            <>
-              <p className="text-md opacity_56">
-                Clients ({nearbyClients?.payload?.length})
-              </p>
-              {nearbyClients?.payload?.map((client, index) => (
-                <NearByClientCard
-                  index={index}
-                  key={client.name}
-                  client={client}
-                />
-              ))}
-            </>
-          )}
+      <>
+        <p className="text-md opacity_56">
+          Clients ({nearbyClients?.payload?.length})
+        </p>
 
-          {data?.payload?.length && (
-            <>
-              <p className="text-md opacity_56 mt-12">
-                Centers / Markets ({data?.payload?.length})
-              </p>
-              {data?.payload?.map((location) => (
-                <NearbyCenterCard key={location?.name} center={location} />
-              ))}
-            </>
-          )}
-        </>
-      )}
+        {isNearByClientsFetching ? (
+          <SpinningLoader className="h-[100px] w-[50px]" />
+        ) : nearbyClients?.payload?.length ? (
+          nearbyClients?.payload?.map((client, index) => (
+            <NearByClientCard index={index} key={client.name} client={client} />
+          ))
+        ) : (
+          <p className="text-sm text-gray-400">
+            There is no nearby clients available!
+          </p>
+        )}
+
+        <p className="text-md opacity_56 mt-12">
+          Centers / Markets ({data?.payload?.length})
+        </p>
+
+        {isNearByLocationsFetching ? (
+          <SpinningLoader className="h-[100px] w-[50px]" />
+        ) : data?.payload?.length ? (
+          data?.payload?.map((location) => (
+            <NearbyCenterCard key={location?.name} center={location} />
+          ))
+        ) : (
+          <p className="text-sm text-gray-400">
+            There is no nearby locations available!
+          </p>
+        )}
+      </>
     </ModalWrapper>
   );
 };

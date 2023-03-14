@@ -134,7 +134,7 @@ const ViewOrder: FC<ViewOrderProps> = ({ orderId, setSupport }) => {
 
   const isOrderAbove24Hours = getHoursDiff(now, orderStartTime) > 24;
 
-  const isOrderComplete = orderEndTime < now;
+  const isOrderComplete = orderEndTime < now || isComplete || isCanceled;
 
   const deleteStopAction = () => {
     handleAPIRequests({
