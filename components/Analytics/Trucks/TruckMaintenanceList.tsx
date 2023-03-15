@@ -274,7 +274,7 @@ export const DetailsComponent: React.FC<Types> = ({
 
     {records?.map((record: { key: string; value: string }, index: number) => (
       <>
-        {children && children}
+        {children}
 
         <Row
           align="top"

@@ -52,11 +52,10 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
         <RowsWrapper>
           <div className="flex items-center gap-1">
             <Text className="normalText fowe700">
-              {record?.totalRevenue && abbreviateNumber(record?.totalRevenue)}{" "}
-              Rwf
+              {abbreviateNumber(record?.totalRevenue || 0)} Rwf
             </Text>
             <Text className="text-xs fowe700 italic">
-              {record?.previousTotalRevenue &&
+              {!!record?.previousTotalRevenue &&
                 truckPercentageCalculator(
                   record?.totalRevenue,
                   record?.previousTotalRevenue
@@ -74,10 +73,10 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
         <RowsWrapper>
           <div className="flex items-center gap-1">
             <Text className="normalText fowe700">
-              {record?.totalPaid && abbreviateNumber(record?.totalPaid)} Rwf
+              {abbreviateNumber(record?.totalPaid || 0)} Rwf
             </Text>
             <Text className="text-xs fowe700 red">
-              {record.totalPaid &&
+              {!!record.totalPaid &&
                 truckPercentageCalculator(
                   record?.totalPaid,
                   record?.previousTotalPaid
@@ -95,8 +94,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
         <RowsWrapper>
           <div className="flex items-center gap-1">
             <Text className="normalText fowe700">
-              {record?.totalDistance && numbersFormatter(record?.totalDistance)}{" "}
-              KMs
+              {numbersFormatter(record?.totalDistance || 0)} KMs
             </Text>
             <Text className="text-xs fowe700 red">
               {record.totalDistance &&
@@ -171,7 +169,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
         <RowsWrapper>
           <div className="flex items-center gap-1">
             <Text className="normalText fowe700 text_ellipsis">
-              {record?.totalFuel && abbreviateNumber(record?.totalFuel)} ltr
+              {abbreviateNumber(record?.totalFuel || 0)} ltr
             </Text>
             <Text className="text-xs fowe700 red text_ellipsis">
               {record.totalFuel &&

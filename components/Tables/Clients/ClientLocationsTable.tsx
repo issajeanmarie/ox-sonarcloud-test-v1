@@ -163,7 +163,7 @@ const ClientLocationsTable: FC<ClientLocationsTypes> = ({
       <Table
         className="data_table  noborder"
         columns={columns}
-        dataSource={offices && offices}
+        dataSource={offices || []}
         rowKey={(record) => record?.key}
         pagination={false}
         bordered={false}

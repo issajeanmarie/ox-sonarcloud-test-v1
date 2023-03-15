@@ -84,7 +84,7 @@ const PaymentHistoryTable: FC<PaymentHistoryTableProps> = ({
             <Text className="normalText opacity_56">{index + 1}</Text>
             <div className="flex flex-col">
               <Text className="normalText fowe900">
-                {record?.amount && numbersFormatter(record?.amount)} Rwf
+                {numbersFormatter(record?.amount || 0)} Rwf
               </Text>
             </div>
           </div>

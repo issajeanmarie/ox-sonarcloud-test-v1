@@ -299,7 +299,7 @@ export const OneInspection: React.FC<OneInspectionTypes> = ({
     <>
       <p className="text-gray-400 mt-6">{title}</p>
 
-      {children && children}
+      {children}
 
       {records?.map((record: RecordTypes) => {
         const isRed =

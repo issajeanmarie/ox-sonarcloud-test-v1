@@ -158,8 +158,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
         (accountsError as any).data.message.indexOf("Token revoked") !== -1)) ||
     (categoriesError as any)?.status === 401 ||
     ((categoriesError as any)?.data?.message &&
-      ((categoriesError as any).data.message.indexOf("Token expired") !== -1 ||
-        (categoriesError as any).data.message.indexOf("Token expired") !== -1))
+      (categoriesError as any).data.message.indexOf("Token expired") !== -1)
   ) {
     onQBAuthFailure();
   } else if (
@@ -240,7 +239,7 @@ const RecordExpenseModal: FC<RecordExpenseTypes> = ({
 
     const qbSupplier = supplierFromQB();
     const formData = new FormData();
-    Object.keys(values).map((key: any) => {
+    Object.keys(values).forEach((key: any) => {
       if (values[key]) {
         if (key === "date") {
           formData.append(key, moment(values[key]).format("YYYY-MM-DD"));

@@ -730,7 +730,7 @@ body {
 }
 
 .PhoneInputCountrySelect {
-  font-family: Arial;
+  font-family: Roboto, sans-serif;
   padding: 12px;
   outline: none;
 }

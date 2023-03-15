@@ -63,9 +63,7 @@ const AnalyticMap: FC<AnalyticMapTypes> = ({
 
   if (coordinates) {
     //REMOVE UNDEFINEDs AND NULLs
-    const filteredCoordinates = coordinates?.filter(
-      (item: LatLng) => item && item
-    );
+    const filteredCoordinates = coordinates?.filter((item: LatLng) => item);
 
     filteredCoordinates?.forEach((coordinate: any) => {
       if (

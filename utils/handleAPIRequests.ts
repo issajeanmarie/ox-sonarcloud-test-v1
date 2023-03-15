@@ -1,6 +1,5 @@
 import { ErrorMessage } from "../components/Shared/Messages/ErrorMessage";
 import { SuccessMessage } from "../components/Shared/Messages/SuccessMessage";
-import { errorCodes } from "../config/errorCodes";
 import { removeFromLocal } from "../helpers/handleLocalStorage";
 import { GenericResponse } from "../lib/types/shared";
 
@@ -65,11 +64,6 @@ export const handleAPIRequests = ({
             removeFromLocal("_ox_tkn_");
             window.location.href = "/";
           }
-
-          errorCodes.filter(
-            (errorCode) =>
-              errorCode.code === error.status && ErrorMessage(errorCode.message)
-          );
         }
       }
 

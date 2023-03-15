@@ -73,7 +73,7 @@ const ClientOrderHistoryTable: FC<ClientOrderHistoryTableProps> = ({
       ) => (
         <RowsWrapper>
           <Text className="normalText fowe900">
-            {record?.totalAmount && numbersFormatter(record?.totalAmount)} Rwf
+            {numbersFormatter(record?.totalAmount || 0)} Rwf
           </Text>
         </RowsWrapper>
       )

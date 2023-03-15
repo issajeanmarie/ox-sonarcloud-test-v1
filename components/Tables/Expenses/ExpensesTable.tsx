@@ -287,7 +287,7 @@ const ResourcesTable: FC<ExpensesTableProps> = ({
           render={(text: ExpensesTableTypes, record: ExpensesTableTypes) => {
             const child = (
               <Text className="normalText fowe700 text_ellipsis">
-                {record?.amount && abbreviateNumber(record.amount) + " RWF"}
+                {abbreviateNumber(record.amount || 0) + " RWF"}
               </Text>
             );
             return {

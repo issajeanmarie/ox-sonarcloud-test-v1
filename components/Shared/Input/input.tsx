@@ -272,9 +272,7 @@ const Entry = ({
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
       <Form.Item name={name} rules={rules} help={help}>
         <TimePicker
-          defaultValue={
-            defaultValue && moment(defaultValue && defaultValue, dateFormat)
-          }
+          defaultValue={defaultValue && moment(defaultValue, dateFormat)}
           onChange={onDateChange}
           className={`my_datepicker ${size === "small" && "sm"} ${className}`}
           name={name}
@@ -300,9 +298,7 @@ const Entry = ({
       {label && <Text className="heading2 mb-[8px]">{label}</Text>}
       <Form.Item name={name} rules={rules} help={help}>
         <DatePicker
-          defaultValue={
-            defaultValue && moment(defaultValue && defaultValue, dateFormat)
-          }
+          defaultValue={defaultValue && moment(defaultValue, dateFormat)}
           onChange={onDateChange}
           className={`my_datepicker ${size === "small" && "sm"} ${className}`}
           // allowClear
