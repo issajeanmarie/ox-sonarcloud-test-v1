@@ -97,7 +97,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
               {numbersFormatter(record?.totalDistance || 0)} KMs
             </Text>
             <Text className="text-xs fowe700 red">
-              {record.totalDistance &&
+              {!!record.totalDistance &&
                 truckPercentageCalculator(
                   record?.totalDistance,
                   record?.previousTotalDistance
@@ -127,10 +127,11 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
         <RowsWrapper>
           <div className="flex items-center gap-1">
             <Text className="normalText fowe700">
-              {record?.totalWeight && numbersFormatter(record?.totalWeight)} KGs
+              {!!record?.totalWeight && numbersFormatter(record?.totalWeight)}{" "}
+              KGs
             </Text>
             <Text className="text-xs fowe700 yellow">
-              {record.totalWeight &&
+              {!record.totalWeight &&
                 truckPercentageCalculator(
                   record?.totalWeight,
                   record?.previousTotalWeight
@@ -148,10 +149,10 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
         <RowsWrapper>
           <div className="flex items-center gap-1">
             <Text className="normalText fowe700 text_ellipsis">
-              {record?.totalHours && numbersFormatter(record?.totalHours)} Hrs
+              {numbersFormatter(record?.totalHours || 0)} Hrs
             </Text>
             <Text className="text-xs fowe700 red text_ellipsis">
-              {record.totalHours &&
+              {!!record.totalHours &&
                 truckPercentageCalculator(
                   record?.totalHours,
                   record?.previousTotalHours
@@ -172,7 +173,7 @@ const TrucksUsageTable = ({ truckData, truckFetching }: truckTableTypes) => {
               {abbreviateNumber(record?.totalFuel || 0)} ltr
             </Text>
             <Text className="text-xs fowe700 red text_ellipsis">
-              {record.totalFuel &&
+              {!!record.totalFuel &&
                 truckPercentageCalculator(
                   record?.totalFuel,
                   record?.previousTotalFuel
