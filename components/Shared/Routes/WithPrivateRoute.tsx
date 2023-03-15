@@ -42,7 +42,7 @@ const WithPrivateRoute = (Wrapped: any) => {
       <>
         {router.pathname !== routes.MapAnalytics.url && (
           <Script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9hqG4ozeDqzIdNd-OoftYqgFCHc33U_4&libraries=places"
+            src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"
             defer
           />
         )}

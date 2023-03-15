@@ -48,7 +48,7 @@ const OrderRoute: FC<Props> = ({ movements, isMoving, start, truckID }) => {
 
   return (
     <WrappedMap
-      googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places,visualization&key=AIzaSyB9hqG4ozeDqzIdNd-OoftYqgFCHc33U_4"
+      googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places,visualization&key="
       loadingElement={<div style={{ height: "100%" }} />}
       containerElement={<div style={{ height: "100%" }} />}
       mapElement={<div style={{ height: "100%" }} />}
