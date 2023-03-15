@@ -14,7 +14,7 @@ const center = {
 function OrderRoutes() {
   return (
     <>
-      <LoadScript googleMapsApiKey="AIzaSyBHgwcB3X6WdORbT2I5Ra5spl1raTEDWG8">
+      <LoadScript googleMapsApiKey="">
         <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
           Child components, such as markers, info windows, etc.
           <></>
